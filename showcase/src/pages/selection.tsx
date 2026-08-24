@@ -29,7 +29,8 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The checkbox and radio are carved wells that fill when selected. The
+        The checkbox and radio are edged wells that fill when selected; at
+        20px the carve alone is invisible, so these keep a hairline. The
         checkbox floods mauve behind a scaled-in check, the radio presses a
         mauve dot into its center.
       </p>
@@ -79,9 +80,9 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The switch is an abstract light switch. A carved plate holds a raised
-        rocker paddle, and checking slides the paddle across, flips its tilt,
-        and lights it mauve.
+        The switch is a rocker light switch. A carved bezel holds a two-ended
+        paddle, I on top, O on the bottom, and the active end sits pressed in.
+        Checking presses I in and lights it mauve; O pops out.
       </p>
 
       <CodeBlock
@@ -130,7 +131,7 @@ export default function SelectionPage() {
             name: ".switch",
             values: 'input[type="checkbox"]',
             notes:
-              "50x28 plate, 8px radius. The paddle slides 23px, flips its tilt, and glows mauve when checked.",
+              "30x46 bezel, 8px radius. Two paddle halves; the active end presses in, and the I end glows mauve when checked.",
           },
           {
             name: ".choice:has(:disabled)",
