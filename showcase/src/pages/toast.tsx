@@ -80,6 +80,13 @@ export default function ToastPage() {
       </p>
 
       <p class="cn-copy">
+        The stack collapses: the newest toast sits on top, up to two older
+        ones peek behind it, scaled back, and the fourth and older hide until
+        the stack thins. Hover or keyboard focus fans the stack out into the
+        column.
+      </p>
+
+      <p class="cn-copy">
         Toasts slide in from the right edge, like the drawer. The exit animates only if
         the toast stays mounted and <code class="cn-code">hidden</code> is toggled;
         unmount it after the transition. Unmounting directly gets the entrance only.
@@ -119,6 +126,13 @@ export default function ToastPage() {
             default: "—",
             notes:
               "Fixed 20px from the right and bottom, z-index 90, column flex aligned to the end, 10px gap, min(380px, calc(100vw - 40px)) wide. Mark it aria-live=\"polite\"; append at the bottom.",
+          },
+          {
+            name: "stack states",
+            values: "collapsed / fanned",
+            default: "collapsed",
+            notes:
+              "Newest on top, two older peeking behind, older hidden. :hover or :focus-within on the stack fans the column out.",
           },
           {
             name: ".toast",

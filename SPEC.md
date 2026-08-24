@@ -529,7 +529,10 @@ All float on `--shadow-pop`, never neu.
   need no radius treatment).
 - `.toast-stack`: the toast viewport, fixed 20px from the right and bottom,
   z-index 90, column flex aligned to the end, 10px gap,
-  `min(380px, calc(100vw - 40px))` wide; toasts append at the bottom.
+  `min(380px, calc(100vw - 40px))` wide; toasts append at the bottom. At rest
+  the stack collapses (grid, one cell): newest on top, the two older toasts
+  peek behind at `-14px scale(.95)` and `-26px scale(.9)`, the fourth and
+  older hidden; `:hover` or `:focus-within` fans it back into the column.
 - `.toast`: one stack item, shadcn-shaped: a flex row holding a content
   column (`b` title over a span/p description) plus trailing controls
   (`.btn-text` action and/or `.btn-icon` close). 13px radius, neutral
@@ -707,3 +710,5 @@ above describes only what shipped.
 24. Toast reworked shadcn-shaped: toast-stack viewport, title/description
     anatomy, slide-in from the edge, neutral border.
 24. `.cn-engaged` went borderless (transparent border-color) as shipped.
+25. Toast stack collapses newest-on-top with peeking older toasts; hover
+    or keyboard focus fans it out.
