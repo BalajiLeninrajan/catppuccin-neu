@@ -80,9 +80,10 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The switch is a rocker light switch. A carved bezel holds a two-ended
-        paddle, I on top, O on the bottom, and the active end sits pressed in.
-        Checking presses I in and lights it mauve; O pops out.
+        The switch is a seesaw rocker. A carved bezel holds two labeled ends,
+        O left and I right; the current end faces you flat and the other folds
+        away into the bezel. Checking folds O back, brings I flat, and lights
+        it mauve.
       </p>
 
       <CodeBlock
@@ -131,7 +132,7 @@ export default function SelectionPage() {
             name: ".switch",
             values: 'input[type="checkbox"]',
             notes:
-              "30x46 bezel, 8px radius. Two paddle halves; the active end presses in, and the I end glows mauve when checked.",
+              "60x30 bezel, 8px radius. The active end faces flat, the other folds away 42deg; I glows mauve when checked.",
           },
           {
             name: ".choice:has(:disabled)",

@@ -674,60 +674,65 @@
 .radio:checked { box-shadow: var(--neu-inset); }
 .radio:checked::after { opacity: 1; transform: none; }
 
-/* Switch: a rocker light switch. A carved bezel holds a two-ended paddle,
-   I on the top half, O on the bottom. The active end is pressed in (inset =
-   engaged); its opposite end pops out. On presses I in and lights it mauve. */
+/* Switch: a seesaw rocker. A carved bezel holds two labeled ends, O left
+   and I right. The current end faces you flat; the other folds away into
+   the bezel. Checking folds O back, brings I flat, and lights it mauve. */
 .switch {
   appearance: none;
-  width: 30px;
-  height: 46px;
+  width: 60px;
+  height: 30px;
   flex: 0 0 auto;
   position: relative;
   border-radius: 8px;
   background: transparent;
   box-shadow: var(--neu-inset);
+  perspective: 140px;
   cursor: pointer;
 }
 .switch::before, .switch::after {
-  content: "";
   position: absolute;
-  left: 3px;
-  right: 3px;
-  height: 19px;
-  border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
-  transition: background .2s, box-shadow .2s, border-color .2s, transform .2s;
-}
-/* Top half: the I bar, drawn as a gradient layer over the paddle ground. */
-.switch::before {
   top: 3px;
-  border-radius: 5px 5px 2px 2px;
-  background: linear-gradient(var(--overlay-1), var(--overlay-1)) center / 2.5px 9px no-repeat, var(--base);
-  box-shadow: var(--neu-raised-soft);
-  transform: perspective(70px) rotateX(12deg);
-  transform-origin: bottom;
-}
-/* Bottom half: the O ring, pressed in while the switch is off. */
-.switch::after {
   bottom: 3px;
-  border-radius: 2px 2px 5px 5px;
-  background: radial-gradient(circle, transparent 0 3px, var(--overlay-1) 3.5px 5px, transparent 5.5px) center / 12px 12px no-repeat,
-              color-mix(in srgb, var(--crust) 24%, var(--base));
-  box-shadow: var(--neu-inset-soft);
-  transform: perspective(70px) rotateX(6deg);
-  transform-origin: top;
+  width: calc(50% - 4px);
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
+  font: 800 10px/1 var(--sans);
+  transition: transform .18s, background .18s, color .18s, box-shadow .18s, border-color .18s;
 }
-/* On: I presses in and lights mauve; O pops out. */
+/* O, the off end: flat while off. */
+.switch::before {
+  content: "O";
+  left: 3px;
+  border-radius: 5px 2px 2px 5px;
+  color: var(--subtext-0);
+  background: var(--base);
+  box-shadow: var(--neu-raised-soft);
+  transform-origin: right center;
+}
+/* I, the on end: folded away while off. */
+.switch::after {
+  content: "I";
+  right: 3px;
+  border-radius: 2px 5px 5px 2px;
+  color: var(--overlay-0);
+  background: color-mix(in srgb, var(--crust) 34%, var(--base));
+  box-shadow: var(--neu-inset-soft);
+  transform-origin: left center;
+  transform: rotateY(-42deg);
+}
 .switch:checked::before {
-  border-color: var(--mauve);
-  background: linear-gradient(var(--crust), var(--crust)) center / 2.5px 9px no-repeat, var(--mauve);
-  box-shadow: var(--neu-inset-soft), 0 0 10px color-mix(in srgb, var(--mauve) 45%, transparent);
-  transform: perspective(70px) rotateX(-6deg);
+  color: var(--overlay-0);
+  background: color-mix(in srgb, var(--crust) 34%, var(--base));
+  box-shadow: var(--neu-inset-soft);
+  transform: rotateY(42deg);
 }
 .switch:checked::after {
-  background: radial-gradient(circle, transparent 0 3px, var(--overlay-1) 3.5px 5px, transparent 5.5px) center / 12px 12px no-repeat,
-              var(--base);
-  box-shadow: var(--neu-raised-soft);
-  transform: perspective(70px) rotateX(-12deg);
+  color: var(--crust);
+  border-color: var(--mauve);
+  background: var(--mauve);
+  box-shadow: var(--neu-raised-soft), 0 0 10px color-mix(in srgb, var(--mauve) 45%, transparent);
+  transform: rotateY(0deg);
 }
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
@@ -759,7 +764,13 @@
 }
 .accordion[open] summary::after { transform: rotate(180deg); }
 .accordion summary:hover { color: var(--mauve); }
-.accordion > :not(summary) { padding: 0 2px 16px; }
+/* The expanded body sits in a carved well of its own. */
+.accordion > :not(summary) {
+  margin: 2px 0 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  box-shadow: var(--neu-inset-soft);
+}
 /* Where the browser supports it, the body height animates open and closed. */
 @supports (interpolate-size: allow-keywords) {
   .accordion { interpolate-size: allow-keywords; }

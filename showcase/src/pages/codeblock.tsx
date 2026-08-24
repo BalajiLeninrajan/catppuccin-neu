@@ -34,10 +34,10 @@ export default function CodeblockPage() {
       <Demo title="Numbered lines" classes="codeblock is-numbered">
         <div class="codeblock is-numbered" style="width:min(560px,100%)">
           <pre>
-            <span><span class="tok-keyword">const</span> <span class="tok-fn">total</span> = seats * <span class="tok-number">12</span>;</span>
-            <span><span class="tok-keyword">if</span> (total &gt; <span class="tok-number">40</span>) notify(<span class="tok-string">"#billing"</span>);</span>
-            <span><span class="tok-comment">// invoices send on the 1st</span></span>
-            <span>send(invoice, owner);</span>
+            <span>$ pnpm install</span>
+            <span>$ pnpm build</span>
+            <span>dist/index.html   2.1 kB</span>
+            <span>dist/assets/app.js  41.7 kB</span>
           </pre>
         </div>
       </Demo>
@@ -45,10 +45,19 @@ export default function CodeblockPage() {
       <p class="cn-copy">
         Add <code class="cn-code">.is-numbered</code> and wrap each line in its
         own element inside the <code class="cn-code">pre</code>. CSS counters
-        draw the gutter; no JS. The colors come from the five{" "}
-        <code class="cn-code">.tok-*</code> classes. Producing those spans is a
-        tokenizer's job (shiki, prism, or your build), the system only supplies
-        the palette.
+        draw the gutter; no JS.
+      </p>
+
+      <Demo title="Syntax colors" classes="codeblock + .tok-*">
+        <div class="codeblock" style="width:min(560px,100%)">
+          <pre><span class="tok-keyword">const</span> <span class="tok-fn">total</span> = seats * <span class="tok-number">12</span>;{"\n"}<span class="tok-keyword">if</span> (total &gt; <span class="tok-number">40</span>) notify(<span class="tok-string">"#billing"</span>); <span class="tok-comment">// monthly</span></pre>
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        The five <code class="cn-code">.tok-*</code> classes work in any code
+        block, numbered or not. Producing the spans is a tokenizer's job
+        (shiki, prism, or your build); the system only supplies the palette.
       </p>
 
       <Demo title="Long lines wrap" classes="codeblock > pre">
