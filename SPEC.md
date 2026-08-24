@@ -131,10 +131,13 @@ carved-transparent.)*
 > carve alone is invisible), and `.switch` as an abstract light switch
 > (50×28): a carved plate holding a raised paddle that slides across, flips
 > its tilt (`perspective rotateY ±16°`), and lights mauve with a soft glow
-> when on. ~~Three I/O rocker variants (glyph halves, seesaw fold, hinged
-> angled paddle after uiverse) were tried and REVERTED~~: none read cleanly
-> at control size; the sliding paddle stays canon. The accordion's expanded
-> body sits in a carved well of its own. `details.accordion` with a rotating chevron and
+> when on, the glow a whisper (6px at mauve 18%). ~~Three I/O rocker
+> variants (glyph halves, seesaw fold, hinged angled paddle after uiverse)
+> were tried and REVERTED~~: none read cleanly at control size; the sliding
+> paddle stays canon. The whole open accordion item sinks: carved
+> (inset-soft, title and body together) and slightly wider than its closed
+> siblings (negative inline margin compensated by padding, so text stays
+> aligned). `details.accordion` with a rotating chevron and
 > height animation behind `@supports (interpolate-size: allow-keywords)`.
 > `.avatar` (initials or image on an accent-tinted round, `.is-lg`,
 > `.avatar-stack`). `.codeblock`, a carved mono snippet well; with the

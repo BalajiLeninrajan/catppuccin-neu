@@ -707,7 +707,7 @@
   translate: 23px 0;
   border-color: var(--mauve);
   background: var(--mauve);
-  box-shadow: 0 0 10px color-mix(in srgb, var(--mauve) 45%, transparent),
+  box-shadow: 0 0 6px color-mix(in srgb, var(--mauve) 18%, transparent),
               inset 0 1px rgb(255 255 255 / .16);
   transform: perspective(120px) rotateY(-16deg);
 }
@@ -717,7 +717,20 @@
 
 /* ── Accordion — native details/summary ─────────────────────────────────── */
 
-.accordion { border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent); }
+/* The whole open item sinks: carved, and a little wider than its closed
+   siblings (negative inline margin, compensated by padding, so the text
+   stays aligned while the box grows). */
+.accordion {
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+  border-radius: 10px;
+  transition: margin .2s, padding .2s, box-shadow .2s, border-color .2s;
+}
+.accordion[open] {
+  margin-inline: -12px;
+  padding-inline: 12px;
+  border-bottom-color: transparent;
+  box-shadow: var(--neu-inset-soft);
+}
 .accordion summary {
   min-height: 48px;
   padding: 12px 2px;
@@ -742,13 +755,7 @@
 }
 .accordion[open] summary::after { transform: rotate(180deg); }
 .accordion summary:hover { color: var(--mauve); }
-/* The expanded body sits in a carved well of its own. */
-.accordion > :not(summary) {
-  margin: 2px 0 14px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  box-shadow: var(--neu-inset-soft);
-}
+.accordion > :not(summary) { padding: 0 2px 16px; }
 /* Where the browser supports it, the body height animates open and closed. */
 @supports (interpolate-size: allow-keywords) {
   .accordion { interpolate-size: allow-keywords; }
