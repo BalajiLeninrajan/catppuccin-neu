@@ -80,10 +80,9 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The switch is an angled rocker: one paddle with two faces meeting at a
-        center ridge. The raised face pivots on that ridge, so the body never
-        splits. The whole paddle is neutral while off and mauve while on; the
-        away face is only shaded darker.
+        The switch is an abstract light switch. A carved plate holds a raised
+        paddle; checking slides the paddle across, flips its tilt, and lights
+        it mauve.
       </p>
 
       <CodeBlock
@@ -132,7 +131,7 @@ export default function SelectionPage() {
             name: ".switch",
             values: 'input[type="checkbox"]',
             notes:
-              "62x30 bezel, 8px radius. One hinged paddle; the raised face pivots 14deg on the center ridge. Whole paddle mauve when on; the bezel glows.",
+              "50x28 plate, 8px radius. The paddle slides 23px, flips its tilt, and glows mauve when checked.",
           },
           {
             name: ".choice:has(:disabled)",

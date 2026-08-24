@@ -128,13 +128,13 @@ carved-transparent.)*
 > **REVISION 6 — new components (2026-08-24, gap review vs fiveoutofnine).**
 > Selection controls: `.choice` label row, `.checkbox` and `.radio` as edged
 > wells that fill mauve when selected (they keep a hairline: at 20px the
-> carve alone is invisible), and `.switch` as an angled rocker (62×30, after
-> uiverse wonderful-dog-56): one hinged paddle drawn as two faces sharing a
-> center ridge, the raised face rotating 14° about that shared edge so the
-> body never splits, a thickness strip under its base. One color per state:
-> the whole paddle neutral off and mauve on (the away face shaded darker,
-> lighting not a second color), with the bezel glowing when on. The
-> accordion's expanded body sits in a carved well of its own. `details.accordion` with a rotating chevron and
+> carve alone is invisible), and `.switch` as an abstract light switch
+> (50×28): a carved plate holding a raised paddle that slides across, flips
+> its tilt (`perspective rotateY ±16°`), and lights mauve with a soft glow
+> when on. ~~Three I/O rocker variants (glyph halves, seesaw fold, hinged
+> angled paddle after uiverse) were tried and REVERTED~~: none read cleanly
+> at control size; the sliding paddle stays canon. The accordion's expanded
+> body sits in a carved well of its own. `details.accordion` with a rotating chevron and
 > height animation behind `@supports (interpolate-size: allow-keywords)`.
 > `.avatar` (initials or image on an accent-tinted round, `.is-lg`,
 > `.avatar-stack`). `.codeblock`, a carved mono snippet well; with the
