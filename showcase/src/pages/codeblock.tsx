@@ -44,8 +44,7 @@ export default function CodeblockPage() {
 
       <p class="cn-copy">
         Add <code class="cn-code">.is-numbered</code> and wrap each line in its
-        own element inside the <code class="cn-code">pre</code>. CSS counters
-        draw the gutter; no JS.
+        own element inside the <code class="cn-code">pre</code>.
       </p>
 
       <Demo title="Syntax colors" classes="codeblock + .tok-*">
@@ -117,7 +116,7 @@ export default function CodeblockPage() {
           {
             name: ".is-numbered",
             values: "one element per line inside the pre",
-            notes: "CSS counters draw a 22px right-aligned overlay-0 gutter.",
+            notes: "22px right-aligned gutter.",
           },
           {
             name: ".tok-keyword / -string / -number / -fn / -comment",

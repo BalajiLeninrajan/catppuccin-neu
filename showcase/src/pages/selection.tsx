@@ -28,12 +28,6 @@ export default function SelectionPage() {
         </label>
       </Demo>
 
-      <p class="cn-copy">
-        The checkbox and radio are edged wells that fill when selected; at
-        20px the carve alone is invisible, so these keep a hairline. The
-        checkbox floods mauve behind a scaled-in check, the radio presses a
-        mauve dot into its center.
-      </p>
 
       <Demo title="Radio group" classes="fieldset > label.choice > input.radio">
         <fieldset style="margin:0;padding:0;border:0">
@@ -80,9 +74,8 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The switch is an abstract light switch. A carved plate holds a raised
-        paddle; checking slides the paddle across, flips its tilt, and lights
-        it mauve.
+        The switch is an abstract light switch: checking slides the paddle
+        across and lights it mauve.
       </p>
 
       <CodeBlock

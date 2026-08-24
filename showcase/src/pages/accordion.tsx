@@ -22,7 +22,7 @@ export default function AccordionPage() {
   return (
     <Doc
       title="Accordion"
-      lede="Stacked disclosure rows on a label and a hidden checkbox. The fold animates open and closed in every modern browser, no JS."
+      lede="Stacked disclosure rows on a label and a hidden checkbox. No JS."
     >
       <Demo title="Accordion" classes="accordion > label + .fold">
         <div style="width:min(640px,100%)">
@@ -43,15 +43,9 @@ export default function AccordionPage() {
       </Demo>
 
       <p class="cn-copy">
-        Native <code class="cn-code">details</code> cannot animate its close
-        outside Chromium, so the recipe uses a checkbox instead: the fold is a
-        grid row transitioning <code class="cn-code">0fr</code> to{" "}
-        <code class="cn-code">1fr</code>, which plays everywhere. The whole
-        open item sinks into a carved well, title included; closed rows stay
-        flat with straight dividers. The sink and the fold animate together.
-        Space toggles the focused input, and the whole label is the hit
-        target. Use radios sharing a{" "}
-        <code class="cn-code">name</code> when only one item may be open.
+        The whole label is the hit target; Space toggles the focused input.
+        Use radios sharing a <code class="cn-code">name</code> when only one
+        item may be open.
       </p>
 
       <CodeBlock
@@ -84,21 +78,19 @@ export default function AccordionPage() {
             values: "title + hidden input",
             default: "—",
             notes:
-              "48px min-height row, sans 700 13px, chevron as ::after. The input is invisible but keyboard-reachable; its focus ring draws on the label.",
+              "48px min-height row. The hidden input stays keyboard-reachable; its focus ring draws on the label.",
           },
           {
             name: ".fold",
             values: "one wrapper element inside",
             default: "—",
-            notes:
-              "grid-template-rows 0fr to 1fr, .3s. The inner wrapper needs min-height 0; the recipe sets it.",
+            notes: "Animates open and closed, .3s. Put the body inside one wrapper element.",
           },
           {
             name: "screen readers",
             values: "checkbox semantics",
             default: "—",
-            notes:
-              "Announced as a checkbox, not a disclosure button. The trade for cross-browser motion without JS.",
+            notes: "Announced as a checkbox, not a disclosure button.",
           },
         ]}
       />
