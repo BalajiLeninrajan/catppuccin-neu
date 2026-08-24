@@ -15,8 +15,8 @@ function AnchoredDemo() {
       >
         Notifications
       </button>
-      {open && (
-        <div class="popover" role="dialog" aria-label="Notifications" style="top:60px; left:0;">
+      {/* Stays mounted; toggling hidden plays the exit transition. */}
+        <div class="popover" hidden={!open} role="dialog" aria-label="Notifications" style="top:60px; left:0;">
           <header class="cn-bg-head" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px;">
             <span class="cn-label">Notifications</span>
             <span class="chip-tone cn-tone-mauve">3 new</span>
@@ -41,7 +41,6 @@ function AnchoredDemo() {
             </button>
           </footer>
         </div>
-      )}
     </div>
   );
 }

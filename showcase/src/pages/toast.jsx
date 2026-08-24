@@ -16,14 +16,14 @@ function ToastSpawner() {
   function spawn() {
     const id = ++idRef.current;
     const message = MESSAGES[msgRef.current++ % MESSAGES.length];
-    setToasts((t) => [...t, { id, message }]);
-    setTimeout(() => {
-      setToasts((t) => t.filter((x) => x.id !== id));
-    }, 3600);
+    setToasts((t) => [...t, { id, message, leaving: false }]);
+    setTimeout(() => dismiss(id), 3600);
   }
 
+  // Two-phase: hidden plays the exit transition, then the element unmounts.
   function dismiss(id) {
-    setToasts((t) => t.filter((x) => x.id !== id));
+    setToasts((t) => t.map((x) => (x.id === id ? { ...x, leaving: true } : x)));
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 260);
   }
 
   return (
@@ -37,7 +37,7 @@ function ToastSpawner() {
           style="position:fixed; right:20px; bottom:20px; z-index:90; display:flex; flex-direction:column; align-items:flex-end; gap:10px;"
         >
           {toasts.map((t) => (
-            <div key={t.id} class="toast page-enter" role="status">
+            <div key={t.id} class="toast" hidden={t.leaving} role="status">
               <span class="live-dot" aria-hidden="true"></span>
               {t.message}
               <button type="button" class="btn-text" onClick={() => dismiss(t.id)}>

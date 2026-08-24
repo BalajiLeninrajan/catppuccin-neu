@@ -729,6 +729,44 @@ a:active > .accent-card {
   letter-spacing: .03em;
 }
 
+/* ── Overlay motion ──────────────────────────────────────────────────────────
+   Overlays enter via @starting-style and exit via [hidden]: display joins the
+   transition with allow-discrete, so setting `el.hidden = true` plays the
+   exit before the element leaves the render tree — no JS timing needed.
+   Consumers that mount/unmount instead still get the entrance, only the exit
+   needs the element kept around. These rules must stay AFTER the component
+   blocks so [hidden] beats their display values. */
+
+.cn-scrim,
+.popover,
+.modal,
+.drawer,
+.toast {
+  transition: opacity .2s ease, transform .2s ease, display .2s allow-discrete;
+}
+.popover { transition-duration: .16s; }
+.drawer  { transition-duration: .26s; }
+
+/* Exit targets — mirrored as pre-entry states in @starting-style below. */
+.cn-scrim[hidden] { display: none; opacity: 0; }
+.popover[hidden]  { display: none; opacity: 0; transform: translateY(-4px); }
+.modal[hidden]    { display: none; opacity: 0; transform: translateY(8px) scale(.98); }
+.drawer[hidden]   { display: none; transform: translateX(calc(100% + 40px)); }
+.toast[hidden]    { display: none; opacity: 0; transform: translateY(6px); }
+/* A modal or drawer inside a scrim rides the scrim's exit. */
+.cn-scrim[hidden] .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
+.cn-scrim[hidden] .drawer { transform: translateX(calc(100% + 40px)); }
+
+@starting-style {
+  .cn-scrim:not([hidden]) { opacity: 0; }
+  .popover:not([hidden])  { opacity: 0; transform: translateY(-4px); }
+  .modal:not([hidden])    { opacity: 0; transform: translateY(8px) scale(.98); }
+  .cn-scrim:not([hidden]) .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
+  .drawer:not([hidden])   { transform: translateX(calc(100% + 40px)); }
+  .cn-scrim:not([hidden]) .drawer { transform: translateX(calc(100% + 40px)); }
+  .toast:not([hidden])    { opacity: 0; transform: translateY(6px); }
+}
+
 /* ── Page furniture ─────────────────────────────────────────────────────────
    Recipes never style bare element selectors (the tokens reset aside).
    The main-column pattern, applied by the consumer:

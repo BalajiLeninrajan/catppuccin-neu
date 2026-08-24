@@ -19,8 +19,8 @@ function ModalDemo() {
       <button type="button" class="btn btn-primary" onClick={() => setOpen(true)}>
         Invite a teammate
       </button>
-      {open && (
-        <div class="cn-scrim" onClick={close}>
+      {/* Stays mounted; toggling hidden plays the exit transition. */}
+        <div class="cn-scrim" hidden={!open} onClick={close}>
           <div
             class="modal"
             role="dialog"
@@ -64,7 +64,6 @@ function ModalDemo() {
             </footer>
           </div>
         </div>
-      )}
     </>
   );
 }

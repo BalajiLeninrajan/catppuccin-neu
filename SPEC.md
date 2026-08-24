@@ -98,7 +98,19 @@ carved-transparent.)*
 >    `--neu-inset-soft`.
 > 8. `.page-enter` drops its animation fill-mode: a held transform made the
 >    element a permanent containing block/stacking context, trapping fixed
->    overlays (the modal-in-an-iframe bug). Apply the same
+>    overlays (the modal-in-an-iframe bug).
+
+> **REVISION 4 — overlay motion (2026-08-24).** Popover, modal, drawer, toast,
+> and the scrim animate on enter AND exit. Mechanism: transitions +
+> `@starting-style` for entry; exit by setting `[hidden]` — `display` joins
+> the transition with `allow-discrete`, so the element plays its exit before
+> leaving the render tree (no JS timing). Specs: scrim fades .2s; modal fades
+> + rises 8px + scales .98→1 (.2s); drawer slides from the right edge (.26s);
+> popover fades + drops 4px (.16s); toast fades + rises 6px (.2s). A modal or
+> drawer inside a scrim rides the scrim's `[hidden]`. Consumers that unmount
+> instead of hiding get the entrance only — keep the element mounted and
+> toggle `hidden` for the exit. The tokens' reduced-motion block collapses
+> all of it. Apply the same
 "depth replaces border" principle across inset surfaces (wells, terminal,
 progress track, engaged states): remove hairlines where the depth already
 separates the surface; keep hairline borders only on *raised* surfaces where
