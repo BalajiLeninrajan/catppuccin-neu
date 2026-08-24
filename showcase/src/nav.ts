@@ -14,16 +14,20 @@ import Depth from "./pages/depth";
 
 import Button from "./pages/button";
 import Input from "./pages/input";
+import Selection from "./pages/selection";
 import Segmented from "./pages/segmented";
 import Stepper from "./pages/stepper";
 import Chip from "./pages/chip";
 import Banner from "./pages/banner";
+import Accordion from "./pages/accordion";
 import Surfaces from "./pages/surfaces";
 import AccentCard from "./pages/accent-card";
+import Avatar from "./pages/avatar";
 import Stat from "./pages/stat";
 import Progress from "./pages/progress";
 import Table from "./pages/table";
 import Terminal from "./pages/terminal";
+import Codeblock from "./pages/codeblock";
 import Popover from "./pages/popover";
 import Modal from "./pages/modal";
 import Drawer from "./pages/drawer";
@@ -52,16 +56,20 @@ export const PAGES: NavEntry[] = [
 
   { path: "/button", title: "Button", group: "Components", component: Button },
   { path: "/input", title: "Input & Field", group: "Components", component: Input },
+  { path: "/selection", title: "Selection", group: "Components", component: Selection },
   { path: "/segmented", title: "Segmented", group: "Components", component: Segmented },
   { path: "/stepper", title: "Stepper", group: "Components", component: Stepper },
   { path: "/chip", title: "Chip", group: "Components", component: Chip },
   { path: "/banner", title: "Banner", group: "Components", component: Banner },
+  { path: "/accordion", title: "Accordion", group: "Components", component: Accordion },
   { path: "/surfaces", title: "Surfaces", group: "Components", component: Surfaces },
   { path: "/accent-card", title: "Accent card", group: "Components", component: AccentCard },
+  { path: "/avatar", title: "Avatar", group: "Components", component: Avatar },
   { path: "/stat", title: "Stat", group: "Components", component: Stat },
   { path: "/progress", title: "Progress", group: "Components", component: Progress },
   { path: "/table", title: "Table", group: "Components", component: Table },
   { path: "/terminal", title: "Terminal", group: "Components", component: Terminal },
+  { path: "/codeblock", title: "Code block", group: "Components", component: Codeblock },
   { path: "/popover", title: "Popover", group: "Components", component: Popover },
   { path: "/modal", title: "Modal", group: "Components", component: Modal },
   { path: "/drawer", title: "Drawer", group: "Components", component: Drawer },

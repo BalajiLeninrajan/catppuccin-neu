@@ -125,6 +125,21 @@ carved-transparent.)*
 > separation — which the divider does honestly, without bending the depth
 > grammar (inset = engaged, raised = untouched control).
 
+> **REVISION 6 — new components (2026-08-24, gap review vs fiveoutofnine).**
+> Selection controls: `.choice` label row, `.checkbox` and `.radio` as carved
+> wells that fill mauve when selected, and `.switch` as an abstract light
+> switch, a carved 50×28 plate holding a raised rocker paddle that slides
+> across, flips its tilt (`perspective rotateY ±16deg`), and lights mauve
+> with a soft glow when on. `details.accordion` with a rotating chevron and
+> height animation behind `@supports (interpolate-size: allow-keywords)`.
+> `.avatar` (initials or image on an accent-tinted round, `.is-lg`,
+> `.avatar-stack`). `.codeblock`, a carved mono snippet well; with the
+> terminal it is one of the two mono surfaces. Also: the select picker
+> restyles via `appearance: base-select` + `::picker(select)` where
+> supported (Chromium 135+), and `[data-tip]` draws the system tooltip, so
+> `title=` is never used. Deliberately skipped: hover card (compose popover),
+> tabs (segmented is the tab bar).
+
 Apply the same
 "depth replaces border" principle across inset surfaces (wells, terminal,
 progress track, engaged states): remove hairlines where the depth already
