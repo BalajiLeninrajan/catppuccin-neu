@@ -128,11 +128,12 @@ carved-transparent.)*
 > **REVISION 6 — new components (2026-08-24, gap review vs fiveoutofnine).**
 > Selection controls: `.choice` label row, `.checkbox` and `.radio` as edged
 > wells that fill mauve when selected (they keep a hairline: at 20px the
-> carve alone is invisible), and `.switch` as a seesaw rocker (60×30, after
-> uiverse dry-rabbit-69): O left and I right in a carved bezel, the current
-> end flat and raised, the other folded 42° into the bezel; checking brings
-> I flat and lights it mauve. The accordion's expanded body sits in a carved
-> well of its own. `details.accordion` with a rotating chevron and
+> carve alone is invisible), and `.switch` as an angled rocker (62×30, after
+> uiverse wonderful-dog-56): O left and I right in a carved bezel, the
+> pressed end flat and low, the other tilted up 12° (rotate + skewX) with a
+> thickness edge along its base. No split color: the control reads base
+> while off, and checking presses I flat and paints it mauve. The
+> accordion's expanded body sits in a carved well of its own. `details.accordion` with a rotating chevron and
 > height animation behind `@supports (interpolate-size: allow-keywords)`.
 > `.avatar` (initials or image on an accent-tinted round, `.is-lg`,
 > `.avatar-stack`). `.codeblock`, a carved mono snippet well; with the

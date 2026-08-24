@@ -674,65 +674,69 @@
 .radio:checked { box-shadow: var(--neu-inset); }
 .radio:checked::after { opacity: 1; transform: none; }
 
-/* Switch: a seesaw rocker. A carved bezel holds two labeled ends, O left
-   and I right. The current end faces you flat; the other folds away into
-   the bezel. Checking folds O back, brings I flat, and lights it mauve. */
+/* Switch: an angled rocker. Two labeled ends in a carved bezel, O left and
+   I right; the pressed end sits flat and low, the other end tilts up
+   (rotate + skew) showing its thickness. The whole control reads base while
+   off; checking presses I flat and paints it mauve. */
 .switch {
   appearance: none;
-  width: 60px;
+  width: 62px;
   height: 30px;
   flex: 0 0 auto;
   position: relative;
+  overflow: hidden;
   border-radius: 8px;
   background: transparent;
   box-shadow: var(--neu-inset);
-  perspective: 140px;
   cursor: pointer;
 }
 .switch::before, .switch::after {
   position: absolute;
-  top: 3px;
   bottom: 3px;
-  width: calc(50% - 4px);
+  width: 27px;
+  height: 21px;
   display: grid;
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
   font: 800 10px/1 var(--sans);
-  transition: transform .18s, background .18s, color .18s, box-shadow .18s, border-color .18s;
+  transition: transform .18s, background .18s, color .18s, box-shadow .18s, bottom .18s, border-color .18s;
 }
-/* O, the off end: flat while off. */
+/* O, the off end: pressed flat while off. */
 .switch::before {
   content: "O";
   left: 3px;
   border-radius: 5px 2px 2px 5px;
   color: var(--subtext-0);
-  background: var(--base);
-  box-shadow: var(--neu-raised-soft);
-  transform-origin: right center;
+  background: color-mix(in srgb, var(--surface-0) 30%, var(--base));
+  box-shadow: var(--neu-inset-soft);
+  transform-origin: bottom right;
 }
-/* I, the on end: folded away while off. */
+/* I, the on end: tilted up while off, thickness edge along its base. */
 .switch::after {
   content: "I";
   right: 3px;
+  bottom: 7px;
   border-radius: 2px 5px 5px 2px;
   color: var(--overlay-0);
-  background: color-mix(in srgb, var(--crust) 34%, var(--base));
-  box-shadow: var(--neu-inset-soft);
-  transform-origin: left center;
-  transform: rotateY(-42deg);
+  background: var(--base);
+  box-shadow: 0 4px 0 -1px color-mix(in srgb, var(--crust) 50%, var(--base)), var(--neu-raised-soft);
+  transform: rotate(-12deg) skewX(-12deg);
+  transform-origin: bottom left;
 }
 .switch:checked::before {
+  bottom: 7px;
   color: var(--overlay-0);
-  background: color-mix(in srgb, var(--crust) 34%, var(--base));
-  box-shadow: var(--neu-inset-soft);
-  transform: rotateY(42deg);
+  background: var(--base);
+  box-shadow: 0 4px 0 -1px color-mix(in srgb, var(--crust) 50%, var(--base)), var(--neu-raised-soft);
+  transform: rotate(12deg) skewX(12deg);
 }
 .switch:checked::after {
+  bottom: 3px;
   color: var(--crust);
   border-color: var(--mauve);
   background: var(--mauve);
-  box-shadow: var(--neu-raised-soft), 0 0 10px color-mix(in srgb, var(--mauve) 45%, transparent);
-  transform: rotateY(0deg);
+  box-shadow: var(--neu-inset-soft), 0 0 10px color-mix(in srgb, var(--mauve) 45%, transparent);
+  transform: none;
 }
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }

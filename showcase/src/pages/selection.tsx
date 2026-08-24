@@ -80,10 +80,9 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The switch is a seesaw rocker. A carved bezel holds two labeled ends,
-        O left and I right; the current end faces you flat and the other folds
-        away into the bezel. Checking folds O back, brings I flat, and lights
-        it mauve.
+        The switch is an angled rocker. The pressed end sits flat and low; the
+        other end tilts up and shows its thickness. The whole control reads
+        base while off. Checking presses I flat and paints it mauve.
       </p>
 
       <CodeBlock
@@ -132,7 +131,7 @@ export default function SelectionPage() {
             name: ".switch",
             values: 'input[type="checkbox"]',
             notes:
-              "60x30 bezel, 8px radius. The active end faces flat, the other folds away 42deg; I glows mauve when checked.",
+              "62x30 bezel, 8px radius. Pressed end flat and low; the other tilts 12deg with a thickness edge. Mauve only when on.",
           },
           {
             name: ".choice:has(:disabled)",
