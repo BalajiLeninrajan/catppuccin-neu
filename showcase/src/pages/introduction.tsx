@@ -5,7 +5,7 @@ const LAYER_CODE = `@layer cn.tokens, cn.utilities, cn.recipes;
 @import "./utilities.css" layer(cn.utilities);
 @import "./recipes.css" layer(cn.recipes);`;
 
-const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/design#v0.2.0`;
+const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/design#v0.1.0`;
 
 const IMPORT_CODE = `/* your entry stylesheet */
 @import "catppuccin-neu/css/index.css";`;
@@ -36,7 +36,7 @@ export default function IntroductionPage() {
   return (
     <Doc
       title="Introduction"
-      lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, neumorphic depth from a fixed top-left light source, one mauve accent. It ships as three plain CSS files."
+      lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, neumorphic depth from a fixed top-left light source, one mauve accent. It ships as four plain CSS files."
     >
       <section>
         <h2 class="cn-title">The idea</h2>

@@ -72,8 +72,20 @@ export default function DensityPage() {
             default: "16px",
             notes: "Panel-scale radius; panel heading/footer bands follow it minus 1px.",
           },
+          {
+            name: "--hard-offset",
+            values: "4px · 3px compact",
+            default: "4px",
+            notes: "The hard offset's distance; the press slides half of it.",
+          },
         ]}
       />
+
+      <p class="cn-copy">
+        Three controls are deliberately fixed at every density: the checkbox
+        and radio (20px), the switch (50×28px), and the avatar (32px, 44px
+        for <code class="cn-code">.is-lg</code>).
+      </p>
 
       <Demo title="Live density toggle" classes='data-density="compact"'>
         <button
@@ -135,7 +147,7 @@ export default function DensityPage() {
             values: "the accent cycle: #cba6f7 #94e2d5 #f9e2af #89b4fa #fab387 #f5c2e7",
             default: "var(--mauve)",
             notes:
-              "Per-instance accent. Read by accent-card (border, gradient, spine), mark-solid, cn-value-lg, the terminal caret, and cn-text-accent / cn-tint-accent / cn-edge-accent / cn-spine.",
+              "Per-instance accent. Read by accent-card (border, gradient, spine), mark-solid, avatar, cn-value-lg, the terminal caret, and cn-text-accent / cn-tint-accent / cn-edge-accent / cn-spine.",
           },
           {
             name: "--tone",

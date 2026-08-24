@@ -51,8 +51,8 @@ export default function DepthPage() {
       <p class="cn-copy">
         Two directions, two strengths. <code class="cn-code">cn-raised</code>{" "}
         lifts a surface off the page; <code class="cn-code">cn-inset</code>{" "}
-        presses one into it. Each has a soft partner at roughly half the
-        offset, blur, and strength. Panels and cards take the regular shadows;
+        presses one into it. Each has a soft partner with smaller offset and
+        blur at reduced strength. Panels and cards take the regular shadows;
         chips, small controls, and held states take the soft ones.
       </p>
 
@@ -174,6 +174,40 @@ export default function DepthPage() {
         selected state, pressed in, mauve-tinted, and borderless.
       </p>
 
+      <Demo
+        title="Radius roles"
+        classes="cn-r-panel / cn-r-card / cn-r-control / cn-r-mark / cn-r-chip / cn-r-pill / cn-r-round"
+        row
+      >
+        {[
+          ["panel", "var(--pane-radius)"],
+          ["card", "13px"],
+          ["control", "10px"],
+          ["mark", "8px"],
+          ["chip", "4px"],
+          ["pill", "999px"],
+          ["round", "50%"],
+        ].map(([role, value]) => (
+          <div key={role} style="display:grid;gap:10px;justify-items:center">
+            <div
+              class={`cn-bg-base cn-raised-soft cn-r-${role}`}
+              style="width:64px;height:64px"
+            />
+            <code class="cn-code cn-text-overlay-1" style="font-size:11px">
+              cn-r-{role}
+            </code>
+            <span class="cn-meta">{value}</span>
+          </div>
+        ))}
+      </Demo>
+
+      <p class="cn-copy">
+        Radii are role-named; no utility takes a numeric value.{" "}
+        <code class="cn-code">cn-r-panel</code> reads{" "}
+        <code class="cn-code">--pane-radius</code>, so 12px enters the scale
+        only via compact density.
+      </p>
+
       <CodeBlock
         title="Composing depth"
         code={`<!-- A raised card, carved from the page ground -->
@@ -202,7 +236,7 @@ export default function DepthPage() {
           {
             name: ".cn-raised-soft",
             values: "var(--neu-raised-soft)",
-            notes: "Half the offset, blur, and strength. Chips, small controls.",
+            notes: "Smaller offset and blur at reduced strength. Chips, small controls.",
           },
           {
             name: ".cn-raised-lit",
@@ -252,13 +286,20 @@ export default function DepthPage() {
           {
             name: ".cn-flat",
             values: "box-shadow: none",
-            notes: "Opt out. Softens a secondary button to raised-soft, for example.",
+            notes:
+              "Opt out for utility-composed shadows. Cannot override a recipe shadow: the recipes layer wins. Softening a recipe needs an unlayered consumer rule.",
           },
           {
             name: "--hard-offset-color",
             values: "any token color-mix",
             default: "var(--crust)",
             notes: "Contract prop read by the whole hard family.",
+          },
+          {
+            name: "--hard-offset",
+            values: "length",
+            default: "4px",
+            notes: "3px under compact density. The press slides half the offset.",
           },
           {
             name: ".cn-pressable",

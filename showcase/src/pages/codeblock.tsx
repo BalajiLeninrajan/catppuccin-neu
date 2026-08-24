@@ -23,7 +23,7 @@ export default function CodeblockPage() {
   return (
     <Doc
       title="Code block"
-      lede="A carved well for snippets. Mono 500 12px on a 1.75 line height, and besides the terminal this is the only surface that sets the mono face."
+      lede="A carved well for snippets. Mono 500 12px on a 1.75 line height. One of the three mono carriers, with .cn-code and .terminal."
     >
       <Demo title="Code block" classes="codeblock > pre">
         <div class="codeblock" style="width:min(560px,100%)">
@@ -88,9 +88,8 @@ export default function CodeblockPage() {
         For long content, cap the well with a{" "}
         <code class="cn-code">max-height</code> and{" "}
         <code class="cn-code">overflow-y: auto</code>, and compose{" "}
-        <code class="cn-code">.scroll-well</code> for the quiet scrollbar. The
-        copy line under each demo on this site is docs chrome, not part of the
-        recipe. Copying to the clipboard needs consumer JS.
+        <code class="cn-code">.scroll-well</code> for the quiet scrollbar.
+        Copying to the clipboard needs consumer JS.
       </p>
 
       <CodeBlock

@@ -80,6 +80,12 @@ export default function ModalPage() {
         <code class="cn-code">--pane-radius</code>, so compact density tightens the corners.
       </p>
 
+      <p class="cn-copy">
+        The exit animates only if the scrim stays mounted and{" "}
+        <code class="cn-code">hidden</code> is toggled; unmounting gets the
+        entrance only.
+      </p>
+
       <Demo title="Live demo" classes="cn-scrim > modal">
         <ModalDemo />
       </Demo>
@@ -117,12 +123,19 @@ export default function ModalPage() {
             default: "16px",
             notes: "12px arrives only via data-density=\"compact\".",
           },
+          {
+            name: "[hidden]",
+            values: "exit state",
+            default: "—",
+            notes: "Toggle on the mounted scrim to play the exit; unmounting gets the entrance only.",
+          },
         ]}
       />
 
       <CodeBlock
         title="Markup"
-        code={`<div class="cn-scrim">
+        code={`<!-- keep it mounted; toggle hidden to animate the exit -->
+<div class="cn-scrim" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="t">
     <header>
       <h2 id="t" class="cn-title">Invite a teammate</h2>

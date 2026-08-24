@@ -107,6 +107,12 @@ export default function SurfacesPage() {
         the well dissolves to show the overflow.
       </p>
 
+      <p class="cn-copy">
+        The well's ground is transparent; the carve alone defines it. Compose{" "}
+        <code class="cn-code">.cn-bg-well</code> onto{" "}
+        <code class="cn-code">.well</code> for an explicit darker fill.
+      </p>
+
       <Props
         title="Surface classes"
         rows={[

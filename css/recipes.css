@@ -2,9 +2,9 @@
    Every recipe reads tokens and contract properties only (--accent, --tone,
    --hard-offset-color, the density knobs). Depth canon: clickable controls
    default to the hard offset shadow and press with the half-slide — rest
-   4px 4px 0, hover translate(-1px,-1px), active translate(2px,2px) with the
-   shadow shrinking to 2px 2px 0. Type: everything sets the sans face; mono
-   appears only in code-like contexts (.terminal, .cn-code). Inset surfaces
+   --hard-offset (4px, 3px compact), hover translate(-1px,-1px), active a
+   half-slide onto the shadow, which shrinks to meet it. Type: everything sets the sans face; mono
+   appears only in code-like contexts (.terminal, .codeblock, .cn-code). Inset surfaces
    are borderless — depth defines them; hairlines stay on raised surfaces
    and tinted semantic surfaces only.
    Requires tokens.css (+ utilities.css for .cn-scrim). Layer: cn.recipes.   */
@@ -157,7 +157,7 @@
   color: var(--crust);
   border: 1px solid var(--mauve);
   background: var(--mauve);
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--mauve) 25%, var(--surface-0)),
+  box-shadow: var(--hard-offset) var(--hard-offset) 0 color-mix(in srgb, var(--mauve) 25%, var(--surface-0)),
               inset 1px 1px rgb(255 255 255 / .16);
 }
 .btn-primary:hover:not(:disabled) {
@@ -166,8 +166,8 @@
   background: var(--pink);
 }
 .btn-primary:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 color-mix(in srgb, var(--mauve) 25%, var(--surface-0)),
+  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
+  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 color-mix(in srgb, var(--mauve) 25%, var(--surface-0)),
               inset 1px 1px rgb(255 255 255 / .16);
 }
 
@@ -179,15 +179,15 @@
   color: var(--text);
   border: 1px solid color-mix(in srgb, var(--surface-2) 40%, transparent);
   background: var(--base);
-  box-shadow: 4px 4px 0 var(--hard-offset-color);
+  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color);
 }
 .btn-secondary:hover:not(:disabled) {
   transform: translate(-1px, -1px);
   border-color: color-mix(in srgb, var(--mauve) 50%, var(--surface-1));
 }
 .btn-secondary:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--hard-offset-color);
+  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
+  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--hard-offset-color);
 }
 
 /* Ghost — chrome-free until hovered. */
@@ -248,7 +248,7 @@
 
 /* Icon button — flat until hovered, then tints toward its --tone. */
 .btn-icon {
-  width: 32px; height: 32px;
+  width: var(--control-h-sm); height: var(--control-h-sm);
   display: grid; place-items: center;
   color: var(--overlay-1);
   border: 1px solid transparent;
@@ -473,7 +473,7 @@
   border: 1px solid color-mix(in srgb, var(--surface-2) 36%, transparent);
   border-radius: 10px;
   background: var(--base);
-  box-shadow: 4px 4px 0 var(--hard-offset-color);
+  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color);
   text-align: left;
   cursor: pointer;
   transition: transform .16s, background .16s, border-color .16s, box-shadow .16s, color .16s;
@@ -484,8 +484,8 @@
 }
 /* Held down — the half-slide. Transient only; the settled state never slides. */
 .segmented > *:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--hard-offset-color);
+  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
+  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--hard-offset-color);
 }
 /* Selected — the engaged treatment: pressed in, mauve-keyed, borderless. */
 .segmented > .active,
@@ -659,19 +659,25 @@
   transition: box-shadow .16s, border-color .16s;
 }
 .radio:hover:not(:disabled):not(:checked) { border-color: var(--surface-2); }
-.radio:checked { border-color: color-mix(in srgb, var(--mauve) 55%, var(--surface-1)); }
+/* Deliberate asymmetry with the checkbox: the checkbox signals with its
+   mauve fill and stays on the soft inset; the radio only gets a dot, so it
+   leans on the full carve instead. */
+.radio:checked {
+  border-color: color-mix(in srgb, var(--mauve) 55%, var(--surface-1));
+  box-shadow: var(--neu-inset);
+}
 .radio::after {
   content: "";
   width: 9px;
   height: 9px;
   border-radius: 50%;
   background: var(--mauve);
+  /* Halo ring: the .live-dot composite (0 0 0 Npx currentColor-mix). */
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mauve) 13%, transparent);
   opacity: 0;
   transform: scale(.5);
   transition: opacity .16s, transform .16s;
 }
-.radio:checked { box-shadow: var(--neu-inset); }
 .radio:checked::after { opacity: 1; transform: none; }
 
 /* Switch: an abstract light switch. A carved wall plate holds a raised
@@ -786,7 +792,12 @@
   min-height: 0;
   overflow: clip;
   padding: 0 12px;
+  /* Closed content leaves the tab order and the accessibility tree;
+     visibility flips at the end of the close, so the fold still animates. */
+  visibility: hidden;
+  transition: visibility .3s;
 }
+.accordion:has(> label > input:checked) .fold > * { visibility: visible; }
 /* Bottom spacing lives on the content's margin: padding would floor the
    collapsed wrapper at its own height, margins clip away with the fold. */
 .accordion .fold > * > :last-child { margin-bottom: 16px; }
@@ -1007,6 +1018,25 @@ a:active > .accent-card {
 .popover > :first-child { border-top-left-radius: calc(13px - 1px); border-top-right-radius: calc(13px - 1px); }
 .popover > :last-child  { border-bottom-left-radius: calc(13px - 1px); border-bottom-right-radius: calc(13px - 1px); }
 
+/* Band layout inside popovers and drawers: the recipe owns the flex band;
+   compose cn-bg-head on headers for the fill. Popover footers are divider
+   only, per the footer rule. */
+.popover > header, .drawer > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+}
+.drawer > header { min-height: 62px; padding: 14px 22px; gap: 16px; }
+.popover > footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 16px;
+  border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+}
+
 /* Modal — a child of .cn-scrim; centers itself in the viewport. */
 .modal {
   position: fixed;
@@ -1034,11 +1064,6 @@ a:active > .accent-card {
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
   border-radius: calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px) 0 0;
 }
-/* A filled footer band mirrors the heading treatment. */
-.modal > footer:last-child {
-  border-radius: 0 0 calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px);
-}
-
 /* Drawer — side sheet pinned to the right edge, above the scrim. Square
    corners, so child bands need no radius treatment. */
 .drawer {
@@ -1054,19 +1079,68 @@ a:active > .accent-card {
   box-shadow: var(--shadow-pop);
 }
 
-/* Toast — one item in a fixed-corner stack (the consumer owns the stack). */
-.toast {
-  padding: 12px 16px;
+/* Toast — shadcn-shaped. `.toast-stack` is the fixed viewport; toasts append
+   at its bottom. Each `.toast` is a row: a content column (`b` title over a
+   span/p description) plus trailing controls (.btn-text and/or .btn-icon).
+   Neutral surface-1 border — the toast carries no accent color. */
+.toast-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 90;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
   gap: 10px;
+  width: min(380px, calc(100vw - 40px));
+}
+.toast-stack .toast { width: 100%; }
+/* Collapsed stack: the newest toast sits on top, up to two older ones peek
+   behind it, scaled back; the fourth and older hide until the stack thins.
+   Hover or keyboard focus fans the stack out into the column. */
+.toast-stack:not(:hover):not(:focus-within) {
+  display: grid;
+  justify-items: end;
+}
+.toast-stack:not(:hover):not(:focus-within) .toast {
+  grid-area: 1 / 1;
+  align-self: end;
+}
+.toast-stack:not(:hover):not(:focus-within) .toast:nth-last-child(2):not([hidden]) {
+  translate: 0 -14px;
+  scale: .95;
+}
+.toast-stack:not(:hover):not(:focus-within) .toast:nth-last-child(3):not([hidden]) {
+  translate: 0 -26px;
+  scale: .9;
+}
+.toast-stack:not(:hover):not(:focus-within) .toast:nth-last-child(n + 4) {
+  opacity: 0;
+  visibility: hidden;
+}
+.toast {
+  max-width: 100%;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
   color: var(--text);
-  border: 1px solid color-mix(in srgb, var(--mauve) 38%, var(--surface-0));
+  border: 1px solid var(--surface-1);
   border-radius: 13px;
   background: var(--base);
   box-shadow: var(--shadow-pop);
-  font: 600 11px/1.4 var(--sans);
-  letter-spacing: .03em;
+  font: 500 11.5px/1.5 var(--sans);
+}
+.toast b {
+  display: block;
+  color: var(--text);
+  font: 700 12.5px/1.4 var(--sans);
+}
+.toast span,
+.toast p {
+  margin: 0;
+  color: var(--subtext-0);
+  font: 500 11.5px/1.5 var(--sans);
 }
 
 /* ── Overlay motion ──────────────────────────────────────────────────────────
@@ -1088,13 +1162,16 @@ a:active > .accent-card {
 .cn-scrim { transition: opacity .2s ease, backdrop-filter .2s ease, visibility .2s; }
 .popover { transition-duration: .16s; }
 .drawer  { transition-duration: .26s; }
+/* The toast travels on the `translate` property (transform stays free for
+   consumers); .26s to match the drawer's travel tier. */
+.toast   { transition: opacity .26s ease, translate .26s ease, scale .26s ease, visibility .26s; }
 
 /* Exit targets — mirrored as pre-entry states in @starting-style below. */
 .cn-scrim[hidden] { display: block; visibility: hidden; opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
 .popover[hidden]  { display: block; visibility: hidden; opacity: 0; transform: translateY(-4px); pointer-events: none; }
 .modal[hidden]    { display: block; visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); pointer-events: none; }
 .drawer[hidden]   { display: flex; visibility: hidden; transform: translateX(calc(100% + 40px)); pointer-events: none; }
-.toast[hidden]    { display: flex; visibility: hidden; opacity: 0; transform: translateY(6px); pointer-events: none; }
+.toast[hidden]    { display: flex; visibility: hidden; opacity: 0; translate: calc(100% + 24px) 0; pointer-events: none; }
 /* A modal or drawer inside a scrim rides the scrim's exit. */
 .cn-scrim[hidden] .modal  { visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); }
 .cn-scrim[hidden] .drawer { visibility: hidden; transform: translateX(calc(100% + 40px)); }
@@ -1106,7 +1183,7 @@ a:active > .accent-card {
   .cn-scrim:not([hidden]) .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
   .drawer:not([hidden])   { transform: translateX(calc(100% + 40px)); }
   .cn-scrim:not([hidden]) .drawer { transform: translateX(calc(100% + 40px)); }
-  .toast:not([hidden])    { opacity: 0; transform: translateY(6px); }
+  .toast:not([hidden])    { opacity: 0; translate: calc(100% + 24px) 0; }
 }
 
 /* ── Page furniture ─────────────────────────────────────────────────────────
@@ -1166,9 +1243,10 @@ a:active > .accent-card {
   .topbar { min-height: 60px; padding: 9px 13px; }
   .footer-neu { width: min(100% - 24px, 1440px); }
 
-  /* Icon-only collapse: kill the label with font-size 0, keep the glyph.
-     Keep an accessible name on the control. */
-  .chip { padding: 7px; font-size: 0; }
+  /* Icon-only collapse, glyph chips only: kill the label with font-size 0,
+     keep the glyph. Text-only chips keep their label. Keep an accessible
+     name on the control. */
+  .chip:has(svg) { padding: 7px; font-size: 0; }
   .chip svg { width: 16px; height: 16px; }
 
   .display-title { font-size: 38px; }

@@ -12,8 +12,7 @@ export default function EmptyStatePage() {
         The recipe styles two children directly.{" "}
         <code class="cn-code">strong</code> is the title,{" "}
         <code class="cn-code">span</code> the supporting line, and anything
-        else joins the 10px stack. Keep the copy to one idea: what's missing,
-        and the single next step.
+        else joins the 10px stack.
       </p>
 
       <Demo title="Title, description, action" classes="empty-state">

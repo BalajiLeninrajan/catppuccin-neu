@@ -18,9 +18,9 @@
 /* Solid-mark mini-drop. */
 .cn-mark-drop   { box-shadow: var(--shadow-mark); }
 /* The hard offset — the flat graphic note. Any clickable control may take it. */
-.cn-hard        { box-shadow: 4px 4px 0 var(--hard-offset-color); }
+.cn-hard        { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color); }
 .cn-hard-lg     { box-shadow: 10px 10px 0 var(--hard-offset-color); }  /* tilted hero card */
-.cn-hard-sm     { box-shadow: 3px 3px 0 var(--hard-offset-color); }    /* compact density */
+.cn-hard-sm     { box-shadow: 3px 3px 0 var(--hard-offset-color); }    /* fixed small offset */
 .cn-flat        { box-shadow: none; }
 
 /* ── Interaction ────────────────────────────────────────────────────────── */
@@ -37,7 +37,7 @@
 /* The canonical half-slide — legal only combined with .cn-hard. The control
    slides halfway onto its own offset shadow, which shrinks to meet it. */
 .cn-pressable-slide:hover:not(:disabled)  { transform: translate(-1px, -1px); }
-.cn-pressable-slide:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--hard-offset-color); }
+.cn-pressable-slide:active:not(:disabled) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--hard-offset-color); }
 
 /* (.cn-engaged — the selected/toggled state — is declared after the border
    utilities so its border-color beats a composed .cn-edge-*.)              */

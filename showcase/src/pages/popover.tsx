@@ -17,7 +17,7 @@ function AnchoredDemo() {
       </button>
       {/* Stays mounted; toggling hidden plays the exit transition. */}
         <div class="popover" hidden={!open} role="dialog" aria-label="Notifications" style="top:60px; left:0;">
-          <header class="cn-bg-head" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px;">
+          <header class="cn-bg-head">
             <span class="cn-label">Notifications</span>
             <span class="chip-tone cn-tone-mauve">3 new</span>
           </header>
@@ -35,7 +35,7 @@ function AnchoredDemo() {
               <span class="cn-meta">Teams · 1h ago</span>
             </div>
           </div>
-          <footer style="display:flex; justify-content:flex-end; padding:10px 16px; border-top:1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);">
+          <footer>
             <button type="button" class="btn-text" onClick={() => setOpen(false)}>
               Mark all as read
             </button>
@@ -50,7 +50,7 @@ function AnatomyDemo() {
   return (
     <div style="position:relative; min-height:230px; width:min(390px, 100%);">
       <div class="popover" style="top:0; left:0;">
-        <header class="cn-bg-head" style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px;">
+        <header class="cn-bg-head">
           <span class="cn-label">Filter results</span>
           <span class="chip">12 columns</span>
         </header>
@@ -69,7 +69,7 @@ function AnatomyDemo() {
             <span class="chip-tone cn-tone-red">Overdue</span>
           </div>
         </div>
-        <footer style="display:flex; justify-content:space-between; gap:10px; padding:10px 16px; border-top:1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);">
+        <footer>
           <button type="button" class="btn-text">Reset</button>
           <button type="button" class="btn-text">Apply</button>
         </footer>
@@ -81,13 +81,22 @@ function AnatomyDemo() {
 export default function PopoverPage() {
   return (
     <Doc
-      title="Popover"
+      title="Popover & tooltip"
       lede="An anchored floating panel for menus and filters. Popovers float on the pop shadow; overlays never use neumorphic depth."
     >
       <p class="cn-copy">
         Give the anchor <code class="cn-code">position: relative</code> and drop the popover
         inside it. Filled first and last children inherit the corner radius. Never clip
-        with <code class="cn-code">overflow: hidden</code>; it clips the shadow too.
+        with <code class="cn-code">overflow: hidden</code>; it clips the shadow too. The
+        recipe lays out <code class="cn-code">header</code> and{" "}
+        <code class="cn-code">footer</code> bands; compose{" "}
+        <code class="cn-code">.cn-bg-head</code> on the header for the fill.
+      </p>
+
+      <p class="cn-copy">
+        The exit animates only if the element stays mounted and{" "}
+        <code class="cn-code">hidden</code> is toggled; unmounting gets the
+        entrance only.
       </p>
 
       <Demo title="Anchored, click to open" classes="popover">
@@ -148,14 +157,27 @@ export default function PopoverPage() {
             default: "—",
             notes: "Recessed band mix, same fill as panel headings.",
           },
+          {
+            name: ".popover > header / > footer",
+            values: "band elements",
+            default: "—",
+            notes: "Recipe-owned flex bands. Footer is divider only, actions right-aligned.",
+          },
+          {
+            name: "[hidden]",
+            values: "exit state",
+            default: "—",
+            notes: "Toggle on a mounted popover to play the exit; unmounting gets the entrance only.",
+          },
         ]}
       />
 
       <CodeBlock
         title="Markup"
         code={`<div style="position: relative">
-  <button class="btn btn-secondary" aria-expanded="true">Notifications</button>
-  <div class="popover" role="dialog" aria-label="Notifications">
+  <button class="btn btn-secondary" aria-expanded="false">Notifications</button>
+  <!-- keep it mounted; toggle hidden to animate the exit -->
+  <div class="popover" hidden role="dialog" aria-label="Notifications">
     <header class="cn-bg-head">…</header>
     <div>…rows…</div>
     <footer>…divider-top, no fill…</footer>

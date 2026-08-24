@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, TONES } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock, TONES, ACCENTS } from "../lib/doc";
 
 /* Small inline glyphs (24-unit grid, stroke = currentColor). Decorative:
    always paired with a text label, always aria-hidden. */
@@ -97,10 +97,11 @@ export default function ChipPage() {
       </Demo>
 
       <p class="cn-copy">
-        Below 760px a chip with an <code class="cn-code">svg</code> glyph
-        collapses to icon-only: the label is hidden with{" "}
-        <code class="cn-code">font-size: 0</code> and the glyph scales up to
-        16px. Keep the label in the markup, it stays the chip's accessible name
+        Below 760px, only a chip containing an{" "}
+        <code class="cn-code">svg</code> glyph collapses to icon-only: the
+        label is hidden with <code class="cn-code">font-size: 0</code> and the
+        glyph scales up to 16px. Text-only chips keep their label at every
+        width. Keep the label in the markup, it stays the chip's accessible name
         after the collapse. Mark the glyph{" "}
         <code class="cn-code">aria-hidden="true"</code>, and never ship a chip
         whose only content is the svg.
@@ -113,6 +114,20 @@ export default function ChipPage() {
           </span>
         ))}
       </Demo>
+
+      <Demo title="Solid marks" classes='mark-solid · set style="--accent:#…"' row>
+        {ACCENTS.map((a, i) => (
+          <span class="mark-solid" style={`--accent:${a.color}`}>
+            {i + 1}
+          </span>
+        ))}
+      </Demo>
+
+      <p class="cn-copy">
+        <code class="cn-code">.mark-solid</code> is the 28px identity square for step numbers, ranks, and the
+        logo tile. Re-key it per instance by setting <code class="cn-code">--accent</code> inline from your
+        data.
+      </p>
 
       <Props
         title="Contract"
@@ -140,6 +155,12 @@ export default function ChipPage() {
             values: ".cn-tone-red / -green / -peach / -yellow / -blue / -mauve",
             default: "var(--peach)",
             notes: "Semantic color contract prop; set via a tone utility or inline.",
+          },
+          {
+            name: ".mark-solid",
+            values: "28px square",
+            default: "--accent: var(--mauve)",
+            notes: "Solid accent fill, --shadow-mark, tabular numeral. Set --accent inline per instance.",
           },
         ]}
       />

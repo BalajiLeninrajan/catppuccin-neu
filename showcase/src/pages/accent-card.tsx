@@ -101,7 +101,7 @@ export default function AccentCardPage() {
             values: "any cycle hex",
             default: "var(--mauve)",
             notes:
-              "Set inline from data. Read by the spine, border, gradient, mark-solid, cn-value-lg, and the terminal caret.",
+              "Set inline from data. Read by the spine, border, gradient, mark-solid, avatar, cn-value-lg, and the terminal caret.",
           },
           {
             name: ".accent-card",
@@ -129,7 +129,8 @@ export default function AccentCardPage() {
 
       <CodeBlock
         title="Markup"
-        code={`<a href="/teams/payments" class="card-link">
+        code={`<a href="/teams/payments"
+   style="display: block; text-decoration: none; color: inherit">
   <div class="accent-card" style="--accent: #94e2d5">
     <p class="cn-microlabel">Team</p>
     <p class="cn-name">Payments</p>

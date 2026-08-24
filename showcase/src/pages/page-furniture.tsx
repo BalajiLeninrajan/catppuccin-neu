@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const headerSnippet = `<header>
   <p class="eyebrow">Quarterly report</p>
@@ -24,11 +24,6 @@ main {
   z-index: 1;
 }`;
 
-const srOnlySnippet = `<button class="btn-icon" type="button">
-  <svg …></svg>
-  <span class="cn-sr-only">Open settings</span>
-</button>`;
-
 function GearIcon() {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -42,7 +37,7 @@ export default function PageFurniturePage() {
   return (
     <Doc
       title="Page furniture"
-      lede="The pieces that frame a page: the topbar, the footer rule, the eyebrow-title-lede header stack, solid marks, the live dot, and the shell wash."
+      lede="The pieces that frame a page: the topbar, the footer rule, the eyebrow-title-lede header stack, the live dot, and the shell wash."
     >
       <p class="cn-copy">
         The furniture recipes never style bare elements. <code class="cn-code">.topbar</code> goes on
@@ -86,7 +81,7 @@ export default function PageFurniturePage() {
             <span class="chip">
               <span class="live-dot" aria-hidden="true"></span> Synced
             </span>
-            <button type="button" class="btn-icon" title="Settings">
+            <button type="button" class="btn-icon" data-tip="Settings">
               <GearIcon />
               <span class="cn-sr-only">Open settings</span>
             </button>
@@ -114,20 +109,6 @@ export default function PageFurniturePage() {
         pattern, so it lines up with the content above it.
       </p>
 
-      <Demo title="Solid marks" classes='mark-solid · set style="--accent:#…"' row>
-        {ACCENTS.map((a, i) => (
-          <span class="mark-solid" style={`--accent:${a.color}`}>
-            {i + 1}
-          </span>
-        ))}
-      </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code">.mark-solid</code> is the 28px identity square for step numbers, ranks, and the
-        logo tile. Re-key it per instance by setting <code class="cn-code">--accent</code> inline from your
-        data.
-      </p>
-
       <Demo title="Live dot" classes=".live-dot" row>
         <span class="live-dot" aria-hidden="true"></span>
         <span class="cn-meta sc-row">
@@ -152,22 +133,6 @@ export default function PageFurniturePage() {
       </p>
 
       <CodeBlock title="Page shell + main column pattern" code={shellSnippet} />
-
-      <Demo title="Screen-reader-only label" classes="cn-sr-only">
-        <button type="button" class="btn-icon" title="Settings">
-          <GearIcon />
-          <span class="cn-sr-only">Open settings</span>
-        </button>
-      </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code">.cn-sr-only</code> clips content out of the visual layout but leaves it in the
-        accessibility tree. <code class="cn-code">.cn-hidden</code> is{" "}
-        <code class="cn-code">display: none !important</code>, gone from layout and assistive tech alike. Use
-        sr-only to relabel, hidden to remove.
-      </p>
-
-      <CodeBlock title="Accessible icon button" code={srOnlySnippet} />
 
       <Props
         title="Furniture reference"
@@ -198,12 +163,6 @@ export default function PageFurniturePage() {
             notes: "16px/1.65 subtext, max-width 690px.",
           },
           {
-            name: ".mark-solid",
-            values: "28px square",
-            default: "--accent: var(--mauve)",
-            notes: "Solid accent fill, --shadow-mark, tabular numeral. Set --accent inline per instance.",
-          },
-          {
             name: ".live-dot",
             values: "7px pulse dot",
             default: "green",
@@ -218,16 +177,6 @@ export default function PageFurniturePage() {
             name: ".cn-scrim",
             values: "fixed overlay backdrop",
             notes: "Blurred crust at 74%, z-index 70. Modals and drawers render inside it.",
-          },
-          {
-            name: ".cn-sr-only",
-            values: "clip pattern",
-            notes: "Visually hidden, still announced. Label icon-only controls with it.",
-          },
-          {
-            name: ".cn-hidden",
-            values: "display: none !important",
-            notes: "Removed from layout and the accessibility tree.",
           },
         ]}
       />

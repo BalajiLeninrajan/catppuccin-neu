@@ -29,7 +29,7 @@ export default function ButtonPage() {
   return (
     <Doc
       title="Button"
-      lede="Seven button styles, one press. Clickable controls default to the hard offset shadow and the half-slide, riding down onto their own shadow instead of sinking into the page."
+      lede="Seven button styles, two presses. Primary and secondary carry the hard offset and half-slide onto their own shadow; ghost, flat, text, icon, and dashed sink with the soft press."
     >
       <p class="cn-copy">
         Compose the base class with a variant: <code class="cn-code">class="btn btn-primary"</code>. Labels are

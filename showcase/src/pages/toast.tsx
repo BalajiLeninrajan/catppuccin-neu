@@ -2,15 +2,16 @@ import { useRef, useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const MESSAGES = [
-  "Invoice #1042 sent to Accounts",
-  "Settings saved for Northwind Ops",
-  "Message archived",
-  "3 teammates added to Design",
+  { title: "Invoice sent", desc: "Invoice #1042 is on its way to Accounts." },
+  { title: "Settings saved", desc: "Northwind Ops picks up the change now." },
+  { title: "Message archived", desc: "Find it under Archive whenever you need it." },
+  { title: "Teammates added", desc: "3 people joined the Design workspace." },
 ];
 
 interface ToastItem {
   id: number;
-  message: string;
+  title: string;
+  desc: string;
   leaving: boolean;
 }
 
@@ -21,15 +22,15 @@ function ToastSpawner() {
 
   function spawn() {
     const id = ++idRef.current;
-    const message = MESSAGES[msgRef.current++ % MESSAGES.length];
-    setToasts((t) => [...t, { id, message, leaving: false }]);
+    const { title, desc } = MESSAGES[msgRef.current++ % MESSAGES.length];
+    setToasts((t) => [...t, { id, title, desc, leaving: false }]);
     setTimeout(() => dismiss(id), 3600);
   }
 
   // Two-phase: hidden plays the exit transition, then the element unmounts.
   function dismiss(id: number) {
     setToasts((t) => t.map((x) => (x.id === id ? { ...x, leaving: true } : x)));
-    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 260);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 300);
   }
 
   return (
@@ -38,16 +39,20 @@ function ToastSpawner() {
         Spawn a toast
       </button>
       {toasts.length > 0 && (
-        <div
-          aria-live="polite"
-          style="position:fixed; right:20px; bottom:20px; z-index:90; display:flex; flex-direction:column; align-items:flex-end; gap:10px;"
-        >
+        <div class="toast-stack" aria-live="polite">
           {toasts.map((t) => (
             <div key={t.id} class="toast" hidden={t.leaving} role="status">
-              <span class="live-dot" aria-hidden="true"></span>
-              {t.message}
-              <button type="button" class="btn-text" onClick={() => dismiss(t.id)}>
-                Dismiss
+              <div>
+                <b>{t.title}</b>
+                <span>{t.desc}</span>
+              </div>
+              <button
+                type="button"
+                class="btn-icon"
+                aria-label="Dismiss"
+                onClick={() => dismiss(t.id)}
+              >
+                ✕
               </button>
             </div>
           ))}
@@ -61,26 +66,46 @@ export default function ToastPage() {
   return (
     <Doc
       title="Toast"
-      lede="A transient confirmation in a fixed corner stack. The consumer owns the stack and the timing."
+      lede="A transient confirmation in a fixed corner stack. The stack is the recipe now; the consumer owns the timing."
     >
       <p class="cn-copy">
-        The recipe styles one item. The stack is yours, a fixed corner container with a
-        column gap, marked <code class="cn-code">aria-live="polite"</code> so arrivals are
-        announced. Auto-dismiss after a few seconds and offer a manual dismiss for anything
-        a reader might want to keep. Keep the copy to one line.
+        Two classes. <code class="cn-code">.toast-stack</code> is the viewport, fixed to
+        the bottom-right corner; mark it <code class="cn-code">aria-live="polite"</code>{" "}
+        so arrivals are announced, and append new toasts at the bottom.{" "}
+        <code class="cn-code">.toast</code> is one item: a content column with a{" "}
+        <code class="cn-code">b</code> title over a span or p description, then trailing
+        controls, a <code class="cn-code">.btn-text</code> action and/or a{" "}
+        <code class="cn-code">.btn-icon</code> close. The border is the neutral
+        surface-1 hairline; the toast carries no accent color.
       </p>
 
-      <Demo title="Spawner, auto-dismisses after 3.6s" classes="toast">
+      <p class="cn-copy">
+        Toasts slide in from the right edge, like the drawer. The exit animates only if
+        the toast stays mounted and <code class="cn-code">hidden</code> is toggled;
+        unmount it after the transition. Unmounting directly gets the entrance only.
+        Auto-dismiss after a few seconds and keep a manual dismiss for anything a
+        reader might want to keep.
+      </p>
+
+      <Demo title="Spawner, auto-dismisses after 3.6s" classes="toast-stack toast">
         <ToastSpawner />
       </Demo>
 
-      <Demo title="At rest, statically positioned until you stack it" row>
+      <Demo title="At rest, one item outside its stack" row>
         <div class="toast" role="status">
-          <span class="live-dot" aria-hidden="true"></span>
-          Invoice #1042 sent to Accounts
+          <div>
+            <b>Invoice sent</b>
+            <span>Invoice #1042 is on its way to Accounts.</span>
+          </div>
+          <button type="button" class="btn-icon" aria-label="Dismiss">
+            ✕
+          </button>
         </div>
         <div class="toast" role="status">
-          Settings saved
+          <div>
+            <b>Message archived</b>
+            <span>Find it under Archive whenever you need it.</span>
+          </div>
           <button type="button" class="btn-text">Undo</button>
         </div>
       </Demo>
@@ -89,28 +114,39 @@ export default function ToastPage() {
         title="Contract"
         rows={[
           {
+            name: ".toast-stack",
+            values: "the viewport",
+            default: "—",
+            notes:
+              "Fixed 20px from the right and bottom, z-index 90, column flex aligned to the end, 10px gap, min(380px, calc(100vw - 40px)) wide. Mark it aria-live=\"polite\"; append at the bottom.",
+          },
+          {
             name: ".toast",
             values: "one stack item",
             default: "—",
-            notes: "Mauve-keyed hairline on base; floats on --shadow-pop; no positioning of its own.",
+            notes:
+              "Flex row on base with the neutral surface-1 border (no accent); floats on --shadow-pop; 13px radius.",
           },
           {
-            name: "stack container",
-            values: "consumer-owned",
+            name: "b + span/p",
+            values: "title and description",
             default: "—",
-            notes: "position: fixed in a corner, column flex with a 10px gap, aria-live=\"polite\".",
+            notes:
+              "The content column. b is the block title; the span or p after it is the muted description.",
           },
           {
-            name: ".live-dot",
-            values: "optional leading pulse",
-            default: "green",
-            notes: "Paints with currentColor; recolor via the color property.",
-          },
-          {
-            name: ".btn-text",
-            values: "optional trailing action",
+            name: ".btn-text / .btn-icon",
+            values: "trailing controls",
             default: "—",
-            notes: "Undo / Dismiss; keep it to one action per toast.",
+            notes:
+              "One action and/or an icon close with an aria-label. They sit at the end of the row.",
+          },
+          {
+            name: "[hidden]",
+            values: "exit state",
+            default: "—",
+            notes:
+              "Toggle on a mounted toast to slide it back out (.26s), then unmount. Unmounting directly gets the entrance only.",
           },
         ]}
       />
@@ -118,14 +154,16 @@ export default function ToastPage() {
       <CodeBlock
         title="Markup"
         code={`<div class="toast-stack" aria-live="polite">
-  <!-- .toast-stack is consumer CSS:
-       position: fixed; right: 20px; bottom: 20px;
-       display: flex; flex-direction: column; gap: 10px; -->
   <div class="toast" role="status">
-    <span class="live-dot" aria-hidden="true"></span>
-    Invoice #1042 sent to Accounts
-    <button class="btn-text">Dismiss</button>
+    <div>
+      <b>Invoice sent</b>
+      <span>Invoice #1042 is on its way to Accounts.</span>
+    </div>
+    <button class="btn-icon" aria-label="Dismiss">✕</button>
   </div>
+
+  <!-- dismissing: toggle hidden to play the exit, then remove -->
+  <div class="toast" hidden role="status">…</div>
 </div>`}
       />
     </Doc>

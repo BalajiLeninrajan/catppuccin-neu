@@ -20,7 +20,7 @@ export default function TerminalPage() {
   return (
     <Doc
       title="Terminal"
-      lede="The deepest well in the system. Crust ground, full inset shadow, no border, and the one place the mono face appears outside .cn-code."
+      lede="The deepest well in the system. Crust ground, full inset shadow, no border. One of the three mono carriers, with .cn-code and .codeblock."
     >
       <Demo title="Log surface with caret" classes="terminal / terminal .caret">
         <div class="terminal" style="width:min(560px,100%);height:230px">

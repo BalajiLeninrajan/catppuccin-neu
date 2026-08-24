@@ -41,11 +41,11 @@
 
   /* Neumorphic depth. Light source is top-left: dark shadow bottom-right,
      lift highlight top-left. Every elevation in the app is one of these four.
-     Soft ≈ half the offset/blur and half the strength of its regular partner,
+     Soft: smaller offset and blur at reduced strength (retuned upward by
+     review 2026-08-24; the pairs are no longer strict halves),
      so each pair reads as two distinct elevations at a glance. */
   --neu-dark: rgb(17 17 27 / .66);
   --neu-dark-soft: rgb(17 17 27 / .30);
-  --neu-light-soft: rgb(69 71 90 / .10);
   --neu-raised: 8px 8px 18px var(--neu-dark), -4px -4px 10px rgb(69 71 90 / .22);
   --neu-raised-soft: 3px 3px 8px rgb(17 17 27 / .44), -2px -2px 5px rgb(69 71 90 / .16);
   --neu-inset: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
@@ -63,6 +63,7 @@
   --accent: var(--mauve);            /* per-instance accent: cards, spines, marks, hero values */
   --tone: var(--peach);              /* semantic tint for chips/banners */
   --hard-offset-color: var(--crust); /* the hard offset's color; primary buttons override */
+  --hard-offset: 4px;                /* the hard offset's distance; compact tightens it */
 
   /* Density knobs */
   --control-h: 46px;                 /* primary/secondary button height */
@@ -78,6 +79,7 @@
 
 /* Compact density — the only way 12px enters the radius scale. */
 [data-density="compact"] {
+  --hard-offset: 3px;
   --control-h: 30px;
   --control-h-sm: 24px;
   --input-h: 30px;

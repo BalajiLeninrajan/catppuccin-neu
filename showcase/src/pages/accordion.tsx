@@ -45,7 +45,8 @@ export default function AccordionPage() {
       <p class="cn-copy">
         The whole label is the hit target; Space toggles the focused input.
         Use radios sharing a <code class="cn-code">name</code> when only one
-        item may be open.
+        item may be open. Closed content leaves the tab order and the
+        accessibility tree.
       </p>
 
       <CodeBlock
@@ -61,6 +62,18 @@ export default function AccordionPage() {
     </div>
   </div>
 </div>`}
+      />
+
+      <p class="cn-copy">
+        Space toggles natively; Enter needs this one delegated listener.
+      </p>
+
+      <CodeBlock
+        title="Enter key"
+        code={`document.addEventListener("keydown", (e) => {
+  const t = e.target;
+  if (e.key === "Enter" && t.matches(".accordion input")) t.click();
+});`}
       />
 
       <Props

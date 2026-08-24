@@ -1,4 +1,11 @@
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc";
+
+const RANKED = [
+  { name: "Payments", value: "$48,210" },
+  { name: "Analytics", value: "$31,876" },
+  { name: "Messaging", value: "$18,455" },
+  { name: "Support", value: "$9,102" },
+];
 
 const ROWS = [
   {
@@ -121,6 +128,31 @@ export default function TablePage() {
         no overflow clipping.
       </p>
 
+      <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child">
+        <div class="panel" style="width:min(560px,100%)">
+          <div class="panel-heading">
+            <h2>Top teams</h2>
+            <span class="chip">Q3</span>
+          </div>
+          {RANKED.map((r, i) => (
+            <div class="ranked-row" key={r.name}>
+              <span class="mark-solid" style={`--accent:${ACCENTS[i].color}`}>
+                {i + 1}
+              </span>
+              <strong>{r.name}</strong>
+              <b>{r.value}</b>
+            </div>
+          ))}
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        <code class="cn-code">.ranked-row</code> is the ordered-list line: a
+        rank mark, a name, a trailing value. Accent-key the mark from data. A
+        ranked row ending a panel keeps its hover fill inside the rounded
+        corners, same contract as a table's last row.
+      </p>
+
       <p class="cn-copy">
         <b class="cn-text-text">Mobile collapse.</b> Give every data cell a{" "}
         <code class="cn-code">data-label</code> attribute. At ≤760px the header
@@ -153,6 +185,17 @@ export default function TablePage() {
             values: "attribute contract",
             notes: "Becomes the cell's micro-label in the ≤760px card collapse.",
           },
+          {
+            name: ".ranked-row",
+            values: "rank mark + strong + b",
+            notes:
+              "Flex row, hairline bottom divider, hover presses in. strong is the name; b right-aligns the value.",
+          },
+          {
+            name: ".panel > .ranked-row:last-child",
+            values: "state",
+            notes: "Bottom corners follow the panel radius minus the 1px border.",
+          },
         ]}
       />
 
@@ -175,6 +218,23 @@ export default function TablePage() {
     </tr>
   </tbody>
 </table>`}
+      />
+
+      <CodeBlock
+        title="Ranked row markup"
+        code={`<div class="panel">
+  <div class="panel-heading"><h2>Top teams</h2></div>
+  <div class="ranked-row">
+    <span class="mark-solid" style="--accent: #cba6f7">1</span>
+    <strong>Payments</strong>
+    <b>$48,210</b>
+  </div>
+  <div class="ranked-row">
+    <span class="mark-solid" style="--accent: #94e2d5">2</span>
+    <strong>Analytics</strong>
+    <b>$31,876</b>
+  </div>
+</div>`}
       />
     </Doc>
   );

@@ -100,7 +100,7 @@ export default function ColorsPage() {
 
       <h2 class="cn-title">Semantic assignments</h2>
       <p class="cn-copy">
-        Five hues have fixed meanings. Set them through the{" "}
+        Six hues have fixed meanings. Set them through the{" "}
         <code class="cn-code">.cn-tone-*</code> utilities. They write{" "}
         <code class="cn-code">--tone</code> and nothing else, so chips, banners,
         and tinted edges re-key as a group.
@@ -129,8 +129,8 @@ export default function ColorsPage() {
       <h2 class="cn-title">The accent cycle</h2>
       <p class="cn-copy">
         <code class="cn-code">--accent</code> is the per-instance identity
-        color, read by accent cards, spines, solid marks, hero values, and the{" "}
-        <code class="cn-code">cn-*-accent</code> utilities. Assign it inline
+        color, read by accent cards, spines, solid marks, avatars, hero values,
+        and the <code class="cn-code">cn-*-accent</code> utilities. Assign it inline
         from data, cycling through six hues in this order.
       </p>
 
@@ -205,6 +205,80 @@ background: color-mix(in srgb, var(--mauve) 5%, var(--base));`}
           </p>
         ))}
       </Demo>
+
+      <h2 class="cn-title">Border utilities</h2>
+      <p class="cn-copy">
+        Six hairlines, blessed mixes only. Hairlines belong to raised and
+        tinted surfaces; inset surfaces stay borderless.{" "}
+        <code class="cn-code">.cn-edge-tone</code> reads{" "}
+        <code class="cn-code">--tone</code>;{" "}
+        <code class="cn-code">.cn-edge-dashed</code> is the only dashed border.
+      </p>
+
+      <Demo
+        title="Edges"
+        classes="cn-edge / cn-edge-soft / cn-edge-line / cn-edge-mauve / cn-edge-tone / cn-edge-dashed"
+        row
+      >
+        {["edge", "edge-soft", "edge-line", "edge-mauve", "edge-tone", "edge-dashed"].map(
+          (cls) => (
+            <span
+              key={cls}
+              class={`cn-${cls} cn-r-control`}
+              style="padding:10px 14px"
+            >
+              <code class="cn-code" style="font-size:11px">
+                cn-{cls}
+              </code>
+            </span>
+          ),
+        )}
+      </Demo>
+
+      <Props
+        title="Edge reference"
+        rows={[
+          { name: ".cn-edge", values: "surface-2 40%", notes: "Raised-surface hairline; panel and chip strength." },
+          { name: ".cn-edge-soft", values: "surface-1 38%", notes: "Inner separators." },
+          { name: ".cn-edge-line", values: "surface-0", notes: "Row separators, footer rules." },
+          { name: ".cn-edge-mauve", values: "mauve 30%", notes: "Accent-forward edge." },
+          { name: ".cn-edge-tone", values: "tone 25% into surface-0", notes: "Semantic edge; pair with .cn-tone-*." },
+          { name: ".cn-edge-dashed", values: "dashed surface-1", notes: "The only dashed border. Open slots." },
+        ]}
+      />
+
+      <h2 class="cn-title">Background utilities</h2>
+      <Demo
+        title="Grounds & fills"
+        classes="cn-bg-base / cn-bg-mantle / cn-bg-crust / cn-bg-well / cn-bg-head / cn-tint"
+        row
+      >
+        {["bg-base", "bg-mantle", "bg-crust", "bg-well", "bg-head", "tint"].map(
+          (cls) => (
+            <span
+              key={cls}
+              class={`cn-${cls} cn-edge-soft cn-r-mark`}
+              style="padding:14px"
+            >
+              <code class="cn-code" style="font-size:11px">
+                cn-{cls}
+              </code>
+            </span>
+          ),
+        )}
+      </Demo>
+
+      <Props
+        title="Background reference"
+        rows={[
+          { name: ".cn-bg-base", values: "var(--base)", notes: "The page ground." },
+          { name: ".cn-bg-mantle", values: "var(--mantle)", notes: "Recessed regions." },
+          { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill; the terminal ground." },
+          { name: ".cn-bg-well", values: "crust 38% into mantle", notes: "Explicit well fill; compose onto .well." },
+          { name: ".cn-bg-head", values: "crust 30% into mantle", notes: "Band fill for headers; panel headings use the same mix." },
+          { name: ".cn-tint", values: "tone 7% into transparent", notes: "Semantic wash; pair with .cn-tone-*." },
+        ]}
+      />
     </Doc>
   );
 }

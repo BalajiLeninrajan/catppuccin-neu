@@ -117,9 +117,7 @@ export default function InputPage() {
           placeholder="Name your new dashboard"
         />
         <p class="cn-copy">
-          The hero variant: 58px tall, 13px radius, 15px type. One per page,
-          for the primary act of entry, like naming the thing you're about to
-          create.
+          The hero variant: 58px tall, 13px radius, 15px type. One per page.
         </p>
       </Demo>
 
@@ -144,8 +142,9 @@ export default function InputPage() {
         </div>
         <p class="cn-copy">
           Focus adds a 2px mauve ring over the unchanged inset shadow. No
-          border appears, nothing moves. The global{" "}
-          <code class="cn-code">:focus-visible</code> outline is never removed.
+          border appears, nothing moves. Fields suppress the global{" "}
+          <code class="cn-code">:focus-visible</code> outline; the ring is the
+          focus indicator. Everywhere else the global outline stands.
         </p>
       </Demo>
 
@@ -154,8 +153,9 @@ export default function InputPage() {
           <input class="input" type="text" value="ACME-2041 (locked)" disabled />
         </div>
         <p class="cn-copy">
-          Use the native attribute. The well stays put; the browser dims the
-          value and blocks input. Don't fake it with classes.
+          Use the native attribute. The field flattens to the soft inset with
+          authored dimming: opacity .6, text at overlay-0. The browser only
+          blocks input.
         </p>
       </Demo>
 

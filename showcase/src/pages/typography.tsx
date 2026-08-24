@@ -141,9 +141,10 @@ export default function TypographyPage() {
       />
 
       <p class="cn-copy">
-        <strong>Mono scarcity.</strong> The mono face has exactly two carriers:{" "}
-        <code class="cn-code">.cn-code</code> for inline literals and{" "}
-        <code class="cn-code">.terminal</code> for log output. Everything else
+        <strong>Mono scarcity.</strong> The mono face has exactly three
+        carriers: <code class="cn-code">.cn-code</code> for inline literals,{" "}
+        <code class="cn-code">.terminal</code> for log output, and{" "}
+        <code class="cn-code">.codeblock</code> for snippets. Everything else
         is sans. If a string is not code, a CLI command, or machine output, it
         does not get mono.
       </p>
@@ -155,7 +156,7 @@ export default function TypographyPage() {
         </p>
       </Demo>
 
-      <Demo title="terminal · the other mono carrier" classes="terminal">
+      <Demo title="terminal · a mono carrier" classes="terminal">
         <div class="terminal" style="width:100%; max-width:560px;">
           <pre>
             {"$ deploy --env production\n"}

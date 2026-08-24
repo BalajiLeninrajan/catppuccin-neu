@@ -80,6 +80,18 @@ function NotFound() {
 }
 
 export function App() {
+  /* Enter toggles a focused accordion input (Space works natively). */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (e.key === "Enter" && t.matches?.(".accordion input")) {
+        (t as HTMLInputElement).click();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <LocationProvider>
       <div class="app-shell sc-shell">

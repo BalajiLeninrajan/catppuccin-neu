@@ -21,7 +21,7 @@ export default function AvatarPage() {
             key={p.initials}
             class="avatar"
             style={`--accent:${ACCENTS[i].color}`}
-            title={p.name}
+            data-tip={p.name}
           >
             {p.initials}
           </span>
@@ -36,26 +36,26 @@ export default function AvatarPage() {
       </p>
 
       <Demo title="Large" classes="avatar is-lg" row>
-        <span class="avatar is-lg" style="--accent:#94e2d5" title="Tomas Silva">
+        <span class="avatar is-lg" style="--accent:#94e2d5" data-tip="Tomas Silva">
           TS
         </span>
-        <span class="avatar is-lg" style="--accent:#f5c2e7" title="Efe Okafor">
+        <span class="avatar is-lg" style="--accent:#f5c2e7" data-tip="Efe Okafor">
           EO
         </span>
       </Demo>
 
       <Demo title="Stack" classes="avatar-stack > .avatar">
         <div class="avatar-stack">
-          <span class="avatar" style="--accent:#cba6f7" title="Nadia Rahman">
+          <span class="avatar" style="--accent:#cba6f7" data-tip="Nadia Rahman">
             NR
           </span>
-          <span class="avatar" style="--accent:#94e2d5" title="Tomas Silva">
+          <span class="avatar" style="--accent:#94e2d5" data-tip="Tomas Silva">
             TS
           </span>
-          <span class="avatar" style="--accent:#f9e2af" title="Aya Kato">
+          <span class="avatar" style="--accent:#f9e2af" data-tip="Aya Kato">
             AK
           </span>
-          <span class="avatar" style="--accent:#89b4fa" title="Jon Lindqvist">
+          <span class="avatar" style="--accent:#89b4fa" data-tip="Jon Lindqvist">
             JL
           </span>
         </div>
@@ -68,7 +68,7 @@ export default function AvatarPage() {
 
       <CodeBlock
         title="Markup"
-        code={`<span class="avatar" style="--accent:#cba6f7" title="Nadia Rahman">NR</span>
+        code={`<span class="avatar" style="--accent:#cba6f7" data-tip="Nadia Rahman">NR</span>
 
 <span class="avatar is-lg" style="--accent:#94e2d5">TS</span>
 

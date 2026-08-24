@@ -28,7 +28,7 @@ function DrawerDemo() {
             aria-labelledby="drawer-title"
             onClick={(e) => e.stopPropagation()}
           >
-            <header class="cn-bg-head" style="display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:62px; padding:14px 22px;">
+            <header class="cn-bg-head">
               <h2 id="drawer-title" class="cn-title" style="margin:0;">
                 Workspace settings
               </h2>
@@ -96,12 +96,19 @@ export default function DrawerPage() {
     >
       <p class="cn-copy">
         The drawer spans the full viewport height with square corners, so its bands need no
-        radius rules. The header composes from <code class="cn-code">.cn-bg-head</code>; the
+        radius rules. The recipe lays out the <code class="cn-code">header</code> band;
+        compose <code class="cn-code">.cn-bg-head</code> on it for the fill. The
         footer is <code class="cn-code">.panel-footer</code>, no fill, divider only. The sheet
         is a flex column that scrolls as a whole; push the footer down with{" "}
         <code class="cn-code">margin-top: auto</code>. Pair it with{" "}
         <code class="cn-code">.cn-scrim</code> and close on Escape or a scrim click, like the
         modal.
+      </p>
+
+      <p class="cn-copy">
+        The exit animates only if the scrim stays mounted and{" "}
+        <code class="cn-code">hidden</code> is toggled; unmounting gets the
+        entrance only.
       </p>
 
       <Demo title="Live demo" classes="cn-scrim > drawer">
@@ -124,10 +131,16 @@ export default function DrawerPage() {
             notes: "Crust wash + blur behind the sheet; z-index 70.",
           },
           {
-            name: "header band",
-            values: ".cn-bg-head",
+            name: ".drawer > header",
+            values: "compose .cn-bg-head",
             default: "—",
-            notes: "Square corners; no radius rules needed, unlike panel and modal bands.",
+            notes: "Recipe-owned flex band, 62px min-height. Square corners; no radius rules needed.",
+          },
+          {
+            name: "[hidden]",
+            values: "exit state",
+            default: "—",
+            notes: "Toggle on the mounted scrim to play the slide-out; unmounting gets the entrance only.",
           },
           {
             name: "footer band",
@@ -146,7 +159,8 @@ export default function DrawerPage() {
 
       <CodeBlock
         title="Markup"
-        code={`<div class="cn-scrim">
+        code={`<!-- keep it mounted; toggle hidden to animate the exit -->
+<div class="cn-scrim" hidden>
   <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="t">
     <header class="cn-bg-head">
       <h2 id="t" class="cn-title">Workspace settings</h2>
