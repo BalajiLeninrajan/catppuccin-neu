@@ -80,9 +80,10 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The switch is an angled rocker. The pressed end sits flat and low; the
-        other end tilts up and shows its thickness. The whole control reads
-        base while off. Checking presses I flat and paints it mauve.
+        The switch is an angled rocker: one paddle with two faces meeting at a
+        center ridge. The raised face pivots on that ridge, so the body never
+        splits. The whole paddle is neutral while off and mauve while on; the
+        away face is only shaded darker.
       </p>
 
       <CodeBlock
@@ -131,7 +132,7 @@ export default function SelectionPage() {
             name: ".switch",
             values: 'input[type="checkbox"]',
             notes:
-              "62x30 bezel, 8px radius. Pressed end flat and low; the other tilts 12deg with a thickness edge. Mauve only when on.",
+              "62x30 bezel, 8px radius. One hinged paddle; the raised face pivots 14deg on the center ridge. Whole paddle mauve when on; the bezel glows.",
           },
           {
             name: ".choice:has(:disabled)",

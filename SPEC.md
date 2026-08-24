@@ -129,10 +129,11 @@ carved-transparent.)*
 > Selection controls: `.choice` label row, `.checkbox` and `.radio` as edged
 > wells that fill mauve when selected (they keep a hairline: at 20px the
 > carve alone is invisible), and `.switch` as an angled rocker (62×30, after
-> uiverse wonderful-dog-56): O left and I right in a carved bezel, the
-> pressed end flat and low, the other tilted up 12° (rotate + skewX) with a
-> thickness edge along its base. No split color: the control reads base
-> while off, and checking presses I flat and paints it mauve. The
+> uiverse wonderful-dog-56): one hinged paddle drawn as two faces sharing a
+> center ridge, the raised face rotating 14° about that shared edge so the
+> body never splits, a thickness strip under its base. One color per state:
+> the whole paddle neutral off and mauve on (the away face shaded darker,
+> lighting not a second color), with the bezel glowing when on. The
 > accordion's expanded body sits in a carved well of its own. `details.accordion` with a rotating chevron and
 > height animation behind `@supports (interpolate-size: allow-keywords)`.
 > `.avatar` (initials or image on an accent-tinted round, `.is-lg`,

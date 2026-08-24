@@ -674,10 +674,11 @@
 .radio:checked { box-shadow: var(--neu-inset); }
 .radio:checked::after { opacity: 1; transform: none; }
 
-/* Switch: an angled rocker. Two labeled ends in a carved bezel, O left and
-   I right; the pressed end sits flat and low, the other end tilts up
-   (rotate + skew) showing its thickness. The whole control reads base while
-   off; checking presses I flat and paints it mauve. */
+/* Switch: an angled rocker. One hinged paddle drawn as two faces that share
+   a center ridge; the raised face rotates about that shared edge, so the
+   body never splits. One color per state: neutral off, mauve on (the away
+   face is a darker shade of the same hue, which is lighting, not a second
+   color). The bezel glows when on. */
 .switch {
   appearance: none;
   width: 62px;
@@ -689,53 +690,53 @@
   background: transparent;
   box-shadow: var(--neu-inset);
   cursor: pointer;
+  transition: box-shadow .18s;
 }
 .switch::before, .switch::after {
   position: absolute;
   bottom: 3px;
-  width: 27px;
-  height: 21px;
+  width: 28px;
+  height: 20px;
   display: grid;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
   font: 800 10px/1 var(--sans);
-  transition: transform .18s, background .18s, color .18s, box-shadow .18s, bottom .18s, border-color .18s;
+  transition: transform .18s, background .18s, color .18s, box-shadow .18s;
 }
-/* O, the off end: pressed flat while off. */
+/* O face, left. Flat toward you while off. */
 .switch::before {
   content: "O";
   left: 3px;
-  border-radius: 5px 2px 2px 5px;
+  border-radius: 5px 0 0 5px;
   color: var(--subtext-0);
-  background: color-mix(in srgb, var(--surface-0) 30%, var(--base));
-  box-shadow: var(--neu-inset-soft);
-  transform-origin: bottom right;
+  background: color-mix(in srgb, var(--surface-0) 45%, var(--base));
+  transform-origin: right center;
 }
-/* I, the on end: tilted up while off, thickness edge along its base. */
+/* I face, right. Tilts up from the ridge while off; the shadow strip under
+   its base is the paddle's thickness. */
 .switch::after {
   content: "I";
   right: 3px;
-  bottom: 7px;
-  border-radius: 2px 5px 5px 2px;
-  color: var(--overlay-0);
-  background: var(--base);
-  box-shadow: 0 4px 0 -1px color-mix(in srgb, var(--crust) 50%, var(--base)), var(--neu-raised-soft);
-  transform: rotate(-12deg) skewX(-12deg);
-  transform-origin: bottom left;
+  border-radius: 0 5px 5px 0;
+  color: var(--overlay-1);
+  background: color-mix(in srgb, var(--crust) 30%, color-mix(in srgb, var(--surface-0) 45%, var(--base)));
+  box-shadow: 0 5px 0 -1px color-mix(in srgb, var(--crust) 60%, var(--base));
+  transform-origin: left center;
+  transform: rotate(-14deg);
+}
+/* On: the paddle pivots, and the whole body turns mauve. */
+.switch:checked {
+  box-shadow: var(--neu-inset), 0 0 12px color-mix(in srgb, var(--mauve) 40%, transparent);
 }
 .switch:checked::before {
-  bottom: 7px;
-  color: var(--overlay-0);
-  background: var(--base);
-  box-shadow: 0 4px 0 -1px color-mix(in srgb, var(--crust) 50%, var(--base)), var(--neu-raised-soft);
-  transform: rotate(12deg) skewX(12deg);
+  color: color-mix(in srgb, var(--crust) 70%, var(--mauve));
+  background: color-mix(in srgb, var(--crust) 30%, var(--mauve));
+  box-shadow: 0 5px 0 -1px color-mix(in srgb, var(--crust) 55%, var(--mauve));
+  transform: rotate(14deg);
 }
 .switch:checked::after {
-  bottom: 3px;
   color: var(--crust);
-  border-color: var(--mauve);
   background: var(--mauve);
-  box-shadow: var(--neu-inset-soft), 0 0 10px color-mix(in srgb, var(--mauve) 45%, transparent);
+  box-shadow: none;
   transform: none;
 }
 
