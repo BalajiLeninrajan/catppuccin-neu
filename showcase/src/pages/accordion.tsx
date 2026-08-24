@@ -38,9 +38,9 @@ export default function AccordionPage() {
         Each row is a bare <code class="cn-code">details</code> with a{" "}
         <code class="cn-code">summary</code> and one body element. Rows share a
         hairline bottom border, and the chevron rotates 180 degrees while
-        open. The whole open item sinks into a carved well, title included,
-        and sits slightly wider than its closed siblings; the text stays
-        aligned because padding compensates the negative margin. In browsers that support{" "}
+        open. The whole open item sinks into a carved well in place, title
+        included; closed rows stay flat with straight dividers, and only the
+        height changes. In browsers that support{" "}
         <code class="cn-code">interpolate-size</code> (Chrome), the body
         height animates open and closed. Elsewhere it snaps, the{" "}
         <code class="cn-code">@supports</code> block scopes the transition so

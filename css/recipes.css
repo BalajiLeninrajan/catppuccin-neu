@@ -717,23 +717,20 @@
 
 /* ── Accordion — native details/summary ─────────────────────────────────── */
 
-/* The whole open item sinks: carved, and a little wider than its closed
-   siblings (negative inline margin, compensated by padding, so the text
-   stays aligned while the box grows). */
+/* Closed rows are flat: straight dividers, no radius, no shadow. The open
+   item sinks in place, title and body together, growing only vertically. */
 .accordion {
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  border-radius: 10px;
-  transition: margin .2s, padding .2s, box-shadow .2s, border-color .2s;
+  transition: box-shadow .2s, border-color .2s;
 }
 .accordion[open] {
-  margin-inline: -12px;
-  padding-inline: 12px;
+  border-radius: 10px;
   border-bottom-color: transparent;
   box-shadow: var(--neu-inset-soft);
 }
 .accordion summary {
   min-height: 48px;
-  padding: 12px 2px;
+  padding: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -755,7 +752,7 @@
 }
 .accordion[open] summary::after { transform: rotate(180deg); }
 .accordion summary:hover { color: var(--mauve); }
-.accordion > :not(summary) { padding: 0 2px 16px; }
+.accordion > :not(summary) { padding: 0 12px 16px; }
 /* Where the browser supports it, the body height animates open and closed. */
 @supports (interpolate-size: allow-keywords) {
   .accordion { interpolate-size: allow-keywords; }

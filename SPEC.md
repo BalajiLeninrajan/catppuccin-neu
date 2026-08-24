@@ -31,9 +31,11 @@ states.
 indistinguishable; separate them. New token values (tokens.css):
 ```css
 --neu-raised:      8px 8px 18px rgb(17 17 27 / .66), -4px -4px 10px rgb(69 71 90 / .22);
---neu-raised-soft: 2px 2px 5px  rgb(17 17 27 / .30), -1px -1px 3px  rgb(69 71 90 / .10);
+--neu-raised-soft: 3px 3px 8px  rgb(17 17 27 / .44), -2px -2px 5px  rgb(69 71 90 / .16);
 --neu-inset:       inset 3px 3px 7px rgb(17 17 27 / .66), inset -3px -3px 7px rgb(69 71 90 / .24);
---neu-inset-soft:  inset 1px 1px 3px rgb(17 17 27 / .38), inset -1px -1px 2px rgb(69 71 90 / .12);
+--neu-inset-soft:  inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
+/* Both soft tokens strengthened by review 2026-08-24: the earlier
+   half-strength values were too faint on small surfaces. */
 ```
 Rule of thumb going forward: soft ≈ half the offset/blur *and* half the
 strength of its regular partner, so the pair reads as two distinct elevations
@@ -134,10 +136,10 @@ carved-transparent.)*
 > when on, the glow a whisper (6px at mauve 18%). ~~Three I/O rocker
 > variants (glyph halves, seesaw fold, hinged angled paddle after uiverse)
 > were tried and REVERTED~~: none read cleanly at control size; the sliding
-> paddle stays canon. The whole open accordion item sinks: carved
-> (inset-soft, title and body together) and slightly wider than its closed
-> siblings (negative inline margin compensated by padding, so text stays
-> aligned). `details.accordion` with a rotating chevron and
+> paddle stays canon. The whole open accordion item sinks in place: carved
+> (inset-soft, title and body together), vertical growth only; closed rows
+> stay flat with straight dividers, radius and shadow appear only while
+> open. `details.accordion` with a rotating chevron and
 > height animation behind `@supports (interpolate-size: allow-keywords)`.
 > `.avatar` (initials or image on an accent-tinted round, `.is-lg`,
 > `.avatar-stack`). `.codeblock`, a carved mono snippet well; with the

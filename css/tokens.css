@@ -47,9 +47,9 @@
   --neu-dark-soft: rgb(17 17 27 / .30);
   --neu-light-soft: rgb(69 71 90 / .10);
   --neu-raised: 8px 8px 18px var(--neu-dark), -4px -4px 10px rgb(69 71 90 / .22);
-  --neu-raised-soft: 2px 2px 5px var(--neu-dark-soft), -1px -1px 3px var(--neu-light-soft);
+  --neu-raised-soft: 3px 3px 8px rgb(17 17 27 / .44), -2px -2px 5px rgb(69 71 90 / .16);
   --neu-inset: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
-  --neu-inset-soft: inset 1px 1px 3px rgb(17 17 27 / .38), inset -1px -1px 2px rgb(69 71 90 / .12);
+  --neu-inset-soft: inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
 
   /* Promoted shadows — composites every surface shares. */
   --shadow-pop:  0 24px 70px rgb(17 17 27 / .78);                 /* popovers/modals/toasts float */
