@@ -718,15 +718,20 @@
 /* ── Accordion — native details/summary ─────────────────────────────────── */
 
 /* Closed rows are flat: straight dividers, no radius, no shadow. The open
-   item sinks in place, title and body together, growing only vertically. */
+   item sinks in place, title and body together, growing only vertically.
+   Choreography: transitions read from the destination state, so opening
+   sinks first then expands, and closing contracts first then releases. */
 .accordion {
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  transition: box-shadow .2s, border-color .2s;
+  /* closing: the carve releases after the body has contracted */
+  transition: box-shadow .18s .18s, border-color .18s .18s, border-radius .18s .18s;
 }
 .accordion[open] {
   border-radius: 10px;
   border-bottom-color: transparent;
   box-shadow: var(--neu-inset-soft);
+  /* opening: sink immediately; the body expansion waits (see below) */
+  transition: box-shadow .18s, border-color .18s, border-radius .18s;
 }
 .accordion summary {
   min-height: 48px;
@@ -759,9 +764,14 @@
   .accordion::details-content {
     height: 0;
     overflow: clip;
+    /* closing: contract immediately */
     transition: height .2s ease, content-visibility .2s allow-discrete;
   }
-  .accordion[open]::details-content { height: auto; }
+  .accordion[open]::details-content {
+    height: auto;
+    /* opening: expand only once the sink has landed */
+    transition: height .2s ease .15s, content-visibility .2s allow-discrete .15s;
+  }
 }
 
 /* ── Avatar — initials or an image on an accent-tinted round ────────────── */
