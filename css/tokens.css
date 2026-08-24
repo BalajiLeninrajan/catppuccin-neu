@@ -112,7 +112,9 @@ h1 { text-wrap: balance; }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 0 7px transparent; } }
 @keyframes blink { 50% { opacity: 0; } }
 
-.page-enter { animation: enter .34s ease both; }
+/* No fill-mode: a held transform would make the element a containing block
+   for every fixed descendant (scrims, modals, drawers, toasts) forever. */
+.page-enter { animation: enter .34s ease; }
 .live-dot {
   width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
   color: var(--green); background: currentColor;

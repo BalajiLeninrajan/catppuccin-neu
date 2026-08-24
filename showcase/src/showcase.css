@@ -169,7 +169,9 @@
 
 .sc-snippet pre {
   margin: 0;
-  overflow-x: auto;
+  /* Copy lines always wrap — nothing on the page scrolls sideways. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   font: inherit;
 }
 

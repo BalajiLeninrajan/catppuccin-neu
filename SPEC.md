@@ -74,8 +74,29 @@ surface it sits on (panel, well, or the page), which is what makes the inset
 read as depth rather than a dark slab. Geometry loosened to match: 13px radius,
 14px inline padding, and `:focus` adds a solid 2px mauve ring over the inset
 (no border swap). `.well` follows the same carved-transparent rule (compose
-`cn-bg-well` when an explicit fill is wanted); `.terminal` and the progress
-track keep their crust fill deliberately (code surface / groove contrast). Apply the same
+`cn-bg-well` when an explicit fill is wanted); `.terminal` keeps its crust fill
+deliberately (code surface). *(Amended by R3 below: the progress track is also
+carved-transparent.)*
+
+> **REVISION 3 — follow-up review (2026-08-24).**
+> 1. Flat controls press too: `btn-ghost`/`btn-icon`/`btn-dashed` get
+>    `:active` → `translateY(1px)` + `--neu-inset-soft`; `btn-text` translates
+>    only.
+> 2. Selects carry a chevron glyph (overlay-1 hex in a data-URI SVG, right
+>    13px, 15px) so they read as dropdowns; trailing padding 40px.
+> 3. Inputs suppress the global `:focus-visible` outline — the solid mauve
+>    ring over the inset is the one focus indicator (text fields match
+>    `:focus-visible` even on pointer focus, which doubled the ring).
+> 4. Disabled fields flatten: `--neu-inset-soft`, `--overlay-0` text, `.6`
+>    opacity, `not-allowed` cursor.
+> 5. `.well` deepens to full `--neu-inset`.
+> 6. `.well.scroll-well` pins a 30px crust fade (`rgb(17 17 27 / .55)`) to the
+>    bottom of its scrollport via a sticky `::after` — the scroll cue.
+> 7. `.progress-track` is carved like the input: transparent ground, full
+>    `--neu-inset`.
+> 8. `.page-enter` drops its animation fill-mode: a held transform made the
+>    element a permanent containing block/stacking context, trapping fixed
+>    overlays (the modal-in-an-iframe bug). Apply the same
 "depth replaces border" principle across inset surfaces (wells, terminal,
 progress track, engaged states): remove hairlines where the depth already
 separates the surface; keep hairline borders only on *raised* surfaces where

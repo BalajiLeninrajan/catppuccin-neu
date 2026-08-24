@@ -102,9 +102,10 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        When a well scrolls, add <code class="cn-code">.scroll-well</code> so
-        the scrollbar picks up the dark-well thumb color instead of the
-        browser default.
+        When a well scrolls, add <code class="cn-code">.scroll-well</code>: the
+        scrollbar picks up the dark-well thumb color, and a crust fade pins to
+        the bottom of the scrollport so the overflow is visible at a glance —
+        it sits over the last rows only once you reach the end.
       </p>
 
       <Props
@@ -135,12 +136,14 @@ export default function SurfacesPage() {
           {
             name: ".well",
             values: "inset container",
-            notes: "Borderless — soft inner shadow on a crust-mix ground. 13px radius.",
+            notes:
+              "Borderless and transparent — carved from the parent surface by the full inner shadow. 13px radius.",
           },
           {
             name: ".scroll-well",
             values: "scroll styling",
-            notes: "Sets scrollbar-color for content scrolling inside dark wells.",
+            notes:
+              "Sets scrollbar-color; combined with .well it adds the bottom scroll fade.",
           },
           {
             name: "--pane-radius",

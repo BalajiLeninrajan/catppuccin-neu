@@ -66,7 +66,19 @@
 .well {
   border-radius: 13px;
   background: transparent;
-  box-shadow: var(--neu-inset-soft);
+  box-shadow: var(--neu-inset);
+}
+/* A scrolling well hints at its overflow: a crust fade pinned to the bottom
+   of the scrollport, lifting only as the reader nears the end. */
+.well.scroll-well::after {
+  content: "";
+  position: sticky;
+  bottom: 0;
+  display: block;
+  height: 30px;
+  margin-top: -30px;
+  background: linear-gradient(180deg, transparent, rgb(17 17 27 / .55));
+  pointer-events: none;
 }
 
 /* Terminal/log surface — the deepest well in the system. Borderless. */
@@ -194,6 +206,7 @@
   color: var(--text);
   background: color-mix(in srgb, var(--surface-0) 40%, transparent);
 }
+.btn-ghost:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
 /* Flat toolbar button — flat at rest, engaged-in when pressed/toggled. */
 .btn-flat {
@@ -233,9 +246,10 @@
   background: transparent;
   font: 700 12px var(--sans);
   cursor: pointer;
-  transition: color .16s;
+  transition: color .16s, transform .16s;
 }
 .btn-text:hover:not(:disabled) { color: var(--pink); }
+.btn-text:active:not(:disabled) { transform: translateY(1px); }
 
 /* Icon button — flat until hovered, then tints toward its --tone. */
 .btn-icon {
@@ -246,13 +260,14 @@
   border-radius: 10px;
   background: transparent;
   cursor: pointer;
-  transition: background .16s, border-color .16s, color .16s;
+  transition: background .16s, border-color .16s, color .16s, transform .16s, box-shadow .16s;
 }
 .btn-icon:hover:not(:disabled) {
   color: var(--tone);
   border-color: color-mix(in srgb, var(--tone) 38%, transparent);
   background: color-mix(in srgb, var(--tone) 9%, transparent);
 }
+.btn-icon:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 .btn-icon:disabled { opacity: .28; cursor: not-allowed; }
 
 /* Dashed button — the only dashed border in the system. An open, low-emphasis
@@ -268,13 +283,14 @@
   font-family: var(--sans);
   font-size: 13px; font-weight: 650;
   cursor: pointer;
-  transition: background .16s, border-color .16s, color .16s;
+  transition: background .16s, border-color .16s, color .16s, transform .16s, box-shadow .16s;
 }
 .btn-dashed:hover {
   color: var(--mauve);
   border-color: var(--mauve);
   background: color-mix(in srgb, var(--mauve) 7%, transparent);
 }
+.btn-dashed:active { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
 /* ── Inputs ─────────────────────────────────────────────────────────────── */
 
@@ -322,7 +338,29 @@
 .field :is(input, select, textarea):focus {
   box-shadow: var(--neu-inset), 0 0 0 2px var(--mauve);
 }
-.field select { appearance: none; padding-right: 27px; cursor: pointer; }
+/* The ring IS the focus indicator — the global :focus-visible outline would
+   double it (text fields match :focus-visible even on pointer focus). */
+.input:focus-visible,
+.field :is(input, select, textarea):focus-visible { outline: none; }
+/* Disabled fields flatten: the carve nearly fills in, text dims, no caret. */
+.input:disabled,
+.field :is(input, select, textarea):disabled {
+  color: var(--overlay-0);
+  opacity: .6;
+  box-shadow: var(--neu-inset-soft);
+  cursor: not-allowed;
+}
+/* Selects read as dropdowns: a chevron glyph (overlay-1, a palette hex — data
+   URIs can't reference custom properties) sits in the trailing padding. */
+.field select, select.input {
+  appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  background-size: 15px;
+  cursor: pointer;
+}
 
 /* Hero variant — the one oversized input on a page. */
 .input-lg {
@@ -554,11 +592,13 @@ a:active > .accent-card {
 
 /* Progress — borderless inset track, accent-gradient fill. The fill inherits
    the track radius, so no overflow clipping is needed. */
+/* Carved groove, like the input: transparent over the parent ground, the
+   inset alone digs the track. */
 .progress-track {
   height: 7px;
   border-radius: 999px;
-  background: var(--crust);
-  box-shadow: var(--neu-inset-soft);
+  background: transparent;
+  box-shadow: var(--neu-inset);
 }
 .progress-track span {
   height: 100%;
