@@ -29,16 +29,15 @@ export default function ButtonPage() {
   return (
     <Doc
       title="Button"
-      lede="Seven button styles, one press. Clickable controls default to the hard offset shadow and the half-slide: the control rides down onto its own shadow instead of sinking into the page."
+      lede="Seven button styles, one press. Clickable controls default to the hard offset shadow and the half-slide, riding down onto their own shadow instead of sinking into the page."
     >
       <p class="cn-copy">
         Compose the base class with a variant: <code class="cn-code">class="btn btn-primary"</code>. Labels are
-        always sans; heights come from the density knobs, so every variant shrinks together under{" "}
-        <code class="cn-code">data-density="compact"</code>. Hover and press the live specimens below — every state
-        is driven by the shipped CSS, nothing is simulated.
+        always sans. Heights come from the density knobs, so every variant shrinks together under{" "}
+        <code class="cn-code">data-density="compact"</code>.
       </p>
 
-      <Demo title="Primary — solid accent, hard offset" classes="btn btn-primary" row>
+      <Demo title="Primary" classes="btn btn-primary" row>
         <button class="btn btn-primary">Create invoice</button>
         <button class="btn btn-primary" disabled>
           Create invoice
@@ -46,26 +45,25 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        One primary action per view. The offset is the one non-crust hard shadow in the system — mauve pressed into
-        the surface — and softening it is a violation of the depth canon. Disabled controls drop to 35% opacity and
-        a soft inset.
+        One primary action per view. The offset is the one non-crust hard shadow in the system, mauve pressed into
+        the surface. Don't soften it. Disabled controls drop to 35% opacity and a soft inset.
       </p>
 
-      <Demo title="Secondary — the canon default for clickables" classes="btn btn-secondary" row>
+      <Demo title="Secondary" classes="btn btn-secondary" row>
         <button class="btn btn-secondary">Export report</button>
         <button class="btn btn-secondary" disabled>
           Export report
         </button>
       </Demo>
 
-      <Demo title="Ghost — chrome-free until hovered" classes="btn btn-ghost" row>
+      <Demo title="Ghost" classes="btn btn-ghost" row>
         <button class="btn btn-ghost">Dismiss</button>
         <button class="btn btn-ghost" disabled>
           Dismiss
         </button>
       </Demo>
 
-      <Demo title="Flat — toolbar toggle, engages in place (click to toggle)" classes="btn-flat" row>
+      <Demo title="Flat" classes="btn-flat" row>
         <button class="btn-flat" aria-pressed={muted} onClick={() => setMuted(!muted)}>
           Mute thread
         </button>
@@ -78,16 +76,16 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        The flat button is the toolbar workhorse: no chrome at rest, a surface wash on hover, and the engaged
-        treatment — pressed in, mauve-keyed, borderless — when <code class="cn-code">aria-pressed="true"</code> or{" "}
-        <code class="cn-code">.active</code> is set.
+        The flat button is a toolbar toggle. No chrome at rest, a surface wash on hover. When{" "}
+        <code class="cn-code">aria-pressed="true"</code> or <code class="cn-code">.active</code> is set, it engages
+        in place, pressed in, mauve-keyed, borderless.
       </p>
 
-      <Demo title="Text — inline, no chrome" classes="btn-text" row>
+      <Demo title="Text" classes="btn-text" row>
         <button class="btn-text">View all members</button>
       </Demo>
 
-      <Demo title="Icon — tints toward its --tone on hover" classes="btn-icon" row>
+      <Demo title="Icon" classes="btn-icon" row>
         <button class="btn-icon" aria-label="Settings">
           <GearIcon />
         </button>
@@ -103,34 +101,34 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        Icon buttons are flat until hovered, then tint toward <code class="cn-code">--tone</code> — set it with a{" "}
+        Icon buttons are flat until hovered, then tint toward <code class="cn-code">--tone</code>. Set it with a{" "}
         <code class="cn-code">.cn-tone-*</code> class so destructive and informational actions read differently.
         Always give them an <code class="cn-code">aria-label</code>.
       </p>
 
-      <Demo title="Dashed — the open slot" classes="btn-dashed">
+      <Demo title="Dashed" classes="btn-dashed">
         <button class="btn-dashed" style="width: 100%">
           + Add team member
         </button>
       </Demo>
 
       <p class="cn-copy">
-        The dashed button is the only dashed border in the system: a low-emphasis open slot for drop zones,
-        placeholder rows, and optional extras. It fills toward mauve on hover instead of sliding.
+        The only dashed border in the system. Use it as an open slot for drop zones, placeholder rows, and optional
+        extras. It fills toward mauve on hover instead of sliding.
       </p>
 
       <h2 class="cn-label">The half-slide</h2>
       <p class="cn-copy">
-        Hard-offset controls never sink — they slide. At rest the control casts{" "}
+        Hard-offset controls never sink, they slide. At rest the control casts{" "}
         <code class="cn-code">4px 4px 0</code> in <code class="cn-code">--hard-offset-color</code>. Hover lifts it{" "}
         <code class="cn-code">translate(-1px, -1px)</code>, away from the shadow. Active slides it{" "}
-        <code class="cn-code">translate(2px, 2px)</code> — halfway onto the shadow — while the shadow shrinks to{" "}
+        <code class="cn-code">translate(2px, 2px)</code> while the shadow shrinks to{" "}
         <code class="cn-code">2px 2px 0</code> to meet it. The control covers half the distance, the shadow covers
-        the rest, and the whole move reads as a flat object being pushed onto the page.
+        the rest.
       </p>
 
       <Demo
-        title="Composed on a custom element — cn-hard + cn-pressable-slide"
+        title="Composed on a custom element"
         classes="cn-hard cn-pressable-slide cn-edge cn-r-control cn-bg-base"
         row
       >
@@ -146,10 +144,10 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        Any clickable element may take the press: compose <code class="cn-code">.cn-hard</code> (the offset) with{" "}
-        <code class="cn-code">.cn-pressable-slide</code> (the motion). The slide utility is legal only alongside the
-        hard offset — soft-shadowed controls use <code class="cn-code">.cn-pressable</code>, which sinks to an inset
-        instead.
+        Any clickable element may take the press. Compose <code class="cn-code">.cn-hard</code> for the offset with{" "}
+        <code class="cn-code">.cn-pressable-slide</code> for the motion. The slide utility is legal only alongside
+        the hard offset. Soft-shadowed controls use <code class="cn-code">.cn-pressable</code>, which sinks to an
+        inset instead.
       </p>
 
       <CodeBlock
@@ -170,7 +168,7 @@ export default function ButtonPage() {
         rows={[
           { name: ".btn", values: "base class", notes: "Height var(--control-h), radius 10px, sans label. Compose with one variant." },
           { name: ".btn-primary", notes: "Solid mauve, crust text, mauve-mix hard offset. One per view." },
-          { name: ".btn-secondary", notes: "Base ground, hairline edge, crust hard offset — the canon default." },
+          { name: ".btn-secondary", notes: "Base ground, hairline edge, crust hard offset. The canon default." },
           { name: ".btn-ghost", notes: "Transparent until hovered; surface wash on hover." },
           { name: ".btn-flat", values: '.active / [aria-pressed="true"]', notes: "Toolbar toggle; engaged state presses in with the mauve wash." },
           { name: ".btn-text", notes: "Inline mauve text button; pink on hover." },

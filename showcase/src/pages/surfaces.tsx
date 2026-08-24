@@ -4,7 +4,7 @@ export default function SurfacesPage() {
   return (
     <Doc
       title="Surfaces"
-      lede="Two containers carry the whole system: the raised panel and the inset well. A panel lifts content off the page with the full neumorphic shadow and a lit top-left edge; a well presses content in with no border at all — depth alone defines it."
+      lede="Two containers: the raised panel and the inset well. A panel lifts content off the page; a well presses it in, borderless."
     >
       <Demo
         title="Panel with heading and footer"
@@ -31,11 +31,11 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         The heading and footer bands are filled children of a rounded parent,
-        so each one carries its own radius —{" "}
+        so each carries its own radius,{" "}
         <code class="cn-code">calc(var(--pane-radius) - 1px)</code> on the
-        outer corners — and the fill never pokes past the panel. Never fix a
-        band corner with <code class="cn-code">overflow: hidden</code>; that
-        clips anchored popovers and hard-offset shadows.
+        outer corners. Never fix a band corner with{" "}
+        <code class="cn-code">overflow: hidden</code>; that clips anchored
+        popovers and hard-offset shadows.
       </p>
 
       <Demo title="Tilted hero panel" classes="panel is-tilted">
@@ -52,8 +52,8 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         <code class="cn-code">.is-tilted</code> is the one rotated,
-        hard-shadowed surface — a 1.2° rotate with a 10px hard offset. Use it
-        once per page at most; it flattens back to the regular raised panel at
+        hard-shadowed surface, a 1.2° rotate with a 10px hard offset. Use it
+        once per page at most; it flattens to the regular raised panel at
         ≤1060px.
       </p>
 
@@ -102,10 +102,9 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        When a well scrolls, add <code class="cn-code">.scroll-well</code>: the
+        When a well scrolls, add <code class="cn-code">.scroll-well</code>. The
         scrollbar picks up the dark-well thumb color, and the bottom edge of
-        the well dissolves — content visibly runs past the fold, so the
-        overflow reads at a glance.
+        the well dissolves to show the overflow.
       </p>
 
       <Props
@@ -121,7 +120,7 @@ export default function SurfacesPage() {
             name: ".panel-heading / .panel-footer",
             values: "bands",
             notes:
-              "Heading: mantle-mix fill, corners follow the parent radius minus the 1px border (R2). Footer: no fill — the divider line alone, on the panel's own ground.",
+              "Heading has the mantle-mix fill; corners follow the parent radius minus the 1px border. Footer has no fill, only the divider line.",
           },
           {
             name: ".panel.is-tilted",
@@ -137,7 +136,7 @@ export default function SurfacesPage() {
             name: ".well",
             values: "inset container",
             notes:
-              "Borderless and transparent — carved from the parent surface by the full inner shadow. 13px radius.",
+              "Borderless and transparent; the full inner shadow defines it. 13px radius.",
           },
           {
             name: ".scroll-well",

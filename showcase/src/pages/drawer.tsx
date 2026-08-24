@@ -92,18 +92,19 @@ export default function DrawerPage() {
   return (
     <Doc
       title="Drawer"
-      lede="A side sheet pinned to the right edge — for settings, detail views, and longer forms that outgrow a modal. It floats on the pop shadow above the scrim."
+      lede="A side sheet pinned to the right edge, for settings, detail views, and forms that outgrow a modal. It floats on the pop shadow above the scrim."
     >
       <p class="cn-copy">
-        The drawer spans the full viewport height with square corners, so header and footer
-        bands need no radius treatment — compose them from{" "}
-        <code class="cn-code">.cn-bg-head</code>. The sheet is a flex column that scrolls
-        as a whole; push the footer down with <code class="cn-code">margin-top: auto</code>.
-        Pair it with <code class="cn-code">.cn-scrim</code> and close on Escape or a scrim
-        click, exactly like the modal.
+        The drawer spans the full viewport height with square corners, so its bands need no
+        radius rules. The header composes from <code class="cn-code">.cn-bg-head</code>; the
+        footer is <code class="cn-code">.panel-footer</code>, no fill, divider only. The sheet
+        is a flex column that scrolls as a whole; push the footer down with{" "}
+        <code class="cn-code">margin-top: auto</code>. Pair it with{" "}
+        <code class="cn-code">.cn-scrim</code> and close on Escape or a scrim click, like the
+        modal.
       </p>
 
-      <Demo title="Live — Escape or the scrim closes it" classes="cn-scrim > drawer">
+      <Demo title="Live demo" classes="cn-scrim > drawer">
         <DrawerDemo />
       </Demo>
 
@@ -123,10 +124,16 @@ export default function DrawerPage() {
             notes: "Crust wash + blur behind the sheet; z-index 70.",
           },
           {
-            name: "header / footer bands",
+            name: "header band",
             values: ".cn-bg-head",
             default: "—",
-            notes: "Square corners — no radius rules needed, unlike panel and modal bands.",
+            notes: "Square corners; no radius rules needed, unlike panel and modal bands.",
+          },
+          {
+            name: "footer band",
+            values: ".panel-footer",
+            default: "—",
+            notes: "No fill; the divider line separates it. margin-top: auto pins it down.",
           },
           {
             name: "border-left",
@@ -146,7 +153,7 @@ export default function DrawerPage() {
       <button class="btn-icon" aria-label="Close">✕</button>
     </header>
     <div>…form…</div>
-    <footer class="cn-bg-head" style="margin-top: auto">
+    <footer class="panel-footer" style="margin-top: auto">
       <button class="btn btn-ghost">Discard</button>
       <button class="btn btn-primary">Save changes</button>
     </footer>

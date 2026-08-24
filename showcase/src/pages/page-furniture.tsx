@@ -15,7 +15,7 @@ const shellSnippet = `<body class="app-shell">
   <footer class="footer-neu">…</footer>
 </body>
 
-/* main is never styled by the package — apply the width pattern yourself: */
+/* main is never styled by the package; apply the width pattern yourself: */
 main {
   width: min(1440px, calc(100% - 40px));
   min-width: 0;
@@ -42,16 +42,16 @@ export default function PageFurniturePage() {
   return (
     <Doc
       title="Page furniture"
-      lede="The pieces that frame every page: the sticky topbar, the footer rule, the eyebrow-title-lede header stack, solid marks, the live dot, and the ambient shell wash. None of it is a component you configure — it is the chrome a page wears."
+      lede="The pieces that frame a page: the topbar, the footer rule, the eyebrow-title-lede header stack, solid marks, the live dot, and the shell wash."
     >
       <p class="cn-copy">
         The furniture recipes never style bare elements. <code class="cn-code">.topbar</code> goes on
         a <code class="cn-code">header</code>, <code class="cn-code">.footer-neu</code> on
-        a <code class="cn-code">footer</code>, and the main column is a documented pattern you apply in your own
-        CSS — the package leaves <code class="cn-code">main</code> alone.
+        a <code class="cn-code">footer</code>. The package leaves <code class="cn-code">main</code> alone;
+        apply the main-column width pattern in your own CSS.
       </p>
 
-      <Demo title="Page header — eyebrow, display title, lede" classes="eyebrow · display-title · lede">
+      <Demo title="Page header" classes="eyebrow · display-title · lede">
         <header>
           <p class="eyebrow">Quarterly report</p>
           <h1 class="display-title">
@@ -65,12 +65,9 @@ export default function PageFurniturePage() {
       </Demo>
 
       <p class="cn-copy">
-        The header stack is the one place display type appears. The eyebrow sits above in uppercase mauve,
-        the title takes an <code class="cn-code">em</code> for its accented phrase, and the lede caps its own
-        measure at 690px. These three are aliases of the type
-        roles <code class="cn-code">.cn-eyebrow</code>, <code class="cn-code">.cn-display</code>,
-        and <code class="cn-code">.cn-lede</code>, kept so base-layer markup keeps working — new code can use
-        either name.
+        The header stack is the one place display type appears. The three classes are aliases
+        of <code class="cn-code">.cn-eyebrow</code>, <code class="cn-code">.cn-display</code>,
+        and <code class="cn-code">.cn-lede</code>. Either name works.
       </p>
 
       <CodeBlock title="Header markup" code={headerSnippet} />
@@ -99,8 +96,7 @@ export default function PageFurniturePage() {
 
       <p class="cn-copy">
         The topbar is sticky, translucent over a 14px blur, and casts <code class="cn-code">--shadow-cast</code>{" "}
-        with a lit hairline — the one surface that floats without being an overlay. Its grid is
-        1fr / auto / 1fr, so the center nav stays centered regardless of what the ends hold. At 1060px the grid
+        with a lit hairline. Its grid is 1fr / auto / 1fr, so the center nav stays centered. At 1060px the grid
         collapses to two columns and anything tagged <code class="cn-code">.nav-secondary</code> hides; at 760px
         the bar tightens and chips inside it go icon-only.
       </p>
@@ -114,12 +110,11 @@ export default function PageFurniturePage() {
       </Demo>
 
       <p class="cn-copy">
-        The footer is a hairline rule and quiet metadata — no depth, no fill. It shares the main column's width
-        pattern, so it lines up with the content above it. On small phones the middle paragraph drops and only
-        the wordmark and trailing mark remain.
+        The footer is a hairline rule and metadata. No depth, no fill. It shares the main column's width
+        pattern, so it lines up with the content above it.
       </p>
 
-      <Demo title="Solid marks — the accent cycle" classes='mark-solid — set style="--accent:#…"' row>
+      <Demo title="Solid marks" classes='mark-solid · set style="--accent:#…"' row>
         {ACCENTS.map((a, i) => (
           <span class="mark-solid" style={`--accent:${a.color}`}>
             {i + 1}
@@ -128,10 +123,9 @@ export default function PageFurniturePage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.mark-solid</code> is the 28px identity square: step numbers, ranks, the logo
-        tile. It fills with <code class="cn-code">var(--accent)</code>, sits on the mark mini-drop shadow, and
-        keeps its numeral tabular. Re-key it per instance by setting <code class="cn-code">--accent</code>{" "}
-        inline from your data.
+        <code class="cn-code">.mark-solid</code> is the 28px identity square for step numbers, ranks, and the
+        logo tile. Re-key it per instance by setting <code class="cn-code">--accent</code> inline from your
+        data.
       </p>
 
       <Demo title="Live dot" classes=".live-dot" row>
@@ -145,17 +139,16 @@ export default function PageFurniturePage() {
       </Demo>
 
       <p class="cn-copy">
-        The live dot pulses green through its halo to say "this number is current". It is presentational — pair
-        it with text, and keep it <code class="cn-code">aria-hidden</code>. Under reduced motion the pulse
-        stops on the first frame.
+        The live dot is presentational. Pair it with text and keep it{" "}
+        <code class="cn-code">aria-hidden</code>. Under reduced motion the pulse stops on the first frame.
       </p>
 
       <p class="cn-copy">
-        Two more pieces of furniture have no specimen here. <code class="cn-code">.app-shell</code> goes on the
-        page root (usually <code class="cn-code">body</code>) and lays an almost-invisible mauve bloom over the
-        top-left of <code class="cn-code">--base</code> — ambient light, not a gradient hero; this site's own
-        shell wears it. <code class="cn-code">.cn-scrim</code> is the fixed, blurred crust backdrop that modals
-        and drawers sit on — see those pages for it in action.
+        Two more pieces have no specimen here. <code class="cn-code">.app-shell</code> goes on the page root,
+        usually <code class="cn-code">body</code>, and lays a faint mauve bloom over the top-left
+        of <code class="cn-code">--base</code>. This site's own shell wears it.{" "}
+        <code class="cn-code">.cn-scrim</code> is the fixed, blurred crust backdrop that modals and drawers
+        sit on. See those pages for it in action.
       </p>
 
       <CodeBlock title="Page shell + main column pattern" code={shellSnippet} />
@@ -168,10 +161,10 @@ export default function PageFurniturePage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.cn-sr-only</code> clips content out of the visual layout while leaving it in the
-        accessibility tree — the icon button above still announces "Open settings". Its blunt
-        sibling <code class="cn-code">.cn-hidden</code> is <code class="cn-code">display: none !important</code>:
-        gone from layout and from assistive tech alike. Use sr-only to relabel, hidden to remove.
+        <code class="cn-code">.cn-sr-only</code> clips content out of the visual layout but leaves it in the
+        accessibility tree. <code class="cn-code">.cn-hidden</code> is{" "}
+        <code class="cn-code">display: none !important</code>, gone from layout and assistive tech alike. Use
+        sr-only to relabel, hidden to remove.
       </p>
 
       <CodeBlock title="Accessible icon button" code={srOnlySnippet} />
@@ -197,7 +190,7 @@ export default function PageFurniturePage() {
           {
             name: ".display-title",
             values: "alias of .cn-display",
-            notes: "clamp(38–64px), weight 820; <em> renders mauve. Steps to 38/34px at 760/520px.",
+            notes: "clamp(38px to 64px), weight 820; <em> renders mauve. Steps to 38/34px at 760/520px.",
           },
           {
             name: ".lede",
@@ -219,7 +212,7 @@ export default function PageFurniturePage() {
           {
             name: ".app-shell",
             values: "page root wash",
-            notes: "Radial accent bloom at top-left over --base. Ambient, not decorative.",
+            notes: "Radial accent bloom at top-left over --base.",
           },
           {
             name: ".cn-scrim",

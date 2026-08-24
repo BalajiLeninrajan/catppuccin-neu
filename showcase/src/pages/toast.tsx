@@ -61,20 +61,20 @@ export default function ToastPage() {
   return (
     <Doc
       title="Toast"
-      lede="A transient confirmation in a fixed corner stack. Each toast floats on the pop shadow and leaves on its own — the consumer owns the stack and the timing."
+      lede="A transient confirmation in a fixed corner stack. The consumer owns the stack and the timing."
     >
       <p class="cn-copy">
-        The recipe styles one item; the stack is yours — a fixed corner container with a
+        The recipe styles one item. The stack is yours, a fixed corner container with a
         column gap, marked <code class="cn-code">aria-live="polite"</code> so arrivals are
         announced. Auto-dismiss after a few seconds and offer a manual dismiss for anything
-        a reader might want to keep. Keep the copy to one confident line.
+        a reader might want to keep. Keep the copy to one line.
       </p>
 
-      <Demo title="Spawner — auto-dismisses after 3.6s" classes="toast">
+      <Demo title="Spawner, auto-dismisses after 3.6s" classes="toast">
         <ToastSpawner />
       </Demo>
 
-      <Demo title="At rest — a toast is statically positioned until you stack it" row>
+      <Demo title="At rest, statically positioned until you stack it" row>
         <div class="toast" role="status">
           <span class="live-dot" aria-hidden="true"></span>
           Invoice #1042 sent to Accounts
@@ -104,7 +104,7 @@ export default function ToastPage() {
             name: ".live-dot",
             values: "optional leading pulse",
             default: "green",
-            notes: "Recolor via the color property — it paints with currentColor.",
+            notes: "Paints with currentColor; recolor via the color property.",
           },
           {
             name: ".btn-text",

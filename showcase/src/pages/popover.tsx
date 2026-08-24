@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
-/* Live anchored popover — toggled from its trigger. */
+/* Live anchored popover, toggled from its trigger. */
 function AnchoredDemo() {
   const [open, setOpen] = useState(false);
   return (
@@ -45,7 +45,7 @@ function AnchoredDemo() {
   );
 }
 
-/* Static open specimen — the anatomy, pinned open for inspection. */
+/* Static open specimen, pinned open for inspection. */
 function AnatomyDemo() {
   return (
     <div style="position:relative; min-height:230px; width:min(390px, 100%);">
@@ -82,21 +82,19 @@ export default function PopoverPage() {
   return (
     <Doc
       title="Popover"
-      lede="An anchored floating panel for menus, filters, and glanceable detail. Popovers float on the pop shadow — overlays never use neumorphic depth."
+      lede="An anchored floating panel for menus and filters. Popovers float on the pop shadow; overlays never use neumorphic depth."
     >
       <p class="cn-copy">
         Give the anchor <code class="cn-code">position: relative</code> and drop the popover
-        inside it; the recipe handles width, border, radius, and elevation. Filled first and
-        last children (header and footer bands) inherit the corner radius automatically —
-        never clip with <code class="cn-code">overflow: hidden</code>, which would also clip
-        the shadow.
+        inside it. Filled first and last children inherit the corner radius. Never clip
+        with <code class="cn-code">overflow: hidden</code>; it clips the shadow too.
       </p>
 
-      <Demo title="Anchored — click to open" classes="popover">
+      <Demo title="Anchored, click to open" classes="popover">
         <AnchoredDemo />
       </Demo>
 
-      <Demo title="Anatomy — header band, body, footer band" classes="popover">
+      <Demo title="Anatomy, pinned open" classes="popover">
         <AnatomyDemo />
       </Demo>
 
@@ -125,7 +123,7 @@ export default function PopoverPage() {
             name: ".cn-bg-head",
             values: "header band fill",
             default: "—",
-            notes: "The recessed band mix — same fill as panel headings.",
+            notes: "Recessed band mix, same fill as panel headings.",
           },
         ]}
       />

@@ -34,22 +34,18 @@ export default function InputPage() {
   return (
     <Doc
       title="Input & Field"
-      lede="Text inputs, selects, and textareas are borderless and carved from whatever surface they sit on: the background stays transparent, and the inner shadow alone presses the well into the parent ground."
+      lede="Text inputs, selects, and textareas are borderless. The background stays transparent; the inner shadow alone presses the well into the parent ground."
     >
       <p class="cn-copy">
-        Raised surfaces keep a hairline because their lit edge needs support.
-        Inset surfaces don't: the shadow already separates the well from the
-        ground, so a border or a fill would only add noise. An input never
-        paints its own background — on a panel it is carved from the panel, on
-        the page it is carved from the page, which is what makes the depth read
-        as depth. There is no 1px stroke at rest, and focus doesn't swap one in — the
-        mauve ring layers <em>over</em> the inset, so the field never shifts or
-        reflows when it takes focus. Labels are small uppercase sans; values
-        are sans with tabular numerals, so amounts and dates align in forms
-        the same way they do in tables.
+        An input never paints its own background. On a panel it is carved from
+        the panel, on the page from the page. There is no stroke at rest, and
+        focus doesn't add one; the mauve ring layers over the inset, so the
+        field never shifts or reflows on focus. Labels are small uppercase
+        sans. Values are sans with tabular numerals, so amounts and dates
+        align in forms the same way they do in tables.
       </p>
 
-      <Demo title="Field — label + input" classes="field">
+      <Demo title="Field" classes="field">
         <div class="sc-grid">
           <div class="field">
             <label for="demo-ws-name">Workspace name</label>
@@ -75,7 +71,7 @@ export default function InputPage() {
           <input
             class="input"
             type="text"
-            placeholder="Invoice reference — e.g. INV-2041"
+            placeholder="Invoice reference, e.g. INV-2041"
           />
         </div>
         <p class="cn-copy">
@@ -98,9 +94,9 @@ export default function InputPage() {
           </div>
         </div>
         <p class="cn-copy">
-          Selects share the input well. The native chrome is stripped
-          (<code class="cn-code">appearance: none</code>) so the recessed
-          surface stays consistent across controls.
+          Selects share the input well. The native chrome is stripped with{" "}
+          <code class="cn-code">appearance: none</code> so the recessed surface
+          stays consistent across controls.
         </p>
       </Demo>
 
@@ -121,9 +117,9 @@ export default function InputPage() {
           placeholder="Name your new dashboard"
         />
         <p class="cn-copy">
-          The hero variant: 58px tall, 13px radius, 15px type. One per page —
-          it marks the primary act of entry, like naming the thing you're about
-          to create.
+          The hero variant: 58px tall, 13px radius, 15px type. One per page,
+          for the primary act of entry, like naming the thing you're about to
+          create.
         </p>
       </Demo>
 
@@ -142,15 +138,14 @@ export default function InputPage() {
         </p>
       </Demo>
 
-      <Demo title="Focus — ring over inset" classes="input">
+      <Demo title="Focus" classes="input">
         <div class="sc-grid">
           <input class="input" type="text" placeholder="Click or tab into me" />
         </div>
         <p class="cn-copy">
-          Focus adds a 2px mauve ring layered over the unchanged inset shadow.
-          No border appears, nothing moves — the well simply lights up. The
-          global <code class="cn-code">:focus-visible</code> outline is never
-          removed.
+          Focus adds a 2px mauve ring over the unchanged inset shadow. No
+          border appears, nothing moves. The global{" "}
+          <code class="cn-code">:focus-visible</code> outline is never removed.
         </p>
       </Demo>
 
@@ -159,8 +154,8 @@ export default function InputPage() {
           <input class="input" type="text" value="ACME-2041 (locked)" disabled />
         </div>
         <p class="cn-copy">
-          Disable with the native attribute. The well stays put; the browser
-          dims the value and blocks input. Don't fake it with classes.
+          Use the native attribute. The well stays put; the browser dims the
+          value and blocks input. Don't fake it with classes.
         </p>
       </Demo>
 

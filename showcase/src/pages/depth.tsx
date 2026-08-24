@@ -26,16 +26,15 @@ export default function DepthPage() {
   return (
     <Doc
       title="Depth"
-      lede="Every elevation in the system is one of a small set of shadows, all lit from a single top-left light source. Surfaces are carved from the same ground they sit on — depth, not borders, is what separates them."
+      lede="Every elevation is one of a small set of shadows, all lit from a single top-left light source. Depth, not borders, separates surfaces."
     >
       <p class="cn-copy">
-        The light source never moves: the dark shadow always falls to the
-        bottom-right, the lift highlight always comes from the top-left.
-        Mixing directions breaks the illusion instantly, so no component ever
-        composes its own <code class="cn-code">box-shadow</code> — it picks one
-        of the utilities below. Neumorphic depth only reads when a surface
-        shares its background with the page, which is why every specimen here
-        sits directly on <code class="cn-code">--base</code>.
+        The light source never moves. The dark shadow falls bottom-right, the
+        lift highlight comes from the top-left. No component composes its own{" "}
+        <code class="cn-code">box-shadow</code>; it picks one of the utilities
+        below. Neumorphic depth only reads when a surface shares its background
+        with the page, so every specimen here sits directly on{" "}
+        <code class="cn-code">--base</code>.
       </p>
 
       <Demo
@@ -53,14 +52,12 @@ export default function DepthPage() {
         Two directions, two strengths. <code class="cn-code">cn-raised</code>{" "}
         lifts a surface off the page; <code class="cn-code">cn-inset</code>{" "}
         presses one into it. Each has a soft partner at roughly half the
-        offset, half the blur, and half the strength — so the pair reads as
-        two distinct elevations at a glance, never as a rendering glitch.
-        Panels and cards take the regular shadows; chips, small controls, and
-        held states take the soft ones.
+        offset, blur, and strength. Panels and cards take the regular shadows;
+        chips, small controls, and held states take the soft ones.
       </p>
 
       <Demo
-        title="Raised with a lit edge — larger surfaces only"
+        title="Raised with a lit edge"
         classes="cn-bg-base cn-r-panel cn-raised-lit"
       >
         <div
@@ -75,10 +72,9 @@ export default function DepthPage() {
 
       <p class="cn-copy">
         <code class="cn-code">cn-raised-lit</code> adds a 1px inner highlight
-        along the top-left edge — the side facing the light. Reserve it for
-        larger surfaces (panels, hero cards) where the raised shadow alone
-        starts to look soft; on small controls the extra edge reads as a
-        border.
+        along the top-left edge, the side facing the light. Reserve it for
+        larger surfaces like panels and hero cards; on small controls the
+        extra edge reads as a border.
       </p>
 
       <Demo title="Promoted shadows" classes="cn-pop | cn-cast | cn-mark-drop">
@@ -108,10 +104,9 @@ export default function DepthPage() {
       </Demo>
 
       <p class="cn-copy">
-        Three shadows were promoted from repeated literals into tokens.{" "}
-        <code class="cn-code">cn-pop</code> is the float for overlays —
-        popovers, modals, drawers, toasts — and is never combined with neu
-        shadows: an overlay is above the surface, not carved from it.{" "}
+        <code class="cn-code">cn-pop</code> is the float for overlays:
+        popovers, modals, drawers, toasts. Never combine it with neu shadows;
+        an overlay is above the surface, not carved from it.{" "}
         <code class="cn-code">cn-cast</code> is the topbar's downward cast plus
         its lit hairline. <code class="cn-code">cn-mark-drop</code> is the
         mini-drop under small solid marks; the{" "}
@@ -134,18 +129,17 @@ export default function DepthPage() {
       </Demo>
 
       <p class="cn-copy">
-        The hard offset is the system's one flat graphic note — a solid,
-        blur-free shadow available to any clickable control, and the default
-        on primary and secondary buttons. It reads via{" "}
-        <code class="cn-code">--hard-offset-color</code> (crust by default),
-        so a control can re-key it inline — the primary button presses a
-        mauve-mixed offset into the surface. <code class="cn-code">cn-hard-lg</code>{" "}
-        belongs to the tilted hero card; <code class="cn-code">cn-hard-sm</code>{" "}
-        pairs with compact density.
+        The hard offset is a solid, blur-free shadow, available to any
+        clickable control and the default on primary and secondary buttons. It
+        reads <code class="cn-code">--hard-offset-color</code>, crust by
+        default, so a control can re-key it inline.{" "}
+        <code class="cn-code">cn-hard-lg</code> belongs to the tilted hero
+        card; <code class="cn-code">cn-hard-sm</code> pairs with compact
+        density.
       </p>
 
       <Demo
-        title="Interaction — press these"
+        title="Press these"
         classes="cn-pressable | cn-hard cn-pressable-slide | cn-engaged"
         row
       >
@@ -171,14 +165,13 @@ export default function DepthPage() {
 
       <p class="cn-copy">
         Two presses, one state. <code class="cn-code">cn-pressable</code> is
-        the soft-control press: lift 1px on hover, sink to{" "}
+        the soft-control press. It lifts 1px on hover and sinks to{" "}
         <code class="cn-code">cn-inset-soft</code> while held.{" "}
-        <code class="cn-code">cn-pressable-slide</code> is the canonical
-        half-slide — legal only combined with{" "}
-        <code class="cn-code">cn-hard</code>: the control slides halfway onto
-        its own offset shadow, which shrinks from 4px to 2px to meet it.{" "}
-        <code class="cn-code">cn-engaged</code> is the selected/toggled state —
-        pressed in, mauve-tinted, and borderless: the inset depth defines it.
+        <code class="cn-code">cn-pressable-slide</code> is the half-slide,
+        legal only with <code class="cn-code">cn-hard</code>. The control
+        slides halfway onto its own offset shadow, which shrinks from 4px to
+        2px to meet it. <code class="cn-code">cn-engaged</code> is the
+        selected state, pressed in, mauve-tinted, and borderless.
       </p>
 
       <CodeBlock
@@ -204,12 +197,12 @@ export default function DepthPage() {
           {
             name: ".cn-raised",
             values: "var(--neu-raised)",
-            notes: "Panels, cards — the standard lift off the page.",
+            notes: "Panels and cards. The standard lift off the page.",
           },
           {
             name: ".cn-raised-soft",
             values: "var(--neu-raised-soft)",
-            notes: "Half the offset, blur, and strength — chips, small controls.",
+            notes: "Half the offset, blur, and strength. Chips, small controls.",
           },
           {
             name: ".cn-raised-lit",
@@ -219,7 +212,7 @@ export default function DepthPage() {
           {
             name: ".cn-inset",
             values: "var(--neu-inset)",
-            notes: "Wells, engaged states — pressed into the ground.",
+            notes: "Wells and engaged states, pressed into the ground.",
           },
           {
             name: ".cn-inset-soft",
@@ -229,7 +222,7 @@ export default function DepthPage() {
           {
             name: ".cn-pop",
             values: "var(--shadow-pop)",
-            notes: "Overlays only — never combined with neu shadows.",
+            notes: "Overlays only. Never combined with neu shadows.",
           },
           {
             name: ".cn-cast",
@@ -259,7 +252,7 @@ export default function DepthPage() {
           {
             name: ".cn-flat",
             values: "box-shadow: none",
-            notes: "Opt out — e.g. soften a secondary button to raised-soft.",
+            notes: "Opt out. Softens a secondary button to raised-soft, for example.",
           },
           {
             name: "--hard-offset-color",
@@ -284,13 +277,6 @@ export default function DepthPage() {
           },
         ]}
       />
-
-      <p class="cn-copy">
-        One rule underneath all of it: the light comes from the top-left,
-        always. Dark falls bottom-right, light lifts top-left, insets invert
-        the pair — and nothing in the system, at rest or mid-press, ever
-        contradicts that.
-      </p>
     </Doc>
   );
 }

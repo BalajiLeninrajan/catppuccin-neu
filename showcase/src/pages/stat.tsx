@@ -4,7 +4,7 @@ export default function StatPage() {
   return (
     <Doc
       title="Stat"
-      lede="Three shapes for numbers: the metric tile (micro-label over an oversized tabular figure), the hero metric (accent-colored, one per view), and the stat row — a label/value baseline pair that stacks into a hairline-separated strip."
+      lede="Three shapes for numbers: the metric tile, the hero metric, and the stat row."
     >
       <Demo title="Metric tiles" row classes="metric">
         <div class="metric">
@@ -25,7 +25,7 @@ export default function StatPage() {
         </div>
       </Demo>
 
-      <Demo title="Hero metric — accent-keyed" row classes="metric is-hero  (reads --accent)">
+      <Demo title="Hero metric" row classes="metric is-hero  (reads --accent)">
         <div class="metric is-hero">
           <span>Monthly revenue</span>
           <strong>$42,180</strong>
@@ -42,11 +42,10 @@ export default function StatPage() {
 
       <p class="cn-copy">
         <code class="cn-code">.is-hero</code> steps the figure up to 28px and
-        colors it with <code class="cn-code">var(--accent)</code> — mauve by
-        default, or whatever the surrounding card assigned. One hero per
-        surface; everything else stays a plain metric. All figures are sans
-        with <code class="cn-code">tabular-nums</code>, so columns of numbers
-        line up.
+        colors it with <code class="cn-code">var(--accent)</code>, mauve by
+        default. One hero per surface. All figures are sans with{" "}
+        <code class="cn-code">tabular-nums</code>, so columns of numbers line
+        up.
       </p>
 
       <Demo title="Stat strip" classes="stat-strip > stat-row">
@@ -71,10 +70,9 @@ export default function StatPage() {
       </Demo>
 
       <p class="cn-copy">
-        Rows sit on the page ground — no card required. Each row is a
-        baseline-aligned pair: uppercase micro-label left, tabular value
-        right. The strip adds the hairline separators between rows. Drop the
-        strip into a well or panel body when it needs containment.
+        Rows sit on the page ground; no card required. The strip adds the
+        hairline separators between rows. Drop the strip into a well or panel
+        body when it needs containment.
       </p>
 
       <Props

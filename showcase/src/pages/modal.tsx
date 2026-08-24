@@ -72,18 +72,15 @@ export default function ModalPage() {
   return (
     <Doc
       title="Modal"
-      lede="A centered dialog inside the scrim. It floats on the pop shadow, carries a recessed header band, and closes on Escape or a scrim click."
+      lede="A centered dialog inside the scrim. It closes on Escape or a scrim click."
     >
       <p class="cn-copy">
         The modal is a child of <code class="cn-code">.cn-scrim</code> and centers itself in
-        the viewport — no positioning wrapper needed. The <code class="cn-code">header</code>{" "}
-        band recesses onto the head fill and follows the panel radius; a trailing{" "}
-        <code class="cn-code">footer</code> band mirrors it. Radius tracks{" "}
-        <code class="cn-code">--pane-radius</code>, so compact density tightens the corners
-        for free.
+        the viewport. No positioning wrapper is needed. Radius tracks{" "}
+        <code class="cn-code">--pane-radius</code>, so compact density tightens the corners.
       </p>
 
-      <Demo title="Live — Escape or the scrim closes it" classes="cn-scrim > modal">
+      <Demo title="Live demo" classes="cn-scrim > modal">
         <ModalDemo />
       </Demo>
 
@@ -112,7 +109,7 @@ export default function ModalPage() {
             name: ".modal > footer:last-child",
             values: "action row",
             default: "—",
-            notes: "Compose with .panel-footer: no fill, the divider line alone separates it.",
+            notes: "Compose with .panel-footer. No fill; the divider line separates it.",
           },
           {
             name: "--pane-radius",

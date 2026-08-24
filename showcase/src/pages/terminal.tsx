@@ -20,7 +20,7 @@ export default function TerminalPage() {
   return (
     <Doc
       title="Terminal"
-      lede="The deepest well in the system — a crust ground with the full inset shadow and no border. It is also the one place the mono face appears outside .cn-code: terminal content is code-like by definition."
+      lede="The deepest well in the system. Crust ground, full inset shadow, no border, and the one place the mono face appears outside .cn-code."
     >
       <Demo title="Log surface with caret" classes="terminal / terminal .caret">
         <div class="terminal" style="width:min(560px,100%);height:230px">
@@ -34,10 +34,10 @@ export default function TerminalPage() {
       <p class="cn-copy">
         The <code class="cn-code">&lt;pre&gt;</code> fills the surface and
         scrolls on overflow; add <code class="cn-code">.scroll-well</code> so
-        the scrollbar thumb matches the dark ground. Text wraps rather than
-        forcing horizontal scroll —{" "}
-        <code class="cn-code">white-space: pre-wrap</code> with{" "}
-        <code class="cn-code">overflow-wrap: anywhere</code>.
+        the scrollbar thumb matches the dark ground. Text wraps via{" "}
+        <code class="cn-code">white-space: pre-wrap</code> and{" "}
+        <code class="cn-code">overflow-wrap: anywhere</code>; there is no
+        horizontal scroll.
       </p>
 
       <Demo title="Accent-keyed caret" classes="terminal  (caret reads --accent)">
@@ -54,11 +54,9 @@ export default function TerminalPage() {
 
       <p class="cn-copy">
         The blinking caret is a plain <code class="cn-code">span.caret</code>{" "}
-        filled with <code class="cn-code">var(--accent)</code> — mauve by
-        default, re-keyed by the same inline custom property as every other
-        accent-aware recipe. The blink uses the shared{" "}
-        <code class="cn-code">blink</code> keyframes and stops under
-        reduced-motion, like all system animation.
+        filled with <code class="cn-code">var(--accent)</code>, mauve by
+        default, re-keyed inline like every other accent-aware recipe. The
+        blink stops under reduced motion.
       </p>
 
       <Demo title="Inside a panel" classes="panel > terminal">
@@ -81,9 +79,9 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        Composed into a panel body, the raised panel and deep-inset terminal
-        make the strongest depth contrast the system allows — use the pairing
-        when the log is the point of the page.
+        A raised panel around the deep-inset terminal is the strongest depth
+        contrast the system allows. Use the pairing when the log is the point
+        of the page.
       </p>
 
       <Props
@@ -99,7 +97,7 @@ export default function TerminalPage() {
             name: ".terminal pre",
             values: "content",
             notes:
-              "500 11px/1.65 var(--mono) — the one mono surface. Wraps; scrolls on overflow.",
+              "500 11px/1.65 var(--mono). Wraps; scrolls on overflow.",
           },
           {
             name: ".terminal .caret",

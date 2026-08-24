@@ -4,16 +4,16 @@ export default function EmptyStatePage() {
   return (
     <Doc
       title="Empty state"
-      lede="A quiet, centered placeholder for a region with nothing to show yet: a short title, one line of guidance, and the action that fills the space."
+      lede="A centered placeholder for a region with nothing to show yet: a short title, one line of guidance, and the action that fills the space."
     >
       <p class="cn-copy">
         <code class="cn-code">.empty-state</code> is a centered flex column
-        with a 260px floor, so an empty list or panel body keeps its height
-        instead of collapsing. The recipe styles two children directly —{" "}
+        with a 260px floor, so an empty list or panel body keeps its height.
+        The recipe styles two children directly.{" "}
         <code class="cn-code">strong</code> is the title,{" "}
-        <code class="cn-code">span</code> the supporting line — and anything
-        else (a button, a glyph) simply joins the 10px stack. Keep the copy to
-        one idea: what's missing, and the single next step.
+        <code class="cn-code">span</code> the supporting line, and anything
+        else joins the 10px stack. Keep the copy to one idea: what's missing,
+        and the single next step.
       </p>
 
       <Demo title="Title, description, action" classes="empty-state">
@@ -35,12 +35,11 @@ export default function EmptyStatePage() {
       </Demo>
 
       <p class="cn-copy">
-        Pick the action to match the weight of the moment:{" "}
-        <code class="cn-code">.btn .btn-secondary</code> for the ordinary
-        create step, <code class="cn-code">.btn-dashed</code> when the action
-        is itself an open slot — the dashed border reads as "nothing here yet,
-        add something." Reserve <code class="cn-code">.btn-primary</code> for
-        an empty state that is the page's one job, like a first-run screen.
+        Use <code class="cn-code">.btn .btn-secondary</code> for the ordinary
+        create step and <code class="cn-code">.btn-dashed</code> when the
+        action is itself an open slot. Reserve{" "}
+        <code class="cn-code">.btn-primary</code> for an empty state that is
+        the page's one job, like a first-run screen.
       </p>
 
       <Props
@@ -54,11 +53,11 @@ export default function EmptyStatePage() {
           },
           {
             name: "strong",
-            notes: "The title — 15px, full text color.",
+            notes: "The title. 15px, full text color.",
           },
           {
             name: "span",
-            notes: "The supporting line — 12px, inherits the muted color.",
+            notes: "The supporting line. 12px, inherits the muted color.",
           },
           {
             name: "action",

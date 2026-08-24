@@ -20,16 +20,16 @@ export default function SegmentedPage() {
   return (
     <Doc
       title="Segmented"
-      lede="A row of mutually exclusive options. Every option carries the hard offset at rest, half-slides while held, and presses in — engaged — once selected."
+      lede="A row of mutually exclusive options. Options carry the hard offset at rest, half-slide while held, and press in once selected."
     >
       <p class="cn-copy">
         The recipe styles every direct child of <code class="cn-code">.segmented</code>, so the same class works on
         a row of buttons or a group of labels wrapping visually-hidden radios. Mark the selection with{" "}
-        <code class="cn-code">.active</code>: the settled state never slides — it sits pressed into the page with
-        the mauve wash, and its <code class="cn-code">&lt;b&gt;</code> line turns mauve.
+        <code class="cn-code">.active</code>. The selected option sits pressed in with the mauve wash and never
+        slides.
       </p>
 
-      <Demo title="Button form — live selection" classes="segmented › button.active">
+      <Demo title="Button form" classes="segmented › button.active">
         <div class="segmented" role="group" aria-label="Billing period">
           {PERIODS.map((p) => (
             <button
@@ -47,12 +47,11 @@ export default function SegmentedPage() {
       </Demo>
 
       <p class="cn-copy">
-        Buttons suit toolbar-style switches the app reacts to immediately — a billing period, a chart range, a view
-        mode. Toggle <code class="cn-code">.active</code> (and <code class="cn-code">aria-pressed</code>) from your
-        state.
+        Use buttons for switches the app reacts to immediately. Toggle{" "}
+        <code class="cn-code">.active</code> and <code class="cn-code">aria-pressed</code> from your state.
       </p>
 
-      <Demo title="Radio form — label + visually-hidden input" classes="segmented › label.active > input.cn-sr-only">
+      <Demo title="Radio form" classes="segmented › label.active > input.cn-sr-only">
         <div class="segmented">
           {PERIODS.map((p) => (
             <label key={p.id} class={period === p.id ? "active" : ""}>
@@ -72,13 +71,11 @@ export default function SegmentedPage() {
 
       <p class="cn-copy">
         Inside a form, wrap a radio in each option's label and hide it with{" "}
-        <code class="cn-code">.cn-sr-only</code> — the value submits natively and arrow keys move the selection.
-        When the hidden input takes keyboard focus, the recipe draws a mauve outline around the whole label, so the
-        focus ring is never lost. Both forms above share one piece of state — select in either and the other
-        follows.
+        <code class="cn-code">.cn-sr-only</code>. The value submits natively and arrow keys move the selection.
+        When the hidden input takes keyboard focus, the recipe draws a mauve outline around the whole label.
       </p>
 
-      <Demo title="Stacked — vertical option list" classes="segmented is-stacked">
+      <Demo title="Stacked" classes="segmented is-stacked">
         <div class="segmented is-stacked" style="width: min(420px, 100%)">
           {PLANS.map((p) => (
             <label key={p.id} class={plan === p.id ? "active" : ""}>
@@ -98,8 +95,8 @@ export default function SegmentedPage() {
 
       <p class="cn-copy">
         <code class="cn-code">.is-stacked</code> turns the grid vertical with roomier rows and a larger{" "}
-        <code class="cn-code">&lt;b&gt;</code> — built for plan pickers and settings choices where each option needs
-        a description. Below 520px the default row form stacks on its own.
+        <code class="cn-code">&lt;b&gt;</code>, for options that need a description. Below 520px the default row
+        form stacks on its own.
       </p>
 
       <CodeBlock
@@ -128,8 +125,8 @@ export default function SegmentedPage() {
       <Props
         title="Variants & knobs"
         rows={[
-          { name: ".segmented", notes: "Equal-width column grid, 7px gap. Styles every direct child — buttons or labels." },
-          { name: ".segmented > .active", notes: "The selection: engaged treatment — pressed in, mauve wash, borderless; <b> turns mauve." },
+          { name: ".segmented", notes: "Equal-width column grid, 7px gap. Styles every direct child, buttons or labels." },
+          { name: ".segmented > .active", notes: "The selection. Pressed in, mauve wash, borderless; <b> turns mauve." },
           { name: ".is-stacked", notes: "Vertical list, 12px gap, roomier rows, 17px <b>. For described options." },
           { name: "<b> / <small>", notes: "Option title (sans 750) and quiet hint line inside each option." },
           { name: ".cn-sr-only", notes: "Hides the radio in the label form; label:has(input:focus-visible) draws the focus outline." },

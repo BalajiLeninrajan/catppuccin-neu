@@ -43,7 +43,7 @@ export default function TablePage() {
   return (
     <Doc
       title="Table"
-      lede="An opt-in class on a plain <table> — the recipe scopes every bit of table styling, so bare tables elsewhere stay untouched. Sans throughout, tabular numerals, a mantle header band, and rows that press in on hover."
+      lede="An opt-in class on a plain <table>. The recipe scopes every bit of table styling, so bare tables elsewhere stay untouched."
     >
       <Demo title="Subscriptions" classes="table-neu / cell-name / td[data-label]">
         <div style="width:100%;overflow-x:auto">
@@ -79,12 +79,10 @@ export default function TablePage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.cell-name</code> marks the emphasized column:
-        a full-strength <code class="cn-code">&lt;strong&gt;</code> primary
-        line over a quiet <code class="cn-code">&lt;small&gt;</code> secondary
-        line. Status tags are ordinary{" "}
-        <code class="cn-code">.chip-tone</code> chips keyed by the{" "}
-        <code class="cn-code">.cn-tone-*</code> setters.
+        <code class="cn-code">.cell-name</code> marks the emphasized column.{" "}
+        <code class="cn-code">&lt;strong&gt;</code> is the primary line,{" "}
+        <code class="cn-code">&lt;small&gt;</code> the secondary. Status tags
+        are ordinary <code class="cn-code">.chip-tone</code> chips.
       </p>
 
       <Demo title="Filling a panel" classes="panel > table-neu">
@@ -119,17 +117,16 @@ export default function TablePage() {
 
       <p class="cn-copy">
         When a table is a panel's first child, the header band's outer corners
-        follow the panel radius automatically — the same band-corner contract
-        as panel headings, with no overflow clipping involved.
+        follow the panel radius. Same band-corner contract as panel headings,
+        no overflow clipping.
       </p>
 
       <p class="cn-copy">
         <b class="cn-text-text">Mobile collapse.</b> Give every data cell a{" "}
         <code class="cn-code">data-label</code> attribute. At ≤760px the header
-        row drops, each row becomes a mantle card on a three-column grid, and
-        each cell grows its own micro-label from the attribute. Cells without
-        the attribute still stack, but unlabeled — the attribute is the
-        contract. Resize this page to watch it happen.
+        row drops, each row becomes a mantle card, and each cell grows its own
+        micro-label from the attribute. Cells without the attribute stack
+        unlabeled.
       </p>
 
       <Props

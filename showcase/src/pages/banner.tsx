@@ -1,6 +1,6 @@
 import { Doc, Demo, Props, CodeBlock, TONES } from "../lib/doc";
 
-/* Decorative leading glyphs — 16px, stroke = currentColor, aria-hidden.
+/* Decorative leading glyphs. 16px, stroke = currentColor, aria-hidden.
    The banner text carries the meaning; the glyph only echoes the tone. */
 function InfoGlyph() {
   return (
@@ -62,7 +62,7 @@ function AlertGlyph() {
 }
 
 const TONE_COPY = {
-  red: "Payment failed — update the card on file to keep this workspace active.",
+  red: "Payment failed. Update the card on file to keep this workspace active.",
   green: "Invoice #1042 was sent and marked as paid.",
   peach: "Your trial ends in 3 days. Pick a plan to keep your data.",
   yellow: "Two teammates haven't accepted their invites yet.",
@@ -74,15 +74,14 @@ export default function BannerPage() {
   return (
     <Doc
       title="Banner"
-      lede="An inline message band with a semantic tint — no card chrome, just the tone's wash, its hairline edge, and a soft inset. It sits in the content flow wherever the message applies."
+      lede="An inline message band with a semantic tint. It sits in the content flow wherever the message applies."
     >
       <p class="cn-copy">
-        The banner reads its color from the{" "}
-        <code class="cn-code">--tone</code> contract prop: text, tint, and edge
-        all derive from the one value, so a single{" "}
+        Text, tint, and edge all derive from the{" "}
+        <code class="cn-code">--tone</code> contract prop, so a single{" "}
         <code class="cn-code">.cn-tone-*</code> utility switches the whole
-        band. Unlike most inset surfaces, the tinted band keeps its hairline
-        border — the tint needs the edge to hold its shape on the base ground.
+        band. Unlike most inset surfaces, the banner keeps its hairline border.
+        The tint needs the edge to hold its shape on the base ground.
       </p>
 
       <Demo title="Six tones" classes="banner cn-tone-{tone}">
@@ -100,7 +99,7 @@ export default function BannerPage() {
         </div>
         <div class="banner cn-tone-red">
           <AlertGlyph />
-          Payment failed — update the card on file to keep this workspace
+          Payment failed. Update the card on file to keep this workspace
           active.
         </div>
         <div class="banner cn-tone-blue">
@@ -109,14 +108,12 @@ export default function BannerPage() {
       </Demo>
 
       <p class="cn-copy">
-        The glyph is optional and purely decorative — the banner's flex row
-        seats it before the text with the built-in gap. Keep it at 16px, stroke
-        it with <code class="cn-code">currentColor</code> so it inherits the
-        tone, and mark it <code class="cn-code">aria-hidden="true"</code>. For
-        messages that arrive dynamically, put{" "}
-        <code class="cn-code">role="status"</code> (or{" "}
-        <code class="cn-code">role="alert"</code> for the red tone) on the
-        banner itself.
+        The glyph is optional and decorative. Keep it at 16px, stroke it with{" "}
+        <code class="cn-code">currentColor</code> so it inherits the tone, and
+        mark it <code class="cn-code">aria-hidden="true"</code>. For messages
+        that arrive dynamically, put <code class="cn-code">role="status"</code>{" "}
+        on the banner, or <code class="cn-code">role="alert"</code> for the red
+        tone.
       </p>
 
       <Props
@@ -132,7 +129,7 @@ export default function BannerPage() {
             name: ".banner svg",
             values: "one optional leading glyph",
             notes:
-              "16px, currentColor stroke, aria-hidden. Seated by the flex gap — no extra wrapper.",
+              "16px, currentColor stroke, aria-hidden. Seated by the flex gap, no extra wrapper.",
           },
           {
             name: "--tone",
@@ -151,7 +148,7 @@ export default function BannerPage() {
 
 <div class="banner cn-tone-red" role="alert">
   <svg aria-hidden="true"><!-- glyph --></svg>
-  Payment failed — update the card on file.
+  Payment failed. Update the card on file.
 </div>`}
       />
     </Doc>

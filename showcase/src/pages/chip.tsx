@@ -73,17 +73,8 @@ export default function ChipPage() {
   return (
     <Doc
       title="Chip"
-      lede="Two species of small metadata mark: the outlined pill for counts, versions, and status readouts, and the tone-tinted tag for semantic states. Both are sans, both stay on one line."
+      lede="Two small metadata marks. The outlined .chip carries facts like counts and versions; the tinted .chip-tone carries semantic states through --tone. Both stay on one line."
     >
-      <p class="cn-copy">
-        <code class="cn-code">.chip</code> is a raised-soft pill on the page
-        ground — an outlined mark for facts that ride alongside a title:
-        version numbers, member counts, last-sync times.{" "}
-        <code class="cn-code">.chip-tone</code> is the louder sibling: a
-        tinted, uppercase tag that carries a semantic color through the{" "}
-        <code class="cn-code">--tone</code> contract prop.
-      </p>
-
       <Demo title="Chip" classes="chip" row>
         <span class="chip">v2.4.1</span>
         <span class="chip">12 members</span>
@@ -109,10 +100,10 @@ export default function ChipPage() {
         Below 760px a chip with an <code class="cn-code">svg</code> glyph
         collapses to icon-only: the label is hidden with{" "}
         <code class="cn-code">font-size: 0</code> and the glyph scales up to
-        16px. The label text stays in the DOM, so keep it in the markup — it
-        remains the chip's accessible name after the collapse. Mark the glyph{" "}
-        <code class="cn-code">aria-hidden="true"</code>, and never ship an
-        icon-bearing chip whose only content is the svg.
+        16px. Keep the label in the markup, it stays the chip's accessible name
+        after the collapse. Mark the glyph{" "}
+        <code class="cn-code">aria-hidden="true"</code>, and never ship a chip
+        whose only content is the svg.
       </p>
 
       <Demo title="Chip tones" classes="chip-tone cn-tone-{tone}" row>
@@ -130,7 +121,7 @@ export default function ChipPage() {
             name: ".chip",
             values: "span, a, or button",
             notes:
-              "Outlined pill on --base with raised-soft depth. White-space: nowrap — keep labels short.",
+              "Outlined pill on --base with raised-soft depth. White-space: nowrap, keep labels short.",
           },
           {
             name: ".chip svg",

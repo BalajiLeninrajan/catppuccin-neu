@@ -13,7 +13,7 @@ export default function AccentCardPage() {
   return (
     <Doc
       title="Accent card"
-      lede="A softly raised card keyed by one contract property, --accent. The spine, hairline border, and corner gradient all read the same color, so re-keying a card is one inline style — assign a hex from your data and every cue follows."
+      lede="A raised card keyed by one property, --accent. The spine, hairline border, and corner gradient all read it, so re-keying a card is one inline style."
     >
       <Demo title="The accent cycle" classes="accent-card  (set --accent inline)">
         <div class="sc-grid" style="width:100%">
@@ -32,12 +32,12 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        The cycle order is documented in tokens.css: mauve, teal, yellow,
-        blue, peach, pink. Assign colors positionally from data — sixth item
-        wraps back to mauve — and never pick per-item colors by hand.
+        The cycle order lives in tokens.css: mauve, teal, yellow, blue, peach,
+        pink. Assign colors positionally from data, wrapping after six. Never
+        pick per-item colors by hand.
       </p>
 
-      <Demo title="Linked card — hover lifts, click presses in" classes="a > .accent-card">
+      <Demo title="Linked card" classes="a > .accent-card">
         <a
           href="#"
           style="display:block;width:min(340px,100%);text-decoration:none;color:inherit"
@@ -52,10 +52,10 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        Wrap the card in a plain <code class="cn-code">&lt;a&gt;</code> and the
-        recipe handles the states: hover lifts to the full raised shadow and
-        strengthens the accent border; active presses the card into a soft
-        inset. The card itself never becomes a link — the wrapper does.
+        Wrap the card in a plain <code class="cn-code">&lt;a&gt;</code>. Hover
+        lifts to the full raised shadow and strengthens the accent border;
+        active presses the card into a soft inset. The wrapper is the link,
+        never the card itself.
       </p>
 
       <Demo title="The spine alone" classes="cn-spine  (utility)">
@@ -71,10 +71,10 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.cn-spine</code> is the standalone identity cue —
-        a 4px left bar in <code class="cn-code">var(--accent)</code> you can
-        put on any surface. The accent card ships with it built in; use the
-        utility when you want the cue without the card chrome.
+        <code class="cn-code">.cn-spine</code> is a 4px left bar in{" "}
+        <code class="cn-code">var(--accent)</code> for any surface. The accent
+        card has it built in; use the utility for the cue without the card
+        chrome.
       </p>
 
       <Demo title="Accent utilities" row classes="cn-text-accent / cn-edge-accent / cn-tint-accent">

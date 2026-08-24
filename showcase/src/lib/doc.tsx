@@ -2,8 +2,8 @@
    Every docs page composes these four pieces. Pages put pure system markup
    (cn-* utilities + recipes) inside <Demo>; the kit owns all sc- chrome.
 
-   Per R5, <Demo> renders children DIRECTLY on the page's --base ground —
-   there is no well/mantle stage — so neumorphic depth reads correctly.     */
+   Per R5, <Demo> renders children DIRECTLY on the page's --base ground.
+   No well/mantle stage, so neumorphic depth reads correctly.     */
 
 import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
@@ -63,7 +63,7 @@ function CopyLine({ text, block }: CopyLineProps) {
 }
 
 /**
- * Doc — the page wrapper. One per page, at the top of the default export.
+ * Doc: the page wrapper. One per page, at the top of the default export.
  * props: { title: string, lede?: string, children }
  */
 export interface DocProps {
@@ -85,7 +85,7 @@ export function Doc({ title, lede, children }: DocProps) {
 }
 
 /**
- * Demo — a captioned specimen stage. Children sit directly on --base (R5).
+ * Demo: a captioned specimen stage. Children sit directly on --base (R5).
  * props: {
  *   title?: string,     // .cn-label caption above the stage
  *   classes?: string,   // class string shown in a copyable code line below
@@ -111,7 +111,7 @@ export function Demo({ title, classes, row, children }: DemoProps) {
 }
 
 /**
- * Props — a variants/knobs documentation table (renders .table-neu).
+ * Props: a variants/knobs documentation table (renders .table-neu).
  * props: {
  *   title?: string,
  *   rows: Array<{ name: string, values?: string, default?: string, notes?: string }>,
@@ -163,7 +163,7 @@ export function Props({ title, rows }: PropsProps) {
 }
 
 /**
- * CodeBlock — a copyable multi-line html/CSS snippet.
+ * CodeBlock: a copyable multi-line html/CSS snippet.
  * props: { code: string, title?: string }
  */
 export interface CodeBlockProps {

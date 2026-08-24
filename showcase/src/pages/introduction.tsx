@@ -36,7 +36,7 @@ export default function IntroductionPage() {
   return (
     <Doc
       title="Introduction"
-      lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, soft neumorphic depth cast from a fixed top-left light source, and a single mauve accent. It ships as three plain CSS files."
+      lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, neumorphic depth from a fixed top-left light source, one mauve accent. It ships as three plain CSS files."
     >
       <section>
         <h2 class="cn-title">The idea</h2>
@@ -45,9 +45,8 @@ export default function IntroductionPage() {
           lift off the page with a soft shadow pair; inputs, wells, and
           selected states press in with an inset. Clickable controls carry a
           flat hard-offset shadow and press with a half-slide onto it. Type is
-          sans-first — Inter everywhere, with JetBrains Mono reserved for
-          actual code. Mauve is the one accent; everything else is a semantic
-          tint passed through a custom property.
+          Inter everywhere, JetBrains Mono for code. Mauve is the one accent;
+          everything else is a semantic tint passed through a custom property.
         </p>
       </section>
 
@@ -61,24 +60,23 @@ export default function IntroductionPage() {
       <section>
         <h2 class="cn-title">Three layers, one import</h2>
         <p class="cn-copy">
-          The package is three cascade layers — <code class="cn-code">cn.tokens</code>{" "}
-          (palette, shadows, contract properties, reset),{" "}
-          <code class="cn-code">cn.utilities</code> (single-purpose{" "}
-          <code class="cn-code">cn-*</code> classes with blessed values only), and{" "}
-          <code class="cn-code">cn.recipes</code> (full components: panel, btn,
-          input, table-neu, and friends). Your own CSS stays unlayered, so it
-          always wins over the system — overrides never need{" "}
-          <code class="cn-code">!important</code>.
+          The package is three cascade layers.{" "}
+          <code class="cn-code">cn.tokens</code> holds the palette, shadows,
+          contract properties, and reset. <code class="cn-code">cn.utilities</code>{" "}
+          holds single-purpose <code class="cn-code">cn-*</code> classes with
+          blessed values only. <code class="cn-code">cn.recipes</code> holds
+          full components. Your own CSS stays unlayered, so it always wins;
+          overrides never need <code class="cn-code">!important</code>.
         </p>
-        <CodeBlock title="css/index.css — the entry point" code={LAYER_CODE} />
+        <CodeBlock title="css/index.css, the entry point" code={LAYER_CODE} />
       </section>
 
       <section>
         <h2 class="cn-title">Install</h2>
         <p class="cn-copy">
-          The package is consumed as a git dependency — there is no CDN build.
-          Add it, import the one entry point, and link the two font families on
-          every public page.
+          The package is a git dependency; there is no CDN build. Add it,
+          import the one entry point, and link the two font families on every
+          public page.
         </p>
         <CodeBlock title="Add the dependency" code={INSTALL_CODE} />
         <CodeBlock title="Import the CSS" code={IMPORT_CODE} />
@@ -89,10 +87,10 @@ export default function IntroductionPage() {
         <h2 class="cn-title">Zero-build sites</h2>
         <p class="cn-copy">
           No bundler? <code class="cn-code">scripts/sync.mjs</code> vendors the
-          CSS files into any directory you point it at (Node 18+, no
-          dependencies). The three files also work as plain{" "}
-          <code class="cn-code">&lt;link&gt;</code> tags loaded in order —
-          tokens, utilities, recipes — no layer machinery required.
+          CSS files into any directory you point it at. Node 18+, no
+          dependencies. The three files also work as plain{" "}
+          <code class="cn-code">&lt;link&gt;</code> tags loaded in order:
+          tokens, utilities, recipes.
         </p>
         <CodeBlock title="Vendor the CSS" code={SYNC_CODE} />
         <CodeBlock title="Link in order" code={LINKS_CODE} />
@@ -101,9 +99,9 @@ export default function IntroductionPage() {
       <section>
         <h2 class="cn-title">Tailwind</h2>
         <p class="cn-copy">
-          A Tailwind preset maps the system onto theme keys — palette colors
-          (plus <code class="cn-code">accent</code> and{" "}
-          <code class="cn-code">tone</code>), font stacks, role-named radii, the
+          A Tailwind preset maps the system onto theme keys: palette colors
+          plus <code class="cn-code">accent</code> and{" "}
+          <code class="cn-code">tone</code>, font stacks, role-named radii, the
           shadow set, and control heights. Components still come from the CSS
           recipes; the preset carries no plugin logic.
         </p>
