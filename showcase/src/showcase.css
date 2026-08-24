@@ -72,6 +72,7 @@
   text-decoration: none;
   padding: 8px 10px;
   border: 1px solid transparent; /* keeps box size stable when .cn-engaged clears border-color */
+  border-radius: 10px;
   transition: color 0.16s, background 0.16s;
 }
 

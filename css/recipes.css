@@ -236,6 +236,7 @@
 .btn-text {
   color: var(--mauve);
   border: 0;
+  border-radius: 8px; /* focus ring traces this — no sharp rectangles */
   background: transparent;
   font: 700 12px var(--sans);
   cursor: pointer;
@@ -543,7 +544,10 @@
   border-radius: 0 6px 6px 0;
   background: var(--accent);
 }
-/* Cards wrapped in a link lift on hover, press in on click. */
+/* Cards wrapped in a link lift on hover, press in on click. The wrapper
+   takes the card's radius so its focus ring traces the card, not the
+   bare-link 4px. */
+a:has(> .accent-card) { border-radius: 13px; }
 a:hover > .accent-card {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--accent) 52%, var(--surface-0));
