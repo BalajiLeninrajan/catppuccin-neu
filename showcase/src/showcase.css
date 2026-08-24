@@ -204,9 +204,15 @@
 .sc-doc section .sc-codeblock:first-child { margin-top: 0; }
 .sc-doc section .sc-codeblock + p { margin-top: 26px; }
 
-/* A bare label heading at the top level introduces what follows — pull the
-   next block up into the grid gap so the label hugs its content (34 − 20 =
-   14px effective). */
+/* The grid gap owns ALL spacing between top-level blocks. UA margins on
+   direct children (p margin-bottom, h2 margin-bottom) otherwise stack onto
+   the 34px gap unevenly. */
+.sc-doc > * { margin-block: 0; }
+
+/* Headings group with what follows: extra room above, hug below. */
+.sc-doc > :is(h2, h3):not(.cn-label) { margin-top: 22px; }
+.sc-doc > :is(h2, h3):not(.cn-label) + * { margin-top: -16px; }
+.sc-doc > .cn-label { margin-top: 8px; }
 .sc-doc > .cn-label + * { margin-top: -20px; }
 
 .sc-props-scroll {
