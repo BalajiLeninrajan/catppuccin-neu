@@ -37,15 +37,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
 }
+/* The heading anchors with a fill; the footer sits on the panel's own ground,
+   separated by the divider alone (band study, Revision 5). */
 .panel-heading {
+  background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
   border-radius: calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px) 0 0;
 }
 .panel-footer {
   border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  border-radius: 0 0 calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px);
 }
 .panel-heading h2 { margin: 0; font-size: 18px; }
 

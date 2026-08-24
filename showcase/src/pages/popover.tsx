@@ -35,7 +35,7 @@ function AnchoredDemo() {
               <span class="cn-meta">Teams · 1h ago</span>
             </div>
           </div>
-          <footer class="cn-bg-head" style="display:flex; justify-content:flex-end; padding:10px 16px;">
+          <footer style="display:flex; justify-content:flex-end; padding:10px 16px; border-top:1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);">
             <button type="button" class="btn-text" onClick={() => setOpen(false)}>
               Mark all as read
             </button>
@@ -69,7 +69,7 @@ function AnatomyDemo() {
             <span class="chip-tone cn-tone-red">Overdue</span>
           </div>
         </div>
-        <footer class="cn-bg-head" style="display:flex; justify-content:space-between; gap:10px; padding:10px 16px;">
+        <footer style="display:flex; justify-content:space-between; gap:10px; padding:10px 16px; border-top:1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);">
           <button type="button" class="btn-text">Reset</button>
           <button type="button" class="btn-text">Apply</button>
         </footer>
@@ -123,7 +123,7 @@ export default function PopoverPage() {
           },
           {
             name: ".cn-bg-head",
-            values: "header/footer band fill",
+            values: "header band fill",
             default: "—",
             notes: "The recessed band mix — same fill as panel headings.",
           },
@@ -137,7 +137,7 @@ export default function PopoverPage() {
   <div class="popover" role="dialog" aria-label="Notifications">
     <header class="cn-bg-head">…</header>
     <div>…rows…</div>
-    <footer class="cn-bg-head">…</footer>
+    <footer>…divider-top, no fill…</footer>
   </div>
 </div>`}
       />

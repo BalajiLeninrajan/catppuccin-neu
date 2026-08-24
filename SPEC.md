@@ -112,7 +112,20 @@ carved-transparent.)*
 > (.2s); drawer slides from the right edge (.26s); popover fades + drops 4px
 > (.16s); toast fades + rises 6px (.2s). A modal or drawer inside a scrim
 > rides the scrim's `[hidden]`. Consumers that unmount instead of hiding get
-> the entrance only. The tokens' reduced-motion block collapses all of it. Apply the same
+> the entrance only. The tokens' reduced-motion block collapses all of it.
+
+> **REVISION 5 — footer bands (2026-08-24, band study).** Headers and footers
+> stop being twins. The **heading** keeps its crust-mix fill + divider +
+> corner-following radius — it anchors. The **footer** paints no fill and
+> carries no depth: it sits on the panel's own ground, separated by the
+> divider line alone (`border-top: 1px solid` surface-1 40% mix). Applies to
+> `.panel-footer` everywhere it composes (panels, modals) and to popover and
+> drawer footer bands. Rationale: A/B/C/D/E were tried live; the raised-soft
+> footer (E) won on looks, revealing its whole contribution was gentle
+> separation — which the divider does honestly, without bending the depth
+> grammar (inset = engaged, raised = untouched control).
+
+Apply the same
 "depth replaces border" principle across inset surfaces (wells, terminal,
 progress track, engaged states): remove hairlines where the depth already
 separates the surface; keep hairline borders only on *raised* surfaces where

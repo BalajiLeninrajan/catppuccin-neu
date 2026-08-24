@@ -112,7 +112,7 @@ export default function ModalPage() {
             name: ".modal > footer:last-child",
             values: "action row",
             default: "—",
-            notes: "Bottom corners mirror the header; compose with .panel-footer for the fill.",
+            notes: "Compose with .panel-footer: no fill, the divider line alone separates it.",
           },
           {
             name: "--pane-radius",

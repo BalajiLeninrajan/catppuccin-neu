@@ -74,7 +74,7 @@ function DrawerDemo() {
                 Changes apply to all 14 members of this workspace.
               </div>
             </div>
-            <footer class="cn-bg-head" style="margin-top:auto; display:flex; justify-content:flex-end; gap:10px; padding:14px 22px;">
+            <footer class="panel-footer" style="margin-top:auto; justify-content:flex-end; gap:10px;">
               <button type="button" class="btn btn-ghost" onClick={close}>
                 Discard
               </button>

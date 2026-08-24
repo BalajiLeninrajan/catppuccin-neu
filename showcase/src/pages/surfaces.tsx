@@ -119,9 +119,9 @@ export default function SurfacesPage() {
           },
           {
             name: ".panel-heading / .panel-footer",
-            values: "recessed bands",
+            values: "bands",
             notes:
-              "Mantle-mix fill; outer corners follow the parent radius minus the 1px border (R2).",
+              "Heading: mantle-mix fill, corners follow the parent radius minus the 1px border (R2). Footer: no fill — the divider line alone, on the panel's own ground.",
           },
           {
             name: ".panel.is-tilted",
