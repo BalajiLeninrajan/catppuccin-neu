@@ -730,35 +730,37 @@ a:active > .accent-card {
 }
 
 /* ── Overlay motion ──────────────────────────────────────────────────────────
-   Overlays enter via @starting-style and exit via [hidden]: display joins the
-   transition with allow-discrete, so setting `el.hidden = true` plays the
-   exit before the element leaves the render tree — no JS timing needed.
-   Consumers that mount/unmount instead still get the entrance, only the exit
-   needs the element kept around. These rules must stay AFTER the component
-   blocks so [hidden] beats their display values. */
+   Overlays enter via @starting-style and exit via [hidden]. The exit does NOT
+   rely on display transitions (allow-discrete is too new to trust): [hidden]
+   keeps the element's display and drops `visibility` instead — visibility is
+   discretely transitionable everywhere, staying visible for the whole exit
+   and flipping only at the end. A hidden overlay is invisible, unfocusable,
+   and inert to pointers, same as display:none for a fixed element.
+   These rules must stay AFTER the component blocks so [hidden] wins. */
 
 .cn-scrim,
 .popover,
 .modal,
 .drawer,
 .toast {
-  transition: opacity .2s ease, transform .2s ease, display .2s allow-discrete;
+  transition: opacity .2s ease, transform .2s ease, visibility .2s;
 }
+.cn-scrim { transition: opacity .2s ease, backdrop-filter .2s ease, visibility .2s; }
 .popover { transition-duration: .16s; }
 .drawer  { transition-duration: .26s; }
 
 /* Exit targets — mirrored as pre-entry states in @starting-style below. */
-.cn-scrim[hidden] { display: none; opacity: 0; }
-.popover[hidden]  { display: none; opacity: 0; transform: translateY(-4px); }
-.modal[hidden]    { display: none; opacity: 0; transform: translateY(8px) scale(.98); }
-.drawer[hidden]   { display: none; transform: translateX(calc(100% + 40px)); }
-.toast[hidden]    { display: none; opacity: 0; transform: translateY(6px); }
+.cn-scrim[hidden] { display: block; visibility: hidden; opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
+.popover[hidden]  { display: block; visibility: hidden; opacity: 0; transform: translateY(-4px); pointer-events: none; }
+.modal[hidden]    { display: block; visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); pointer-events: none; }
+.drawer[hidden]   { display: flex; visibility: hidden; transform: translateX(calc(100% + 40px)); pointer-events: none; }
+.toast[hidden]    { display: flex; visibility: hidden; opacity: 0; transform: translateY(6px); pointer-events: none; }
 /* A modal or drawer inside a scrim rides the scrim's exit. */
-.cn-scrim[hidden] .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
-.cn-scrim[hidden] .drawer { transform: translateX(calc(100% + 40px)); }
+.cn-scrim[hidden] .modal  { visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); }
+.cn-scrim[hidden] .drawer { visibility: hidden; transform: translateX(calc(100% + 40px)); }
 
 @starting-style {
-  .cn-scrim:not([hidden]) { opacity: 0; }
+  .cn-scrim:not([hidden]) { opacity: 0; backdrop-filter: blur(0); }
   .popover:not([hidden])  { opacity: 0; transform: translateY(-4px); }
   .modal:not([hidden])    { opacity: 0; transform: translateY(8px) scale(.98); }
   .cn-scrim:not([hidden]) .modal  { opacity: 0; transform: translateY(8px) scale(.98); }

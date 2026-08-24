@@ -102,15 +102,17 @@ carved-transparent.)*
 
 > **REVISION 4 — overlay motion (2026-08-24).** Popover, modal, drawer, toast,
 > and the scrim animate on enter AND exit. Mechanism: transitions +
-> `@starting-style` for entry; exit by setting `[hidden]` — `display` joins
-> the transition with `allow-discrete`, so the element plays its exit before
-> leaving the render tree (no JS timing). Specs: scrim fades .2s; modal fades
-> + rises 8px + scales .98→1 (.2s); drawer slides from the right edge (.26s);
-> popover fades + drops 4px (.16s); toast fades + rises 6px (.2s). A modal or
-> drawer inside a scrim rides the scrim's `[hidden]`. Consumers that unmount
-> instead of hiding get the entrance only — keep the element mounted and
-> toggle `hidden` for the exit. The tokens' reduced-motion block collapses
-> all of it. Apply the same
+> `@starting-style` for entry; exit by setting `[hidden]`, which keeps the
+> element's `display` and drops **`visibility`** instead — visibility
+> transitions discretely everywhere (visible for the whole exit, flipping at
+> the end), unlike `display` + `allow-discrete`, which was tried first and
+> only works in the newest engines. A hidden overlay is invisible,
+> unfocusable, and pointer-inert, same as display:none for a fixed element.
+> Specs: scrim fades + un-blurs .2s; modal fades + rises 8px + scales .98→1
+> (.2s); drawer slides from the right edge (.26s); popover fades + drops 4px
+> (.16s); toast fades + rises 6px (.2s). A modal or drawer inside a scrim
+> rides the scrim's `[hidden]`. Consumers that unmount instead of hiding get
+> the entrance only. The tokens' reduced-motion block collapses all of it. Apply the same
 "depth replaces border" principle across inset surfaces (wells, terminal,
 progress track, engaged states): remove hairlines where the depth already
 separates the surface; keep hairline borders only on *raised* surfaces where
