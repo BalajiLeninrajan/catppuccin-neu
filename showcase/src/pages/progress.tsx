@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const LABELS = ["Storage used", "Seats filled", "Profile complete"];
 

@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const FIELD_SNIPPET = `<div class="field">
   <label for="ws-name">Workspace name</label>

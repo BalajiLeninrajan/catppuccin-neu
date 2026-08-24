@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 function ModalDemo() {
   const [open, setOpen] = useState(false);
@@ -7,7 +7,7 @@ function ModalDemo() {
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);

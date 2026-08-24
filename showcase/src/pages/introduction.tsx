@@ -1,4 +1,4 @@
-import { Doc, Demo, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, CodeBlock } from "../lib/doc";
 
 const LAYER_CODE = `@layer cn.tokens, cn.utilities, cn.recipes;
 @import "./tokens.css" layer(cn.tokens);

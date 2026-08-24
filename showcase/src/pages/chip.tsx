@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, TONES } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock, TONES } from "../lib/doc";
 
 /* Small inline glyphs (24-unit grid, stroke = currentColor). Decorative:
    always paired with a text label, always aria-hidden. */

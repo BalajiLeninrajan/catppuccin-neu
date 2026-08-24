@@ -3,35 +3,46 @@
    Each entry: { path, title, group, component }. Groups render in GROUPS
    order; pages render in PAGES order within their group.                   */
 
-import Introduction from "./pages/introduction.jsx";
-import Density from "./pages/density.jsx";
+import type { ComponentType } from "preact";
 
-import Colors from "./pages/colors.jsx";
-import Typography from "./pages/typography.jsx";
-import Depth from "./pages/depth.jsx";
+import Introduction from "./pages/introduction";
+import Density from "./pages/density";
 
-import Button from "./pages/button.jsx";
-import Input from "./pages/input.jsx";
-import Segmented from "./pages/segmented.jsx";
-import Stepper from "./pages/stepper.jsx";
-import Chip from "./pages/chip.jsx";
-import Banner from "./pages/banner.jsx";
-import Surfaces from "./pages/surfaces.jsx";
-import AccentCard from "./pages/accent-card.jsx";
-import Stat from "./pages/stat.jsx";
-import Progress from "./pages/progress.jsx";
-import Table from "./pages/table.jsx";
-import Terminal from "./pages/terminal.jsx";
-import Popover from "./pages/popover.jsx";
-import Modal from "./pages/modal.jsx";
-import Drawer from "./pages/drawer.jsx";
-import Toast from "./pages/toast.jsx";
-import EmptyState from "./pages/empty-state.jsx";
-import PageFurniture from "./pages/page-furniture.jsx";
+import Colors from "./pages/colors";
+import Typography from "./pages/typography";
+import Depth from "./pages/depth";
 
-export const GROUPS = ["Getting started", "Foundation", "Components"];
+import Button from "./pages/button";
+import Input from "./pages/input";
+import Segmented from "./pages/segmented";
+import Stepper from "./pages/stepper";
+import Chip from "./pages/chip";
+import Banner from "./pages/banner";
+import Surfaces from "./pages/surfaces";
+import AccentCard from "./pages/accent-card";
+import Stat from "./pages/stat";
+import Progress from "./pages/progress";
+import Table from "./pages/table";
+import Terminal from "./pages/terminal";
+import Popover from "./pages/popover";
+import Modal from "./pages/modal";
+import Drawer from "./pages/drawer";
+import Toast from "./pages/toast";
+import EmptyState from "./pages/empty-state";
+import PageFurniture from "./pages/page-furniture";
 
-export const PAGES = [
+export const GROUPS = ["Getting started", "Foundation", "Components"] as const;
+
+export type Group = (typeof GROUPS)[number];
+
+export interface NavEntry {
+  path: string;
+  title: string;
+  group: Group;
+  component: ComponentType;
+}
+
+export const PAGES: NavEntry[] = [
   { path: "/", title: "Introduction", group: "Getting started", component: Introduction },
   { path: "/density", title: "Density & contract props", group: "Getting started", component: Density },
 

@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, TONES } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock, TONES } from "../lib/doc";
 
 /* Decorative leading glyphs — 16px, stroke = currentColor, aria-hidden.
    The banner text carries the meaning; the glyph only echoes the tone. */

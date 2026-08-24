@@ -5,13 +5,21 @@
    Per R5, <Demo> renders children DIRECTLY on the page's --base ground —
    there is no well/mantle stage — so neumorphic depth reads correctly.     */
 
+import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
 
 /* Semantic tones, canonical order (matches the .cn-tone-* setters). */
-export const TONES = ["red", "green", "peach", "yellow", "blue", "mauve"];
+export const TONES = ["red", "green", "peach", "yellow", "blue", "mauve"] as const;
+
+export type Tone = (typeof TONES)[number];
+
+export interface Accent {
+  name: string;
+  color: string;
+}
 
 /* The accent cycle (R6): assign hex to `--accent` inline from data. */
-export const ACCENTS = [
+export const ACCENTS: Accent[] = [
   { name: "mauve", color: "#cba6f7" },
   { name: "teal", color: "#94e2d5" },
   { name: "yellow", color: "#f9e2af" },
@@ -20,8 +28,13 @@ export const ACCENTS = [
   { name: "pink", color: "#f5c2e7" },
 ];
 
+interface CopyLineProps {
+  text: string;
+  block?: boolean;
+}
+
 /* Click-to-copy code line (internal; Demo and CodeBlock render it). */
-function CopyLine({ text, block }) {
+function CopyLine({ text, block }: CopyLineProps) {
   const [copied, setCopied] = useState(false);
 
   function copy() {
@@ -53,7 +66,13 @@ function CopyLine({ text, block }) {
  * Doc — the page wrapper. One per page, at the top of the default export.
  * props: { title: string, lede?: string, children }
  */
-export function Doc({ title, lede, children }) {
+export interface DocProps {
+  title: string;
+  lede?: string;
+  children?: ComponentChildren;
+}
+
+export function Doc({ title, lede, children }: DocProps) {
   return (
     <article class="sc-doc page-enter">
       <header class="sc-doc-header">
@@ -74,7 +93,14 @@ export function Doc({ title, lede, children }) {
  *   children,
  * }
  */
-export function Demo({ title, classes, row, children }) {
+export interface DemoProps {
+  title?: string;
+  classes?: string;
+  row?: boolean;
+  children?: ComponentChildren;
+}
+
+export function Demo({ title, classes, row, children }: DemoProps) {
   return (
     <figure class="sc-demo">
       {title ? <figcaption class="cn-label">{title}</figcaption> : null}
@@ -92,7 +118,19 @@ export function Demo({ title, classes, row, children }) {
  * }
  * `name` is the class / custom property / attribute being documented.
  */
-export function Props({ title, rows }) {
+export interface PropsRow {
+  name: string;
+  values?: string;
+  default?: string;
+  notes?: string;
+}
+
+export interface PropsProps {
+  title?: string;
+  rows: PropsRow[];
+}
+
+export function Props({ title, rows }: PropsProps) {
   return (
     <section class="sc-props">
       {title ? <h2 class="cn-label">{title}</h2> : null}
@@ -128,7 +166,12 @@ export function Props({ title, rows }) {
  * CodeBlock — a copyable multi-line html/CSS snippet.
  * props: { code: string, title?: string }
  */
-export function CodeBlock({ code, title }) {
+export interface CodeBlockProps {
+  code: string;
+  title?: string;
+}
+
+export function CodeBlock({ code, title }: CodeBlockProps) {
   return (
     <section class="sc-codeblock">
       {title ? <h2 class="cn-label">{title}</h2> : null}

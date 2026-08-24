@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc";
 
 const AREAS = [
   { name: "Payments", meta: "12 members · 4 open invoices" },

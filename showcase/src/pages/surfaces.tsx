@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 export default function SurfacesPage() {
   return (

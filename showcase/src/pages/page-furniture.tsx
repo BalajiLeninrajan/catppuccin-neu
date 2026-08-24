@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc";
 
 const headerSnippet = `<header>
   <p class="eyebrow">Quarterly report</p>

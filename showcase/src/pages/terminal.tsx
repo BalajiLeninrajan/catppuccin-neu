@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const LOG = `$ app deploy --env production
   reading config          ok

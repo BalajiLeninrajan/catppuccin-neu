@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, TONES, ACCENTS } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock, TONES, ACCENTS } from "../lib/doc";
 
 /* The full Mocha set, grouped by role. name → token, hex, one-line role note. */
 const GROUNDS = [
@@ -44,7 +44,13 @@ const TONE_LABELS = {
 
 const RAMP = ["text", "subtext-1", "subtext-0", "overlay-2", "overlay-1", "overlay-0"];
 
-function Swatch({ name, hex, note }) {
+interface SwatchProps {
+  name: string;
+  hex: string;
+  note: string;
+}
+
+function Swatch({ name, hex, note }: SwatchProps) {
   return (
     <div style="display:grid;gap:7px;align-content:start">
       <div class="cn-r-mark cn-edge-soft" style={`height:52px;background:var(--${name})`} />

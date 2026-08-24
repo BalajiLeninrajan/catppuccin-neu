@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "deploy": "pnpm build && wrangler deploy"
   },
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.0",
+    "typescript": "^5.8.3",
     "vite": "^6.0.0",
     "wrangler": "^4.0.0"
   }

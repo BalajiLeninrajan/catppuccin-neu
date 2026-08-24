@@ -1,5 +1,5 @@
 import { useRef, useState } from "preact/hooks";
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const MESSAGES = [
   "Invoice #1042 sent to Accounts",
@@ -8,8 +8,14 @@ const MESSAGES = [
   "3 teammates added to Design",
 ];
 
+interface ToastItem {
+  id: number;
+  message: string;
+  leaving: boolean;
+}
+
 function ToastSpawner() {
-  const [toasts, setToasts] = useState([]);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
   const msgRef = useRef(0);
 
@@ -21,7 +27,7 @@ function ToastSpawner() {
   }
 
   // Two-phase: hidden plays the exit transition, then the element unmounts.
-  function dismiss(id) {
+  function dismiss(id: number) {
     setToasts((t) => t.map((x) => (x.id === id ? { ...x, leaving: true } : x)));
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 260);
   }

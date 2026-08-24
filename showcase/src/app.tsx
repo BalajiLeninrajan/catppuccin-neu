@@ -1,7 +1,7 @@
 import { LocationProvider, Router, Route, useLocation } from "preact-iso";
 import { useState, useEffect } from "preact/hooks";
-import { GROUPS, PAGES } from "./nav.js";
-import { Doc } from "./lib/doc.jsx";
+import { GROUPS, PAGES } from "./nav";
+import { Doc } from "./lib/doc";
 
 function Wordmark() {
   return (

@@ -1,7 +1,14 @@
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 /* A depth specimen: a base-ground cube wearing one shadow utility. */
-function Cube({ cls, label, size = 96, style = "" }) {
+interface CubeProps {
+  cls: string;
+  label?: string;
+  size?: number;
+  style?: string;
+}
+
+function Cube({ cls, label, size = 96, style = "" }: CubeProps) {
   return (
     <div style="display:grid;gap:12px;justify-items:center">
       <div

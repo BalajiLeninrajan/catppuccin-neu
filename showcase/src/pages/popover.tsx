@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 /* Live anchored popover — toggled from its trigger. */
 function AnchoredDemo() {

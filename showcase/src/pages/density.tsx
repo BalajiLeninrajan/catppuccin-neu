@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc.jsx";
+import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc";
 
 const COMPACT_CODE = `<section data-density="compact">
   <button class="btn btn-primary">Save changes</button>
