@@ -61,9 +61,11 @@
 
 /* Well — an inset container for grouped controls or scrolling content.
    Borderless: the inset depth defines the surface. */
+/* Carved from the parent surface — transparent ground, depth alone. Compose
+   cn-bg-well when an explicit darker fill is wanted. */
 .well {
   border-radius: 13px;
-  background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
+  background: transparent;
   box-shadow: var(--neu-inset-soft);
 }
 
@@ -285,17 +287,18 @@
   text-transform: uppercase;
 }
 
-/* Borderless inset well — depth defines the field: an inner shadow on a
-   slightly darkened ground. Sans face; numbers stay tabular. */
+/* Borderless inset well, carved from whatever surface it sits on: the
+   background stays transparent so the parent ground shows through and only
+   the inner shadow defines the field. Sans face; numbers stay tabular. */
 .input,
 .field input, .field select, .field textarea {
   width: 100%;
   height: var(--input-h);
-  padding: 0 11px;
+  padding: 0 14px;
   color: var(--text);
   border: 0;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--crust) 62%, var(--mantle));
+  border-radius: 13px;
+  background: transparent;
   box-shadow: var(--neu-inset);
   font-family: var(--sans);
   font-size: 13px;
@@ -303,7 +306,13 @@
   letter-spacing: normal;
   text-transform: none;
   font-variant-numeric: tabular-nums;
-  transition: background .18s, box-shadow .18s;
+  transition: box-shadow .18s;
+}
+.field textarea, textarea.input {
+  height: auto;
+  min-height: calc(var(--input-h) * 2);
+  padding: 12px 14px;
+  resize: vertical;
 }
 .input::placeholder,
 .field :is(input, textarea)::placeholder { color: var(--overlay-0); }
@@ -311,7 +320,7 @@
    stays untouched. */
 .input:focus,
 .field :is(input, select, textarea):focus {
-  box-shadow: var(--neu-inset), 0 0 0 2px color-mix(in srgb, var(--mauve) 20%, transparent);
+  box-shadow: var(--neu-inset), 0 0 0 2px var(--mauve);
 }
 .field select { appearance: none; padding-right: 27px; cursor: pointer; }
 

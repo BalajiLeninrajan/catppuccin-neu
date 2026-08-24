@@ -34,13 +34,15 @@ export default function InputPage() {
   return (
     <Doc
       title="Input & Field"
-      lede="Text inputs, selects, and textareas are borderless. Each one is a shallow well pressed into the page — an inner shadow on a slightly darkened ground — and depth, not a stroke, tells you where the field is."
+      lede="Text inputs, selects, and textareas are borderless and carved from whatever surface they sit on: the background stays transparent, and the inner shadow alone presses the well into the parent ground."
     >
       <p class="cn-copy">
         Raised surfaces keep a hairline because their lit edge needs support.
         Inset surfaces don't: the shadow already separates the well from the
-        ground, so a border would only add noise. Inputs follow that rule.
-        There is no 1px stroke at rest, and focus doesn't swap one in — the
+        ground, so a border or a fill would only add noise. An input never
+        paints its own background — on a panel it is carved from the panel, on
+        the page it is carved from the page, which is what makes the depth read
+        as depth. There is no 1px stroke at rest, and focus doesn't swap one in — the
         mauve ring layers <em>over</em> the inset, so the field never shifts or
         reflows when it takes focus. Labels are small uppercase sans; values
         are sans with tabular numerals, so amounts and dates align in forms

@@ -71,7 +71,7 @@ numbers keep `font-variant-numeric: tabular-nums` on the sans face. Any
 ## Depth over borders
 
 Inset surfaces (inputs, wells, the terminal, progress tracks, engaged states)
-are borderless — their inner shadow and darkened ground define them, and
+are borderless and transparent — carved from the parent surface by their inner shadow alone, and
 input focus adds the mauve ring over the inset. Hairline borders appear only
 on raised surfaces (panel, popover) where the lit edge needs support, and on
 tinted semantic surfaces (chip-tone, banner) where the tint needs an edge.

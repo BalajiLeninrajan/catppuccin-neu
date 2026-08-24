@@ -68,8 +68,14 @@ as single-use. Anything that can't be generalized is deleted from the package
 
 **R8 — Borderless inset depth (the input rethink).** Inset surfaces get their
 definition from depth, not strokes: `.input` (and select/textarea) drops its
-1px border entirely — subtle inner shadow well on a slightly darkened ground,
-`:focus` adds the mauve ring over the inset (no border swap). Apply the same
+1px border entirely, and — per the follow-up review — paints **no background of
+its own**: `background: transparent`, so the field is carved from whatever
+surface it sits on (panel, well, or the page), which is what makes the inset
+read as depth rather than a dark slab. Geometry loosened to match: 13px radius,
+14px inline padding, and `:focus` adds a solid 2px mauve ring over the inset
+(no border swap). `.well` follows the same carved-transparent rule (compose
+`cn-bg-well` when an explicit fill is wanted); `.terminal` and the progress
+track keep their crust fill deliberately (code surface / groove contrast). Apply the same
 "depth replaces border" principle across inset surfaces (wells, terminal,
 progress track, engaged states): remove hairlines where the depth already
 separates the surface; keep hairline borders only on *raised* surfaces where
