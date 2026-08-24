@@ -44,32 +44,32 @@
 
 /* ── Type roles ─────────────────────────────────────────────────────────────
    No bare font-family utility exists: pick the role, not the face.
-   Mono for anything machine-ish; sans for anything human.                   */
+   Mono is scarce — reserved for code-like content (.cn-code, .terminal);
+   every other role sets the sans face. Numbers keep tabular-nums on sans.   */
 
-/* Mono roles */
 .cn-label {
-  font: 650 11px/1 var(--mono);
+  font: 650 11px/1 var(--sans);
   letter-spacing: .04em;
   text-transform: uppercase;
   color: var(--overlay-2);
 }
 .cn-microlabel {
-  font: 700 9px/1 var(--mono);
+  font: 700 9px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--overlay-1);
 }
 .cn-value {
-  font: 650 21px/1 var(--mono);
+  font: 650 21px/1 var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .cn-value-lg {
-  font: 650 28px/1 var(--mono);
+  font: 650 28px/1 var(--sans);
   font-variant-numeric: tabular-nums;
-  color: var(--entity-color, var(--mauve));  /* opt out via a color utility */
+  color: var(--accent);  /* opt out via a color utility */
 }
 .cn-meta {
-  font: 550 11px/1.5 var(--mono);
+  font: 550 11px/1.5 var(--sans);
   font-variant-numeric: tabular-nums;
   color: var(--overlay-1);
 }
@@ -77,17 +77,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font: 700 11px/1 var(--mono);
+  font: 700 11px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--mauve);
 }
+/* The one mono role — actual code, CLI strings, machine literals. */
 .cn-code {
   font: 500 13px/1.6 var(--mono);
   font-variant-numeric: tabular-nums;
 }
 
-/* Sans roles */
 .cn-display {
   font-family: var(--sans);
   font-size: clamp(38px, 5vw, 64px);
@@ -106,7 +106,7 @@
 }
 .cn-display em, .cn-display-sm em { color: var(--mauve); font-style: normal; }
 .cn-title { font-family: var(--sans); font-size: 20px; font-weight: 800; letter-spacing: -.03em; }
-/* Proper names inside mono contexts stay in the sans face. */
+/* Emphasized proper names — full-strength text color at body scale. */
 .cn-name { font: 700 13px/1.3 var(--sans); color: var(--text); }
 .cn-lede { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--subtext-1); max-width: 690px; }
 .cn-copy { font-family: var(--sans); font-size: 13px; line-height: 1.6; color: var(--subtext-0); }
@@ -129,7 +129,7 @@
 .cn-text-blue      { color: var(--blue); }
 .cn-text-teal      { color: var(--teal); }
 .cn-text-lavender  { color: var(--lavender); }
-.cn-text-entity    { color: var(--entity-color); }
+.cn-text-accent    { color: var(--accent); }
 .cn-text-tone      { color: var(--tone); }
 
 /* Backgrounds */
@@ -139,8 +139,8 @@
 .cn-bg-well   { background: color-mix(in srgb, var(--crust) 38%, var(--mantle)); }
 .cn-bg-head   { background: color-mix(in srgb, var(--crust) 30%, var(--mantle)); }
 .cn-tint      { background: color-mix(in srgb, var(--tone) 7%, transparent); }
-.cn-tint-entity {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--entity-color) 8%, var(--mantle)), var(--mantle) 48%);
+.cn-tint-accent {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
 }
 
 /* Tone setters — set --tone only; pair with .cn-tint / .cn-text-tone / recipes. */
@@ -151,22 +151,25 @@
 .cn-tone-blue   { --tone: var(--blue); }
 .cn-tone-mauve  { --tone: var(--mauve); }
 
-/* ── Borders ────────────────────────────────────────────────────────────── */
+/* ── Borders ──────────────────────────────────────────────────────────────
+   Hairlines belong to raised surfaces (where the lit edge needs support)
+   and tinted semantic surfaces. Inset surfaces are defined by depth alone. */
 
 .cn-edge        { border: 1px solid color-mix(in srgb, var(--surface-2) 40%, transparent); }
-.cn-edge-soft   { border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent); }  /* wells, inner separators */
+.cn-edge-soft   { border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent); }  /* inner separators */
 .cn-edge-line   { border: 1px solid var(--surface-0); }  /* row separators, footer rules */
 .cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) 30%, transparent); }
 .cn-edge-tone   { border: 1px solid color-mix(in srgb, var(--tone) 25%, var(--surface-0)); }
-.cn-edge-entity { border: 1px solid color-mix(in srgb, var(--entity-color) 28%, var(--surface-0)); }
+.cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--surface-0)); }
 .cn-edge-dashed { border: 1px dashed var(--surface-1); }  /* the only dashed border */
 
-/* The selected/toggled state — pressed in, mauve-keyed. Declared after the
-   edge utilities so the engaged border-color wins over a composed base edge. */
+/* The selected/toggled state — pressed in, mauve-keyed, borderless: the inset
+   depth and tint define it. Declared after the edge utilities so the cleared
+   border-color wins over a composed base edge. */
 .cn-engaged {
   transform: translateY(1px);
   box-shadow: var(--neu-inset);
-  border-color: color-mix(in srgb, var(--mauve) 56%, var(--surface-1));
+  border-color: transparent;
   background: color-mix(in srgb, var(--mauve) 7%, var(--base));
 }
 
@@ -182,7 +185,7 @@
 
 /* ── Structure ──────────────────────────────────────────────────────────── */
 
-/* Left color spine — the entity identity cue. */
+/* Left color spine — the accent identity cue. */
 .cn-spine { position: relative; }
 .cn-spine::before {
   content: "";
@@ -190,7 +193,7 @@
   inset: 12px auto 12px 0;
   width: 4px;
   border-radius: 0 6px 6px 0;
-  background: var(--entity-color);
+  background: var(--accent);
 }
 
 /* Fixed overlay backdrop for modals/drawers. */

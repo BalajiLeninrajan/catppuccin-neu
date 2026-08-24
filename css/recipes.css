@@ -1,10 +1,12 @@
 /* ── Component recipes ──────────────────────────────────────────────────────
-   Every recipe reads tokens and contract properties only (--entity-color,
-   --tone, --accent, --hard-offset-color, the density knobs). Depth canon:
-   clickable controls default to the hard offset shadow and press with the
-   half-slide — rest 4px 4px 0, hover translate(-1px,-1px), active
-   translate(2px,2px) with the shadow shrinking to 2px 2px 0. Button labels
-   are sans; labels, numbers, and metadata are mono.
+   Every recipe reads tokens and contract properties only (--accent, --tone,
+   --hard-offset-color, the density knobs). Depth canon: clickable controls
+   default to the hard offset shadow and press with the half-slide — rest
+   4px 4px 0, hover translate(-1px,-1px), active translate(2px,2px) with the
+   shadow shrinking to 2px 2px 0. Type: everything sets the sans face; mono
+   appears only in code-like contexts (.terminal, .cn-code). Inset surfaces
+   are borderless — depth defines them; hairlines stay on raised surfaces
+   and tinted semantic surfaces only.
    Requires tokens.css (+ utilities.css for .cn-scrim). Layer: cn.recipes.   */
 
 /* ── Surfaces ───────────────────────────────────────────────────────────── */
@@ -24,7 +26,10 @@
   box-shadow: 10px 10px 0 var(--hard-offset-color);
 }
 
-/* Panel header/footer — recessed bands inside a panel, on --mantle. */
+/* Panel header/footer — recessed bands inside a panel, on --mantle. The band
+   follows the parent radius (minus the 1px border) so its fill never pokes
+   past the panel corners; never fix this with overflow: hidden — that clips
+   anchored popovers and hard-offset shadows. */
 .panel-heading, .panel-footer {
   min-height: 70px;
   padding: 14px 22px;
@@ -34,23 +39,38 @@
   gap: 16px;
   background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
 }
-.panel-heading { border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent); }
-.panel-footer  { border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent); }
+.panel-heading {
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+  border-radius: calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px) 0 0;
+}
+.panel-footer {
+  border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+  border-radius: 0 0 calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px);
+}
 .panel-heading h2 { margin: 0; font-size: 18px; }
 
-/* Well — an inset container for grouped controls or scrolling content. */
+/* A table filling the top of a panel: the header band respects the corners. */
+.panel > .table-neu:first-child th:first-child { border-top-left-radius: calc(var(--pane-radius) - 1px); }
+.panel > .table-neu:first-child th:last-child  { border-top-right-radius: calc(var(--pane-radius) - 1px); }
+/* …and the bottom mirror: a table (or ranked row) ending a panel keeps its
+   last filled band inside the rounded corners (hover fills live on the cells
+   so the radius can clip them; never overflow: hidden). */
+.panel > .table-neu:last-child tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--pane-radius) - 1px); }
+.panel > .table-neu:last-child tbody tr:last-child td:last-child  { border-bottom-right-radius: calc(var(--pane-radius) - 1px); }
+.panel > .ranked-row:last-child { border-radius: 0 0 calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px); }
+
+/* Well — an inset container for grouped controls or scrolling content.
+   Borderless: the inset depth defines the surface. */
 .well {
-  border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent);
   border-radius: 13px;
   background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
   box-shadow: var(--neu-inset-soft);
 }
 
-/* Terminal/log surface — the deepest well in the system. */
+/* Terminal/log surface — the deepest well in the system. Borderless. */
 .terminal {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--surface-0);
   border-radius: 10px;
   background: var(--crust);
   box-shadow: var(--neu-inset);
@@ -71,7 +91,7 @@
   display: inline-block;
   margin-left: 3px;
   vertical-align: -2px;
-  background: var(--entity-color);
+  background: var(--accent);
   animation: blink .75s steps(2) infinite;
 }
 
@@ -123,7 +143,7 @@
 }
 .btn:disabled { opacity: .35; cursor: not-allowed; box-shadow: var(--neu-inset-soft); }
 
-/* Primary — solid accent + hard offset (the flat graphic note, fleet-wide).
+/* Primary — solid accent + hard offset (the flat graphic note, system-wide).
    The offset is the one non-crust hard offset: mauve pressed into surface. */
 .btn-primary {
   color: var(--crust);
@@ -195,10 +215,10 @@
   color: var(--text);
   background: color-mix(in srgb, var(--surface-0) 40%, transparent);
 }
+/* Engaged — borderless: the inset depth and mauve wash define the state. */
 .btn-flat[aria-pressed="true"], .btn-flat.active {
   transform: translateY(1px);
   color: var(--text);
-  border-color: color-mix(in srgb, var(--mauve) 56%, var(--surface-1));
   background: color-mix(in srgb, var(--mauve) 7%, var(--base));
   box-shadow: var(--neu-inset);
 }
@@ -233,8 +253,9 @@
 }
 .btn-icon:disabled { opacity: .28; cursor: not-allowed; }
 
-/* Dashed "add" affordance — the only dashed border in the system. */
-.btn-add {
+/* Dashed button — the only dashed border in the system. An open, low-emphasis
+   slot of a control (drop zones, placeholder rows, optional extras). */
+.btn-dashed {
   min-height: calc(var(--control-h) + 18px);
   padding: 0 18px;
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -247,7 +268,7 @@
   cursor: pointer;
   transition: background .16s, border-color .16s, color .16s;
 }
-.btn-add:hover {
+.btn-dashed:hover {
   color: var(--mauve);
   border-color: var(--mauve);
   background: color-mix(in srgb, var(--mauve) 7%, transparent);
@@ -259,35 +280,35 @@
   display: block;
   margin: 0 0 7px 1px;
   color: var(--overlay-2);
-  font: 650 11px/1 var(--mono);
+  font: 650 11px/1 var(--sans);
   letter-spacing: .04em;
   text-transform: uppercase;
 }
 
-/* Inset well. Input values are data, so they set in the mono face. */
+/* Borderless inset well — depth defines the field: an inner shadow on a
+   slightly darkened ground. Sans face; numbers stay tabular. */
 .input,
 .field input, .field select, .field textarea {
   width: 100%;
   height: var(--input-h);
   padding: 0 11px;
   color: var(--text);
-  border: 1px solid color-mix(in srgb, var(--surface-1) 42%, transparent);
+  border: 0;
   border-radius: 10px;
   background: color-mix(in srgb, var(--crust) 62%, var(--mantle));
   box-shadow: var(--neu-inset);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 13px;
   font-weight: 500;
   letter-spacing: normal;
   text-transform: none;
   font-variant-numeric: tabular-nums;
-  transition: border-color .18s, background .18s, box-shadow .18s;
+  transition: background .18s, box-shadow .18s;
 }
 .input::placeholder,
 .field :is(input, textarea)::placeholder { color: var(--overlay-0); }
-.input:hover,
-.field :is(input, select):hover { border-color: var(--surface-2); }
-/* Focus ring layers over the inset; :focus-visible outline stays untouched. */
+/* Focus ring layers over the inset — no border swap; :focus-visible outline
+   stays untouched. */
 .input:focus,
 .field :is(input, select, textarea):focus {
   box-shadow: var(--neu-inset), 0 0 0 2px color-mix(in srgb, var(--mauve) 20%, transparent);
@@ -302,9 +323,9 @@
   font-size: 15px;
 }
 
-/* Search — absolute icon inside a padded input. */
-.search { position: relative; }
-.search svg {
+/* Icon input — absolute leading icon inside a padded input. */
+.input-icon { position: relative; }
+.input-icon svg {
   position: absolute;
   top: 50%;
   left: 16px;
@@ -314,7 +335,7 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
-.search .input, .search input { padding-left: 44px; }
+.input-icon .input, .input-icon input { padding-left: 44px; }
 
 /* ── Segmented / preset control ─────────────────────────────────────────────
    Options carry the hard offset at rest, half-slide when held, and press in
@@ -350,13 +371,13 @@
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--hard-offset-color);
 }
-/* Selected — the engaged treatment: pressed in, mauve-keyed. */
+/* Selected — the engaged treatment: pressed in, mauve-keyed, borderless. */
 .segmented > .active,
 .segmented > .active:hover,
 .segmented > .active:active {
   transform: translateY(1px);
   color: var(--text);
-  border-color: color-mix(in srgb, var(--mauve) 56%, var(--surface-1));
+  border-color: transparent;
   background: color-mix(in srgb, var(--mauve) 7%, var(--base));
   box-shadow: var(--neu-inset);
 }
@@ -375,7 +396,8 @@
 .segmented.is-stacked small { font-size: 12px; }
 
 /* Stepper — phase track chips. Mark the current phase with .active (or
-   aria-current="step"), completed phases with .is-done.                     */
+   aria-current="step"), completed phases with .is-done. Borderless inset
+   pills; depth and tint carry the states.                                   */
 .stepper {
   display: flex;
   align-items: center;
@@ -388,18 +410,16 @@
   align-items: center;
   gap: 6px;
   color: var(--overlay-1);
-  border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
   box-shadow: var(--neu-inset-soft);
-  font: 650 9px/1 var(--mono);
+  font: 650 9px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
 .stepper > .active,
 .stepper > [aria-current="step"] {
   color: var(--mauve);
-  border-color: color-mix(in srgb, var(--mauve) 45%, transparent);
   background: color-mix(in srgb, var(--mauve) 8%, transparent);
 }
 .stepper > .is-done { color: var(--green); }
@@ -416,7 +436,7 @@
   border-radius: 8px;
   background: var(--accent);
   box-shadow: var(--shadow-mark);
-  font: 800 11px/1 var(--mono);
+  font: 800 11px/1 var(--sans);
   font-variant-numeric: tabular-nums;
 }
 
@@ -429,12 +449,13 @@
   border-radius: 999px;
   background: var(--base);
   box-shadow: var(--neu-raised-soft);
-  font: 600 11px/1 var(--mono);
+  font: 600 11px/1 var(--sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-/* Tinted status tag — pass a semantic color via --tone (.cn-tone-*). */
+/* Tinted status tag — pass a semantic color via --tone (.cn-tone-*). The
+   tint keeps its hairline edge. */
 .chip-tone {
   padding: 3px 5px;
   display: inline-flex; align-items: center; gap: 5px;
@@ -442,12 +463,12 @@
   border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
   border-radius: 4px;
   background: color-mix(in srgb, var(--tone) 8%, transparent);
-  font: 750 8px/1 var(--mono);
-  letter-spacing: .06em;
+  font: 750 8px/1 var(--sans);
   text-transform: uppercase;
 }
 
-/* Inline banner — semantic tint band, no card chrome. */
+/* Inline banner — semantic tint band, no card chrome. The tint keeps its
+   hairline edge. */
 .banner {
   padding: 12px 18px;
   display: flex; align-items: center; gap: 10px;
@@ -460,51 +481,49 @@
   line-height: 1.5;
 }
 
-/* ── Entity cards keyed by --entity-color ───────────────────────────────── */
+/* ── Accent cards keyed by --accent ─────────────────────────────────────── */
 
-.entity-card {
+.accent-card {
   min-width: 0;
   padding: 16px 16px 16px 22px;
   position: relative;
-  border: 1px solid color-mix(in srgb, var(--entity-color) 28%, var(--surface-0));
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--surface-0));
   border-radius: 13px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--entity-color) 8%, var(--mantle)), var(--mantle) 48%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
   box-shadow: var(--neu-raised-soft),
-              inset 1px 1px color-mix(in srgb, var(--entity-color) 12%, var(--surface-2));
+              inset 1px 1px color-mix(in srgb, var(--accent) 12%, var(--surface-2));
   transition: transform .16s, box-shadow .16s, border-color .16s;
 }
-/* Left spine in the entity color — the identity cue. */
-.entity-card::before {
+/* Left spine in the accent color — the identity cue. */
+.accent-card::before {
   content: "";
   position: absolute;
   inset: 12px auto 12px 0;
   width: 4px;
   border-radius: 0 6px 6px 0;
-  background: var(--entity-color);
+  background: var(--accent);
 }
 /* Cards wrapped in a link lift on hover, press in on click. */
-a:hover > .entity-card {
+a:hover > .accent-card {
   transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--entity-color) 52%, var(--surface-0));
+  border-color: color-mix(in srgb, var(--accent) 52%, var(--surface-0));
   box-shadow: var(--neu-raised);
 }
-a:active > .entity-card {
+a:active > .accent-card {
   transform: translateY(1px);
   box-shadow: var(--neu-inset-soft);
 }
 
 /* ── Data display ───────────────────────────────────────────────────────── */
 
-/* Metric tile — mono micro-label above an oversized tabular number. */
+/* Metric tile — micro-label above an oversized tabular number. */
 .metric { min-width: 0; padding: 12px 13px; display: flex; flex-direction: column; gap: 6px; }
 .metric span {
   color: var(--overlay-1);
-  font: 650 9px var(--mono);
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  font: 650 9px var(--sans);
 }
-.metric strong { font: 650 21px/1 var(--mono); font-variant-numeric: tabular-nums; }
-.metric.is-hero strong { font-size: 28px; color: var(--entity-color); }
+.metric strong { font: 650 21px/1 var(--sans); font-variant-numeric: tabular-nums; }
+.metric.is-hero strong { font-size: 28px; color: var(--accent); }
 
 /* Label/value baseline row + a strip of them separated by hairlines. */
 .stat-row {
@@ -513,9 +532,7 @@ a:active > .entity-card {
   justify-content: space-between;
   gap: 12px;
   color: var(--overlay-1);
-  font: 650 9px var(--mono);
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  font: 650 9px var(--sans);
 }
 .stat-row b {
   color: var(--subtext-1);
@@ -526,10 +543,10 @@ a:active > .entity-card {
 .stat-strip > * { padding: 9px 0; }
 .stat-strip > * + * { border-top: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent); }
 
-/* Progress — inset track, accent-gradient fill. */
+/* Progress — borderless inset track, accent-gradient fill. The fill inherits
+   the track radius, so no overflow clipping is needed. */
 .progress-track {
   height: 7px;
-  overflow: hidden;
   border-radius: 999px;
   background: var(--crust);
   box-shadow: var(--neu-inset-soft);
@@ -542,7 +559,7 @@ a:active > .entity-card {
   transition: width .35s;
 }
 
-/* Table — opt-in class on <table>; scopes all table styling. Mono tabular
+/* Table — opt-in class on <table>; scopes all table styling. Sans tabular
    body, mantle header, hover presses the row in. Give each data cell a
    data-label attribute — it becomes the card label at ≤760px.              */
 .table-neu { width: 100%; border-collapse: collapse; }
@@ -552,25 +569,28 @@ a:active > .entity-card {
   border-bottom: 1px solid var(--surface-0);
   background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
   text-align: left;
-  font: 650 10px var(--mono);
+  font: 650 10px var(--sans);
 }
 .table-neu td {
   padding: 14px;
   color: var(--subtext-1);
   border-bottom: 1px solid var(--surface-0);
-  font: 600 13px var(--mono);
+  font: 600 13px var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .table-neu tbody tr:last-child td { border-bottom: 0; }
-.table-neu tbody tr:hover {
+/* Hover fill sits on the cells, not the row — with border-collapse a td
+   border-radius cannot clip a tr background, so this keeps the fill inside
+   a rounded parent's corners. */
+.table-neu tbody tr:hover td {
   background: color-mix(in srgb, var(--mauve) 5%, var(--base));
   box-shadow: var(--neu-inset-soft);
 }
-/* Proper names stay in the sans face even inside a mono table. */
+/* Emphasized name cell — full-strength primary line, quiet secondary line. */
 .table-neu .cell-name strong { color: var(--text); font: 700 13px var(--sans); }
-.table-neu .cell-name small  { color: var(--overlay-2); font: 500 10px var(--mono); }
+.table-neu .cell-name small  { color: var(--overlay-2); font: 500 10px var(--sans); }
 
-/* Ranked row — leaderboard line: rank mark, name, trailing value. */
+/* Ranked row — ordered list line: rank mark, name, trailing value. */
 .ranked-row {
   display: flex;
   align-items: center;
@@ -578,7 +598,7 @@ a:active > .entity-card {
   padding: 10px 14px;
   color: var(--subtext-1);
   border-bottom: 1px solid var(--surface-0);
-  font: 600 13px var(--mono);
+  font: 600 13px var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .ranked-row:last-child { border-bottom: 0; }
@@ -591,17 +611,21 @@ a:active > .entity-card {
 
 /* ── Overlays — all float on --shadow-pop, never neu ────────────────────── */
 
-/* Popover / menu — anchored to a relative parent. */
+/* Popover / menu — anchored to a relative parent. No overflow clipping:
+   filled first/last children follow the parent radius instead. */
 .popover {
   position: absolute;
   z-index: 80;
   width: min(390px, calc(100vw - 32px));
-  overflow: hidden;
   border: 1px solid var(--surface-1);
   border-radius: 13px;
   background: var(--base);
   box-shadow: var(--shadow-pop);
 }
+/* Child bands follow the parent per R2: the 13px card radius minus the 1px
+   border — not a free 12px radius. */
+.popover > :first-child { border-top-left-radius: calc(13px - 1px); border-top-right-radius: calc(13px - 1px); }
+.popover > :last-child  { border-bottom-left-radius: calc(13px - 1px); border-bottom-right-radius: calc(13px - 1px); }
 
 /* Modal — a child of .cn-scrim; centers itself in the viewport. */
 .modal {
@@ -618,7 +642,7 @@ a:active > .entity-card {
   background: var(--base);
   box-shadow: var(--shadow-pop);
 }
-/* Recessed header band, like a panel heading. */
+/* Recessed header band, like a panel heading — follows the parent radius. */
 .modal > header {
   min-height: 62px;
   padding: 14px 22px;
@@ -628,9 +652,15 @@ a:active > .entity-card {
   gap: 16px;
   background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+  border-radius: calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px) 0 0;
+}
+/* A filled footer band mirrors the heading treatment. */
+.modal > footer:last-child {
+  border-radius: 0 0 calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px);
 }
 
-/* Drawer — side sheet pinned to the right edge, above the scrim. */
+/* Drawer — side sheet pinned to the right edge, above the scrim. Square
+   corners, so child bands need no radius treatment. */
 .drawer {
   position: fixed;
   top: 0; right: 0; bottom: 0;
@@ -655,7 +685,7 @@ a:active > .entity-card {
   border-radius: 13px;
   background: var(--base);
   box-shadow: var(--shadow-pop);
-  font: 600 11px/1.4 var(--mono);
+  font: 600 11px/1.4 var(--sans);
   letter-spacing: .03em;
 }
 
@@ -665,12 +695,12 @@ a:active > .entity-card {
      main { width: min(1440px, calc(100% - 40px)); min-width: 0;
             margin: 0 auto; position: relative; z-index: 1; }               */
 
-/* Aliases of the type roles, kept for skill compatibility. */
+/* Aliases of the type roles, kept for base-layer compatibility. */
 .eyebrow {
   display: flex; align-items: center; gap: 8px;
   margin-bottom: 13px;
   color: var(--mauve);
-  font: 700 11px/1 var(--mono);
+  font: 700 11px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -694,8 +724,8 @@ a:active > .entity-card {
   color: var(--overlay-1);
   border-top: 1px solid var(--surface-0);
 }
-.footer-neu span { font: 700 11px var(--mono); }
-.footer-neu p { margin: 0; font: 500 10px var(--mono); }
+.footer-neu span { font: 700 11px var(--sans); }
+.footer-neu p { margin: 0; font: 500 10px var(--sans); }
 
 /* ── Responsive ─────────────────────────────────────────────────────────────
    Three breakpoints, always these three. Each one removes decoration before
@@ -731,7 +761,7 @@ a:active > .entity-card {
   .panel.is-shell { border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 
   /* Table → stacked cards. Header row drops; each td[data-label] carries its
-     own mono micro-label via ::before. */
+     own micro-label via ::before. */
   .table-neu thead { display: none; }
   .table-neu tbody, .table-neu tr, .table-neu td { display: block; }
   .table-neu tbody { padding: 9px; }
@@ -750,9 +780,7 @@ a:active > .entity-card {
   .table-neu td[data-label]::before {
     content: attr(data-label);
     color: var(--overlay-1);
-    font: 650 8px var(--mono);
-    letter-spacing: .08em;
-    text-transform: uppercase;
+    font: 650 8px var(--sans);
   }
 }
 

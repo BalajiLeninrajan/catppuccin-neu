@@ -37,7 +37,7 @@ module.exports = {
         blue: "var(--blue)",
         lavender: "var(--lavender)",
         /* Contract properties */
-        entity: "var(--entity-color)",
+        accent: "var(--accent)",
         tone: "var(--tone)",
       },
       fontFamily: {

@@ -1,5 +1,95 @@
 # catppuccin-neu — design system spec
 
+> **REVISION 2 — user design review (2026-08-24). This section OVERRIDES any
+> conflicting text below it.** The system is for all future projects, not just
+> the original five; the fleet inventory below remains as provenance only.
+
+**R1 — Generic, project-neutral content.** The showcase, README, and all CSS
+comments must never reference the source projects (no exams, races, benchmarks,
+harness/word/skill content, no project names). Examples use neutral product
+content (dashboards, settings, invoices, messages, generic data).
+
+**R2 — Panel band corners.** `.panel-heading` / `.panel-footer` (and any child
+band of a rounded surface) must respect the parent radius:
+heading `border-radius: calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px) 0 0;`,
+footer the mirror. Audit every recipe that places a filled child band inside a
+rounded parent for the same bug. Do not fix with `overflow: hidden` (it clips
+popovers and hard-offset shadows).
+
+**R3 — Multi-page docs.** The showcase becomes a shadcn-style docs site: fixed
+left sidebar nav (grouped: Getting started / Foundation / Components), one page
+per topic, real-path routing (preact-iso) with wrangler
+`not_found_handling: "single-page-application"`. Pages: Introduction (install +
+layer model), Colors, Typography, Depth, Density & contract props; then one page
+per component: Button, Input & Field, Segmented, Stepper, Chip, Banner, Surfaces
+(panel/well), Accent card, Stat, Progress, Table, Terminal, Popover, Modal,
+Drawer, Toast, Empty state, Page furniture (topbar/footer/eyebrow/display).
+Each page: short intro prose, specimens with copyable class strings, variants,
+states.
+
+**R4 — Depth contrast retune.** The soft/regular pairs are visually
+indistinguishable; separate them. New token values (tokens.css):
+```css
+--neu-raised:      8px 8px 18px rgb(17 17 27 / .66), -4px -4px 10px rgb(69 71 90 / .22);
+--neu-raised-soft: 2px 2px 5px  rgb(17 17 27 / .30), -1px -1px 3px  rgb(69 71 90 / .10);
+--neu-inset:       inset 3px 3px 7px rgb(17 17 27 / .66), inset -3px -3px 7px rgb(69 71 90 / .24);
+--neu-inset-soft:  inset 1px 1px 3px rgb(17 17 27 / .38), inset -1px -1px 2px rgb(69 71 90 / .12);
+```
+Rule of thumb going forward: soft ≈ half the offset/blur *and* half the
+strength of its regular partner, so the pair reads as two distinct elevations
+at a glance. `--neu-dark`/`--neu-dark-soft`/`--neu-light-soft` primitives update
+consistently with these.
+
+**R5 — Specimens sit on `--base`.** Components live on the page ground, and
+neumorphic depth only reads when the surface matches its background. Demo
+stages in the docs use `--base` (no well/mantle stage). The well remains a
+component, shown as itself on its own page.
+
+**R6 — Names describe style, never purpose.** `btn-add` → **`btn-dashed`**.
+Audit every class: names must describe appearance/genre (chip, banner, panel,
+dashed, tilted, spine), never an action or role (add, back, search, submit).
+Genre names for component species (banner, chip, stat, terminal) are fine;
+action/role names are not. The `.search` wrapper renames to a style name
+(e.g. `.input-icon`). Update the Tailwind preset and all docs to match.
+
+Contract props unify under the same rule: `--entity-color` and `--accent`
+merge into one prop, **`--accent`** (default `var(--mauve)`) — the
+per-instance accent read by the accent card's spine/gradient/border,
+`mark-solid`'s fill, `.cn-value-lg`, the terminal caret, and the
+`cn-text-accent` / `cn-tint-accent` / `cn-edge-accent` / `cn-spine`
+utilities (renamed from their `-entity` forms). `.entity-card` renames to
+**`.accent-card`**. Contract props are now: `--accent`, `--tone`,
+`--hard-offset-color`, plus the density knobs.
+
+**R7 — No exceptional elements.** Every recipe is a general-purpose component:
+no variant may exist only as "the X from project Y" and none may be documented
+as single-use. Anything that can't be generalized is deleted from the package
+(projects keep such things in their own local layer).
+
+**R8 — Borderless inset depth (the input rethink).** Inset surfaces get their
+definition from depth, not strokes: `.input` (and select/textarea) drops its
+1px border entirely — subtle inner shadow well on a slightly darkened ground,
+`:focus` adds the mauve ring over the inset (no border swap). Apply the same
+"depth replaces border" principle across inset surfaces (wells, terminal,
+progress track, engaged states): remove hairlines where the depth already
+separates the surface; keep hairline borders only on *raised* surfaces where
+the lit edge needs support (panel, popover) and on tinted semantic surfaces
+(chip-tone, banner) where the tint needs an edge.
+
+**R9 — Mono is for code, rarely anything else.** The mono face is reserved for
+code-like content: `.cn-code`, `.terminal`, actual code/CLI strings. Everything
+previously mono — labels, microlabels, eyebrows, values, metadata, chips,
+table headers and cells, footer meta, popover content — becomes **sans** (keep
+the small sizes, weights, uppercase + letter-spacing where specified; numbers
+keep `font-variant-numeric: tabular-nums`, now on the sans face). The type
+roles table below is superseded accordingly: same class names, same
+size/weight/tracking, `var(--sans)` instead of `var(--mono)` everywhere except
+`.cn-code`. Table recipes (`.table-neu`) set sans + tabular-nums. Update the
+verification rules: the old "mono/sans split" check becomes "mono scarcity" —
+flag any `var(--mono)` outside code/terminal contexts.
+
+---
+
 The formalization of the Catppuccin Mocha + neumorphic design language shared by
 consenStat, harness-racer, salt, skill-issue, and varchar. This file is the
 **single source of truth**: implementation, showcase, and backports follow it.
@@ -23,6 +113,7 @@ spec wins.
 4. **skill-issue** gets a full restyle into the system (separate backport).
 5. **Naming**: `--entity-color` is the one per-entity property.
    `--lane-color`/`--track-color`/`--tier-color` are project-local legacy.
+   *(Superseded by R6: `--entity-color` merged into `--accent`.)*
 6. **Radii cap at 16px.** 12px arrives only via the density knob. The blessed
    scale is 16 / 13 / 10 / 8 / 4 / 999 / 50%.
 7. **Button labels are sans.** The mono/sans split follows the skill exactly.
@@ -82,6 +173,7 @@ reduced-motion block). Then add, in the same `:root`:
 --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);  /* solid-mark mini-drop */
 
 /* Contract properties — the documented extension points */
+/* (Superseded by R6: --entity-color and --accent merged into --accent.) */
 --entity-color: var(--mauve);      /* per-entity identity; set inline from data */
 --tone: var(--peach);              /* semantic tint for chips/banners */
 --accent: var(--mauve);            /* solid-mark fill */
@@ -105,8 +197,9 @@ And after `:root`:
 }
 ```
 
-The entity color cycle (documented in a comment): `#cba6f7, #94e2d5, #f9e2af,
-#89b4fa, #fab387, #f5c2e7` (mauve, teal, yellow, blue, peach, pink).
+The entity color cycle *(per R6 now the **accent cycle**)* (documented in a
+comment): `#cba6f7, #94e2d5, #f9e2af, #89b4fa, #fab387, #f5c2e7`
+(mauve, teal, yellow, blue, peach, pink).
 
 ## css/utilities.css — layer `cn.utilities`
 
@@ -144,7 +237,7 @@ Mono roles:
 - `.cn-label` — `font: 650 11px/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--overlay-2);`
 - `.cn-microlabel` — `font: 700 9px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--overlay-1);`
 - `.cn-value` — `font: 650 21px/1 var(--mono); font-variant-numeric: tabular-nums;`
-- `.cn-value-lg` — 28px variant, color `var(--entity-color, var(--mauve))` opt-out via color utilities.
+- `.cn-value-lg` — 28px variant, color `var(--entity-color, var(--mauve))` opt-out via color utilities. *(Superseded by R6: reads `var(--accent)`.)*
 - `.cn-meta` — `font: 550 11px/1.5 var(--mono); font-variant-numeric: tabular-nums; color: var(--overlay-1);`
 - `.cn-eyebrow` — `font: 700 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mauve); display: flex; align-items: center; gap: 8px;`
 - `.cn-code` — `font: 500 13px/1.6 var(--mono); font-variant-numeric: tabular-nums;`
@@ -159,8 +252,8 @@ Sans roles:
 
 ### Color
 
-- Text: `.cn-text-{text,subtext-1,subtext-0,overlay-2,overlay-1,overlay-0,mauve,pink,red,green,peach,yellow,blue,teal,lavender}` plus `.cn-text-entity` (`var(--entity-color)`), `.cn-text-tone` (`var(--tone)`).
-- Backgrounds: `.cn-bg-base`, `.cn-bg-mantle`, `.cn-bg-crust`, `.cn-bg-well` (`color-mix(in srgb, var(--crust) 38%, var(--mantle))`), `.cn-bg-head` (`color-mix(in srgb, var(--crust) 30%, var(--mantle))`), `.cn-tint` (`color-mix(in srgb, var(--tone) 7%, transparent)`), `.cn-tint-entity` (`linear-gradient(135deg, color-mix(in srgb, var(--entity-color) 8%, var(--mantle)), var(--mantle) 48%)`).
+- Text: `.cn-text-{text,subtext-1,subtext-0,overlay-2,overlay-1,overlay-0,mauve,pink,red,green,peach,yellow,blue,teal,lavender}` plus `.cn-text-entity` (`var(--entity-color)`) *(superseded by R6: `.cn-text-accent`, `var(--accent)`)*, `.cn-text-tone` (`var(--tone)`).
+- Backgrounds: `.cn-bg-base`, `.cn-bg-mantle`, `.cn-bg-crust`, `.cn-bg-well` (`color-mix(in srgb, var(--crust) 38%, var(--mantle))`), `.cn-bg-head` (`color-mix(in srgb, var(--crust) 30%, var(--mantle))`), `.cn-tint` (`color-mix(in srgb, var(--tone) 7%, transparent)`), `.cn-tint-entity` (`linear-gradient(135deg, color-mix(in srgb, var(--entity-color) 8%, var(--mantle)), var(--mantle) 48%)`) *(superseded by R6: `.cn-tint-accent`, keyed by `--accent`)*.
 - Tone setters: `.cn-tone-{red,green,peach,yellow,blue,mauve}` set `--tone` only.
 
 ### Borders
@@ -168,7 +261,7 @@ Sans roles:
 - `.cn-edge` — `border: 1px solid color-mix(in srgb, var(--surface-2) 40%, transparent);`
 - `.cn-edge-soft` — surface-1 38% mix (wells, inner separators).
 - `.cn-edge-line` — `border: 1px solid var(--surface-0);` (row separators, footer rules)
-- `.cn-edge-mauve` — mauve 30% mix. `.cn-edge-tone` — tone 25% into surface-0. `.cn-edge-entity` — entity 28% into surface-0.
+- `.cn-edge-mauve` — mauve 30% mix. `.cn-edge-tone` — tone 25% into surface-0. `.cn-edge-entity` — entity 28% into surface-0. *(Superseded by R6: `.cn-edge-accent`, keyed by `--accent`.)*
 - `.cn-edge-dashed` — `border: 1px dashed var(--surface-1);` (the only dashed border)
 
 ### Radii (role-named; no numeric escape hatch)
@@ -178,7 +271,7 @@ Sans roles:
 
 ### Structure
 
-- `.cn-spine` — position:relative; `::before` 4px left bar in `var(--entity-color)`, `inset: 12px auto 12px 0; border-radius: 0 6px 6px 0;`
+- `.cn-spine` — position:relative; `::before` 4px left bar in `var(--entity-color)` *(superseded by R6: `var(--accent)`)*, `inset: 12px auto 12px 0; border-radius: 0 6px 6px 0;`
 - `.cn-scrim` — fixed inset overlay: `background: color-mix(in srgb, var(--crust) 74%, transparent); backdrop-filter: blur(6px); z-index: 70;`
 - `.cn-sr-only` — standard clip pattern.
 - `.cn-hidden` — `display: none !important;`
@@ -206,11 +299,12 @@ approved canon. Every recipe reads tokens/contract props only. The set:
 - `.btn-flat` — toolbar button: transparent border, flat, `.cn-engaged`-style when `[aria-pressed="true"]`/`.active`.
 - `.btn-text` — mauve inline text button.
 - `.btn-icon` — 32px grid center, overlay-1, tints toward `var(--tone)` on hover.
-- `.btn-add` — the dashed add affordance.
+- `.btn-add` — the dashed add affordance. *(Superseded by R6: `.btn-dashed`.)*
 - `.field` / `.field label` / `.input` — 9-10px radius, inset well
   (`color-mix(in srgb, var(--crust) 62%, var(--mantle))`), height `var(--input-h)`,
   mauve 20% focus ring layered over the inset. `.input-lg` (58px hero variant),
-  `.search` wrapper (absolute icon + padded input).
+  `.search` wrapper (absolute icon + padded input). *(Superseded by R6:
+  `.search` → `.input-icon`; per R8 inputs are borderless.)*
 - `.segmented` + `.segmented > *` — options **hard offset at rest** (crust), min
   58px (respects density), hover `translate(-1px,-1px)`, active press = half-slide,
   selected `.active` = `.cn-engaged` treatment; `.is-stacked` variant.
@@ -220,7 +314,8 @@ approved canon. Every recipe reads tokens/contract props only. The set:
 `.chip` (raised-soft mono pill), `.chip-tone` (tone-tinted 4px-radius tag),
 `.banner` (tone tint band, inset-soft), `.live-dot` (tokens).
 
-**Data**: `.entity-card` (entity border/gradient/spine per skill), `.metric`
+**Data**: `.entity-card` (entity border/gradient/spine per skill) *(superseded
+by R6: `.accent-card`, keyed by `--accent`)*, `.metric`
 (+`.is-hero`), `.stat-row`/`.stat-strip`, `.progress-track` (+ accent-gradient
 fill span), `.table-neu` (opt-in class on `<table>` — mantle mono th, tabular td,
 row hover inset; `td[data-label]` mobile card-collapse contract; `.cell-name`),
@@ -240,7 +335,8 @@ Responsive: fold the skill's `reference/responsive.css` breakpoints
 
 ## tailwind/preset.cjs (v3)
 
-`theme.extend`: colors (all palette names → `var(--…)`, plus `entity: "var(--entity-color)"`,
+`theme.extend`: colors (all palette names → `var(--…)`, plus `entity: "var(--entity-color)"`
+*(superseded by R6: `accent: "var(--accent)"`)*,
 `tone: "var(--tone)"`), fontFamily `sans`/`mono` → token stacks,
 borderRadius `{ panel: "var(--pane-radius)", card: "13px", control: "10px", mark: "8px", chip: "4px" }`,
 boxShadow `{ "neu-raised", "neu-raised-soft", "neu-inset", "neu-inset-soft", "pop", "cast", "hard", "hard-lg" }` → the token values,
@@ -273,11 +369,11 @@ One-page gallery, topbar + section nav, sections:
 3. **Forms** — field/label/input/input-lg/search, focus states.
 4. **Marks** — chip, chip-tone (all tones), banner (all tones), mark-solid,
    live-dot.
-5. **Data** — entity cards (full 6-color cycle), metric/stat variants, progress,
+5. **Data** — entity cards *(per R6: accent cards)* (full 6-color cycle), metric/stat variants, progress,
    table-neu with mobile collapse, ranked rows.
 6. **Overlays** — popover, modal (open on demand), drawer, toast.
 7. **Playground** — density toggle (`data-density`), tone picker, entity-color
-   picker, applied live to a specimen panel.
+   picker *(per R6: accent picker, `--accent`)*, applied live to a specimen panel.
 
 Every specimen shows its class string in a copyable `.cn-code` line (click to
 copy). The showcase is the visual-regression reference for backports: every

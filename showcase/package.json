@@ -10,7 +10,8 @@
     "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
-    "preact": "^10.24.0"
+    "preact": "^10.24.0",
+    "preact-iso": "^2.12.2"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.0",

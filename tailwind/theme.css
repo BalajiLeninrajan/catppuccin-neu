@@ -9,8 +9,8 @@
 */
 
 /* inline: utilities emit the var() reference at the use site, so subtree
-   overrides of the contract/density props (--entity-color, --tone,
-   --pane-radius, --control-h, --input-h) re-key text-entity, rounded-panel,
+   overrides of the contract/density props (--accent, --tone,
+   --pane-radius, --control-h, --input-h) re-key text-accent, rounded-panel,
    h-control, etc. — matching the v3 preset's runtime behavior. */
 @theme inline {
   /* Palette → var() so density/contract overrides keep working at runtime */
@@ -38,7 +38,7 @@
   --color-blue: var(--blue);
   --color-lavender: var(--lavender);
   /* Contract properties */
-  --color-entity: var(--entity-color);
+  --color-accent: var(--accent);
   --color-tone: var(--tone);
 
   /* Faces — the token stacks */

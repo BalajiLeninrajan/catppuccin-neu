@@ -1,10 +1,10 @@
 # catppuccin-neu
 
-The Catppuccin Mocha + neumorphic dark design system shared by consenStat,
-harness-racer, salt, skill-issue, and varchar — formalized as a package.
-Dark-only, one top-left light source, mauve as the sole accent, a strict
-mono/sans split, and a hard offset shadow with a half-slide press on
-clickable controls. [SPEC.md](./SPEC.md) is the single source of truth.
+A Catppuccin Mocha + neumorphic dark design system, packaged as tokens,
+utilities, and recipes. Dark-only, one top-left light source, mauve as the
+sole accent, mono reserved for code, borderless depth-defined inset surfaces,
+and a hard offset shadow with a half-slide press on clickable controls.
+[SPEC.md](./SPEC.md) is the single source of truth.
 
 ## Three layers
 
@@ -15,7 +15,7 @@ Everything ships as plain CSS in three cascade layers, declared by
 |---|---|---|
 | `cn.tokens` | `css/tokens.css` | Mocha palette, font stacks, depth shadows, contract props, density knobs, reset, focus/selection, motion |
 | `cn.utilities` | `css/utilities.css` | Single-purpose `cn-*` classes — depth, press behavior, type roles, color, borders, role-named radii |
-| `cn.recipes` | `css/recipes.css` | Components — panels, buttons, inputs, segmented, marks, entity cards, tables, overlays |
+| `cn.recipes` | `css/recipes.css` | Components — panels, buttons, inputs, segmented, marks, accent cards, tables, overlays |
 
 Consumer CSS is unlayered and therefore always wins; overrides never need
 `!important`. The three files also work as plain `<link>` tags in order
@@ -49,16 +49,32 @@ via `tailwind/preset.cjs` (v3) or `tailwind/theme.css` (v4 `@theme`).
 
 ## Contract properties
 
-Recipes read four custom properties — set them inline or on a wrapper to
-re-key a subtree:
+Recipes read three custom properties (plus the density knobs) — set them
+inline or on a wrapper to re-key a subtree:
 
-- `--entity-color` — per-entity identity (cards, spines, hero metrics).
-  Cycle: mauve, teal, yellow, blue, peach, pink.
+- `--accent` — the per-instance accent (accent cards, spines, solid marks,
+  hero values, the terminal caret). Defaults to mauve; the documented cycle
+  is mauve, teal, yellow, blue, peach, pink.
 - `--tone` — semantic tint for chips, banners, icon buttons
   (`.cn-tone-red` … set it for you).
-- `--accent` — solid-mark fill.
 - `--hard-offset-color` — the hard offset's color (crust by default;
   primary buttons override it).
+
+## Type: mono scarcity
+
+The mono face is reserved for code-like content — `.cn-code`, `.terminal`,
+actual code/CLI strings. Every other role (labels, values, metadata, chips,
+table cells, footer meta) is sans at the specified size/weight/tracking;
+numbers keep `font-variant-numeric: tabular-nums` on the sans face. Any
+`var(--mono)` outside a code/terminal context is a violation.
+
+## Depth over borders
+
+Inset surfaces (inputs, wells, the terminal, progress tracks, engaged states)
+are borderless — their inner shadow and darkened ground define them, and
+input focus adds the mauve ring over the inset. Hairline borders appear only
+on raised surfaces (panel, popover) where the lit edge needs support, and on
+tinted semantic surfaces (chip-tone, banner) where the tint needs an edge.
 
 ## Density knob
 
