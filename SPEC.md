@@ -90,10 +90,12 @@ carved-transparent.)*
 > 4. Disabled fields flatten: `--neu-inset-soft`, `--overlay-0` text, `.6`
 >    opacity, `not-allowed` cursor.
 > 5. `.well` deepens to full `--neu-inset`.
-> 6. `.well.scroll-well` pins a 30px crust fade (`rgb(17 17 27 / .55)`) to the
->    bottom of its scrollport via a sticky `::after` — the scroll cue.
-> 7. `.progress-track` is carved like the input: transparent ground, full
->    `--neu-inset`.
+> 6. `.well.scroll-well` dissolves its bottom 34px via `mask-image` (a sticky
+>    `::after` band was tried first and broke against the well's padding) —
+>    the scroll cue.
+> 7. ~~`.progress-track` carved-transparent~~ — tried and REVERTED: at 7px
+>    tall the carve reads as mud; the track keeps its crust fill +
+>    `--neu-inset-soft`.
 > 8. `.page-enter` drops its animation fill-mode: a held transform made the
 >    element a permanent containing block/stacking context, trapping fixed
 >    overlays (the modal-in-an-iframe bug). Apply the same

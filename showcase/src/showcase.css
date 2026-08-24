@@ -192,8 +192,21 @@
 .sc-props,
 .sc-codeblock {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
+
+/* Inside a flowed <section>, code blocks need their own breathing room —
+   otherwise a block sits flush against the previous one and its title reads
+   as a caption of the box above it. */
+.sc-doc section .sc-codeblock { margin-top: 26px; }
+.sc-doc section .sc-codeblock:first-child { margin-top: 0; }
+.sc-doc section .sc-codeblock + p { margin-top: 26px; }
+
+/* A bare label heading at the top level introduces what follows — pull the
+   next block up into the grid gap so the label hugs its content (34 − 20 =
+   14px effective). */
+.sc-doc > .cn-label + * { margin-top: -20px; }
 
 .sc-props-scroll {
   overflow-x: auto;

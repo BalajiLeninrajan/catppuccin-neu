@@ -103,9 +103,9 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         When a well scrolls, add <code class="cn-code">.scroll-well</code>: the
-        scrollbar picks up the dark-well thumb color, and a crust fade pins to
-        the bottom of the scrollport so the overflow is visible at a glance —
-        it sits over the last rows only once you reach the end.
+        scrollbar picks up the dark-well thumb color, and the bottom edge of
+        the well dissolves — content visibly runs past the fold, so the
+        overflow reads at a glance.
       </p>
 
       <Props
@@ -143,7 +143,7 @@ export default function SurfacesPage() {
             name: ".scroll-well",
             values: "scroll styling",
             notes:
-              "Sets scrollbar-color; combined with .well it adds the bottom scroll fade.",
+              "Sets scrollbar-color; combined with .well it dissolves the bottom edge as the scroll cue.",
           },
           {
             name: "--pane-radius",
