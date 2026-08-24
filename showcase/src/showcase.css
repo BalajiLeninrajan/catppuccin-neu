@@ -109,6 +109,9 @@
 
 .sc-doc {
   display: grid;
+  /* minmax(0, 1fr): a wide code block scrolls inside its own box instead of
+     growing the track past the measure and dragging the page sideways */
+  grid-template-columns: minmax(0, 1fr);
   gap: 34px;
 }
 
