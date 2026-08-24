@@ -1,0 +1,136 @@
+/* ── showcase chrome ─────────────────────────────────────────────────────────
+   Unlayered, so it always wins over the cn.* layers. Prefix: sc-.
+   Chrome only — specimens themselves use system classes exclusively.        */
+
+.sc-main {
+  width: min(1160px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 34px 0 110px;
+  display: grid;
+  gap: 30px;
+}
+
+/* Section panel: anchor target offset clears the sticky topbar. */
+.sc-section {
+  scroll-margin-top: 86px;
+}
+
+.sc-section-body {
+  padding: 22px;
+  display: grid;
+  gap: 22px;
+}
+
+/* Specimen: caption / stage / copy line. */
+.sc-specimen {
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 9px;
+}
+
+.sc-stage {
+  padding: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Hero card body — the .panel.is-tilted in app.jsx. */
+.sc-hero {
+  padding: clamp(24px, 4vw, 44px);
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+}
+
+.sc-hero .sc-row {
+  margin-top: 14px;
+}
+
+/* Copy line — the dash comes from composing .cn-edge-dashed + .cn-r-chip in
+   the markup (specimen.jsx); only the blessed dashed treatment may dash. */
+.sc-copy {
+  appearance: none;
+  background: transparent;
+  color: var(--subtext-0);
+  padding: 6px 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  transition: border-color 0.16s, color 0.16s;
+}
+
+.sc-copy:hover {
+  border-color: color-mix(in srgb, var(--mauve) 30%, var(--surface-0));
+  color: var(--text);
+}
+
+.sc-copy-hint {
+  flex: none;
+}
+
+.sc-copy.is-copied .sc-copy-hint {
+  color: var(--green);
+}
+
+/* Generic layout helpers for section authors. */
+.sc-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.sc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/* Topbar chrome. */
+.sc-wordmark {
+  font: 800 16px/1 var(--sans);
+  letter-spacing: -0.03em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.sc-wordmark em {
+  color: var(--mauve);
+  font-style: normal;
+}
+
+
+.sc-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.sc-nav a {
+  font: 650 11px/1 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--overlay-2);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: color 0.16s, background 0.16s;
+}
+
+.sc-nav a:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface-0) 40%, transparent);
+}
+
+@media (max-width: 760px) {
+  .sc-nav {
+    display: none;
+  }
+}

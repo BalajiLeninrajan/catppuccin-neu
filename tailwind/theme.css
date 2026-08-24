@@ -1,0 +1,71 @@
+/* ── catppuccin-neu — Tailwind v4 @theme ────────────────────────────────────
+   The same mappings as tailwind/preset.cjs, expressed as @theme custom
+   properties for Tailwind v4 consumers. Requires css/tokens.css (or
+   css/index.css) to be loaded — most values here point back at it.
+
+   usage: @import "tailwindcss";
+          @import "catppuccin-neu/tailwind/theme.css";
+          @import "catppuccin-neu/css/index.css";
+*/
+
+/* inline: utilities emit the var() reference at the use site, so subtree
+   overrides of the contract/density props (--entity-color, --tone,
+   --pane-radius, --control-h, --input-h) re-key text-entity, rounded-panel,
+   h-control, etc. — matching the v3 preset's runtime behavior. */
+@theme inline {
+  /* Palette → var() so density/contract overrides keep working at runtime */
+  --color-crust: var(--crust);
+  --color-mantle: var(--mantle);
+  --color-base: var(--base);
+  --color-surface-0: var(--surface-0);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-overlay-0: var(--overlay-0);
+  --color-overlay-1: var(--overlay-1);
+  --color-overlay-2: var(--overlay-2);
+  --color-subtext-0: var(--subtext-0);
+  --color-subtext-1: var(--subtext-1);
+  --color-text: var(--text);
+  --color-rosewater: var(--rosewater);
+  --color-pink: var(--pink);
+  --color-mauve: var(--mauve);
+  --color-red: var(--red);
+  --color-peach: var(--peach);
+  --color-yellow: var(--yellow);
+  --color-green: var(--green);
+  --color-teal: var(--teal);
+  --color-sky: var(--sky);
+  --color-blue: var(--blue);
+  --color-lavender: var(--lavender);
+  /* Contract properties */
+  --color-entity: var(--entity-color);
+  --color-tone: var(--tone);
+
+  /* Faces — the token stacks */
+  --font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono", "JetBrains Mono",
+               ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Role-named radii — the blessed scale */
+  --radius-panel: var(--pane-radius);
+  --radius-card: 13px;
+  --radius-control: 10px;
+  --radius-mark: 8px;
+  --radius-chip: 4px;
+
+  /* Depth — the four neu tokens, the promoted floats, the hard offsets */
+  --shadow-neu-raised: var(--neu-raised);
+  --shadow-neu-raised-soft: var(--neu-raised-soft);
+  --shadow-neu-inset: var(--neu-inset);
+  --shadow-neu-inset-soft: var(--neu-inset-soft);
+  /* --shadow-pop/--shadow-cast share names with the tokens themselves, so the
+     literal token values are repeated here to avoid a self-referential var(). */
+  --shadow-pop: 0 24px 70px rgb(17 17 27 / .78);
+  --shadow-cast: 0 5px 12px var(--neu-dark-soft);
+  --shadow-hard: 4px 4px 0 var(--hard-offset-color);
+  --shadow-hard-lg: 10px 10px 0 var(--hard-offset-color);
+
+  /* Density knobs — spacing entries so h-control / min-h-input resolve */
+  --spacing-control: var(--control-h);
+  --spacing-input: var(--input-h);
+}
