@@ -142,9 +142,9 @@ carved-transparent.)*
 > open. ~~`details.accordion` with `::details-content` height animation~~
 > REPLACED: details cannot animate its close outside Chromium, so the
 > accordion is a label + hidden checkbox and the fold transitions
-> `grid-template-rows 0fr→1fr` (.3s, open delayed .1s behind the .12s sink,
-> close release delayed .22s) — plays in every modern browser, no JS. The
-> trade: checkbox semantics instead of disclosure semantics.
+> `grid-template-rows 0fr→1fr` (.3s; the .2s carve runs with it, no
+> sequencing) — plays in every modern browser, no JS. The trade: checkbox
+> semantics instead of disclosure semantics.
 > `.avatar` (initials or image on an accent-tinted round, `.is-lg`,
 > `.avatar-stack`). `.codeblock`, a carved mono snippet well; with the
 > terminal it is one of the two mono surfaces. `.is-numbered` draws a line

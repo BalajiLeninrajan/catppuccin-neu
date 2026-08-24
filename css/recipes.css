@@ -724,19 +724,15 @@
      </div>
    Use radios sharing a name for an exclusive-open group. Space toggles the
    focused input; the whole label is the hit target.
-   Choreography: opening sinks quickly then the fold expands; closing
-   contracts first, then the carve releases. */
+   The sink and the fold animate together, no sequencing. */
 .accordion {
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  /* closing: the carve snaps off once the body has mostly contracted */
-  transition: box-shadow .12s .22s, border-color .12s .22s, border-radius .12s .22s;
+  transition: box-shadow .2s, border-color .2s, border-radius .2s;
 }
 .accordion:has(> label > input:checked) {
   border-radius: 10px;
   border-bottom-color: transparent;
   box-shadow: var(--neu-inset-soft);
-  /* opening: a quick sink; the fold carries the motion */
-  transition: box-shadow .12s, border-color .12s, border-radius .12s;
 }
 .accordion > label {
   min-height: 48px;
@@ -781,13 +777,10 @@
 .accordion .fold {
   display: grid;
   grid-template-rows: 0fr;
-  /* closing: contract immediately; this is the visible beat */
   transition: grid-template-rows .3s ease;
 }
 .accordion:has(> label > input:checked) .fold {
   grid-template-rows: 1fr;
-  /* opening: expand as the quick sink lands */
-  transition: grid-template-rows .3s ease .1s;
 }
 .accordion .fold > * {
   min-height: 0;

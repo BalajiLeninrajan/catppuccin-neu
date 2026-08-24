@@ -48,9 +48,9 @@ export default function AccordionPage() {
         grid row transitioning <code class="cn-code">0fr</code> to{" "}
         <code class="cn-code">1fr</code>, which plays everywhere. The whole
         open item sinks into a carved well, title included; closed rows stay
-        flat with straight dividers. Opening sinks first, then expands;
-        closing contracts first, then releases. Space toggles the focused
-        input, and the whole label is the hit target. Use radios sharing a{" "}
+        flat with straight dividers. The sink and the fold animate together.
+        Space toggles the focused input, and the whole label is the hit
+        target. Use radios sharing a{" "}
         <code class="cn-code">name</code> when only one item may be open.
       </p>
 
