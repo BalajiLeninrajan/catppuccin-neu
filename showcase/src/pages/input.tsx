@@ -94,9 +94,9 @@ export default function InputPage() {
           </div>
         </div>
         <p class="cn-copy">
-          Selects share the input well. The native chrome is stripped with{" "}
-          <code class="cn-code">appearance: none</code> so the recessed surface
-          stays consistent across controls.
+          Selects share the input well. Where the browser supports customizable
+          selects (Chrome 135+), the option list renders as a system popover
+          with mauve hover and checkmark. Elsewhere the OS picker stays.
         </p>
       </Demo>
 

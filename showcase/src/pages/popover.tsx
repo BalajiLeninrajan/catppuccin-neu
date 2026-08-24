@@ -98,6 +98,23 @@ export default function PopoverPage() {
         <AnatomyDemo />
       </Demo>
 
+      <Demo title="Tooltip" classes="[data-tip]" row>
+        <button type="button" class="btn btn-secondary" data-tip="Duplicates the dashboard with its filters">
+          Duplicate
+        </button>
+        <button type="button" class="btn-icon" aria-label="Archive" data-tip="Archive this view">
+          ⌫
+        </button>
+      </Demo>
+
+      <p class="cn-copy">
+        Put the text in <code class="cn-code">data-tip</code>, not{" "}
+        <code class="cn-code">title</code>. The bubble shows on hover and
+        keyboard focus and caps at 240px. Icon-only controls still need{" "}
+        <code class="cn-code">aria-label</code>; the tooltip is visual, not the
+        accessible name.
+      </p>
+
       <Props
         title="Contract"
         rows={[
@@ -118,6 +135,12 @@ export default function PopoverPage() {
             values: "any filled band",
             default: "—",
             notes: "Bottom corners mirror the same treatment.",
+          },
+          {
+            name: "[data-tip]",
+            values: "any focusable element",
+            default: "—",
+            notes: "Popover-styled bubble above the element on hover/focus; max-width 240px. Use instead of title=.",
           },
           {
             name: ".cn-bg-head",

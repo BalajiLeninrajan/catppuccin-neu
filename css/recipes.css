@@ -357,6 +357,80 @@
   cursor: pointer;
 }
 
+/* Where the browser supports customizable selects (Chrome 135+), the OS
+   option list becomes a system popover. Elsewhere the native picker stays. */
+@supports (appearance: base-select) {
+  .field select, select.input,
+  .field select::picker(select), select.input::picker(select) {
+    appearance: base-select;
+  }
+  /* base-select renders the closed control as a flex button with
+     align-items: normal, which pins the label to the top of the well. */
+  .field select, select.input {
+    display: flex;
+    align-items: center;
+  }
+  .field select::picker-icon, select.input::picker-icon { display: none; }
+  .field select::picker(select), select.input::picker(select) {
+    margin-top: 6px;
+    padding: 6px;
+    border: 1px solid var(--surface-1);
+    border-radius: 13px;
+    background: var(--base);
+    box-shadow: var(--shadow-pop);
+    opacity: 1;
+    transition: opacity .16s ease, transform .16s ease, display .16s allow-discrete, overlay .16s allow-discrete;
+  }
+  .field select::picker(select):popover-open { opacity: 1; transform: none; }
+  @starting-style {
+    .field select::picker(select):popover-open,
+    select.input::picker(select):popover-open { opacity: 0; transform: translateY(-4px); }
+  }
+  .field select option, select.input option {
+    padding: 9px 11px;
+    border-radius: 8px;
+    color: var(--subtext-1);
+    background: transparent;
+    font: 500 13px var(--sans);
+  }
+  .field select option:hover, select.input option:hover,
+  .field select option:focus-visible, select.input option:focus-visible {
+    color: var(--text);
+    background: color-mix(in srgb, var(--mauve) 7%, var(--base));
+    outline: none;
+  }
+  .field select option:checked, select.input option:checked { color: var(--mauve); font-weight: 700; }
+  .field select option::checkmark, select.input option::checkmark { color: var(--mauve); }
+}
+
+/* Tooltip: a popover-styled bubble from a data-tip attribute. Use this, not
+   title=, which renders the OS tooltip. Shows on hover and keyboard focus. */
+[data-tip] { position: relative; }
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 90;
+  translate: -50%;
+  width: max-content;
+  max-width: 240px;
+  padding: 7px 10px;
+  color: var(--subtext-1);
+  border: 1px solid var(--surface-1);
+  border-radius: 8px;
+  background: var(--base);
+  box-shadow: var(--shadow-pop);
+  font: 500 11px/1.45 var(--sans);
+  letter-spacing: normal;
+  text-transform: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .16s ease, visibility .16s;
+}
+[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; visibility: visible; }
+
 /* Hero variant — the one oversized input on a page. */
 .input-lg {
   height: 58px;
