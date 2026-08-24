@@ -715,27 +715,33 @@
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
 
-/* ── Accordion — native details/summary ─────────────────────────────────── */
-
-/* Closed rows are flat: straight dividers, no radius, no shadow. The open
-   item sinks in place, title and body together, growing only vertically.
-   Choreography: transitions read from the destination state, so opening
-   sinks first then expands, and closing contracts first then releases. */
+/* ── Accordion — label + checkbox disclosure ────────────────────────────────
+   Native details cannot animate its close outside Chromium, so the fold
+   rides grid-template-rows 0fr → 1fr, which transitions everywhere. Markup:
+     <div class="accordion">
+       <label><input type="checkbox">Title</label>
+       <div class="fold"><div>…body…</div></div>
+     </div>
+   Use radios sharing a name for an exclusive-open group. Space toggles the
+   focused input; the whole label is the hit target.
+   Choreography: opening sinks quickly then the fold expands; closing
+   contracts first, then the carve releases. */
 .accordion {
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
   /* closing: the carve snaps off once the body has mostly contracted */
   transition: box-shadow .12s .22s, border-color .12s .22s, border-radius .12s .22s;
 }
-.accordion[open] {
+.accordion:has(> label > input:checked) {
   border-radius: 10px;
   border-bottom-color: transparent;
   box-shadow: var(--neu-inset-soft);
-  /* opening: a quick sink; the body expansion carries the motion */
+  /* opening: a quick sink; the fold carries the motion */
   transition: box-shadow .12s, border-color .12s, border-radius .12s;
 }
-.accordion summary {
+.accordion > label {
   min-height: 48px;
   padding: 12px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -743,36 +749,54 @@
   color: var(--text);
   font: 700 13px/1.3 var(--sans);
   cursor: pointer;
-  list-style: none;
   transition: color .16s;
 }
-.accordion summary::-webkit-details-marker { display: none; }
-.accordion summary::after {
+.accordion > label:hover { color: var(--mauve); }
+.accordion > label::after {
   content: "";
   width: 15px;
   height: 15px;
   flex: 0 0 auto;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
   transition: transform .2s;
 }
-.accordion[open] summary::after { transform: rotate(180deg); }
-.accordion summary:hover { color: var(--mauve); }
-.accordion > :not(summary) { padding: 0 12px 16px; }
-/* Where the browser supports it, the body height animates open and closed. */
-@supports (interpolate-size: allow-keywords) {
-  .accordion { interpolate-size: allow-keywords; }
-  .accordion::details-content {
-    height: 0;
-    overflow: clip;
-    /* closing: contract immediately; this is the visible beat */
-    transition: height .3s ease, content-visibility .3s allow-discrete;
-  }
-  .accordion[open]::details-content {
-    height: auto;
-    /* opening: expand as the quick sink lands */
-    transition: height .3s ease .1s, content-visibility .3s allow-discrete .1s;
-  }
+.accordion:has(> label > input:checked) > label::after { transform: rotate(180deg); }
+/* The input stays keyboard-reachable but visually silent; its focus ring
+   draws on the label. */
+.accordion > label > input {
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
 }
+.accordion > label:has(input:focus-visible) {
+  outline: 2px solid var(--mauve);
+  outline-offset: -2px;
+  border-radius: 10px;
+}
+/* The fold: a grid row that opens from 0fr to 1fr. The inner wrapper must
+   be a single element with min-height 0 so the row can fully collapse. */
+.accordion .fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  /* closing: contract immediately; this is the visible beat */
+  transition: grid-template-rows .3s ease;
+}
+.accordion:has(> label > input:checked) .fold {
+  grid-template-rows: 1fr;
+  /* opening: expand as the quick sink lands */
+  transition: grid-template-rows .3s ease .1s;
+}
+.accordion .fold > * {
+  min-height: 0;
+  overflow: clip;
+  padding: 0 12px;
+}
+/* Bottom spacing lives on the content's margin: padding would floor the
+   collapsed wrapper at its own height, margins clip away with the fold. */
+.accordion .fold > * > :last-child { margin-bottom: 16px; }
 
 /* ── Avatar — initials or an image on an accent-tinted round ────────────── */
 
