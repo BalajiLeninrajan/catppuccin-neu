@@ -214,7 +214,7 @@ No bare font-family utility exists: pick the role, not the face. All roles are
 sans except `.cn-code`.
 
 - `.cn-label`: `650 12px/1 var(--sans)`, `.04em`, uppercase, overlay-2.
-- `.cn-microlabel`: `700 12px/1 var(--sans)`, `.08em`, uppercase, overlay-1.
+- `.cn-microlabel`: `700 10px/1 var(--sans)` (the one exception to the 12px floor), `.08em`, uppercase, overlay-1.
 - `.cn-value`: `650 21px/1 var(--sans)`, tabular-nums.
 - `.cn-value-lg`: 28px variant, color `var(--accent)` (opt out via a color
   utility).
@@ -732,5 +732,5 @@ above describes only what shipped.
     Preact reference (cancelable timers, pause on hover, cap, guarded
     two-phase exit).
 28. Type scale compressed twice: display clamps to 46px (was 64),
-    display-sm to 36px; the type floor rose to 12px (every micro size),
-    and cn-copy rose to 14px.
+    display-sm to 36px; the type floor rose to 12px (cn-microlabel excepted
+    at 10px), and cn-copy rose to 14px.

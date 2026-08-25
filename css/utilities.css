@@ -54,7 +54,8 @@
   color: var(--overlay-2);
 }
 .cn-microlabel {
-  font: 700 12px/1 var(--sans);
+  /* The one exception to the 12px floor: the smallest voice in the system. */
+  font: 700 10px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--overlay-1);

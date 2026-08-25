@@ -65,7 +65,7 @@ export default function TypographyPage() {
       </Demo>
 
       <Demo
-        title="cn-microlabel · 700 · 12px · +0.08em · uppercase · overlay-1"
+        title="cn-microlabel · 700 · 10px · +0.08em · uppercase · overlay-1"
         classes="cn-microlabel"
       >
         <span class="cn-microlabel">last synced 2 min ago</span>
@@ -131,7 +131,7 @@ export default function TypographyPage() {
           { name: ".cn-lede", values: "sans", default: "16px/1.65 · subtext-1", notes: "Intro paragraph; max-width 690px." },
           { name: ".cn-copy", values: "sans", default: "14px/1.6 · subtext-0", notes: "Body prose." },
           { name: ".cn-label", values: "sans", default: "650 · 12px · +0.04em · uppercase", notes: "Field and section labels; overlay-2." },
-          { name: ".cn-microlabel", values: "sans", default: "700 · 12px · +0.08em · uppercase", notes: "Smallest metadata; overlay-1." },
+          { name: ".cn-microlabel", values: "sans", default: "700 · 10px · +0.08em · uppercase", notes: "Smallest metadata; overlay-1." },
           { name: ".cn-eyebrow", values: "sans", default: "700 · 12px · +0.08em · uppercase · mauve", notes: "Kicker above a display; flex with 8px gap." },
           { name: ".cn-value", values: "sans", default: "650 · 21px · tabular-nums", notes: "Stat numbers." },
           { name: ".cn-value-lg", values: "sans", default: "650 · 28px · tabular-nums", notes: "Hero stat; color: var(--accent). Opt out with a color utility." },
