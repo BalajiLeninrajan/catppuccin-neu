@@ -1149,6 +1149,16 @@ a:active > .accent-card {
    (clipped, so taller content cannot poke out) and lift behind it, scaled.
    Depth counts VISIBLE toasts only, so an exiting [hidden] toast never
    shifts the pile. Hover or keyboard focus fans the column back out. */
+/* Exiting toasts leave the flow at once, fading in place over the stack
+   bottom, so the pile never reserves a ghost row during the exit. */
+.toast-stack .toast[hidden] {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  z-index: 1;
+}
 .toast-stack:not(:hover):not(:focus-within) .toast:not([hidden]):has(~ .toast:not([hidden])) {
   position: absolute;
   inset: 0;
