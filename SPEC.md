@@ -38,8 +38,10 @@ Ground rules:
 
 Consumed as an npm dependency via git URL
 (`github:BalajiLeninrajan/catppuccin-neu#<tag>`). Zero-build consumers vendor the CSS
-via `scripts/sync.mjs`. No CDN. Pending: the repo currently has no remote; the
-git URL waits on recreating it (backburnered).
+via `scripts/sync.mjs`. No CDN. The repo is public at
+github.com/BalajiLeninrajan/catppuccin-neu, tagged v0.1.0; the docs deploy as
+the `catppuccin-neu` Cloudflare Worker at
+https://catppuccin-neu.balajileninrajan.dev.
 
 ## Repo layout
 

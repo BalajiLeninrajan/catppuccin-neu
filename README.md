@@ -35,9 +35,6 @@ npx catppuccin-neu-sync public/styles
 # from a clone: node scripts/sync.mjs public/styles
 ```
 
-The git URL needs the repo pushed first, and it has no remote yet. Until then,
-clone it and either sync the CSS or point the dependency at the local path.
-
 Then link the fonts on every page that loads the CSS. Inter 100..900 and
 JetBrains Mono 100..800:
 
