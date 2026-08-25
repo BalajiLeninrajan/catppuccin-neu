@@ -1,5 +1,9 @@
 # catppuccin-neu
 
+[![Latest tag](https://img.shields.io/github/v/tag/BalajiLeninrajan/catppuccin-neu?label=catppuccin-neu&color=cba6f7)](https://github.com/BalajiLeninrajan/catppuccin-neu/tags)
+[![Docs](https://img.shields.io/badge/docs-live-cba6f7.svg)](https://catppuccin-neu.balajileninrajan.dev)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/BalajiLeninrajan/catppuccin-neu/blob/main/LICENSE)
+
 A CSS-only design system in [Catppuccin](https://catppuccin.com/) Mocha.
 Dark, soft, carved from shadow.
 

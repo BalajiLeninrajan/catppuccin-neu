@@ -14,7 +14,8 @@
     "tailwind",
     "scripts",
     "SPEC.md",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": "./css/index.css",
