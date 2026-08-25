@@ -545,7 +545,9 @@ All float on `--shadow-pop`, never neu.
   same box with `overflow: clip`, lifted behind it at `-12px scale(.96)` and
   `-22px scale(.92)`, the fourth and older hidden. Depth counts visible
   toasts only, so an exiting `[hidden]` toast never shifts the pile.
-  `:hover` or `:focus-within` fans it back into the column.
+  `:hover` or `:focus-within` fans it back into the column. The package
+  ships no toast JavaScript by design: spawning, timers, dismissal, the cap,
+  and pause on hover are consumer code; the docs carry a Preact reference.
 - `.toast`: one stack item, shadcn-shaped: a flex row holding a content
   column (`b` title over a span/p description) plus trailing controls
   (`.btn-text` action and/or `.btn-icon` close). 13px radius, neutral
@@ -726,3 +728,6 @@ above describes only what shipped.
     or keyboard focus fans it out.
 26. Field validation states (.is-error / .is-warning: tone ring over the
     inset) and the code block copy control.
+27. Toast behavior declared consumer code; the docs spawner became the
+    Preact reference (cancelable timers, pause on hover, cap, guarded
+    two-phase exit).

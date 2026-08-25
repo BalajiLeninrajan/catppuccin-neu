@@ -1,4 +1,4 @@
-import { useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const MESSAGES = [
@@ -19,19 +19,67 @@ function ToastSpawner() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
   const msgRef = useRef(0);
+  // Per-toast timer bookkeeping so hover can pause and dismissal can cancel.
+  const timers = useRef(new Map<number, { handle: number; endsAt: number; remaining: number }>());
+  const leavingRef = useRef(new Set<number>());
+
+  const DURATION = 7000;
+  const EXIT_MS = 240; // matches the .2s exit transition
+  const CAP = 5;
+
+  function schedule(id: number, ms: number) {
+    const handle = window.setTimeout(() => dismiss(id), ms);
+    timers.current.set(id, { handle, endsAt: Date.now() + ms, remaining: ms });
+  }
 
   function spawn() {
     const id = ++idRef.current;
     const { title, desc } = MESSAGES[msgRef.current++ % MESSAGES.length];
     setToasts((t) => [...t, { id, title, desc, leaving: false }]);
-    setTimeout(() => dismiss(id), 7000);
+    schedule(id, DURATION);
   }
 
-  // Two-phase: hidden plays the exit transition, then the element unmounts.
+  // Cancel the timer, guard double dismissal, play the exit, then unmount.
   function dismiss(id: number) {
+    if (leavingRef.current.has(id)) return;
+    leavingRef.current.add(id);
+    const timer = timers.current.get(id);
+    if (timer) {
+      clearTimeout(timer.handle);
+      timers.current.delete(id);
+    }
     setToasts((t) => t.map((x) => (x.id === id ? { ...x, leaving: true } : x)));
-    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 300);
+    window.setTimeout(() => {
+      leavingRef.current.delete(id);
+      setToasts((t) => t.filter((x) => x.id !== id));
+    }, EXIT_MS);
   }
+
+  // Reading the stack pauses every timer; leaving resumes the remainder.
+  function pause() {
+    for (const timer of timers.current.values()) {
+      clearTimeout(timer.handle);
+      timer.remaining = Math.max(0, timer.endsAt - Date.now());
+    }
+  }
+  function resume() {
+    for (const [id, timer] of timers.current) {
+      schedule(id, Math.max(timer.remaining, 600));
+    }
+  }
+
+  // The pile hides the fourth and older; cap the DOM at five live toasts.
+  useEffect(() => {
+    const live = toasts.filter((t) => !t.leaving);
+    if (live.length > CAP) dismiss(live[0].id);
+  }, [toasts]);
+
+  useEffect(() => {
+    const held = timers.current;
+    return () => {
+      for (const timer of held.values()) clearTimeout(timer.handle);
+    };
+  }, []);
 
   return (
     <>
@@ -39,7 +87,14 @@ function ToastSpawner() {
         Spawn a toast
       </button>
       {toasts.length > 0 && (
-        <div class="toast-stack" aria-live="polite">
+        <div
+          class="toast-stack"
+          aria-live="polite"
+          onMouseEnter={pause}
+          onMouseLeave={resume}
+          onFocusIn={pause}
+          onFocusOut={resume}
+        >
           {toasts.map((t) => (
             <div key={t.id} class="toast" hidden={t.leaving} role="status">
               <div>
@@ -66,7 +121,7 @@ export default function ToastPage() {
   return (
     <Doc
       title="Toast"
-      lede="A transient confirmation in a fixed corner stack. The stack is the recipe now; the consumer owns the timing."
+      lede="A transient confirmation in a fixed corner stack. The recipe is the look and the motion; the behavior is yours."
     >
       <p class="cn-copy">
         Two classes. <code class="cn-code">.toast-stack</code> is the viewport, fixed to
@@ -116,6 +171,50 @@ export default function ToastPage() {
           <button type="button" class="btn-text">Undo</button>
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        The package ships no JavaScript, by design. Spawning, timers,
+        dismissal, the pile cap, and pause on hover are consumer code in
+        whatever framework you use. This page runs the Preact reference
+        below: per-toast timers that manual dismissal cancels, hover or focus
+        on the stack pausing every timer and resuming the remainder, a cap of
+        five live toasts, and the hidden-then-unmount exit.
+      </p>
+
+      <CodeBlock
+        title="Reference behavior (Preact, condensed)"
+        code={`const timers = useRef(new Map()); // id -> { handle, endsAt, remaining }
+
+function schedule(id, ms) {
+  const handle = setTimeout(() => dismiss(id), ms);
+  timers.current.set(id, { handle, endsAt: Date.now() + ms, remaining: ms });
+}
+
+function spawn(item) {
+  setToasts((t) => [...t, { ...item, leaving: false }]);
+  schedule(item.id, 7000);
+}
+
+function dismiss(id) {
+  if (leaving.current.has(id)) return;      // guard double dismissal
+  leaving.current.add(id);
+  clearTimeout(timers.current.get(id)?.handle);
+  timers.current.delete(id);
+  setToasts((t) => t.map((x) => (x.id === id ? { ...x, leaving: true } : x)));
+  setTimeout(() => remove(id), 240);        // matches the .2s exit
+}
+
+// on the stack: onMouseEnter/onFocusIn -> pause, onMouseLeave/onFocusOut -> resume
+function pause() {
+  for (const t of timers.current.values()) {
+    clearTimeout(t.handle);
+    t.remaining = Math.max(0, t.endsAt - Date.now());
+  }
+}
+function resume() {
+  for (const [id, t] of timers.current) schedule(id, Math.max(t.remaining, 600));
+}`}
+      />
 
       <Props
         title="Contract"
