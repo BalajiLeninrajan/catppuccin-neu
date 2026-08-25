@@ -341,6 +341,26 @@
    double it (text fields match :focus-visible even on pointer focus). */
 .input:focus-visible,
 .field :is(input, select, textarea):focus-visible { outline: none; }
+/* Helper or message line inside a field. Tints with the state. */
+.field small {
+  display: block;
+  margin: 6px 1px 0;
+  color: var(--overlay-1);
+  font: 500 11px/1.4 var(--sans);
+}
+/* Validation: the state sets the tone, and a tone ring layers over the
+   inset, staying through focus. Set aria-invalid alongside .is-error. */
+.field.is-error, .input.is-error { --tone: var(--red); }
+.field.is-warning, .input.is-warning { --tone: var(--peach); }
+.field.is-error :is(input, select, textarea),
+.field.is-warning :is(input, select, textarea),
+.input.is-error,
+.input.is-warning {
+  box-shadow: var(--neu-inset), 0 0 0 2px var(--tone);
+}
+.field.is-error label, .field.is-warning label,
+.field.is-error small, .field.is-warning small { color: var(--tone); }
+
 /* Disabled fields flatten: the carve nearly fills in, text dims, no caret. */
 .input:disabled,
 .field :is(input, select, textarea):disabled {
@@ -858,6 +878,18 @@
   scrollbar-color: var(--surface-1) transparent;
 }
 .codeblock pre { margin: 0; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+/* Copy control: a .btn-icon in the corner. Wire it with the one-line
+   listener documented on the code block page; copying is consumer JS. */
+.codeblock { position: relative; }
+.codeblock > .btn-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+}
+.codeblock:has(> .btn-icon) { padding-right: 44px; }
 
 /* Numbered lines: wrap each line in its own element (span or code) inside
    the pre. CSS counters draw the gutter; no JS. */

@@ -148,6 +148,32 @@ export default function InputPage() {
         </p>
       </Demo>
 
+      <Demo title="Validation" classes="field is-error / field is-warning">
+        <div class="sc-grid">
+          <div class="field is-error">
+            <label for="demo-bad-email">Billing email</label>
+            <input
+              id="demo-bad-email"
+              type="email"
+              value="billing@acme"
+              aria-invalid="true"
+            />
+            <small>Enter a full email address.</small>
+          </div>
+          <div class="field is-warning">
+            <label for="demo-ext-email">Invite</label>
+            <input id="demo-ext-email" type="email" value="sam@other.co" />
+            <small>Outside your workspace domain.</small>
+          </div>
+        </div>
+        <p class="cn-copy">
+          The state class sets <code class="cn-code">--tone</code> and rings
+          the well; label and message tint with it. The ring stays through
+          focus. Set <code class="cn-code">aria-invalid</code> alongside{" "}
+          <code class="cn-code">.is-error</code>.
+        </p>
+      </Demo>
+
       <Demo title="Disabled" classes="input">
         <div class="sc-grid">
           <input class="input" type="text" value="ACME-2041 (locked)" disabled />
@@ -184,6 +210,17 @@ export default function InputPage() {
             values: "wrapper around svg + input",
             notes:
               "Absolutely positions a leading 18px icon; pads the input to 44px on the left.",
+          },
+          {
+            name: ".is-error / .is-warning",
+            values: "on .field or a bare .input",
+            notes:
+              "Red or peach tone ring over the inset; label and small tint. Disabled wins over both.",
+          },
+          {
+            name: ".field small",
+            values: "helper or message line",
+            notes: "11px under the control; overlay-1, tinted by the state.",
           },
           {
             name: "--input-h",

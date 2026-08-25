@@ -1,3 +1,4 @@
+import { useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const SHELL_SNIPPET = `$ pnpm install
@@ -19,6 +20,33 @@ const LONG_SNIPPET = `# deploy.log
 [10:41:20] deploy live at v2.4.1
 [10:41:21] notified #releases`;
 
+function CopyableBlock() {
+  const [copied, setCopied] = useState(false);
+
+  function copy(e: MouseEvent) {
+    const block = (e.currentTarget as HTMLElement).closest(".codeblock");
+    const text = block?.querySelector("pre")?.innerText ?? "";
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    });
+  }
+
+  return (
+    <div class="codeblock" style="width:min(560px,100%)">
+      <pre>npx catppuccin-neu-sync public/styles</pre>
+      <button
+        type="button"
+        class="btn-icon"
+        aria-label="Copy"
+        onClick={copy}
+      >
+        {copied ? "✓" : "⧉"}
+      </button>
+    </div>
+  );
+}
+
 export default function CodeblockPage() {
   return (
     <Doc
@@ -30,6 +58,26 @@ export default function CodeblockPage() {
           <pre>{SHELL_SNIPPET}</pre>
         </div>
       </Demo>
+
+      <Demo title="With a copy control" classes="codeblock > btn-icon">
+        <CopyableBlock />
+      </Demo>
+
+      <p class="cn-copy">
+        Put a <code class="cn-code">.btn-icon</code> as a direct child; the
+        recipe pins it to the corner and pads the code clear of it. Copying is
+        one delegated listener.
+      </p>
+
+      <CodeBlock
+        title="Copy listener"
+        code={`document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".codeblock > .btn-icon");
+  if (btn) navigator.clipboard.writeText(
+    btn.closest(".codeblock").querySelector("pre").innerText
+  );
+});`}
+      />
 
       <Demo title="Numbered lines" classes="codeblock is-numbered">
         <div class="codeblock is-numbered" style="width:min(560px,100%)">
@@ -121,6 +169,12 @@ export default function CodeblockPage() {
             name: ".tok-keyword / -string / -number / -fn / -comment",
             values: "spans from your tokenizer",
             notes: "blue / green / peach / mauve / overlay-0 italic.",
+          },
+          {
+            name: ".codeblock > .btn-icon",
+            values: "optional copy control",
+            notes:
+              "Pinned to the corner, 26px; the block pads right to clear it. Wire with the copy listener.",
           },
           {
             name: ".codeblock pre",

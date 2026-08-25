@@ -361,6 +361,11 @@ from whatever surface it sits on. `border: 0`, `background: transparent`,
 - `.input-lg`: the one oversized input on a page, 58px, 15px text.
 - `.input-icon`: wrapper with an absolute 18px leading icon at left 16px;
   the input pads to 44px.
+- Validation: `.is-error` / `.is-warning` on `.field` or a bare `.input` set
+  `--tone` (red / peach) and ring the well `0 0 0 2px var(--tone)` over the
+  inset, staying through focus; label and `.field small` (the 11px helper or
+  message line) tint with it. Disabled wins over both by source order. Set
+  `aria-invalid` alongside `.is-error`.
 
 ### Select picker
 
@@ -484,6 +489,9 @@ terminal it is one of the two mono surfaces (plus `.cn-code`).
 own element inside the `pre`; no JS. Five `.tok-*` classes carry the
 highlight palette (keyword blue, string green, number peach, fn mauve,
 comment overlay-0 italic); tokenizing itself is a consumer build step.
+An optional copy control is a `.btn-icon` direct child: the recipe pins it
+to the corner (26px, top/right 8px) and pads the block clear of it; the
+clipboard write is one delegated consumer listener, documented on the page.
 
 ### Accent card
 
@@ -716,3 +724,5 @@ above describes only what shipped.
 24. `.cn-engaged` went borderless (transparent border-color) as shipped.
 25. Toast stack collapses newest-on-top with peeking older toasts; hover
     or keyboard focus fans it out.
+26. Field validation states (.is-error / .is-warning: tone ring over the
+    inset) and the code block copy control.
