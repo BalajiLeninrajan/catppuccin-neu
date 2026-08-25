@@ -287,8 +287,10 @@ table styling.
 
 - `.panel`: the primary content container. 1px `cn-edge`-mix border,
   `var(--pane-radius)`, `--base` background, `--neu-raised`.
-- `.panel.is-tilted`: `rotate(1.2deg)` + `10px 10px 0 var(--hard-offset-color)`.
-  The one rotated hero card; flattened at 1060px and below.
+- `.panel.is-tilted`: `rotate(1.2deg)` with the hard offset composed over the
+  neu raise — `10px 10px 0 var(--hard-offset-color), var(--neu-raised)` — so
+  the hero still answers the top-left light instead of floating as a flat
+  sticker. The one rotated hero card; flattened at 1060px and below.
 - `.panel-heading` / `.panel-footer`: min-height 70px flex bands, padding
   14px 22px. The heading anchors with a fill: `cn-bg-head` mix, bottom
   divider (surface-1 40% mix), and `border-radius:
@@ -517,8 +519,10 @@ card.
   soft hairlines.
 - `.progress-track`: 7px, 999px radius, `--crust` fill + `--neu-inset-soft`
   (the track keeps its fill; at 7px a carve reads as mud). The fill span
-  inherits the radius (no overflow clipping) and runs the
-  mauve-pink-peach gradient; width transitions .35s.
+  inherits the radius (no overflow clipping) and defaults to the
+  mauve-pink-peach gradient; re-key it per instance via `--progress-fill`
+  (any token color or token gradient — the `--ring-ground` pattern), e.g.
+  `style="--progress-fill: var(--green)"`. Width transitions .35s.
 - `.table-neu`: opt-in class on `<table>`; scopes all table styling. Header:
   `cn-bg-head` mix, `650 12px var(--sans)`, overlay-1. Cells:
   `600 13px var(--sans)` tabular, subtext-1. Row hover presses in: mauve 5%
@@ -653,7 +657,8 @@ at least once.
 
 1. Every `box-shadow` in utilities/recipes is one of: the four neu tokens,
    `--shadow-pop/cast/mark`, the hard-offset family (`var(--hard-offset)`
-   and its half-press, `10px`, `3px`), the focus ring `0 0 0 2px` mauve
+   and its half-press, `10px`, `3px`), the tilted-hero composite (the 10px
+   hard offset layered with `--neu-raised`), the focus ring `0 0 0 2px` mauve
    layered on an inset, or a documented composite: the two blessed white
    insets, the accent-card's accent-mix inset, the cast hairline, the halo ring
    `0 0 0 Npx color-mix(… 13%, transparent)` used by `.radio` and
@@ -761,3 +766,8 @@ above describes only what shipped.
     the code surfaces, but consumer layers may set mono on any text in the
     rare right circumstance; the anti-mono flag now targets mono-as-default,
     not mono-at-all.
+33. Progress fill made customizable: `--progress-fill` on the track re-keys
+    the span (any token color or gradient), defaulting to the
+    mauve-pink-peach ramp — the `--ring-ground` fallback pattern.
+34. The tilted hero composes its hard offset over `--neu-raised`: the flat
+    offset alone ignored the top-left light and read as a sticker.

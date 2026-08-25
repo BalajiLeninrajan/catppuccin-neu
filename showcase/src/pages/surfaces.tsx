@@ -51,10 +51,11 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.is-tilted</code> is the one rotated,
-        hard-shadowed surface, a 1.2° rotate with a 10px hard offset. Use it
-        once per page at most; it flattens to the regular raised panel at
-        ≤1060px.
+        <code class="cn-code">.is-tilted</code> is the one rotated surface, a
+        1.2° rotate with the 10px hard offset composed over the neu raise —
+        the graphic note stays, but the card still answers the top-left light
+        instead of floating as a flat sticker. Use it once per page at most;
+        it flattens to the regular raised panel at ≤1060px.
       </p>
 
       <Demo title="Well" classes="well">
@@ -131,7 +132,7 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-tilted",
             values: "hero variant",
-            notes: "rotate(1.2deg) + 10px hard offset; flattens at ≤1060px.",
+            notes: "rotate(1.2deg) + 10px hard offset over neu-raised; flattens at ≤1060px.",
           },
           {
             name: ".panel.is-shell",

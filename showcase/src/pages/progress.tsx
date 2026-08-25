@@ -54,9 +54,34 @@ export default function ProgressPage() {
       </Demo>
 
       <p class="cn-copy">
-        The gradient runs mauve to pink to peach across the fill span, so
-        short fills read mostly mauve and only a full track shows the whole
-        ramp.
+        The default gradient runs mauve to pink to peach across the fill
+        span, so short fills read mostly mauve and only a full track shows
+        the whole ramp.
+      </p>
+
+      <Demo title="Custom fill · --progress-fill" classes="progress-track">
+        <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:14px">
+          <div class="progress-track" style="--progress-fill: var(--green)">
+            <span style="width:82%" />
+          </div>
+          <div class="progress-track" style="--progress-fill: var(--peach)">
+            <span style="width:46%" />
+          </div>
+          <div
+            class="progress-track"
+            style="--progress-fill: linear-gradient(90deg, var(--blue), var(--teal))"
+          >
+            <span style="width:64%" />
+          </div>
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        Set <code class="cn-code">--progress-fill</code> on the track (or a
+        wrapper) to re-key the fill per instance: any token color or a
+        gradient built from tokens. Semantic bars — a green success meter, a
+        peach quota warning — stay on the palette without touching the
+        recipe.
       </p>
 
       <Props
@@ -73,7 +98,14 @@ export default function ProgressPage() {
             values: "width: 0–100%",
             default: "width: 0",
             notes:
-              "Block fill; inherits the track radius; mauve→pink→peach gradient; width transitions at .35s.",
+              "Block fill; inherits the track radius; fills with var(--progress-fill), defaulting to the mauve→pink→peach gradient; width transitions at .35s.",
+          },
+          {
+            name: "--progress-fill",
+            values: "token color or token gradient",
+            default: "mauve→pink→peach",
+            notes:
+              "Set on the track or a wrapper to re-key the fill per instance.",
           },
         ]}
       />

@@ -127,8 +127,9 @@ export default function DepthPage() {
         reads <code class="cn-code">--hard-offset-color</code>, crust by
         default, so a control can re-key it inline.{" "}
         <code class="cn-code">cn-hard-lg</code> belongs to the tilted hero
-        card; <code class="cn-code">cn-hard-sm</code> pairs with compact
-        density.
+        card, which layers it over <code class="cn-code">--neu-raised</code>{" "}
+        so the hero still answers the light;{" "}
+        <code class="cn-code">cn-hard-sm</code> pairs with compact density.
       </p>
 
       <Demo
