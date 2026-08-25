@@ -3,9 +3,9 @@
    --hard-offset-color, the density knobs). Depth canon: clickable controls
    default to the hard offset shadow and press with the half-slide — rest
    --hard-offset (4px, 3px compact), hover translate(-1px,-1px), active a
-   half-slide onto the shadow, which shrinks to meet it. Type: sans carries
-   prose, labels, and controls; mono carries code and data (.terminal,
-   .codeblock, .cn-code, and the data roles). Inset surfaces
+   half-slide onto the shadow, which shrinks to meet it. Type: sans is the
+   default; mono ships on the code surfaces (.terminal, .codeblock, .cn-code)
+   and may be adopted elsewhere sparingly in a consumer layer. Inset surfaces
    are borderless — depth defines them; hairlines stay on raised surfaces
    and tinted semantic surfaces only.
    Requires tokens.css (+ utilities.css for .cn-scrim). Layer: cn.recipes.   */
@@ -953,13 +953,13 @@ a:active > .accent-card {
 
 /* ── Data display ───────────────────────────────────────────────────────── */
 
-/* Metric tile — small label above an oversized mono number. */
+/* Metric tile — small label above an oversized tabular number. */
 .metric { min-width: 0; padding: 12px 13px; display: flex; flex-direction: column; gap: 6px; }
 .metric span {
   color: var(--overlay-1);
   font: 650 12px var(--sans);
 }
-.metric strong { font: 600 21px/1 var(--mono); }
+.metric strong { font: 650 21px/1 var(--sans); font-variant-numeric: tabular-nums; }
 .metric.is-hero strong { font-size: 28px; color: var(--accent); }
 
 /* Label/value baseline row + a strip of them separated by hairlines. */
@@ -973,7 +973,8 @@ a:active > .accent-card {
 }
 .stat-row b {
   color: var(--subtext-1);
-  font: 600 12px/1 var(--mono);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
 }
 .stat-strip { display: flex; flex-direction: column; }
 .stat-strip > * { padding: 9px 0; }

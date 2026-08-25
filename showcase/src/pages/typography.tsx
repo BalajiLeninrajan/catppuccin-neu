@@ -4,14 +4,14 @@ export default function TypographyPage() {
   return (
     <Doc
       title="Typography"
-      lede="Two voices: Inter carries prose, labels, and controls; JetBrains Mono carries code and data. Pick the role, not the face."
+      lede="Inter is the default voice; JetBrains Mono ships on the code surfaces and is yours to reach for anywhere it earns its place. Pick the role, not the face."
     >
       <p class="cn-copy">
-        Each role fixes size, weight, tracking, and color in one class. Data
-        roles set the mono face; sans-face numbers keep{" "}
-        <code class="cn-code">font-variant-numeric: tabular-nums</code> so
-        figures still align in columns. Uppercase is scarce: only the eyebrow
-        and the microlabel shout.
+        Each role fixes size, weight, tracking, and color in one class.
+        Numeric roles keep{" "}
+        <code class="cn-code">font-variant-numeric: tabular-nums</code> on the
+        sans face, so figures align in columns without mono. Uppercase is
+        scarce: only the eyebrow and the microlabel shout.
       </p>
 
       <Demo
@@ -83,12 +83,12 @@ export default function TypographyPage() {
         </p>
       </Demo>
 
-      <Demo title="cn-value · mono · 600 · 21px" classes="cn-value">
+      <Demo title="cn-value · 650 · 21px · tabular-nums" classes="cn-value">
         <span class="cn-value">1,284</span>
       </Demo>
 
       <Demo
-        title="cn-value-lg · mono · 600 · 28px · colored by --accent"
+        title="cn-value-lg · 650 · 28px · tabular-nums · colored by --accent"
         classes="cn-value-lg"
       >
         <div class="sc-row">
@@ -103,14 +103,14 @@ export default function TypographyPage() {
       </Demo>
 
       <Demo
-        title="cn-meta · mono · 500 · 12px/1.5 · overlay-1"
+        title="cn-meta · 550 · 12px/1.5 · tabular-nums · overlay-1"
         classes="cn-meta"
       >
         <span class="cn-meta">Updated Aug 24, 2026 · 14 members · v3.2.1</span>
       </Demo>
 
       <Demo
-        title="Data columns"
+        title="Tabular numerals"
         classes="cn-value / cn-meta"
       >
         <div style="display:grid; grid-template-columns:auto auto; gap: 6px 28px; justify-items:end;">
@@ -135,22 +135,22 @@ export default function TypographyPage() {
           { name: ".cn-label", values: "sans", default: "650 · 12px · +0.01em", notes: "Field and section labels; sentence case; overlay-2." },
           { name: ".cn-microlabel", values: "sans", default: "700 · 10px · +0.08em · uppercase", notes: "Smallest metadata; one of the two uppercase voices; overlay-1." },
           { name: ".cn-eyebrow", values: "sans", default: "700 · 12px · +0.08em · uppercase · mauve", notes: "Kicker above a display; the other uppercase voice; flex with 8px gap." },
-          { name: ".cn-value", values: "mono", default: "600 · 21px", notes: "Stat numbers." },
-          { name: ".cn-value-lg", values: "mono", default: "600 · 28px", notes: "Hero stat; color: var(--accent). Opt out with a color utility." },
-          { name: ".cn-meta", values: "mono", default: "500 · 12px/1.5", notes: "Timestamps, counts, versions; overlay-1." },
-          { name: ".cn-code", values: "mono", default: "500 · 13px/1.6", notes: "Inline code and machine literals." },
+          { name: ".cn-value", values: "sans", default: "650 · 21px · tabular-nums", notes: "Stat numbers." },
+          { name: ".cn-value-lg", values: "sans", default: "650 · 28px · tabular-nums", notes: "Hero stat; color: var(--accent). Opt out with a color utility." },
+          { name: ".cn-meta", values: "sans", default: "550 · 12px/1.5 · tabular-nums", notes: "Timestamps, counts, versions; overlay-1." },
+          { name: ".cn-code", values: "mono", default: "500 · 13px/1.6 · tabular-nums", notes: "Inline code and machine literals; the one shipped mono role." },
         ]}
       />
 
       <p class="cn-copy">
-        <strong>Voice discipline.</strong> Mono carries code (
-        <code class="cn-code">.cn-code</code>,{" "}
-        <code class="cn-code">.terminal</code>,{" "}
-        <code class="cn-code">.codeblock</code>) and data (
-        <code class="cn-code">.cn-value</code>,{" "}
-        <code class="cn-code">.cn-meta</code>, metric and stat numbers).
-        Prose, headings, labels, and control labels stay sans. If a string is
-        a sentence someone wrote for a person, it does not get mono.
+        <strong>Voice discipline.</strong> The package ships mono in three
+        places: <code class="cn-code">.cn-code</code>,{" "}
+        <code class="cn-code">.terminal</code>, and{" "}
+        <code class="cn-code">.codeblock</code>. Everything else defaults to
+        sans — but mono is not off-limits. In the rare right circumstance any
+        text may take it as a deliberate accent in your own layer; what mono
+        must never become is the default voice for prose, headings, or whole
+        control sets.
       </p>
 
       <Demo title="cn-code · inline machine literals" classes="cn-code">

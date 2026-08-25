@@ -42,10 +42,11 @@
 
 /* ── Type roles ─────────────────────────────────────────────────────────────
    No bare font-family utility exists: pick the role, not the face.
-   Two voices: sans carries prose, labels, and controls; mono carries code
-   and data (.cn-code, .cn-value, .cn-meta, the terminal/codeblock surfaces).
-   Sans-face numbers keep tabular-nums. Uppercase is scarce — only the
-   eyebrow and the microlabel shout; everything else is sentence case.       */
+   Sans is the default voice: every shipped role is sans except .cn-code.
+   Mono is not forbidden elsewhere — in the rare right circumstance any text
+   may take it (a consumer-layer call, not a shipped default). Numbers keep
+   tabular-nums on the sans face. Uppercase is scarce — only the eyebrow and
+   the microlabel shout; everything else is sentence case.                   */
 
 .cn-label {
   font: 650 12px/1 var(--sans);
@@ -61,14 +62,17 @@
   color: var(--overlay-1);
 }
 .cn-value {
-  font: 600 21px/1 var(--mono);
+  font: 650 21px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
 }
 .cn-value-lg {
-  font: 600 28px/1 var(--mono);
+  font: 650 28px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
   color: var(--accent);  /* opt out via a color utility */
 }
 .cn-meta {
-  font: 500 12px/1.5 var(--mono);
+  font: 550 12px/1.5 var(--sans);
+  font-variant-numeric: tabular-nums;
   color: var(--overlay-1);
 }
 .cn-eyebrow {
@@ -84,6 +88,7 @@
 /* Inline code voice — code, CLI strings, machine literals. */
 .cn-code {
   font: 500 13px/1.6 var(--mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .cn-display {

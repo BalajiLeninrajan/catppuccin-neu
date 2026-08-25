@@ -16,11 +16,12 @@ Ground rules:
 - **No exceptional elements.** Every recipe is general purpose. Nothing ships
   as single-use; anything that cannot be generalized lives in a project's own
   local layer instead.
-- **Two voices: sans for prose and controls, mono for code and data.** The
-  mono face carries code contexts (`.cn-code`, `.terminal`, `.codeblock`)
-  and the data roles (`.cn-value`, `.cn-value-lg`, `.cn-meta`, metric and
-  stat numbers). Prose, headings, labels, and control labels are sans;
-  sans-face numbers keep `font-variant-numeric: tabular-nums`.
+- **Sans by default; mono is allowed, not assigned.** Every shipped role
+  and recipe is sans except the code surfaces (`.cn-code`, `.terminal`,
+  `.codeblock`). Mono is not forbidden elsewhere: in the rare right
+  circumstance any text may take it, as a deliberate consumer-layer choice —
+  the system just never makes that choice for you. Sans-face numbers keep
+  `font-variant-numeric: tabular-nums`.
 - **Uppercase is scarce.** Only two voices shout: `.cn-eyebrow` (one per
   page) and `.cn-microlabel` (caps buy legibility at 10px). Every other
   role — labels, field labels, chips, steppers — is sentence case.
@@ -214,19 +215,20 @@ Hover/active variants apply under `:hover:not(:disabled)` /
 
 ### Type roles
 
-No bare font-family utility exists: pick the role, not the face. Sans carries
-prose, labels, and controls; mono carries code and data. Uppercase appears
-only on `.cn-eyebrow` and `.cn-microlabel`.
+No bare font-family utility exists: pick the role, not the face. Every role
+is sans except `.cn-code`; mono elsewhere is a consumer-layer call. Uppercase
+appears only on `.cn-eyebrow` and `.cn-microlabel`.
 
 - `.cn-label`: `650 12px/1 var(--sans)`, `.01em`, sentence case, overlay-2.
 - `.cn-microlabel`: `700 10px/1 var(--sans)` (the one exception to the 12px floor), `.08em`, uppercase, overlay-1.
-- `.cn-value`: `600 21px/1 var(--mono)`.
+- `.cn-value`: `650 21px/1 var(--sans)`, tabular-nums.
 - `.cn-value-lg`: 28px variant, color `var(--accent)` (opt out via a color
   utility).
-- `.cn-meta`: `500 12px/1.5 var(--mono)`, overlay-1.
+- `.cn-meta`: `550 12px/1.5 var(--sans)`, tabular-nums, overlay-1.
 - `.cn-eyebrow`: `700 12px/1 var(--sans)`, `.08em`, uppercase, mauve, flex
   row with 8px gap.
-- `.cn-code`: `500 13px/1.6 var(--mono)`. The inline code voice.
+- `.cn-code`: `500 13px/1.6 var(--mono)`, tabular-nums. The inline code
+  voice, and the only shipped mono role.
 - `.cn-display`: `clamp(32px, 4vw, 46px)`, line-height .98, `-.055em`, weight
   820, `text-wrap: balance`; `em` renders mauve, no italic.
 - `.cn-display-sm`: `clamp(26px, 3.4vw, 36px)`, `-.045em`, weight 820.
@@ -509,9 +511,8 @@ card.
 
 ### Data display
 
-- `.metric`: small label over an oversized mono number
-  (`600 21px var(--mono)`); `.is-hero` is 28px in `var(--accent)`.
-  Stat-row values are `600 12px var(--mono)`.
+- `.metric`: small label over an oversized tabular number
+  (`650 21px var(--sans)`); `.is-hero` is 28px in `var(--accent)`.
 - `.stat-row` / `.stat-strip`: label/value baseline rows separated by
   soft hairlines.
 - `.progress-track`: 7px, 999px radius, `--crust` fill + `--neu-inset-soft`
@@ -666,11 +667,12 @@ at least once.
 3. Every radius resolves to the blessed scale (16/13/10/8/4/999/50%, 6px on
    decorative sub-corners, 12 only via `--pane-radius` under compact
    density) or the band pattern `calc(<parent radius> - 1px)`.
-4. Voice discipline: mono belongs to code contexts (`.cn-code`, `.terminal`,
-   `.codeblock`) and the data roles (`.cn-value`, `.cn-value-lg`, `.cn-meta`,
-   `.metric strong`, `.stat-row b`); flag mono on prose, headings, labels, or
-   control labels. Sans-face numbers get `tabular-nums`. Uppercase appears
-   only on `.cn-eyebrow`/`.eyebrow` and `.cn-microlabel`; flag
+4. Voice discipline: in the package itself, `var(--mono)` appears only in
+   `.cn-code`, `.terminal`, `.codeblock`. In consumer layers mono is legal
+   anywhere as a rare, deliberate accent — flag it only when it reads as a
+   default voice (prose, headings, or whole control sets in mono), not when
+   one element earns it. Sans-face numbers get `tabular-nums`. Uppercase
+   appears only on `.cn-eyebrow`/`.eyebrow` and `.cn-microlabel`; flag
    `text-transform: uppercase` anywhere else.
 5. Transitions .16 to .3s per the documented values (.35s progress); the
    four keyframes only; the reduced-motion block survives.
@@ -754,3 +756,8 @@ above describes only what shipped.
 31. Mono expanded from code-only to code + data: cn-value, cn-value-lg,
     cn-meta, metric numbers, and stat-row values took the mono face
     (mono scarcity check replaced by the voice-discipline check).
+32. Entry 31 reverted: the data roles went back to sans + tabular-nums.
+    What survives is the relaxed doctrine — the package ships mono only on
+    the code surfaces, but consumer layers may set mono on any text in the
+    rare right circumstance; the anti-mono flag now targets mono-as-default,
+    not mono-at-all.

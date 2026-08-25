@@ -43,8 +43,9 @@ export default function StatPage() {
       <p class="cn-copy">
         <code class="cn-code">.is-hero</code> steps the figure up to 28px and
         colors it with <code class="cn-code">var(--accent)</code>, mauve by
-        default. One hero per surface. All figures are mono, so columns of
-        numbers line up.
+        default. One hero per surface. All figures are sans with{" "}
+        <code class="cn-code">tabular-nums</code>, so columns of numbers line
+        up.
       </p>
 
       <Demo title="Stat strip" classes="stat-strip > stat-row">
@@ -80,7 +81,7 @@ export default function StatPage() {
           {
             name: ".metric",
             values: "tile",
-            notes: "Small label <span> over a 21px mono <strong>. No chrome of its own.",
+            notes: "Small label <span> over a 21px tabular <strong>. No chrome of its own.",
           },
           {
             name: ".metric.is-hero",
@@ -91,7 +92,7 @@ export default function StatPage() {
           {
             name: ".stat-row",
             values: "label/value pair",
-            notes: "Baseline-aligned; label overlay-1 sans, value subtext-1 mono.",
+            notes: "Baseline-aligned; label overlay-1, value subtext-1 tabular.",
           },
           {
             name: ".stat-strip",
