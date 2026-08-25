@@ -1131,6 +1131,9 @@ a:active > .accent-card {
   box-shadow: var(--shadow-pop);
   font: 500 11.5px/1.5 var(--sans);
 }
+/* The content column takes the slack, pinning trailing controls to the
+   toast's right edge regardless of text width. */
+.toast > :first-child { flex: 1; min-width: 0; }
 .toast b {
   display: block;
   color: var(--text);
