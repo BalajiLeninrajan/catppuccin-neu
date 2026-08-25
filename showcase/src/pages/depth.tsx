@@ -57,11 +57,11 @@ export default function DepthPage() {
       </p>
 
       <Demo
-        title="Raised with a lit edge"
-        classes="cn-bg-base cn-r-panel cn-raised-lit"
+        title="Raised surface"
+        classes="cn-bg-base cn-r-panel cn-raised"
       >
         <div
-          class="cn-bg-base cn-r-panel cn-raised-lit"
+          class="cn-bg-base cn-r-panel cn-raised"
           style="padding:22px 24px;max-width:420px;display:grid;gap:10px"
         >
           <span class="cn-label">Team activity</span>
@@ -69,13 +69,6 @@ export default function DepthPage() {
           <span class="cn-meta">messages this week · 12 members</span>
         </div>
       </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code">cn-raised-lit</code> adds a 1px inner highlight
-        along the top-left edge, the side facing the light. Reserve it for
-        larger surfaces like panels and hero cards; on small controls the
-        extra edge reads as a border.
-      </p>
 
       <Demo title="Promoted shadows" classes="cn-pop | cn-cast | cn-mark-drop">
         <div
@@ -237,11 +230,6 @@ export default function DepthPage() {
             name: ".cn-raised-soft",
             values: "var(--neu-raised-soft)",
             notes: "Smaller offset and blur at reduced strength. Chips, small controls.",
-          },
-          {
-            name: ".cn-raised-lit",
-            values: "raised + 1px top-left inner highlight",
-            notes: "Larger surfaces only; the highlight faces the light.",
           },
           {
             name: ".cn-inset",

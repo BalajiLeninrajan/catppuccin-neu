@@ -148,7 +148,7 @@ export default function ChipPage() {
             name: ".chip-tone",
             values: "span",
             notes:
-              "Tinted uppercase tag, 4px radius. Tint and hairline edge both derive from --tone.",
+              "Tinted status tag, 4px radius. Tint and hairline edge both derive from --tone.",
           },
           {
             name: "--tone",

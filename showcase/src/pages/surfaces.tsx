@@ -120,7 +120,7 @@ export default function SurfacesPage() {
             name: ".panel",
             values: "raised container",
             notes:
-              "Full neu-raised shadow, hairline edge, lit top-left inset line. Radius from --pane-radius.",
+              "Full neu-raised shadow, hairline edge. Radius from --pane-radius.",
           },
           {
             name: ".panel-heading / .panel-footer",

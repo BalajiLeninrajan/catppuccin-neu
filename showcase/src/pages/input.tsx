@@ -40,7 +40,7 @@ export default function InputPage() {
         An input never paints its own background. On a panel it is carved from
         the panel, on the page from the page. There is no stroke at rest, and
         focus doesn't add one; the mauve ring layers over the inset, so the
-        field never shifts or reflows on focus. Labels are small uppercase
+        field never shifts or reflows on focus. Labels are small sentence-case
         sans. Values are sans with tabular numerals, so amounts and dates
         align in forms the same way they do in tables.
       </p>
@@ -192,7 +192,7 @@ export default function InputPage() {
             name: ".field",
             values: "wrapper around label + input/select/textarea",
             notes:
-              "Styles its label (uppercase micro-sans) and any native control inside it.",
+              "Styles its label (small sentence-case sans) and any native control inside it.",
           },
           {
             name: ".input",

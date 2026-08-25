@@ -16,9 +16,14 @@ Ground rules:
 - **No exceptional elements.** Every recipe is general purpose. Nothing ships
   as single-use; anything that cannot be generalized lives in a project's own
   local layer instead.
-- **Mono is scarce.** The mono face appears only in code-like contexts:
-  `.cn-code`, `.terminal`, `.codeblock`. Every other role is sans. Numbers
-  keep `font-variant-numeric: tabular-nums` on the sans face.
+- **Two voices: sans for prose and controls, mono for code and data.** The
+  mono face carries code contexts (`.cn-code`, `.terminal`, `.codeblock`)
+  and the data roles (`.cn-value`, `.cn-value-lg`, `.cn-meta`, metric and
+  stat numbers). Prose, headings, labels, and control labels are sans;
+  sans-face numbers keep `font-variant-numeric: tabular-nums`.
+- **Uppercase is scarce.** Only two voices shout: `.cn-eyebrow` (one per
+  page) and `.cn-microlabel` (caps buy legibility at 10px). Every other
+  role — labels, field labels, chips, steppers — is sentence case.
 - **Depth replaces borders on inset surfaces.** Inset surfaces are borderless
   and paint no background of their own; the carve defines them. Hairlines
   stay on raised surfaces (where the lit edge needs support) and on tinted
@@ -180,7 +185,6 @@ parameter. Prefix `cn-`.
 |---|---|
 | `.cn-raised` | `var(--neu-raised)` |
 | `.cn-raised-soft` | `var(--neu-raised-soft)` |
-| `.cn-raised-lit` | raised + `inset 1px 1px` surface-2 30% mix (larger surfaces only) |
 | `.cn-inset` | `var(--neu-inset)` |
 | `.cn-inset-soft` | `var(--neu-inset-soft)` |
 | `.cn-pop` | `var(--shadow-pop)` (overlays only, never neu) |
@@ -210,18 +214,19 @@ Hover/active variants apply under `:hover:not(:disabled)` /
 
 ### Type roles
 
-No bare font-family utility exists: pick the role, not the face. All roles are
-sans except `.cn-code`.
+No bare font-family utility exists: pick the role, not the face. Sans carries
+prose, labels, and controls; mono carries code and data. Uppercase appears
+only on `.cn-eyebrow` and `.cn-microlabel`.
 
-- `.cn-label`: `650 12px/1 var(--sans)`, `.04em`, uppercase, overlay-2.
+- `.cn-label`: `650 12px/1 var(--sans)`, `.01em`, sentence case, overlay-2.
 - `.cn-microlabel`: `700 10px/1 var(--sans)` (the one exception to the 12px floor), `.08em`, uppercase, overlay-1.
-- `.cn-value`: `650 21px/1 var(--sans)`, tabular-nums.
+- `.cn-value`: `600 21px/1 var(--mono)`.
 - `.cn-value-lg`: 28px variant, color `var(--accent)` (opt out via a color
   utility).
-- `.cn-meta`: `550 12px/1.5 var(--sans)`, tabular-nums, overlay-1.
+- `.cn-meta`: `500 12px/1.5 var(--mono)`, overlay-1.
 - `.cn-eyebrow`: `700 12px/1 var(--sans)`, `.08em`, uppercase, mauve, flex
   row with 8px gap.
-- `.cn-code`: `500 13px/1.6 var(--mono)`, tabular-nums. The one mono role.
+- `.cn-code`: `500 13px/1.6 var(--mono)`. The inline code voice.
 - `.cn-display`: `clamp(32px, 4vw, 46px)`, line-height .98, `-.055em`, weight
   820, `text-wrap: balance`; `em` renders mauve, no italic.
 - `.cn-display-sm`: `clamp(26px, 3.4vw, 36px)`, `-.045em`, weight 820.
@@ -279,8 +284,7 @@ table styling.
 ### Surfaces
 
 - `.panel`: the primary content container. 1px `cn-edge`-mix border,
-  `var(--pane-radius)`, `--base` background, `--neu-raised` plus the lit
-  top-left inset hairline (surface-2 30% mix).
+  `var(--pane-radius)`, `--base` background, `--neu-raised`.
 - `.panel.is-tilted`: `rotate(1.2deg)` + `10px 10px 0 var(--hard-offset-color)`.
   The one rotated hero card; flattened at 1060px and below.
 - `.panel-heading` / `.panel-footer`: min-height 70px flex bands, padding
@@ -340,7 +344,8 @@ knobs. `.btn`: min-height `var(--control-h)`, padding 0 18px, 10px radius,
 
 ### Inputs
 
-`.field label`: block label, `650 12px/1 var(--sans)`, uppercase, overlay-2.
+`.field label`: block label, `650 12px/1 var(--sans)`, sentence case,
+overlay-2.
 
 `.input` (and `.field input/select/textarea`): a borderless inset well carved
 from whatever surface it sits on. `border: 0`, `background: transparent`,
@@ -398,7 +403,7 @@ half-slide is transient only; the settled state never slides.
 row flow, 12px gap, roomier rows, 17px labels.
 
 `.stepper`: phase track of borderless inset pills (999px radius, `cn-bg-well`
-mix, `--neu-inset-soft`, `650 12px var(--sans)` uppercase). Current phase via
+mix, `--neu-inset-soft`, `650 12px var(--sans)`). Current phase via
 `.active` or `[aria-current="step"]` (mauve + mauve 8% wash); completed via
 `.is-done` (green).
 
@@ -410,7 +415,7 @@ mix, `--neu-inset-soft`, `650 12px var(--sans)` uppercase). Current phase via
 - `.chip`: outlined pill, `--base`, `--neu-raised-soft`,
   `600 12px var(--sans)` tabular.
 - `.chip-tone`: tinted status tag, 4px radius, tone 8% wash, tone 45%
-  hairline, `750 12px var(--sans)` uppercase. Pass the color via `.cn-tone-*`.
+  hairline, `650 12px var(--sans)`. Pass the color via `.cn-tone-*`.
 - `.banner`: semantic tint band, 10px radius, tone 7% wash, tone 25% into
   surface-0 edge, `--neu-inset-soft`, 12px text.
 
@@ -431,7 +436,7 @@ gap, sans 13px; `:has(:disabled)` dims to `.5`.
   `.live-dot` pattern).
 - `.switch`: an abstract light switch, 50x28, 8px radius, transparent carved
   plate (`--neu-inset`). The `::after` paddle (21x22, 6px radius, `--base`,
-  raised-soft + lit edge, hairline) tilts `perspective(120px) rotateY(16deg)`
+  raised-soft, hairline) tilts `perspective(120px) rotateY(16deg)`
   at rest; checked slides it `translate 23px`, flips the tilt to -16deg, and
   lights it mauve with a whisper glow
   (`0 0 6px color-mix(in srgb, var(--mauve) 18%, transparent)` + the white
@@ -504,8 +509,9 @@ card.
 
 ### Data display
 
-- `.metric`: micro-label over an oversized tabular number
-  (`650 21px var(--sans)`); `.is-hero` is 28px in `var(--accent)`.
+- `.metric`: small label over an oversized mono number
+  (`600 21px var(--mono)`); `.is-hero` is 28px in `var(--accent)`.
+  Stat-row values are `600 12px var(--mono)`.
 - `.stat-row` / `.stat-strip`: label/value baseline rows separated by
   soft hairlines.
 - `.progress-track`: 7px, 999px radius, `--crust` fill + `--neu-inset-soft`
@@ -585,7 +591,7 @@ entrance only. The reduced-motion block collapses all of it.
 Three breakpoints, always these three. Each removes decoration before it
 removes content.
 
-- **1060**: the tilted card flattens (back to raised-lit), secondary nav
+- **1060**: the tilted card flattens (back to raised), secondary nav
   hides, topbar collapses to two columns.
 - **760**: tighter topbar, glyph chips go icon-only (font-size 0, keep the
   glyph and an accessible name), display type steps down, panel footers
@@ -647,8 +653,8 @@ at least once.
 1. Every `box-shadow` in utilities/recipes is one of: the four neu tokens,
    `--shadow-pop/cast/mark`, the hard-offset family (`var(--hard-offset)`
    and its half-press, `10px`, `3px`), the focus ring `0 0 0 2px` mauve
-   layered on an inset, or a documented composite: the lit-edge insets
-   (surface mixes and the two blessed whites), the halo ring
+   layered on an inset, or a documented composite: the two blessed white
+   insets, the accent-card's accent-mix inset, the cast hairline, the halo ring
    `0 0 0 Npx color-mix(… 13%, transparent)` used by `.radio` and
    `.live-dot`, the avatar-stack ground ring `0 0 0 2px var(--base)`, and
    the switch glow `0 0 6px` mauve 18%.
@@ -660,8 +666,12 @@ at least once.
 3. Every radius resolves to the blessed scale (16/13/10/8/4/999/50%, 6px on
    decorative sub-corners, 12 only via `--pane-radius` under compact
    density) or the band pattern `calc(<parent radius> - 1px)`.
-4. Mono scarcity: flag any `var(--mono)` outside `.cn-code`, `.terminal`,
-   `.codeblock`. Numbers get `tabular-nums` on the sans face.
+4. Voice discipline: mono belongs to code contexts (`.cn-code`, `.terminal`,
+   `.codeblock`) and the data roles (`.cn-value`, `.cn-value-lg`, `.cn-meta`,
+   `.metric strong`, `.stat-row b`); flag mono on prose, headings, labels, or
+   control labels. Sans-face numbers get `tabular-nums`. Uppercase appears
+   only on `.cn-eyebrow`/`.eyebrow` and `.cn-microlabel`; flag
+   `text-transform: uppercase` anywhere else.
 5. Transitions .16 to .3s per the documented values (.35s progress); the
    four keyframes only; the reduced-motion block survives.
 6. `:focus-visible` outline never removed, except the documented input case
@@ -734,3 +744,13 @@ above describes only what shipped.
 28. Type scale compressed twice: display clamps to 46px (was 64),
     display-sm to 36px; the type floor rose to 12px (cn-microlabel excepted
     at 10px), and cn-copy rose to 14px.
+29. The lit top-left inset edge retired everywhere neutral: `.cn-raised-lit`
+    deleted; panel, tilted-card fallback, and the switch paddle dropped it.
+    Kept: the two blessed whites, the accent-card's accent-mix inset, the
+    cast hairline.
+30. Uppercase made scarce: only eyebrow and microlabel keep caps; cn-label,
+    field labels, chip-tone, and stepper went sentence case (chip-tone
+    750→650).
+31. Mono expanded from code-only to code + data: cn-value, cn-value-lg,
+    cn-meta, metric numbers, and stat-row values took the mono face
+    (mono scarcity check replaced by the voice-discipline check).
