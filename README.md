@@ -24,7 +24,7 @@ package. This file covers how to consume it.
 As a git dependency, with a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.0
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.1
 ```
 
 ```js

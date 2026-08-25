@@ -5,7 +5,7 @@ const LAYER_CODE = `@layer cn.tokens, cn.utilities, cn.recipes;
 @import "./utilities.css" layer(cn.utilities);
 @import "./recipes.css" layer(cn.recipes);`;
 
-const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.0`;
+const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.1`;
 
 const IMPORT_CODE = `/* your entry stylesheet */
 @import "catppuccin-neu/css/index.css";`;
