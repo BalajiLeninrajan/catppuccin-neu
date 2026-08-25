@@ -24,7 +24,7 @@ function ToastSpawner() {
     const id = ++idRef.current;
     const { title, desc } = MESSAGES[msgRef.current++ % MESSAGES.length];
     setToasts((t) => [...t, { id, title, desc, leaving: false }]);
-    setTimeout(() => dismiss(id), 3600);
+    setTimeout(() => dismiss(id), 7000);
   }
 
   // Two-phase: hidden plays the exit transition, then the element unmounts.
@@ -94,7 +94,7 @@ export default function ToastPage() {
         reader might want to keep.
       </p>
 
-      <Demo title="Spawner, auto-dismisses after 3.6s" classes="toast-stack toast">
+      <Demo title="Spawner, auto-dismisses after 7s" classes="toast-stack toast">
         <ToastSpawner />
       </Demo>
 
