@@ -1,6 +1,10 @@
 {
   "name": "catppuccin-neu",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BalajiLeninrajan/catppuccin-neu.git"
+  },
   "description": "Catppuccin Mocha + neumorphic dark design system: tokens, utilities, and recipes in three cascade layers.",
   "type": "module",
   "license": "MIT",
