@@ -42,9 +42,13 @@ Ground rules:
 
 ## Distribution
 
-Consumed as an npm dependency via git URL
-(`github:BalajiLeninrajan/catppuccin-neu#<tag>`). Zero-build consumers vendor the CSS
-via `scripts/sync.mjs`. No CDN. The repo is public at
+Every consumer vendors the CSS via `scripts/sync.mjs` and commits the four
+files — zero-build surfaces into their served directory, bundled apps into a
+`vendor/` dir they import relatively. The git dep
+(`github:BalajiLeninrajan/catppuccin-neu#<tag>`) stays as a devDependency: it
+pins the version, provides the `catppuccin-neu-sync` bin, and supplies the
+Tailwind preset where used — but no build imports from node_modules. A version
+bump is: bump the pin, re-run sync, commit. No CDN. The repo is public at
 github.com/BalajiLeninrajan/catppuccin-neu, tagged v0.1.0; the docs deploy as
 the `catppuccin-neu` Cloudflare Worker at
 https://catppuccin-neu.balajileninrajan.dev.
@@ -771,3 +775,7 @@ above describes only what shipped.
     mauve-pink-peach ramp — the `--ring-ground` fallback pattern.
 34. The tilted hero composes its hard offset over `--neu-raised`: the flat
     offset alone ignored the top-left light and read as a sticker.
+35. Vendoring became the rule for every consumer, bundled apps included:
+    sync + commit the four CSS files, import them relatively; the git dep
+    remains only to pin the version and drive the sync (and the Tailwind
+    preset). No build imports the CSS from node_modules.
