@@ -24,7 +24,7 @@ function ToastSpawner() {
   const leavingRef = useRef(new Set<number>());
 
   const DURATION = 7000;
-  const EXIT_MS = 240; // matches the .2s exit transition
+  const EXIT_MS = 280; // covers the fade and the fanned row collapse
   const CAP = 5;
 
   function schedule(id: number, ms: number) {
@@ -201,7 +201,7 @@ function dismiss(id) {
   clearTimeout(timers.current.get(id)?.handle);
   timers.current.delete(id);
   setToasts((t) => t.map((x) => (x.id === id ? { ...x, leaving: true } : x)));
-  setTimeout(() => remove(id), 240);        // matches the .2s exit
+  setTimeout(() => remove(id), 280);        // covers fade + row collapse
 }
 
 // on the stack: onMouseEnter/onFocusIn -> pause, onMouseLeave/onFocusOut -> resume

@@ -1159,6 +1159,17 @@ a:active > .accent-card {
   width: auto;
   z-index: 1;
 }
+/* Fanned, the exiting toast instead stays in flow and collapses its row, so
+   the toasts above it ride down with the transition. The negative margin
+   swallows the flex gap its slot leaves behind. */
+.toast-stack:is(:hover, :focus-within) .toast[hidden] {
+  position: static;
+  max-height: 0;
+  margin-bottom: -10px;
+  padding-block: 0;
+  border-block-width: 0;
+  overflow: clip;
+}
 .toast-stack:not(:hover):not(:focus-within) .toast:not([hidden]):has(~ .toast:not([hidden])) {
   position: absolute;
   inset: 0;
@@ -1178,6 +1189,8 @@ a:active > .accent-card {
   visibility: hidden;
 }
 .toast {
+  /* Caps nothing in practice; exists so the fanned exit can animate height. */
+  max-height: 140px;
   max-width: 100%;
   padding: 14px 16px;
   display: flex;
@@ -1226,7 +1239,7 @@ a:active > .accent-card {
 .drawer  { transition-duration: .26s; }
 /* The toast travels on the `translate` property (transform stays free for
    consumers); .26s to match the drawer's travel tier. */
-.toast   { transition: opacity .2s ease, translate .2s ease, scale .2s ease, visibility .2s; }
+.toast   { transition: opacity .2s ease, translate .2s ease, scale .2s ease, visibility .25s, max-height .25s ease, margin .25s ease, padding .25s ease, border-width .25s ease; }
 
 /* Exit targets — mirrored as pre-entry states in @starting-style below. */
 .cn-scrim[hidden] { display: block; visibility: hidden; opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
