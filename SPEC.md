@@ -213,23 +213,23 @@ Hover/active variants apply under `:hover:not(:disabled)` /
 No bare font-family utility exists: pick the role, not the face. All roles are
 sans except `.cn-code`.
 
-- `.cn-label`: `650 11px/1 var(--sans)`, `.04em`, uppercase, overlay-2.
-- `.cn-microlabel`: `700 10px/1 var(--sans)`, `.08em`, uppercase, overlay-1.
+- `.cn-label`: `650 12px/1 var(--sans)`, `.04em`, uppercase, overlay-2.
+- `.cn-microlabel`: `700 12px/1 var(--sans)`, `.08em`, uppercase, overlay-1.
 - `.cn-value`: `650 21px/1 var(--sans)`, tabular-nums.
 - `.cn-value-lg`: 28px variant, color `var(--accent)` (opt out via a color
   utility).
-- `.cn-meta`: `550 11px/1.5 var(--sans)`, tabular-nums, overlay-1.
-- `.cn-eyebrow`: `700 11px/1 var(--sans)`, `.08em`, uppercase, mauve, flex
+- `.cn-meta`: `550 12px/1.5 var(--sans)`, tabular-nums, overlay-1.
+- `.cn-eyebrow`: `700 12px/1 var(--sans)`, `.08em`, uppercase, mauve, flex
   row with 8px gap.
 - `.cn-code`: `500 13px/1.6 var(--mono)`, tabular-nums. The one mono role.
-- `.cn-display`: `clamp(36px, 4.6vw, 56px)`, line-height .98, `-.055em`, weight
+- `.cn-display`: `clamp(32px, 4vw, 46px)`, line-height .98, `-.055em`, weight
   820, `text-wrap: balance`; `em` renders mauve, no italic.
-- `.cn-display-sm`: `clamp(28px, 4vw, 42px)`, `-.045em`, weight 820.
+- `.cn-display-sm`: `clamp(26px, 3.4vw, 36px)`, `-.045em`, weight 820.
 - `.cn-title`: 20px, weight 800, `-.03em`.
 - `.cn-name`: `700 13px/1.3 var(--sans)`, `var(--text)` (emphasized proper
   names).
 - `.cn-lede`: 16px/1.65, subtext-1, max-width 690px.
-- `.cn-copy`: 13px/1.6, subtext-0.
+- `.cn-copy`: 14px/1.6, subtext-0.
 
 ### Color
 
@@ -303,7 +303,7 @@ table styling.
   visibly runs past the fold.
 - `.terminal`: the deepest well. 10px radius, `--crust` fill (deliberate: a
   code surface keeps its fill), `--neu-inset`, borderless. `pre` in
-  `500 11px/1.65 var(--mono)`; `.caret` is a 6x14 blinking block in
+  `500 12px/1.65 var(--mono)`; `.caret` is a 6x14 blinking block in
   `var(--accent)`.
 - `.topbar`: sticky, min-height 68px, translucent base (91%) + `blur(14px)`,
   bottom hairline, `--shadow-cast` + lit hairline. Three-column grid.
@@ -340,7 +340,7 @@ knobs. `.btn`: min-height `var(--control-h)`, padding 0 18px, 10px radius,
 
 ### Inputs
 
-`.field label`: block label, `650 11px/1 var(--sans)`, uppercase, overlay-2.
+`.field label`: block label, `650 12px/1 var(--sans)`, uppercase, overlay-2.
 
 `.input` (and `.field input/select/textarea`): a borderless inset well carved
 from whatever surface it sits on. `border: 0`, `background: transparent`,
@@ -363,7 +363,7 @@ from whatever surface it sits on. `border: 0`, `background: transparent`,
   the input pads to 44px.
 - Validation: `.is-error` / `.is-warning` on `.field` or a bare `.input` set
   `--tone` (red / peach) and ring the well `0 0 0 2px var(--tone)` over the
-  inset, staying through focus; label and `.field small` (the 11px helper or
+  inset, staying through focus; label and `.field small` (the 12px helper or
   message line) tint with it. Disabled wins over both by source order. Set
   `aria-invalid` alongside `.is-error`.
 
@@ -398,19 +398,19 @@ half-slide is transient only; the settled state never slides.
 row flow, 12px gap, roomier rows, 17px labels.
 
 `.stepper`: phase track of borderless inset pills (999px radius, `cn-bg-well`
-mix, `--neu-inset-soft`, `650 10px var(--sans)` uppercase). Current phase via
+mix, `--neu-inset-soft`, `650 12px var(--sans)` uppercase). Current phase via
 `.active` or `[aria-current="step"]` (mauve + mauve 8% wash); completed via
 `.is-done` (green).
 
 ### Marks, chips, banners
 
 - `.mark-solid`: 28px solid square in `var(--accent)`, crust glyph, 8px
-  radius, `--shadow-mark`, currentColor 14% edge, `800 11px var(--sans)`
+  radius, `--shadow-mark`, currentColor 14% edge, `800 12px var(--sans)`
   tabular.
 - `.chip`: outlined pill, `--base`, `--neu-raised-soft`,
-  `600 11px var(--sans)` tabular.
+  `600 12px var(--sans)` tabular.
 - `.chip-tone`: tinted status tag, 4px radius, tone 8% wash, tone 45%
-  hairline, `750 9px var(--sans)` uppercase. Pass the color via `.cn-tone-*`.
+  hairline, `750 12px var(--sans)` uppercase. Pass the color via `.cn-tone-*`.
 - `.banner`: semantic tint band, 10px radius, tone 7% wash, tone 25% into
   surface-0 edge, `--neu-inset-soft`, 12px text.
 
@@ -475,7 +475,7 @@ trade: checkbox semantics instead of disclosure semantics.
 ### Avatar
 
 `.avatar`: initials or an image on an accent-tinted round. 32px, accent 14%
-into mantle, accent 38% edge, `--neu-raised-soft`, `700 11px var(--sans)`.
+into mantle, accent 38% edge, `--neu-raised-soft`, `700 12px var(--sans)`.
 `.is-lg` is 44px. `.avatar-stack`: -8px overlap; stacked avatars ring
 themselves with the page ground (`0 0 0 2px var(--base)` added to the soft
 raise).
@@ -513,7 +513,7 @@ card.
   inherits the radius (no overflow clipping) and runs the
   mauve-pink-peach gradient; width transitions .35s.
 - `.table-neu`: opt-in class on `<table>`; scopes all table styling. Header:
-  `cn-bg-head` mix, `650 10px var(--sans)`, overlay-1. Cells:
+  `cn-bg-head` mix, `650 12px var(--sans)`, overlay-1. Cells:
   `600 13px var(--sans)` tabular, subtext-1. Row hover presses in: mauve 5%
   wash + `--neu-inset-soft` on the cells, not the row (with border-collapse
   a td radius cannot clip a tr background, so cell fills stay inside a
@@ -731,5 +731,6 @@ above describes only what shipped.
 27. Toast behavior declared consumer code; the docs spawner became the
     Preact reference (cancelable timers, pause on hover, cap, guarded
     two-phase exit).
-28. Type scale compressed: display clamps to 56px (was 64), display-sm to
-    42px; the 8px and 9px micro sizes rose to 9px and 10px.
+28. Type scale compressed twice: display clamps to 46px (was 64),
+    display-sm to 36px; the type floor rose to 12px (every micro size),
+    and cn-copy rose to 14px.

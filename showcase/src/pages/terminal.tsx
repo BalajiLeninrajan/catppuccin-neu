@@ -97,7 +97,7 @@ export default function TerminalPage() {
             name: ".terminal pre",
             values: "content",
             notes:
-              "500 11px/1.65 var(--mono). Wraps; scrolls on overflow.",
+              "500 12px/1.65 var(--mono). Wraps; scrolls on overflow.",
           },
           {
             name: ".terminal .caret",

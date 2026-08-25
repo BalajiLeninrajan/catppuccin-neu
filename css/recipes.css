@@ -91,7 +91,7 @@
   color: var(--subtext-1);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font: 500 11px/1.65 var(--mono);
+  font: 500 12px/1.65 var(--mono);
   scrollbar-color: var(--surface-1) transparent;
 }
 .terminal .caret {
@@ -297,7 +297,7 @@
   display: block;
   margin: 0 0 7px 1px;
   color: var(--overlay-2);
-  font: 650 11px/1 var(--sans);
+  font: 650 12px/1 var(--sans);
   letter-spacing: .04em;
   text-transform: uppercase;
 }
@@ -346,7 +346,7 @@
   display: block;
   margin: 6px 1px 0;
   color: var(--overlay-1);
-  font: 500 11px/1.4 var(--sans);
+  font: 500 12px/1.4 var(--sans);
 }
 /* Validation: the state sets the tone, and a tone ring layers over the
    inset, staying through focus. Set aria-invalid alongside .is-error. */
@@ -445,7 +445,7 @@
   border-radius: 8px;
   background: var(--base);
   box-shadow: var(--shadow-pop);
-  font: 500 11px/1.45 var(--sans);
+  font: 500 12px/1.45 var(--sans);
   letter-spacing: normal;
   text-transform: none;
   opacity: 0;
@@ -523,7 +523,7 @@
 }
 .segmented b { font-family: var(--sans); font-size: 13px; font-weight: 750; }
 .segmented .active b { color: var(--mauve); }
-.segmented small { color: var(--overlay-2); font-size: 11px; }
+.segmented small { color: var(--overlay-2); font-size: 12px; }
 .segmented label:has(input:focus-visible) {
   outline: 2px solid var(--mauve);
   outline-offset: 3px;
@@ -553,7 +553,7 @@
   border-radius: 999px;
   background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
   box-shadow: var(--neu-inset-soft);
-  font: 650 10px/1 var(--sans);
+  font: 650 12px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -576,7 +576,7 @@
   border-radius: 8px;
   background: var(--accent);
   box-shadow: var(--shadow-mark);
-  font: 800 11px/1 var(--sans);
+  font: 800 12px/1 var(--sans);
   font-variant-numeric: tabular-nums;
 }
 
@@ -589,7 +589,7 @@
   border-radius: 999px;
   background: var(--base);
   box-shadow: var(--neu-raised-soft);
-  font: 600 11px/1 var(--sans);
+  font: 600 12px/1 var(--sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -603,7 +603,7 @@
   border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
   border-radius: 4px;
   background: color-mix(in srgb, var(--tone) 8%, transparent);
-  font: 750 9px/1 var(--sans);
+  font: 750 12px/1 var(--sans);
   text-transform: uppercase;
 }
 
@@ -851,7 +851,7 @@
   border-radius: 50%;
   background: color-mix(in srgb, var(--accent) 14%, var(--mantle));
   box-shadow: var(--neu-raised-soft);
-  font: 700 11px/1 var(--sans);
+  font: 700 12px/1 var(--sans);
   letter-spacing: .02em;
   user-select: none;
 }
@@ -960,7 +960,7 @@ a:active > .accent-card {
 .metric { min-width: 0; padding: 12px 13px; display: flex; flex-direction: column; gap: 6px; }
 .metric span {
   color: var(--overlay-1);
-  font: 650 10px var(--sans);
+  font: 650 12px var(--sans);
 }
 .metric strong { font: 650 21px/1 var(--sans); font-variant-numeric: tabular-nums; }
 .metric.is-hero strong { font-size: 28px; color: var(--accent); }
@@ -972,7 +972,7 @@ a:active > .accent-card {
   justify-content: space-between;
   gap: 12px;
   color: var(--overlay-1);
-  font: 650 10px var(--sans);
+  font: 650 12px var(--sans);
 }
 .stat-row b {
   color: var(--subtext-1);
@@ -1009,7 +1009,7 @@ a:active > .accent-card {
   border-bottom: 1px solid var(--surface-0);
   background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
   text-align: left;
-  font: 650 10px var(--sans);
+  font: 650 12px var(--sans);
 }
 .table-neu td {
   padding: 14px;
@@ -1028,7 +1028,7 @@ a:active > .accent-card {
 }
 /* Emphasized name cell — full-strength primary line, quiet secondary line. */
 .table-neu .cell-name strong { color: var(--text); font: 700 13px var(--sans); }
-.table-neu .cell-name small  { color: var(--overlay-2); font: 500 10px var(--sans); }
+.table-neu .cell-name small  { color: var(--overlay-2); font: 500 12px var(--sans); }
 
 /* Ranked row — ordered list line: rank mark, name, trailing value. */
 .ranked-row {
@@ -1201,7 +1201,7 @@ a:active > .accent-card {
   border-radius: 13px;
   background: var(--base);
   box-shadow: var(--shadow-pop);
-  font: 500 11.5px/1.5 var(--sans);
+  font: 500 12px/1.5 var(--sans);
 }
 /* The content column takes the slack, pinning trailing controls to the
    toast's right edge regardless of text width. */
@@ -1215,7 +1215,7 @@ a:active > .accent-card {
 .toast p {
   margin: 0;
   color: var(--subtext-0);
-  font: 500 11.5px/1.5 var(--sans);
+  font: 500 12px/1.5 var(--sans);
 }
 
 /* ── Overlay motion ──────────────────────────────────────────────────────────
@@ -1272,7 +1272,7 @@ a:active > .accent-card {
   display: flex; align-items: center; gap: 8px;
   margin-bottom: 13px;
   color: var(--mauve);
-  font: 700 11px/1 var(--sans);
+  font: 700 12px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -1296,8 +1296,8 @@ a:active > .accent-card {
   color: var(--overlay-1);
   border-top: 1px solid var(--surface-0);
 }
-.footer-neu span { font: 700 11px var(--sans); }
-.footer-neu p { margin: 0; font: 500 10px var(--sans); }
+.footer-neu span { font: 700 12px var(--sans); }
+.footer-neu p { margin: 0; font: 500 12px var(--sans); }
 
 /* ── Responsive ─────────────────────────────────────────────────────────────
    Three breakpoints, always these three. Each one removes decoration before
@@ -1353,7 +1353,7 @@ a:active > .accent-card {
   .table-neu td[data-label]::before {
     content: attr(data-label);
     color: var(--overlay-1);
-    font: 650 9px var(--sans);
+    font: 650 12px var(--sans);
   }
 }
 

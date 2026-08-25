@@ -88,7 +88,7 @@ export default function AvatarPage() {
             name: ".avatar",
             values: "initials text or one img",
             notes:
-              "32px round, sans 700 11px. Accent text, 14% accent tint over mantle, 38% accent hairline.",
+              "32px round, sans 700 12px. Accent text, 14% accent tint over mantle, 38% accent hairline.",
           },
           {
             name: ".is-lg",
