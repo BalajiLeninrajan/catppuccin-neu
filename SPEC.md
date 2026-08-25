@@ -550,8 +550,7 @@ element.
 
 Specs: scrim fades and un-blurs .2s; modal fades + rises 8px + scales
 .98 to 1 (.2s); drawer slides from the right edge (.26s); popover fades +
-drops 4px (.16s); toast fades + slides in from the right edge on the
-`translate` property (.26s, the drawer's travel tier). A modal or drawer inside a
+drops 4px (.16s); toast fades + rises 6px (.2s). A modal or drawer inside a
 scrim rides the scrim's `[hidden]`. The motion rules sit after the component
 blocks so `[hidden]` wins. Consumers that unmount instead of hiding get the
 entrance only. The reduced-motion block collapses all of it.

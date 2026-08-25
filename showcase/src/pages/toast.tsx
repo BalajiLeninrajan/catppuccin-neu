@@ -2,7 +2,7 @@ import { useRef, useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const MESSAGES = [
-  { title: "Invoice sent", desc: "Invoice #1042 is on its way to Accounts." },
+  { title: "Event created", desc: "Sunday, December 3 at 9:00 AM" },
   { title: "Settings saved", desc: "Northwind Ops picks up the change now." },
   { title: "Message archived", desc: "Find it under Archive whenever you need it." },
   { title: "Teammates added", desc: "3 people joined the Design workspace." },
@@ -87,7 +87,7 @@ export default function ToastPage() {
       </p>
 
       <p class="cn-copy">
-        Toasts slide in from the right edge, like the drawer. The exit animates only if
+        Toasts fade in, rising 6px. The exit animates only if
         the toast stays mounted and <code class="cn-code">hidden</code> is toggled;
         unmount it after the transition. Unmounting directly gets the entrance only.
         Auto-dismiss after a few seconds and keep a manual dismiss for anything a
@@ -101,8 +101,8 @@ export default function ToastPage() {
       <Demo title="At rest, one item outside its stack" row>
         <div class="toast" role="status">
           <div>
-            <b>Invoice sent</b>
-            <span>Invoice #1042 is on its way to Accounts.</span>
+            <b>Event created</b>
+            <span>Sunday, December 3 at 9:00 AM</span>
           </div>
           <button type="button" class="btn-icon" aria-label="Dismiss">
             ✕
@@ -160,7 +160,7 @@ export default function ToastPage() {
             values: "exit state",
             default: "—",
             notes:
-              "Toggle on a mounted toast to slide it back out (.26s), then unmount. Unmounting directly gets the entrance only.",
+              "Toggle on a mounted toast to fade it back down (.2s), then unmount. Unmounting directly gets the entrance only.",
           },
         ]}
       />
@@ -170,8 +170,8 @@ export default function ToastPage() {
         code={`<div class="toast-stack" aria-live="polite">
   <div class="toast" role="status">
     <div>
-      <b>Invoice sent</b>
-      <span>Invoice #1042 is on its way to Accounts.</span>
+      <b>Event created</b>
+      <span>Sunday, December 3 at 9:00 AM</span>
     </div>
     <button class="btn-icon" aria-label="Dismiss">✕</button>
   </div>
