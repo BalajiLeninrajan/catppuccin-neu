@@ -136,6 +136,10 @@
    density knobs.                                                            */
 
 .btn {
+  /* Neutral base so a variant-less .btn never shows UA button chrome. */
+  color: inherit;
+  border: 1px solid transparent;
+  background: transparent;
   min-height: var(--control-h);
   padding: 0 18px;
   display: inline-flex;
@@ -802,6 +806,17 @@
    collapsed wrapper at its own height, margins clip away with the fold. */
 .accordion .fold > * > :last-child { margin-bottom: 16px; }
 
+/* Spinner — a 16px accent-keyed ring on the spin keyframe. */
+.spinner {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  border: 2px solid color-mix(in srgb, var(--surface-2) 45%, transparent);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
 /* ── Avatar — initials or an image on an accent-tinted round ────────────── */
 
 .avatar {
@@ -824,7 +839,9 @@
 .avatar.is-lg { width: 44px; height: 44px; font-size: 14px; }
 /* Overlapping stack: later avatars ring themselves with the page ground. */
 .avatar-stack { display: inline-flex; }
-.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), 0 0 0 2px var(--base); }
+/* The ring matches the surface behind the stack; set --ring-ground when the
+   stack sits on a panel or mantle band. */
+.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), 0 0 0 2px var(--ring-ground, var(--base)); }
 .avatar-stack .avatar + .avatar { margin-left: -8px; }
 
 /* ── Code block — a carved snippet well; mono is for code ───────────────── */

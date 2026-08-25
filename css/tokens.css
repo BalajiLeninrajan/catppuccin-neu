@@ -36,7 +36,7 @@
   --soft: var(--subtext-1);
 
   --sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono", "JetBrains Mono",
+  --mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono",
           ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* Neumorphic depth. Light source is top-left: dark shadow bottom-right,
@@ -45,7 +45,7 @@
      review 2026-08-24; the pairs are no longer strict halves),
      so each pair reads as two distinct elevations at a glance. */
   --neu-dark: rgb(17 17 27 / .66);
-  --neu-dark-soft: rgb(17 17 27 / .30);
+  --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
   --neu-raised: 8px 8px 18px var(--neu-dark), -4px -4px 10px rgb(69 71 90 / .22);
   --neu-raised-soft: 3px 3px 8px rgb(17 17 27 / .44), -2px -2px 5px rgb(69 71 90 / .16);
   --neu-inset: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);

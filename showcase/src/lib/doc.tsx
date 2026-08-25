@@ -150,8 +150,8 @@ export function Props({ title, rows }: PropsProps) {
                 <td data-label="Name" class="cell-name">
                   <code class="cn-code">{r.name}</code>
                 </td>
-                <td data-label="Values">{r.values ?? "—"}</td>
-                <td data-label="Default">{r.default ?? "—"}</td>
+                <td data-label="Values">{r.values ?? "·"}</td>
+                <td data-label="Default">{r.default ?? "·"}</td>
                 <td data-label="Notes">{r.notes ?? ""}</td>
               </tr>
             ))}

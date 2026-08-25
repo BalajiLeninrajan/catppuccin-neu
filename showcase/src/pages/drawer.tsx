@@ -121,37 +121,37 @@ export default function DrawerPage() {
           {
             name: ".drawer",
             values: "child of .cn-scrim",
-            default: "—",
+            default: "·",
             notes: "width min(420px, 100vw − 40px); right-pinned flex column; z-index 80; --shadow-pop.",
           },
           {
             name: ".cn-scrim",
             values: "fixed inset overlay",
-            default: "—",
+            default: "·",
             notes: "Crust wash + blur behind the sheet; z-index 70.",
           },
           {
             name: ".drawer > header",
             values: "compose .cn-bg-head",
-            default: "—",
+            default: "·",
             notes: "Recipe-owned flex band, 62px min-height. Square corners; no radius rules needed.",
           },
           {
             name: "[hidden]",
             values: "exit state",
-            default: "—",
+            default: "·",
             notes: "Toggle on the mounted scrim to play the slide-out; unmounting gets the entrance only.",
           },
           {
             name: "footer band",
             values: ".panel-footer",
-            default: "—",
+            default: "·",
             notes: "No fill; the divider line separates it. margin-top: auto pins it down.",
           },
           {
             name: "border-left",
             values: "1px solid var(--surface-1)",
-            default: "—",
+            default: "·",
             notes: "The one hairline; the pop shadow does the rest of the separation.",
           },
         ]}

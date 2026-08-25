@@ -62,8 +62,12 @@
      literal token values are repeated here to avoid a self-referential var(). */
   --shadow-pop: 0 24px 70px rgb(17 17 27 / .78);
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);
-  --shadow-hard: 4px 4px 0 var(--hard-offset-color);
+  --shadow-hard: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color);
   --shadow-hard-lg: 10px 10px 0 var(--hard-offset-color);
+  --shadow-hard-sm: 3px 3px 0 var(--hard-offset-color);
+  /* Literal repeated: the theme namespace collides with the token name,
+     same as pop and cast above. */
+  --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);
 
   /* Density knobs — spacing entries so h-control / min-h-input resolve */
   --spacing-control: var(--control-h);

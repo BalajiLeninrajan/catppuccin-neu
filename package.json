@@ -12,6 +12,7 @@
     "README.md"
   ],
   "exports": {
+    ".": "./css/index.css",
     "./css/*": "./css/*",
     "./tailwind/*": "./tailwind/*",
     "./scripts/*": "./scripts/*"

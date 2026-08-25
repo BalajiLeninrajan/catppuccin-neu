@@ -530,9 +530,12 @@ All float on `--shadow-pop`, never neu.
 - `.toast-stack`: the toast viewport, fixed 20px from the right and bottom,
   z-index 90, column flex aligned to the end, 10px gap,
   `min(380px, calc(100vw - 40px))` wide; toasts append at the bottom. At rest
-  the stack collapses (grid, one cell): newest on top, the two older toasts
-  peek behind at `-14px scale(.95)` and `-26px scale(.9)`, the fourth and
-  older hidden; `:hover` or `:focus-within` fans it back into the column.
+  the stack collapses: only the newest visible toast stays in flow (the
+  stack is exactly its size); older visible toasts pin absolutely to that
+  same box with `overflow: clip`, lifted behind it at `-12px scale(.96)` and
+  `-22px scale(.92)`, the fourth and older hidden. Depth counts visible
+  toasts only, so an exiting `[hidden]` toast never shifts the pile.
+  `:hover` or `:focus-within` fans it back into the column.
 - `.toast`: one stack item, shadcn-shaped: a flex row holding a content
   column (`b` title over a span/p description) plus trailing controls
   (`.btn-text` action and/or `.btn-icon` close). 13px radius, neutral

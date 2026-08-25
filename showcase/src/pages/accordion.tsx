@@ -44,9 +44,34 @@ export default function AccordionPage() {
 
       <p class="cn-copy">
         The whole label is the hit target; Space toggles the focused input.
-        Use radios sharing a <code class="cn-code">name</code> when only one
-        item may be open. Closed content leaves the tab order and the
-        accessibility tree.
+        Closed content leaves the tab order and the accessibility tree.
+      </p>
+
+      <Demo title="Exclusive group, radios sharing a name" classes="accordion > label > input[type=radio]">
+        <div style="width:min(640px,100%)">
+          {[
+            ["Monthly billing", "One invoice per workspace on the 1st.", true],
+            ["Annual billing", "Two months free, invoiced in January.", false],
+          ].map(([title, body, open]) => (
+            <div class="accordion" key={title as string}>
+              <label>
+                <input type="radio" name="billing-cycle" checked={open as boolean} />
+                {title}
+              </label>
+              <div class="fold">
+                <div>
+                  <p class="cn-copy">{body}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        Radios open one item and close the rest. A radio cannot uncheck
+        itself, so the group always keeps one item open; use checkboxes when
+        everything must be closable.
       </p>
 
       <CodeBlock
@@ -82,27 +107,27 @@ export default function AccordionPage() {
           {
             name: ".accordion",
             values: "one disclosure row",
-            default: "—",
+            default: "·",
             notes:
               "Hairline bottom divider. Stack siblings for a group; radios sharing a name make the group exclusive.",
           },
           {
             name: ".accordion > label",
             values: "title + hidden input",
-            default: "—",
+            default: "·",
             notes:
               "48px min-height row. The hidden input stays keyboard-reachable; its focus ring draws on the label.",
           },
           {
             name: ".fold",
             values: "one wrapper element inside",
-            default: "—",
+            default: "·",
             notes: "Animates open and closed, .3s. Put the body inside one wrapper element.",
           },
           {
             name: "screen readers",
             values: "checkbox semantics",
-            default: "—",
+            default: "·",
             notes: "Announced as a checkbox, not a disclosure button.",
           },
         ]}

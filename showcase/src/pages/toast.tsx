@@ -123,7 +123,7 @@ export default function ToastPage() {
           {
             name: ".toast-stack",
             values: "the viewport",
-            default: "—",
+            default: "·",
             notes:
               "Fixed 20px from the right and bottom, z-index 90, column flex aligned to the end, 10px gap, min(380px, calc(100vw - 40px)) wide. Mark it aria-live=\"polite\"; append at the bottom.",
           },
@@ -137,28 +137,28 @@ export default function ToastPage() {
           {
             name: ".toast",
             values: "one stack item",
-            default: "—",
+            default: "·",
             notes:
               "Flex row on base with the neutral surface-1 border (no accent); floats on --shadow-pop; 13px radius.",
           },
           {
             name: "b + span/p",
             values: "title and description",
-            default: "—",
+            default: "·",
             notes:
               "The content column. b is the block title; the span or p after it is the muted description.",
           },
           {
             name: ".btn-text / .btn-icon",
             values: "trailing controls",
-            default: "—",
+            default: "·",
             notes:
               "One action and/or an icon close with an aria-label. They sit at the end of the row.",
           },
           {
             name: "[hidden]",
             values: "exit state",
-            default: "—",
+            default: "·",
             notes:
               "Toggle on a mounted toast to fade it back down (.2s), then unmount. Unmounting directly gets the entrance only.",
           },

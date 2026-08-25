@@ -27,28 +27,10 @@ function PageEnterDemo() {
           .34s ease, 7px rise, fade in.
         </p>
       </div>
-      <button type="button" class="btn" onClick={() => setKey((k) => k + 1)}>
+      <button type="button" class="btn btn-secondary" onClick={() => setKey((k) => k + 1)}>
         Replay
       </button>
     </div>
-  );
-}
-
-function SpinGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="16"
-      height="16"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      aria-hidden="true"
-      style="animation: spin .9s linear infinite"
-    >
-      <path d="M12 3a9 9 0 1 1-6.4 2.6" />
-    </svg>
   );
 }
 
@@ -72,7 +54,7 @@ export default function MotionPage() {
 
       <Demo title="Loops" classes="animation: spin | pulse | blink" row>
         <span class="chip">
-          <SpinGlyph />
+          <span class="spinner" aria-hidden="true"></span>
           Syncing
         </span>
         <span class="cn-meta sc-row">
@@ -92,7 +74,7 @@ export default function MotionPage() {
         <code class="cn-code">pulse</code> drives{" "}
         <code class="cn-code">.live-dot</code>,{" "}
         <code class="cn-code">blink</code> drives the terminal caret, and{" "}
-        <code class="cn-code">spin</code> is there for your own spinners.
+        <code class="cn-code">spin</code> drives <code class="cn-code">.spinner</code>.
       </p>
 
       <CodeBlock title="The keyframes (tokens.css)" code={keyframesSnippet} />
@@ -108,7 +90,7 @@ export default function MotionPage() {
           {
             name: "spin",
             values: "rotate to 360deg",
-            notes: "For spinners; pair with linear timing and infinite.",
+            notes: "Used by .spinner: a 16px accent-keyed ring, .8s linear infinite.",
           },
           {
             name: "pulse",

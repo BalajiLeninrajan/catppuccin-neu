@@ -96,25 +96,25 @@ export default function ModalPage() {
           {
             name: ".cn-scrim",
             values: "fixed inset overlay",
-            default: "—",
+            default: "·",
             notes: "Crust wash at 74% with a 6px blur; z-index 70.",
           },
           {
             name: ".modal",
             values: "child of .cn-scrim",
-            default: "—",
+            default: "·",
             notes: "width min(520px, 100vw − 32px); max-height 100dvh − 48px; z-index 80; --shadow-pop.",
           },
           {
             name: ".modal > header",
             values: "title + close control",
-            default: "—",
+            default: "·",
             notes: "Recessed head band; top corners follow --pane-radius − 1px.",
           },
           {
             name: ".modal > footer:last-child",
             values: "action row",
-            default: "—",
+            default: "·",
             notes: "Compose with .panel-footer. No fill; the divider line separates it.",
           },
           {
@@ -126,7 +126,7 @@ export default function ModalPage() {
           {
             name: "[hidden]",
             values: "exit state",
-            default: "—",
+            default: "·",
             notes: "Toggle on the mounted scrim to play the exit; unmounting gets the entrance only.",
           },
         ]}

@@ -100,6 +100,12 @@ export default function AvatarPage() {
               "Inline flex. Each avatar after the first overlaps -8px, every avatar adds a 2px --base ring.",
           },
           {
+            name: "--ring-ground",
+            values: "color",
+            default: "var(--base)",
+            notes: "The stack ring matches the surface behind it; set this when the stack sits on a panel or mantle band.",
+          },
+          {
             name: "--accent",
             values: "any accent hex from the cycle",
             default: "var(--mauve)",

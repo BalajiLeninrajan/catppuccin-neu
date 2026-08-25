@@ -76,8 +76,10 @@ module.exports = {
         "neu-inset-soft": "var(--neu-inset-soft)",
         pop: "var(--shadow-pop)",
         cast: "var(--shadow-cast)",
-        hard: "4px 4px 0 var(--hard-offset-color)",
+        hard: "var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color)",
         "hard-lg": "10px 10px 0 var(--hard-offset-color)",
+        "hard-sm": "3px 3px 0 var(--hard-offset-color)",
+        mark: "var(--shadow-mark)",
       },
       /* Density knobs */
       height: {
