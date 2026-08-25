@@ -42,13 +42,14 @@ Ground rules:
 
 ## Distribution
 
-Every consumer vendors the CSS via `scripts/sync.mjs` and commits the four
-files — zero-build surfaces into their served directory, bundled apps into a
-`vendor/` dir they import relatively. The git dep
-(`github:BalajiLeninrajan/catppuccin-neu#<tag>`) stays as a devDependency: it
-pins the version, provides the `catppuccin-neu-sync` bin, and supplies the
-Tailwind preset where used — but no build imports from node_modules. A version
-bump is: bump the pin, re-run sync, commit. No CDN. The repo is public at
+Consumed as an npm dependency via git URL
+(`github:BalajiLeninrajan/catppuccin-neu#<tag>`) — the installed package is
+the single source, and no consumer commits copies of its CSS. Bundled apps
+import `catppuccin-neu/css/index.css` from node_modules and let the bundler
+inline it. Zero-build surfaces generate their served copies from the
+installed package via `catppuccin-neu-sync` in a pre-dev/pre-build/pre-deploy
+hook, and the generated files are gitignored. A version bump is just the pin
+bump. No CDN. The repo is public at
 github.com/BalajiLeninrajan/catppuccin-neu, tagged v0.1.0; the docs deploy as
 the `catppuccin-neu` Cloudflare Worker at
 https://catppuccin-neu.balajileninrajan.dev.
@@ -779,3 +780,7 @@ above describes only what shipped.
     sync + commit the four CSS files, import them relatively; the git dep
     remains only to pin the version and drive the sync (and the Tailwind
     preset). No build imports the CSS from node_modules.
+36. Entry 35 reverted and inverted: nothing is vendored, ever. Bundled apps
+    import from node_modules; zero-build surfaces sync generated copies in
+    pre-dev/pre-deploy hooks and gitignore them. The installed package is
+    the single source of the CSS.
