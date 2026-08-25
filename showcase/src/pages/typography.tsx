@@ -13,7 +13,7 @@ export default function TypographyPage() {
       </p>
 
       <Demo
-        title="cn-display · 820 · clamp(38px to 64px) · -0.055em · balance"
+        title="cn-display · 820 · clamp(36px to 56px) · -0.055em · balance"
         classes="cn-display"
       >
         <h1 class="cn-display">
@@ -22,7 +22,7 @@ export default function TypographyPage() {
       </Demo>
 
       <Demo
-        title="cn-display-sm · 820 · clamp(30px to 46px) · -0.045em"
+        title="cn-display-sm · 820 · clamp(28px to 42px) · -0.045em"
         classes="cn-display-sm"
       >
         <h1 class="cn-display-sm">
@@ -65,7 +65,7 @@ export default function TypographyPage() {
       </Demo>
 
       <Demo
-        title="cn-microlabel · 700 · 9px · +0.08em · uppercase · overlay-1"
+        title="cn-microlabel · 700 · 10px · +0.08em · uppercase · overlay-1"
         classes="cn-microlabel"
       >
         <span class="cn-microlabel">last synced 2 min ago</span>
@@ -124,14 +124,14 @@ export default function TypographyPage() {
       <Props
         title="Role reference"
         rows={[
-          { name: ".cn-display", values: "sans", default: "820 · clamp(38px, 5vw, 64px) · -0.055em", notes: "Hero headline; text-wrap: balance; em turns mauve." },
-          { name: ".cn-display-sm", values: "sans", default: "820 · clamp(30px, 4.6vw, 46px) · -0.045em", notes: "Page titles; same em rule." },
+          { name: ".cn-display", values: "sans", default: "820 · clamp(36px, 4.6vw, 56px) · -0.055em", notes: "Hero headline; text-wrap: balance; em turns mauve." },
+          { name: ".cn-display-sm", values: "sans", default: "820 · clamp(28px, 4vw, 42px) · -0.045em", notes: "Page titles; same em rule." },
           { name: ".cn-title", values: "sans", default: "800 · 20px · -0.03em", notes: "Section and card headings." },
           { name: ".cn-name", values: "sans", default: "700 · 13px/1.3 · text", notes: "Proper names at body scale, full-strength color." },
           { name: ".cn-lede", values: "sans", default: "16px/1.65 · subtext-1", notes: "Intro paragraph; max-width 690px." },
           { name: ".cn-copy", values: "sans", default: "13px/1.6 · subtext-0", notes: "Body prose." },
           { name: ".cn-label", values: "sans", default: "650 · 11px · +0.04em · uppercase", notes: "Field and section labels; overlay-2." },
-          { name: ".cn-microlabel", values: "sans", default: "700 · 9px · +0.08em · uppercase", notes: "Smallest metadata; overlay-1." },
+          { name: ".cn-microlabel", values: "sans", default: "700 · 10px · +0.08em · uppercase", notes: "Smallest metadata; overlay-1." },
           { name: ".cn-eyebrow", values: "sans", default: "700 · 11px · +0.08em · uppercase · mauve", notes: "Kicker above a display; flex with 8px gap." },
           { name: ".cn-value", values: "sans", default: "650 · 21px · tabular-nums", notes: "Stat numbers." },
           { name: ".cn-value-lg", values: "sans", default: "650 · 28px · tabular-nums", notes: "Hero stat; color: var(--accent). Opt out with a color utility." },

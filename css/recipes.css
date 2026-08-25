@@ -553,7 +553,7 @@
   border-radius: 999px;
   background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
   box-shadow: var(--neu-inset-soft);
-  font: 650 9px/1 var(--sans);
+  font: 650 10px/1 var(--sans);
   letter-spacing: .08em;
   text-transform: uppercase;
 }
@@ -603,7 +603,7 @@
   border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
   border-radius: 4px;
   background: color-mix(in srgb, var(--tone) 8%, transparent);
-  font: 750 8px/1 var(--sans);
+  font: 750 9px/1 var(--sans);
   text-transform: uppercase;
 }
 
@@ -960,7 +960,7 @@ a:active > .accent-card {
 .metric { min-width: 0; padding: 12px 13px; display: flex; flex-direction: column; gap: 6px; }
 .metric span {
   color: var(--overlay-1);
-  font: 650 9px var(--sans);
+  font: 650 10px var(--sans);
 }
 .metric strong { font: 650 21px/1 var(--sans); font-variant-numeric: tabular-nums; }
 .metric.is-hero strong { font-size: 28px; color: var(--accent); }
@@ -972,7 +972,7 @@ a:active > .accent-card {
   justify-content: space-between;
   gap: 12px;
   color: var(--overlay-1);
-  font: 650 9px var(--sans);
+  font: 650 10px var(--sans);
 }
 .stat-row b {
   color: var(--subtext-1);
@@ -1279,7 +1279,7 @@ a:active > .accent-card {
 .display-title {
   margin: 0;
   font-family: var(--sans);
-  font-size: clamp(38px, 5vw, 64px);
+  font-size: clamp(36px, 4.6vw, 56px);
   line-height: .98;
   letter-spacing: -.055em;
   font-weight: 820;
@@ -1353,7 +1353,7 @@ a:active > .accent-card {
   .table-neu td[data-label]::before {
     content: attr(data-label);
     color: var(--overlay-1);
-    font: 650 8px var(--sans);
+    font: 650 9px var(--sans);
   }
 }
 

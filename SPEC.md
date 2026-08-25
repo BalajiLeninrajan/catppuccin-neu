@@ -214,7 +214,7 @@ No bare font-family utility exists: pick the role, not the face. All roles are
 sans except `.cn-code`.
 
 - `.cn-label`: `650 11px/1 var(--sans)`, `.04em`, uppercase, overlay-2.
-- `.cn-microlabel`: `700 9px/1 var(--sans)`, `.08em`, uppercase, overlay-1.
+- `.cn-microlabel`: `700 10px/1 var(--sans)`, `.08em`, uppercase, overlay-1.
 - `.cn-value`: `650 21px/1 var(--sans)`, tabular-nums.
 - `.cn-value-lg`: 28px variant, color `var(--accent)` (opt out via a color
   utility).
@@ -222,9 +222,9 @@ sans except `.cn-code`.
 - `.cn-eyebrow`: `700 11px/1 var(--sans)`, `.08em`, uppercase, mauve, flex
   row with 8px gap.
 - `.cn-code`: `500 13px/1.6 var(--mono)`, tabular-nums. The one mono role.
-- `.cn-display`: `clamp(38px, 5vw, 64px)`, line-height .98, `-.055em`, weight
+- `.cn-display`: `clamp(36px, 4.6vw, 56px)`, line-height .98, `-.055em`, weight
   820, `text-wrap: balance`; `em` renders mauve, no italic.
-- `.cn-display-sm`: `clamp(30px, 4.6vw, 46px)`, `-.045em`, weight 820.
+- `.cn-display-sm`: `clamp(28px, 4vw, 42px)`, `-.045em`, weight 820.
 - `.cn-title`: 20px, weight 800, `-.03em`.
 - `.cn-name`: `700 13px/1.3 var(--sans)`, `var(--text)` (emphasized proper
   names).
@@ -398,7 +398,7 @@ half-slide is transient only; the settled state never slides.
 row flow, 12px gap, roomier rows, 17px labels.
 
 `.stepper`: phase track of borderless inset pills (999px radius, `cn-bg-well`
-mix, `--neu-inset-soft`, `650 9px var(--sans)` uppercase). Current phase via
+mix, `--neu-inset-soft`, `650 10px var(--sans)` uppercase). Current phase via
 `.active` or `[aria-current="step"]` (mauve + mauve 8% wash); completed via
 `.is-done` (green).
 
@@ -410,7 +410,7 @@ mix, `--neu-inset-soft`, `650 9px var(--sans)` uppercase). Current phase via
 - `.chip`: outlined pill, `--base`, `--neu-raised-soft`,
   `600 11px var(--sans)` tabular.
 - `.chip-tone`: tinted status tag, 4px radius, tone 8% wash, tone 45%
-  hairline, `750 8px var(--sans)` uppercase. Pass the color via `.cn-tone-*`.
+  hairline, `750 9px var(--sans)` uppercase. Pass the color via `.cn-tone-*`.
 - `.banner`: semantic tint band, 10px radius, tone 7% wash, tone 25% into
   surface-0 edge, `--neu-inset-soft`, 12px text.
 
@@ -731,3 +731,5 @@ above describes only what shipped.
 27. Toast behavior declared consumer code; the docs spawner became the
     Preact reference (cancelable timers, pause on hover, cap, guarded
     two-phase exit).
+28. Type scale compressed: display clamps to 56px (was 64), display-sm to
+    42px; the 8px and 9px micro sizes rose to 9px and 10px.
