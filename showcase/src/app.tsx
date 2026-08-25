@@ -107,11 +107,15 @@ export function App() {
           </main>
           <footer class="footer-neu">
             <span>catppuccin·neu</span>
-            <p>
-              Mocha only · four neu shadows + three promoted · mauve is the one
-              accent · mono is for code
-            </p>
-            <span>tokens · utilities · recipes</span>
+            <p>Made with 💜 in Waterloo</p>
+            <a
+              class="btn-text"
+              href="https://github.com/BalajiLeninrajan/catppuccin-neu"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
           </footer>
         </div>
       </div>

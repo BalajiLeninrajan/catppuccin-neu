@@ -1,10 +1,11 @@
 # catppuccin-neu
 
-`catppuccin-neu` is a dark-only CSS design system: [Catppuccin](https://catppuccin.com/) Mocha for color,
-neumorphic depth lit from a fixed top-left, mauve as the only accent, and a hard
-offset shadow that slides halfway in when you press a control. Around 1,700
-lines of plain CSS in three cascade layers. No JavaScript, no build step, no
-light mode.
+A dark-only CSS design system. [Catppuccin](https://catppuccin.com/) Mocha for
+color, depth carved by shadow instead of borders, one mauve accent, and a hard
+offset that slides halfway in when you press a control. About 1,700 lines of
+plain CSS in three cascade layers. No JavaScript, no build step, no light mode.
+
+**Every component, live: [catppuccin-neu.bleninrajan.workers.dev](https://catppuccin-neu.bleninrajan.workers.dev)**
 
 ```html
 <link rel="stylesheet" href="/styles/index.css" />
