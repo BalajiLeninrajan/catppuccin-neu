@@ -68,10 +68,14 @@ export default function ColorsPage() {
       lede="Catppuccin Mocha, verbatim. 23 tokens, no substitute hexes. Twelve neutrals carry the grounds and the text ramp; eleven hues carry meaning."
     >
       <p class="cn-copy">
-        Components never use raw hex values. They read tokens directly, or one
-        of the two contract properties: <code class="cn-code">--tone</code> for
-        semantic tinting and <code class="cn-code">--accent</code> for
-        per-instance identity.
+        The palette is{" "}
+        <a class="btn-text" href="https://catppuccin.com/" target="_blank" rel="noreferrer">
+          Catppuccin
+        </a>{" "}
+        Mocha. Components never use raw hex values. They read tokens directly,
+        or one of the two contract properties:{" "}
+        <code class="cn-code">--tone</code> for semantic tinting and{" "}
+        <code class="cn-code">--accent</code> for per-instance identity.
       </p>
 
       <Demo title="Grounds & surfaces">
