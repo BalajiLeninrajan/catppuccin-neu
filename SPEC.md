@@ -37,14 +37,14 @@ Ground rules:
 ## Distribution
 
 Consumed as an npm dependency via git URL
-(`github:BalajiLeninrajan/design#<tag>`). Zero-build consumers vendor the CSS
+(`github:BalajiLeninrajan/catppuccin-neu#<tag>`). Zero-build consumers vendor the CSS
 via `scripts/sync.mjs`. No CDN. Pending: the repo currently has no remote; the
 git URL waits on recreating it (backburnered).
 
 ## Repo layout
 
 ```
-design/
+catppuccin-neu/
 ├── package.json          # name "catppuccin-neu", exports ./css/* ./tailwind/* ./scripts/*
 ├── SPEC.md               # this file
 ├── README.md             # short: what it is, how to consume, layer model
