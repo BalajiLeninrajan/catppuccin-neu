@@ -5,7 +5,9 @@ const LAYER_CODE = `@layer cn.tokens, cn.utilities, cn.recipes;
 @import "./utilities.css" layer(cn.utilities);
 @import "./recipes.css" layer(cn.recipes);`;
 
-const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.1`;
+const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.1.4/css/index.css">`;
+
+const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.4`;
 
 const IMPORT_CODE = `/* your entry stylesheet */
 @import "catppuccin-neu/css/index.css";`;
@@ -74,9 +76,19 @@ export default function IntroductionPage() {
       <section>
         <h2 class="cn-title">Install</h2>
         <p class="cn-copy">
-          The package is a git dependency; there is no CDN build. Add it,
-          import the one entry point, and link the two font families on every
-          public page.
+          A hand-written page with no <code class="cn-code">package.json</code>{" "}
+          links the CDN: jsDelivr serves the repo's tags straight from GitHub.
+          Pin a full tag — <code class="cn-code">@main</code> and truncated
+          ranges float and re-cache every 12 hours — and link{" "}
+          <code class="cn-code">index.css</code> rather than the three files,
+          so the relative imports keep their layer wrappers.
+        </p>
+        <CodeBlock title="CDN (no build)" code={CDN_CODE} />
+        <p class="cn-copy">
+          Anything with a bundler takes the git dependency instead, so the
+          version pin lives in one file rather than in every{" "}
+          <code class="cn-code">&lt;head&gt;</code>. Add it, import the one
+          entry point, and link the two font families on every public page.
         </p>
         <CodeBlock title="Add the dependency" code={INSTALL_CODE} />
         <CodeBlock title="Import the CSS" code={IMPORT_CODE} />
@@ -86,13 +98,14 @@ export default function IntroductionPage() {
       <section>
         <h2 class="cn-title">Zero-build sites</h2>
         <p class="cn-copy">
-          No bundler? <code class="cn-code">scripts/sync.mjs</code> vendors the
-          CSS files into any directory you point it at. Node 18+, no
-          dependencies. The three files also work as plain{" "}
+          Building a static site? <code class="cn-code">scripts/sync.mjs</code>{" "}
+          copies the CSS files into any directory you point it at — run it in a
+          pre-build hook and gitignore the output. Node 18+, no dependencies.
+          The three files also work as plain{" "}
           <code class="cn-code">&lt;link&gt;</code> tags loaded in order:
           tokens, utilities, recipes.
         </p>
-        <CodeBlock title="Vendor the CSS" code={SYNC_CODE} />
+        <CodeBlock title="Sync the CSS" code={SYNC_CODE} />
         <CodeBlock title="Link in order" code={LINKS_CODE} />
       </section>
 

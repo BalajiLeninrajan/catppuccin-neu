@@ -139,8 +139,11 @@
    density knobs.                                                            */
 
 .btn {
-  /* Neutral base so a variant-less .btn never shows UA button chrome. */
+  /* Neutral base so a variant-less .btn never shows UA button chrome.
+     text-decoration covers anchor buttons: <a class="btn"> is a button
+     that navigates, and the UA underline must not bleed through. */
   color: inherit;
+  text-decoration: none;
   border: 1px solid transparent;
   background: transparent;
   min-height: var(--control-h);
@@ -209,8 +212,10 @@
 }
 .btn-ghost:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
-/* Flat toolbar button — flat at rest, engaged-in when pressed/toggled. */
+/* Flat toolbar button — flat at rest, engaged-in when pressed/toggled.
+   Usable without .btn, so it covers anchors itself. */
 .btn-flat {
+  text-decoration: none;
   min-height: var(--control-h-sm);
   padding: 0 12px;
   display: inline-flex;
@@ -242,6 +247,7 @@
 
 /* Inline text button — mauve, sans, no chrome. */
 .btn-text {
+  text-decoration: none; /* standalone-safe on anchors, like .btn-flat */
   color: var(--mauve);
   border: 0;
   border-radius: 8px; /* focus ring traces this — no sharp rectangles */
@@ -255,6 +261,7 @@
 
 /* Icon button — flat until hovered, then tints toward its --tone. */
 .btn-icon {
+  text-decoration: none; /* standalone-safe on anchors, like .btn-flat */
   width: var(--control-h-sm); height: var(--control-h-sm);
   display: grid; place-items: center;
   color: var(--overlay-1);
@@ -824,6 +831,19 @@
 /* Bottom spacing lives on the content's margin: padding would floor the
    collapsed wrapper at its own height, margins clip away with the fold. */
 .accordion .fold > * > :last-child { margin-bottom: 16px; }
+/* Trailing meta in the label: wrap the title in <b> and it grows, so a
+   date or tag rides against the chevron instead of floating mid-row.
+     <label><input type="checkbox"><b>Title</b>
+       <span class="cn-meta">meta</span></label>                             */
+.accordion > label > b { margin-right: auto; }
+
+/* Accordion stack — a group filling a panel. The panel supplies the frame,
+   the stack the breathing room; the closed last row's divider yields to the
+   panel edge (an open row is already borderless). */
+.accordion-stack { padding: 10px 16px; }
+.accordion-stack > .accordion:last-child:not(:has(input:checked)) {
+  border-bottom-color: transparent;
+}
 
 /* Spinner — a 16px accent-keyed ring on the spin keyframe. */
 .spinner {
@@ -942,7 +962,7 @@
 /* Cards wrapped in a link lift on hover, press in on click. The wrapper
    takes the card's radius so its focus ring traces the card, not the
    bare-link 4px. */
-a:has(> .accent-card) { border-radius: 13px; }
+a:has(> .accent-card) { border-radius: 13px; color: inherit; text-decoration: none; }
 a:hover > .accent-card {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--accent) 52%, var(--surface-0));

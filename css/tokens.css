@@ -94,6 +94,16 @@ button { color: inherit; }
 h1, h2, p { margin-top: 0; }
 h1 { text-wrap: balance; }
 
+/* The copy voice is a given: bare content reads as system copy with no
+   class on every element. Safe because every recipe pins its own font
+   shorthand — chrome never inherits this. Consumer chrome built on bare
+   elements (a ul nav) opts out locally. */
+body { font: 400 14px/1.6 var(--sans); color: var(--subtext-0); }
+h1, h2, h3, h4 { color: var(--text); }
+ul, ol { margin-top: 0; padding-left: 20px; }
+li + li { margin-top: 8px; }
+li::marker { color: var(--overlay-1); }
+
 /* Accent-colored focus + selection, everywhere, no exceptions */
 :focus-visible { outline: 2px solid var(--mauve); outline-offset: 3px; }
 ::selection { color: var(--crust); background: var(--mauve); }
@@ -102,6 +112,13 @@ h1 { text-wrap: balance; }
    radius so keyboard outlines follow the system geometry, never a sharp
    rectangle. (Invisible otherwise: links paint no background.) */
 a { border-radius: 4px; }
+
+/* Links ship mauve at rest, pink on hover — .btn-text's pair exactly, no
+   underline ever. Implemented here instead of left to every consumer.
+   Recipes that restyle anchors (buttons, wrapped cards) win from their
+   later layer. */
+a { color: var(--mauve); text-decoration: none; }
+a:hover { color: var(--pink); }
 
 /* Scrollbars inside dark wells */
 .scroll-well { scrollbar-color: var(--surface-2) transparent; }

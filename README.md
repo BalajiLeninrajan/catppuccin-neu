@@ -21,18 +21,32 @@ package. This file covers how to consume it.
 
 ## Install
 
+From the CDN, for a hand-written page with no `package.json`. jsDelivr serves
+the repo's tags directly — no publish step, nothing to configure:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.1.4/css/index.css" />
+```
+
+Pin a full tag, not `@main` or `@v0.1` — those float and re-cache every 12
+hours. Link `index.css` rather than the three files: its relative `@import`s
+resolve against the CDN path and keep the layer wrappers, so your CSS still
+wins unlayered.
+
 As a git dependency, with a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.1
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.4
 ```
 
 ```js
 import "catppuccin-neu/css/index.css";
 ```
 
-Vendored, for zero-build consumers. This copies `tokens.css`, `utilities.css`,
-`recipes.css`, and `index.css` into a directory you link from:
+Synced, for zero-build consumers that do have a build step to hang it on.
+This copies `tokens.css`, `utilities.css`, `recipes.css`, and `index.css` into
+a directory you link from — generate them in a pre-build hook and gitignore
+them rather than committing copies:
 
 ```sh
 npx catppuccin-neu-sync public/styles

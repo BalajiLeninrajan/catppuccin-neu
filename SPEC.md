@@ -49,9 +49,28 @@ import `catppuccin-neu/css/index.css` from node_modules and let the bundler
 inline it. Zero-build surfaces generate their served copies from the
 installed package via `catppuccin-neu-sync` in a pre-dev/pre-build/pre-deploy
 hook, and the generated files are gitignored. A version bump is just the pin
-bump. No CDN. The repo is public at
-github.com/BalajiLeninrajan/catppuccin-neu, tagged v0.1.0; the docs deploy as
-the `catppuccin-neu` Cloudflare Worker at
+bump.
+
+The CDN is the third path, and only for zero-build surfaces with no
+`package.json` at all — a handful of hand-written pages, where an install
+step would exist solely to move four files. jsDelivr serves this repo's tags
+straight from GitHub; there is no publish step and nothing to configure:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.1.3/css/index.css">
+```
+
+Four rules govern it. Pin a full tag — `@main` and truncated ranges float and
+cache for 12h, a full tag is immutable and cached for a year. Link
+`index.css`, never the three files: the relative `@import`s resolve against
+the CDN path and keep their `layer()` wrappers, so consumer CSS still wins
+unlayered. Tags are never moved once pushed — a moved tag leaves the CDN
+serving what it cached while the git dep resolves the new commit, and the two
+disagree silently. Anything with a build uses node_modules regardless; the
+pin belongs in one file, not in every `<head>`.
+
+The repo is public at github.com/BalajiLeninrajan/catppuccin-neu, tagged
+v0.1.3; the docs deploy as the `catppuccin-neu` Cloudflare Worker at
 https://catppuccin-neu.balajileninrajan.dev.
 
 ## Repo layout
@@ -174,6 +193,17 @@ Primary buttons keep the hard offset fleet-wide; softening it is a violation.
   and `::selection` inversion (crust on mauve), everywhere, no exceptions.
 - Bare links get `border-radius: 4px` so keyboard outlines follow the system
   geometry, never a sharp rectangle.
+- Links ship styled from the tokens reset: mauve at rest, pink on hover —
+  `.btn-text`'s pair exactly, never underlined, so every anchor in the
+  system speaks one accent language. Recipes that restyle anchors
+  (buttons, link-wrapped cards) win from their later layer.
+- The copy voice is a given, not an opt-in: the tokens reset sets `body` to
+  `400 14px/1.6 var(--sans)` in subtext-0, headings to `--text`, and lists
+  to 20px indent, 8px row rhythm, overlay-1 markers. Bare content inside
+  folds, panels, and modals just reads correctly. This is safe because
+  every recipe pins its own `font` shorthand — chrome never inherits the
+  voice; consumer chrome built on bare elements (a `ul` nav) opts out
+  locally. The bare-element ban still binds the utility and recipe layers.
 - `.page-enter` has no animation fill-mode: a held transform would make the
   element a permanent containing block for every fixed descendant (scrims,
   modals, drawers, toasts).
@@ -324,9 +354,12 @@ table styling.
 
 ### Buttons
 
-Compose `class="btn btn-primary"`. All labels sans; heights from the density
-knobs. `.btn`: min-height `var(--control-h)`, padding 0 18px, 10px radius,
-`780 13px var(--sans)`; disabled is `.35` opacity + `--neu-inset-soft`.
+Compose `class="btn btn-primary"`. Element-agnostic: `<a class="btn">` is a
+button that navigates, so the base sets `text-decoration: none` and each
+variant carries its own color against the tokens-layer link mauve. All labels
+sans; heights from the density knobs. `.btn`: min-height `var(--control-h)`,
+padding 0 18px, 10px radius, `780 13px var(--sans)`; disabled is `.35`
+opacity + `--neu-inset-soft`.
 
 - `.btn-primary`: crust text, solid mauve, hard offset in
   `color-mix(in srgb, var(--mauve) 25%, var(--surface-0))` plus
@@ -469,6 +502,15 @@ sequencing). Markup:
 </div>
 ```
 
+A trailing meta (a date, a tag set) rides against the chevron: wrap the
+title in `<b>` (it takes `margin-right: auto`) and follow it with
+`<span class="cn-meta">`. Without the wrap, the label's `space-between`
+would float a third child mid-row.
+
+`.accordion-stack` groups accordions inside a panel: the panel supplies the
+frame, the stack 10px 16px breathing room, and the closed last row's
+divider yields to the panel edge (an open row is already borderless).
+
 Radios sharing a name give an exclusive-open group. The input is visually
 silent but keyboard-reachable; its focus ring draws on the label. Space
 toggles natively; Enter support is one consumer line:
@@ -596,6 +638,7 @@ entrance only. The reduced-motion block collapses all of it.
   `main { width: min(1440px, calc(100% - 40px)); min-width: 0; margin: 0
   auto; position: relative; z-index: 1; }`.
 
+
 ### Responsive
 
 Three breakpoints, always these three. Each removes decoration before it
@@ -699,7 +742,8 @@ Decisions in order, one line each. Reverted experiments included; the body
 above describes only what shipped.
 
 1. Showcase on Preact + Vite, deployed as Cloudflare Workers static assets.
-2. Distribution as a git-URL npm dep plus `sync.mjs` vendoring; no CDN.
+2. Distribution as a git-URL npm dep plus `sync.mjs` vendoring; no CDN
+   (the CDN half reversed in 37).
 3. Depth canon: hard offset for any clickable, half-slide press, primary
    buttons never soften.
 4. Radii capped at 16; 12 only via compact density.
@@ -784,3 +828,37 @@ above describes only what shipped.
     import from node_modules; zero-build surfaces sync generated copies in
     pre-dev/pre-deploy hooks and gitignore them. The installed package is
     the single source of the CSS.
+37. The CDN ban lifted, narrowly: a tag-pinned jsDelivr URL against
+    `css/index.css` is the supported path for zero-build surfaces with no
+    `package.json`. Full tags only, tags never move, and anything with a
+    build still imports from node_modules. Entry 2's ban carried no recorded
+    rationale; the third-party origin it avoided was already accepted for
+    the mandatory Google Fonts link.
+38. `.btn` gained `text-decoration: none`: anchor buttons showed the UA
+    underline. Surfaced by the first real consumer page; the showcase had
+    silently carried the same patch. `.btn-flat`, `.btn-text`, and
+    `.btn-icon` carry it too — they are used standalone, without `.btn`.
+39. Links implemented in the tokens reset (blue at rest, hover underline):
+    the color spec assigned the semantic but shipped no mechanism, so every
+    consumer re-invented it. Link-wrapped accent cards inherit instead.
+40. Accordion labels learned trailing meta (`<b>` title grows, meta rides
+    the chevron) and `.accordion-stack` shipped for grouping inside a
+    panel — both re-derived by hand on the first consumer page.
+41. `.prose` content region added: bare paragraphs and lists inside folds,
+    panels, and modals read as system copy without per-element classes. The
+    scoped exception to the bare-element ban.
+42. `.dock` added: floating bottom-center chrome composed from the topbar's
+    translucent blur, `--shadow-pop`, and flat buttons with the engaged
+    active state.
+43. Entry 41 reverted and inverted: `.prose` deleted, the copy voice became
+    a given in the tokens reset (body voice, heading color, list geometry).
+    An opt-in content class earns its keep when chrome would inherit the
+    defaults; here every recipe pins its own font, so the class was pure
+    ceremony.
+44. Entry 42 reverted: `.dock` removed. Section-switching chrome didn't
+    earn a recipe — a short page scrolls, and anything bigger takes the
+    topbar as its spine.
+45. Entry 39 amended: links flipped from blue to mauve with the pink hover
+    and no underline in either state — `.btn-text`'s treatment exactly.
+    Links are brand moments; blue stays a semantic tone (info), not the
+    link color.

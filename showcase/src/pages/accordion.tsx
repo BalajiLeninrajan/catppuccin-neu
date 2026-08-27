@@ -47,6 +47,55 @@ export default function AccordionPage() {
         Closed content leaves the tab order and the accessibility tree.
       </p>
 
+      <Demo
+        title="Trailing meta, stacked in a panel"
+        classes="panel accordion-stack · label > b + .cn-meta"
+      >
+        <div class="panel accordion-stack" style="width:min(640px,100%)">
+          {[
+            [
+              "Q3 infrastructure review",
+              "Sep 2025",
+              "Capacity held through the sale window. Two regions ran hot; both have headroom orders filed.",
+              true,
+            ],
+            [
+              "Q2 infrastructure review",
+              "Jun 2025",
+              "Quiet quarter. One certificate rotation incident, resolved inside the error budget.",
+              false,
+            ],
+            [
+              "Q1 infrastructure review",
+              "Mar 2025",
+              "Baseline quarter for the new fleet; numbers here seed the yearly comparison.",
+              false,
+            ],
+          ].map(([title, meta, body, open]) => (
+            <div class="accordion" key={title as string}>
+              <label>
+                <input type="checkbox" checked={open as boolean} />
+                <b>{title}</b>
+                <span class="cn-meta">{meta}</span>
+              </label>
+              <div class="fold">
+                {/* Bare p: the copy voice is a tokens-reset given. */}
+                <div>
+                  <p>{body}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        Wrap the title in <code class="cn-code">b</code> and it grows, so the
+        meta rides against the chevron instead of floating mid-row.{" "}
+        <code class="cn-code">.accordion-stack</code> pads the group and lets
+        the closed last row's divider yield to the panel edge.
+      </p>
+
       <Demo title="Exclusive group, radios sharing a name" classes="accordion > label > input[type=radio]">
         <div style="width:min(640px,100%)">
           {[

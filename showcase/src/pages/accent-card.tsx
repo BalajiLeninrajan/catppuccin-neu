@@ -40,7 +40,7 @@ export default function AccentCardPage() {
       <Demo title="Linked card" classes="a > .accent-card">
         <a
           href="#"
-          style="display:block;width:min(340px,100%);text-decoration:none;color:inherit"
+          style="display:block;width:min(340px,100%)"
           onClick={(e) => e.preventDefault()}
         >
           <div class="accent-card" style="--accent:#94e2d5">
@@ -129,8 +129,8 @@ export default function AccentCardPage() {
 
       <CodeBlock
         title="Markup"
-        code={`<a href="/teams/payments"
-   style="display: block; text-decoration: none; color: inherit">
+        code={`<a href="/teams/payments" style="display: block">
+  <!-- the wrapper inherits color and sheds the underline via the recipe -->
   <div class="accent-card" style="--accent: #94e2d5">
     <p class="cn-microlabel">Team</p>
     <p class="cn-name">Payments</p>
