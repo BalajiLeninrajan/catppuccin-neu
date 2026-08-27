@@ -1,9 +1,7 @@
 # catppuccin-neu design system spec
 
 The Catppuccin Mocha + neumorphic design language, packaged for all future
-projects. This file and the CSS in `css/` are the single source of truth; the
-skill at `~/.claude/skills/catppuccin-neu/` (SKILL.md + `reference/*.css`) is
-generated from this package and follows it.
+projects. This file and the CSS in `css/` are the single source of truth.
 
 Ground rules:
 

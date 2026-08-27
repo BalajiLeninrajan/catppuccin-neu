@@ -137,5 +137,3 @@ Other things to know before you commit to it:
 - `showcase/` is a Preact docs site that imports `css/index.css` directly and
   shows every recipe and state at least once. Run it with
   `pnpm --dir showcase install && pnpm --dir showcase dev`
-- `~/.claude/skills/catppuccin-neu/` is generated from this package, so Claude
-  can apply the system without reading the CSS
