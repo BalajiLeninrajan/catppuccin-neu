@@ -25,7 +25,7 @@ From the CDN, for a hand-written page with no `package.json`. jsDelivr serves
 the repo's tags directly — no publish step, nothing to configure:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.1.4/css/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.1.5/css/index.css" />
 ```
 
 Pin a full tag, not `@main` or `@v0.1` — those float and re-cache every 12
@@ -36,7 +36,7 @@ wins unlayered.
 As a git dependency, with a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.4
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.5
 ```
 
 ```js

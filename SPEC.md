@@ -202,6 +202,10 @@ Primary buttons keep the hard offset fleet-wide; softening it is a violation.
   every recipe pins its own `font` shorthand — chrome never inherits the
   voice; consumer chrome built on bare elements (a `ul` nav) opts out
   locally. The bare-element ban still binds the utility and recipe layers.
+- `em` is the accent, everywhere: mauve, upright — the display-title
+  treatment made a given by the tokens reset. True italics use `<i>`.
+- `.app-shell` is a flex column and `.app-shell > main` absorbs the slack,
+  so the footer sits at the viewport bottom even when a page runs short.
 - `.page-enter` has no animation fill-mode: a held transform would make the
   element a permanent containing block for every fixed descendant (scrims,
   modals, drawers, toasts).
@@ -501,9 +505,11 @@ sequencing). Markup:
 ```
 
 A trailing meta (a date, a tag set) rides against the chevron: wrap the
-title in `<b>` (it takes `margin-right: auto`) and follow it with
+title — `<b>` for the bold variant, `<p>` for the regular-weight one (both
+grow via `margin-right: auto`) — and follow it with
 `<span class="cn-meta">`. Without the wrap, the label's `space-between`
-would float a third child mid-row.
+would float a third child mid-row. At 520px the meta hides. An `em` inside
+the title takes the given accent.
 
 `.accordion-stack` groups accordions inside a panel: the panel supplies the
 frame, the stack 10px 16px breathing room, and the closed last row's
@@ -635,6 +641,14 @@ entrance only. The reduced-motion block collapses all of it.
 - The main-column pattern is applied by the consumer, not the package:
   `main { width: min(1440px, calc(100% - 40px)); min-width: 0; margin: 0
   auto; position: relative; z-index: 1; }`.
+- `.topbar nav` is a row of flat buttons; `.wordmark` is the identity in
+  the topbar corner (`800 16px`, tight tracking, `em` for the accent half).
+- `.deck`: hash-routed views without JS. Direct children are the views —
+  the `:target` one shows, the first child is the default, and a deep link
+  into a view's content shows that view. State lives in the URL, so
+  back/forward and refresh keep their place. Matching a nav link's engaged
+  state to the visible view stays consumer CSS (per-id `body:has(...)`
+  selectors — CSS cannot correlate an href to a target generically).
 
 
 ### Responsive
@@ -860,3 +874,16 @@ above describes only what shipped.
     and no underline in either state — `.btn-text`'s treatment exactly.
     Links are brand moments; blue stays a semantic tone (info), not the
     link color.
+46. `em` became a given accent (mauve, upright) in the tokens reset; the
+    display-title rule that pioneered it was absorbed. `<i>` keeps italics.
+47. `.app-shell` became a flex column with `> main` absorbing the slack —
+    the sticky footer stopped being a consumer pattern.
+48. `.topbar nav` (flat-button row) and `.wordmark` shipped; the showcase
+    and the first consumer page had each hand-rolled the same wordmark.
+49. Accordion titles grew a second variant: `<b>` bold, `<p>` regular
+    weight, both growing so the meta rides the chevron.
+50. `.deck` shipped: hash-routed views on `:target`/`:has`, first child as
+    default, deep links resolving to their view. Nav engaged-state mapping
+    stays consumer CSS — CSS cannot correlate hrefs to targets.
+51. 520px responsive: accordion stacks tighten and label metas hide —
+    decoration yields before content.

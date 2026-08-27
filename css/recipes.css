@@ -123,6 +123,15 @@
   box-shadow: var(--shadow-cast),
               inset 0 1px color-mix(in srgb, var(--surface-1) 30%, transparent);
 }
+/* A nav in the topbar is a row of flat buttons. */
+.topbar nav { display: flex; gap: 4px; }
+
+/* Wordmark — the identity in the topbar corner. em takes the given accent. */
+.wordmark {
+  font: 800 16px/1 var(--sans);
+  letter-spacing: -.03em;
+  color: var(--text);
+}
 
 /* Empty state */
 .empty-state {
@@ -831,11 +840,13 @@
 /* Bottom spacing lives on the content's margin: padding would floor the
    collapsed wrapper at its own height, margins clip away with the fold. */
 .accordion .fold > * > :last-child { margin-bottom: 16px; }
-/* Trailing meta in the label: wrap the title in <b> and it grows, so a
-   date or tag rides against the chevron instead of floating mid-row.
+/* Trailing meta in the label: wrap the title and it grows, so a date or
+   tag rides against the chevron instead of floating mid-row. <b> is the
+   bold title variant, <p> the regular-weight one.
      <label><input type="checkbox"><b>Title</b>
        <span class="cn-meta">meta</span></label>                             */
-.accordion > label > b { margin-right: auto; }
+.accordion > label > :is(b, p) { margin: 0 auto 0 0; }
+.accordion > label > p { font-weight: 400; }
 
 /* Accordion stack — a group filling a panel. The panel supplies the frame,
    the stack the breathing room; the closed last row's divider yields to the
@@ -1305,7 +1316,6 @@ a:active > .accent-card {
   letter-spacing: -.055em;
   font-weight: 820;
 }
-.display-title em { color: var(--mauve); font-style: normal; }
 .lede { max-width: 690px; margin: 20px 0; color: var(--subtext-1); font-family: var(--sans); font-size: 16px; line-height: 1.65; }
 
 .footer-neu {
@@ -1319,6 +1329,16 @@ a:active > .accent-card {
 }
 .footer-neu span { font: 700 12px var(--sans); }
 .footer-neu p { margin: 0; font: 500 12px var(--sans); }
+
+/* Deck — hash-routed views, no JS. Direct children are the views: the
+   :target one shows, the first is the default, and a deep link into a
+   view's content shows that view. State lives in the URL, so back/forward
+   and refresh keep their place.
+     <main class="deck"><section id="a">…</section> …</main>               */
+.deck > * { display: none; }
+.deck > :target,
+.deck > :has(:target) { display: block; }
+.deck:not(:has(:target)) > :first-child { display: block; }
 
 /* ── Responsive ─────────────────────────────────────────────────────────────
    Three breakpoints, always these three. Each one removes decoration before
@@ -1387,4 +1407,7 @@ a:active > .accent-card {
   .metric strong { font-size: 18px; }
   .metric.is-hero strong { font-size: 22px; }
   .footer-neu p { display: none; }
+  .accordion-stack { padding: 8px 10px; }
+  /* Label meta is decoration at phone width: it yields to the title. */
+  .accordion > label > .cn-meta { display: none; }
 }

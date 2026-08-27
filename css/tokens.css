@@ -100,6 +100,9 @@ h1 { text-wrap: balance; }
    elements (a ul nav) opts out locally. */
 body { font: 400 14px/1.6 var(--sans); color: var(--subtext-0); }
 h1, h2, h3, h4 { color: var(--text); }
+/* em is the accent, everywhere: mauve, upright — the display-title
+   treatment made a given. True italics use <i>. */
+em { color: var(--mauve); font-style: normal; }
 ul, ol { margin-top: 0; padding-left: 20px; }
 li + li { margin-top: 8px; }
 li::marker { color: var(--overlay-1); }
@@ -128,7 +131,12 @@ a:hover { color: var(--pink); }
   background:
     radial-gradient(circle at 14% 8%, rgb(203 166 247 / .008), transparent 44rem),
     var(--base);
+  /* The shell is a column and main absorbs the slack, so the footer sits
+     at the viewport bottom even when a page runs short. */
+  display: flex;
+  flex-direction: column;
 }
+.app-shell > main { flex: 1 0 auto; }
 
 /* ── Motion ─────────────────────────────────────────────────────────────── */
 @keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
