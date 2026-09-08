@@ -71,6 +71,17 @@
   --input-h: 42px;
   --pane-radius: 16px;               /* panel-scale radius */
 
+  /* Motion. Two curves, a spring, three durations. Anything answering the
+     pointer takes the fast-out, anything returning takes the spring (it
+     overshoots by about a pixel), anything leaving takes the ease-in.
+     Nothing in the package rides the browser default curve. */
+  --ease-out:    cubic-bezier(.16, 1, .3, 1);
+  --ease-in:     cubic-bezier(.7, 0, .84, 0);
+  --ease-spring: cubic-bezier(.3, 1.4, .4, 1);
+  --t-fast: .16s;
+  --t-base: .22s;
+  --t-slow: .32s;
+
   font-family: var(--sans);
   color: var(--text);
   background: var(--base);
@@ -107,8 +118,11 @@ ul, ol { margin-top: 0; padding-left: 20px; }
 li + li { margin-top: 8px; }
 li::marker { color: var(--overlay-1); }
 
-/* Accent-colored focus + selection, everywhere, no exceptions */
-:focus-visible { outline: 2px solid var(--mauve); outline-offset: 3px; }
+/* Accent-colored focus + selection, everywhere, no exceptions. The ring
+   settles outward: it starts at the element's edge and eases to 3px, so
+   focus arrives instead of blinking on. */
+:not(:focus-visible) { outline-offset: 0; }
+:focus-visible { outline: 2px solid var(--mauve); outline-offset: 3px; transition: outline-offset .15s var(--ease-out); }
 ::selection { color: var(--crust); background: var(--mauve); }
 
 /* Focus rings trace the element's border-radius — bare links get the chip
@@ -120,7 +134,7 @@ a { border-radius: 4px; }
    underline ever. Implemented here instead of left to every consumer.
    Recipes that restyle anchors (buttons, wrapped cards) win from their
    later layer. */
-a { color: var(--mauve); text-decoration: none; }
+a { color: var(--mauve); text-decoration: none; transition: color var(--t-fast); }
 a:hover { color: var(--pink); }
 
 /* Scrollbars inside dark wells */
@@ -143,10 +157,20 @@ a:hover { color: var(--pink); }
 @keyframes spin  { to { transform: rotate(360deg); } }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 0 7px transparent; } }
 @keyframes blink { 50% { opacity: 0; } }
+/* The topbar's cast, scroll-driven where supported: nothing is under the
+   bar at the top of the page, so the shadow fades in over the first 60px. */
+@keyframes cast  { from { box-shadow: 0 0 0 transparent; border-bottom-color: transparent; } }
 
-/* No fill-mode: a held transform would make the element a containing block
-   for every fixed descendant (scrims, modals, drawers, toasts) forever. */
-.page-enter { animation: enter .34s ease; }
+/* Page enter staggers the children 40ms apart so the page assembles instead
+   of arriving as one slab. `backwards` fill only: the from-state holds
+   during each child's delay, and nothing is held after, so no element stays
+   a containing block for fixed descendants (scrims, modals, drawers, toasts). */
+.page-enter > * { animation: enter .34s var(--ease-out) backwards; }
+.page-enter > :nth-child(2) { animation-delay: .04s; }
+.page-enter > :nth-child(3) { animation-delay: .08s; }
+.page-enter > :nth-child(4) { animation-delay: .12s; }
+.page-enter > :nth-child(5) { animation-delay: .16s; }
+.page-enter > :nth-child(n + 6) { animation-delay: .2s; }
 .live-dot {
   width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
   color: var(--green); background: currentColor;

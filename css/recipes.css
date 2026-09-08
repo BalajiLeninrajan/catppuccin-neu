@@ -123,6 +123,12 @@
   box-shadow: var(--shadow-cast),
               inset 0 1px color-mix(in srgb, var(--surface-1) 30%, transparent);
 }
+/* The cast exists once something is under the bar. Where scroll-driven
+   animation is supported it fades in over the first 60px; elsewhere the bar
+   keeps its cast at rest, as before. */
+@supports (animation-timeline: scroll()) {
+  .topbar { animation: cast linear both; animation-timeline: scroll(); animation-range: 0 60px; }
+}
 /* A nav in the topbar is a row of flat buttons. */
 .topbar nav { display: flex; gap: 4px; }
 
@@ -142,6 +148,17 @@
 }
 .empty-state strong { color: var(--text); font-size: 15px; }
 .empty-state span { font-size: 12px; }
+/* A glyph gets a carved plate: the same stuff as every input on the page,
+   so the emptiness becomes a place instead of a void. */
+.empty-state > svg {
+  width: 56px;
+  height: 56px;
+  padding: 16px;
+  margin-bottom: 6px;
+  color: var(--overlay-1);
+  border-radius: 50%;
+  box-shadow: var(--neu-inset-soft);
+}
 
 /* ── Buttons ────────────────────────────────────────────────────────────────
    Compose: class="btn btn-primary". All labels sans; heights from the
@@ -166,8 +183,11 @@
   font-size: 13px;
   font-weight: 780;
   cursor: pointer;
-  transition: transform .16s, background .16s, border-color .16s, box-shadow .16s, color .16s;
+  transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
+              background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
+/* Down is crisp on the fast-out; up comes back on the spring. */
+.btn:active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: .08s; }
 .btn:disabled { opacity: .35; cursor: not-allowed; box-shadow: var(--neu-inset-soft); }
 
 /* Primary — solid accent + hard offset (the flat graphic note, system-wide).
@@ -347,8 +367,11 @@
   padding: 12px 14px;
   resize: vertical;
 }
+/* overlay-1, not overlay-0: inside the carve the top-left of the well is
+   darker than base, so the ratio where a placeholder sits is lower than the
+   3.4:1 overlay-0 makes on paper. One step up still reads as a placeholder. */
 .input::placeholder,
-.field :is(input, textarea)::placeholder { color: var(--overlay-0); }
+.field :is(input, textarea)::placeholder { color: var(--overlay-1); }
 /* Focus ring layers over the inset — no border swap; :focus-visible outline
    stays untouched. */
 .input:focus,
@@ -366,15 +389,17 @@
   color: var(--overlay-1);
   font: 500 12px/1.4 var(--sans);
 }
-/* Validation: the state sets the tone, and a tone ring layers over the
-   inset, staying through focus. Set aria-invalid alongside .is-error. */
+/* Validation: the state sets the tone and washes the well in it at 4%, the
+   accordion's engaged rule. The carve is untouched (an inset surface stays
+   defined by depth) and focus keeps its mauve ring, layered over the wash
+   by the focus rule above. Set aria-invalid alongside .is-error. */
 .field.is-error, .input.is-error { --tone: var(--red); }
 .field.is-warning, .input.is-warning { --tone: var(--peach); }
 .field.is-error :is(input, select, textarea),
 .field.is-warning :is(input, select, textarea),
 .input.is-error,
 .input.is-warning {
-  box-shadow: var(--neu-inset), 0 0 0 2px var(--tone);
+  background: color-mix(in srgb, var(--tone) 4%, transparent);
 }
 .field.is-error label, .field.is-warning label,
 .field.is-error small, .field.is-warning small { color: var(--tone); }
@@ -421,7 +446,7 @@
     background: var(--base);
     box-shadow: var(--shadow-pop);
     opacity: 1;
-    transition: opacity .16s ease, transform .16s ease, display .16s allow-discrete, overlay .16s allow-discrete;
+    transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out), display var(--t-fast) allow-discrete, overlay var(--t-fast) allow-discrete;
   }
   .field select::picker(select):popover-open { opacity: 1; transform: none; }
   @starting-style {
@@ -469,9 +494,13 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity .16s ease, visibility .16s;
+  /* Rests 2px low; rises into place. */
+  translate: -50% 2px;
+  transition: opacity var(--t-fast) var(--ease-out), translate var(--t-fast) var(--ease-out), visibility var(--t-fast);
 }
-[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; visibility: visible; }
+/* A tooltip waits .4s so a pointer crossing a toolbar doesn't fire a row of
+   them. It leaves at once. */
+[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: .4s; }
 
 /* Hero variant — the one oversized input on a page. */
 .input-lg {
@@ -518,16 +547,20 @@
   box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color);
   text-align: left;
   cursor: pointer;
-  transition: transform .16s, background .16s, border-color .16s, box-shadow .16s, color .16s;
+  transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
+              background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
 .segmented > *:hover {
   transform: translate(-1px, -1px);
   border-color: color-mix(in srgb, var(--mauve) 34%, var(--surface-1));
 }
-/* Held down — the half-slide. Transient only; the settled state never slides. */
+/* Held down — the half-slide. Transient only; the settled state never slides.
+   Down on the fast-out, back up on the spring. */
 .segmented > *:active {
   transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
   box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--hard-offset-color);
+  transition-timing-function: var(--ease-out);
+  transition-duration: .08s;
 }
 /* Selected — the engaged treatment: pressed in, mauve-keyed, borderless. */
 .segmented > .active,
@@ -618,7 +651,7 @@
   color: var(--tone);
   border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
   border-radius: 4px;
-  background: color-mix(in srgb, var(--tone) 8%, transparent);
+  background: color-mix(in srgb, var(--tone) 4%, transparent);
   font: 650 12px/1 var(--sans);
 }
 
@@ -630,7 +663,7 @@
   color: var(--tone);
   border: 1px solid color-mix(in srgb, var(--tone) 25%, var(--surface-0));
   border-radius: 10px;
-  background: color-mix(in srgb, var(--tone) 7%, transparent);
+  background: color-mix(in srgb, var(--tone) 4%, transparent);
   box-shadow: var(--neu-inset-soft);
   font-size: 12px;
   line-height: 1.5;
@@ -662,9 +695,13 @@
   background: transparent;
   box-shadow: var(--neu-inset-soft);
   cursor: pointer;
-  transition: background .16s, box-shadow .16s, border-color .16s;
+  transition: background var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
 }
 .checkbox:hover:not(:disabled):not(:checked) { border-color: var(--surface-2); }
+/* The box itself presses, like every other control: held, it sinks to the
+   full carve. The check then lands on the spring and overshoots a hair. */
+.checkbox:active:not(:disabled),
+.radio:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset); }
 .checkbox::after {
   content: "";
   position: absolute;
@@ -672,8 +709,8 @@
   background: var(--crust);
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / 13px no-repeat;
   opacity: 0;
-  transform: scale(.6);
-  transition: opacity .16s, transform .16s;
+  transform: scale(.4) rotate(-8deg);
+  transition: opacity .12s, transform .22s var(--ease-spring);
 }
 .checkbox:checked {
   border-color: var(--mauve);
@@ -695,7 +732,7 @@
   background: transparent;
   box-shadow: var(--neu-inset-soft);
   cursor: pointer;
-  transition: box-shadow .16s, border-color .16s;
+  transition: box-shadow var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
 }
 .radio:hover:not(:disabled):not(:checked) { border-color: var(--surface-2); }
 /* Deliberate asymmetry with the checkbox: the checkbox signals with its
@@ -746,7 +783,8 @@
   background: var(--base);
   box-shadow: var(--neu-raised-soft);
   transform: perspective(120px) rotateY(16deg);
-  transition: translate .2s, transform .2s, background .2s, box-shadow .2s, border-color .2s;
+  /* The paddle travels on the spring, so it lands at 23px with a bounce. */
+  transition: translate .24s var(--ease-spring), transform .2s var(--ease-out), background .2s, box-shadow .2s, border-color .2s;
 }
 .switch:checked::after {
   translate: 23px 0;
@@ -757,6 +795,11 @@
   transform: perspective(120px) rotateY(-16deg);
 }
 .switch:active:not(:disabled)::after { transform: perspective(120px) rotateY(0deg) scale(.96); }
+/* Held while on, the glow blooms for the frame the paddle is pressed. */
+.switch:checked:active:not(:disabled)::after {
+  box-shadow: 0 0 12px color-mix(in srgb, var(--mauve) 28%, transparent),
+              inset 0 1px rgb(255 255 255 / .16);
+}
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
 
@@ -774,11 +817,16 @@
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
   transition: box-shadow .2s, border-color .2s, border-radius .2s;
 }
+/* Open is the engaged treatment: the full carve and the mauve wash, the
+   same state a toggled flat button wears. On base the soft inset alone sank
+   about as far as a coin on a carpet, and the chevron was the only signal. */
 .accordion:has(> label > input:checked) {
   border-radius: 10px;
   border-bottom-color: transparent;
-  box-shadow: var(--neu-inset-soft);
+  background: color-mix(in srgb, var(--mauve) 4%, var(--base));
+  box-shadow: var(--neu-inset);
 }
+.accordion:has(> label > input:checked) > label { color: var(--mauve); }
 .accordion > label {
   min-height: 48px;
   padding: 12px;
@@ -822,7 +870,7 @@
 .accordion .fold {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows .3s ease;
+  transition: grid-template-rows .3s var(--ease-out);
 }
 .accordion:has(> label > input:checked) .fold {
   grid-template-rows: 1fr;
@@ -950,38 +998,36 @@
 
 /* ── Accent cards keyed by --accent ─────────────────────────────────────── */
 
+/* A raised card on a plate in its accent. The plate is the hard offset, the
+   system's one flat graphic note, mixed toward surface-0 the way the primary
+   button mixes its mauve offset. Nothing is painted on the card: no spine,
+   no gradient, no eyebrow. The color is what the card sits on. */
 .accent-card {
+  --plate: color-mix(in srgb, var(--accent) 50%, var(--surface-0));
   min-width: 0;
-  padding: 16px 16px 16px 22px;
-  position: relative;
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--surface-0));
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--surface-0));
   border-radius: 13px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
-  box-shadow: var(--neu-raised-soft),
-              inset 1px 1px color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+  background: var(--base);
+  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate),
+              var(--neu-raised-soft);
   transition: transform .16s, box-shadow .16s, border-color .16s;
 }
-/* Left spine in the accent color — the identity cue. */
-.accent-card::before {
-  content: "";
-  position: absolute;
-  inset: 12px auto 12px 0;
-  width: 4px;
-  border-radius: 0 6px 6px 0;
-  background: var(--accent);
-}
-/* Cards wrapped in a link lift on hover, press in on click. The wrapper
-   takes the card's radius so its focus ring traces the card, not the
-   bare-link 4px. */
+/* Cards wrapped in a link lift off the plate on hover (the plate grows a
+   pixel so the lift reads) and half-slide onto it on click, the canon press.
+   The wrapper takes the card's radius so its focus ring traces the card, not
+   the bare-link 4px. */
 a:has(> .accent-card) { border-radius: 13px; color: inherit; text-decoration: none; }
 a:hover > .accent-card {
-  transform: translateY(-1px);
+  transform: translate(-1px, -1px);
   border-color: color-mix(in srgb, var(--accent) 52%, var(--surface-0));
-  box-shadow: var(--neu-raised);
+  box-shadow: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate),
+              var(--neu-raised-soft);
 }
 a:active > .accent-card {
-  transform: translateY(1px);
-  box-shadow: var(--neu-inset-soft);
+  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
+  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate),
+              var(--neu-raised-soft);
 }
 
 /* ── Data display ───────────────────────────────────────────────────────── */
@@ -1027,8 +1073,13 @@ a:active > .accent-card {
   height: 100%;
   display: block;
   border-radius: inherit;
-  background: var(--progress-fill, linear-gradient(90deg, var(--mauve), var(--pink), var(--peach)));
-  transition: width .35s;
+  /* The fill is the accent. The old three-color default was the only
+     three-color object in a one-accent system, and because the gradient was
+     sized to the fill, three bars on a page showed three colors at the same
+     x. A gradient stays an opt-in via --progress-fill. */
+  background: var(--progress-fill, var(--accent));
+  /* Decelerates into the value instead of stopping dead. */
+  transition: width .6s var(--ease-out);
 }
 
 /* Table — opt-in class on <table>; scopes all table styling. Sans tabular
@@ -1049,14 +1100,18 @@ a:active > .accent-card {
   border-bottom: 1px solid var(--surface-0);
   font: 600 13px var(--sans);
   font-variant-numeric: tabular-nums;
+  transition: background var(--t-fast), box-shadow var(--t-fast);
 }
 .table-neu tbody tr:last-child td { border-bottom: 0; }
 /* Hover fill sits on the cells, not the row — with border-collapse a td
    border-radius cannot clip a tr background, so this keeps the fill inside
    a rounded parent's corners. */
+/* The row press: one carve across the whole row. A per-cell inset carved
+   every td into its own tile, with seams at every column edge; this pair
+   shades only the top and bottom, so the cells join into one pressed strip. */
 .table-neu tbody tr:hover td {
-  background: color-mix(in srgb, var(--mauve) 5%, var(--base));
-  box-shadow: var(--neu-inset-soft);
+  background: color-mix(in srgb, var(--mauve) 6%, var(--base));
+  box-shadow: inset 0 4px 6px -4px var(--neu-dark), inset 0 -3px 5px -4px rgb(69 71 90 / .3);
 }
 /* Emphasized name cell — full-strength primary line, quiet secondary line. */
 .table-neu .cell-name strong { color: var(--text); font: 700 13px var(--sans); }
@@ -1074,9 +1129,10 @@ a:active > .accent-card {
   font-variant-numeric: tabular-nums;
 }
 .ranked-row:last-child { border-bottom: 0; }
+.ranked-row { transition: background var(--t-fast), box-shadow var(--t-fast); }
 .ranked-row:hover {
-  background: color-mix(in srgb, var(--mauve) 5%, var(--base));
-  box-shadow: var(--neu-inset-soft);
+  background: color-mix(in srgb, var(--mauve) 6%, var(--base));
+  box-shadow: inset 0 4px 6px -4px var(--neu-dark), inset 0 -3px 5px -4px rgb(69 71 90 / .3);
 }
 .ranked-row strong { color: var(--text); font: 700 13px var(--sans); }
 .ranked-row b { margin-left: auto; color: var(--text); font-weight: 650; }
@@ -1259,29 +1315,34 @@ a:active > .accent-card {
    and inert to pointers, same as display:none for a fixed element.
    These rules must stay AFTER the component blocks so [hidden] wins. */
 
+/* Entrances decelerate on the fast-out: the overlay covers most of its
+   travel early and lands in the last stretch. Exits accelerate on the
+   ease-in and take .14s, so a dismissed thing is gone before the hand moves. */
 .cn-scrim,
 .popover,
 .modal,
 .drawer,
 .toast {
-  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+  transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), visibility var(--t-base);
 }
-.cn-scrim { transition: opacity .2s ease, backdrop-filter .2s ease, visibility .2s; }
-.popover { transition-duration: .16s; }
-.drawer  { transition-duration: .26s; }
+.cn-scrim { transition: opacity var(--t-base) var(--ease-out), backdrop-filter var(--t-base), visibility var(--t-base); }
+.popover { transition-duration: var(--t-fast); }
+.drawer  { transition-duration: var(--t-slow); }
 /* The toast travels on the `translate` property (transform stays free for
-   consumers); .26s to match the drawer's travel tier. */
-.toast   { transition: opacity .2s ease, translate .2s ease, scale .2s ease, visibility .25s, max-height .25s ease, margin .25s ease, padding .25s ease, border-width .25s ease; }
+   consumers) and slides in from the edge it lives on, not up from nowhere. */
+.toast   { transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), scale var(--t-base) var(--ease-out), visibility .25s, max-height .25s ease, margin .25s ease, padding .25s ease, border-width .25s ease; }
 
 /* Exit targets — mirrored as pre-entry states in @starting-style below. */
 .cn-scrim[hidden] { display: block; visibility: hidden; opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
 .popover[hidden]  { display: block; visibility: hidden; opacity: 0; transform: translateY(-4px); pointer-events: none; }
 .modal[hidden]    { display: block; visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); pointer-events: none; }
 .drawer[hidden]   { display: flex; visibility: hidden; transform: translateX(calc(100% + 40px)); pointer-events: none; }
-.toast[hidden]    { display: flex; visibility: hidden; opacity: 0; translate: 0 6px; pointer-events: none; }
+.toast[hidden]    { display: flex; visibility: hidden; opacity: 0; translate: 16px 0; pointer-events: none; }
 /* A modal or drawer inside a scrim rides the scrim's exit. */
 .cn-scrim[hidden] .modal  { visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); }
 .cn-scrim[hidden] .drawer { visibility: hidden; transform: translateX(calc(100% + 40px)); }
+:is(.cn-scrim, .popover, .modal, .drawer, .toast)[hidden],
+.cn-scrim[hidden] :is(.modal, .drawer) { transition-timing-function: var(--ease-in); transition-duration: .14s; }
 
 @starting-style {
   .cn-scrim:not([hidden]) { opacity: 0; backdrop-filter: blur(0); }
@@ -1290,7 +1351,7 @@ a:active > .accent-card {
   .cn-scrim:not([hidden]) .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
   .drawer:not([hidden])   { transform: translateX(calc(100% + 40px)); }
   .cn-scrim:not([hidden]) .drawer { transform: translateX(calc(100% + 40px)); }
-  .toast:not([hidden])    { opacity: 0; translate: 0 6px; }
+  .toast:not([hidden])    { opacity: 0; translate: 16px 0; }
 }
 
 /* ── Page furniture ─────────────────────────────────────────────────────────
@@ -1313,8 +1374,8 @@ a:active > .accent-card {
   font-family: var(--sans);
   font-size: clamp(36px, 4.6vw, 56px);
   line-height: .98;
-  letter-spacing: -.055em;
-  font-weight: 820;
+  letter-spacing: -.03em;
+  font-weight: 760;
 }
 .lede { max-width: 690px; margin: 20px 0; color: var(--subtext-1); font-family: var(--sans); font-size: 16px; line-height: 1.65; }
 

@@ -25,8 +25,11 @@
 
 .cn-pressable,
 .cn-pressable-slide {
-  transition: transform .16s, background .16s, border-color .16s, box-shadow .16s;
+  transition: transform var(--t-fast) var(--ease-spring), background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast) var(--ease-spring);
 }
+/* Down is crisp on the fast-out; up comes back on the spring. */
+.cn-pressable:active:not(:disabled),
+.cn-pressable-slide:active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: .08s; }
 
 /* The soft-control press: lift on hover, sink to an inset when held. */
 .cn-pressable:hover:not(:disabled)  { transform: translateY(-1px); }
@@ -95,16 +98,18 @@
   font-family: var(--sans);
   font-size: clamp(32px, 4vw, 46px);
   line-height: .98;
-  letter-spacing: -.055em;
-  font-weight: 820;
+  /* Inter's optical size already tightens at display sizes; 820/-.055em on
+     top of it closed the counters and crashed punctuation into letters. */
+  letter-spacing: -.03em;
+  font-weight: 760;
   text-wrap: balance;
 }
 .cn-display-sm {
   font-family: var(--sans);
   font-size: clamp(26px, 3.4vw, 36px);
   line-height: .98;
-  letter-spacing: -.045em;
-  font-weight: 820;
+  letter-spacing: -.03em;
+  font-weight: 760;
   text-wrap: balance;
 }
 .cn-display em, .cn-display-sm em { color: var(--mauve); font-style: normal; }
@@ -141,7 +146,7 @@
 .cn-bg-crust  { background: var(--crust); }
 .cn-bg-well   { background: color-mix(in srgb, var(--crust) 38%, var(--mantle)); }
 .cn-bg-head   { background: color-mix(in srgb, var(--crust) 30%, var(--mantle)); }
-.cn-tint      { background: color-mix(in srgb, var(--tone) 7%, transparent); }
+.cn-tint      { background: color-mix(in srgb, var(--tone) 4%, transparent); }
 .cn-tint-accent {
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
 }
@@ -199,13 +204,15 @@
   background: var(--accent);
 }
 
-/* Fixed overlay backdrop for modals/drawers. */
+/* Fixed overlay backdrop for modals/drawers. The crust does the work; the
+   blur is a whisper. Everything else in the system is opaque and lit from
+   one corner, and a 6px smear behind a modal read as a different substance. */
 .cn-scrim {
   position: fixed;
   inset: 0;
   z-index: 70;
-  background: color-mix(in srgb, var(--crust) 74%, transparent);
-  backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--crust) 80%, transparent);
+  backdrop-filter: blur(2px);
 }
 
 /* Screen-reader only — clipped, not hidden. */

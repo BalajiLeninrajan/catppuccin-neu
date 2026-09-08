@@ -43,9 +43,24 @@ export default function DepthPage() {
         row
       >
         <Cube cls="cn-raised" />
-        <Cube cls="cn-raised-soft" />
+        <div style="display:grid;gap:12px;justify-items:center">
+          <span class="chip">v2.4.1</span>
+          <code class="cn-code cn-text-overlay-1" style="font-size:11px">
+            cn-raised-soft
+          </code>
+        </div>
         <Cube cls="cn-inset" />
-        <Cube cls="cn-inset-soft" />
+        <div style="display:grid;gap:12px;justify-items:center">
+          <span style="display:flex;gap:10px;align-items:center">
+            <input class="checkbox" type="checkbox" aria-label="inset-soft specimen" />
+            <span class="stepper">
+              <span>Draft</span>
+            </span>
+          </span>
+          <code class="cn-code cn-text-overlay-1" style="font-size:11px">
+            cn-inset-soft
+          </code>
+        </div>
       </Demo>
 
       <p class="cn-copy">
@@ -53,7 +68,10 @@ export default function DepthPage() {
         lifts a surface off the page; <code class="cn-code">cn-inset</code>{" "}
         presses one into it. Each has a soft partner with smaller offset and
         blur at reduced strength. Panels and cards take the regular shadows;
-        chips, small controls, and held states take the soft ones.
+        chips, small controls, and held states take the soft ones, which is
+        why the soft pair is shown on a chip and a checkbox: on a 96px cube
+        it is nearly the strong pair, and the specimen would argue against
+        the token it documents.
       </p>
 
       <Demo

@@ -107,7 +107,7 @@ function ToastSpawner() {
                 aria-label="Dismiss"
                 onClick={() => dismiss(t.id)}
               >
-                ✕
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
               </button>
             </div>
           ))}
@@ -160,7 +160,7 @@ export default function ToastPage() {
             <span>Sunday, December 3 at 9:00 AM</span>
           </div>
           <button type="button" class="btn-icon" aria-label="Dismiss">
-            ✕
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
           </button>
         </div>
         <div class="toast" role="status">
@@ -272,7 +272,7 @@ function resume() {
       <b>Event created</b>
       <span>Sunday, December 3 at 9:00 AM</span>
     </div>
-    <button class="btn-icon" aria-label="Dismiss">✕</button>
+    <button class="btn-icon" aria-label="Dismiss"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg></button>
   </div>
 
   <!-- dismissing: toggle hidden to play the exit, then remove -->

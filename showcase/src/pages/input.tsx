@@ -167,9 +167,11 @@ export default function InputPage() {
           </div>
         </div>
         <p class="cn-copy">
-          The state class sets <code class="cn-code">--tone</code> and rings
-          the well; label and message tint with it. The ring stays through
-          focus. Set <code class="cn-code">aria-invalid</code> alongside{" "}
+          The state class sets <code class="cn-code">--tone</code> and washes
+          the well in it at 4%, the same rule as an open accordion; the carve
+          is untouched, and label and message tint with it. Focus keeps the
+          mauve ring, over the wash. Set{" "}
+          <code class="cn-code">aria-invalid</code> alongside{" "}
           <code class="cn-code">.is-error</code>.
         </p>
       </Demo>
@@ -215,7 +217,7 @@ export default function InputPage() {
             name: ".is-error / .is-warning",
             values: "on .field or a bare .input",
             notes:
-              "Red or peach tone ring over the inset; label and small tint. Disabled wins over both.",
+              "Red or peach tone wash (4%) on the well, carve untouched; label and small tint. Focus keeps the mauve ring. Disabled wins over both.",
           },
           {
             name: ".field small",

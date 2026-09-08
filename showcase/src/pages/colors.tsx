@@ -171,8 +171,8 @@ export default function ColorsPage() {
 
       <CodeBlock
         title="Blessed percentages"
-        code={`/* State background: 7 to 10% tone into transparent or the ground */
-background: color-mix(in srgb, var(--tone) 8%, transparent);
+        code={`/* State background: 4% tone into transparent or the ground, one number everywhere */
+background: color-mix(in srgb, var(--tone) 4%, transparent);
 
 /* Edge: 25 to 45% tone; the tint keeps its hairline */
 border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
@@ -280,7 +280,7 @@ background: color-mix(in srgb, var(--mauve) 5%, var(--base));`}
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill; the terminal ground." },
           { name: ".cn-bg-well", values: "crust 38% into mantle", notes: "Explicit well fill; compose onto .well." },
           { name: ".cn-bg-head", values: "crust 30% into mantle", notes: "Band fill for headers; panel headings use the same mix." },
-          { name: ".cn-tint", values: "tone 7% into transparent", notes: "Semantic wash; pair with .cn-tone-*." },
+          { name: ".cn-tint", values: "tone 4% into transparent", notes: "Semantic wash; pair with .cn-tone-*. One number for every tinted surface." },
         ]}
       />
     </Doc>

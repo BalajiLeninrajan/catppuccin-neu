@@ -172,6 +172,22 @@ Accent cycle: `#cba6f7, #94e2d5, #f9e2af, #89b4fa, #fab387, #f5c2e7`
 Fixed-size exceptions that do not track density: checkbox and radio (20px),
 switch (50x28), avatar (32px, 44px for `.is-lg`).
 
+### Motion tokens
+
+Two curves, a spring, and three durations, all on `:root`:
+
+- `--ease-out: cubic-bezier(.16, 1, .3, 1)` for anything answering the
+  pointer or arriving: it covers most of its travel early and lands.
+- `--ease-in: cubic-bezier(.7, 0, .84, 0)` for anything leaving.
+- `--ease-spring: cubic-bezier(.3, 1.4, .4, 1)` for anything returning; it
+  overshoots by about a pixel, which is the difference between a picture of
+  a button and a button.
+- `--t-fast: .16s`, `--t-base: .22s`, `--t-slow: .32s`.
+
+Presses go down on the fast-out in .08s and come back on the spring.
+Entrances take the fast-out; exits take the ease-in in .14s. No transition
+in the package rides the browser default curve.
+
 ### Depth canon: the hard offset and the half-slide
 
 The hard offset shadow is available to any clickable control, and clickable
@@ -182,6 +198,8 @@ at rest). The press is a half-slide, always half the offset:
 - hover: `translate(-1px, -1px)`
 - active: `translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2))`
   with the shadow shrinking to the same half offset
+- timing: down on `--ease-out` in .08s, back up on `--ease-spring` over
+  `--t-fast`
 
 Primary buttons keep the hard offset fleet-wide; softening it is a violation.
 
@@ -189,9 +207,13 @@ Primary buttons keep the hard offset fleet-wide; softening it is a violation.
 
 - `:focus-visible { outline: 2px solid var(--mauve); outline-offset: 3px; }`
   and `::selection` inversion (crust on mauve), everywhere, no exceptions.
+  The ring settles outward: `:not(:focus-visible)` holds the offset at 0 and
+  focus eases it to 3px over .15s on `--ease-out`, so focus arrives instead
+  of blinking on.
 - Bare links get `border-radius: 4px` so keyboard outlines follow the system
   geometry, never a sharp rectangle.
-- Links ship styled from the tokens reset: mauve at rest, pink on hover —
+- Links ship styled from the tokens reset: mauve at rest, pink on hover
+  (color transitions over `--t-fast`) —
   `.btn-text`'s pair exactly, never underlined, so every anchor in the
   system speaks one accent language. Recipes that restyle anchors
   (buttons, link-wrapped cards) win from their later layer.
@@ -206,10 +228,14 @@ Primary buttons keep the hard offset fleet-wide; softening it is a violation.
   treatment made a given by the tokens reset. True italics use `<i>`.
 - `.app-shell` is a flex column and `.app-shell > main` absorbs the slack,
   so the footer sits at the viewport bottom even when a page runs short.
-- `.page-enter` has no animation fill-mode: a held transform would make the
-  element a permanent containing block for every fixed descendant (scrims,
+- `.page-enter` animates its children, not itself, 40ms apart (the sixth
+  and later share the .2s delay) on `--ease-out`, so the page assembles
+  instead of arriving as one slab. Fill is `backwards` only: the from-state
+  holds through each child's delay and nothing is held after, so no element
+  becomes a permanent containing block for fixed descendants (scrims,
   modals, drawers, toasts).
-- Four keyframes only: `enter`, `spin`, `pulse`, `blink`.
+- Five keyframes only: `enter`, `spin`, `pulse`, `blink`, and `cast` (the
+  topbar's scroll-driven shadow).
 - The reduced-motion block collapses all animation and transitions.
 
 ## css/utilities.css (layer cn.utilities)
@@ -235,9 +261,10 @@ parameter. Prefix `cn-`.
 
 ### Interaction
 
-- `.cn-pressable`: `transition: transform .16s, background .16s, border-color
-  .16s, box-shadow .16s`; hover `translateY(-1px)`, active `translateY(1px)` +
-  `--neu-inset-soft`. The soft-control press.
+- `.cn-pressable`: transform and box-shadow on `--t-fast --ease-spring`,
+  background and border-color on `--t-fast`; active switches to `--ease-out`
+  at .08s (down crisp, up on the spring). Hover `translateY(-1px)`, active
+  `translateY(1px)` + `--neu-inset-soft`. The soft-control press.
 - `.cn-pressable-slide`: same transition; hover `translate(-1px,-1px)`, active
   the half-slide (`calc(var(--hard-offset) / 2)` translate and shadow). Legal
   only combined with `.cn-hard`.
@@ -266,9 +293,11 @@ appears only on `.cn-eyebrow` and `.cn-microlabel`.
   row with 8px gap.
 - `.cn-code`: `500 13px/1.6 var(--mono)`, tabular-nums. The inline code
   voice, and the only shipped mono role.
-- `.cn-display`: `clamp(32px, 4vw, 46px)`, line-height .98, `-.055em`, weight
-  820, `text-wrap: balance`; `em` renders mauve, no italic.
-- `.cn-display-sm`: `clamp(26px, 3.4vw, 36px)`, `-.045em`, weight 820.
+- `.cn-display`: `clamp(32px, 4vw, 46px)`, line-height .98, `-.03em`, weight
+  760, `text-wrap: balance`; `em` renders mauve, no italic. (820 with
+  `-.055em` crashed punctuation into letters at 46px; Inter's optical size
+  already tightens at display sizes, so the manual tracking doubled up.)
+- `.cn-display-sm`: `clamp(26px, 3.4vw, 36px)`, `-.03em`, weight 760.
 - `.cn-title`: 20px, weight 800, `-.03em`.
 - `.cn-name`: `700 13px/1.3 var(--sans)`, `var(--text)` (emphasized proper
   names).
@@ -282,7 +311,7 @@ appears only on `.cn-eyebrow` and `.cn-microlabel`.
   (`var(--accent)`), `.cn-text-tone` (`var(--tone)`).
 - Backgrounds: `.cn-bg-base`, `.cn-bg-mantle`, `.cn-bg-crust`, `.cn-bg-well`
   (crust 38% into mantle), `.cn-bg-head` (crust 30% into mantle), `.cn-tint`
-  (tone 7% wash), `.cn-tint-accent` (135deg gradient, accent 8% into mantle
+  (tone 4% wash), `.cn-tint-accent` (135deg gradient, accent 8% into mantle
   fading to mantle at 48%).
 - Tone setters: `.cn-tone-{red,green,peach,yellow,blue,mauve}` set `--tone`
   only.
@@ -306,8 +335,11 @@ appears only on `.cn-eyebrow` and `.cn-microlabel`.
 
 - `.cn-spine`: relative; `::before` 4px left bar in `var(--accent)`,
   `inset: 12px auto 12px 0; border-radius: 0 6px 6px 0;`.
-- `.cn-scrim`: fixed inset overlay, crust 74% mix, `backdrop-filter:
-  blur(6px)`, z-index 70.
+- `.cn-scrim`: fixed inset overlay, crust 80% mix, `backdrop-filter:
+  blur(2px)`, z-index 70. The crust does the work; the blur is a whisper.
+  Everything else in the system is opaque and lit from one corner, and a 6px
+  smear behind a modal read as a different substance. The topbar keeps its
+  14px blur: content moving under it earns it.
 - `.cn-sr-only`: standard clip pattern.
 - `.cn-hidden`: `display: none !important`.
 - (`.scroll-well`, `.app-shell`, `.page-enter`, `.live-dot` live in
@@ -351,8 +383,15 @@ table styling.
   `500 12px/1.65 var(--mono)`; `.caret` is a 6x14 blinking block in
   `var(--accent)`.
 - `.topbar`: sticky, min-height 68px, translucent base (91%) + `blur(14px)`,
-  bottom hairline, `--shadow-cast` + lit hairline. Three-column grid.
-- `.empty-state`: centered column, min-height 260px, overlay-1.
+  bottom hairline, `--shadow-cast` + lit hairline. Three-column grid. Where
+  `animation-timeline: scroll()` is supported the cast and the hairline fade
+  in over the first 60px of scroll (the `cast` keyframe): nothing is under
+  the bar at the top of the page, so nothing casts. Elsewhere the bar keeps
+  its cast at rest.
+- `.empty-state`: centered column, min-height 260px, overlay-1. An `svg`
+  first child sits on a 56px round plate (`--neu-inset-soft`, 16px padding,
+  overlay-1 stroke): the same material as every input on the page, so the
+  emptiness becomes a place.
 
 ### Buttons
 
@@ -394,7 +433,9 @@ overlay-2.
 `.input` (and `.field input/select/textarea`): a borderless inset well carved
 from whatever surface it sits on. `border: 0`, `background: transparent`,
 `--neu-inset`, height `var(--input-h)`, 13px radius, 14px inline padding, sans
-13px with tabular-nums. Placeholder overlay-0.
+13px with tabular-nums. Placeholder overlay-1: overlay-0 is 3.4:1 on base
+on paper, but inside the carve the top-left of the well is darker than base,
+so the ratio where a placeholder sits is lower still.
 
 - Focus: `box-shadow: var(--neu-inset), 0 0 0 2px var(--mauve)`. The ring is
   the one focus indicator; the fields set `outline: none` on
@@ -411,10 +452,15 @@ from whatever surface it sits on. `border: 0`, `background: transparent`,
 - `.input-icon`: wrapper with an absolute 18px leading icon at left 16px;
   the input pads to 44px.
 - Validation: `.is-error` / `.is-warning` on `.field` or a bare `.input` set
-  `--tone` (red / peach) and ring the well `0 0 0 2px var(--tone)` over the
-  inset, staying through focus; label and `.field small` (the 12px helper or
-  message line) tint with it. Disabled wins over both by source order. Set
-  `aria-invalid` alongside `.is-error`.
+  `--tone` (red / peach) and wash the well in it, `color-mix(in srgb,
+  var(--tone) 4%, transparent)`, the accordion's engaged rule. The carve is
+  untouched: an inset surface stays defined by depth, and the old 2px tone
+  ring was a border by another name that also doubled as the focus ring, so
+  a focused invalid field looked like an unfocused one. Focus stays the
+  mauve ring, layered over the wash. Label and `.field small` (the 12px
+  helper or message line) tint with the tone, so the wash is never the only
+  signal. Disabled wins over both by source order. Set `aria-invalid`
+  alongside `.is-error`.
 
 ### Select picker
 
@@ -432,8 +478,10 @@ the native picker stays.
 
 `[data-tip]` draws the system tooltip as an absolutely positioned `::after`
 bubble (max-width 240px, 8px radius, surface-1 border, `--shadow-pop`, sans
-11px) above the element, shown on hover and `:focus-visible`, fading via
-opacity + visibility. Never use `title=`; it renders the OS tooltip.
+11px) above the element, shown on hover and `:focus-visible`. It waits .4s
+(a pointer crossing a toolbar must not fire a row of them), then fades and
+rises 2px into place on `--ease-out`; it leaves at once. Never use
+`title=`; it renders the OS tooltip.
 
 ### Segmented and stepper
 
@@ -458,9 +506,9 @@ mix, `--neu-inset-soft`, `650 12px var(--sans)`). Current phase via
   tabular.
 - `.chip`: outlined pill, `--base`, `--neu-raised-soft`,
   `600 12px var(--sans)` tabular.
-- `.chip-tone`: tinted status tag, 4px radius, tone 8% wash, tone 45%
+- `.chip-tone`: tinted status tag, 4px radius, tone 4% wash, tone 45%
   hairline, `650 12px var(--sans)`. Pass the color via `.cn-tone-*`.
-- `.banner`: semantic tint band, 10px radius, tone 7% wash, tone 25% into
+- `.banner`: semantic tint band, 10px radius, tone 4% wash, tone 25% into
   surface-0 edge, `--neu-inset-soft`, 12px text.
 
 ### Selection controls
@@ -469,9 +517,11 @@ mix, `--neu-inset-soft`, `650 12px var(--sans)`). Current phase via
 gap, sans 13px; `:has(:disabled)` dims to `.5`.
 
 - `.checkbox`: 20px, 4px radius, transparent background, `--neu-inset-soft`,
-  hairline (surface-2 55% mix). Checked: mauve fill + border, crust checkmark
-  (a masked `::after` scaling in), soft inset kept plus the
-  `rgb(255 255 255 / .16)` top edge.
+  hairline (surface-2 55% mix). Held, the box presses like every other
+  control (`translateY(1px)` + full `--neu-inset`; the radio too). Checked:
+  mauve fill + border, crust checkmark (a masked `::after` that lands on
+  `--ease-spring` from `scale(.4) rotate(-8deg)`, overshooting a hair), soft
+  inset kept plus the `rgb(255 255 255 / .16)` top edge.
 - `.radio`: same edged well, round. Deliberate asymmetry: the checkbox
   signals with its fill and stays on the soft inset; the radio only gets a
   dot, so checked deepens to full `--neu-inset` with a mauve-mix border. The
@@ -481,17 +531,22 @@ gap, sans 13px; `:has(:disabled)` dims to `.5`.
 - `.switch`: an abstract light switch, 50x28, 8px radius, transparent carved
   plate (`--neu-inset`). The `::after` paddle (21x22, 6px radius, `--base`,
   raised-soft, hairline) tilts `perspective(120px) rotateY(16deg)`
-  at rest; checked slides it `translate 23px`, flips the tilt to -16deg, and
+  at rest; checked slides it `translate 23px` on `--ease-spring` (.24s, so
+  it lands with a bounce), flips the tilt to -16deg on `--ease-out`, and
   lights it mauve with a whisper glow
   (`0 0 6px color-mix(in srgb, var(--mauve) 18%, transparent)` + the white
   inset edge). While pressed the paddle flattens
-  (`rotateY(0) scale(.96)`).
+  (`rotateY(0) scale(.96)`); pressed while on, the glow blooms to
+  `0 0 12px` at 28% for the frame it is held.
 
 ### Accordion
 
-The whole open item sinks in place: carved (`--neu-inset-soft`), title and
-body together, vertical growth only. Closed rows stay flat with straight
-dividers; radius (10px) and shadow appear only while open.
+The whole open item sinks in place: the engaged treatment, full `--neu-inset`
+with the mauve 4% wash and the title in mauve, title and body together,
+vertical growth only. (The soft inset alone sank about as far as a coin on
+a carpet, and the chevron was the only open signal.) Closed rows stay flat
+with straight dividers; radius (10px), shadow and wash appear only while
+open.
 
 Mechanism: a label + hidden checkbox, with the fold transitioning
 `grid-template-rows: 0fr` to `1fr` (.3s; the .2s carve runs with it, no
@@ -555,12 +610,17 @@ clipboard write is one delegated consumer listener, documented on the page.
 
 ### Accent card
 
-`.accent-card`: keyed by `--accent`. 13px radius, accent 28% edge, the
-`cn-tint-accent` gradient, `--neu-raised-soft` plus an accent-mix lit inset,
-and the left spine (`::before`, 4px, accent). Cards wrapped in a link lift on
-hover (`--neu-raised`, stronger edge) and press in on click (inset-soft);
-`a:has(> .accent-card)` takes the 13px radius so the focus ring traces the
-card.
+`.accent-card`: keyed by `--accent`. A raised card on a plate in its accent:
+13px radius, base fill, accent 32% edge, and the hard offset in `--plate`
+(accent 50% into surface-0, the primary button's own rule for a colored
+offset) layered over `--neu-raised-soft`. Nothing is painted on the card: no
+spine, no gradient, no eyebrow. Color and depth come from the material, and
+the plate is the one thing a card in this system can sit on that no other
+card can. Cards wrapped in a link lift off the plate on hover
+(`translate(-1px, -1px)`, the plate grows by 1px, stronger edge) and
+half-slide onto it on click, the canon press. `a:has(> .accent-card)` takes
+the 13px radius so the focus ring traces the card. The spine survives as
+`.cn-spine`, for position only: the current row, the selected item.
 
 ### Data display
 
@@ -570,19 +630,28 @@ card.
   soft hairlines.
 - `.progress-track`: 7px, 999px radius, `--crust` fill + `--neu-inset-soft`
   (the track keeps its fill; at 7px a carve reads as mud). The fill span
-  inherits the radius (no overflow clipping) and defaults to the
-  mauve-pink-peach gradient; re-key it per instance via `--progress-fill`
-  (any token color or token gradient — the `--ring-ground` pattern), e.g.
-  `style="--progress-fill: var(--green)"`. Width transitions .35s.
+  inherits the radius (no overflow clipping) and defaults to `var(--accent)`;
+  re-key it per instance via `--progress-fill` (any token color or token
+  gradient — the `--ring-ground` pattern), e.g.
+  `style="--progress-fill: var(--green)"`. The old mauve-pink-peach default
+  was the only three-color object in a one-accent system, and because the
+  gradient was sized to the fill, three bars on one page showed three
+  colors at the same x. A gradient is an opt-in now. Width transitions .6s
+  on `--ease-out`, decelerating into the value.
 - `.table-neu`: opt-in class on `<table>`; scopes all table styling. Header:
   `cn-bg-head` mix, `650 12px var(--sans)`, overlay-1. Cells:
-  `600 13px var(--sans)` tabular, subtext-1. Row hover presses in: mauve 5%
-  wash + `--neu-inset-soft` on the cells, not the row (with border-collapse
-  a td radius cannot clip a tr background, so cell fills stay inside a
-  rounded parent's corners). `.cell-name` for the emphasized two-line cell.
+  `600 13px var(--sans)` tabular, subtext-1. Row hover presses in: mauve 6%
+  wash + the row-press composite
+  (`inset 0 4px 6px -4px var(--neu-dark), inset 0 -3px 5px -4px rgb(69 71 90 / .3)`)
+  on the cells, not the row (with border-collapse a td radius cannot clip a
+  tr background, so cell fills stay inside a rounded parent's corners). The
+  composite shades only the top and bottom, so the cells join into one
+  pressed strip; the per-cell soft inset carved every td into its own tile
+  with seams at every column edge. Background and shadow fade over
+  `--t-fast`. `.cell-name` for the emphasized two-line cell.
   Give each data cell `data-label`; it becomes the card label at 760px.
 - `.ranked-row`: ordered list line (rank mark, name, trailing value), same
-  hover press.
+  hover press and fade.
 
 ### Overlays
 
@@ -625,12 +694,15 @@ flipping at the end. A hidden overlay is invisible, unfocusable, and
 pointer-inert (`pointer-events: none`), same as `display: none` for a fixed
 element.
 
-Specs: scrim fades and un-blurs .2s; modal fades + rises 8px + scales
-.98 to 1 (.2s); drawer slides from the right edge (.26s); popover fades +
-drops 4px (.16s); toast fades + rises 6px (.2s). A modal or drawer inside a
-scrim rides the scrim's `[hidden]`. The motion rules sit after the component
-blocks so `[hidden]` wins. Consumers that unmount instead of hiding get the
-entrance only. The reduced-motion block collapses all of it.
+Specs: scrim fades and un-blurs; modal fades + rises 8px + scales .98 to 1;
+popover fades + drops 4px; toast fades + slides 16px in from the right edge
+it lives on. Entrances take `--ease-out`: modal, scrim and toast over
+`--t-base`, popover `--t-fast`, drawer `--t-slow`, so each covers most of
+its travel early and lands in the last stretch. Exits take `--ease-in` in
+.14s: a dismissed thing is gone before the hand moves. A modal or drawer
+inside a scrim rides the scrim's `[hidden]`. The motion rules sit after the
+component blocks so `[hidden]` wins. Consumers that unmount instead of
+hiding get the entrance only. The reduced-motion block collapses all of it.
 
 ### Page furniture
 
@@ -710,8 +782,14 @@ Each page: short intro prose, specimens with copyable class strings
 (`.cn-code`, click to copy), variants, states. Demo stages sit on `--base`:
 components live on the page ground, and neumorphic depth only reads when the
 surface matches its background (the well is shown as itself on its own page).
-The site is the visual-regression reference: every recipe and state appears
-at least once.
+The stage is framed by a soft hairline and the copy line under it is a flat
+row with a top rule: the system has one dashed border and the docs don't
+add two more per page. Close and dismiss buttons carry a stroke glyph
+(an inline `svg`, 14px, 1.8 stroke), the same drawing style as every other
+icon, never a text character. Card specimens carry a name and a meta line
+and no eyebrow. The soft depth pair is shown on a chip and a checkbox, the
+objects it is tuned for. The site is the visual-regression reference: every
+recipe and state appears at least once.
 
 ## Verification rules (what reviewers check)
 
@@ -720,10 +798,13 @@ at least once.
    and its half-press, `10px`, `3px`), the tilted-hero composite (the 10px
    hard offset layered with `--neu-raised`), the focus ring `0 0 0 2px` mauve
    layered on an inset, or a documented composite: the two blessed white
-   insets, the accent-card's accent-mix inset, the cast hairline, the halo ring
+   insets, the accent-card plate (the hard offset in `--plate`, one pixel
+   larger on hover, layered with `--neu-raised-soft`), the cast hairline, the halo ring
    `0 0 0 Npx color-mix(… 13%, transparent)` used by `.radio` and
-   `.live-dot`, the avatar-stack ground ring `0 0 0 2px var(--base)`, and
-   the switch glow `0 0 6px` mauve 18%.
+   `.live-dot`, the avatar-stack ground ring `0 0 0 2px var(--base)`, the
+   row-press composite (`inset 0 4px 6px -4px var(--neu-dark), inset 0 -3px
+   5px -4px rgb(69 71 90 / .3)`) on hovered table cells and ranked rows,
+   and the switch glow `0 0 6px` mauve 18% (`0 0 12px` at 28% while held).
 2. Every color literal is a Mocha hex from tokens.css, `currentColor`,
    `transparent`, a `color-mix(in srgb, …)` of tokens, or the two blessed
    whites (`rgb(255 255 255 / .16)` primary highlight, `/ .1` mark
@@ -739,8 +820,14 @@ at least once.
    one element earns it. Sans-face numbers get `tabular-nums`. Uppercase
    appears only on `.cn-eyebrow`/`.eyebrow` and `.cn-microlabel`; flag
    `text-transform: uppercase` anywhere else.
-5. Transitions .16 to .3s per the documented values (.35s progress); the
-   four keyframes only; the reduced-motion block survives.
+5. Anything that moves or changes depth (transform, translate, box-shadow,
+   opacity, width, the fold) rides the motion tokens: `--t-fast/base/slow`
+   on `--ease-out`, `--ease-in` or `--ease-spring`, .08s for the down-press,
+   .14s for exits, .3s for the accordion fold, .6s for progress. Plain
+   color fades (background, border-color, color) may stay a bare `.16s`.
+   No named curve (`ease`, `linear`, `ease-in-out`) on any transition; the
+   keyframes keep theirs (`cast` and `spin` linear, `pulse` ease-in-out).
+   The five keyframes only; the reduced-motion block survives.
 6. `:focus-visible` outline never removed, except the documented input case
    where the mauve ring replaces it; `::selection` inversion intact.
 7. Files parse standalone and via index.css layers; recipes reference only
@@ -805,7 +892,8 @@ above describes only what shipped.
 25. Toast stack collapses newest-on-top with peeking older toasts; hover
     or keyboard focus fans it out.
 26. Field validation states (.is-error / .is-warning: tone ring over the
-    inset) and the code block copy control.
+    inset, replaced by the tone wash in item 63) and the code block copy
+    control.
 27. Toast behavior declared consumer code; the docs spawner became the
     Preact reference (cancelable timers, pause on hover, cap, guarded
     two-phase exit).
@@ -814,8 +902,8 @@ above describes only what shipped.
     at 10px), and cn-copy rose to 14px.
 29. The lit top-left inset edge retired everywhere neutral: `.cn-raised-lit`
     deleted; panel, tilted-card fallback, and the switch paddle dropped it.
-    Kept: the two blessed whites, the accent-card's accent-mix inset, the
-    cast hairline.
+    Kept: the two blessed whites and the cast hairline. (The accent-card's
+    accent-mix inset went with the plate redesign, item 52.)
 30. Uppercase made scarce: only eyebrow and microlabel keep caps; cn-label,
     field labels, chip-tone, and stepper went sentence case (chip-tone
     750→650).
@@ -887,3 +975,65 @@ above describes only what shipped.
     stays consumer CSS — CSS cannot correlate hrefs to targets.
 51. 520px responsive: accordion stacks tighten and label metas hide —
     decoration yields before content.
+52. The accent card became a plate card. The left spine, the corner
+    gradient and the accent-mix lit inset were paint: three stock moves
+    stacked on one card, and six of them in a grid read as a template. The
+    accent now lives in the hard offset (`--plate`, accent 50% into
+    surface-0, the primary button's rule for a colored offset) over
+    `--neu-raised-soft`, and the card presses with the canon half-slide.
+    Hover lifts the card off the plate and grows the plate by one pixel so
+    the lift reads (1px alone did not). `.cn-spine` stays, for position only.
+    The showcase dropped the "Team" microlabel from every card: the plate is
+    the identity, the eyebrow was costume.
+53. Motion tokens shipped: `--ease-out`, `--ease-in`, `--ease-spring`,
+    `--t-fast/base/slow`. Before this every transition in the package rode
+    `ease` (sixteen of them), `linear` or `ease-in-out`, and nothing had a
+    custom curve, which is the single biggest reason the system moved like
+    a template. Presses go down on the fast-out in .08s and return on the
+    spring (buttons, segmented options, pressables, the accent card);
+    overlays arrive on the fast-out and leave on the ease-in in .14s; the
+    toast slides in from the edge it lives on instead of rising from
+    nowhere; the focus ring settles outward from 0 to 3px; the checkbox
+    presses and its check lands on the spring; the switch paddle lands with
+    a bounce and its glow blooms while held; tooltips wait .4s and rise
+    2px; table rows and links fade instead of snapping; `.page-enter`
+    staggers its children 40ms apart; the topbar's cast fades in over the
+    first 60px of scroll where scroll-driven animation is supported; the
+    progress fill decelerates over .6s.
+54. Display type loosened: `.cn-display`, `.cn-display-sm` and
+    `.display-title` went from 820/-.055em to 760/-.03em. Inter's optical
+    size already tightens at display sizes; the manual tracking doubled up
+    and closed the counters.
+55. The progress fill defaults to `var(--accent)`; the mauve-pink-peach
+    gradient became an opt-in via `--progress-fill`. It was the only
+    three-color object in a one-accent system.
+56. Row hover carves the whole row, not each cell: the row-press composite
+    replaced the per-cell soft inset, which drew seams at every column edge.
+    Wash 5% to 6%.
+57. An open accordion wears the engaged treatment (full inset, mauve 4%
+    wash, mauve title). The soft inset alone was invisible on base.
+58. Placeholders moved from overlay-0 to overlay-1: the carve darkens the
+    ground they sit on.
+59. The scrim went from crust 74% + 6px blur to crust 80% + 2px blur. The
+    blurred scrim was the one surface behaving like a different substance.
+60. `.empty-state` learned a glyph plate: an `svg` first child on a 56px
+    carved round.
+61. Docs chrome: demo stages lost their dashed frame for a soft hairline and
+    the copy line became a flat row; close and dismiss buttons draw a
+    stroke glyph instead of a text character; the depth page shows the soft
+    pair on a chip and a checkbox.
+62. Reviewed and withdrawn: lighting the primary button's hover by mixing
+    mauve toward rosewater (it makes a hex Mocha doesn't have; the pink
+    hover stays), and a numbered-mark stepper (the pills stay).
+63. Validation states dropped the 2px tone ring for a 4% tone wash on the
+    well, the accordion's engaged rule. An inset surface stays defined by
+    depth, and the ring had been doing two jobs (validity and focus) at
+    once. Focus is the mauve ring again, over the wash. A tinted carve was
+    tried and rejected: a colored inner shadow reads as a glowing pit, not
+    as material.
+64. The tone tint became one number. `.cn-tint`, `.banner` (7%) and
+    `.chip-tone` (8%) all went to 4%, the input wash's number. Rendered side
+    by side the banners lost nothing, because the hairline and the tone text
+    were carrying them; the rule is now one sentence: a tinted surface is
+    the tone at 4% over whatever it sits on. The mauve engaged wash
+    (`.cn-engaged`, `.btn-flat` pressed, `.segmented > .active`) stays at 7%.

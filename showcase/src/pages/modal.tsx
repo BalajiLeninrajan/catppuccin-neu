@@ -33,7 +33,7 @@ function ModalDemo() {
                 Invite a teammate
               </h2>
               <button type="button" class="btn-icon" aria-label="Close" onClick={close}>
-                ✕
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
               </button>
             </header>
             <div style="padding:22px; display:flex; flex-direction:column; gap:16px;">
@@ -97,7 +97,7 @@ export default function ModalPage() {
             name: ".cn-scrim",
             values: "fixed inset overlay",
             default: "·",
-            notes: "Crust wash at 74% with a 6px blur; z-index 70.",
+            notes: "Crust wash at 80% with a 2px blur; z-index 70.",
           },
           {
             name: ".modal",
@@ -139,7 +139,7 @@ export default function ModalPage() {
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="t">
     <header>
       <h2 id="t" class="cn-title">Invite a teammate</h2>
-      <button class="btn-icon" aria-label="Close">✕</button>
+      <button class="btn-icon" aria-label="Close"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg></button>
     </header>
     <div>…body…</div>
     <footer class="panel-footer">

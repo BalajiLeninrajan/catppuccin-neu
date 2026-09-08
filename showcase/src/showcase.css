@@ -129,10 +129,12 @@
 }
 
 /* Per R5 the stage is the page ground itself: --base, no surface swap.
-   The dashed edge only frames the demo area; depth reads against --base. */
+   A soft hairline frames the demo area; depth reads against --base. The
+   system has one dashed border (.btn-dashed / .cn-edge-dashed) and the docs
+   don't get to add two more per page, which read as a wireframe. */
 .sc-demo-stage {
   padding: clamp(24px, 4vw, 40px);
-  border: 1px dashed color-mix(in srgb, var(--surface-1) 60%, transparent);
+  border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent);
   border-radius: var(--pane-radius);
   display: grid;
   gap: 18px;
@@ -147,12 +149,16 @@
   gap: 16px;
 }
 
-/* Snippet line — dash comes from composing .cn-edge-dashed + .cn-r-chip in
-   the markup (doc.jsx); only the blessed dashed treatment may dash. */
+/* Snippet line — a flat copy row under the stage with a top rule, not a
+   second dashed box. The markup (doc.tsx) still composes .cn-edge-dashed +
+   .cn-r-chip; this unlayered rule flattens it. */
 .sc-snippet {
   appearance: none;
   background: transparent;
   color: var(--subtext-0);
+  border: 0;
+  border-top: 1px solid var(--surface-0);
+  border-radius: 0;
   padding: 6px 10px;
   text-align: left;
   cursor: pointer;

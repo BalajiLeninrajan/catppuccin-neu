@@ -1,10 +1,18 @@
 import { useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
+const tokensSnippet = `:root {
+  --ease-out:    cubic-bezier(.16, 1, .3, 1);   /* answering the pointer, arriving */
+  --ease-in:     cubic-bezier(.7, 0, .84, 0);   /* leaving */
+  --ease-spring: cubic-bezier(.3, 1.4, .4, 1);  /* returning; overshoots about a pixel */
+  --t-fast: .16s; --t-base: .22s; --t-slow: .32s;
+}`;
+
 const keyframesSnippet = `@keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
 @keyframes spin  { to { transform: rotate(360deg); } }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 0 7px transparent; } }
-@keyframes blink { 50% { opacity: 0; } }`;
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes cast  { from { box-shadow: 0 0 0 transparent; border-bottom-color: transparent; } }`;
 
 const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -21,11 +29,11 @@ function PageEnterDemo() {
 
   return (
     <div class="sc-row" style="align-items:center; gap:16px; flex-wrap:wrap">
-      <div key={key} class="page-enter panel" style="padding:16px 20px">
-        <span class="cn-label">page-enter</span>
-        <p class="cn-meta" style="margin:6px 0 0">
-          .34s ease, 7px rise, fade in.
-        </p>
+      <div key={key} class="page-enter" style="display:grid;gap:10px;width:min(320px,100%)">
+        <div class="panel" style="padding:12px 16px"><div class="stat-row"><span>Active teams</span><b>48</b></div></div>
+        <div class="panel" style="padding:12px 16px"><div class="stat-row"><span>Open invoices</span><b>12</b></div></div>
+        <div class="panel" style="padding:12px 16px"><div class="stat-row"><span>Messages today</span><b>1,204</b></div></div>
+        <p class="cn-meta" style="margin:0">.34s on --ease-out, 7px rise, 40ms apart.</p>
       </div>
       <button type="button" class="btn btn-secondary" onClick={() => setKey((k) => k + 1)}>
         Replay
@@ -38,18 +46,38 @@ export default function MotionPage() {
   return (
     <Doc
       title="Motion"
-      lede="Four keyframes, three transition tiers, one overlay contract, and a mandatory reduced-motion collapse. Motion here is small and mechanical; nothing bounces."
+      lede="Two curves, a spring, three durations, five keyframes, one overlay contract, and a mandatory reduced-motion collapse. Motion here is small and mechanical. The one thing that overshoots is a press coming back up, by about a pixel."
     >
+      <h2 class="cn-label">Motion tokens</h2>
+
+      <p class="cn-copy">
+        Every transition in the package rides one of three curves. Anything
+        answering the pointer or arriving takes{" "}
+        <code class="cn-code">--ease-out</code>: it covers most of its travel
+        early and lands. Anything leaving takes{" "}
+        <code class="cn-code">--ease-in</code>. Anything returning takes{" "}
+        <code class="cn-code">--ease-spring</code>, which overshoots by about
+        a pixel, the difference between a picture of a button and a button.
+        Presses go down on the fast-out in .08s and come back on the spring;
+        overlays leave on the ease-in in .14s. Nothing rides the browser
+        default curve.
+      </p>
+
+      <CodeBlock title="The tokens (tokens.css)" code={tokensSnippet} />
+
       <Demo title="Page entrance" classes=".page-enter">
         <PageEnterDemo />
       </Demo>
 
       <p class="cn-copy">
         <code class="cn-code">.page-enter</code> runs the{" "}
-        <code class="cn-code">enter</code> keyframe once and deliberately sets
-        no fill mode: a held transform would make the element a containing
-        block for every fixed descendant (scrims, modals, drawers, toasts)
-        forever.
+        <code class="cn-code">enter</code> keyframe on each of its children,
+        40ms apart (the sixth and later share the .2s delay), so the page
+        assembles instead of arriving as one slab. The fill is{" "}
+        <code class="cn-code">backwards</code> only: the from-state holds
+        through a child's delay and nothing is held after, so no element
+        stays a containing block for fixed descendants (scrims, modals,
+        drawers, toasts).
       </p>
 
       <Demo title="Loops" classes="animation: spin | pulse | blink" row>
@@ -68,13 +96,16 @@ export default function MotionPage() {
       </Demo>
 
       <p class="cn-copy">
-        All four keyframes live in tokens.css, so any recipe or consumer rule
+        All five keyframes live in tokens.css, so any recipe or consumer rule
         can reference them by name. <code class="cn-code">enter</code> drives{" "}
         <code class="cn-code">.page-enter</code>,{" "}
         <code class="cn-code">pulse</code> drives{" "}
         <code class="cn-code">.live-dot</code>,{" "}
-        <code class="cn-code">blink</code> drives the terminal caret, and{" "}
-        <code class="cn-code">spin</code> drives <code class="cn-code">.spinner</code>.
+        <code class="cn-code">blink</code> drives the terminal caret,{" "}
+        <code class="cn-code">spin</code> drives <code class="cn-code">.spinner</code>,
+        and <code class="cn-code">cast</code> drives the topbar's shadow on a
+        scroll timeline where the browser supports one: nothing is under the
+        bar at the top of the page, so the cast fades in over the first 60px.
       </p>
 
       <CodeBlock title="The keyframes (tokens.css)" code={keyframesSnippet} />
@@ -85,7 +116,7 @@ export default function MotionPage() {
           {
             name: "enter",
             values: "opacity 0 → 1, translateY(7px) → none",
-            notes: "Used by .page-enter (.34s ease, once). No fill mode.",
+            notes: "Used by .page-enter > * (.34s --ease-out, once, staggered 40ms). Fill backwards only.",
           },
           {
             name: "spin",
@@ -102,38 +133,63 @@ export default function MotionPage() {
             values: "opacity 0 at 50%",
             notes: "Used by .terminal .caret (.75s steps(2) infinite).",
           },
+          {
+            name: "cast",
+            values: "box-shadow and border-bottom-color from transparent",
+            notes: "Used by .topbar under @supports (animation-timeline: scroll()): linear, both, range 0 to 60px.",
+          },
         ]}
       />
 
-      <h2 class="cn-label">Transition tiers</h2>
+      <h2 class="cn-label">Durations</h2>
 
       <p class="cn-copy">
         Durations are tiered by what moves. Controls answer fast; larger
-        structure takes longer. Pick from these four, nothing in between.
+        structure takes longer. Pick from these, nothing in between.
       </p>
 
       <Props
         title="Tiers"
         rows={[
           {
-            name: ".16s to .2s",
-            values: "controls",
-            notes: "Buttons, inputs, chips, segments, popovers, tooltips: transform, background, border-color, box-shadow, color.",
+            name: ".08s",
+            values: "the down-press",
+            notes: "Buttons, segments, pressables, the accent card, checkbox and radio, on --ease-out. Up comes back over --t-fast on --ease-spring.",
           },
           {
-            name: ".26s",
+            name: ".14s",
+            values: "exits",
+            notes: "Every overlay leaving, on --ease-in.",
+          },
+          {
+            name: "--t-fast (.16s)",
+            values: "controls",
+            notes: "Buttons, inputs, chips, segments, popovers, tooltips, table rows, links: transform and box-shadow on the spring, color fades plain.",
+          },
+          {
+            name: "--t-base (.22s)",
+            values: "modal, scrim, toast",
+            notes: "Entrances on --ease-out. The checkbox's check lands in .22s on the spring; the switch paddle in .24s.",
+          },
+          {
+            name: "--t-slow (.32s)",
             values: "drawer",
             notes: "The drawer's slide; the widest travel among overlays.",
           },
           {
             name: ".3s",
             values: "fold",
-            notes: "The accordion fold: grid-template-rows 0fr to 1fr, plus the trailing visibility flip.",
+            notes: "The accordion fold: grid-template-rows 0fr to 1fr on --ease-out, plus the trailing visibility flip.",
           },
           {
-            name: ".35s",
+            name: ".4s then .16s",
+            values: "tooltip",
+            notes: "Waits .4s so a pointer crossing a toolbar doesn't fire a row of them, then fades and rises 2px. Leaves at once.",
+          },
+          {
+            name: ".6s",
             values: "progress",
-            notes: "The progress fill's width, so value jumps read as movement.",
+            notes: "The progress fill's width on --ease-out, decelerating into the value.",
           },
         ]}
       />
@@ -148,7 +204,11 @@ export default function MotionPage() {
         drops <code class="cn-code">visibility</code> instead, which
         transitions discretely everywhere, so the overlay stays visible for
         the whole exit and flips only at the end. A hidden overlay is
-        invisible, unfocusable, and inert to pointers.
+        invisible, unfocusable, and inert to pointers. Entrances take{" "}
+        <code class="cn-code">--ease-out</code>, so the overlay covers most of
+        its travel early and lands in the last stretch; exits take{" "}
+        <code class="cn-code">--ease-in</code> in .14s, so a dismissed thing
+        is gone before the hand moves.
       </p>
 
       <Props
@@ -156,27 +216,27 @@ export default function MotionPage() {
         rows={[
           {
             name: ".popover",
-            values: ".16s",
+            values: "--t-fast",
             notes: "Fades and drops 4px from above.",
           },
           {
             name: ".modal",
-            values: ".2s",
+            values: "--t-base",
             notes: "Fades, rises 8px, and scales from .98.",
           },
           {
             name: ".drawer",
-            values: ".26s",
+            values: "--t-slow",
             notes: "Slides in from past the right edge; no fade.",
           },
           {
             name: ".toast",
-            values: ".2s",
-            notes: "Fades and rises 6px.",
+            values: "--t-base",
+            notes: "Fades and slides 16px in from the right edge it lives on.",
           },
           {
             name: ".cn-scrim",
-            values: ".2s",
+            values: "--t-base",
             notes: "Fades opacity and backdrop blur. A modal or drawer inside it rides the scrim's exit.",
           },
         ]}

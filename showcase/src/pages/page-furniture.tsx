@@ -155,7 +155,7 @@ export default function PageFurniturePage() {
           {
             name: ".display-title",
             values: "alias of .cn-display",
-            notes: "clamp(38px to 64px), weight 820; <em> renders mauve. Steps to 38/34px at 760/520px.",
+            notes: "clamp(36px to 56px), weight 760, -0.03em; <em> renders mauve. Steps to 38/34px at 760/520px.",
           },
           {
             name: ".lede",
@@ -176,7 +176,7 @@ export default function PageFurniturePage() {
           {
             name: ".cn-scrim",
             values: "fixed overlay backdrop",
-            notes: "Blurred crust at 74%, z-index 70. Modals and drawers render inside it.",
+            notes: "Crust at 80% with a 2px blur, z-index 70. Modals and drawers render inside it.",
           },
         ]}
       />

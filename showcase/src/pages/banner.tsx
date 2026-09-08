@@ -123,7 +123,7 @@ export default function BannerPage() {
             name: ".banner",
             values: "div (or a status/alert region)",
             notes:
-              "Tint band: --tone text, 7% tint background, 25% tone edge, inset-soft depth. 10px radius.",
+              "Tint band: --tone text, 4% tint background, 25% tone edge, inset-soft depth. 10px radius.",
           },
           {
             name: ".banner svg",

@@ -13,7 +13,7 @@ export default function AccentCardPage() {
   return (
     <Doc
       title="Accent card"
-      lede="A raised card keyed by one property, --accent. The spine, hairline border, and corner gradient all read it, so re-keying a card is one inline style."
+      lede="A raised card on a plate in its accent. The plate is the hard offset, so the card presses like every other control, and nothing is painted on the card itself."
     >
       <Demo title="The accent cycle" classes="accent-card  (set --accent inline)">
         <div class="sc-grid" style="width:100%">
@@ -23,9 +23,8 @@ export default function AccentCardPage() {
               style={`--accent:${ACCENTS[i].color}`}
               key={area.name}
             >
-              <p class="cn-microlabel" style="margin:0 0 8px">Team</p>
               <p class="cn-name" style="margin:0">{area.name}</p>
-              <p class="cn-meta" style="margin:6px 0 0">{area.meta}</p>
+              <p class="cn-meta" style="margin:4px 0 0">{area.meta}</p>
             </div>
           ))}
         </div>
@@ -34,7 +33,9 @@ export default function AccentCardPage() {
       <p class="cn-copy">
         The cycle order lives in tokens.css: mauve, teal, yellow, blue, peach,
         pink. Assign colors positionally from data, wrapping after six. Never
-        pick per-item colors by hand.
+        pick per-item colors by hand. The card carries a name and a meta line;
+        no eyebrow. The plate is the identity, and six plates in a grid read as
+        a set.
       </p>
 
       <Demo title="Linked card" classes="a > .accent-card">
@@ -44,54 +45,18 @@ export default function AccentCardPage() {
           onClick={(e) => e.preventDefault()}
         >
           <div class="accent-card" style="--accent:#94e2d5">
-            <p class="cn-microlabel" style="margin:0 0 8px">Dashboard</p>
             <p class="cn-name" style="margin:0">Quarterly revenue</p>
-            <p class="cn-meta" style="margin:6px 0 0">Updated 14 minutes ago</p>
+            <p class="cn-meta" style="margin:4px 0 0">Updated 14 minutes ago</p>
           </div>
         </a>
       </Demo>
 
       <p class="cn-copy">
         Wrap the card in a plain <code class="cn-code">&lt;a&gt;</code>. Hover
-        lifts to the full raised shadow and strengthens the accent border;
-        active presses the card into a soft inset. The wrapper is the link,
-        never the card itself.
+        lifts the card off its plate and strengthens the accent border; active
+        half-slides it onto the plate, the same press as every button. The
+        wrapper is the link, never the card itself.
       </p>
-
-      <Demo title="The spine alone" classes="cn-spine  (utility)">
-        <div
-          class="cn-spine well"
-          style="--accent:#89b4fa;width:min(420px,100%);padding:16px 16px 16px 24px"
-        >
-          <p class="cn-name" style="margin:0">Renewal reminder</p>
-          <p class="cn-meta" style="margin:6px 0 0">
-            The Pro plan renews on the 1st. 3 seats are unused.
-          </p>
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code">.cn-spine</code> is a 4px left bar in{" "}
-        <code class="cn-code">var(--accent)</code> for any surface. The accent
-        card has it built in; use the utility for the cue without the card
-        chrome.
-      </p>
-
-      <Demo title="Accent utilities" row classes="cn-text-accent / cn-edge-accent / cn-tint-accent">
-        <span class="cn-value-lg" style="--accent:#fab387">$12,480</span>
-        <span
-          class="cn-edge-accent cn-r-control"
-          style="--accent:#f5c2e7;padding:10px 14px"
-        >
-          <span class="cn-meta">accent-keyed edge</span>
-        </span>
-        <span
-          class="cn-tint-accent cn-r-card"
-          style="--accent:#94e2d5;padding:14px 18px"
-        >
-          <span class="cn-meta">accent-keyed tint</span>
-        </span>
-      </Demo>
 
       <Props
         title="Contract"
@@ -101,28 +66,18 @@ export default function AccentCardPage() {
             values: "any cycle hex",
             default: "var(--mauve)",
             notes:
-              "Set inline from data. Read by the spine, border, gradient, mark-solid, avatar, cn-value-lg, and the terminal caret.",
+              "Set inline from data. Read by the plate, the border, mark-solid, avatar, cn-value-lg, and the terminal caret.",
           },
           {
             name: ".accent-card",
             values: "recipe",
             notes:
-              "Raised-soft card, accent hairline, 135° accent gradient into mantle, built-in spine.",
+              "Base fill, accent hairline, the hard offset in --plate (accent 50% into surface-0) over raised-soft. No spine, no gradient.",
           },
           {
             name: "a > .accent-card",
             values: "hover / active",
-            notes: "Hover: lift + neu-raised. Active: translateY(1px) + inset-soft.",
-          },
-          {
-            name: ".cn-spine",
-            values: "utility",
-            notes: "4px accent bar, inset 12px from top and bottom. Needs position: relative (included).",
-          },
-          {
-            name: ".cn-text-accent / .cn-tint-accent / .cn-edge-accent",
-            values: "utilities",
-            notes: "Single-purpose accent color, background gradient, and hairline.",
+            notes: "Hover: translate(-1px,-1px), plate grows 1px, stronger edge. Active: the half-slide onto the plate.",
           },
         ]}
       />
@@ -132,7 +87,6 @@ export default function AccentCardPage() {
         code={`<a href="/teams/payments" style="display: block">
   <!-- the wrapper inherits color and sheds the underline via the recipe -->
   <div class="accent-card" style="--accent: #94e2d5">
-    <p class="cn-microlabel">Team</p>
     <p class="cn-name">Payments</p>
     <p class="cn-meta">12 members · 4 open invoices</p>
   </div>

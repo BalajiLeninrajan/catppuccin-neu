@@ -38,7 +38,7 @@ export default function ProgressPage() {
 
       <p class="cn-copy">
         Width is the only thing you set, inline, from data. The fill eases to
-        its new width over .35s. Pair each track with a{" "}
+        its new width over .6s, decelerating into the value. Pair each track with a{" "}
         <code class="cn-code">.stat-row</code> for the label/value line above
         it.
       </p>
@@ -98,12 +98,12 @@ export default function ProgressPage() {
             values: "width: 0–100%",
             default: "width: 0",
             notes:
-              "Block fill; inherits the track radius; fills with var(--progress-fill), defaulting to the mauve→pink→peach gradient; width transitions at .35s.",
+              "Block fill; inherits the track radius; fills with var(--progress-fill), defaulting to var(--accent); width transitions .6s on --ease-out.",
           },
           {
             name: "--progress-fill",
             values: "token color or token gradient",
-            default: "mauve→pink→peach",
+            default: "var(--accent)",
             notes:
               "Set on the track or a wrapper to re-key the fill per instance.",
           },

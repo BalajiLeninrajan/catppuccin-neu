@@ -15,7 +15,7 @@ export default function TypographyPage() {
       </p>
 
       <Demo
-        title="cn-display · 820 · clamp(32px to 46px) · -0.055em · balance"
+        title="cn-display · 760 · clamp(32px to 46px) · -0.03em · balance"
         classes="cn-display"
       >
         <h1 class="cn-display">
@@ -24,7 +24,7 @@ export default function TypographyPage() {
       </Demo>
 
       <Demo
-        title="cn-display-sm · 820 · clamp(26px to 36px) · -0.045em"
+        title="cn-display-sm · 760 · clamp(26px to 36px) · -0.03em"
         classes="cn-display-sm"
       >
         <h1 class="cn-display-sm">
@@ -126,8 +126,8 @@ export default function TypographyPage() {
       <Props
         title="Role reference"
         rows={[
-          { name: ".cn-display", values: "sans", default: "820 · clamp(32px, 4vw, 46px) · -0.055em", notes: "Hero headline; text-wrap: balance; em turns mauve." },
-          { name: ".cn-display-sm", values: "sans", default: "820 · clamp(26px, 3.4vw, 36px) · -0.045em", notes: "Page titles; same em rule." },
+          { name: ".cn-display", values: "sans", default: "760 · clamp(32px, 4vw, 46px) · -0.03em", notes: "Hero headline; text-wrap: balance; em turns mauve." },
+          { name: ".cn-display-sm", values: "sans", default: "760 · clamp(26px, 3.4vw, 36px) · -0.03em", notes: "Page titles; same em rule." },
           { name: ".cn-title", values: "sans", default: "800 · 20px · -0.03em", notes: "Section and card headings." },
           { name: ".cn-name", values: "sans", default: "700 · 13px/1.3 · text", notes: "Proper names at body scale, full-strength color." },
           { name: ".cn-lede", values: "sans", default: "16px/1.65 · subtext-1", notes: "Intro paragraph; max-width 690px." },

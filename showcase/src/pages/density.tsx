@@ -147,7 +147,7 @@ export default function DensityPage() {
             values: "the accent cycle: #cba6f7 #94e2d5 #f9e2af #89b4fa #fab387 #f5c2e7",
             default: "var(--mauve)",
             notes:
-              "Per-instance accent. Read by accent-card (border, gradient, spine), mark-solid, avatar, cn-value-lg, the terminal caret, and cn-text-accent / cn-tint-accent / cn-edge-accent / cn-spine.",
+              "Per-instance accent. Read by accent-card (plate, border), mark-solid, avatar, cn-value-lg, the terminal caret, and cn-text-accent / cn-tint-accent / cn-edge-accent / cn-spine.",
           },
           {
             name: "--tone",
