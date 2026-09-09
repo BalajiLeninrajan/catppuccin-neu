@@ -25,7 +25,7 @@ From the CDN, for a hand-written page with no `package.json`. jsDelivr serves
 the repo's tags directly — no publish step, nothing to configure:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.2.0/css/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.2.1/css/index.css" />
 ```
 
 Pin a full tag, not `@main` or `@v0.1` — those float and re-cache every 12
@@ -36,7 +36,7 @@ wins unlayered.
 As a git dependency, with a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.0
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.1
 ```
 
 ```js
@@ -121,8 +121,10 @@ re-keys `--tint`.
 
 `tailwind/preset.cjs` (v3) and `tailwind/theme.css` (v4 `@theme`) map the token
 vocabulary onto utility names: colors including `edge`, `tint` and `wash`,
-radii, shadows, the spacing scale, the type roles, and the motion tokens as
-`ease-out/in/spring` and `duration-fast/base/slow`. They are a convenience
+radii, shadows, the type roles, and the motion tokens as
+`ease-out/in/spring` and `duration-fast/base/slow`. The spacing scale is
+not remapped: Tailwind's own steps already hold the six values (`1` is 4px,
+`2` 8px, `3` 12px, `4` 16px, `5.5` 22px, `7` 28px). They are a convenience
 over the same tokens, not a second implementation, and the recipes still come
 from `css/recipes.css`.
 

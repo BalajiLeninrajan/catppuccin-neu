@@ -59,13 +59,10 @@
   --duration-base: var(--t-base);
   --duration-slow: var(--t-slow);
 
-  /* The blessed spacing scale, by pixel name: gap-22, p-28, mt-12 */
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-22: 22px;
-  --spacing-28: 28px;
+  /* No spacing keys. Tailwind's default scale already holds the system's
+     six values: 4px = 1, 8px = 2, 12px = 3, 16px = 4, 22px = 5.5, 28px = 7.
+     (v0.2.0 shipped pixel-named keys that overrode Tailwind's own 4/8/12/16/28;
+     removed in v0.2.1.) */
 
   /* Type roles — text-label, text-meta, text-name, text-title, text-display */
   --text-micro: 10px;

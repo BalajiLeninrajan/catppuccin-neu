@@ -1190,3 +1190,8 @@ above describes only what shipped.
     scale, the type roles and the mix colors, and the v4 import order is
     documented: package first, then Tailwind, or a utility loses to a
     recipe on the same element.
+76. v0.2.1. The preset's spacing keys came back out. Pixel-named keys
+    (`4: "4px"`) extended over Tailwind's own `4` (16px), `8`, `12`, `16`
+    and `28`, so every `gap-4` in a consumer shrank on upgrade; found by
+    the consenStat upgrade. Tailwind's default steps already hold the six
+    values (1, 2, 3, 4, 5.5, 7), so nothing is remapped.

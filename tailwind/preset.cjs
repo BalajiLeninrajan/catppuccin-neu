@@ -56,15 +56,11 @@ module.exports = {
         base: "var(--t-base)",
         slow: "var(--t-slow)",
       },
-      /* The blessed spacing scale, by pixel name: gap-22, p-28, mt-12 */
-      spacing: {
-        4: "4px",
-        8: "8px",
-        12: "12px",
-        16: "16px",
-        22: "22px",
-        28: "28px",
-      },
+      /* No spacing extension. Tailwind's default scale already holds the
+         system's six values: 4px = 1, 8px = 2, 12px = 3, 16px = 4,
+         22px = 5.5, 28px = 7. (v0.2.0 shipped pixel-named keys, which
+         overrode Tailwind's own 4/8/12/16/28 and shrank every gap-4 on
+         upgrade; removed in v0.2.1.) */
       /* Type roles — text-label, text-meta, text-name, text-title, text-display */
       fontSize: {
         micro: ["10px", { lineHeight: "1", letterSpacing: ".08em", fontWeight: "700" }],
