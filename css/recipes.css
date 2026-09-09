@@ -1080,7 +1080,11 @@
 /* The copy control is the icon button tinted to the page accent, and it goes
    green while the consumer holds .is-copied on the command. Both glyphs are
    in the markup; only which one shows moves, so the swap never flashes empty. */
-.command-copy { flex: 0 0 auto; --tone: var(--mauve); }
+/* The control is sized to the well, not the density: 7 + 34 + 7 is the 48px
+   well at every density, so a dense app's 22px icon buttons never leave the
+   glyph floating in a bar built for a 34px one. */
+.command-copy { flex: 0 0 auto; width: 34px; height: 34px; --tone: var(--mauve); }
+.command-copy > svg { width: 16px; height: 16px; }
 .command .done-glyph { display: none; }
 .command.is-copied .command-copy { --tone: var(--green); color: var(--green); }
 .command.is-copied .copy-glyph { display: none; }

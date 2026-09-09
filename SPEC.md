@@ -1220,3 +1220,6 @@ above describes only what shipped.
     that `cn-microlabel cn-text-*` composes, since the color utilities come
     after the type roles; harness-racer had restated the tracked label six
     times for six colors.
+79. v0.3.1. `.command-copy` is 34px at every density. It had tracked
+    `--control-h-sm`, so under dense it shrank to 22px inside a well built
+    for 34 and the glyph floated bare with the wrong gap (varchar).
