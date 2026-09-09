@@ -1060,6 +1060,9 @@
   scrollbar-width: none;
 }
 .command-prompt { margin-right: 10px; color: var(--mauve); user-select: none; }
+/* A long statement wraps instead of scrolling: the text becomes a block so
+   whitespace inside it (a tokenizer's spans) stays inline. */
+.command.is-wrap .command-text { display: block; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
 /* The copy control is the icon button tinted to the page accent, and it goes
    green while the consumer holds .is-copied on the command. Both glyphs are
    in the markup; only which one shows moves, so the swap never flashes empty. */
@@ -1448,8 +1451,14 @@ a:active > .accent-card {
    and overlay transitions (allow-discrete), which every current browser
    supports; where one doesn't, the dialog appears and disappears in place. */
 dialog:is(.modal, .drawer) { padding: 0; color: inherit; }
+/* Closed is display: none, as the UA has it. The recipes set display on the
+   element (flex on the drawer), which would otherwise beat the UA's closed
+   state and leave a closed drawer in the tree, translated off screen. */
+dialog:is(.modal, .drawer):not([open]) { display: none; }
 dialog.modal { max-width: none; max-height: calc(100dvh - 48px); }
-dialog.drawer { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; max-width: none; }
+/* The drawer recipe draws one hairline on the left; the UA's 3px border on
+   the other three sides goes. */
+dialog.drawer { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; max-width: none; border-width: 0 0 0 1px; }
 dialog.modal {
   opacity: 0;
   transform: translateY(8px) scale(.98);

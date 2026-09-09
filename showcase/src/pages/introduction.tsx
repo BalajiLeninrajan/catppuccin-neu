@@ -5,9 +5,9 @@ const LAYER_CODE = `@layer cn.tokens, cn.recipes, cn.utilities;
 @import "./recipes.css" layer(cn.recipes);
 @import "./utilities.css" layer(cn.utilities);`;
 
-const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.2.1/css/index.css">`;
+const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.2.2/css/index.css">`;
 
-const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.1`;
+const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.2`;
 
 const IMPORT_CODE = `/* your entry stylesheet */
 @import "catppuccin-neu/css/index.css";`;

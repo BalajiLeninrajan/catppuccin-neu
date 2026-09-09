@@ -800,7 +800,10 @@ versions: modal fades and rises 8px on `--t-base --ease-out`, drawer slides
 from the right on `--t-slow`, both leave on `--ease-in` in .14s, and the
 backdrop fades with them. Where a browser lacks discrete transitions the
 dialog appears and disappears in place. Padding is reset to 0 so the header
-and footer bands land on the dialog's own edge.
+and footer bands land on the dialog's own edge; closed dialogs are
+`display: none` explicitly, since the drawer recipe's `display: flex` would
+otherwise beat the UA's closed state; and the drawer keeps only its left
+hairline, since the UA draws a 3px border the recipe never asked for.
 
 ### Page furniture
 
@@ -1195,3 +1198,9 @@ above describes only what shipped.
     and `28`, so every `gap-4` in a consumer shrank on upgrade; found by
     the consenStat upgrade. Tailwind's default steps already hold the six
     values (1, 2, 3, 4, 5.5, 7), so nothing is remapped.
+77. v0.2.2. Two native-dialog gaps found by the varchar upgrade: a closed
+    `dialog.drawer` kept the recipe's `display: flex` over the UA's closed
+    state and stayed in the tree off screen, and the UA's 3px border showed
+    on the drawer's three unstyled sides. Closed dialogs are `display: none`
+    and the drawer keeps only its left hairline. `.command.is-wrap` wraps a
+    long statement instead of scrolling it.

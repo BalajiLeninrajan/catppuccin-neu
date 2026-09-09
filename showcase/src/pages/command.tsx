@@ -59,7 +59,7 @@ export default function CommandPage() {
 
       <Demo title="Full width" classes="command is-full">
         <div style="width:100%">
-          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.1" full />
+          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.2" full />
         </div>
       </Demo>
 
@@ -68,6 +68,7 @@ export default function CommandPage() {
         rows={[
           { name: ".command", values: "div", notes: "min(480px, 100%) wide, 48px tall, 13px radius, crust-mix fill on --neu-inset." },
           { name: ".command.is-full", values: "modifier", notes: "Fills its container." },
+          { name: ".command.is-wrap", values: "modifier", notes: "A long statement wraps instead of scrolling; the text becomes a block so inline spans inside it keep their whitespace." },
           { name: ".command-text", values: "code", notes: "650 13px mono, tabular, scrolls sideways without a scrollbar when the command is longer than the well." },
           { name: ".command-prompt", values: "span", notes: "The $ in mauve, unselectable so a copy never carries it." },
           { name: ".command-copy", values: "button.btn-icon", notes: "Both glyphs in the markup; .copy-glyph shows at rest, .done-glyph while the command is .is-copied." },
