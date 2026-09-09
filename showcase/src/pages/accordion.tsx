@@ -179,6 +179,12 @@ export default function AccordionPage() {
             default: "·",
             notes: "Announced as a checkbox, not a disclosure button.",
           },
+          {
+            name: ".is-open / [data-open]",
+            values: "state alias",
+            default: "·",
+            notes: "The open treatment without the checkbox, for a framework that owns the state or a hover-driven row.",
+          },
         ]}
       />
     </Doc>

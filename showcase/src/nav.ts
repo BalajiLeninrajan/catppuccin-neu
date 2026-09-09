@@ -12,6 +12,7 @@ import Typography from "./pages/typography";
 import Depth from "./pages/depth";
 import Motion from "./pages/motion";
 import Density from "./pages/density";
+import Layout from "./pages/layout";
 
 import Button from "./pages/button";
 import Input from "./pages/input";
@@ -33,6 +34,7 @@ import Stat from "./pages/stat";
 import Table from "./pages/table";
 import Terminal from "./pages/terminal";
 import Codeblock from "./pages/codeblock";
+import Command from "./pages/command";
 
 import Popover from "./pages/popover";
 import Modal from "./pages/modal";
@@ -67,6 +69,7 @@ export const PAGES: NavEntry[] = [
   { path: "/depth", title: "Depth", group: "Foundation", component: Depth },
   { path: "/motion", title: "Motion", group: "Foundation", component: Motion },
   { path: "/density", title: "Density & contract props", group: "Foundation", component: Density },
+  { path: "/layout", title: "Layout", group: "Foundation", component: Layout },
 
   { path: "/button", title: "Button", group: "Controls", component: Button },
   { path: "/input", title: "Input & Field", group: "Controls", component: Input },
@@ -88,6 +91,7 @@ export const PAGES: NavEntry[] = [
   { path: "/table", title: "Table", group: "Containers & data", component: Table },
   { path: "/terminal", title: "Terminal", group: "Containers & data", component: Terminal },
   { path: "/codeblock", title: "Code block", group: "Containers & data", component: Codeblock },
+  { path: "/command", title: "Command", group: "Containers & data", component: Command },
 
   { path: "/popover", title: "Popover & tooltip", group: "Overlays", component: Popover },
   { path: "/modal", title: "Modal", group: "Overlays", component: Modal },

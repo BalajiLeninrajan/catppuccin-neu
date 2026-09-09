@@ -126,7 +126,8 @@ export default function SegmentedPage() {
         title="Variants & knobs"
         rows={[
           { name: ".segmented", notes: "Equal-width column grid, 7px gap. Styles every direct child, buttons or labels." },
-          { name: ".segmented > .active", notes: "The selection. Pressed in, mauve wash, borderless; <b> turns mauve." },
+          { name: '.segmented > .active / [aria-pressed="true"] / [aria-checked="true"]', notes: "The selection. Pressed in, mauve wash, borderless; <b> turns mauve. The attributes mean a framework sets state without touching classes." },
+          { name: "svg inside an option", notes: "16px, sized by the recipe." },
           { name: ".is-stacked", notes: "Vertical list, 12px gap, roomier rows, 17px <b>. For described options." },
           { name: "<b> / <small>", notes: "Option title (sans 750) and quiet hint line inside each option." },
           { name: ".cn-sr-only", notes: "Hides the radio in the label form; label:has(input:focus-visible) draws the focus outline." },

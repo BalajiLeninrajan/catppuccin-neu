@@ -154,7 +154,22 @@ export default function DrawerPage() {
             default: "·",
             notes: "The one hairline; the pop shadow does the rest of the separation.",
           },
+          {
+            name: "dialog.drawer",
+            values: "native host",
+            default: "·",
+            notes: "showModal() pins it to the right edge in the top layer; ::backdrop is the scrim; the slide rides discrete display transitions. No scrim div, no hidden.",
+          },
         ]}
+      />
+
+      <CodeBlock
+        title="Native dialog"
+        code={`<dialog class="drawer" aria-labelledby="t">
+  <header class="cn-bg-head">…</header>
+  <div>…form…</div>
+  <footer class="panel-footer" style="margin-top: auto">…</footer>
+</dialog>`}
       />
 
       <CodeBlock

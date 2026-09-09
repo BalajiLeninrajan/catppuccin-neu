@@ -11,18 +11,12 @@ const headerSnippet = `<header>
 
 const shellSnippet = `<body class="app-shell">
   <header class="topbar">…</header>
-  <main>…</main>
+  <main class="page-main">…</main>
   <footer class="footer-neu">…</footer>
 </body>
 
-/* main is never styled by the package; apply the width pattern yourself: */
-main {
-  width: min(1440px, calc(100% - 40px));
-  min-width: 0;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}`;
+/* a different column for one page: */
+<main class="page-main" style="--page-width: 980px">…</main>`;
 
 function GearIcon() {
   return (
@@ -96,17 +90,52 @@ export default function PageFurniturePage() {
         the bar tightens and chips inside it go icon-only.
       </p>
 
-      <Demo title="Footer" classes=".footer-neu">
+      <Demo title="Split topbar with a wordmark" classes="topbar is-split · wordmark > mark-solid">
+        <header class="topbar is-split">
+          <a class="wordmark" href="#"><span class="mark-solid" aria-hidden="true">L</span>Ledg<em>er</em></a>
+          <div class="cn-row">
+            <span class="chip"><span class="live-dot" aria-hidden="true"></span> Synced</span>
+            <button type="button" class="btn btn-secondary is-sm">Sign in</button>
+          </div>
+        </header>
+      </Demo>
+
+      <p class="cn-copy">
+        A page with no center nav takes <code class="cn-code">is-split</code>: brand left, actions right,
+        nothing centered by accident. <code class="cn-code">is-compact</code> is the 52px app strip. The
+        wordmark is a flex row, so a <code class="cn-code">.mark-solid</code> before the name is the brand
+        tile, and <code class="cn-code">is-lg</code> is the 22px hero size.
+      </p>
+
+      <Demo title="Footer" classes=".footer-neu · .footer-brand">
         <footer class="footer-neu">
-          <span>Ledger Console</span>
-          <p>Build 4.2.1 · deployed 24 Aug 2026</p>
+          <span class="footer-brand"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="6" /></svg>Ledger <b>Console</b><span>build 4.2.1</span></span>
+          <p>Deployed 24 Aug 2026</p>
           <span class="chip">v4.2.1</span>
         </footer>
       </Demo>
 
       <p class="cn-copy">
-        The footer is a hairline rule and metadata. No depth, no fill. It shares the main column's width
-        pattern, so it lines up with the content above it.
+        The footer is a hairline rule and metadata. No depth, no fill. It follows the page column's{" "}
+        <code class="cn-code">--page-width</code>, so it lines up with the content above it, and stacks at
+        760px. <code class="cn-code">.footer-brand</code> is its brand slot: a glyph in mauve, the name,
+        an optional note.
+      </p>
+
+      <CodeBlock
+        title="The page shell"
+        code={`<body class="app-shell">
+  <header class="topbar is-split">…</header>
+  <main class="page-main is-narrow">…</main>
+  <footer class="footer-neu">…</footer>
+</body>`}
+      />
+
+      <p class="cn-copy">
+        <code class="cn-code">.page-main</code> is the column: 1440px or the viewport minus 40, centered,
+        with the vertical padding. <code class="cn-code">is-narrow</code> is 860px,{" "}
+        <code class="cn-code">is-reading</code> 740px, <code class="cn-code">--page-width</code> anything
+        else. <code class="cn-code">.app-shell</code> fills the viewport and pushes the footer to the bottom.
       </p>
 
       <Demo title="Live dot" classes=".live-dot" row>
@@ -132,20 +161,35 @@ export default function PageFurniturePage() {
         sit on. See those pages for it in action.
       </p>
 
-      <CodeBlock title="Page shell + main column pattern" code={shellSnippet} />
+      <CodeBlock title="Page shell, re-keyed" code={shellSnippet} />
 
       <Props
         title="Furniture reference"
         rows={[
           {
             name: ".topbar",
-            values: "sticky header",
-            notes: "Translucent base, blur, --shadow-cast + lit hairline. 1fr/auto/1fr grid; .nav-secondary hides ≤1060px.",
+            values: "sticky header · .is-split · .is-compact",
+            notes: "Translucent base, blur, --shadow-cast + lit hairline. 1fr/auto/1fr grid; is-split is 1fr/auto; is-compact is 52px. .nav-secondary hides ≤1060px.",
+          },
+          {
+            name: ".wordmark",
+            values: "text · > .mark-solid · .is-lg",
+            notes: "800 16px, tight tracking, em in mauve. Flex row: a mark-solid before the name is the brand tile (28px, 34 in is-lg). is-lg is 22px.",
+          },
+          {
+            name: ".page-main",
+            values: ".is-narrow / .is-reading / --page-width",
+            notes: "The page column: min(--page-width, 100% - 40px), centered, clamp(24px, 4vw, 46px) vertical padding. 860 / 740 / any.",
           },
           {
             name: ".footer-neu",
-            values: "page footer",
-            notes: "Hairline top rule, main-column width, quiet meta. Middle paragraph drops ≤520px.",
+            values: "page footer · .footer-brand",
+            notes: "Hairline top rule, --page-width, quiet meta; stacks ≤760px. footer-brand: glyph in mauve, name, optional note. Middle paragraph drops ≤520px.",
+          },
+          {
+            name: ".panel-body",
+            values: "content band",
+            notes: "20px 22px inside a panel. The panel ships no padding so tables fill it; prose goes in a body.",
           },
           {
             name: ".eyebrow",

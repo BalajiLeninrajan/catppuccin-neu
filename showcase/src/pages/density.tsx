@@ -41,7 +41,12 @@ export default function DensityPage() {
           re-tunes them for that subtree. It is also the only way 12px enters
           the radius scale. Pair compact regions with{" "}
           <code class="cn-code">.cn-hard-sm</code> where you compose the hard
-          offset by hand.
+          offset by hand. <code class="cn-code">data-density="dense"</code>{" "}
+          goes one step further for instrument panels: 28px controls, a 2px
+          offset, and the data surfaces tighten with them, so table cells go
+          to 6px 9px, chips and panel bands shrink, flat buttons and the
+          topbar drop to strip height. Compact was tuned for forms; dense is
+          for readouts.
         </p>
       </section>
 
@@ -74,9 +79,15 @@ export default function DensityPage() {
           },
           {
             name: "--hard-offset",
-            values: "4px · 3px compact",
+            values: "4px · 3px compact · 2px dense",
             default: "4px",
             notes: "The hard offset's distance; the press slides half of it.",
+          },
+          {
+            name: 'data-density="dense"',
+            values: "28 / 22 / 28px, radius 12",
+            default: "·",
+            notes: "Plus table cells 6px 9px, chip 4px 8px, panel bands 44px, btn-flat 26px, topbar 44px, tighter code wells.",
           },
         ]}
       />

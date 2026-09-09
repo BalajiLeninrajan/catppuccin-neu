@@ -1,10 +1,12 @@
 /* ── catppuccin-neu — one-line entry point ──────────────────────────────────
-   Declares the layer order, then imports the three files into it. Consumer
-   CSS stays unlayered (or in a later layer) and therefore always wins —
-   overrides never need !important. The three files also work as plain
-   <link> tags in this order, without this file.                             */
+   Declares the layer order, then imports the three files into it. Recipes
+   sit under utilities, Tailwind's own order: a utility on an element always
+   beats the recipe on that element ("well cn-bg-well", "btn-secondary
+   cn-raised-soft", "panel cn-p-16"), and consumer CSS stays unlayered (or in
+   a later layer) and beats both. Overrides never need !important. The three
+   files also work as plain <link> tags in this order, without this file.   */
 
-@layer cn.tokens, cn.utilities, cn.recipes;
+@layer cn.tokens, cn.recipes, cn.utilities;
 @import "./tokens.css" layer(cn.tokens);
-@import "./utilities.css" layer(cn.utilities);
 @import "./recipes.css" layer(cn.recipes);
+@import "./utilities.css" layer(cn.utilities);

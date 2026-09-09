@@ -106,6 +106,20 @@ export default function ButtonPage() {
         Always give them an <code class="cn-code">aria-label</code>.
       </p>
 
+      <Demo title="Sizes" classes="btn is-sm · btn · btn is-lg · btn-icon is-sm / is-lg" row>
+        <button class="btn btn-secondary is-sm">Small</button>
+        <button class="btn btn-secondary">Default</button>
+        <button class="btn btn-primary is-lg">Large</button>
+        <button class="btn-icon is-sm" aria-label="Settings"><GearIcon /></button>
+        <button class="btn-icon is-lg" aria-label="Settings"><GearIcon /></button>
+      </Demo>
+
+      <p class="cn-copy">
+        Small is the toolbar height (<code class="cn-code">--control-h-sm</code>); large is the one hero
+        action, the control height plus 12px. An svg inside any button is sized by the button, 16px by
+        default, 14 in small and 18 in large, so icons are never sized by hand.
+      </p>
+
       <Demo title="Dashed" classes="btn-dashed">
         <button class="btn-dashed" style="width: 100%">
           + Add team member
@@ -170,9 +184,11 @@ export default function ButtonPage() {
           { name: ".btn-primary", notes: "Solid mauve, crust text, mauve-mix hard offset. One per view." },
           { name: ".btn-secondary", notes: "Base ground, hairline edge, crust hard offset. The canon default." },
           { name: ".btn-ghost", notes: "Transparent until hovered; surface wash on hover." },
-          { name: ".btn-flat", values: '.active / [aria-pressed="true"]', notes: "Toolbar toggle; engaged state presses in with the mauve wash." },
+          { name: ".btn-flat", values: '.active / [aria-pressed="true"] / [aria-current]', notes: "Toolbar toggle; engaged state presses in with the mauve wash." },
           { name: ".btn-text", notes: "Inline mauve text button; pink on hover." },
-          { name: ".btn-icon", values: ".cn-tone-*", notes: "32px square; tints toward --tone on hover. Needs aria-label." },
+          { name: ".btn-icon", values: ".cn-tone-* · .is-sm / .is-lg", notes: "34px square (28 small, --control-h large); tints toward --tone on hover. Needs aria-label." },
+          { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 12px type, or the hero action at --control-h + 12px with 14px type." },
+          { name: "svg", values: "inside any button", notes: "Sized by the button: 16px (14 small, 18 large), 15 in flat, 13 in text. Never size by hand." },
           { name: ".btn-dashed", notes: "The only dashed border. Open slot; fills toward mauve on hover, no slide." },
           { name: ":disabled", notes: ".35 opacity, soft inset, not-allowed cursor on .btn variants." },
           { name: "--hard-offset-color", default: "var(--crust)", notes: "The hard offset's color; read by .cn-hard and the half-slide." },

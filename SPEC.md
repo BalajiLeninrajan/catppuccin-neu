@@ -96,16 +96,28 @@ catppuccin-neu/
 `css/index.css`:
 
 ```css
-@layer cn.tokens, cn.utilities, cn.recipes;
+@layer cn.tokens, cn.recipes, cn.utilities;
 @import "./tokens.css" layer(cn.tokens);
-@import "./utilities.css" layer(cn.utilities);
 @import "./recipes.css" layer(cn.recipes);
+@import "./utilities.css" layer(cn.utilities);
 ```
+
+Utilities sit above recipes, Tailwind's order. A `cn-*` class on an element
+beats the recipe on that element: `well cn-bg-well` fills the well,
+`btn-secondary cn-raised-soft` softens the offset, `panel cn-p-16` pads the
+panel. Utilities apply only where written, so nothing composes by accident;
+what the order buys is that a consumer never restates a recipe to adjust it.
+(Until v0.2.0 the order was the reverse, and three consumers carried the same
+comment: "the recipe's own transparent ground wins the cascade order." The
+one utility that had to move was `.cn-scrim`, whose exit un-blur lives with
+the overlays in recipes; it is a recipe now, name unchanged.)
 
 Consumer CSS is unlayered (or in a later layer) and always wins; overrides
 never need `!important`. The three files also work as plain `<link>` tags in
-order (tokens, utilities, recipes) without index.css: no file depends on being
-inside a named layer.
+order (tokens, recipes, utilities) without index.css: no file depends on being
+inside a named layer. With Tailwind v4, import the package before
+`tailwindcss` so its layers are declared first and Tailwind's utilities layer
+stays on top.
 
 ## css/tokens.css (layer cn.tokens)
 
@@ -167,10 +179,42 @@ Accent cycle: `#cba6f7, #94e2d5, #f9e2af, #89b4fa, #fab387, #f5c2e7`
   --input-h: 30px;
   --pane-radius: 12px;
 }
+[data-density="dense"] {
+  --hard-offset: 2px;
+  --control-h: 28px;
+  --control-h-sm: 22px;
+  --input-h: 28px;
+  --pane-radius: 12px;
+}
 ```
+
+Compact was tuned for forms. Dense is for instrument panels, and the data
+surfaces follow it from a block at the end of recipes.css: table cells and
+headers `6px 9px` with 12px cells, chips `4px 8px`, tone chips `2px 4px`,
+panel bands 44px with 14px titles, `.panel-body` `12px 14px`, flat buttons
+26px, the topbar 44px, code wells and terminal pre tightened, empty states
+at 120px. A consumer running dense should need no per-cell override.
 
 Fixed-size exceptions that do not track density: checkbox and radio (20px),
 switch (50x28), avatar (32px, 44px for `.is-lg`).
+
+### Mix tokens
+
+Four custom properties carry the `color-mix` expressions every surface
+shares, so a change is one line and a Tailwind consumer gets them as
+`border-edge`, `border-edge-soft`, `bg-tint`, `bg-wash`:
+
+- `--edge`: surface-2 40% into transparent, the raised-surface hairline
+  (panel, secondary button, `.cn-edge`).
+- `--edge-soft`: surface-1 38% into transparent, inner separators
+  (`.cn-edge-soft`, stat strips).
+- `--tint`: the tone at 4% into transparent, every tinted surface
+  (banner, tone chip, `.cn-tint`, the invalid field's well).
+- `--wash`: mauve 7% into base, the engaged state (`.cn-engaged`, pressed
+  flat buttons, the selected segment).
+
+They resolve at the use site, so re-keying `--tone` on a subtree re-keys
+`--tint` with it.
 
 ### Motion tokens
 
@@ -335,15 +379,40 @@ appears only on `.cn-eyebrow` and `.cn-microlabel`.
 
 - `.cn-spine`: relative; `::before` 4px left bar in `var(--accent)`,
   `inset: 12px auto 12px 0; border-radius: 0 6px 6px 0;`.
-- `.cn-scrim`: fixed inset overlay, crust 80% mix, `backdrop-filter:
-  blur(2px)`, z-index 70. The crust does the work; the blur is a whisper.
-  Everything else in the system is opaque and lit from one corner, and a 6px
-  smear behind a modal read as a different substance. The topbar keeps its
-  14px blur: content moving under it earns it.
 - `.cn-sr-only`: standard clip pattern.
 - `.cn-hidden`: `display: none !important`.
 - (`.scroll-well`, `.app-shell`, `.page-enter`, `.live-dot` live in
-  tokens.css; do not duplicate.)
+  tokens.css; `.cn-scrim` lives in recipes.css with the overlays it backs;
+  do not duplicate.)
+
+### Layout
+
+Three primitives and one scale. The scale is the six values the recipes
+already use, 4, 8, 12, 16, 22, 28; no utility takes a number outside it, and
+there is nothing in between.
+
+- `.cn-row`: flex, centered, gap 8. `.cn-stack`: grid, gap 12.
+  `.cn-cluster`: flex, wrap, centered, gap 8. Modifiers only add:
+  `.cn-between`, `.cn-center`, `.cn-end`, `.cn-top`, `.cn-baseline`,
+  `.cn-wrap`.
+- Children: `.cn-grow` (flex 1 with `min-width: 0`, the one that lets a
+  child truncate), `.cn-fixed`, `.cn-min-0`, `.cn-auto-l` (margin-left auto).
+  `.cn-w-full`, `.cn-fit`, `.cn-block`.
+- `.cn-grid-2/3/4`: equal `minmax(0, 1fr)` columns, gap 14; three and four
+  collapse to two at 760px and everything to one at 520px.
+- `.cn-gap-{4,8,12,16,22,28}`; `.cn-p-{0,4,8,12,16,22,28}`; `.cn-px-*` and
+  `.cn-py-*` from 8 up plus 0; `.cn-mt-*`, `.cn-mb-*` on the scale plus 0;
+  `.cn-m-0`. No horizontal margin utility exists: centering is the page
+  column's or a grid's job.
+- `.cn-divide`: `> * + *` takes the surface-0 hairline (Tailwind's
+  `divide-y`).
+- `.cn-truncate` (overflow hidden, ellipsis, nowrap; needs a bounded width),
+  `.cn-nowrap`, `.cn-tabular`.
+- `.cn-icon-sm/.cn-icon/.cn-icon-lg`: 13/16/20px inline svg, `flex: none`.
+  Buttons, chips, banners and the segmented control size their own svg.
+- `.cn-code-meta`: the mono secondary line, `500 12px/1 var(--mono)` in
+  overlay-2. The one mono role outside code surfaces: a model id, a path, a
+  hash under a name. Every consumer had written it by hand.
 
 ## css/recipes.css (layer cn.recipes)
 
@@ -400,7 +469,12 @@ button that navigates, so the base sets `text-decoration: none` and each
 variant carries its own color against the tokens-layer link mauve. All labels
 sans; heights from the density knobs. `.btn`: min-height `var(--control-h)`,
 padding 0 18px, 10px radius, `780 13px var(--sans)`; disabled is `.35`
-opacity + `--neu-inset-soft`.
+opacity + `--neu-inset-soft`. Sizes: `.is-sm` is the toolbar height
+(`--control-h-sm`, 12px type, 8px radius), `.is-lg` the one hero action
+(`--control-h` + 12px, 14px type). An svg inside a button is sized by the
+button: 16px in `.btn` (14 small, 18 large), 15 in `.btn-flat`, 16 in
+`.btn-icon` (14 in `.is-sm`, 20 in `.is-lg`, which is `--control-h` square;
+`.is-sm` is 28px), 13 in `.btn-text`. Never size an icon by hand.
 
 - `.btn-primary`: crust text, solid mauve, hard offset in
   `color-mix(in srgb, var(--mauve) 25%, var(--surface-0))` plus
@@ -488,9 +562,11 @@ rises 2px into place on `--ease-out`; it leaves at once. Never use
 `.segmented`: equal-column grid, 7px gap. Options carry the hard offset at
 rest (min-height `calc(var(--control-h) + 12px)`, 10px radius, `--base`),
 lift on hover with a mauve-mix border, half-slide while held, and take the
-engaged treatment when selected (`.active`: `translateY(1px)`, transparent
-border, mauve 7% wash, `--neu-inset`; the `b` label turns mauve). The
-half-slide is transient only; the settled state never slides.
+engaged treatment when selected (`.active`, `[aria-pressed="true"]` or
+`[aria-checked="true"]`: `translateY(1px)`, transparent border, the
+`--wash`, `--neu-inset`; the `b` label turns mauve). An svg inside an
+option is 16px. The half-slide is transient only; the settled state never
+slides.
 `label:has(input:focus-visible)` gets the standard outline. `.is-stacked`:
 row flow, 12px gap, roomier rows, 17px labels.
 
@@ -571,7 +647,9 @@ frame, the stack 10px 16px breathing room, and the closed last row's
 divider yields to the panel edge (an open row is already borderless).
 
 Radios sharing a name give an exclusive-open group. The input is visually
-silent but keyboard-reachable; its focus ring draws on the label. Space
+silent but keyboard-reachable; its focus ring draws on the label. A
+framework that owns the state, or a hover-driven row, sets `.is-open` or
+`data-open` on the accordion instead and gets the same treatment. Space
 toggles natively; Enter support is one consumer line:
 
 ```js
@@ -704,17 +782,51 @@ inside a scrim rides the scrim's `[hidden]`. The motion rules sit after the
 component blocks so `[hidden]` wins. Consumers that unmount instead of
 hiding get the entrance only. The reduced-motion block collapses all of it.
 
+`.cn-scrim` itself is a recipe: fixed inset, crust 80% mix,
+`backdrop-filter: blur(2px)`, z-index 70. The crust does the work; the blur
+is a whisper. Everything else in the system is opaque and lit from one
+corner, and a 6px smear behind a modal read as a different substance. The
+topbar keeps its 14px blur: content moving under it earns it.
+
+### Native dialog hosts
+
+`<dialog class="modal">` and `<dialog class="drawer">` ride the platform: the
+top layer, focus trapping, Escape, and `::backdrop` styled as the scrim. No
+scrim div, no `hidden` attribute; `showModal()` and `close()` are the whole
+API, and a framework needs no class juggling. The closed state is
+`display: none`, so entrance and exit ride discrete `display` and `overlay`
+transitions (`allow-discrete`) with the same specs as the scrim-hosted
+versions: modal fades and rises 8px on `--t-base --ease-out`, drawer slides
+from the right on `--t-slow`, both leave on `--ease-in` in .14s, and the
+backdrop fades with them. Where a browser lacks discrete transitions the
+dialog appears and disappears in place. Padding is reset to 0 so the header
+and footer bands land on the dialog's own edge.
+
 ### Page furniture
 
 - `.eyebrow`, `.display-title`, `.lede`: aliases of the type roles, kept for
   base-layer compatibility.
-- `.footer-neu`: page footer, `min(1440px, calc(100% - 40px))`, surface-0
-  top rule, sans meta.
-- The main-column pattern is applied by the consumer, not the package:
-  `main { width: min(1440px, calc(100% - 40px)); min-width: 0; margin: 0
-  auto; position: relative; z-index: 1; }`.
-- `.topbar nav` is a row of flat buttons; `.wordmark` is the identity in
-  the topbar corner (`800 16px`, tight tracking, `em` for the accent half).
+- `.page-main`: the page column, `min(var(--page-width, 1440px),
+  calc(100% - 40px))`, centered, `min-width: 0`, relative with z-index 1,
+  vertical padding `clamp(24px, 4vw, 46px)` (`--page-pad`). `is-narrow` is
+  860px, `is-reading` 740px, `--page-width` anything else. At 760px the
+  gutter drops to 14px a side. Every consumer had written this block; the
+  SPEC used to call it the consumer's pattern.
+- `.footer-neu`: page footer at the same `--page-width`, surface-0 top rule,
+  sans meta; stacks at 760px. `.footer-brand` is its brand slot: an svg or
+  mark in mauve, the name in `750 13px`, `b`/`em` in mauve, an optional
+  trailing note in overlay-1.
+- `.topbar nav` is a row of flat buttons. `.topbar.is-split` is the
+  two-region bar, brand left and actions right, for a page with no center
+  nav (the three-column grid would center whatever came second).
+  `.topbar.is-compact` is the 52px app strip.
+- `.wordmark` is the identity in the topbar corner (`800 16px`, tight
+  tracking, `em` for the accent half). It is an inline flex row with a 9px
+  gap, so a `.mark-solid` before the name is the brand tile (28px; 34px under
+  `is-lg`, which is the 22px hero size). Anchors lose their underline.
+- `.panel-body`: the panel's content band, `20px 22px`. The panel ships no
+  padding so tables and ranked lists can fill it edge to edge; prose and
+  controls go in a body. `cn-p-*` re-pads it.
 - `.deck`: hash-routed views without JS. Direct children are the views —
   the `:target` one shows, the first child is the default, and a deep link
   into a view's content shows that view. State lives in the URL, so
@@ -776,6 +888,9 @@ Fixed left sidebar nav, grouped:
   Segmented, Stepper, Chip, Banner, Accordion, Surfaces (panel/well), Accent
   card, Avatar, Stat, Progress, Table, Terminal, Code block, Popover, Modal,
   Drawer, Toast, Empty state, Page furniture (topbar/footer/eyebrow/display).
+
+Foundation also carries Layout (the primitives, the scale, the page shell),
+and Containers carries Command (the copyable command line).
 
 `src/nav.ts` is the single registry for routes, sidebar order, and titles.
 Each page: short intro prose, specimens with copyable class strings
@@ -1037,3 +1152,41 @@ above describes only what shipped.
     were carrying them; the rule is now one sentence: a tinted surface is
     the tone at 4% over whatever it sits on. The mauve engaged wash
     (`.cn-engaged`, `.btn-flat` pressed, `.segmented > .active`) stays at 7%.
+65. v0.2.0. The layer order flipped to tokens, recipes, utilities, so a
+    utility on an element beats the recipe on it. An audit of the six
+    consumers (about 1,900 lines of custom CSS) found three of them carrying
+    the same comment about the well's transparent ground winning the
+    cascade, and two restating the whole engaged treatment because
+    `.cn-engaged` could not beat a recipe. `.cn-scrim` moved to recipes.
+66. Mix tokens: `--edge`, `--edge-soft`, `--tint`, `--wash` carry the
+    shared color-mix expressions and map into the Tailwind preset as
+    `border-edge`, `bg-tint`, `bg-wash`.
+67. Layout utilities on a six-step scale (4, 8, 12, 16, 22, 28): row, stack,
+    cluster, column grids, gap, padding, top and bottom margin, divide,
+    truncate, icon sizes, and `cn-code-meta`. The consumers had over thirty
+    hand-written flex rows and about ten truncations between them.
+68. `.page-main` and `.footer-brand` shipped; the footer follows
+    `--page-width`; `.app-shell` fills the viewport. All six consumers had
+    written the page column.
+69. `.command` shipped: the copyable command line that harness-racer, salt,
+    varchar and the docs site had each built.
+70. Native `dialog.modal` and `dialog.drawer` hosts, with `::backdrop` as the
+    scrim and the overlay motion on discrete transitions.
+71. Sizes: `.btn.is-sm`, `.btn.is-lg`, `.btn-icon.is-sm`, `.btn-icon.is-lg`.
+    Buttons, flat and text buttons, icon buttons, chips, banners, segments
+    and the wordmark size their own svg; no consumer sizes an icon by hand.
+72. Topbar `is-split` and `is-compact`; the wordmark takes a mark and an
+    `is-lg` size; `.panel-body` is the panel's content band.
+73. States as attributes: the segmented selection answers to
+    `aria-pressed` and `aria-checked` as well as `.active`; flat buttons to
+    `aria-current`; the accordion opens on `.is-open` or `data-open` as
+    well as its checkbox; a field is in error when any control inside it is
+    `aria-invalid`, and a bare input when it is.
+74. `data-density="dense"`: 28px controls, 2px offset, and the data surfaces
+    tightened with them (table cells 6px 9px, chips, panel bands, flat
+    buttons, the topbar). Compact was tuned for forms; varchar ran compact
+    and still overrode every readout.
+75. Tailwind: the preset and theme gained the motion tokens, the spacing
+    scale, the type roles and the mix colors, and the v4 import order is
+    documented: package first, then Tailwind, or a utility loses to a
+    recipe on the same element.

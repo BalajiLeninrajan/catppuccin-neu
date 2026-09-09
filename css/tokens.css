@@ -65,6 +65,13 @@
   --hard-offset-color: var(--crust); /* the hard offset's color; primary buttons override */
   --hard-offset: 4px;                /* the hard offset's distance; compact tightens it */
 
+  /* Mix tokens — the color-mix expressions every surface shares. They
+     resolve at the use site, so re-keying --tone re-keys --tint with it. */
+  --edge:      color-mix(in srgb, var(--surface-2) 40%, transparent); /* raised-surface hairline */
+  --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
+  --tint:      color-mix(in srgb, var(--tone) 4%, transparent);       /* every tinted surface */
+  --wash:      color-mix(in srgb, var(--mauve) 7%, var(--base));      /* the engaged state */
+
   /* Density knobs */
   --control-h: 46px;                 /* primary/secondary button height */
   --control-h-sm: 34px;              /* small controls */
@@ -94,6 +101,16 @@
   --control-h: 30px;
   --control-h-sm: 24px;
   --input-h: 30px;
+  --pane-radius: 12px;
+}
+/* Dense — instrument panels: tables, chips and toolbars at readout scale.
+   Compact was tuned for forms; dense tightens the data surfaces too (see
+   the [data-density="dense"] block in recipes.css). */
+[data-density="dense"] {
+  --hard-offset: 2px;
+  --control-h: 28px;
+  --control-h-sm: 22px;
+  --input-h: 28px;
   --pane-radius: 12px;
 }
 
@@ -147,6 +164,8 @@ a:hover { color: var(--pink); }
     var(--base);
   /* The shell is a column and main absorbs the slack, so the footer sits
      at the viewport bottom even when a page runs short. */
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }

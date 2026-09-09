@@ -171,15 +171,18 @@ export default function ColorsPage() {
 
       <CodeBlock
         title="Blessed percentages"
-        code={`/* State background: 4% tone into transparent or the ground, one number everywhere */
-background: color-mix(in srgb, var(--tone) 4%, transparent);
+        code={`/* The four mix tokens carry the shared expressions; use them, not the mix */
+--edge:      color-mix(in srgb, var(--surface-2) 40%, transparent); /* raised-surface hairline */
+--edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
+--tint:      color-mix(in srgb, var(--tone) 4%, transparent);       /* every tinted surface */
+--wash:      color-mix(in srgb, var(--mauve) 7%, var(--base));      /* the engaged state */
 
-/* Edge: 25 to 45% tone; the tint keeps its hairline */
+/* Tone edges: 25 to 45% tone; the tint keeps its hairline */
 border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
 border: 1px solid color-mix(in srgb, var(--tone) 25%, var(--surface-0));
 
-/* Wash: 4 to 5% for the quietest hover and selected grounds */
-background: color-mix(in srgb, var(--mauve) 5%, var(--base));`}
+/* Hover grounds: mauve 5 to 6% into base */
+background: color-mix(in srgb, var(--mauve) 6%, var(--base));`}
       />
 
       <Demo title="Tints at recipe strength" classes="banner cn-tone-green">

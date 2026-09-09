@@ -93,6 +93,16 @@
   font: 500 13px/1.6 var(--mono);
   font-variant-numeric: tabular-nums;
 }
+/* The mono secondary line: a model id, a path, a hash under a name. Every
+   consumer wrote this one by hand, so it ships. */
+.cn-code-meta {
+  font: 500 12px/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--overlay-2);
+}
+.cn-tabular { font-variant-numeric: tabular-nums; }
+.cn-nowrap { white-space: nowrap; }
+.cn-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .cn-display {
   font-family: var(--sans);
@@ -146,7 +156,7 @@
 .cn-bg-crust  { background: var(--crust); }
 .cn-bg-well   { background: color-mix(in srgb, var(--crust) 38%, var(--mantle)); }
 .cn-bg-head   { background: color-mix(in srgb, var(--crust) 30%, var(--mantle)); }
-.cn-tint      { background: color-mix(in srgb, var(--tone) 4%, transparent); }
+.cn-tint      { background: var(--tint); }
 .cn-tint-accent {
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
 }
@@ -163,8 +173,8 @@
    Hairlines belong to raised surfaces and tinted semantic surfaces.
    Inset surfaces are defined by depth alone.                                */
 
-.cn-edge        { border: 1px solid color-mix(in srgb, var(--surface-2) 40%, transparent); }
-.cn-edge-soft   { border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent); }  /* inner separators */
+.cn-edge        { border: 1px solid var(--edge); }
+.cn-edge-soft   { border: 1px solid var(--edge-soft); }  /* inner separators */
 .cn-edge-line   { border: 1px solid var(--surface-0); }  /* row separators, footer rules */
 .cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) 30%, transparent); }
 .cn-edge-tone   { border: 1px solid color-mix(in srgb, var(--tone) 25%, var(--surface-0)); }
@@ -178,7 +188,7 @@
   transform: translateY(1px);
   box-shadow: var(--neu-inset);
   border-color: transparent;
-  background: color-mix(in srgb, var(--mauve) 7%, var(--base));
+  background: var(--wash);
 }
 
 /* ── Radii — role-named; no numeric escape hatch ────────────────────────── */
@@ -204,16 +214,8 @@
   background: var(--accent);
 }
 
-/* Fixed overlay backdrop for modals/drawers. The crust does the work; the
-   blur is a whisper. Everything else in the system is opaque and lit from
-   one corner, and a 6px smear behind a modal read as a different substance. */
-.cn-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  background: color-mix(in srgb, var(--crust) 80%, transparent);
-  backdrop-filter: blur(2px);
-}
+/* (.cn-scrim moved to recipes.css with the overlays it backs: its exit
+   un-blur lives in the recipes layer and must not be beaten from here.) */
 
 /* Screen-reader only — clipped, not hidden. */
 .cn-sr-only {
@@ -229,5 +231,60 @@
 }
 
 .cn-hidden { display: none !important; }
+
+/* ── Layout — three primitives and one spacing scale ──────────────────────
+   The scale is the six values the recipes already use: 4, 8, 12, 16, 22,
+   28. Nothing in between exists, so no utility takes a number outside it.
+   A row is a centered flex line, a stack is a grid column, a cluster wraps.
+   Modifiers only ever add: cn-row cn-between cn-gap-12.                    */
+
+.cn-row     { display: flex; align-items: center; gap: 8px; }
+.cn-stack   { display: grid; gap: 12px; }
+.cn-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cn-between { justify-content: space-between; }
+.cn-center  { justify-content: center; }
+.cn-end     { justify-content: flex-end; }
+.cn-top     { align-items: flex-start; }
+.cn-baseline{ align-items: baseline; }
+.cn-wrap    { flex-wrap: wrap; }
+.cn-grow    { flex: 1 1 auto; min-width: 0; }
+.cn-fixed   { flex: 0 0 auto; }
+.cn-min-0   { min-width: 0; min-height: 0; }
+.cn-w-full  { width: 100%; }
+.cn-fit     { width: fit-content; }
+.cn-block   { display: block; }
+.cn-auto-l  { margin-left: auto; }
+
+/* Column grids collapse on the system's own breakpoints. */
+.cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
+
+.cn-gap-4  { gap: 4px; }  .cn-gap-8  { gap: 8px; }  .cn-gap-12 { gap: 12px; }
+.cn-gap-16 { gap: 16px; } .cn-gap-22 { gap: 22px; } .cn-gap-28 { gap: 28px; }
+
+.cn-p-0  { padding: 0; }    .cn-p-4  { padding: 4px; }  .cn-p-8  { padding: 8px; }  .cn-p-12 { padding: 12px; }
+.cn-p-16 { padding: 16px; } .cn-p-22 { padding: 22px; } .cn-p-28 { padding: 28px; }
+.cn-px-0  { padding-inline: 0; }    .cn-px-8  { padding-inline: 8px; }  .cn-px-12 { padding-inline: 12px; }
+.cn-px-16 { padding-inline: 16px; } .cn-px-22 { padding-inline: 22px; } .cn-px-28 { padding-inline: 28px; }
+.cn-py-0  { padding-block: 0; }     .cn-py-8  { padding-block: 8px; }   .cn-py-12 { padding-block: 12px; }
+.cn-py-16 { padding-block: 16px; }  .cn-py-22 { padding-block: 22px; }  .cn-py-28 { padding-block: 28px; }
+
+.cn-m-0  { margin: 0; }
+.cn-mt-0  { margin-top: 0; }    .cn-mt-4  { margin-top: 4px; }  .cn-mt-8  { margin-top: 8px; }  .cn-mt-12 { margin-top: 12px; }
+.cn-mt-16 { margin-top: 16px; } .cn-mt-22 { margin-top: 22px; } .cn-mt-28 { margin-top: 28px; }
+.cn-mb-0  { margin-bottom: 0; }    .cn-mb-4  { margin-bottom: 4px; }  .cn-mb-8  { margin-bottom: 8px; }  .cn-mb-12 { margin-bottom: 12px; }
+.cn-mb-16 { margin-bottom: 16px; } .cn-mb-22 { margin-bottom: 22px; } .cn-mb-28 { margin-bottom: 28px; }
+
+/* Rows separated by the line hairline, last one bare: Tailwind's divide-y. */
+.cn-divide > * + * { border-top: 1px solid var(--surface-0); }
+
+/* Inline icon sizes. Buttons, chips and banners size their own svg; these
+   are for an icon anywhere else. */
+.cn-icon-sm { width: 13px; height: 13px; flex: 0 0 auto; }
+.cn-icon    { width: 16px; height: 16px; flex: 0 0 auto; }
+.cn-icon-lg { width: 20px; height: 20px; flex: 0 0 auto; }
 
 /* (.scroll-well, .app-shell, .page-enter, .live-dot live in tokens.css.) */

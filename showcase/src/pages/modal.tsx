@@ -129,7 +129,26 @@ export default function ModalPage() {
             default: "·",
             notes: "Toggle on the mounted scrim to play the exit; unmounting gets the entrance only.",
           },
+          {
+            name: "dialog.modal",
+            values: "native host",
+            default: "·",
+            notes: "showModal() / close() are the whole API. ::backdrop is the scrim; the same motion rides discrete display transitions. No scrim div, no hidden.",
+          },
         ]}
+      />
+
+      <CodeBlock
+        title="Native dialog"
+        code={`<dialog class="modal" aria-labelledby="t">
+  <header>…</header>
+  <div>…body…</div>
+  <footer class="panel-footer">…</footer>
+</dialog>
+
+<script>
+  document.querySelector("dialog.modal").showModal(); // Escape and the backdrop close it
+</script>`}
       />
 
       <CodeBlock

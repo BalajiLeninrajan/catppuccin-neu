@@ -214,10 +214,10 @@ export default function InputPage() {
               "Absolutely positions a leading 18px icon; pads the input to 44px on the left.",
           },
           {
-            name: ".is-error / .is-warning",
+            name: '.is-error / .is-warning / [aria-invalid="true"]',
             values: "on .field or a bare .input",
             notes:
-              "Red or peach tone wash (4%) on the well, carve untouched; label and small tint. Focus keeps the mauve ring. Disabled wins over both.",
+              "Red or peach tone wash (4%) on the well, carve untouched; label and small tint. Focus keeps the mauve ring. A field with any aria-invalid control inside it is in error without the class. Disabled wins over both.",
           },
           {
             name: ".field small",

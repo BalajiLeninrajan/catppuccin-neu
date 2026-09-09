@@ -39,6 +39,40 @@ module.exports = {
         /* Contract properties */
         accent: "var(--accent)",
         tone: "var(--tone)",
+        /* Mix tokens — border-edge, border-edge-soft, bg-tint, bg-wash */
+        edge: "var(--edge)",
+        "edge-soft": "var(--edge-soft)",
+        tint: "var(--tint)",
+        wash: "var(--wash)",
+      },
+      /* Motion tokens — ease-out / ease-in / ease-spring, duration-fast/base/slow */
+      transitionTimingFunction: {
+        out: "var(--ease-out)",
+        in: "var(--ease-in)",
+        spring: "var(--ease-spring)",
+      },
+      transitionDuration: {
+        fast: "var(--t-fast)",
+        base: "var(--t-base)",
+        slow: "var(--t-slow)",
+      },
+      /* The blessed spacing scale, by pixel name: gap-22, p-28, mt-12 */
+      spacing: {
+        4: "4px",
+        8: "8px",
+        12: "12px",
+        16: "16px",
+        22: "22px",
+        28: "28px",
+      },
+      /* Type roles — text-label, text-meta, text-name, text-title, text-display */
+      fontSize: {
+        micro: ["10px", { lineHeight: "1", letterSpacing: ".08em", fontWeight: "700" }],
+        label: ["12px", { lineHeight: "1", letterSpacing: ".01em", fontWeight: "650" }],
+        meta: ["12px", { lineHeight: "1.5", fontWeight: "550" }],
+        name: ["13px", { lineHeight: "1.3", fontWeight: "700" }],
+        title: ["20px", { letterSpacing: "-.03em", fontWeight: "800" }],
+        display: ["clamp(32px, 4vw, 46px)", { lineHeight: ".98", letterSpacing: "-.03em", fontWeight: "760" }],
       },
       fontFamily: {
         sans: [

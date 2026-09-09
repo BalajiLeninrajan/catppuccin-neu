@@ -3,9 +3,14 @@
    properties for Tailwind v4 consumers. Requires css/tokens.css (or
    css/index.css) to be loaded — most values here point back at it.
 
-   usage: @import "tailwindcss";
+   usage: @import "catppuccin-neu/css/index.css";
           @import "catppuccin-neu/tailwind/theme.css";
-          @import "catppuccin-neu/css/index.css";
+          @import "tailwindcss";
+
+   Order matters. Cascade layers declared later win, so the package's layers
+   must be declared before Tailwind's: importing tailwindcss first would put
+   its utilities layer under cn.recipes, and "panel p-4" would keep the
+   panel's padding.
 */
 
 /* inline: utilities emit the var() reference at the use site, so subtree
@@ -40,6 +45,35 @@
   /* Contract properties */
   --color-accent: var(--accent);
   --color-tone: var(--tone);
+  /* Mix tokens — border-edge, border-edge-soft, bg-tint, bg-wash */
+  --color-edge: var(--edge);
+  --color-edge-soft: var(--edge-soft);
+  --color-tint: var(--tint);
+  --color-wash: var(--wash);
+
+  /* Motion tokens — ease-out / ease-in / ease-spring, duration-fast/base/slow */
+  --ease-out: var(--ease-out);
+  --ease-in: var(--ease-in);
+  --ease-spring: var(--ease-spring);
+  --duration-fast: var(--t-fast);
+  --duration-base: var(--t-base);
+  --duration-slow: var(--t-slow);
+
+  /* The blessed spacing scale, by pixel name: gap-22, p-28, mt-12 */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-22: 22px;
+  --spacing-28: 28px;
+
+  /* Type roles — text-label, text-meta, text-name, text-title, text-display */
+  --text-micro: 10px;
+  --text-label: 12px;
+  --text-meta: 12px;
+  --text-name: 13px;
+  --text-title: 20px;
+  --text-display: clamp(32px, 4vw, 46px);
 
   /* Faces — the token stacks */
   --font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;

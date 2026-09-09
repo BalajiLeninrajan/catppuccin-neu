@@ -1,13 +1,13 @@
 import { Doc, Demo, CodeBlock } from "../lib/doc";
 
-const LAYER_CODE = `@layer cn.tokens, cn.utilities, cn.recipes;
+const LAYER_CODE = `@layer cn.tokens, cn.recipes, cn.utilities;
 @import "./tokens.css" layer(cn.tokens);
-@import "./utilities.css" layer(cn.utilities);
-@import "./recipes.css" layer(cn.recipes);`;
+@import "./recipes.css" layer(cn.recipes);
+@import "./utilities.css" layer(cn.utilities);`;
 
-const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.1.5/css/index.css">`;
+const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.2.0/css/index.css">`;
 
-const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.1.5`;
+const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.0`;
 
 const IMPORT_CODE = `/* your entry stylesheet */
 @import "catppuccin-neu/css/index.css";`;
@@ -23,16 +23,19 @@ node node_modules/catppuccin-neu/scripts/sync.mjs public/styles
 pnpm exec catppuccin-neu-sync public/styles`;
 
 const LINKS_CODE = `<link rel="stylesheet" href="/styles/tokens.css">
-<link rel="stylesheet" href="/styles/utilities.css">
-<link rel="stylesheet" href="/styles/recipes.css">`;
+<link rel="stylesheet" href="/styles/recipes.css">
+<link rel="stylesheet" href="/styles/utilities.css">`;
 
 const TAILWIND_CODE = `// tailwind.config.cjs (Tailwind v3)
 module.exports = {
   presets: [require("catppuccin-neu/tailwind/preset.cjs")],
 };
 
-/* Tailwind v4 */
-@import "catppuccin-neu/tailwind/theme.css";`;
+/* Tailwind v4: the package first, so its layers are declared before
+   Tailwind's and a utility on an element beats the recipe on it. */
+@import "catppuccin-neu/css/index.css";
+@import "catppuccin-neu/tailwind/theme.css";
+@import "tailwindcss";`;
 
 export default function IntroductionPage() {
   return (
@@ -64,11 +67,14 @@ export default function IntroductionPage() {
         <p class="cn-copy">
           The package is three cascade layers.{" "}
           <code class="cn-code">cn.tokens</code> holds the palette, shadows,
-          contract properties, and reset. <code class="cn-code">cn.utilities</code>{" "}
+          contract properties, and reset. <code class="cn-code">cn.recipes</code>{" "}
+          holds full components. <code class="cn-code">cn.utilities</code>{" "}
           holds single-purpose <code class="cn-code">cn-*</code> classes with
-          blessed values only. <code class="cn-code">cn.recipes</code> holds
-          full components. Your own CSS stays unlayered, so it always wins;
-          overrides never need <code class="cn-code">!important</code>.
+          blessed values only, and sits above the recipes, so a utility on an
+          element always beats the recipe on that element:{" "}
+          <code class="cn-code">well cn-bg-well</code> fills the well. Your own
+          CSS stays unlayered, so it always wins; overrides never need{" "}
+          <code class="cn-code">!important</code>.
         </p>
         <CodeBlock title="css/index.css, the entry point" code={LAYER_CODE} />
       </section>
@@ -103,7 +109,7 @@ export default function IntroductionPage() {
           pre-build hook and gitignore the output. Node 18+, no dependencies.
           The three files also work as plain{" "}
           <code class="cn-code">&lt;link&gt;</code> tags loaded in order:
-          tokens, utilities, recipes.
+          tokens, recipes, utilities.
         </p>
         <CodeBlock title="Sync the CSS" code={SYNC_CODE} />
         <CodeBlock title="Link in order" code={LINKS_CODE} />
