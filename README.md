@@ -25,7 +25,7 @@ From the CDN, for a hand-written page with no `package.json`. jsDelivr serves
 the repo's tags directly — no publish step, nothing to configure:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.2.2/css/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.3.0/css/index.css" />
 ```
 
 Pin a full tag, not `@main` or `@v0.1` — those float and re-cache every 12
@@ -36,7 +36,7 @@ wins unlayered.
 As a git dependency, with a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.2.2
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.3.0
 ```
 
 ```js
@@ -84,13 +84,14 @@ The recipes, by group:
 | --- | --- |
 | Controls | `.btn` and its variants, `.input`, `.field`, `.checkbox`, `.radio`, `.switch`, `.choice`, `.segmented` |
 | Status | `.chip`, `.banner`, `.progress-track`, `.stepper`, `.spinner`, `.toast`, `.empty-state` |
-| Containers | `.panel`, `.panel-body`, `.well`, `.accent-card`, `.accordion`, `.avatar`, `.stat-row`, `.metric`, `.table-neu`, `.terminal`, `.codeblock`, `.command` |
+| Containers | `.panel`, `.panel-body`, `.well`, `.accent-card`, `.accordion`, `.avatar`, `.stat-row`, `.metric`, `.table-neu`, `.table-scroll`, `.terminal`, `.codeblock`, `.command` |
 | Overlays | `.popover`, `.modal`, `.drawer`, `.cn-scrim`, and `dialog.modal` / `dialog.drawer` on the native element |
 | Page | `.page-main`, `.topbar` (`is-split`, `is-compact`), `.wordmark`, `.footer-neu`, `.footer-brand`, `.eyebrow`, `.display-title`, `.lede` |
 
 Layout comes from utilities: `cn-row`, `cn-stack`, `cn-cluster`, `cn-grid-2/3/4`,
-`cn-divide`, `cn-truncate`, and `cn-gap-*`, `cn-p-*`, `cn-mt-*`, `cn-mb-*` on
-the scale 4, 8, 12, 16, 22, 28. Nothing takes a number outside it.
+`cn-divide`, `cn-truncate`, `cn-text-center`, `cn-list-none`, `cn-scroll-x`,
+`cn-sticky-top`, and `cn-gap-*`, `cn-p-*`, `cn-mt-*`, `cn-mb-*` on the scale
+4, 8, 12, 16, 22, 28. Nothing takes a number outside it.
 
 ## Contract properties
 

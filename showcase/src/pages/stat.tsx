@@ -90,6 +90,11 @@ export default function StatPage() {
             notes: "28px figure in the accent color. Steps down to 22px at ≤520px.",
           },
           {
+            name: ".metric.is-value-first",
+            values: "modifier",
+            notes: "Value over label, 4px gap. The DOM stays label-first for reading order; the flip is visual.",
+          },
+          {
             name: ".stat-row",
             values: "label/value pair",
             notes: "Baseline-aligned; label overlay-1, value subtext-1 tabular.",

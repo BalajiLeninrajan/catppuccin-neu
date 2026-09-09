@@ -145,6 +145,11 @@ export default function ChipPage() {
               "14px at rest, 16px icon-only below 760px. Decorative: aria-hidden, label text carries the name.",
           },
           {
+            name: ".chip.is-glyph",
+            values: "modifier",
+            notes: "Icon-only at any width: 7px padding, 16px svg, label hidden with font-size 0. Keep an accessible name.",
+          },
+          {
             name: ".chip-tone",
             values: "span",
             notes:

@@ -413,6 +413,12 @@ there is nothing in between.
 - `.cn-code-meta`: the mono secondary line, `500 12px/1 var(--mono)` in
   overlay-2. The one mono role outside code surfaces: a model id, a path, a
   hash under a name. Every consumer had written it by hand.
+- `.cn-text-center/-right/-left`; `.cn-list-none` (no marker, margin or
+  padding); `.cn-scroll-x` (sideways scroll inside the box, system
+  scrollbar color); `.cn-sticky-top` (sticky, top 0, z-index 2).
+- Composition rule: the type roles pin a color and the color utilities come
+  later in the file, so `cn-microlabel cn-text-accent` is a tracked label
+  in the accent. A consumer never restates a role to recolor it.
 
 ## css/recipes.css (layer cn.recipes)
 
@@ -1204,3 +1210,13 @@ above describes only what shipped.
     on the drawer's three unstyled sides. Closed dialogs are `display: none`
     and the drawer keeps only its left hairline. `.command.is-wrap` wraps a
     long statement instead of scrolling it.
+78. v0.3.0. What the consumers were still restating after v0.2 became
+    classes: `.cn-text-center/-right/-left`, `.cn-list-none`,
+    `.cn-scroll-x`, `.cn-sticky-top`; `.metric.is-value-first` (value over
+    label); `.empty-state.is-fill` (fills its pane); `.chip.is-glyph`
+    (icon-only at any width; the 760 collapse uses the same rule);
+    `.table-scroll` as a recipe, with the panel corner rules reaching
+    through it so a wrapped table keeps the panel's corners. Documented
+    that `cn-microlabel cn-text-*` composes, since the color utilities come
+    after the type roles; harness-racer had restated the tracked label six
+    times for six colors.

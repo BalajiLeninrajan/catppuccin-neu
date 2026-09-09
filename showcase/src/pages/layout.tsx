@@ -100,6 +100,11 @@ export default function LayoutPage() {
           { name: ".cn-w-full / .cn-fit / .cn-block / .cn-auto-l", values: "sizing", notes: "auto-l pushes an item to the far end of a row." },
           { name: ".cn-divide", values: "children", notes: "surface-0 hairline between siblings, none on the first." },
           { name: ".cn-truncate / .cn-nowrap / .cn-tabular", values: "text", notes: "Truncate needs a bounded width: cn-grow or cn-min-0 on the parent." },
+          { name: ".cn-text-center / -right / -left", values: "text", notes: "Alignment. Center a confirmation, right-align a number column." },
+          { name: ".cn-list-none", values: "ul, ol", notes: "No marker, no margin, no padding: a list used as layout." },
+          { name: ".cn-scroll-x", values: "any box", notes: "Scrolls sideways inside itself with the system scrollbar color; the page never scrolls sideways." },
+          { name: ".cn-sticky-top", values: "any child of a scroll box", notes: "position sticky, top 0, z-index 2. Table headers, pane toolbars." },
+          { name: "cn-microlabel cn-text-*", values: "composition", notes: "The type roles pin a color; the color utilities come later and win. A tracked label in the accent is two classes, not a restated role." },
         ]}
       />
 

@@ -171,6 +171,16 @@ export default function TablePage() {
               "Scopes all table styling. Sans + tabular-nums body, mantle-mix header, hairline row separators.",
           },
           {
+            name: ".table-scroll",
+            values: "wrapper div",
+            notes: "A wide table scrolls inside it, never the page. Inside a panel the corner rules reach through it, so a wrapped table keeps the panel's corners.",
+          },
+          {
+            name: "th.cn-sticky-top",
+            values: "utility",
+            notes: "Pins the header row to the top of a scrolling body.",
+          },
+          {
             name: "tbody tr:hover",
             values: "state",
             notes: "Row presses in: mauve 5% wash + soft inset shadow.",

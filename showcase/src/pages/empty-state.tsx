@@ -62,6 +62,11 @@ export default function EmptyStatePage() {
               "Centered flex column, 10px gap, 260px min-height, overlay-1 base color.",
           },
           {
+            name: ".empty-state.is-fill",
+            values: "modifier",
+            notes: "Fills the pane or drawer it sits in: height 100%, no 260px floor, 16px padding, 6px gap.",
+          },
+          {
             name: "svg",
             notes:
               "Optional glyph, first child. 56px round plate on --neu-inset-soft, 16px padding, overlay-1 stroke.",

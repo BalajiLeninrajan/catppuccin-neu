@@ -103,6 +103,12 @@
 .cn-tabular { font-variant-numeric: tabular-nums; }
 .cn-nowrap { white-space: nowrap; }
 .cn-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cn-text-center { text-align: center; }
+.cn-text-right  { text-align: right; }
+.cn-text-left   { text-align: left; }
+/* The type roles pin a color; the color utilities below come later in this
+   file and win, so "cn-microlabel cn-text-accent" is a tracked label in the
+   accent. Compose, never restate the role. */
 
 .cn-display {
   font-family: var(--sans);
@@ -280,6 +286,12 @@
 
 /* Rows separated by the line hairline, last one bare: Tailwind's divide-y. */
 .cn-divide > * + * { border-top: 1px solid var(--surface-0); }
+/* Lists as layout, not lists. */
+.cn-list-none { margin: 0; padding: 0; list-style: none; }
+/* A wide thing scrolls inside its own box, never the page. */
+.cn-scroll-x { overflow-x: auto; scrollbar-color: var(--surface-2) transparent; }
+/* Pins to the top of its scroll container: table headers, pane toolbars. */
+.cn-sticky-top { position: sticky; top: 0; z-index: 2; }
 
 /* Inline icon sizes. Buttons, chips and banners size their own svg; these
    are for an icon anywhere else. */

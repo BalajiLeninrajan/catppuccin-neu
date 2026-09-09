@@ -56,14 +56,21 @@
    a ranked list can fill it edge to edge; prose and controls go in a body. */
 .panel-body { padding: 20px 22px; }
 
-/* A table filling the top of a panel: the header band respects the corners. */
-.panel > .table-neu:first-child th:first-child { border-top-left-radius: calc(var(--pane-radius) - 1px); }
-.panel > .table-neu:first-child th:last-child  { border-top-right-radius: calc(var(--pane-radius) - 1px); }
+/* A wide table scrolls inside its own wrapper, never the page. */
+.table-scroll { overflow-x: auto; scrollbar-color: var(--surface-2) transparent; }
+/* A table filling the top of a panel: the header band respects the corners,
+   through a scroll wrapper too. */
+.panel > .table-neu:first-child th:first-child,
+.panel > .table-scroll:first-child > .table-neu th:first-child { border-top-left-radius: calc(var(--pane-radius) - 1px); }
+.panel > .table-neu:first-child th:last-child,
+.panel > .table-scroll:first-child > .table-neu th:last-child  { border-top-right-radius: calc(var(--pane-radius) - 1px); }
 /* …and the bottom mirror: a table (or ranked row) ending a panel keeps its
    last filled band inside the rounded corners (hover fills live on the cells
    so the radius can clip them; never overflow: hidden). */
-.panel > .table-neu:last-child tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--pane-radius) - 1px); }
-.panel > .table-neu:last-child tbody tr:last-child td:last-child  { border-bottom-right-radius: calc(var(--pane-radius) - 1px); }
+.panel > .table-neu:last-child tbody tr:last-child td:first-child,
+.panel > .table-scroll:last-child > .table-neu tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--pane-radius) - 1px); }
+.panel > .table-neu:last-child tbody tr:last-child td:last-child,
+.panel > .table-scroll:last-child > .table-neu tbody tr:last-child td:last-child { border-bottom-right-radius: calc(var(--pane-radius) - 1px); }
 .panel > .ranked-row:last-child { border-radius: 0 0 calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px); }
 
 /* Well — an inset container for grouped controls or scrolling content.
@@ -165,6 +172,8 @@
 }
 .empty-state strong { color: var(--text); font-size: 15px; }
 .empty-state span { font-size: 12px; }
+/* Fills the pane or drawer it sits in instead of holding the 260px floor. */
+.empty-state.is-fill { height: 100%; min-height: 0; padding: 16px; gap: 6px; }
 /* A glyph gets a carved plate: the same stuff as every input on the page,
    so the emptiness becomes a place instead of a void. */
 .empty-state > svg {
@@ -674,6 +683,11 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+.chip > svg { width: 14px; height: 14px; flex: 0 0 auto; }
+/* Icon-only at any width: the glyph is the chip. Keep an accessible name on
+   the element (aria-label, or the label text still in the markup). */
+.chip.is-glyph { padding: 7px; font-size: 0; }
+.chip.is-glyph > svg { width: 16px; height: 16px; }
 
 /* Tinted status tag — pass a semantic color via --tone (.cn-tone-*). The
    tint keeps its hairline edge. */
@@ -1116,6 +1130,10 @@ a:active > .accent-card {
 }
 .metric strong { font: 650 21px/1 var(--sans); font-variant-numeric: tabular-nums; }
 .metric.is-hero strong { font-size: 28px; color: var(--accent); }
+/* Value over label. The DOM stays label-first for reading order; the flip
+   is visual only. Tighter gap: the label reads as a caption under the
+   number. */
+.metric.is-value-first { flex-direction: column-reverse; gap: 4px; }
 
 /* Label/value baseline row + a strip of them separated by hairlines. */
 .stat-row {
@@ -1593,7 +1611,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
      keep the glyph. Text-only chips keep their label. Keep an accessible
      name on the control. */
   .chip:has(svg) { padding: 7px; font-size: 0; }
-  .chip svg { width: 16px; height: 16px; }
+  .chip:has(svg) > svg { width: 16px; height: 16px; }
 
   .display-title { font-size: 38px; }
   .lede { font-size: 14px; }
