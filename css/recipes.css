@@ -856,8 +856,10 @@
        <label><input type="checkbox">Title</label>
        <div class="fold"><div>…body…</div></div>
      </div>
-   Use radios sharing a name for an exclusive-open group. Space toggles the
-   focused input; the whole label is the hit target.
+   Use radios sharing a name for an exclusive-open group; a radio cannot
+   uncheck itself, so a group that must close fully adds the closable
+   listener from SPEC (arm on press, uncheck on the click that follows).
+   Space toggles the focused input; the whole label is the hit target.
    The sink and the fold animate together, no sequencing. */
 .accordion {
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);

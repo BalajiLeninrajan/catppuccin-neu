@@ -59,7 +59,7 @@ export default function CommandPage() {
 
       <Demo title="Full width" classes="command is-full">
         <div style="width:100%">
-          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.3.1" full />
+          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.3.2" full />
         </div>
       </Demo>
 

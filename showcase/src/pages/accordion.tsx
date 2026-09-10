@@ -119,8 +119,10 @@ export default function AccordionPage() {
 
       <p class="cn-copy">
         Radios open one item and close the rest. A radio cannot uncheck
-        itself, so the group always keeps one item open; use checkboxes when
-        everything must be closable.
+        itself, so on its own the group always keeps one item open. This
+        demo runs the closable listener below, so clicking the open item
+        closes it too. Leave the listener out when one item must always be
+        open.
       </p>
 
       <CodeBlock
@@ -150,6 +152,31 @@ export default function AccordionPage() {
 });`}
       />
 
+      <p class="cn-copy">
+        Closable exclusive groups need this second listener. The press arms
+        the radio that was already checked, and the click that follows
+        unchecks it. From the keyboard, Enter closes the open item; Space
+        on a checked radio is inert natively. Narrow the selector to one
+        group's name if another group must stay sticky.
+      </p>
+
+      <CodeBlock
+        title="Closable radios"
+        code={`let held = null;
+const arm = (e) => {
+  const r = e.target.closest?.(".accordion > label")?.querySelector("input[type=radio]");
+  held = r?.checked ? r : null;
+};
+document.addEventListener("pointerdown", arm, true);
+document.addEventListener("keydown", arm, true);
+document.addEventListener("click", (e) => {
+  const t = e.target;
+  if (!t.matches(".accordion input[type=radio]")) return;
+  if (t === held) t.checked = false;
+  held = null;
+});`}
+      />
+
       <Props
         title="Contract"
         rows={[
@@ -158,7 +185,7 @@ export default function AccordionPage() {
             values: "one disclosure row",
             default: "·",
             notes:
-              "Hairline bottom divider. Stack siblings for a group; radios sharing a name make the group exclusive.",
+              "Hairline bottom divider. Stack siblings for a group; radios sharing a name make the group exclusive, and the closable listener lets that group close fully.",
           },
           {
             name: ".accordion > label",

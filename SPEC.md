@@ -664,6 +664,30 @@ el.addEventListener("keydown", e => {
 });
 ```
 
+A radio cannot uncheck itself, so an exclusive group keeps one item open.
+When the group must close fully, a second listener arms the radio that was
+already checked on the press (capture, so it runs before the Enter
+listener's click) and unchecks it on the click that follows. From the
+keyboard, Enter closes the open item; Space on a checked radio is inert
+natively. Narrow the selector to one group's name if another group must
+stay sticky.
+
+```js
+let held = null;
+const arm = e => {
+  const r = e.target.closest?.(".accordion > label")?.querySelector("input[type=radio]");
+  held = r?.checked ? r : null;
+};
+document.addEventListener("pointerdown", arm, true);
+document.addEventListener("keydown", arm, true);
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (!t.matches(".accordion input[type=radio]")) return;
+  if (t === held) t.checked = false;
+  held = null;
+});
+```
+
 Details that matter: the fold's inner wrapper is a single element with
 `min-height: 0` and `overflow: clip`; closed content gets
 `visibility: hidden` (flipping at the end of the close) so it leaves the tab
@@ -1223,3 +1247,7 @@ above describes only what shipped.
 79. v0.3.1. `.command-copy` is 34px at every density. It had tracked
     `--control-h-sm`, so under dense it shrank to 22px inside a well built
     for 34 and the glyph floated bare with the wrong gap (varchar).
+80. v0.3.2. An exclusive accordion group can close fully. Radios cannot
+    uncheck themselves, so the docs had said "use checkboxes" and lost the
+    exclusivity; the closable listener (arm the checked radio on press,
+    uncheck it on the click that follows) keeps both. The showcase runs it.

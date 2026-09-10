@@ -92,6 +92,34 @@ export function App() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  /* A checked accordion radio unchecks on its next click, so an exclusive
+     group can close fully. The press arms the radio that was already
+     checked (capture, so it runs before the Enter listener's click); the
+     click that follows clears it. */
+  useEffect(() => {
+    let held: HTMLInputElement | null = null;
+    const radio = (el: EventTarget | null) =>
+      (el as HTMLElement | null)?.closest?.(".accordion > label")?.querySelector<HTMLInputElement>("input[type=radio]") ?? null;
+    const arm = (r: HTMLInputElement | null) => {
+      held = r?.checked ? r : null;
+    };
+    const onPress = (e: Event) => arm(radio(e.target));
+    const onClick = (e: Event) => {
+      const t = e.target as HTMLInputElement;
+      if (!t.matches?.(".accordion input[type=radio]")) return;
+      if (t === held) t.checked = false;
+      held = null;
+    };
+    document.addEventListener("pointerdown", onPress, true);
+    document.addEventListener("keydown", onPress, true);
+    document.addEventListener("click", onClick);
+    return () => {
+      document.removeEventListener("pointerdown", onPress, true);
+      document.removeEventListener("keydown", onPress, true);
+      document.removeEventListener("click", onClick);
+    };
+  }, []);
+
   return (
     <LocationProvider>
       <div class="app-shell sc-shell">
