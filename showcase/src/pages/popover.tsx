@@ -16,10 +16,10 @@ function AnchoredDemo() {
         Notifications
       </button>
       {/* Stays mounted; toggling hidden plays the exit transition. */}
-        <div class="popover" hidden={!open} role="dialog" aria-label="Notifications" style="top:60px; left:0;">
+        <div class="popover" hidden={!open} role="dialog" aria-label="Notifications" style="top:60px; left:0; max-width:100%;">
           <header class="cn-bg-head">
             <span class="cn-label">Notifications</span>
-            <span class="chip-tone cn-tone-mauve">3 new</span>
+            <span class="tag cn-tone-mauve">3 new</span>
           </header>
           <div style="display:flex; flex-direction:column;">
             <div class="cn-copy" style="padding:12px 16px; display:flex; flex-direction:column; gap:3px;">
@@ -49,7 +49,7 @@ function AnchoredDemo() {
 function AnatomyDemo() {
   return (
     <div style="position:relative; min-height:230px; width:min(390px, 100%);">
-      <div class="popover" style="top:0; left:0;">
+      <div class="popover" style="top:0; left:0; max-width:100%;">
         <header class="cn-bg-head">
           <span class="cn-label">Filter results</span>
           <span class="chip">12 columns</span>
@@ -64,9 +64,9 @@ function AnatomyDemo() {
             </select>
           </div>
           <div class="sc-row">
-            <span class="chip-tone cn-tone-green">Paid</span>
-            <span class="chip-tone cn-tone-peach">Pending</span>
-            <span class="chip-tone cn-tone-red">Overdue</span>
+            <span class="tag cn-tone-green">Paid</span>
+            <span class="tag cn-tone-peach">Pending</span>
+            <span class="tag cn-tone-red">Overdue</span>
           </div>
         </div>
         <footer>
@@ -111,7 +111,7 @@ export default function PopoverPage() {
         <button type="button" class="btn btn-secondary" data-tip="Duplicates the dashboard with its filters">
           Duplicate
         </button>
-        <button type="button" class="btn-icon" aria-label="Archive" data-tip="Archive this view">
+        <button type="button" class="btn is-icon" aria-label="Archive" data-tip="Archive this view">
           ⌫
         </button>
       </Demo>
@@ -131,13 +131,13 @@ export default function PopoverPage() {
             name: ".popover",
             values: "child of a position: relative anchor",
             default: "·",
-            notes: "width min(390px, 100vw − 32px); z-index 80; floats on --shadow-pop.",
+            notes: "width min(390px, 100vw - 32px); z-index 80; floats on --shadow-pop.",
           },
           {
             name: ".popover > :first-child",
             values: "any filled band",
             default: "·",
-            notes: "Top corners follow the 13px parent radius (12px inner).",
+            notes: "Top corners follow the card radius minus the 1px border (11px).",
           },
           {
             name: ".popover > :last-child",
@@ -149,13 +149,13 @@ export default function PopoverPage() {
             name: "[data-tip]",
             values: "any focusable element",
             default: "·",
-            notes: "Popover-styled bubble above the element on hover/focus; max-width 240px. Use instead of title=.",
+            notes: "A popover-styled bubble above the element on hover and focus, after --t-slow + --t-press (.4s). Max width 240px. Use it instead of title=.",
           },
           {
             name: ".cn-bg-head",
             values: "header band fill",
             default: "·",
-            notes: "Recessed band mix, same fill as panel headings.",
+            notes: "Recessed band mix, the same fill as panel headers.",
           },
           {
             name: ".popover > header / > footer",

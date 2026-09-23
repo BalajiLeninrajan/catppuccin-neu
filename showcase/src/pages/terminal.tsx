@@ -1,4 +1,6 @@
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock, TEAMS, accentStyle } from "../lib/doc";
+
+const PAYMENTS = TEAMS[0];
 
 const LOG = `$ app deploy --env production
   reading config          ok
@@ -20,7 +22,7 @@ export default function TerminalPage() {
   return (
     <Doc
       title="Terminal"
-      lede="The deepest well in the system. Crust ground, full inset shadow, no border. One of the three mono carriers, with .cn-code and .codeblock."
+      lede="A carved log surface in mono. It shares its radius, fill and type with the code block and the command."
     >
       <Demo title="Log surface with caret" classes="terminal / terminal .caret">
         <div class="terminal" style="width:min(560px,100%);height:230px">
@@ -43,10 +45,10 @@ export default function TerminalPage() {
       <Demo title="Accent-keyed caret" classes="terminal  (caret reads --accent)">
         <div
           class="terminal"
-          style="--accent:#94e2d5;width:min(560px,100%)"
+          style={`${accentStyle(PAYMENTS.accent)};width:min(560px,100%)`}
         >
           <pre>
-            {"$ app status\nall services healthy\n$ "}
+            {"$ app status --team payments\nall services healthy\n$ "}
             <span class="caret" />
           </pre>
         </div>
@@ -55,19 +57,19 @@ export default function TerminalPage() {
       <p class="cn-copy">
         The blinking caret is a plain <code class="cn-code">span.caret</code>{" "}
         filled with <code class="cn-code">var(--accent)</code>, mauve by
-        default, re-keyed inline like every other accent-aware recipe. The
-        blink stops under reduced motion.
+        default. A terminal that belongs to one team takes that team's
+        accent, here Payments' teal. The blink stops under reduced motion.
       </p>
 
       <Demo title="Inside a panel" classes="panel > terminal">
         <div class="panel" style="width:min(560px,100%)">
-          <div class="panel-heading">
+          <div class="panel-header">
             <h2>Deploy log</h2>
             <span class="chip">
               <span class="live-dot" /> streaming
             </span>
           </div>
-          <div style="padding:18px">
+          <div class="panel-body">
             <div class="terminal" style="height:150px">
               <pre class="scroll-well">
                 {LOG}
@@ -79,9 +81,9 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        A raised panel around the deep-inset terminal is the strongest depth
-        contrast the system allows. Use the pairing when the log is the point
-        of the page.
+        A raised panel around the carved terminal is the strongest depth
+        contrast the system allows. Use it when the log is the point of the
+        page.
       </p>
 
       <Props
@@ -91,19 +93,19 @@ export default function TerminalPage() {
             name: ".terminal",
             values: "surface",
             notes:
-              "Crust ground, full neu-inset, 10px radius, borderless. Column flex; the pre stretches.",
+              "The shared recess fill, full neu-inset, the card radius (12px), no border. Column flex; the pre stretches.",
           },
           {
             name: ".terminal pre",
             values: "content",
             notes:
-              "500 12px/1.65 var(--mono). Wraps; scrolls on overflow.",
+              "Mono 500 12px/1.6, --well-pad padding. Wraps; scrolls on overflow.",
           },
           {
             name: ".terminal .caret",
             values: "cursor",
             default: "--accent: var(--mauve)",
-            notes: "6×14px block, accent fill, .75s step blink.",
+            notes: "6 by 14px block, accent fill, .75s step blink.",
           },
           {
             name: ".scroll-well",

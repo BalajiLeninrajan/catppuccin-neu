@@ -1,22 +1,24 @@
 /* ── Component recipes ──────────────────────────────────────────────────────
    Every recipe reads tokens and contract properties only (--accent, --tone,
-   --hard-offset-color, the density knobs). Depth canon: clickable controls
-   default to the hard offset shadow and press with the half-slide — rest
-   --hard-offset (4px, 3px compact), hover translate(-1px,-1px), active a
+   --plate, the density knobs). Depth canon: clickable controls
+   default to the hard offset shadow and press with the half-slide. Rest
+   --hard-offset (4px, 2px compact), hover translate(-1px,-1px), active a
    half-slide onto the shadow, which shrinks to meet it. Type: sans is the
    default; mono ships on the code surfaces (.terminal, .codeblock, .cn-code)
    and may be adopted elsewhere sparingly in a consumer layer. Inset surfaces
-   are borderless — depth defines them; hairlines stay on raised surfaces
+   are borderless: depth defines them; hairlines stay on raised surfaces
    and tinted semantic surfaces only.
-   Requires tokens.css (+ utilities.css for .cn-scrim). Layer: cn.recipes.   */
+   Requires tokens.css. Layer: cn.recipes.
+   Deprecated names sit in selector lists after a "deprecated, removed in
+   0.5.0" comment; rg for that string to find every alias.                  */
 
 /* ── Surfaces ───────────────────────────────────────────────────────────── */
 
-/* Panel — the primary content container. Raised. */
+/* Panel: the primary content container. Raised. */
 .panel {
   min-width: 0;
   border: 1px solid var(--edge);
-  border-radius: var(--pane-radius);
+  border-radius: var(--cn-radius-panel);
   background: var(--base);
   box-shadow: var(--neu-raised);
 }
@@ -26,59 +28,81 @@
    sticker. Flattened at ≤1060px. */
 .panel.is-tilted {
   transform: rotate(1.2deg);
-  box-shadow: 10px 10px 0 var(--hard-offset-color), var(--neu-raised);
+  box-shadow: 10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust))), var(--neu-raised);
 }
 
-/* Panel header/footer — recessed bands inside a panel, on --mantle. The band
-   follows the parent radius (minus the 1px border) so its fill never pokes
-   past the panel corners; never fix this with overflow: hidden — that clips
-   anchored popovers and hard-offset shadows. */
-.panel-heading, .panel-footer {
-  min-height: 70px;
-  padding: 14px 22px;
+/* Bands: the panel header and footer, and the modal and drawer headers.
+   Heights and padding come from the density knobs. A filled band follows
+   the parent radius minus the 1px border so its fill never pokes past the
+   corners; never fix this with overflow: hidden, which clips anchored
+   popovers and hard-offset shadows. */
+.panel-header, .panel-footer, .modal > header, .drawer > header,
+/* deprecated, removed in 0.5.0 */
+.panel-heading {
+  min-height: var(--band-h);
+  padding: var(--band-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-4);
 }
-/* The heading anchors with a fill; the footer sits on the panel's own ground,
-   separated by the divider alone (band study, Revision 5). */
+/* Headers anchor with a fill; the footer sits on the panel's own ground,
+   separated by the divider alone. */
+.panel-header, .modal > header, .drawer > header,
+/* deprecated, removed in 0.5.0 */
 .panel-heading {
   background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  border-radius: calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px) 0 0;
+  border-radius: calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px) 0 0;
 }
+/* The drawer has square corners. */
+.drawer > header { border-radius: 0; }
 .panel-footer {
   border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
 }
-.panel-heading h2 { margin: 0; font-size: 18px; }
+.panel-header h2,
+/* deprecated, removed in 0.5.0 */
+.panel-heading h2 { min-width: 0; margin: 0; font-size: var(--band-title-size); }
+/* A band holding a .band-actions cluster wraps when the actions outgrow
+   the row; the cluster holds to the right and wraps inside itself. Other
+   bands stay on one line. */
+:is(.panel-header, .modal > header, .drawer > header, .panel-heading):has(> .band-actions) { flex-wrap: wrap; row-gap: var(--space-2); }
+.band-actions {
+  min-width: 0;
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
 /* The panel's content band. The panel itself ships no padding, so a table or
    a ranked list can fill it edge to edge; prose and controls go in a body. */
-.panel-body { padding: 20px 22px; }
+.panel-body { padding: var(--body-pad); }
 
 /* A wide table scrolls inside its own wrapper, never the page. */
 .table-scroll { overflow-x: auto; scrollbar-color: var(--surface-2) transparent; }
 /* A table filling the top of a panel: the header band respects the corners,
    through a scroll wrapper too. */
-.panel > .table-neu:first-child th:first-child,
-.panel > .table-scroll:first-child > .table-neu th:first-child { border-top-left-radius: calc(var(--pane-radius) - 1px); }
-.panel > .table-neu:first-child th:last-child,
-.panel > .table-scroll:first-child > .table-neu th:last-child  { border-top-right-radius: calc(var(--pane-radius) - 1px); }
+.panel > :is(.data-table, .table-neu):first-child th:first-child,
+.panel > .table-scroll:first-child > :is(.data-table, .table-neu) th:first-child { border-top-left-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > :is(.data-table, .table-neu):first-child th:last-child,
+.panel > .table-scroll:first-child > :is(.data-table, .table-neu) th:last-child  { border-top-right-radius: calc(var(--cn-radius-panel) - 1px); }
 /* …and the bottom mirror: a table (or ranked row) ending a panel keeps its
    last filled band inside the rounded corners (hover fills live on the cells
    so the radius can clip them; never overflow: hidden). */
-.panel > .table-neu:last-child tbody tr:last-child td:first-child,
-.panel > .table-scroll:last-child > .table-neu tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--pane-radius) - 1px); }
-.panel > .table-neu:last-child tbody tr:last-child td:last-child,
-.panel > .table-scroll:last-child > .table-neu tbody tr:last-child td:last-child { border-bottom-right-radius: calc(var(--pane-radius) - 1px); }
-.panel > .ranked-row:last-child { border-radius: 0 0 calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px); }
+.panel > :is(.data-table, .table-neu):last-child tbody tr:last-child td:first-child,
+.panel > .table-scroll:last-child > :is(.data-table, .table-neu) tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > :is(.data-table, .table-neu):last-child tbody tr:last-child td:last-child,
+.panel > .table-scroll:last-child > :is(.data-table, .table-neu) tbody tr:last-child td:last-child { border-bottom-right-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > .ranked-row:last-child { border-radius: 0 0 calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px); }
 
-/* Well — an inset container for grouped controls or scrolling content.
+/* Well: an inset container for grouped controls or scrolling content.
    Borderless: the inset depth defines the surface. */
-/* Carved from the parent surface — transparent ground, depth alone. Compose
+/* Carved from the parent surface: transparent ground, depth alone. Compose
    cn-bg-well when an explicit darker fill is wanted. */
 .well {
-  border-radius: 13px;
+  border-radius: var(--cn-radius-card);
   background: transparent;
   box-shadow: var(--neu-inset);
 }
@@ -88,45 +112,50 @@
   mask-image: linear-gradient(180deg, #000 calc(100% - 34px), transparent);
 }
 
-/* Terminal/log surface — the deepest well in the system. Borderless. */
-.terminal {
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  background: var(--crust);
+/* Mono wells: the terminal, the code block and the command share one
+   carve, one recess fill, one radius and the code type role. Borderless. */
+.terminal, .codeblock, .command {
+  border-radius: var(--cn-radius-card);
+  background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
   box-shadow: var(--neu-inset);
+  color: var(--subtext-1);
+  font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
+  font-variant-numeric: tabular-nums;
+  scrollbar-color: var(--surface-1) transparent;
 }
+
+/* Terminal: a log surface. */
+.terminal { display: flex; flex-direction: column; }
 .terminal pre {
   flex: 1;
   overflow: auto;
   margin: 0;
-  padding: 14px;
-  color: var(--subtext-1);
+  padding: var(--well-pad);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font: 500 12px/1.65 var(--mono);
-  scrollbar-color: var(--surface-1) transparent;
+  font: inherit;
 }
 .terminal .caret {
   width: 6px; height: 14px;
   display: inline-block;
-  margin-left: 3px;
+  margin-left: var(--space-1);
   vertical-align: -2px;
   background: var(--accent);
   animation: blink .75s steps(2) infinite;
 }
 
-/* Sticky top bar — translucent base, blurred, hairline + soft cast shadow. */
+/* Sticky top bar: translucent base, blurred, hairline + soft cast shadow. */
 .topbar {
-  min-height: 68px;
-  padding: 10px clamp(16px, 3vw, 42px);
+  min-height: calc(var(--band-h) + var(--space-1));
+  /* Same gutter as .page-main, so the brand lines up with the column edge. */
+  padding: var(--space-3) var(--page-gutter);
   position: sticky;
   top: 0;
   z-index: 50;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 24px;
+  gap: var(--space-5);
   background: color-mix(in srgb, var(--base) 91%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 45%, transparent);
   backdrop-filter: blur(14px);
@@ -135,52 +164,69 @@
 }
 /* The cast exists once something is under the bar. Where scroll-driven
    animation is supported it fades in over the first 60px; elsewhere the bar
-   keeps its cast at rest, as before. */
+   keeps its cast at rest. */
 @supports (animation-timeline: scroll()) {
   .topbar { animation: cast linear both; animation-timeline: scroll(); animation-range: 0 60px; }
 }
 /* A nav in the topbar is a row of flat buttons. */
-.topbar nav { display: flex; gap: 4px; }
+.topbar nav { display: flex; gap: var(--space-1); }
 /* Two regions, brand left and actions right, for a page with no center nav
    (the three-column grid would center whatever came second). */
 .topbar.is-split { grid-template-columns: 1fr auto; }
 /* An app strip rather than a page bar. */
-.topbar.is-compact { min-height: 52px; padding: 6px 14px; gap: 14px; }
+.topbar.is-compact { min-height: min(52px, var(--band-h)); padding: var(--space-2) var(--space-3); gap: var(--space-3); }
 
-/* Wordmark — the identity in the topbar corner. em takes the given accent.
-   A mark-solid before the name is the brand tile; is-lg is the hero size. */
-.wordmark {
+/* Wordmark: the identity in the topbar corner. em takes the mauve upright
+   treatment. A .mark before the name is the brand tile. is-lg is the hero
+   size; is-sm is the footer brand: a glyph, the name, an optional note. */
+.wordmark,
+/* deprecated, removed in 0.5.0 */
+.footer-brand {
   display: inline-flex;
   align-items: center;
-  font: 800 16px/1 var(--sans);
-  letter-spacing: -.03em;
+  font: var(--cn-type-display-weight) var(--cn-type-lede-size)/1 var(--sans);
+  letter-spacing: var(--cn-type-display-tracking);
   color: var(--text);
   text-decoration: none;
 }
 /* The gap lives on the mark, not the row: the name and its em are separate
    flex items and must stay flush. */
-.wordmark > .mark-solid { width: 28px; height: 28px; margin-right: 9px; font-size: 13px; }
-.wordmark.is-lg { font-size: 22px; letter-spacing: -.045em; }
-.wordmark.is-lg > .mark-solid { width: 34px; height: 34px; margin-right: 11px; font-size: 15px; }
+.wordmark > :is(.mark, .mark-solid) { width: 28px; height: 28px; margin-right: var(--space-2); font-size: var(--cn-type-ui-size); }
+.wordmark.is-lg { font-size: var(--cn-type-title-size); }
+.wordmark.is-lg > :is(.mark, .mark-solid) { width: 34px; height: 34px; margin-right: var(--space-3); font-size: var(--cn-type-body-size); }
+.wordmark.is-sm,
+/* deprecated, removed in 0.5.0 */
+.footer-brand { font-size: var(--cn-type-name-size); font-weight: var(--cn-type-name-weight); }
+.wordmark.is-sm > :is(.mark, .mark-solid) { width: 20px; height: 20px; margin-right: var(--space-2); font-size: var(--cn-type-micro-size); }
+.wordmark.is-sm > svg,
+/* deprecated, removed in 0.5.0 */
+.footer-brand > svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: var(--space-2); color: var(--mauve); }
+.wordmark.is-sm b,
+/* deprecated, removed in 0.5.0 */
+.footer-brand :is(b, em) { color: var(--mauve); font-style: normal; }
+/* The suffix is its own flex item, so the word space comes from a margin. */
+.wordmark.is-sm > b { margin-left: .25em; }
+.wordmark.is-sm > span,
+/* deprecated, removed in 0.5.0 */
+.footer-brand > span { margin-left: var(--space-2); color: var(--overlay-2); font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/1 var(--sans); letter-spacing: normal; }
 
 /* Empty state */
 .empty-state {
-  min-height: 260px;
-  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px;
-  color: var(--overlay-1);
+  min-height: var(--empty-h);
+  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: var(--space-2);
+  color: var(--overlay-2);
   text-align: center;
 }
-.empty-state strong { color: var(--text); font-size: 15px; }
-.empty-state span { font-size: 12px; }
-/* Fills the pane or drawer it sits in instead of holding the 260px floor. */
-.empty-state.is-fill { height: 100%; min-height: 0; padding: 16px; gap: 6px; }
-/* A glyph gets a carved plate: the same stuff as every input on the page,
-   so the emptiness becomes a place instead of a void. */
+.empty-state strong { color: var(--text); font-size: var(--cn-type-body-size); }
+.empty-state span { font-size: var(--cn-type-meta-size); }
+/* Fills the pane or drawer it sits in instead of holding the --empty-h floor. */
+.empty-state.is-fill { height: 100%; min-height: 0; padding: var(--space-4); gap: var(--space-1); }
+/* A glyph sits in a carved plate, the same inset as an input. */
 .empty-state > svg {
   width: 56px;
   height: 56px;
-  padding: 16px;
-  margin-bottom: 6px;
+  padding: var(--space-4);
+  margin-bottom: var(--space-1);
   color: var(--overlay-1);
   border-radius: 50%;
   box-shadow: var(--neu-inset-soft);
@@ -188,278 +234,277 @@
 
 /* ── Buttons ────────────────────────────────────────────────────────────────
    Compose: class="btn btn-primary". All labels sans; heights from the
-   density knobs.                                                            */
+   density knobs. Modifiers: is-sm, is-lg, is-icon, and is-dashed on ghost. */
 
-.btn {
+.btn,
+/* deprecated, removed in 0.5.0 */
+.btn-flat, .btn-icon, .btn-dashed {
   /* Neutral base so a variant-less .btn never shows UA button chrome.
-     text-decoration covers anchor buttons: <a class="btn"> is a button
-     that navigates, and the UA underline must not bleed through. */
+     text-decoration covers anchor buttons. */
   color: inherit;
   text-decoration: none;
   border: 1px solid transparent;
   background: transparent;
   min-height: var(--control-h);
-  padding: 0 18px;
+  padding: 0 var(--space-4);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  border-radius: 10px;
+  gap: var(--space-2);
+  border-radius: var(--cn-radius-control);
   font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 780;
+  font-size: var(--cn-type-ui-size);
+  font-weight: var(--cn-type-name-weight);
   cursor: pointer;
   transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
 /* Down is crisp on the fast-out; up comes back on the spring. */
-.btn:active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: .08s; }
-.btn:disabled { opacity: .35; cursor: not-allowed; box-shadow: var(--neu-inset-soft); }
+.btn:active:not(:disabled),
+/* deprecated, removed in 0.5.0 */
+:is(.btn-flat, .btn-icon, .btn-dashed):active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
+/* Disabled dims and keeps the variant's rest shadow. */
+.btn:disabled,
+/* deprecated, removed in 0.5.0 */
+:is(.btn-flat, .btn-icon, .btn-dashed):disabled { opacity: var(--disabled-opacity); cursor: not-allowed; }
 /* Sizes. Small is the toolbar height; large is the one hero action. */
-.btn.is-sm { min-height: var(--control-h-sm); padding: 0 12px; gap: 7px; border-radius: 8px; font-size: 12px; }
-.btn.is-lg { min-height: calc(var(--control-h) + 12px); padding: 0 22px; gap: 11px; font-size: 14px; }
+.btn.is-sm,
+/* deprecated, removed in 0.5.0 */
+.btn-flat { min-height: var(--control-h-sm); padding: 0 var(--space-3); font-size: var(--cn-type-label-size); }
+.btn.is-lg { min-height: calc(var(--control-h) + var(--space-3)); padding: 0 var(--space-5); gap: var(--space-3); font-size: var(--cn-type-body-size); }
 /* An icon inside a button is sized by the button, never by hand. */
-.btn > svg { width: 16px; height: 16px; flex: 0 0 auto; }
-.btn.is-sm > svg { width: 14px; height: 14px; }
+.btn > svg,
+/* deprecated, removed in 0.5.0 */
+:is(.btn-flat, .btn-icon, .btn-dashed) > svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.btn.is-sm > svg,
+/* deprecated, removed in 0.5.0 */
+.btn-flat > svg { width: 14px; height: 14px; }
 .btn.is-lg > svg { width: 18px; height: 18px; }
 
-/* Primary — solid accent + hard offset (the flat graphic note, system-wide).
-   The offset is the one non-crust hard offset: mauve pressed into surface. */
+/* ── Hard-offset press ──────────────────────────────────────────────────────
+   One rule for every control that rests on a plate: hover lifts 1px, held
+   half-slides onto the plate, which shrinks to meet it. --hard-extra holds
+   shadow layers a recipe draws over the plate (the primary gloss). The
+   .cn-pressable-slide utility draws the same press. */
+:is(.btn-primary, .btn-secondary, .segmented > *, .accent-card) {
+  --hard-extra: 0 0 transparent;
+  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust))), var(--hard-extra);
+}
+:is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:disabled),
+a:hover > .accent-card { transform: translate(-1px, -1px); }
+:is(.btn-primary, .btn-secondary, .segmented > *):active:not(:disabled),
+a:active > .accent-card {
+  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
+  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--hard-offset-color, var(--crust))), var(--hard-extra);
+  transition-timing-function: var(--ease-out);
+  transition-duration: var(--t-press);
+}
+
+/* Primary: solid mauve on a mauve plate pressed into surface, plus the gloss. */
 .btn-primary {
+  --plate: color-mix(in srgb, var(--mauve) 25%, var(--surface-0));
+  --hard-extra: inset 1px 1px rgb(255 255 255 / .16);
   color: var(--crust);
   border: 1px solid var(--mauve);
   background: var(--mauve);
-  box-shadow: var(--hard-offset) var(--hard-offset) 0 color-mix(in srgb, var(--mauve) 25%, var(--surface-0)),
-              inset 1px 1px rgb(255 255 255 / .16);
 }
 .btn-primary:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
   border-color: var(--pink);
   background: var(--pink);
 }
-.btn-primary:active:not(:disabled) {
-  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 color-mix(in srgb, var(--mauve) 25%, var(--surface-0)),
-              inset 1px 1px rgb(255 255 255 / .16);
-}
 
-/* Secondary — hard offset in crust (the canon default for clickables).
-   Softening one requires an unlayered consumer override (e.g.
-   .btn-secondary.is-soft { box-shadow: var(--neu-raised-soft); } in consumer
-   CSS) — utility classes live in an earlier layer and cannot beat this rule. */
+/* Secondary: base fill on the crust plate, the default for clickables. */
 .btn-secondary {
   color: var(--text);
   border: 1px solid var(--edge);
   background: var(--base);
-  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color);
 }
-.btn-secondary:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  border-color: color-mix(in srgb, var(--mauve) 50%, var(--surface-1));
-}
-.btn-secondary:active:not(:disabled) {
-  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--hard-offset-color);
-}
+.btn-secondary:hover:not(:disabled) { border-color: color-mix(in srgb, var(--mauve) 50%, var(--surface-1)); }
 
-/* Ghost — chrome-free until hovered. */
-.btn-ghost {
+/* Ghost: chrome-free until hovered. Toggled or current, it wears the
+   engaged state: pressed in on the mauve wash, borderless. */
+.btn-ghost,
+/* deprecated, removed in 0.5.0 */
+.btn-flat, .btn-dashed {
   color: var(--subtext-0);
   border: 1px solid transparent;
   background: transparent;
 }
-.btn-ghost:hover:not(:disabled) {
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface-0) 40%, transparent);
-}
-.btn-ghost:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
-
-/* Flat toolbar button — flat at rest, engaged-in when pressed/toggled.
-   Usable without .btn, so it covers anchors itself. */
-.btn-flat {
-  text-decoration: none;
-  min-height: var(--control-h-sm);
-  padding: 0 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  color: var(--subtext-0);
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform .16s, background .16s, border-color .16s, box-shadow .16s, color .16s;
-}
+.btn-ghost:hover:not(:disabled),
+/* deprecated, removed in 0.5.0 */
 .btn-flat:hover:not(:disabled) {
   color: var(--text);
   background: color-mix(in srgb, var(--surface-0) 40%, transparent);
 }
-/* Engaged — borderless: the inset depth and mauve wash define the state. */
-.btn-flat > svg { width: 15px; height: 15px; flex: 0 0 auto; }
-.btn-flat[aria-pressed="true"], .btn-flat[aria-current], .btn-flat.active {
+.btn-ghost:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
+/* Danger ghost: a destructive action in a toolbar or menu. */
+/* Three classes, so it beats the icon button's overlay-1 rest color. */
+.btn.btn-ghost.is-danger { --tone: var(--red); color: var(--red); }
+.btn-ghost.is-danger:hover:not(:disabled) { color: var(--red); background: color-mix(in srgb, var(--red) 9%, transparent); }
+.btn-ghost:is([aria-pressed="true"], [aria-current]),
+/* deprecated, removed in 0.5.0 */
+.btn-flat:is([aria-pressed="true"], [aria-current], .active) {
   transform: translateY(1px);
   color: var(--text);
   background: var(--wash);
   box-shadow: var(--neu-inset);
 }
-.btn-flat:disabled { opacity: .35; cursor: not-allowed; }
 
-/* Inline text button — mauve, sans, no chrome. */
-.btn-text {
-  text-decoration: none; /* standalone-safe on anchors, like .btn-flat */
+/* Dashed ghost: the only dashed border in the system. An open slot of a
+   control (drop zones, placeholder rows, optional extras). */
+.btn-ghost.is-dashed,
+/* deprecated, removed in 0.5.0 */
+.btn-dashed {
+  border: 1px dashed var(--surface-1);
+  border-radius: var(--cn-radius-card);
+  background: color-mix(in srgb, var(--surface-0) 16%, transparent);
+}
+.btn-ghost.is-dashed:hover:not(:disabled),
+/* deprecated, removed in 0.5.0 */
+.btn-dashed:hover:not(:disabled) {
   color: var(--mauve);
-  border: 0;
-  border-radius: 8px; /* focus ring traces this — no sharp rectangles */
-  background: transparent;
-  font: 700 12px var(--sans);
-  cursor: pointer;
-  transition: color .16s, transform .16s;
+  border-color: var(--mauve);
+  background: color-mix(in srgb, var(--mauve) 7%, transparent);
 }
-.btn-text:hover:not(:disabled) { color: var(--pink); }
-.btn-text:active:not(:disabled) { transform: translateY(1px); }
+/* deprecated, removed in 0.5.0 */
+.btn-dashed { display: flex; min-height: calc(var(--control-h) + var(--space-4)); font-weight: var(--cn-type-ui-weight); }
+/* deprecated, removed in 0.5.0 */
+.btn-dashed:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
-/* Icon button — flat until hovered, then tints toward its --tone. */
+/* Icon button: a square at the small height, flat until hovered, then
+   tinted toward its --tone. */
+.btn.is-icon,
+/* deprecated, removed in 0.5.0 */
 .btn-icon {
-  text-decoration: none; /* standalone-safe on anchors, like .btn-flat */
-  width: var(--control-h-sm); height: var(--control-h-sm);
-  display: grid; place-items: center;
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  min-height: var(--control-h-sm);
+  padding: 0;
   color: var(--overlay-1);
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
-  cursor: pointer;
-  transition: background .16s, border-color .16s, color .16s, transform .16s, box-shadow .16s;
 }
+.btn.is-icon:hover:not(:disabled),
+/* deprecated, removed in 0.5.0 */
 .btn-icon:hover:not(:disabled) {
   color: var(--tone);
   border-color: color-mix(in srgb, var(--tone) 38%, transparent);
   background: color-mix(in srgb, var(--tone) 9%, transparent);
 }
+.btn.is-icon:active:not(:disabled),
+/* deprecated, removed in 0.5.0 */
 .btn-icon:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
-.btn-icon:disabled { opacity: .28; cursor: not-allowed; }
-.btn-icon > svg { width: 16px; height: 16px; }
-.btn-icon.is-sm { width: 28px; height: 28px; border-radius: 8px; }
-.btn-icon.is-sm > svg { width: 14px; height: 14px; }
-.btn-icon.is-lg { width: var(--control-h); height: var(--control-h); }
+.btn.is-icon.is-lg,
+/* deprecated, removed in 0.5.0 */
+.btn-icon.is-lg { width: var(--control-h); height: var(--control-h); min-height: var(--control-h); }
+.btn.is-icon.is-lg > svg,
+/* deprecated, removed in 0.5.0 */
 .btn-icon.is-lg > svg { width: 20px; height: 20px; }
-.btn-text > svg { width: 13px; height: 13px; flex: 0 0 auto; vertical-align: -2px; }
+/* deprecated, removed in 0.5.0 */
+.btn-icon { display: grid; place-items: center; }
+/* deprecated, removed in 0.5.0 */
+.btn-icon.is-sm { width: 28px; height: 28px; min-height: 28px; }
+/* deprecated, removed in 0.5.0 */
+.btn-icon.is-sm > svg { width: 14px; height: 14px; }
 
-/* Dashed button — the only dashed border in the system. An open, low-emphasis
-   slot of a control (drop zones, placeholder rows, optional extras). */
-.btn-dashed {
-  min-height: calc(var(--control-h) + 18px);
-  padding: 0 18px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  color: var(--subtext-0);
-  border: 1px dashed var(--surface-1);
-  border-radius: 13px;
-  background: color-mix(in srgb, var(--surface-0) 16%, transparent);
-  font-family: var(--sans);
-  font-size: 13px; font-weight: 650;
-  cursor: pointer;
-  transition: background .16s, border-color .16s, color .16s, transform .16s, box-shadow .16s;
-}
-.btn-dashed:hover {
+/* Inline text button: mauve, sans, no chrome. */
+.btn-text {
+  text-decoration: none;
   color: var(--mauve);
-  border-color: var(--mauve);
-  background: color-mix(in srgb, var(--mauve) 7%, transparent);
+  border: 0;
+  border-radius: var(--cn-radius-control); /* the focus ring traces this */
+  background: transparent;
+  font: var(--cn-type-name-weight) var(--cn-type-label-size) var(--sans);
+  cursor: pointer;
+  transition: color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.btn-dashed:active { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
+.btn-text:hover:not(:disabled) { color: var(--pink); }
+.btn-text:active:not(:disabled) { transform: translateY(1px); }
+.btn-text > svg { width: 13px; height: 13px; flex: 0 0 auto; vertical-align: -2px; }
 
 /* ── Inputs ─────────────────────────────────────────────────────────────── */
 
 .field label {
   display: block;
-  margin: 0 0 7px 1px;
+  margin: 0 0 var(--space-2) 1px;
   color: var(--overlay-2);
-  font: 650 12px/1 var(--sans);
-  letter-spacing: .01em;
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
+  letter-spacing: var(--cn-type-label-tracking);
 }
 
 /* Borderless inset well, carved from whatever surface it sits on: the
    background stays transparent so the parent ground shows through and only
-   the inner shadow defines the field. Sans face; numbers stay tabular. */
+   the inner shadow defines the field. Sans face; numbers stay tabular.
+   A plain list, not :is(), so .input-lg (0,1,0) can still override it. */
 .input,
 .field input, .field select, .field textarea {
   width: 100%;
-  height: var(--input-h);
-  padding: 0 14px;
+  height: var(--control-h);
+  padding: 0 var(--space-4);
   color: var(--text);
   border: 0;
-  border-radius: 13px;
+  border-radius: var(--cn-radius-card);
   background: transparent;
   box-shadow: var(--neu-inset);
   font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: var(--cn-type-ui-size);
+  font-weight: var(--cn-type-meta-weight);
   letter-spacing: normal;
   text-transform: none;
   font-variant-numeric: tabular-nums;
-  transition: box-shadow .18s;
+  transition: box-shadow var(--t-base) var(--ease-out);
 }
-.field textarea, textarea.input {
+:is(textarea.input, .field textarea) {
   height: auto;
-  min-height: calc(var(--input-h) * 2);
-  padding: 12px 14px;
+  min-height: calc(var(--control-h) * 2);
+  padding: var(--space-3) var(--space-4);
   resize: vertical;
 }
 /* overlay-1, not overlay-0: inside the carve the top-left of the well is
-   darker than base, so the ratio where a placeholder sits is lower than the
-   3.4:1 overlay-0 makes on paper. One step up still reads as a placeholder. */
-.input::placeholder,
-.field :is(input, textarea)::placeholder { color: var(--overlay-1); }
-/* Focus ring layers over the inset — no border swap; :focus-visible outline
-   stays untouched. */
-.input:focus,
-.field :is(input, select, textarea):focus {
-  box-shadow: var(--neu-inset), 0 0 0 2px var(--mauve);
-}
-/* The ring IS the focus indicator — the global :focus-visible outline would
-   double it (text fields match :focus-visible even on pointer focus). */
-.input:focus-visible,
-.field :is(input, select, textarea):focus-visible { outline: none; }
+   darker than base, so overlay-0 falls under 3:1 there. */
+:is(.input, .field :is(input, textarea))::placeholder { color: var(--overlay-1); }
+/* The ring layers over the inset and is the focus indicator, so the global
+   :focus-visible outline goes transparent (text fields match it on pointer
+   focus too). */
+:is(.input, .field :is(input, select, textarea)):focus { box-shadow: var(--neu-inset), 0 0 0 2px var(--mauve); }
+:is(.input, .field :is(input, select, textarea)):focus-visible { outline: 2px solid transparent; }
 /* Helper or message line inside a field. Tints with the state. */
 .field small {
   display: block;
-  margin: 6px 1px 0;
-  color: var(--overlay-1);
-  font: 500 12px/1.4 var(--sans);
+  margin: var(--space-1) 1px 0;
+  color: var(--overlay-2);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
-/* Validation: the state sets the tone and washes the well in it at 4%, the
-   accordion's engaged rule. The carve is untouched (an inset surface stays
-   defined by depth) and focus keeps its mauve ring, layered over the wash
-   by the focus rule above. Set aria-invalid alongside .is-error. */
-:is(.field.is-error, .field:has([aria-invalid="true"])), :is(.input.is-error, .input[aria-invalid="true"]) { --tone: var(--red); }
+/* Validation keys on aria-invalid="true" (error) or .is-warning. The state
+   sets --tone and washes the well in its 4% tint; the carve and the focus
+   ring stay. */
+.field:has([aria-invalid="true"]), .input[aria-invalid="true"],
+/* deprecated, removed in 0.5.0 */
+.field.is-error, .input.is-error { --tone: var(--red); }
 .field.is-warning, .input.is-warning { --tone: var(--peach); }
-:is(.field.is-error, .field:has([aria-invalid="true"])) :is(input, select, textarea),
-.field.is-warning :is(input, select, textarea),
-:is(.input.is-error, .input[aria-invalid="true"]),
-.input.is-warning {
+:is(.field:has([aria-invalid="true"]), .field.is-warning) :is(input, select, textarea),
+.input:is([aria-invalid="true"], .is-warning),
+/* deprecated, removed in 0.5.0 */
+.field.is-error :is(input, select, textarea), .input.is-error {
   background: var(--tint);
 }
-:is(.field.is-error, .field:has([aria-invalid="true"])) label, .field.is-warning label,
-:is(.field.is-error, .field:has([aria-invalid="true"])) small, .field.is-warning small { color: var(--tone); }
+:is(.field:has([aria-invalid="true"]), .field.is-warning) :is(label, small),
+/* deprecated, removed in 0.5.0 */
+.field.is-error :is(label, small) { color: var(--tone); }
 
 /* Disabled fields flatten: the carve nearly fills in, text dims, no caret. */
-.input:disabled,
-.field :is(input, select, textarea):disabled {
+:is(.input, .field :is(input, select, textarea)):disabled {
   color: var(--overlay-0);
-  opacity: .6;
+  opacity: var(--disabled-opacity);
   box-shadow: var(--neu-inset-soft);
   cursor: not-allowed;
 }
-/* Selects read as dropdowns: a chevron glyph (overlay-1, a palette hex — data
-   URIs can't reference custom properties) sits in the trailing padding. */
-.field select, select.input {
+/* Selects read as dropdowns: a chevron glyph (overlay-1, a palette hex, as
+   data URIs can't read custom properties) sits in the trailing padding. */
+:is(select.input, .field select) {
   appearance: none;
-  padding-right: 40px;
+  padding-right: calc(var(--space-6) + var(--space-2));
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 13px center;
+  background-position: right var(--space-3) center;
   background-size: 15px;
   cursor: pointer;
 }
@@ -467,47 +512,39 @@
 /* Where the browser supports customizable selects (Chrome 135+), the OS
    option list becomes a system popover. Elsewhere the native picker stays. */
 @supports (appearance: base-select) {
-  .field select, select.input,
-  .field select::picker(select), select.input::picker(select) {
-    appearance: base-select;
-  }
+  :is(select.input, .field select),
+  :is(select.input, .field select)::picker(select) { appearance: base-select; }
   /* base-select renders the closed control as a flex button with
      align-items: normal, which pins the label to the top of the well. */
-  .field select, select.input {
-    display: flex;
-    align-items: center;
-  }
-  .field select::picker-icon, select.input::picker-icon { display: none; }
-  .field select::picker(select), select.input::picker(select) {
-    margin-top: 6px;
-    padding: 6px;
+  :is(select.input, .field select) { display: flex; align-items: center; }
+  :is(select.input, .field select)::picker-icon { display: none; }
+  :is(select.input, .field select)::picker(select) {
+    margin-top: var(--space-1);
+    padding: var(--space-1);
     border: 1px solid var(--surface-1);
-    border-radius: 13px;
+    border-radius: var(--cn-radius-card);
     background: var(--base);
     box-shadow: var(--shadow-pop);
     opacity: 1;
     transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out), display var(--t-fast) allow-discrete, overlay var(--t-fast) allow-discrete;
   }
-  .field select::picker(select):popover-open { opacity: 1; transform: none; }
   @starting-style {
-    .field select::picker(select):popover-open,
-    select.input::picker(select):popover-open { opacity: 0; transform: translateY(-4px); }
+    :is(select.input, .field select)::picker(select):popover-open { opacity: 0; transform: translateY(-4px); }
   }
-  .field select option, select.input option {
-    padding: 9px 11px;
-    border-radius: 8px;
+  :is(select.input, .field select) option {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--cn-radius-control);
     color: var(--subtext-1);
     background: transparent;
-    font: 500 13px var(--sans);
+    font: var(--cn-type-meta-weight) var(--cn-type-ui-size) var(--sans);
   }
-  .field select option:hover, select.input option:hover,
-  .field select option:focus-visible, select.input option:focus-visible {
+  :is(select.input, .field select) option:is(:hover, :focus-visible) {
     color: var(--text);
     background: var(--wash);
-    outline: none;
+    outline: 2px solid transparent;
   }
-  .field select option:checked, select.input option:checked { color: var(--mauve); font-weight: 700; }
-  .field select option::checkmark, select.input option::checkmark { color: var(--mauve); }
+  :is(select.input, .field select) option:checked { color: var(--mauve); font-weight: var(--cn-type-name-weight); }
+  :is(select.input, .field select) option::checkmark { color: var(--mauve); }
 }
 
 /* Tooltip: a popover-styled bubble from a data-tip attribute. Use this, not
@@ -516,19 +553,19 @@
 [data-tip]::after {
   content: attr(data-tip);
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + var(--space-2));
   left: 50%;
   z-index: 90;
   translate: -50%;
   width: max-content;
   max-width: 240px;
-  padding: 7px 10px;
+  padding: var(--space-2) var(--space-3);
   color: var(--subtext-1);
   border: 1px solid var(--surface-1);
-  border-radius: 8px;
+  border-radius: var(--cn-radius-control);
   background: var(--base);
   box-shadow: var(--shadow-pop);
-  font: 500 12px/1.45 var(--sans);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
   letter-spacing: normal;
   text-transform: none;
   opacity: 0;
@@ -538,71 +575,59 @@
   translate: -50% 2px;
   transition: opacity var(--t-fast) var(--ease-out), translate var(--t-fast) var(--ease-out), visibility var(--t-fast);
 }
-/* A tooltip waits .4s so a pointer crossing a toolbar doesn't fire a row of
-   them. It leaves at once. */
-[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: .4s; }
+/* A tooltip waits .4s (slow + press) so a pointer crossing a toolbar
+   doesn't fire a row of them. It leaves at once. */
+[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: calc(var(--t-slow) + var(--t-press)); }
 
-/* Hero variant — the one oversized input on a page. */
+/* Hero variant: the one oversized input on a page. */
 .input-lg {
   height: 58px;
-  padding: 0 16px;
-  border-radius: 13px;
-  font-size: 15px;
+  padding: 0 var(--space-4);
+  border-radius: var(--cn-radius-card);
+  font-size: var(--cn-type-lede-size);
 }
 
-/* Icon input — absolute leading icon inside a padded input. */
+/* Icon input: absolute leading icon inside a padded input. */
 .input-icon { position: relative; }
 .input-icon svg {
   position: absolute;
   top: 50%;
-  left: 16px;
+  left: var(--space-4);
   width: 18px;
   height: 18px;
   color: var(--overlay-1);
   transform: translateY(-50%);
   pointer-events: none;
 }
-.input-icon .input, .input-icon input { padding-left: 44px; }
+.input-icon .input, .input-icon input { padding-left: calc(var(--space-6) + var(--space-3)); }
 
 /* ── Segmented / preset control ─────────────────────────────────────────────
-   Options carry the hard offset at rest, half-slide when held, and press in
-   (engaged) when selected. Height tracks the density knob (46+12 = 58px).  */
+   Options rest on the plate and take the hard-offset press; selected, they
+   press in (engaged). Height tracks the density knob (46+12 = 58px).       */
 
 .segmented {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
-  gap: 7px;
+  gap: var(--space-2);
 }
 .segmented > * {
-  min-height: calc(var(--control-h) + 12px);
-  padding: 10px 14px;
+  min-height: calc(var(--control-h) + var(--space-3));
+  padding: var(--space-3) var(--space-4);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
   color: var(--subtext-0);
   border: 1px solid color-mix(in srgb, var(--surface-2) 36%, transparent);
-  border-radius: 10px;
+  border-radius: var(--cn-radius-control);
   background: var(--base);
-  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color);
   text-align: left;
   cursor: pointer;
   transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
-.segmented > *:hover {
-  transform: translate(-1px, -1px);
-  border-color: color-mix(in srgb, var(--mauve) 34%, var(--surface-1));
-}
-/* Held down — the half-slide. Transient only; the settled state never slides.
-   Down on the fast-out, back up on the spring. */
-.segmented > *:active {
-  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--hard-offset-color);
-  transition-timing-function: var(--ease-out);
-  transition-duration: .08s;
-}
-/* Selected — the engaged treatment: pressed in, mauve-keyed, borderless. */
+.segmented > *:hover { border-color: color-mix(in srgb, var(--mauve) 34%, var(--surface-1)); }
+/* Selected: the engaged treatment: pressed in, mauve-keyed, borderless. */
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]),
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]):hover,
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]):active {
@@ -612,40 +637,40 @@
   background: var(--wash);
   box-shadow: var(--neu-inset);
 }
-.segmented b { font-family: var(--sans); font-size: 13px; font-weight: 750; }
+.segmented b { font-family: var(--sans); font-size: var(--cn-type-name-size); font-weight: var(--cn-type-name-weight); }
 .segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) b { color: var(--mauve); }
 .segmented > * > svg { width: 16px; height: 16px; flex: 0 0 auto; }
-.segmented small { color: var(--overlay-2); font-size: 12px; }
+.segmented small { color: var(--overlay-2); font-size: var(--cn-type-meta-size); }
 .segmented label:has(input:focus-visible) {
   outline: 2px solid var(--mauve);
   outline-offset: 3px;
 }
 
-/* Stacked variant — vertical option list with roomier rows. */
-.segmented.is-stacked { grid-auto-flow: row; gap: 12px; }
-.segmented.is-stacked > * { min-height: calc(var(--control-h) + 22px); padding: 12px 18px; }
-.segmented.is-stacked b { font-size: 17px; letter-spacing: -.02em; }
-.segmented.is-stacked small { font-size: 12px; }
+/* Stacked variant: vertical option list with roomier rows. */
+.segmented.is-stacked { grid-auto-flow: row; gap: var(--space-3); }
+.segmented.is-stacked > * { min-height: calc(var(--control-h) + var(--space-5)); padding: var(--space-3) var(--space-4); }
+.segmented.is-stacked b { font-size: var(--cn-type-lede-size); }
+.segmented.is-stacked small { font-size: var(--cn-type-meta-size); }
 
-/* Stepper — phase track chips. Mark the current phase with .active (or
+/* Stepper: phase track chips. Mark the current phase with .active (or
    aria-current="step"), completed phases with .is-done. Borderless inset
    pills; depth and tint carry the states.                                   */
 .stepper {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 .stepper > * {
-  padding: 6px 10px;
+  padding: var(--space-2) var(--space-3);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  color: var(--overlay-1);
+  gap: var(--space-2);
+  color: var(--overlay-2);
   border-radius: 999px;
   background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
   box-shadow: var(--neu-inset-soft);
-  font: 650 12px/1 var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 .stepper > .active,
 .stepper > [aria-current="step"] {
@@ -656,63 +681,67 @@
 
 /* ── Marks, chips, banners ──────────────────────────────────────────────── */
 
-/* Solid accent square — step numbers, ranks, logo tile. Hard highlight edge. */
+/* Solid accent square: step numbers, ranks, logo tile. Hard highlight edge. */
+.mark,
+/* deprecated, removed in 0.5.0 */
 .mark-solid {
   width: 28px; height: 28px;
   display: inline-grid; place-items: center;
   flex: 0 0 auto;
   color: var(--crust);
   border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
-  border-radius: 8px;
+  border-radius: var(--cn-radius-control);
   background: var(--accent);
   box-shadow: var(--shadow-mark);
-  font: 800 12px/1 var(--sans);
+  font: var(--cn-type-name-weight) var(--cn-type-label-size)/1 var(--sans);
   font-variant-numeric: tabular-nums;
 }
 
-/* Outlined pill — version tags, status, stat chips. */
+/* Outlined pill: version tags, status, stat chips. */
 .chip {
-  padding: 7px 10px;
-  display: inline-flex; align-items: center; gap: 7px;
-  color: var(--overlay-1);
+  padding: var(--chip-pad);
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  color: var(--overlay-2);
   border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
   border-radius: 999px;
   background: var(--base);
   box-shadow: var(--neu-raised-soft);
-  font: 600 12px/1 var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .chip > svg { width: 14px; height: 14px; flex: 0 0 auto; }
 /* Icon-only at any width: the glyph is the chip. Keep an accessible name on
    the element (aria-label, or the label text still in the markup). */
-.chip.is-glyph { padding: 7px; font-size: 0; }
+.chip.is-glyph { padding: var(--space-2); font-size: 0; }
 .chip.is-glyph > svg { width: 16px; height: 16px; }
 
-/* Tinted status tag — pass a semantic color via --tone (.cn-tone-*). The
+/* Tinted status tag: pass a semantic color via --tone (.cn-tone-*). The
    tint keeps its hairline edge. */
+.tag,
+/* deprecated, removed in 0.5.0 */
 .chip-tone {
-  padding: 3px 5px;
-  display: inline-flex; align-items: center; gap: 5px;
+  padding: var(--space-1);
+  display: inline-flex; align-items: center; gap: var(--space-1);
   color: var(--tone);
   border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
-  border-radius: 4px;
+  border-radius: var(--cn-radius-chip);
   background: var(--tint);
-  font: 650 12px/1 var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 
-/* Inline banner — semantic tint band, no card chrome. The tint keeps its
+/* Inline banner: semantic tint band, no card chrome. The tint keeps its
    hairline edge. */
 .banner {
-  padding: 12px 18px;
-  display: flex; align-items: center; gap: 10px;
+  padding: var(--space-3) var(--space-4);
+  display: flex; align-items: center; gap: var(--space-2);
   color: var(--tone);
   border: 1px solid color-mix(in srgb, var(--tone) 25%, var(--surface-0));
-  border-radius: 10px;
+  border-radius: var(--cn-radius-card);
   background: var(--tint);
   box-shadow: var(--neu-inset-soft);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: var(--cn-type-meta-size);
+  line-height: var(--cn-type-meta-leading);
 }
 
 /* ── Selection controls ─────────────────────────────────────────────────── */
@@ -721,12 +750,12 @@
 .choice {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
   color: var(--subtext-1);
-  font: 500 13px/1.4 var(--sans);
+  font: var(--cn-type-meta-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
   cursor: pointer;
 }
-.choice:has(:disabled) { opacity: .5; cursor: not-allowed; }
+.choice:has(:disabled) { opacity: var(--disabled-opacity); cursor: not-allowed; }
 
 /* Checkbox: an edged well that fills mauve when checked. At 20px the carve
    alone is invisible, so small selection controls keep a hairline. */
@@ -736,14 +765,14 @@
   height: 20px;
   flex: 0 0 auto;
   position: relative;
-  border: 1px solid color-mix(in srgb, var(--surface-2) 55%, transparent);
-  border-radius: 4px;
+  border: 1px solid var(--control-edge);
+  border-radius: var(--cn-radius-chip);
   background: transparent;
   box-shadow: var(--neu-inset-soft);
   cursor: pointer;
-  transition: background var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+  transition: background var(--t-fast), box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.checkbox:hover:not(:disabled):not(:checked) { border-color: var(--surface-2); }
+.checkbox:hover:not(:disabled):not(:checked) { border-color: var(--overlay-1); }
 /* The box itself presses, like every other control: held, it sinks to the
    full carve. The check then lands on the spring and overshoots a hair. */
 .checkbox:active:not(:disabled),
@@ -756,7 +785,7 @@
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / 13px no-repeat;
   opacity: 0;
   transform: scale(.4) rotate(-8deg);
-  transition: opacity .12s, transform .22s var(--ease-spring);
+  transition: opacity var(--t-fast), transform var(--t-base) var(--ease-spring);
 }
 .checkbox:checked {
   border-color: var(--mauve);
@@ -773,14 +802,14 @@
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--surface-2) 55%, transparent);
+  border: 1px solid var(--control-edge);
   border-radius: 50%;
   background: transparent;
   box-shadow: var(--neu-inset-soft);
   cursor: pointer;
-  transition: box-shadow var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+  transition: box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.radio:hover:not(:disabled):not(:checked) { border-color: var(--surface-2); }
+.radio:hover:not(:disabled):not(:checked) { border-color: var(--overlay-1); }
 /* Deliberate asymmetry with the checkbox: the checkbox signals with its
    mauve fill and stays on the soft inset; the radio only gets a dot, so it
    leans on the full carve instead. */
@@ -798,7 +827,7 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mauve) 13%, transparent);
   opacity: 0;
   transform: scale(.5);
-  transition: opacity .16s, transform .16s;
+  transition: opacity var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
 .radio:checked::after { opacity: 1; transform: none; }
 
@@ -811,11 +840,12 @@
   height: 28px;
   flex: 0 0 auto;
   position: relative;
-  border-radius: 8px;
+  border-radius: var(--cn-radius-control);
   background: transparent;
-  box-shadow: var(--neu-inset);
+  /* The inset ring is the plate's 3:1 edge. */
+  box-shadow: var(--neu-inset), inset 0 0 0 1px var(--control-edge);
   cursor: pointer;
-  transition: box-shadow .2s;
+  transition: box-shadow var(--t-base) var(--ease-out);
 }
 .switch::after {
   content: "";
@@ -825,12 +855,12 @@
   width: 21px;
   height: 22px;
   border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
-  border-radius: 6px;
+  border-radius: var(--cn-radius-chip);
   background: var(--base);
   box-shadow: var(--neu-raised-soft);
   transform: perspective(120px) rotateY(16deg);
   /* The paddle travels on the spring, so it lands at 23px with a bounce. */
-  transition: translate .24s var(--ease-spring), transform .2s var(--ease-out), background .2s, box-shadow .2s, border-color .2s;
+  transition: translate var(--t-base) var(--ease-spring), transform var(--t-base) var(--ease-out), background var(--t-base), box-shadow var(--t-base) var(--ease-out), border-color var(--t-base);
 }
 .switch:checked::after {
   translate: 23px 0;
@@ -849,7 +879,7 @@
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
 
-/* ── Accordion — label + checkbox disclosure ────────────────────────────────
+/* ── Accordion: label + checkbox disclosure ─────────────────────────────────
    Native details cannot animate its close outside Chromium, so the fold
    rides grid-template-rows 0fr → 1fr, which transitions everywhere. Markup:
      <div class="accordion">
@@ -863,13 +893,12 @@
    The sink and the fold animate together, no sequencing. */
 .accordion {
   border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  transition: box-shadow .2s, border-color .2s, border-radius .2s;
+  transition: box-shadow var(--t-base) var(--ease-out), border-color var(--t-base), border-radius var(--t-base);
 }
 /* Open is the engaged treatment: the full carve and the mauve wash, the
-   same state a toggled flat button wears. On base the soft inset alone sank
-   about as far as a coin on a carpet, and the chevron was the only signal. */
+   same state a toggled flat button wears. */
 .accordion:is(:has(> label > input:checked), .is-open, [data-open]) {
-  border-radius: 10px;
+  border-radius: var(--cn-radius-card);
   border-bottom-color: transparent;
   background: color-mix(in srgb, var(--mauve) 4%, var(--base));
   box-shadow: var(--neu-inset);
@@ -877,16 +906,16 @@
 .accordion:is(:has(> label > input:checked), .is-open, [data-open]) > label { color: var(--mauve); }
 .accordion > label {
   min-height: 48px;
-  padding: 12px;
+  padding: var(--space-3);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-4);
   color: var(--text);
-  font: 700 13px/1.3 var(--sans);
+  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
   cursor: pointer;
-  transition: color .16s;
+  transition: color var(--t-fast);
 }
 .accordion > label:hover { color: var(--mauve); }
 .accordion > label::after {
@@ -895,7 +924,7 @@
   height: 15px;
   flex: 0 0 auto;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform .2s;
+  transition: transform var(--t-base) var(--ease-out);
 }
 .accordion:is(:has(> label > input:checked), .is-open, [data-open]) > label::after { transform: rotate(180deg); }
 /* The input stays keyboard-reachable but visually silent; its focus ring
@@ -911,14 +940,14 @@
 .accordion > label:has(input:focus-visible) {
   outline: 2px solid var(--mauve);
   outline-offset: -2px;
-  border-radius: 10px;
+  border-radius: var(--cn-radius-card);
 }
 /* The fold: a grid row that opens from 0fr to 1fr. The inner wrapper must
    be a single element with min-height 0 so the row can fully collapse. */
 .accordion .fold {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows .3s var(--ease-out);
+  transition: grid-template-rows var(--t-slow) var(--ease-out);
 }
 .accordion:is(:has(> label > input:checked), .is-open, [data-open]) .fold {
   grid-template-rows: 1fr;
@@ -926,33 +955,33 @@
 .accordion .fold > * {
   min-height: 0;
   overflow: clip;
-  padding: 0 12px;
+  padding: 0 var(--space-3);
   /* Closed content leaves the tab order and the accessibility tree;
      visibility flips at the end of the close, so the fold still animates. */
   visibility: hidden;
-  transition: visibility .3s;
+  transition: visibility var(--t-slow);
 }
 .accordion:is(:has(> label > input:checked), .is-open, [data-open]) .fold > * { visibility: visible; }
 /* Bottom spacing lives on the content's margin: padding would floor the
    collapsed wrapper at its own height, margins clip away with the fold. */
-.accordion .fold > * > :last-child { margin-bottom: 16px; }
+.accordion .fold > * > :last-child { margin-bottom: var(--space-4); }
 /* Trailing meta in the label: wrap the title and it grows, so a date or
    tag rides against the chevron instead of floating mid-row. <b> is the
    bold title variant, <p> the regular-weight one.
      <label><input type="checkbox"><b>Title</b>
        <span class="cn-meta">meta</span></label>                             */
 .accordion > label > :is(b, p) { margin: 0 auto 0 0; }
-.accordion > label > p { font-weight: 400; }
+.accordion > label > p { font-weight: var(--cn-type-body-weight); }
 
-/* Accordion stack — a group filling a panel. The panel supplies the frame,
+/* Accordion stack: a group filling a panel. The panel supplies the frame,
    the stack the breathing room; the closed last row's divider yields to the
    panel edge (an open row is already borderless). */
-.accordion-stack { padding: 10px 16px; }
+.accordion-stack { padding: var(--space-3) var(--space-4); }
 .accordion-stack > .accordion:last-child:not(:has(input:checked)) {
   border-bottom-color: transparent;
 }
 
-/* Spinner — a 16px accent-keyed ring on the spin keyframe. */
+/* Spinner: a 16px accent-keyed ring on the spin keyframe. */
 .spinner {
   width: 16px;
   height: 16px;
@@ -963,7 +992,7 @@
   animation: spin .8s linear infinite;
 }
 
-/* ── Avatar — initials or an image on an accent-tinted round ────────────── */
+/* ── Avatar: initials or an image on an accent-tinted round ────────────── */
 
 .avatar {
   width: 32px;
@@ -977,52 +1006,48 @@
   border-radius: 50%;
   background: color-mix(in srgb, var(--accent) 14%, var(--mantle));
   box-shadow: var(--neu-raised-soft);
-  font: 700 12px/1 var(--sans);
-  letter-spacing: .02em;
+  font: var(--cn-type-name-weight) var(--cn-type-label-size)/1 var(--sans);
   user-select: none;
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
-.avatar.is-lg { width: 44px; height: 44px; font-size: 14px; }
+.avatar.is-lg { width: 44px; height: 44px; font-size: var(--cn-type-body-size); }
 /* Overlapping stack: later avatars ring themselves with the page ground. */
 .avatar-stack { display: inline-flex; }
 /* The ring matches the surface behind the stack; set --ring-ground when the
    stack sits on a panel or mantle band. */
 .avatar-stack .avatar { box-shadow: var(--neu-raised-soft), 0 0 0 2px var(--ring-ground, var(--base)); }
-.avatar-stack .avatar + .avatar { margin-left: -8px; }
+.avatar-stack .avatar + .avatar { margin-left: calc(-1 * var(--space-2)); }
 
-/* ── Code block — a carved snippet well; mono is for code ───────────────── */
+/* ── Code block: a carved snippet well ──────────────────────────────────── */
 
 .codeblock {
-  padding: 14px 16px;
+  position: relative;
+  padding: var(--well-pad);
   overflow-x: auto;
-  border-radius: 10px;
-  background: transparent;
-  box-shadow: var(--neu-inset);
-  color: var(--subtext-1);
-  font: 500 12px/1.75 var(--mono);
-  font-variant-numeric: tabular-nums;
-  scrollbar-color: var(--surface-1) transparent;
 }
 .codeblock pre { margin: 0; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
-/* Copy control: a .btn-icon in the corner. Wire it with the one-line
+/* Copy control: an icon button in the corner. Wire it with the one-line
    listener documented on the code block page; copying is consumer JS. */
-.codeblock { position: relative; }
+.codeblock > .btn.is-icon,
+/* deprecated, removed in 0.5.0 */
 .codeblock > .btn-icon {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: var(--space-2);
+  right: var(--space-2);
   width: 26px;
   height: 26px;
-  border-radius: 8px;
+  min-height: 26px;
 }
-.codeblock:has(> .btn-icon) { padding-right: 44px; }
+.codeblock:has(> .btn.is-icon),
+/* deprecated, removed in 0.5.0 */
+.codeblock:has(> .btn-icon) { padding-right: calc(var(--space-6) + var(--space-3)); }
 
 /* Numbered lines: wrap each line in its own element (span or code) inside
    the pre. CSS counters draw the gutter; no JS. */
 .codeblock.is-numbered pre { counter-reset: line; }
 .codeblock.is-numbered pre > * {
   display: block;
-  padding-left: 34px;
+  padding-left: calc(3ch + var(--space-3));
   position: relative;
   counter-increment: line;
 }
@@ -1030,7 +1055,7 @@
   content: counter(line);
   position: absolute;
   left: 0;
-  width: 22px;
+  width: 3ch;
   color: var(--overlay-0);
   text-align: right;
   user-select: none;
@@ -1042,51 +1067,51 @@
 .codeblock .tok-string  { color: var(--green); }
 .codeblock .tok-number  { color: var(--peach); }
 .codeblock .tok-fn      { color: var(--mauve); }
-.codeblock .tok-comment { color: var(--overlay-0); font-style: italic; }
+.codeblock .tok-comment { color: var(--overlay-2); font-style: italic; }
 
-/* ── Command — a copyable command line ──────────────────────────────────────
-   A carved crust well holding one command in mono, a prompt glyph, and a
-   trailing icon button that copies it. Four consumers and the docs site had
-   each written this; it ships. The copy itself is one consumer listener that
-   toggles .is-copied for a moment:
+/* ── Command: a copyable command line ───────────────────────────────────────
+   A recess well holding one command in mono, a prompt glyph, and a
+   trailing icon button that copies it. The copy itself is one consumer
+   listener that toggles .is-copied for a moment:
      <div class="command"><code class="command-text">
-       <span class="command-prompt">$</span>npx salt scan</code>
-       <button class="btn-icon command-copy" aria-label="Copy">
+       <span class="command-prompt">$</span>npx example init</code>
+       <button class="btn is-icon command-copy" aria-label="Copy">
          <svg class="copy-glyph">…</svg><svg class="done-glyph">…</svg>
        </button></div>                                                       */
 .command {
   width: min(480px, 100%);
-  min-height: 48px;
-  padding: 7px 7px 7px 16px;
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  border-radius: 13px;
-  background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
-  box-shadow: var(--neu-inset);
+  min-width: 0;
+  max-width: 100%;
+  min-height: 50px;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
 }
 .command.is-full { width: 100%; }
+/* Zero width with flex-grow: a long command never widens the well's
+   container, it scrolls inside the well. */
 .command-text {
+  width: 0;
   min-width: 0;
+  flex: 1 1 auto;
   display: flex; align-items: center;
   color: var(--text);
-  font: 650 13px/1.4 var(--mono);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -.01em;
+  font-size: var(--cn-type-ui-size);
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;
 }
-.command-prompt { margin-right: 10px; color: var(--mauve); user-select: none; }
+.command-prompt { margin-right: var(--space-2); color: var(--mauve); user-select: none; }
 /* A long statement wraps instead of scrolling: the text becomes a block so
    whitespace inside it (a tokenizer's spans) stays inline. */
 .command.is-wrap .command-text { display: block; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
 /* The copy control is the icon button tinted to the page accent, and it goes
    green while the consumer holds .is-copied on the command. Both glyphs are
    in the markup; only which one shows moves, so the swap never flashes empty. */
-/* The control is sized to the well, not the density: 7 + 34 + 7 is the 48px
-   well at every density, so a dense app's 22px icon buttons never leave the
+/* The control is sized to the well, not the density: 8 + 34 + 8 is the 50px
+   well at every density, so a dense app's small icon buttons never leave the
    glyph floating in a bar built for a 34px one. */
-.command-copy { flex: 0 0 auto; width: 34px; height: 34px; --tone: var(--mauve); }
-.command-copy > svg { width: 16px; height: 16px; }
+.command .command-copy { flex: 0 0 auto; width: 34px; height: 34px; min-height: 34px; --tone: var(--mauve); }
+.command .command-copy > svg { width: 16px; height: 16px; }
 .command .done-glyph { display: none; }
 .command.is-copied .command-copy { --tone: var(--green); color: var(--green); }
 .command.is-copied .copy-glyph { display: none; }
@@ -1094,72 +1119,85 @@
 
 /* ── Accent cards keyed by --accent ─────────────────────────────────────── */
 
-/* A raised card on a plate in its accent. The plate is the hard offset, the
-   system's one flat graphic note, mixed toward surface-0 the way the primary
-   button mixes its mauve offset. Nothing is painted on the card: no spine,
-   no gradient, no eyebrow. The color is what the card sits on. */
+/* A card on a plate in its accent, mixed toward surface-0 the way the
+   primary button mixes its plate. The plate is the only depth cue and the
+   only place the accent shows; the border and text stay neutral. Data marks
+   inside (a progress fill) keep the accent. */
 .accent-card {
   --plate: color-mix(in srgb, var(--accent) 50%, var(--surface-0));
   min-width: 0;
-  padding: 14px 16px;
-  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--surface-0));
-  border-radius: 13px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--cn-radius-card);
   background: var(--base);
-  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate),
-              var(--neu-raised-soft);
-  transition: transform .16s, box-shadow .16s, border-color .16s;
+  transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
 }
-/* Cards wrapped in a link lift off the plate on hover (the plate grows a
-   pixel so the lift reads) and half-slide onto it on click, the canon press.
+/* Controls inside the card rest on their own plate, not the card's. */
+:where(.accent-card > *) { --plate: initial; }
+.accent-card :is(.stat.is-lg, .metric.is-hero) strong { color: var(--text); }
+/* Cards wrapped in a link take the hard-offset press; on hover the plate
+   also grows a pixel so the lift reads.
    The wrapper takes the card's radius so its focus ring traces the card, not
    the bare-link 4px. */
-a:has(> .accent-card) { border-radius: 13px; color: inherit; text-decoration: none; }
-a:hover > .accent-card {
-  transform: translate(-1px, -1px);
-  border-color: color-mix(in srgb, var(--accent) 52%, var(--surface-0));
-  box-shadow: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate),
-              var(--neu-raised-soft);
-}
-a:active > .accent-card {
-  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate),
-              var(--neu-raised-soft);
+a:has(> .accent-card) { border-radius: var(--cn-radius-card); color: inherit; text-decoration: none; }
+a:hover:not(:active) > .accent-card {
+  box-shadow: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate), var(--hard-extra);
 }
 
 /* ── Data display ───────────────────────────────────────────────────────── */
 
-/* Metric tile — small label above an oversized tabular number. */
-.metric { min-width: 0; padding: 12px 13px; display: flex; flex-direction: column; gap: 6px; }
+/* Stat: a label over a tabular value.
+     <div class="stat"><span>Label</span><strong>48</strong></div>
+   .is-lg is the hero value in the accent. .is-inline is a baseline row,
+   label left and value (b or strong) right; stack rows in a .cn-divide. */
+.stat,
+/* deprecated, removed in 0.5.0 */
+.metric { min-width: 0; padding: var(--space-3); display: flex; flex-direction: column; gap: var(--space-2); }
+.stat span,
+/* deprecated, removed in 0.5.0 */
 .metric span {
-  color: var(--overlay-1);
-  font: 650 12px var(--sans);
+  color: var(--overlay-2);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size) var(--sans);
 }
-.metric strong { font: 650 21px/1 var(--sans); font-variant-numeric: tabular-nums; }
-.metric.is-hero strong { font-size: 28px; color: var(--accent); }
-/* Value over label. The DOM stays label-first for reading order; the flip
-   is visual only. Tighter gap: the label reads as a caption under the
-   number. */
-.metric.is-value-first { flex-direction: column-reverse; gap: 4px; }
+.stat strong,
+/* deprecated, removed in 0.5.0 */
+.metric strong { font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans); letter-spacing: var(--cn-type-value-tracking); font-variant-numeric: tabular-nums; }
+.stat.is-lg strong,
+/* deprecated, removed in 0.5.0 */
+.metric.is-hero strong { font-size: var(--cn-type-value-lg-size); color: var(--accent); }
+/* deprecated, removed in 0.5.0 */
+/* Value over label; the DOM stays label-first for reading order. */
+.metric.is-value-first { flex-direction: column-reverse; gap: var(--space-1); }
 
-/* Label/value baseline row + a strip of them separated by hairlines. */
+.stat.is-inline,
+/* deprecated, removed in 0.5.0 */
 .stat-row {
+  padding: 0;
+  flex-direction: row;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
-  color: var(--overlay-1);
-  font: 650 12px var(--sans);
+  gap: var(--space-3);
+  color: var(--overlay-2);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size) var(--sans);
 }
+.stat.is-inline :is(b, strong),
+/* deprecated, removed in 0.5.0 */
 .stat-row b {
   color: var(--subtext-1);
-  font-weight: 650;
+  font: inherit;
+  letter-spacing: normal;
   font-variant-numeric: tabular-nums;
 }
+.cn-divide > .stat.is-inline { padding-block: var(--space-2); }
+/* deprecated, removed in 0.5.0 */
 .stat-strip { display: flex; flex-direction: column; }
-.stat-strip > * { padding: 9px 0; }
+/* deprecated, removed in 0.5.0 */
+.stat-strip > * { padding: var(--space-2) 0; }
+/* deprecated, removed in 0.5.0 */
 .stat-strip > * + * { border-top: 1px solid var(--edge-soft); }
 
-/* Progress — borderless inset track, accent-gradient fill. The fill inherits
+/* Progress: borderless inset track, accent fill. The fill inherits
    the track radius, so no overflow clipping is needed. Re-key the fill per
    instance via --progress-fill (any token color or token gradient):
    <div class="progress-track" style="--progress-fill: var(--green)">.       */
@@ -1173,149 +1211,220 @@ a:active > .accent-card {
   height: 100%;
   display: block;
   border-radius: inherit;
-  /* The fill is the accent. The old three-color default was the only
-     three-color object in a one-accent system, and because the gradient was
-     sized to the fill, three bars on a page showed three colors at the same
-     x. A gradient stays an opt-in via --progress-fill. */
+  /* The fill is the accent. --progress-fill opts into a gradient. */
   background: var(--progress-fill, var(--accent));
   /* Decelerates into the value instead of stopping dead. */
-  transition: width .6s var(--ease-out);
+  transition: width calc(var(--t-slow) * 2) var(--ease-out);
 }
+.progress-track.is-lg { height: 12px; }
 
-/* Table — opt-in class on <table>; scopes all table styling. Sans tabular
+/* Table: opt-in class on <table>; scopes all table styling. Sans tabular
    body, mantle header, hover presses the row in. Give each data cell a
-   data-label attribute — it becomes the card label at ≤760px.              */
+   data-label attribute: it becomes the row label at 760px and below. Inside
+   .table-scroll the table stays a table and scrolls sideways instead.
+   deprecated, removed in 0.5.0: .table-neu, in the :is() lists below. */
+.data-table,
+/* deprecated, removed in 0.5.0 */
 .table-neu { width: 100%; border-collapse: collapse; }
-.table-neu th {
-  padding: 12px 14px;
-  color: var(--overlay-1);
+:is(.data-table, .table-neu) th {
+  padding: var(--cell-pad);
+  color: var(--overlay-2);
   border-bottom: 1px solid var(--surface-0);
   background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
   text-align: left;
-  font: 650 12px var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size) var(--sans);
 }
-.table-neu td {
-  padding: 14px;
+:is(.data-table, .table-neu) td {
+  padding: var(--cell-pad);
   color: var(--subtext-1);
   border-bottom: 1px solid var(--surface-0);
-  font: 600 13px var(--sans);
+  font: var(--cn-type-meta-weight) var(--cell-font-size) var(--sans);
   font-variant-numeric: tabular-nums;
-  transition: background var(--t-fast), box-shadow var(--t-fast);
 }
-.table-neu tbody tr:last-child td { border-bottom: 0; }
-/* Hover fill sits on the cells, not the row — with border-collapse a td
-   border-radius cannot clip a tr background, so this keeps the fill inside
-   a rounded parent's corners. */
-/* The row press: one carve across the whole row. A per-cell inset carved
-   every td into its own tile, with seams at every column edge; this pair
-   shades only the top and bottom, so the cells join into one pressed strip. */
-.table-neu tbody tr:hover td {
-  background: color-mix(in srgb, var(--mauve) 6%, var(--base));
-  box-shadow: inset 0 4px 6px -4px var(--neu-dark), inset 0 -3px 5px -4px rgb(69 71 90 / .3);
-}
-/* Emphasized name cell — full-strength primary line, quiet secondary line. */
-.table-neu .cell-name strong { color: var(--text); font: 700 13px var(--sans); }
-.table-neu .cell-name small  { color: var(--overlay-2); font: 500 12px var(--sans); }
+:is(.data-table, .table-neu) tbody tr:last-child td { border-bottom: 0; }
+/* Emphasized name cell: full-strength primary line, quiet secondary line. */
+:is(.data-table, .table-neu) .cell-name strong { color: var(--text); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
+:is(.data-table, .table-neu) .cell-name small  { color: var(--overlay-2); font: var(--cn-type-meta-weight) var(--cn-type-meta-size) var(--sans); }
 
-/* Ranked row — ordered list line: rank mark, name, trailing value. */
+/* Sortable header: a button inside th[aria-sort]. The chevron shows the
+   direction and hides while the column is unsorted. */
+:is(.data-table, .table-neu) th[aria-sort] > button {
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: inherit;
+  border: 0;
+  border-radius: var(--cn-radius-chip);
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+:is(.data-table, .table-neu) th[aria-sort] > button:hover { color: var(--text); }
+:is(.data-table, .table-neu) th[aria-sort] > button:focus-visible { outline-offset: 2px; }
+:is(.data-table, .table-neu) th[aria-sort] > button::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  opacity: 0;
+  transition: opacity var(--t-fast), transform var(--t-base) var(--ease-out);
+}
+:is(.data-table, .table-neu) th:is([aria-sort="ascending"], [aria-sort="descending"]) { color: var(--text); }
+:is(.data-table, .table-neu) th:is([aria-sort="ascending"], [aria-sort="descending"]) > button::after { opacity: 1; }
+:is(.data-table, .table-neu) th[aria-sort="ascending"] > button::after { transform: rotate(180deg); }
+
+/* Sticky header: pins to the top of the nearest scroll container. The rule
+   is an inset shadow, because a collapsed border scrolls away with the body. */
+.data-table.is-sticky-head th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 0;
+  box-shadow: inset 0 -1px var(--surface-0);
+}
+
+/* The row press: a dark top edge and a lit bottom edge drawn as a vertical
+   gradient on every cell. Each cell paints the same gradient at the same
+   height, so the row reads as one strip with no seams. The edge colors are
+   registered so they fade in with the fill. */
+@property --press-top    { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --press-bottom { syntax: "<color>"; inherits: false; initial-value: transparent; }
+:is(.data-table, .table-neu) td, .ranked-row {
+  background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px, transparent calc(100% - 4px), var(--press-bottom, transparent));
+  transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out), --press-bottom var(--t-fast) var(--ease-out);
+}
+:is(.data-table, .table-neu) tbody tr:hover td, .ranked-row:hover {
+  --press-top: rgb(17 17 27 / .5);
+  --press-bottom: rgb(69 71 90 / .3);
+  background-color: color-mix(in srgb, var(--mauve) 6%, var(--base));
+}
+/* Selected row: the engaged treatment, the wash with the full press. */
+.data-table tbody tr[aria-selected="true"] td {
+  --press-top: rgb(17 17 27 / .66);
+  --press-bottom: rgb(69 71 90 / .3);
+  color: var(--text);
+  background-color: var(--wash);
+}
+
+/* Ranked row: ordered list line: rank mark, name, trailing value. */
 .ranked-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
   color: var(--subtext-1);
   border-bottom: 1px solid var(--surface-0);
-  font: 600 13px var(--sans);
+  font: var(--cn-type-meta-weight) var(--cn-type-ui-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .ranked-row:last-child { border-bottom: 0; }
-.ranked-row { transition: background var(--t-fast), box-shadow var(--t-fast); }
-.ranked-row:hover {
-  background: color-mix(in srgb, var(--mauve) 6%, var(--base));
-  box-shadow: inset 0 4px 6px -4px var(--neu-dark), inset 0 -3px 5px -4px rgb(69 71 90 / .3);
+.ranked-row strong { color: var(--text); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
+.ranked-row b { margin-left: auto; color: var(--text); font-weight: var(--cn-type-value-weight); }
+
+/* Legend: a chart key. Each item's swatch takes its --tone; the label is
+   sentence case at the meta size.
+     <ul class="legend"><li class="legend-item cn-tone-blue">Reads</li></ul> */
+.legend {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  list-style: none;
 }
-.ranked-row strong { color: var(--text); font: 700 13px var(--sans); }
-.ranked-row b { margin-left: auto; color: var(--text); font-weight: 650; }
+.legend-item {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--subtext-0);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
+}
+.legend-item::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: var(--cn-radius-chip);
+  background: var(--tone);
+}
 
-/* ── Overlays — all float on --shadow-pop, never neu ────────────────────── */
+/* Key-value list: a dl with the keys in a column that fits them.
+     <dl class="kv"><dt>Region</dt><dd>us-east-1</dd></dl>                  */
+.kv {
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  font: var(--cn-type-meta-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
+}
+.kv dt { color: var(--overlay-2); font-weight: var(--cn-type-label-weight); font-size: var(--cn-type-label-size); line-height: inherit; }
+.kv dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
 
-/* Popover / menu — anchored to a relative parent. No overflow clipping:
+/* ── Overlays: all float on --shadow-pop, never neu ────────────────────── */
+
+/* Popover / menu: anchored to a relative parent. No overflow clipping:
    filled first/last children follow the parent radius instead. */
 .popover {
   position: absolute;
   z-index: 80;
-  width: min(390px, calc(100vw - 32px));
+  width: min(390px, calc(100vw - var(--space-6)));
   border: 1px solid var(--surface-1);
-  border-radius: 13px;
+  border-radius: var(--cn-radius-card);
   background: var(--base);
   box-shadow: var(--shadow-pop);
 }
-/* Child bands follow the parent per R2: the 13px card radius minus the 1px
-   border — not a free 12px radius. */
-.popover > :first-child { border-top-left-radius: calc(13px - 1px); border-top-right-radius: calc(13px - 1px); }
-.popover > :last-child  { border-bottom-left-radius: calc(13px - 1px); border-bottom-right-radius: calc(13px - 1px); }
+/* Child bands follow the parent: the card radius minus the 1px border. */
+.popover > :first-child { border-top-left-radius: calc(var(--cn-radius-card) - 1px); border-top-right-radius: calc(var(--cn-radius-card) - 1px); }
+.popover > :last-child  { border-bottom-left-radius: calc(var(--cn-radius-card) - 1px); border-bottom-right-radius: calc(var(--cn-radius-card) - 1px); }
 
-/* Band layout inside popovers and drawers: the recipe owns the flex band;
-   compose cn-bg-head on headers for the fill. Popover footers are divider
-   only, per the footer rule. */
-.popover > header, .drawer > header {
+/* Popover bands keep their own compact padding; compose cn-bg-head on a
+   header for the fill. The footer is divider only, per the footer rule. */
+.popover > header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
 }
-.drawer > header { min-height: 62px; padding: 14px 22px; gap: 16px; }
 .popover > footer {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  padding: 10px 16px;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
   border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
 }
 
-/* Scrim — the fixed backdrop modals and drawers sit in. The crust does the
-   work; the blur is a whisper. Everything else in the system is opaque and
-   lit from one corner, and a 6px smear behind a modal read as a different
-   substance. (Lives here, not in utilities, because its exit un-blur below
-   must not be beaten by the utilities layer.) */
-.cn-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  background: color-mix(in srgb, var(--crust) 80%, transparent);
-  backdrop-filter: blur(2px);
-}
-
-/* Modal — a child of .cn-scrim; centers itself in the viewport. */
+/* Modal: <dialog class="modal">, centered in the viewport. */
 .modal {
   position: fixed;
   inset: 0;
   z-index: 80;
-  width: min(520px, calc(100vw - 32px));
+  width: min(520px, calc(100vw - var(--space-6)));
   height: fit-content;
-  max-height: calc(100dvh - 48px);
+  max-height: calc(100dvh - 2 * var(--space-5));
   margin: auto;
   overflow: auto;
   border: 1px solid var(--surface-1);
-  border-radius: var(--pane-radius);
+  border-radius: var(--cn-radius-panel);
   background: var(--base);
   box-shadow: var(--shadow-pop);
 }
-/* Recessed header band, like a panel heading — follows the parent radius. */
-.modal > header {
-  min-height: 62px;
-  padding: 14px 22px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
-  border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  border-radius: calc(var(--pane-radius) - 1px) calc(var(--pane-radius) - 1px) 0 0;
-}
-/* Drawer — side sheet pinned to the right edge, above the scrim. Square
-   corners, so child bands need no radius treatment. */
+/* A wide modal for a table or a two-column form. */
+.modal.is-wide { width: min(760px, calc(100vw - var(--space-6))); }
+/* Drawer: <dialog class="drawer">, a side sheet pinned to the right edge.
+   Square corners. */
 .drawer {
   position: fixed;
   top: 0; right: 0; bottom: 0;
@@ -1329,20 +1438,20 @@ a:active > .accent-card {
   box-shadow: var(--shadow-pop);
 }
 
-/* Toast — shadcn-shaped. `.toast-stack` is the fixed viewport; toasts append
+/* Toast: a stack of title and description cards. `.toast-stack` is the fixed viewport; toasts append
    at its bottom. Each `.toast` is a row: a content column (`b` title over a
-   span/p description) plus trailing controls (.btn-text and/or .btn-icon).
-   Neutral surface-1 border — the toast carries no accent color. */
+   span/p description) plus trailing controls (.btn-text and/or .btn.is-icon).
+   Neutral surface-1 border. The toast carries no accent color. */
 .toast-stack {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: var(--space-5);
+  bottom: var(--space-5);
   z-index: 90;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
-  width: min(380px, calc(100vw - 40px));
+  gap: var(--space-2);
+  width: min(380px, calc(100vw - 2 * var(--space-5)));
 }
 .toast-stack .toast { width: 100%; }
 /* Collapsed pile: only the newest visible toast stays in flow, so the stack
@@ -1366,7 +1475,7 @@ a:active > .accent-card {
 .toast-stack:is(:hover, :focus-within) .toast[hidden] {
   position: static;
   max-height: 0;
-  margin-bottom: -10px;
+  margin-bottom: calc(-1 * var(--space-2));
   padding-block: 0;
   border-block-width: 0;
   overflow: clip;
@@ -1393,16 +1502,16 @@ a:active > .accent-card {
   /* Caps nothing in practice; exists so the fanned exit can animate height. */
   max-height: 140px;
   max-width: 100%;
-  padding: 14px 16px;
+  padding: var(--space-3) var(--space-4);
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--space-3);
   color: var(--text);
   border: 1px solid var(--surface-1);
-  border-radius: 13px;
+  border-radius: var(--cn-radius-card);
   background: var(--base);
   box-shadow: var(--shadow-pop);
-  font: 500 12px/1.5 var(--sans);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 /* The content column takes the slack, pinning trailing controls to the
    toast's right edge regardless of text width. */
@@ -1410,78 +1519,46 @@ a:active > .accent-card {
 .toast b {
   display: block;
   color: var(--text);
-  font: 700 12.5px/1.4 var(--sans);
+  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
 }
 .toast span,
 .toast p {
   margin: 0;
   color: var(--subtext-0);
-  font: 500 12px/1.5 var(--sans);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 
 /* ── Overlay motion ──────────────────────────────────────────────────────────
-   Overlays enter via @starting-style and exit via [hidden]. The exit does NOT
-   rely on display transitions (allow-discrete is too new to trust): [hidden]
-   keeps the element's display and drops `visibility` instead — visibility is
-   discretely transitionable everywhere, staying visible for the whole exit
-   and flipping only at the end. A hidden overlay is invisible, unfocusable,
-   and inert to pointers, same as display:none for a fixed element.
-   These rules must stay AFTER the component blocks so [hidden] wins. */
-
-/* Entrances decelerate on the fast-out: the overlay covers most of its
-   travel early and lands in the last stretch. Exits accelerate on the
-   ease-in and take .14s, so a dismissed thing is gone before the hand moves. */
-.cn-scrim,
-.popover,
-.modal,
-.drawer,
-.toast {
-  transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), visibility var(--t-base);
-}
-.cn-scrim { transition: opacity var(--t-base) var(--ease-out), backdrop-filter var(--t-base), visibility var(--t-base); }
-.popover { transition-duration: var(--t-fast); }
-.drawer  { transition-duration: var(--t-slow); }
-/* The toast travels on the `translate` property (transform stays free for
-   consumers) and slides in from the edge it lives on, not up from nowhere. */
-.toast   { transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), scale var(--t-base) var(--ease-out), visibility .25s, max-height .25s ease, margin .25s ease, padding .25s ease, border-width .25s ease; }
-
-/* Exit targets — mirrored as pre-entry states in @starting-style below. */
-.cn-scrim[hidden] { display: block; visibility: hidden; opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
-.popover[hidden]  { display: block; visibility: hidden; opacity: 0; transform: translateY(-4px); pointer-events: none; }
-.modal[hidden]    { display: block; visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); pointer-events: none; }
-.drawer[hidden]   { display: flex; visibility: hidden; transform: translateX(calc(100% + 40px)); pointer-events: none; }
-.toast[hidden]    { display: flex; visibility: hidden; opacity: 0; translate: 16px 0; pointer-events: none; }
-/* A modal or drawer inside a scrim rides the scrim's exit. */
-.cn-scrim[hidden] .modal  { visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); }
-.cn-scrim[hidden] .drawer { visibility: hidden; transform: translateX(calc(100% + 40px)); }
-:is(.cn-scrim, .popover, .modal, .drawer, .toast)[hidden],
-.cn-scrim[hidden] :is(.modal, .drawer) { transition-timing-function: var(--ease-in); transition-duration: .14s; }
-
+   Entrances decelerate on the fast-out; exits accelerate on the ease-in and
+   take --t-exit. Popovers and toasts enter via @starting-style and exit via
+   [hidden], which keeps display and drops visibility: visibility transitions
+   discretely everywhere, so the exit animates, and a hidden overlay is
+   invisible and inert. These rules stay after the component blocks. */
+.popover { transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out), visibility var(--t-fast); }
+/* The toast travels on `translate` (transform stays free for consumers) and
+   slides in from the edge it lives on. */
+.toast   { transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), scale var(--t-base) var(--ease-out), visibility var(--t-base), max-height var(--t-base) var(--ease-out), margin var(--t-base) var(--ease-out), padding var(--t-base) var(--ease-out), border-width var(--t-base) var(--ease-out); }
+.popover[hidden] { display: block; visibility: hidden; opacity: 0; transform: translateY(-4px); pointer-events: none; }
+.toast[hidden]   { display: flex; visibility: hidden; opacity: 0; translate: 16px 0; pointer-events: none; }
+:is(.popover, .toast)[hidden] { transition-timing-function: var(--ease-in); transition-duration: var(--t-exit); }
 @starting-style {
-  .cn-scrim:not([hidden]) { opacity: 0; backdrop-filter: blur(0); }
-  .popover:not([hidden])  { opacity: 0; transform: translateY(-4px); }
-  .modal:not([hidden])    { opacity: 0; transform: translateY(8px) scale(.98); }
-  .cn-scrim:not([hidden]) .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
-  .drawer:not([hidden])   { transform: translateX(calc(100% + 40px)); }
-  .cn-scrim:not([hidden]) .drawer { transform: translateX(calc(100% + 40px)); }
-  .toast:not([hidden])    { opacity: 0; translate: 16px 0; }
+  .popover:not([hidden]) { opacity: 0; transform: translateY(-4px); }
+  .toast:not([hidden])   { opacity: 0; translate: 16px 0; }
 }
 
-/* ── Native dialog hosts ─────────────────────────────────────────────────────
+/* ── Dialogs ─────────────────────────────────────────────────────────────────
    <dialog class="modal"> and <dialog class="drawer"> ride the platform: the
-   top layer, focus trapping, Escape, and ::backdrop as the scrim. No scrim
-   div, no hidden attribute; showModal() and close() are the whole API. The
-   closed state is display: none, so entrance and exit ride discrete display
-   and overlay transitions (allow-discrete), which every current browser
-   supports; where one doesn't, the dialog appears and disappears in place. */
+   top layer, focus trapping, Escape, and ::backdrop as the scrim.
+   showModal() and close() are the whole API. Closed is display: none, so
+   entrance and exit ride discrete display and overlay transitions
+   (allow-discrete); where a browser lacks them, the dialog appears and
+   disappears in place. */
 dialog:is(.modal, .drawer) { padding: 0; color: inherit; }
-/* Closed is display: none, as the UA has it. The recipes set display on the
-   element (flex on the drawer), which would otherwise beat the UA's closed
-   state and leave a closed drawer in the tree, translated off screen. */
+/* The recipes set display (flex on the drawer), which would beat the UA's
+   closed state and leave a closed drawer in the tree off screen. */
 dialog:is(.modal, .drawer):not([open]) { display: none; }
-dialog.modal { max-width: none; max-height: calc(100dvh - 48px); }
-/* The drawer recipe draws one hairline on the left; the UA's 3px border on
-   the other three sides goes. */
+dialog.modal { max-width: none; max-height: calc(100dvh - 2 * var(--space-5)); }
+/* The drawer draws one hairline on the left; the UA's 3px border goes. */
 dialog.drawer { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; max-width: none; border-width: 0 0 0 1px; }
 dialog.modal {
   opacity: 0;
@@ -1496,7 +1573,7 @@ dialog.drawer {
               overlay var(--t-slow) allow-discrete, display var(--t-slow) allow-discrete;
 }
 dialog.drawer[open] { transform: none; }
-dialog:is(.modal, .drawer):not([open]) { transition-timing-function: var(--ease-in); transition-duration: .14s; }
+dialog:is(.modal, .drawer):not([open]) { transition-timing-function: var(--ease-in); transition-duration: var(--t-exit); }
 dialog:is(.modal, .drawer)::backdrop {
   background: color-mix(in srgb, var(--crust) 80%, transparent);
   backdrop-filter: blur(2px);
@@ -1511,62 +1588,98 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   dialog:is(.modal, .drawer)[open]::backdrop { opacity: 0; }
 }
 
-/* ── Page furniture ─────────────────────────────────────────────────────────
-   Recipes never style bare element selectors (the tokens reset aside).
-   The main-column pattern, applied by the consumer:
-     main { width: min(1440px, calc(100% - 40px)); min-width: 0;
-            margin: 0 auto; position: relative; z-index: 1; }               */
+/* deprecated, removed in 0.5.0: div modals and drawers inside a .cn-scrim,
+   opened and closed with [hidden]. The scrim lives here, not in utilities,
+   so the utilities layer cannot beat its exit un-blur. */
+.cn-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: color-mix(in srgb, var(--crust) 80%, transparent);
+  backdrop-filter: blur(2px);
+  transition: opacity var(--t-base) var(--ease-out), backdrop-filter var(--t-base), visibility var(--t-base);
+}
+/* deprecated, removed in 0.5.0 */
+.modal { transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), visibility var(--t-base); }
+/* deprecated, removed in 0.5.0 */
+.drawer { transition: transform var(--t-slow) var(--ease-out), visibility var(--t-slow); }
+/* deprecated, removed in 0.5.0 */
+.cn-scrim[hidden] { display: block; visibility: hidden; opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
+/* deprecated, removed in 0.5.0 */
+.modal[hidden]    { display: block; visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); pointer-events: none; }
+/* deprecated, removed in 0.5.0 */
+.drawer[hidden]   { display: flex; visibility: hidden; transform: translateX(calc(100% + 40px)); pointer-events: none; }
+/* deprecated, removed in 0.5.0 */
+.cn-scrim[hidden] .modal  { visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); }
+/* deprecated, removed in 0.5.0 */
+.cn-scrim[hidden] .drawer { visibility: hidden; transform: translateX(calc(100% + 40px)); }
+/* deprecated, removed in 0.5.0 */
+:is(.cn-scrim, .modal, .drawer)[hidden],
+.cn-scrim[hidden] :is(.modal, .drawer) { transition-timing-function: var(--ease-in); transition-duration: var(--t-exit); }
+/* deprecated, removed in 0.5.0 */
+@starting-style {
+  .cn-scrim:not([hidden]) { opacity: 0; backdrop-filter: blur(0); }
+  .modal:not([hidden])    { opacity: 0; transform: translateY(8px) scale(.98); }
+  .cn-scrim:not([hidden]) .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
+  .drawer:not([hidden])   { transform: translateX(calc(100% + 40px)); }
+  .cn-scrim:not([hidden]) .drawer { transform: translateX(calc(100% + 40px)); }
+}
 
-/* Aliases of the type roles, kept for base-layer compatibility. */
+/* ── Page furniture ─────────────────────────────────────────────────────────
+   Recipes never style bare element selectors (the tokens reset aside).   */
+
+/* deprecated, removed in 0.5.0: .eyebrow. A kicker above a display title
+   usually restates the lede; drop it. */
 .eyebrow {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 13px;
+  display: flex; align-items: center; gap: var(--space-2);
+  margin-bottom: var(--space-3);
   color: var(--mauve);
-  font: 700 12px/1 var(--sans);
-  letter-spacing: .08em;
+  font: var(--cn-type-micro-weight) var(--cn-type-label-size)/var(--cn-type-micro-leading) var(--sans);
+  letter-spacing: var(--cn-type-micro-tracking);
   text-transform: uppercase;
 }
-.display-title {
-  margin: 0;
-  font-family: var(--sans);
-  font-size: clamp(36px, 4.6vw, 56px);
-  line-height: .98;
-  letter-spacing: -.03em;
-  font-weight: 760;
-}
-.lede { max-width: 690px; margin: 20px 0; color: var(--subtext-1); font-family: var(--sans); font-size: 16px; line-height: 1.65; }
+/* .display-title lives with .cn-display in utilities. */
+.lede { max-width: 690px; margin: var(--space-5) 0; color: var(--subtext-1); font-family: var(--sans); font-size: var(--cn-type-lede-size); line-height: var(--cn-type-lede-leading); }
 
-/* The page column. Every consumer wrote this; it ships. --page-width re-keys
-   it per page (a reading column, a narrow form) and the footer follows it. */
+/* The page column. --page-width re-keys it per page (a reading column,
+   a narrow form) and the footer follows it. */
 .page-main {
-  width: min(var(--page-width, 1440px), calc(100% - 40px));
+  width: min(var(--page-width, 1440px), 100% - 2 * var(--page-gutter));
   min-width: 0;
   margin: 0 auto;
   position: relative;
-  z-index: 1;
-  padding: var(--page-pad, clamp(24px, 4vw, 46px)) 0;
+  padding: var(--page-pad) 0;
 }
 .page-main.is-narrow  { --page-width: 860px; }
 .page-main.is-reading { --page-width: 740px; }
 
+.page-footer,
+/* deprecated, removed in 0.5.0 */
 .footer-neu {
-  width: min(var(--page-width, 1440px), calc(100% - 40px));
+  width: min(var(--page-width, 1440px), 100% - 2 * var(--page-gutter));
   min-height: 72px;
   margin: 0 auto;
-  padding: 12px 0;
-  display: flex; align-items: center; justify-content: space-between; gap: 20px;
-  color: var(--overlay-1);
+  padding: var(--space-3) 0;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  color: var(--overlay-2);
   border-top: 1px solid var(--surface-0);
 }
-.footer-neu span { font: 700 12px var(--sans); }
-.footer-neu p { margin: 0; font: 500 12px var(--sans); }
-/* The footer's brand slot: a small mark or glyph, the name, an optional note. */
-.footer-brand { display: flex; align-items: center; gap: 9px; color: var(--text); font: 750 13px var(--sans); letter-spacing: -.02em; }
-.footer-brand > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--mauve); }
-.footer-brand b, .footer-brand em { color: var(--mauve); font-style: normal; }
-.footer-brand > span { margin-left: 5px; color: var(--overlay-1); font: 500 12px/1 var(--sans); }
+.page-footer > span,
+/* deprecated, removed in 0.5.0 */
+.footer-neu span { font: var(--cn-type-name-weight) var(--cn-type-label-size) var(--sans); }
+.page-footer p,
+/* deprecated, removed in 0.5.0 */
+.footer-neu p { margin: 0; font: var(--cn-type-meta-weight) var(--cn-type-meta-size) var(--sans); }
+/* deprecated, removed in 0.5.0 */
+/* .footer-brand is .wordmark.is-sm (see Wordmark); these keep its old
+   flex gap and beat the .footer-neu span rule above. */
+.footer-brand { display: flex; gap: var(--space-2); line-height: normal; }
+/* deprecated, removed in 0.5.0 */
+.footer-brand > svg { margin-right: 0; }
+/* deprecated, removed in 0.5.0 */
+.footer-brand > span { margin-left: var(--space-1); font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/1 var(--sans); }
 
-/* Deck — hash-routed views, no JS. Direct children are the views: the
+/* Deck: hash-routed views, no JS. Direct children are the views: the
    :target one shows, the first is the default, and a deep link into a
    view's content shows that view. State lives in the URL, so back/forward
    and refresh keep their place.
@@ -1576,28 +1689,11 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 .deck > :has(:target) { display: block; }
 .deck:not(:has(:target)) > :first-child { display: block; }
 
-/* ── Dense density — the data surfaces follow the knobs ─────────────────────
-   Compact shrinks the controls; dense also tightens the readouts around
-   them, so an instrument panel needs no per-cell overrides.               */
-[data-density="dense"] .table-neu th,
-[data-density="dense"] .table-neu td { padding: 6px 9px; }
-[data-density="dense"] .table-neu td { font-size: 12px; }
-[data-density="dense"] .chip { padding: 4px 8px; }
-[data-density="dense"] .chip-tone { padding: 2px 4px; }
-[data-density="dense"] .panel-heading, [data-density="dense"] .panel-footer { min-height: 44px; padding: 8px 14px; }
-[data-density="dense"] .panel-heading h2 { font-size: 14px; }
-[data-density="dense"] .panel-body { padding: 12px 14px; }
-[data-density="dense"] .btn-flat { min-height: 26px; padding: 0 9px; }
-[data-density="dense"] .topbar { min-height: 44px; padding: 4px 10px; gap: 12px; }
-[data-density="dense"] .codeblock { padding: 10px 12px; }
-[data-density="dense"] .terminal pre { padding: 9px 10px; }
-[data-density="dense"] .empty-state { min-height: 120px; gap: 6px; }
-
 /* ── Responsive ─────────────────────────────────────────────────────────────
-   Three breakpoints, always these three. Each one removes decoration before
-   it removes content.                                                       */
+   Three breakpoints, always these three. Each one removes decoration; none
+   removes content.                                                          */
 
-/* 1060 — drop ornament: the tilted card flattens, secondary nav hides. */
+/* 1060: drop ornament: the tilted card flattens, secondary nav hides. */
 @media (max-width: 1060px) {
   .topbar { grid-template-columns: 1fr auto; }
   .topbar .nav-secondary { display: none; }
@@ -1607,61 +1703,122 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   }
 }
 
-/* 760 — tablet/phone: tighter chrome, icon-only chips, tables become cards. */
+/* 760: tablet and phone: tighter chrome, tables become label and value rows. */
 @media (max-width: 760px) {
-  .topbar { min-height: 60px; padding: 9px 13px; }
-  .page-main, .footer-neu { width: min(100% - 28px, var(--page-width, 1440px)); }
-  .footer-neu { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .topbar { min-height: min(60px, calc(var(--band-h) + var(--space-1))); padding: var(--space-2) var(--page-gutter); }
+  /* The center nav scrolls sideways inside the bar. */
+  .topbar nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  /* A split bar's actions wrap onto more rows, right-aligned, so none
+     hides. */
+  .topbar.is-split { grid-template-columns: auto minmax(0, 1fr); }
+  .topbar.is-split > :last-child { min-width: 0; max-width: 100%; justify-self: end; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-2); }
+  .page-footer,
+  /* deprecated, removed in 0.5.0 */
+  .footer-neu { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
 
-  /* Icon-only collapse, glyph chips only: kill the label with font-size 0,
-     keep the glyph. Text-only chips keep their label. Keep an accessible
-     name on the control. */
-  .chip:has(svg) { padding: 7px; font-size: 0; }
-  .chip:has(svg) > svg { width: 16px; height: 16px; }
-
-  .display-title { font-size: 38px; }
-  .lede { font-size: 14px; }
-  .panel-footer { flex-direction: column; align-items: stretch; }
-  .panel-footer .btn-primary { width: 100%; }
+  .lede { font-size: var(--cn-type-body-size); }
+  .panel-footer { flex-wrap: wrap; }
 
   /* Full-bleed on phones: the outermost panel sheds its chrome so content
      runs edge to edge instead of sitting in a shrunken card. */
   .panel.is-shell { border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 
-  /* Table → stacked cards. Header row drops; each td[data-label] carries its
-     own micro-label via ::before. */
-  .table-neu thead { display: none; }
-  .table-neu tbody, .table-neu tr, .table-neu td { display: block; }
-  .table-neu tbody { padding: 9px; }
-  .table-neu tbody tr {
-    margin-bottom: 9px;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    border: 1px solid var(--surface-0);
-    border-radius: 10px;
-    background: var(--mantle);
+  /* Table → rows of label and value, split by hairlines. The header row
+     drops; each td[data-label] draws its label. A cell without one (the
+     name) spans the row. The press moves from the cells to the row. */
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) { display: block; }
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) thead { display: none; }
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) :is(tbody, tr, td) { display: block; }
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tr {
+    padding: var(--cell-pad);
+    border-bottom: 1px solid var(--surface-0);
+    background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px, transparent calc(100% - 4px), var(--press-bottom, transparent));
+    transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out), --press-bottom var(--t-fast) var(--ease-out);
   }
-  .table-neu td { min-width: 0; padding: 0; border: 0; }
-  .table-neu td[data-label] { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
-  .table-neu td[data-label]::before {
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:last-child { border-bottom: 0; }
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td {
+    min-width: 0;
+    padding: var(--space-1) 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
+    --press-top: rgb(17 17 27 / .5);
+    --press-bottom: rgb(69 71 90 / .3);
+    background-color: color-mix(in srgb, var(--mauve) 6%, var(--base));
+  }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
+    --press-top: rgb(17 17 27 / .66);
+    --press-bottom: rgb(69 71 90 / .3);
+    background-color: var(--wash);
+  }
+  /* The label sits in a fixed left column; the value flows as one inline
+     run in the rest of the row, so mixed text and code keep their order. */
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td[data-label] {
+    --label-w: 7.5rem;
+    display: flow-root;
+    padding-left: calc(var(--label-w) + var(--space-3));
+    text-align: start;
+  }
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td[data-label]::before {
     content: attr(data-label);
-    color: var(--overlay-1);
-    font: 650 12px var(--sans);
+    float: left;
+    width: var(--label-w);
+    margin-left: calc(-1 * (var(--label-w) + var(--space-3)));
+    color: var(--overlay-2);
+    font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-body-leading) var(--sans);
+  }
+  /* A row-select checkbox rides at the end of the row instead of taking a
+     labeled line. */
+  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td.cell-select { float: right; padding: 0; margin-left: var(--space-3); }
+  .panel > :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])):last-child tbody tr:last-child {
+    border-radius: 0 0 calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px);
   }
 }
 
-/* 520 — small phone: display type shrinks again, horizontal rows stack,
-   oversized numerals step down. */
+/* 520: small phone: horizontal rows stack, oversized numerals step down. */
 @media (max-width: 520px) {
-  .display-title { font-size: 34px; }
   .segmented { grid-auto-flow: row; }
-  .metric { padding-inline: 10px; }
-  .metric strong { font-size: 18px; }
-  .metric.is-hero strong { font-size: 22px; }
-  .footer-neu p { display: none; }
-  .accordion-stack { padding: 8px 10px; }
-  /* Label meta is decoration at phone width: it yields to the title. */
-  .accordion > label > .cn-meta { display: none; }
+  .stat,
+  /* deprecated, removed in 0.5.0 */
+  .metric { padding-inline: var(--space-2); }
+  .stat strong,
+  /* deprecated, removed in 0.5.0 */
+  .metric strong { font-size: var(--cn-type-lede-size); }
+  .stat.is-lg strong,
+  /* deprecated, removed in 0.5.0 */
+  .metric.is-hero strong { font-size: var(--cn-type-value-size); }
+  .accordion-stack { padding: var(--space-2) var(--space-3); }
+  /* Label meta wraps under the title; the chevron stays on the title line. */
+  .accordion > label:has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
+  .accordion > label > .cn-meta { order: 1; flex-basis: 100%; }
+  /* Key-value pairs stack: key over value. */
+  .kv { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
+  .kv dd + dt { margin-top: var(--space-2); }
+}
+
+/* ── App shell and live dot ─────────────────────────────────────────────── */
+
+/* A column whose main absorbs the slack, so the footer sits at the
+   viewport bottom on short pages. */
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.app-shell > main { flex: 1 0 auto; }
+/* A fixed-viewport app: the shell is the viewport and its panes scroll, so
+   the page reserves no scrollbar gutter. */
+.app-shell.is-fixed { height: 100vh; height: 100dvh; min-height: 0; }
+.app-shell.is-fixed > main { flex: 1 1 auto; min-height: 0; }
+:root:has(.app-shell.is-fixed) { scrollbar-gutter: auto; }
+
+.live-dot {
+  width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
+  color: var(--green); background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 13%, transparent);
+  animation: pulse 1.5s ease-in-out infinite;
 }

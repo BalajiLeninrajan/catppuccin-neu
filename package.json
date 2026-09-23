@@ -1,6 +1,6 @@
 {
   "name": "catppuccin-neu",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BalajiLeninrajan/catppuccin-neu.git"
@@ -15,6 +15,7 @@
     "scripts",
     "SPEC.md",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "exports": {
@@ -25,6 +26,9 @@
   },
   "bin": {
     "catppuccin-neu-sync": "scripts/sync.mjs"
+  },
+  "scripts": {
+    "lint": "node scripts/lint.mjs"
   },
   "engines": {
     "node": ">=18"

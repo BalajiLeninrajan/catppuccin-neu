@@ -6,6 +6,7 @@
 import type { ComponentType } from "preact";
 
 import Introduction from "./pages/introduction";
+import Migration from "./pages/migration";
 
 import Colors from "./pages/colors";
 import Typography from "./pages/typography";
@@ -31,6 +32,8 @@ import AccentCard from "./pages/accent-card";
 import Accordion from "./pages/accordion";
 import Avatar from "./pages/avatar";
 import Stat from "./pages/stat";
+import KeyValue from "./pages/key-value";
+import Legend from "./pages/legend";
 import Table from "./pages/table";
 import Terminal from "./pages/terminal";
 import Codeblock from "./pages/codeblock";
@@ -63,16 +66,17 @@ export interface NavEntry {
 
 export const PAGES: NavEntry[] = [
   { path: "/", title: "Introduction", group: "Getting started", component: Introduction },
+  { path: "/migration", title: "Migrating to 0.4", group: "Getting started", component: Migration },
 
   { path: "/colors", title: "Colors", group: "Foundation", component: Colors },
   { path: "/typography", title: "Typography", group: "Foundation", component: Typography },
   { path: "/depth", title: "Depth", group: "Foundation", component: Depth },
   { path: "/motion", title: "Motion", group: "Foundation", component: Motion },
-  { path: "/density", title: "Density & contract props", group: "Foundation", component: Density },
+  { path: "/density", title: "Density and contract props", group: "Foundation", component: Density },
   { path: "/layout", title: "Layout", group: "Foundation", component: Layout },
 
   { path: "/button", title: "Button", group: "Controls", component: Button },
-  { path: "/input", title: "Input & Field", group: "Controls", component: Input },
+  { path: "/input", title: "Input & field", group: "Controls", component: Input },
   { path: "/selection", title: "Selection", group: "Controls", component: Selection },
   { path: "/segmented", title: "Segmented", group: "Controls", component: Segmented },
 
@@ -88,6 +92,8 @@ export const PAGES: NavEntry[] = [
   { path: "/accordion", title: "Accordion", group: "Containers & data", component: Accordion },
   { path: "/avatar", title: "Avatar", group: "Containers & data", component: Avatar },
   { path: "/stat", title: "Stat", group: "Containers & data", component: Stat },
+  { path: "/key-value", title: "Key-value list", group: "Containers & data", component: KeyValue },
+  { path: "/legend", title: "Legend", group: "Containers & data", component: Legend },
   { path: "/table", title: "Table", group: "Containers & data", component: Table },
   { path: "/terminal", title: "Terminal", group: "Containers & data", component: Terminal },
   { path: "/codeblock", title: "Code block", group: "Containers & data", component: Codeblock },

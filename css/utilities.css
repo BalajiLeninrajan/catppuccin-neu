@@ -1,5 +1,5 @@
 /* ── Utilities ──────────────────────────────────────────────────────────────
-   Single-purpose classes, blessed values only — no utility takes a numeric
+   Single-purpose classes on token values. No utility takes a numeric
    parameter. Compose them; when a combination recurs, promote it to a recipe.
    Requires tokens.css. Layer: cn.utilities.                                 */
 
@@ -9,16 +9,16 @@
 .cn-raised-soft { box-shadow: var(--neu-raised-soft); }
 .cn-inset       { box-shadow: var(--neu-inset); }
 .cn-inset-soft  { box-shadow: var(--neu-inset-soft); }
-/* Floats above the surface — overlays only, never neu. */
+/* Floats above the surface: overlays only, never neu. */
 .cn-pop         { box-shadow: var(--shadow-pop); }
 /* Topbar cast plus its lit hairline. */
 .cn-cast        { box-shadow: var(--shadow-cast), inset 0 1px color-mix(in srgb, var(--surface-1) 30%, transparent); }
 /* Solid-mark mini-drop. */
 .cn-mark-drop   { box-shadow: var(--shadow-mark); }
-/* The hard offset — the flat graphic note. Any clickable control may take it. */
-.cn-hard        { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color); }
-.cn-hard-lg     { box-shadow: 10px 10px 0 var(--hard-offset-color); }  /* tilted hero card */
-.cn-hard-sm     { box-shadow: 3px 3px 0 var(--hard-offset-color); }    /* fixed small offset */
+/* The hard offset: a solid plate. Any clickable control may take it. */
+.cn-hard        { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust))); }
+.cn-hard-lg     { box-shadow: 10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust))); }  /* tilted hero card */
+.cn-hard-sm     { box-shadow: 3px 3px 0 var(--plate, var(--hard-offset-color, var(--crust))); }    /* fixed small offset */
 .cn-flat        { box-shadow: none; }
 
 /* ── Interaction ────────────────────────────────────────────────────────── */
@@ -29,74 +29,91 @@
 }
 /* Down is crisp on the fast-out; up comes back on the spring. */
 .cn-pressable:active:not(:disabled),
-.cn-pressable-slide:active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: .08s; }
+.cn-pressable-slide:active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
 
 /* The soft-control press: lift on hover, sink to an inset when held. */
 .cn-pressable:hover:not(:disabled)  { transform: translateY(-1px); }
 .cn-pressable:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
-/* The canonical half-slide — legal only combined with .cn-hard. The control
+/* The half-slide, only combined with .cn-hard. The control
    slides halfway onto its own offset shadow, which shrinks to meet it. */
 .cn-pressable-slide:hover:not(:disabled)  { transform: translate(-1px, -1px); }
-.cn-pressable-slide:active:not(:disabled) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--hard-offset-color); }
+.cn-pressable-slide:active:not(:disabled) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--hard-offset-color, var(--crust))); }
 
-/* (.cn-engaged — the selected/toggled state — is declared after the border
+/* (.cn-engaged, the selected or toggled state, is declared after the border
    utilities so its border-color beats a composed .cn-edge-*.)              */
 
 /* ── Type roles ─────────────────────────────────────────────────────────────
-   No bare font-family utility exists: pick the role, not the face.
-   Sans is the default voice: every shipped role is sans except .cn-code.
-   Mono is not forbidden elsewhere — in the rare right circumstance any text
-   may take it (a consumer-layer call, not a shipped default). Numbers keep
-   tabular-nums on the sans face. Uppercase is scarce — only the eyebrow and
-   the microlabel shout; everything else is sentence case.                   */
+   No bare font-family utility exists: pick the role, not the face. Each
+   role reads its --cn-type-<role>-size/-weight/-leading/-tracking tokens.
+   Every role is sans except .cn-code, .cn-code-meta and .cn-code-inline.
+   Numbers keep tabular-nums on the sans face. Uppercase is scarce: only
+   the microlabel shouts, and it labels a fact, never a section.            */
 
 .cn-label {
-  font: 650 12px/1 var(--sans);
-  letter-spacing: .01em;
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
+  letter-spacing: var(--cn-type-label-tracking);
   color: var(--overlay-2);
 }
+/* The one exception to the 12px floor. Caps buy legibility at 10px. */
 .cn-microlabel {
-  /* The one exception to the 12px floor: the smallest voice in the system.
-     One of the two uppercase voices — caps buy legibility at 10px. */
-  font: 700 10px/1 var(--sans);
-  letter-spacing: .08em;
+  font: var(--cn-type-micro-weight) var(--cn-type-micro-size)/var(--cn-type-micro-leading) var(--sans);
+  letter-spacing: var(--cn-type-micro-tracking);
   text-transform: uppercase;
-  color: var(--overlay-1);
+  color: var(--overlay-2);
+}
+.cn-ui {
+  font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  letter-spacing: var(--cn-type-ui-tracking);
 }
 .cn-value {
-  font: 650 21px/1 var(--sans);
+  font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans);
+  letter-spacing: var(--cn-type-value-tracking);
   font-variant-numeric: tabular-nums;
 }
 .cn-value-lg {
-  font: 650 28px/1 var(--sans);
+  font: var(--cn-type-value-lg-weight) var(--cn-type-value-lg-size)/var(--cn-type-value-lg-leading) var(--sans);
+  letter-spacing: var(--cn-type-value-lg-tracking);
   font-variant-numeric: tabular-nums;
   color: var(--accent);  /* opt out via a color utility */
 }
+/* On an accent card the plate carries the accent, so the value is text.
+   :where keeps this under the color utilities below. */
+:where(.accent-card) .cn-value-lg { color: var(--text); }
 .cn-meta {
-  font: 550 12px/1.5 var(--sans);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
+  letter-spacing: var(--cn-type-meta-tracking);
   font-variant-numeric: tabular-nums;
-  color: var(--overlay-1);
+  color: var(--overlay-2);
 }
+/* deprecated, removed in 0.5.0: .cn-eyebrow. A kicker above a display
+   title usually restates the lede; drop it. */
 .cn-eyebrow {
-  /* The other uppercase voice — one per page, announcing a section. */
   display: flex;
   align-items: center;
-  gap: 8px;
-  font: 700 12px/1 var(--sans);
-  letter-spacing: .08em;
+  gap: var(--space-2);
+  font: var(--cn-type-micro-weight) var(--cn-type-label-size)/var(--cn-type-micro-leading) var(--sans);
+  letter-spacing: var(--cn-type-micro-tracking);
   text-transform: uppercase;
   color: var(--mauve);
 }
-/* Inline code voice — code, CLI strings, machine literals. */
+/* Code, CLI strings, machine literals. */
 .cn-code {
-  font: 500 13px/1.6 var(--mono);
+  font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
+  letter-spacing: var(--cn-type-code-tracking);
   font-variant-numeric: tabular-nums;
 }
-/* The mono secondary line: a model id, a path, a hash under a name. Every
-   consumer wrote this one by hand, so it ships. */
+/* Quiet inline code in prose: mono at the text ink, no chip. It scales
+   with the surrounding copy. */
+.cn-code-inline {
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: .92em;
+  font-weight: var(--cn-type-code-weight);
+}
+/* The mono secondary line: a model id, a path or a hash under a name. */
 .cn-code-meta {
-  font: 500 12px/1 var(--mono);
+  font: var(--cn-type-code-weight) var(--cn-type-code-size)/1 var(--mono);
   font-variant-numeric: tabular-nums;
   color: var(--overlay-2);
 }
@@ -110,30 +127,40 @@
    file and win, so "cn-microlabel cn-text-accent" is a tracked label in the
    accent. Compose, never restate the role. */
 
-.cn-display {
-  font-family: var(--sans);
-  font-size: clamp(32px, 4vw, 46px);
-  line-height: .98;
-  /* Inter's optical size already tightens at display sizes; 820/-.055em on
-     top of it closed the counters and crashed punctuation into letters. */
-  letter-spacing: -.03em;
-  font-weight: 760;
-  text-wrap: balance;
-}
+/* The hero headline, margin zeroed. .display-title is an alias; .is-sm is
+   the page-title size. */
+.cn-display, .display-title,
+/* deprecated, removed in 0.5.0 */
 .cn-display-sm {
-  font-family: var(--sans);
-  font-size: clamp(26px, 3.4vw, 36px);
-  line-height: .98;
-  letter-spacing: -.03em;
-  font-weight: 760;
+  font: var(--cn-type-display-weight) var(--cn-type-display-size)/var(--cn-type-display-leading) var(--sans);
+  letter-spacing: var(--cn-type-display-tracking);
   text-wrap: balance;
+  margin: 0;
 }
-.cn-display em, .cn-display-sm em { color: var(--mauve); font-style: normal; }
-.cn-title { font-family: var(--sans); font-size: 20px; font-weight: 800; letter-spacing: -.03em; }
-/* Emphasized proper names — full-strength text color at body scale. */
-.cn-name { font: 700 13px/1.3 var(--sans); color: var(--text); }
-.cn-lede { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--subtext-1); max-width: 690px; }
-.cn-copy { font-family: var(--sans); font-size: 14px; line-height: 1.6; color: var(--subtext-0); }
+:is(.cn-display, .display-title).is-sm,
+/* deprecated, removed in 0.5.0 */
+.cn-display-sm { font-size: var(--cn-type-display-sm-size); }
+.cn-title {
+  font: var(--cn-type-title-weight) var(--cn-type-title-size)/var(--cn-type-title-leading) var(--sans);
+  letter-spacing: var(--cn-type-title-tracking);
+}
+/* Emphasized proper names: full-strength text color at body scale. */
+.cn-name {
+  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
+  letter-spacing: var(--cn-type-name-tracking);
+  color: var(--text);
+}
+.cn-lede {
+  font: var(--cn-type-lede-weight) var(--cn-type-lede-size)/var(--cn-type-lede-leading) var(--sans);
+  letter-spacing: var(--cn-type-lede-tracking);
+  color: var(--subtext-1);
+  max-width: 690px;
+}
+.cn-copy {
+  font: var(--cn-type-body-weight) var(--cn-type-body-size)/var(--cn-type-body-leading) var(--sans);
+  letter-spacing: var(--cn-type-body-tracking);
+  color: var(--subtext-0);
+}
 
 /* ── Color ──────────────────────────────────────────────────────────────── */
 
@@ -167,7 +194,7 @@
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
 }
 
-/* Tone setters — set --tone only; pair with .cn-tint / .cn-text-tone / recipes. */
+/* Tone setters set --tone only; pair with .cn-tint / .cn-text-tone / recipes. */
 .cn-tone-red    { --tone: var(--red); }
 .cn-tone-green  { --tone: var(--green); }
 .cn-tone-peach  { --tone: var(--peach); }
@@ -187,7 +214,7 @@
 .cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--surface-0)); }
 .cn-edge-dashed { border: 1px dashed var(--surface-1); }  /* the only dashed border */
 
-/* The selected/toggled state — pressed in, mauve-keyed, borderless: the inset
+/* The selected or toggled state: pressed in, mauve-keyed, borderless. The inset
    depth and tint define it. Declared after the edge utilities so the cleared
    border-color wins over a composed base edge. */
 .cn-engaged {
@@ -197,33 +224,33 @@
   background: var(--wash);
 }
 
-/* ── Radii — role-named; no numeric escape hatch ────────────────────────── */
+/* ── Radii: role-named, read from the --cn-radius-* tokens ─────────────── */
 
-.cn-r-panel   { border-radius: var(--pane-radius); }
-.cn-r-card    { border-radius: 13px; }
-.cn-r-control { border-radius: 10px; }
-.cn-r-mark    { border-radius: 8px; }
-.cn-r-chip    { border-radius: 4px; }
+.cn-r-panel   { border-radius: var(--cn-radius-panel); }
+.cn-r-card    { border-radius: var(--cn-radius-card); }
+.cn-r-control { border-radius: var(--cn-radius-control); }
+.cn-r-mark    { border-radius: var(--cn-radius-control); }  /* .mark tiles */
+.cn-r-chip    { border-radius: var(--cn-radius-chip); }
 .cn-r-pill    { border-radius: 999px; }
 .cn-r-round   { border-radius: 50%; }
 
 /* ── Structure ──────────────────────────────────────────────────────────── */
 
-/* Left color spine — the accent identity cue. */
+/* Left color spine: the accent identity cue. */
 .cn-spine { position: relative; }
 .cn-spine::before {
   content: "";
   position: absolute;
-  inset: 12px auto 12px 0;
+  inset: var(--space-3) auto var(--space-3) 0;
   width: 4px;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 var(--cn-radius-chip) var(--cn-radius-chip) 0;
   background: var(--accent);
 }
 
 /* (.cn-scrim moved to recipes.css with the overlays it backs: its exit
    un-blur lives in the recipes layer and must not be beaten from here.) */
 
-/* Screen-reader only — clipped, not hidden. */
+/* Screen-reader only: clipped, not hidden. */
 .cn-sr-only {
   position: absolute;
   width: 1px;
@@ -238,15 +265,16 @@
 
 .cn-hidden { display: none !important; }
 
-/* ── Layout — three primitives and one spacing scale ──────────────────────
-   The scale is the six values the recipes already use: 4, 8, 12, 16, 22,
-   28. Nothing in between exists, so no utility takes a number outside it.
+/* ── Layout: three primitives and one spacing scale ───────────────────────
+   Every gap, padding and margin reads --space-1..6: 4, 8, 12, 16, 24, 32.
+   The utilities are named by pixel value, and no other value exists.
    A row is a centered flex line, a stack is a grid column, a cluster wraps.
-   Modifiers only ever add: cn-row cn-between cn-gap-12.                    */
+   Modifiers only ever add: cn-row cn-between cn-gap-12.
+   The -22 and -28 names are deprecated aliases of -24 and -32.             */
 
-.cn-row     { display: flex; align-items: center; gap: 8px; }
-.cn-stack   { display: grid; gap: 12px; }
-.cn-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cn-row     { display: flex; align-items: center; gap: var(--space-2); }
+.cn-stack   { display: grid; gap: var(--space-3); }
+.cn-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
 .cn-between { justify-content: space-between; }
 .cn-center  { justify-content: center; }
 .cn-end     { justify-content: flex-end; }
@@ -262,27 +290,82 @@
 .cn-auto-l  { margin-left: auto; }
 
 /* Column grids collapse on the system's own breakpoints. */
-.cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
 @media (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
 
-.cn-gap-4  { gap: 4px; }  .cn-gap-8  { gap: 8px; }  .cn-gap-12 { gap: 12px; }
-.cn-gap-16 { gap: 16px; } .cn-gap-22 { gap: 22px; } .cn-gap-28 { gap: 28px; }
+.cn-gap-4  { gap: var(--space-1); }
+.cn-gap-8  { gap: var(--space-2); }
+.cn-gap-12 { gap: var(--space-3); }
+.cn-gap-16 { gap: var(--space-4); }
+.cn-gap-24,
+/* deprecated, removed in 0.5.0 */
+.cn-gap-22 { gap: var(--space-5); }
+.cn-gap-32,
+/* deprecated, removed in 0.5.0 */
+.cn-gap-28 { gap: var(--space-6); }
 
-.cn-p-0  { padding: 0; }    .cn-p-4  { padding: 4px; }  .cn-p-8  { padding: 8px; }  .cn-p-12 { padding: 12px; }
-.cn-p-16 { padding: 16px; } .cn-p-22 { padding: 22px; } .cn-p-28 { padding: 28px; }
-.cn-px-0  { padding-inline: 0; }    .cn-px-8  { padding-inline: 8px; }  .cn-px-12 { padding-inline: 12px; }
-.cn-px-16 { padding-inline: 16px; } .cn-px-22 { padding-inline: 22px; } .cn-px-28 { padding-inline: 28px; }
-.cn-py-0  { padding-block: 0; }     .cn-py-8  { padding-block: 8px; }   .cn-py-12 { padding-block: 12px; }
-.cn-py-16 { padding-block: 16px; }  .cn-py-22 { padding-block: 22px; }  .cn-py-28 { padding-block: 28px; }
+.cn-p-0  { padding: 0; }
+.cn-p-4  { padding: var(--space-1); }
+.cn-p-8  { padding: var(--space-2); }
+.cn-p-12 { padding: var(--space-3); }
+.cn-p-16 { padding: var(--space-4); }
+.cn-p-24,
+/* deprecated, removed in 0.5.0 */
+.cn-p-22 { padding: var(--space-5); }
+.cn-p-32,
+/* deprecated, removed in 0.5.0 */
+.cn-p-28 { padding: var(--space-6); }
+
+.cn-px-0  { padding-inline: 0; }
+.cn-px-8  { padding-inline: var(--space-2); }
+.cn-px-12 { padding-inline: var(--space-3); }
+.cn-px-16 { padding-inline: var(--space-4); }
+.cn-px-24,
+/* deprecated, removed in 0.5.0 */
+.cn-px-22 { padding-inline: var(--space-5); }
+.cn-px-32,
+/* deprecated, removed in 0.5.0 */
+.cn-px-28 { padding-inline: var(--space-6); }
+
+.cn-py-0  { padding-block: 0; }
+.cn-py-8  { padding-block: var(--space-2); }
+.cn-py-12 { padding-block: var(--space-3); }
+.cn-py-16 { padding-block: var(--space-4); }
+.cn-py-24,
+/* deprecated, removed in 0.5.0 */
+.cn-py-22 { padding-block: var(--space-5); }
+.cn-py-32,
+/* deprecated, removed in 0.5.0 */
+.cn-py-28 { padding-block: var(--space-6); }
 
 .cn-m-0  { margin: 0; }
-.cn-mt-0  { margin-top: 0; }    .cn-mt-4  { margin-top: 4px; }  .cn-mt-8  { margin-top: 8px; }  .cn-mt-12 { margin-top: 12px; }
-.cn-mt-16 { margin-top: 16px; } .cn-mt-22 { margin-top: 22px; } .cn-mt-28 { margin-top: 28px; }
-.cn-mb-0  { margin-bottom: 0; }    .cn-mb-4  { margin-bottom: 4px; }  .cn-mb-8  { margin-bottom: 8px; }  .cn-mb-12 { margin-bottom: 12px; }
-.cn-mb-16 { margin-bottom: 16px; } .cn-mb-22 { margin-bottom: 22px; } .cn-mb-28 { margin-bottom: 28px; }
+
+.cn-mt-0  { margin-top: 0; }
+.cn-mt-4  { margin-top: var(--space-1); }
+.cn-mt-8  { margin-top: var(--space-2); }
+.cn-mt-12 { margin-top: var(--space-3); }
+.cn-mt-16 { margin-top: var(--space-4); }
+.cn-mt-24,
+/* deprecated, removed in 0.5.0 */
+.cn-mt-22 { margin-top: var(--space-5); }
+.cn-mt-32,
+/* deprecated, removed in 0.5.0 */
+.cn-mt-28 { margin-top: var(--space-6); }
+
+.cn-mb-0  { margin-bottom: 0; }
+.cn-mb-4  { margin-bottom: var(--space-1); }
+.cn-mb-8  { margin-bottom: var(--space-2); }
+.cn-mb-12 { margin-bottom: var(--space-3); }
+.cn-mb-16 { margin-bottom: var(--space-4); }
+.cn-mb-24,
+/* deprecated, removed in 0.5.0 */
+.cn-mb-22 { margin-bottom: var(--space-5); }
+.cn-mb-32,
+/* deprecated, removed in 0.5.0 */
+.cn-mb-28 { margin-bottom: var(--space-6); }
 
 /* Rows separated by the line hairline, last one bare: Tailwind's divide-y. */
 .cn-divide > * + * { border-top: 1px solid var(--surface-0); }
@@ -299,4 +382,4 @@
 .cn-icon    { width: 16px; height: 16px; flex: 0 0 auto; }
 .cn-icon-lg { width: 20px; height: 20px; flex: 0 0 auto; }
 
-/* (.scroll-well, .app-shell, .page-enter, .live-dot live in tokens.css.) */
+/* (.scroll-well and .page-enter live in tokens.css.) */

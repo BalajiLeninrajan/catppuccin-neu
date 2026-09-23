@@ -1,11 +1,11 @@
 /* ── Catppuccin Mocha + neumorphic depth: foundation layer ──────────────────
-   Drop this in first, unmodified. Everything else builds on these tokens.
+   Load first. Everything else reads these tokens.
    Layer: cn.tokens (via index.css); also works as a plain first <link>.     */
 
 :root {
   color-scheme: dark;
 
-  /* Catppuccin Mocha — do not substitute hexes */
+  /* Catppuccin Mocha. Do not substitute hexes. */
   --crust: #11111b;
   --mantle: #181825;
   --base: #1e1e2e;
@@ -30,7 +30,7 @@
   --blue: #89b4fa;
   --lavender: #b4befe;
 
-  /* Semantic aliases — reference these, not raw palette names, in components */
+  /* Semantic aliases */
   --line: var(--surface-0);
   --muted: var(--subtext-0);
   --soft: var(--subtext-1);
@@ -39,11 +39,87 @@
   --mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono",
           ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-  /* Neumorphic depth. Light source is top-left: dark shadow bottom-right,
-     lift highlight top-left. Every elevation in the app is one of these four.
-     Soft: smaller offset and blur at reduced strength (retuned upward by
-     review 2026-08-24; the pairs are no longer strict halves),
-     so each pair reads as two distinct elevations at a glance. */
+  /* Type roles. Separate atoms so Tailwind's fontSize tuple can read them.
+     Four weights: 400, 500, 600, 700. Tracking is -.03em at 20px and up,
+     .08em on the uppercase micro voice, 0 elsewhere. */
+  --cn-type-micro-size: 10px;
+  --cn-type-micro-weight: 700;
+  --cn-type-micro-leading: 1;
+  --cn-type-micro-tracking: .08em;
+
+  --cn-type-label-size: 12px;
+  --cn-type-label-weight: 600;
+  --cn-type-label-leading: 1;
+  --cn-type-label-tracking: 0;
+
+  --cn-type-meta-size: 12px;
+  --cn-type-meta-weight: 500;
+  --cn-type-meta-leading: 1.5;
+  --cn-type-meta-tracking: 0;
+
+  --cn-type-ui-size: 13px;
+  --cn-type-ui-weight: 600;
+  --cn-type-ui-leading: 1;
+  --cn-type-ui-tracking: 0;
+
+  --cn-type-name-size: 13px;
+  --cn-type-name-weight: 700;
+  --cn-type-name-leading: 1.3;
+  --cn-type-name-tracking: 0;
+
+  --cn-type-body-size: 14px;
+  --cn-type-body-weight: 400;
+  --cn-type-body-leading: 1.6;
+  --cn-type-body-tracking: 0;
+
+  --cn-type-lede-size: 16px;
+  --cn-type-lede-weight: 400;
+  --cn-type-lede-leading: 1.6;
+  --cn-type-lede-tracking: 0;
+
+  --cn-type-title-size: 20px;
+  --cn-type-title-weight: 700;
+  --cn-type-title-leading: 1.3;
+  --cn-type-title-tracking: -.03em;
+
+  --cn-type-value-size: 20px;
+  --cn-type-value-weight: 600;
+  --cn-type-value-leading: 1;
+  --cn-type-value-tracking: -.03em;
+
+  --cn-type-value-lg-size: 28px;
+  --cn-type-value-lg-weight: 600;
+  --cn-type-value-lg-leading: 1;
+  --cn-type-value-lg-tracking: -.03em;
+
+  --cn-type-code-size: 12px;
+  --cn-type-code-weight: 500;
+  --cn-type-code-leading: 1.6;
+  --cn-type-code-tracking: 0;
+
+  --cn-type-display-size: clamp(36px, 4.6vw, 56px);
+  --cn-type-display-sm-size: clamp(26px, 3.4vw, 36px);
+  --cn-type-display-weight: 700;
+  --cn-type-display-leading: 1;
+  --cn-type-display-tracking: -.03em;
+
+  /* Spacing: 4, 8, 12, 16, 24, 32. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Radius by role. Pills use 999px and rounds use 50%. */
+  --cn-radius-panel: 16px;
+  --cn-radius-card: 12px;
+  --cn-radius-control: 8px;
+  --cn-radius-chip: 4px;
+  --pane-radius: var(--cn-radius-panel); /* deprecated alias */
+
+  /* Neumorphic depth, lit from the top left: four neu shadows, pop, cast
+     and hard. */
   --neu-dark: rgb(17 17 27 / .66);
   --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
   --neu-raised: 8px 8px 18px var(--neu-dark), -4px -4px 10px rgb(69 71 90 / .22);
@@ -51,40 +127,50 @@
   --neu-inset: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
   --neu-inset-soft: inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
 
-  /* Promoted shadows — composites every surface shares. */
-  --shadow-pop:  0 24px 70px rgb(17 17 27 / .78);                 /* popovers/modals/toasts float */
+  --shadow-pop:  0 24px 70px rgb(17 17 27 / .78);                 /* popovers, modals, toasts */
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);                 /* topbar cast */
-  --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);  /* solid-mark mini-drop */
+  --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);  /* solid-mark drop */
 
-  /* Contract properties — the documented extension points. Set these inline
-     (or on a wrapper) to re-key a whole subtree; every recipe reads them.
-     Accent cycle: #cba6f7, #94e2d5, #f9e2af, #89b4fa, #fab387, #f5c2e7
-     (mauve, teal, yellow, blue, peach, pink).                               */
-  --accent: var(--mauve);            /* per-instance accent: cards, spines, marks, hero values */
-  --tone: var(--peach);              /* semantic tint for chips/banners */
-  --hard-offset-color: var(--crust); /* the hard offset's color; primary buttons override */
-  --hard-offset: 4px;                /* the hard offset's distance; compact tightens it */
+  /* Contract properties: set on an element or wrapper to re-key a subtree.
+     Accent comes from the item's identity and stays the same everywhere
+     that item appears.
+     --plate (the hard offset's color) is not declared here, so a subtree
+     can set either --plate or the deprecated --hard-offset-color. Read it
+     as var(--plate, var(--hard-offset-color, var(--crust))). */
+  --accent: var(--mauve);            /* per-instance accent: plates, marks, data */
+  --tone: var(--peach);              /* semantic color for tags, banners, validation */
+  --hard-offset: 4px;                /* the hard offset's distance */
+  --page-gutter: clamp(var(--space-3), 3vw, var(--space-6)); /* page column and topbar inline gutter */
+  --page-pad: clamp(var(--space-5), 4vw, 48px);               /* page column block padding */
 
-  /* Mix tokens — the color-mix expressions every surface shares. They
-     resolve at the use site, so re-keying --tone re-keys --tint with it. */
+  /* Mix tokens. --tint is declared at its use sites below, because a
+     var() resolves where it is declared. */
   --edge:      color-mix(in srgb, var(--surface-2) 40%, transparent); /* raised-surface hairline */
   --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
-  --tint:      color-mix(in srgb, var(--tone) 4%, transparent);       /* every tinted surface */
   --wash:      color-mix(in srgb, var(--mauve) 7%, var(--base));      /* the engaged state */
+  --control-edge: var(--overlay-0);  /* unchecked controls: 3:1 on base */
+  --disabled-opacity: .5;
 
-  /* Density knobs */
-  --control-h: 46px;                 /* primary/secondary button height */
+  /* Density knobs. Default, then compact below. */
+  --control-h: 46px;                 /* buttons and inputs */
   --control-h-sm: 34px;              /* small controls */
-  --input-h: 42px;
-  --pane-radius: 16px;               /* panel-scale radius */
+  --band-h: 64px;                    /* panel, modal and drawer header bands */
+  --band-pad: var(--space-3) var(--space-5);
+  --band-title-size: var(--cn-type-title-size); /* an h2 in a panel header */
+  --body-pad: var(--space-5);
+  --cell-pad: var(--space-3) var(--space-4);
+  --cell-font-size: var(--cn-type-ui-size);
+  --chip-pad: var(--space-2) var(--space-3);
+  --well-pad: var(--space-3) var(--space-4);  /* code block and terminal */
+  --empty-h: 260px;                  /* empty-state floor */
 
-  /* Motion. Two curves, a spring, three durations. Anything answering the
-     pointer takes the fast-out, anything returning takes the spring (it
-     overshoots by about a pixel), anything leaving takes the ease-in.
-     Nothing in the package rides the browser default curve. */
+  /* Motion. The fast-out answers the pointer, the spring returns, the
+     ease-in leaves. Keyframe loops keep literal durations. */
   --ease-out:    cubic-bezier(.16, 1, .3, 1);
   --ease-in:     cubic-bezier(.7, 0, .84, 0);
   --ease-spring: cubic-bezier(.3, 1.4, .4, 1);
+  --t-press: .08s;
+  --t-exit: .14s;
   --t-fast: .16s;
   --t-base: .22s;
   --t-slow: .32s;
@@ -95,26 +181,34 @@
   font-synthesis: none;
 }
 
-/* Compact density — the only way 12px enters the radius scale. */
-[data-density="compact"] {
-  --hard-offset: 3px;
-  --control-h: 30px;
-  --control-h-sm: 24px;
-  --input-h: 30px;
-  --pane-radius: 12px;
+/* --tint reads the element's own --tone. */
+:where(.cn-tint, .chip-tone, .tag, .banner, .input, .field :is(input, select, textarea)) {
+  --tint: color-mix(in srgb, var(--tone) 4%, transparent);
 }
-/* Dense — instrument panels: tables, chips and toolbars at readout scale.
-   Compact was tuned for forms; dense tightens the data surfaces too (see
-   the [data-density="dense"] block in recipes.css). */
-[data-density="dense"] {
+
+/* Compact density. "dense" is a deprecated alias. */
+:is([data-density="compact"], [data-density="dense"]) {
   --hard-offset: 2px;
   --control-h: 28px;
-  --control-h-sm: 22px;
-  --input-h: 28px;
-  --pane-radius: 12px;
+  --control-h-sm: 24px;
+  --cn-radius-panel: var(--cn-radius-card);
+  --pane-radius: var(--cn-radius-panel);
+  --band-h: 44px;
+  --band-pad: var(--space-2) var(--space-4);
+  --band-title-size: var(--cn-type-body-size);
+  --body-pad: var(--space-3) var(--space-4);
+  --cell-pad: var(--space-1) var(--space-2);
+  --cell-font-size: var(--cn-type-meta-size);
+  --chip-pad: var(--space-1) var(--space-2);
+  --well-pad: var(--space-2) var(--space-3);
+  --empty-h: 120px;
 }
 
 * { box-sizing: border-box; }
+/* Overlays keep their own [hidden] rules so they can animate out;
+   until-found must stay searchable. A consumer element that animates out
+   through [hidden] opts out with data-cn-animate-hidden. */
+[hidden]:not([hidden="until-found"], [data-cn-animate-hidden], .cn-scrim, .popover, .modal, .drawer, .toast) { display: none !important; }
 html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--base); }
 button, input, select, textarea { font: inherit; }
@@ -122,86 +216,77 @@ button { color: inherit; }
 h1, h2, p { margin-top: 0; }
 h1 { text-wrap: balance; }
 
-/* The copy voice is a given: bare content reads as system copy with no
-   class on every element. Safe because every recipe pins its own font
-   shorthand — chrome never inherits this. Consumer chrome built on bare
-   elements (a ul nav) opts out locally. */
+/* Bare content reads as body copy. Every recipe sets its own font, so
+   chrome never inherits this. */
 body { font: 400 14px/1.6 var(--sans); color: var(--subtext-0); }
 h1, h2, h3, h4 { color: var(--text); }
-/* em is the accent, everywhere: mauve, upright — the display-title
-   treatment made a given. True italics use <i>. */
-em { color: var(--mauve); font-style: normal; }
+/* A bare em is plain emphasis. The mauve upright em is a display and
+   wordmark treatment only. */
+:is(.cn-display, .cn-display-sm, .display-title, .wordmark) em { color: var(--mauve); font-style: normal; }
 ul, ol { margin-top: 0; padding-left: 20px; }
 li + li { margin-top: 8px; }
 li::marker { color: var(--overlay-1); }
 
-/* Accent-colored focus + selection, everywhere, no exceptions. The ring
-   settles outward: it starts at the element's edge and eases to 3px, so
-   focus arrives instead of blinking on. */
+/* Focus and selection use the accent everywhere. The ring eases out from
+   the element's edge to 3px. */
 :not(:focus-visible) { outline-offset: 0; }
-:focus-visible { outline: 2px solid var(--mauve); outline-offset: 3px; transition: outline-offset .15s var(--ease-out); }
+:focus-visible { outline: 2px solid var(--mauve); outline-offset: 3px; transition: outline-offset var(--t-fast) var(--ease-out); }
 ::selection { color: var(--crust); background: var(--mauve); }
 
-/* Focus rings trace the element's border-radius — bare links get the chip
-   radius so keyboard outlines follow the system geometry, never a sharp
-   rectangle. (Invisible otherwise: links paint no background.) */
-a { border-radius: 4px; }
+/* Focus rings follow border-radius, so bare links take the chip radius. */
+a { border-radius: var(--cn-radius-chip); }
 
-/* Links ship mauve at rest, pink on hover — .btn-text's pair exactly, no
-   underline ever. Implemented here instead of left to every consumer.
-   Recipes that restyle anchors (buttons, wrapped cards) win from their
-   later layer. */
+/* Links: mauve at rest, pink on hover, never underlined. Recipes that
+   restyle anchors win from their later layer. */
 a { color: var(--mauve); text-decoration: none; transition: color var(--t-fast); }
 a:hover { color: var(--pink); }
 
 /* Scrollbars inside dark wells */
 .scroll-well { scrollbar-color: var(--surface-2) transparent; }
 
-/* Ambient page wash — an almost-invisible accent bloom, not a gradient hero */
-.app-shell {
-  background:
-    radial-gradient(circle at 14% 8%, rgb(203 166 247 / .008), transparent 44rem),
-    var(--base);
-  /* The shell is a column and main absorbs the slack, so the footer sits
-     at the viewport bottom even when a page runs short. */
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-.app-shell > main { flex: 1 0 auto; }
-
 /* ── Motion ─────────────────────────────────────────────────────────────── */
 @keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
 @keyframes spin  { to { transform: rotate(360deg); } }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 0 7px transparent; } }
 @keyframes blink { 50% { opacity: 0; } }
-/* The topbar's cast, scroll-driven where supported: nothing is under the
-   bar at the top of the page, so the shadow fades in over the first 60px. */
+/* Scroll-driven topbar cast: fades in over the first 60px of scroll. */
 @keyframes cast  { from { box-shadow: 0 0 0 transparent; border-bottom-color: transparent; } }
 
-/* Page enter staggers the children 40ms apart so the page assembles instead
-   of arriving as one slab. `backwards` fill only: the from-state holds
-   during each child's delay, and nothing is held after, so no element stays
-   a containing block for fixed descendants (scrims, modals, drawers, toasts). */
-.page-enter > * { animation: enter .34s var(--ease-out) backwards; }
+/* Children enter 40ms apart. `backwards` fill holds the from-state only
+   during each delay, so no child stays a containing block for fixed
+   descendants (scrims, modals, drawers, toasts). */
+.page-enter > * { animation: enter var(--t-slow) var(--ease-out) backwards; }
 .page-enter > :nth-child(2) { animation-delay: .04s; }
 .page-enter > :nth-child(3) { animation-delay: .08s; }
 .page-enter > :nth-child(4) { animation-delay: .12s; }
 .page-enter > :nth-child(5) { animation-delay: .16s; }
 .page-enter > :nth-child(n + 6) { animation-delay: .2s; }
-.live-dot {
-  width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
-  color: var(--green); background: currentColor;
-  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 13%, transparent);
-  animation: pulse 1.5s ease-in-out infinite;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;
     animation-duration: .01ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+  /* A frozen spinner reads as a broken ring, so it keeps a slow spin. */
+  .spinner {
+    animation-duration: 2.4s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
+/* Forced colors drop box-shadow, so rings and carves need real edges. */
+@media (forced-colors: active) {
+  :focus-visible { outline-color: Highlight !important; }
+  .checkbox, .radio { border-color: CanvasText !important; }
+  .switch, .switch::after { outline: 1px solid CanvasText !important; outline-offset: -1px; }
+  /* The edge outline above would replace the focus ring, so restore it. */
+  .switch:focus-visible { outline: 2px solid Highlight !important; outline-offset: 3px !important; }
+  .checkbox:checked, .radio:checked::after, .switch:checked::after {
+    forced-color-adjust: none;
+    border-color: Highlight !important;
+    background: Highlight !important;
   }
 }

@@ -4,57 +4,46 @@
 [![Docs](https://img.shields.io/badge/docs-live-cba6f7.svg)](https://catppuccin-neu.balajileninrajan.dev)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/BalajiLeninrajan/catppuccin-neu/blob/main/LICENSE)
 
-A CSS-only design system in [Catppuccin](https://catppuccin.com/) Mocha.
-Dark, soft, carved from shadow.
+A CSS-only dark design system in [Catppuccin](https://catppuccin.com/)
+Mocha. Surfaces are carved and raised with soft shadows, and clickable
+controls rest on a solid plate.
 
-**See it live: [catppuccin-neu.balajileninrajan.dev](https://catppuccin-neu.balajileninrajan.dev)**
+Docs and every component: [catppuccin-neu.balajileninrajan.dev](https://catppuccin-neu.balajileninrajan.dev)
 
 ```html
-<link rel="stylesheet" href="/styles/index.css" />
-
 <button class="btn btn-primary">Save changes</button>
-<div class="panel"><input class="input" placeholder="Search" /></div>
+<div class="panel"><div class="panel-body"><input class="input" placeholder="Search" /></div></div>
 ```
-
-[SPEC.md](./SPEC.md) is the source of truth for every rule and number in the
-package. This file covers how to consume it.
 
 ## Install
 
-From the CDN, for a hand-written page with no `package.json`. jsDelivr serves
-the repo's tags directly — no publish step, nothing to configure:
-
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.3.2/css/index.css" />
-```
-
-Pin a full tag, not `@main` or `@v0.1` — those float and re-cache every 12
-hours. Link `index.css` rather than the three files: its relative `@import`s
-resolve against the CDN path and keep the layer wrappers, so your CSS still
-wins unlayered.
-
-As a git dependency, with a bundler:
+With a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.3.2
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.0
 ```
 
 ```js
 import "catppuccin-neu/css/index.css";
 ```
 
-Synced, for zero-build consumers that do have a build step to hang it on.
-This copies `tokens.css`, `utilities.css`, `recipes.css`, and `index.css` into
-a directory you link from — generate them in a pre-build hook and gitignore
-them rather than committing copies:
+From the CDN, for a page with no `package.json`:
 
-```sh
-npx catppuccin-neu-sync public/styles
-# from a clone: node scripts/sync.mjs public/styles
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.0/css/index.css" />
 ```
 
-Then link the fonts on every page that loads the CSS. Inter 100..900 and
-JetBrains Mono 100..800:
+Pin a full tag. `@main` and `@v0.4` float and re-cache every 12 hours. Link
+`index.css`, not the three files, so the layer wrappers survive.
+
+For a page with a `package.json` but no bundler, copy the CSS in a
+pre-build hook and ignore the copies in git:
+
+```sh
+pnpm exec catppuccin-neu-sync public/styles
+```
+
+Then link the fonts on every page:
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -62,75 +51,33 @@ JetBrains Mono 100..800:
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" />
 ```
 
+## Upgrading from 0.3
+
+Every renamed class and token still works through 0.4.x and is removed in
+0.5.0. `--input-h` is the one removal now; inputs read `--control-h`. The
+[migration table](./CHANGELOG.md#migrating-to-040) lists each old name and
+its replacement.
+
 ## What ships
 
-`css/index.css` declares three cascade layers and imports the three files in
-order: tokens, recipes, utilities. Utilities sit above recipes, Tailwind's
-order, so a `cn-*` class on an element beats the recipe on that element
-(`well cn-bg-well`, `btn-secondary cn-raised-soft`, `panel cn-p-16`).
-Consumer CSS is unlayered and always wins, so overrides never need
-`!important`. The files also work as three plain `<link>` tags in the same
-order, without `index.css`.
+`css/index.css` puts three files into three cascade layers:
 
 | Layer | File | Contents |
 | --- | --- | --- |
-| `cn.tokens` | `css/tokens.css` | Mocha palette, font stacks, depth shadows, mix tokens, contract properties, density knobs, motion tokens, reset, focus and selection |
-| `cn.recipes` | `css/recipes.css` | Components, the page column, native `dialog` hosts |
-| `cn.utilities` | `css/utilities.css` | Single-purpose `cn-*` classes for depth, press behavior, type roles, color, edges, role-named radii, and layout on a six-step spacing scale |
+| `cn.tokens` | `css/tokens.css` | Palette, type roles, spacing, radii, depth, contract properties, density, motion, the base reset |
+| `cn.recipes` | `css/recipes.css` | Components, the page column, native dialogs |
+| `cn.utilities` | `css/utilities.css` | `cn-*` classes for depth, press, type roles, color, edges, radii and layout |
 
-The recipes, by group:
+A utility beats the recipe on the same element (`panel cn-p-16`). Your own
+CSS is unlayered and beats both, so overrides never need `!important`.
 
-| Group | Classes |
-| --- | --- |
-| Controls | `.btn` and its variants, `.input`, `.field`, `.checkbox`, `.radio`, `.switch`, `.choice`, `.segmented` |
-| Status | `.chip`, `.banner`, `.progress-track`, `.stepper`, `.spinner`, `.toast`, `.empty-state` |
-| Containers | `.panel`, `.panel-body`, `.well`, `.accent-card`, `.accordion`, `.avatar`, `.stat-row`, `.metric`, `.table-neu`, `.table-scroll`, `.terminal`, `.codeblock`, `.command` |
-| Overlays | `.popover`, `.modal`, `.drawer`, `.cn-scrim`, and `dialog.modal` / `dialog.drawer` on the native element |
-| Page | `.page-main`, `.topbar` (`is-split`, `is-compact`), `.wordmark`, `.footer-neu`, `.footer-brand`, `.eyebrow`, `.display-title`, `.lede` |
+Re-key a subtree with the contract properties: `--accent` (the item's
+identity color), `--tone` (status color), `--plate` (the hard offset's
+color) and `--hard-offset`. Set `data-density="compact"` on any ancestor
+for 28px controls and tighter data surfaces.
 
-Layout comes from utilities: `cn-row`, `cn-stack`, `cn-cluster`, `cn-grid-2/3/4`,
-`cn-divide`, `cn-truncate`, `cn-text-center`, `cn-list-none`, `cn-scroll-x`,
-`cn-sticky-top`, and `cn-gap-*`, `cn-p-*`, `cn-mt-*`, `cn-mb-*` on the scale
-4, 8, 12, 16, 22, 28. Nothing takes a number outside it.
-
-## Contract properties
-
-Recipes read four custom properties. Set them inline or on a wrapper to re-key
-a whole subtree.
-
-| Property | Default | Read by |
-| --- | --- | --- |
-| `--accent` | mauve | Accent cards, spines, solid marks, avatars, hero values, terminal caret |
-| `--tone` | peach | Chips, banners, icon buttons. The `.cn-tone-*` classes set it |
-| `--hard-offset-color` | crust | The hard offset shadow. Primary buttons override it |
-| `--hard-offset` | 4px | How far the hard offset sits from the control |
-
-The documented accent cycle is mauve, teal, yellow, blue, peach, pink.
-
-Density is separate. `data-density="compact"` on any ancestor shrinks
-`--control-h`, `--control-h-sm`, `--input-h`, and `--hard-offset`, and drops
-`--pane-radius` from 16px to 12px. `data-density="dense"` goes further and
-also tightens the data surfaces: table cells, chips, panel bands, flat
-buttons and the topbar, for instrument panels.
-
-Four mix tokens carry the shared `color-mix` expressions: `--edge` and
-`--edge-soft` (hairlines), `--tint` (every tinted surface, the tone at 4%),
-`--wash` (the engaged state). They resolve where used, so re-keying `--tone`
-re-keys `--tint`.
-
-## Tailwind
-
-`tailwind/preset.cjs` (v3) and `tailwind/theme.css` (v4 `@theme`) map the token
-vocabulary onto utility names: colors including `edge`, `tint` and `wash`,
-radii, shadows, the type roles, and the motion tokens as
-`ease-out/in/spring` and `duration-fast/base/slow`. The spacing scale is
-not remapped: Tailwind's own steps already hold the six values (`1` is 4px,
-`2` 8px, `3` 12px, `4` 16px, `5.5` 22px, `7` 28px). They are a convenience
-over the same tokens, not a second implementation, and the recipes still come
-from `css/recipes.css`.
-
-Import order matters for v4. Cascade layers declared later win, so the
-package must come before Tailwind:
+`tailwind/preset.cjs` (v3) and `tailwind/theme.css` (v4) map the tokens to
+Tailwind names. With v4, import the package first:
 
 ```css
 @import "catppuccin-neu/css/index.css";
@@ -138,35 +85,16 @@ package must come before Tailwind:
 @import "tailwindcss";
 ```
 
-With Tailwind first, its utilities layer sits under `cn.recipes` and
-`class="panel p-4"` keeps the panel's padding. For v3, keep `@tailwind
-utilities` unlayered (the default) and it wins regardless.
-
 ## Caveats
 
-Recipe class names are unprefixed. `.btn`, `.panel`, `.input`, and `.table-neu`
-will collide with anything else on the page claiming those names. Tokens and
-utilities are namespaced `cn-*`; recipes deliberately are not, and that is the
-trade you accept.
+- Recipe classes are unprefixed. `.btn`, `.panel`, `.input` and `.data-table` collide with any other CSS that uses those names.
+- Dark only. There is no light palette.
+- No JavaScript ships. Overlays use `<dialog>`, `showModal()` and `close()`; toasts and copy buttons need your own listeners.
+- Depth reads correctly only on the `--base` ground it was tuned for.
+- The sizes and tracking assume Inter and JetBrains Mono. The fallback stacks stay readable but look different.
 
-Other things to know before you commit to it:
+## Docs
 
-- Dark only. The hexes are hardcoded Mocha, `color-scheme` is `dark`, and there
-  is no light palette.
-- No JavaScript ships. Selection controls and the accordion run on checkboxes,
-  but the overlays are styling only. You toggle `hidden` and manage focus.
-- Depth reads only when a surface sits on the background it was tuned for. A
-  raised panel on the wrong ground looks like a sticker.
-- The Google Fonts link is not optional if you want the intended result. The
-  fallback stacks keep the page readable, but the sizes and tracking were tuned
-  against Inter and JetBrains Mono.
-- Mono is reserved for `.cn-code`, `.terminal`, `.codeblock`, and real code.
-  `var(--mono)` anywhere else is a spec violation and reviewers check for it.
-
-## Documentation
-
-- [SPEC.md](./SPEC.md) covers every token, utility, recipe, and the rules that
-  govern them, including the ones this README skips
-- `showcase/` is a Preact docs site that imports `css/index.css` directly and
-  shows every recipe and state at least once. Run it with
-  `pnpm --dir showcase install && pnpm --dir showcase dev`
+- [SPEC.md](./SPEC.md): every token, utility, recipe and rule.
+- [CHANGELOG.md](./CHANGELOG.md): changes by version, the 0.4.0 migration table, and ideas that were tried and rejected.
+- `showcase/`: the docs site. Run it with `pnpm --dir showcase install && pnpm --dir showcase dev`.

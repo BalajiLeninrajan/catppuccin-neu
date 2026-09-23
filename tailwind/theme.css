@@ -1,7 +1,7 @@
-/* ── catppuccin-neu — Tailwind v4 @theme ────────────────────────────────────
+/* ── catppuccin-neu: Tailwind v4 @theme ─────────────────────────────────────
    The same mappings as tailwind/preset.cjs, expressed as @theme custom
    properties for Tailwind v4 consumers. Requires css/tokens.css (or
-   css/index.css) to be loaded — most values here point back at it.
+   css/index.css) to be loaded, because most values here point back at it.
 
    usage: @import "catppuccin-neu/css/index.css";
           @import "catppuccin-neu/tailwind/theme.css";
@@ -11,14 +11,18 @@
    must be declared before Tailwind's: importing tailwindcss first would put
    its utilities layer under cn.recipes, and "panel p-4" would keep the
    panel's padding.
+
+   A theme key that shares its name with a token (--ease-*, --shadow-pop,
+   --shadow-cast, --shadow-mark) repeats the token's literal value, because
+   var() of its own name is cyclic. pnpm lint rejects that.
 */
 
 /* inline: utilities emit the var() reference at the use site, so subtree
-   overrides of the contract/density props (--accent, --tone,
-   --pane-radius, --control-h, --input-h) re-key text-accent, rounded-panel,
-   h-control, etc. — matching the v3 preset's runtime behavior. */
+   overrides of the contract and density props (--accent, --tone,
+   --cn-radius-panel, --control-h) re-key text-accent, rounded-panel,
+   h-control and the rest, matching the v3 preset. */
 @theme inline {
-  /* Palette → var() so density/contract overrides keep working at runtime */
+  /* Palette */
   --color-crust: var(--crust);
   --color-mantle: var(--mantle);
   --color-base: var(--base);
@@ -45,62 +49,119 @@
   /* Contract properties */
   --color-accent: var(--accent);
   --color-tone: var(--tone);
-  /* Mix tokens — border-edge, border-edge-soft, bg-tint, bg-wash */
+  /* Mix tokens: border-edge, border-edge-soft, bg-tint, bg-wash, border-control-edge */
   --color-edge: var(--edge);
   --color-edge-soft: var(--edge-soft);
-  --color-tint: var(--tint);
+  --color-tint: color-mix(in srgb, var(--tone) 4%, transparent);
   --color-wash: var(--wash);
+  --color-control-edge: var(--control-edge);
 
-  /* Motion tokens — ease-out / ease-in / ease-spring, duration-fast/base/slow */
-  --ease-out: var(--ease-out);
-  --ease-in: var(--ease-in);
-  --ease-spring: var(--ease-spring);
-  --duration-fast: var(--t-fast);
-  --duration-base: var(--t-base);
-  --duration-slow: var(--t-slow);
+  /* Motion */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in: cubic-bezier(.7, 0, .84, 0);
+  --ease-spring: cubic-bezier(.3, 1.4, .4, 1);
 
-  /* No spacing keys. Tailwind's default scale already holds the system's
-     six values: 4px = 1, 8px = 2, 12px = 3, 16px = 4, 22px = 5.5, 28px = 7.
-     (v0.2.0 shipped pixel-named keys that overrode Tailwind's own 4/8/12/16/28;
-     removed in v0.2.1.) */
+  /* Tailwind's default numeric scale already holds --space-1..6:
+     1 = 4px, 2 = 8px, 3 = 12px, 4 = 16px, 6 = 24px, 8 = 32px. Only the
+     named density and layout knobs are added: h-control, h-band,
+     px-gutter and the rest. */
+  --spacing-control: var(--control-h);
+  --spacing-control-sm: var(--control-h-sm);
+  --spacing-band: var(--band-h);
+  --spacing-gutter: var(--page-gutter);
+  --spacing-page-pad: var(--page-pad);
+  /* deprecated, removed in 0.5.0: use control */
+  --spacing-input: var(--control-h);
 
-  /* Type roles — text-label, text-meta, text-name, text-title, text-display */
-  --text-micro: 10px;
-  --text-label: 12px;
-  --text-meta: 12px;
-  --text-name: 13px;
-  --text-title: 20px;
-  --text-display: clamp(32px, 4vw, 46px);
+  /* Type roles: text-microlabel, text-label, text-meta and the rest.
+     Each reads its --cn-type-<role>-* tokens. */
+  --text-microlabel: var(--cn-type-micro-size);
+  --text-microlabel--line-height: var(--cn-type-micro-leading);
+  --text-microlabel--letter-spacing: var(--cn-type-micro-tracking);
+  --text-microlabel--font-weight: var(--cn-type-micro-weight);
+  --text-label: var(--cn-type-label-size);
+  --text-label--line-height: var(--cn-type-label-leading);
+  --text-label--letter-spacing: var(--cn-type-label-tracking);
+  --text-label--font-weight: var(--cn-type-label-weight);
+  --text-meta: var(--cn-type-meta-size);
+  --text-meta--line-height: var(--cn-type-meta-leading);
+  --text-meta--letter-spacing: var(--cn-type-meta-tracking);
+  --text-meta--font-weight: var(--cn-type-meta-weight);
+  --text-ui: var(--cn-type-ui-size);
+  --text-ui--line-height: var(--cn-type-ui-leading);
+  --text-ui--letter-spacing: var(--cn-type-ui-tracking);
+  --text-ui--font-weight: var(--cn-type-ui-weight);
+  --text-name: var(--cn-type-name-size);
+  --text-name--line-height: var(--cn-type-name-leading);
+  --text-name--letter-spacing: var(--cn-type-name-tracking);
+  --text-name--font-weight: var(--cn-type-name-weight);
+  --text-body: var(--cn-type-body-size);
+  --text-body--line-height: var(--cn-type-body-leading);
+  --text-body--letter-spacing: var(--cn-type-body-tracking);
+  --text-body--font-weight: var(--cn-type-body-weight);
+  --text-lede: var(--cn-type-lede-size);
+  --text-lede--line-height: var(--cn-type-lede-leading);
+  --text-lede--letter-spacing: var(--cn-type-lede-tracking);
+  --text-lede--font-weight: var(--cn-type-lede-weight);
+  --text-title: var(--cn-type-title-size);
+  --text-title--line-height: var(--cn-type-title-leading);
+  --text-title--letter-spacing: var(--cn-type-title-tracking);
+  --text-title--font-weight: var(--cn-type-title-weight);
+  --text-value: var(--cn-type-value-size);
+  --text-value--line-height: var(--cn-type-value-leading);
+  --text-value--letter-spacing: var(--cn-type-value-tracking);
+  --text-value--font-weight: var(--cn-type-value-weight);
+  --text-value-lg: var(--cn-type-value-lg-size);
+  --text-value-lg--line-height: var(--cn-type-value-lg-leading);
+  --text-value-lg--letter-spacing: var(--cn-type-value-lg-tracking);
+  --text-value-lg--font-weight: var(--cn-type-value-lg-weight);
+  --text-code: var(--cn-type-code-size);
+  --text-code--line-height: var(--cn-type-code-leading);
+  --text-code--letter-spacing: var(--cn-type-code-tracking);
+  --text-code--font-weight: var(--cn-type-code-weight);
+  --text-display: var(--cn-type-display-size);
+  --text-display--line-height: var(--cn-type-display-leading);
+  --text-display--letter-spacing: var(--cn-type-display-tracking);
+  --text-display--font-weight: var(--cn-type-display-weight);
+  --text-display-sm: var(--cn-type-display-sm-size);
+  --text-display-sm--line-height: var(--cn-type-display-leading);
+  --text-display-sm--letter-spacing: var(--cn-type-display-tracking);
+  --text-display-sm--font-weight: var(--cn-type-display-weight);
+  /* deprecated, removed in 0.5.0: use text-microlabel */
+  --text-micro: var(--cn-type-micro-size);
+  --text-micro--line-height: var(--cn-type-micro-leading);
+  --text-micro--letter-spacing: var(--cn-type-micro-tracking);
+  --text-micro--font-weight: var(--cn-type-micro-weight);
 
-  /* Faces — the token stacks */
+  /* Faces: the token stacks */
   --font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono", "JetBrains Mono",
+  --font-mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono",
                ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-  /* Role-named radii — the blessed scale */
-  --radius-panel: var(--pane-radius);
-  --radius-card: 13px;
-  --radius-control: 10px;
-  --radius-mark: 8px;
-  --radius-chip: 4px;
+  /* Role-named radii from the --cn-radius-* tokens */
+  --radius-panel: var(--cn-radius-panel);
+  --radius-card: var(--cn-radius-card);
+  --radius-control: var(--cn-radius-control);
+  --radius-mark: var(--cn-radius-control);
+  --radius-chip: var(--cn-radius-chip);
 
-  /* Depth — the four neu tokens, the promoted floats, the hard offsets */
+  /* Depth: the four neu tokens, the floats and the hard offsets */
   --shadow-neu-raised: var(--neu-raised);
   --shadow-neu-raised-soft: var(--neu-raised-soft);
   --shadow-neu-inset: var(--neu-inset);
   --shadow-neu-inset-soft: var(--neu-inset-soft);
-  /* --shadow-pop/--shadow-cast share names with the tokens themselves, so the
-     literal token values are repeated here to avoid a self-referential var(). */
   --shadow-pop: 0 24px 70px rgb(17 17 27 / .78);
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);
-  --shadow-hard: var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color);
-  --shadow-hard-lg: 10px 10px 0 var(--hard-offset-color);
-  --shadow-hard-sm: 3px 3px 0 var(--hard-offset-color);
-  /* Literal repeated: the theme namespace collides with the token name,
-     same as pop and cast above. */
+  --shadow-hard: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust)));
+  --shadow-hard-lg: 10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust)));
+  --shadow-hard-sm: 3px 3px 0 var(--plate, var(--hard-offset-color, var(--crust)));
   --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);
-
-  /* Density knobs — spacing entries so h-control / min-h-input resolve */
-  --spacing-control: var(--control-h);
-  --spacing-input: var(--input-h);
 }
+
+/* v4 has no duration namespace, so the duration keys are utilities. */
+@utility duration-press { --tw-duration: var(--t-press); transition-duration: var(--t-press); }
+@utility duration-exit { --tw-duration: var(--t-exit); transition-duration: var(--t-exit); }
+@utility duration-fast { --tw-duration: var(--t-fast); transition-duration: var(--t-fast); }
+@utility duration-base { --tw-duration: var(--t-base); transition-duration: var(--t-base); }
+@utility duration-slow { --tw-duration: var(--t-slow); transition-duration: var(--t-slow); }
+@utility opacity-disabled { opacity: var(--disabled-opacity); }

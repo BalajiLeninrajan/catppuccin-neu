@@ -15,7 +15,7 @@ function Cube({ cls, label, size = 96, style = "" }: CubeProps) {
         class={`cn-bg-base cn-r-card ${cls}`}
         style={`width:${size}px;height:${size}px;${style}`}
       />
-      <code class="cn-code cn-text-overlay-1" style="font-size:11px">
+      <code class="cn-code cn-text-overlay-2" style="font-size:11px">
         {label ?? cls}
       </code>
     </div>
@@ -45,7 +45,7 @@ export default function DepthPage() {
         <Cube cls="cn-raised" />
         <div style="display:grid;gap:12px;justify-items:center">
           <span class="chip">v2.4.1</span>
-          <code class="cn-code cn-text-overlay-1" style="font-size:11px">
+          <code class="cn-code cn-text-overlay-2" style="font-size:11px">
             cn-raised-soft
           </code>
         </div>
@@ -57,7 +57,7 @@ export default function DepthPage() {
               <span>Draft</span>
             </span>
           </span>
-          <code class="cn-code cn-text-overlay-1" style="font-size:11px">
+          <code class="cn-code cn-text-overlay-2" style="font-size:11px">
             cn-inset-soft
           </code>
         </div>
@@ -80,7 +80,7 @@ export default function DepthPage() {
       >
         <div
           class="cn-bg-base cn-r-panel cn-raised"
-          style="padding:22px 24px;max-width:420px;display:grid;gap:10px"
+          style="padding:24px;max-width:420px;display:grid;gap:8px"
         >
           <span class="cn-label">Team activity</span>
           <span class="cn-value">1,284</span>
@@ -105,11 +105,11 @@ export default function DepthPage() {
             <span class="cn-meta">#2041 · acme.co · just now</span>
           </div>
           <div style="display:flex;align-items:center;gap:12px">
-            <span class="mark-solid">B</span>
-            <span class="mark-solid" style="--accent:#94e2d5">
+            <span class="mark">B</span>
+            <span class="mark" style="--accent:#94e2d5">
               7
             </span>
-            <span class="cn-meta">mark-solid · cn-mark-drop</span>
+            <span class="cn-meta">mark · cn-mark-drop</span>
           </div>
         </div>
       </Demo>
@@ -121,7 +121,7 @@ export default function DepthPage() {
         <code class="cn-code">cn-cast</code> is the topbar's downward cast plus
         its lit hairline. <code class="cn-code">cn-mark-drop</code> is the
         mini-drop under small solid marks; the{" "}
-        <code class="cn-code">mark-solid</code> recipe carries it already.
+        <code class="cn-code">mark</code> recipe carries it already.
       </p>
 
       <Demo
@@ -134,20 +134,21 @@ export default function DepthPage() {
         <Cube cls="cn-hard-lg cn-edge" label="cn-hard-lg" />
         <Cube
           cls="cn-hard cn-edge"
-          label="--hard-offset-color"
-          style="--hard-offset-color:#cba6f7"
+          label="--plate"
+          style="--plate:#cba6f7"
         />
       </Demo>
 
       <p class="cn-copy">
         The hard offset is a solid, blur-free shadow, available to any
         clickable control and the default on primary and secondary buttons. It
-        reads <code class="cn-code">--hard-offset-color</code>, crust by
-        default, so a control can re-key it inline.{" "}
+        reads <code class="cn-code">--plate</code>, crust by default, so a
+        control can re-key it inline.{" "}
         <code class="cn-code">cn-hard-lg</code> belongs to the tilted hero
         card, which layers it over <code class="cn-code">--neu-raised</code>{" "}
-        so the hero still answers the light;{" "}
-        <code class="cn-code">cn-hard-sm</code> pairs with compact density.
+        so the hero still answers the light.{" "}
+        <code class="cn-code">cn-hard-sm</code> is a fixed 3px offset for small
+        pieces.
       </p>
 
       <Demo
@@ -192,9 +193,9 @@ export default function DepthPage() {
         row
       >
         {[
-          ["panel", "var(--pane-radius)"],
-          ["card", "13px"],
-          ["control", "10px"],
+          ["panel", "16px"],
+          ["card", "12px"],
+          ["control", "8px"],
           ["mark", "8px"],
           ["chip", "4px"],
           ["pill", "999px"],
@@ -205,7 +206,7 @@ export default function DepthPage() {
               class={`cn-bg-base cn-raised-soft cn-r-${role}`}
               style="width:64px;height:64px"
             />
-            <code class="cn-code cn-text-overlay-1" style="font-size:11px">
+            <code class="cn-code cn-text-overlay-2" style="font-size:11px">
               cn-r-{role}
             </code>
             <span class="cn-meta">{value}</span>
@@ -216,8 +217,8 @@ export default function DepthPage() {
       <p class="cn-copy">
         Radii are role-named; no utility takes a numeric value.{" "}
         <code class="cn-code">cn-r-panel</code> reads{" "}
-        <code class="cn-code">--pane-radius</code>, so 12px enters the scale
-        only via compact density.
+        <code class="cn-code">--cn-radius-panel</code>, which compact density
+        sets to the card radius.
       </p>
 
       <CodeBlock
@@ -232,7 +233,7 @@ export default function DepthPage() {
 
 <!-- Re-key the offset per instance -->
 <button class="btn cn-bg-base cn-edge cn-hard cn-pressable-slide"
-        style="--hard-offset-color: #cba6f7">
+        style="--plate: #cba6f7">
   Upgrade plan
 </button>`}
       />
@@ -273,22 +274,22 @@ export default function DepthPage() {
           {
             name: ".cn-mark-drop",
             values: "var(--shadow-mark)",
-            notes: "Mini-drop for small solid marks; mark-solid has it built in.",
+            notes: "Mini-drop for small solid marks; .mark has it built in.",
           },
           {
             name: ".cn-hard",
-            values: "4px 4px 0 var(--hard-offset-color)",
+            values: "--hard-offset --hard-offset 0 var(--plate)",
             notes: "The flat graphic note; any clickable control may take it.",
           },
           {
             name: ".cn-hard-lg",
-            values: "10px 10px 0 var(--hard-offset-color)",
+            values: "10px 10px 0 var(--plate)",
             notes: "Tilted hero card.",
           },
           {
             name: ".cn-hard-sm",
-            values: "3px 3px 0 var(--hard-offset-color)",
-            notes: "Compact density.",
+            values: "3px 3px 0 var(--plate)",
+            notes: "A fixed small offset.",
           },
           {
             name: ".cn-flat",
@@ -297,8 +298,8 @@ export default function DepthPage() {
               "Opt out for utility-composed shadows. Cannot override a recipe shadow: the recipes layer wins. Softening a recipe needs an unlayered consumer rule.",
           },
           {
-            name: "--hard-offset-color",
-            values: "any token color-mix",
+            name: "--plate",
+            values: "any token or color-mix",
             default: "var(--crust)",
             notes: "Contract prop read by the whole hard family.",
           },
@@ -306,21 +307,21 @@ export default function DepthPage() {
             name: "--hard-offset",
             values: "length",
             default: "4px",
-            notes: "3px under compact density. The press slides half the offset.",
+            notes: "2px under compact density. The press slides half the offset.",
           },
           {
             name: ".cn-pressable",
-            values: "hover −1px · active +1px + inset-soft",
+            values: "hover -1px · active +1px and inset-soft",
             notes: "The soft-control press.",
           },
           {
             name: ".cn-pressable-slide",
-            values: "hover −1,−1 · active +2,+2, shadow → 2px",
+            values: "hover -1,-1 · active half the offset, plate shrinks to match",
             notes: "The half-slide. Legal only with .cn-hard.",
           },
           {
             name: ".cn-engaged",
-            values: "inset + mauve 7% tint + 1px sink",
+            values: "inset, the mauve wash, 1px sink",
             notes: "Selected/toggled state; borderless by design.",
           },
         ]}

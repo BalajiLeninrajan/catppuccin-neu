@@ -52,7 +52,7 @@ function Sidebar() {
         <Wordmark />
         <button
           type="button"
-          class="btn btn-flat sc-menu-btn"
+          class="btn btn-ghost is-sm sc-menu-btn"
           aria-expanded={open}
           aria-controls="sc-nav"
           onClick={() => setOpen((v) => !v)}
@@ -133,7 +133,7 @@ export function App() {
               <Route default component={NotFound} />
             </Router>
           </main>
-          <footer class="footer-neu">
+          <footer class="page-footer">
             <span>catppuccin·neu</span>
             <p>Made with 💜 in Waterloo</p>
             <a

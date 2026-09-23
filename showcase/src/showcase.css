@@ -1,6 +1,6 @@
 /* ── docs-site chrome ────────────────────────────────────────────────────────
    Unlayered, so it always wins over the cn.* layers. Prefix: sc-.
-   Chrome only — specimens themselves use system classes exclusively.        */
+   Chrome only. Specimens use system classes only.                          */
 
 /* ── shell ── */
 
@@ -102,7 +102,7 @@
   flex: 1;
 }
 
-.sc-content .footer-neu {
+.sc-content .page-footer {
   width: min(860px, calc(100% - 48px));
 }
 
@@ -128,14 +128,14 @@
   gap: 10px;
 }
 
-/* Per R5 the stage is the page ground itself: --base, no surface swap.
+/* The stage is the page ground itself: --base, no surface swap.
    A soft hairline frames the demo area; depth reads against --base. The
-   system has one dashed border (.btn-dashed / .cn-edge-dashed) and the docs
+   system has one dashed border (.is-dashed / .cn-edge-dashed) and the docs
    don't get to add two more per page, which read as a wireframe. */
 .sc-demo-stage {
   padding: clamp(24px, 4vw, 40px);
   border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent);
-  border-radius: var(--pane-radius);
+  border-radius: var(--cn-radius-panel);
   display: grid;
   gap: 18px;
   justify-items: start;
@@ -149,7 +149,7 @@
   gap: 16px;
 }
 
-/* Snippet line — a flat copy row under the stage with a top rule, not a
+/* Snippet line: a flat copy row under the stage with a top rule, not a
    second dashed box. The markup (doc.tsx) still composes .cn-edge-dashed +
    .cn-r-chip; this unlayered rule flattens it. */
 .sc-snippet {
@@ -176,7 +176,7 @@
 
 .sc-snippet pre {
   margin: 0;
-  /* Copy lines always wrap — nothing on the page scrolls sideways. */
+  /* Copy lines always wrap, so the page never scrolls sideways. */
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   font: inherit;
@@ -203,7 +203,7 @@
   gap: 10px;
 }
 
-/* Inside a flowed <section>, code blocks need their own breathing room —
+/* Inside a flowed <section>, code blocks need their own space;
    otherwise a block sits flush against the previous one and its title reads
    as a caption of the box above it. */
 .sc-doc section .sc-codeblock { margin-top: 26px; }
@@ -281,7 +281,7 @@
     padding: 30px 0 72px;
   }
 
-  .sc-content .footer-neu {
+  .sc-content .page-footer {
     width: calc(100% - 36px);
   }
 }

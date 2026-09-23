@@ -106,25 +106,25 @@ export default function SelectionPage() {
             name: ".choice",
             values: "label",
             notes:
-              "Inline flex row, 10px gap, sans 500 13px. Wraps control plus text so the text toggles the input.",
+              "Inline flex row, 8px gap, sans 500 13px. Wraps control and text so the text toggles the input.",
           },
           {
             name: ".checkbox",
             values: 'input[type="checkbox"]',
             notes:
-              "20px square well, 4px radius. Checked fills mauve and scales in a crust check.",
+              "20px square well, 4px radius, a 3:1 overlay-0 edge. Checked fills mauve and the crust check lands on the spring.",
           },
           {
             name: ".radio",
             values: 'input[type="radio"]',
             notes:
-              "20px round well. Checked deepens the inset and presses in a 9px mauve dot.",
+              "20px round well with the same 3:1 edge. Checked deepens the inset and presses in a 9px mauve dot.",
           },
           {
             name: ".switch",
             values: 'input[type="checkbox"]',
             notes:
-              "50x28 plate, 8px radius. The paddle slides 23px, flips its tilt, and glows mauve when checked.",
+              "50 by 28px plate, 8px radius, a 1px inset edge. The paddle slides 23px, flips its tilt and glows mauve when checked.",
           },
           {
             name: ".choice:has(:disabled)",

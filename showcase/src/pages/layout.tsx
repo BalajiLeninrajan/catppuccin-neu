@@ -3,13 +3,13 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 const SHELL = `<body class="app-shell">
   <header class="topbar is-split">…</header>
   <main class="page-main is-narrow">…</main>
-  <footer class="footer-neu">…</footer>
+  <footer class="page-footer">…</footer>
 </body>`;
 
 const COMPOSE = `<!-- a utility on an element beats the recipe on that element -->
 <div class="well cn-bg-well cn-p-16">…</div>
 <button class="btn btn-secondary cn-raised-soft">Soft</button>
-<div class="panel cn-stack cn-gap-12 cn-p-22">…</div>`;
+<div class="panel cn-stack cn-gap-12 cn-p-24">…</div>`;
 
 export default function LayoutPage() {
   return (
@@ -20,9 +20,10 @@ export default function LayoutPage() {
       <p class="cn-copy">
         The package's layers are tokens, then recipes, then utilities. A{" "}
         <code class="cn-code">cn-*</code> class on an element always beats the
-        recipe on that element, the same order Tailwind uses. The scale is the
-        six values the recipes already use, 4, 8, 12, 16, 22 and 28, and no
-        utility takes a number outside it.
+        recipe on that element, the same order Tailwind uses. The spacing
+        scale is six tokens, <code class="cn-code">--space-1</code> to{" "}
+        <code class="cn-code">--space-6</code>: 4, 8, 12, 16, 24 and 32. The
+        recipes use only these, and no utility takes a number outside them.
       </p>
 
       <CodeBlock title="Composition" code={COMPOSE} />
@@ -35,13 +36,13 @@ export default function LayoutPage() {
           </div>
           <div class="cn-stack cn-gap-8">
             <span class="cn-label">A stack</span>
-            <div class="stat-row"><span>Active teams</span><b>48</b></div>
-            <div class="stat-row"><span>Open invoices</span><b>12</b></div>
+            <div class="stat is-inline"><span>Active teams</span><b>48</b></div>
+            <div class="stat is-inline"><span>Open invoices</span><b>12</b></div>
           </div>
           <div class="cn-cluster">
-            <span class="chip-tone cn-tone-green">paid</span>
-            <span class="chip-tone cn-tone-peach">trial</span>
-            <span class="chip-tone cn-tone-blue">info</span>
+            <span class="tag cn-tone-green">Paid</span>
+            <span class="tag cn-tone-peach">Trial</span>
+            <span class="tag cn-tone-blue">Synced</span>
             <span class="chip">v2.4.1</span>
           </div>
         </div>
@@ -81,12 +82,17 @@ export default function LayoutPage() {
 
       <p class="cn-copy">
         <code class="cn-code">.page-main</code> is the column every page had
-        been writing by hand: 1440px or the viewport minus 40, centered, with
-        the vertical padding. <code class="cn-code">is-narrow</code> is 860px,{" "}
+        been writing by hand: 1440px, or the viewport less a{" "}
+        <code class="cn-code">--page-gutter</code> on each side, centered, with{" "}
+        <code class="cn-code">--page-pad</code> above and below. The topbar
+        reads the same gutter, so the brand lines up with the column edge. <code class="cn-code">is-narrow</code> is 860px,{" "}
         <code class="cn-code">is-reading</code> 740px, and{" "}
         <code class="cn-code">--page-width</code> sets any other. The footer
         follows the same width. <code class="cn-code">.app-shell</code> fills
-        the viewport and pushes the footer to the bottom.
+        the viewport and pushes the footer to the bottom.{" "}
+        <code class="cn-code">.app-shell.is-fixed</code> is for an app that
+        owns the viewport: the shell is exactly the viewport height and the
+        root drops its reserved scrollbar gutter.
       </p>
 
       <Props
@@ -95,7 +101,7 @@ export default function LayoutPage() {
           { name: ".cn-row", values: "flex, centered, gap 8", notes: "Add cn-between, cn-center, cn-end, cn-top, cn-baseline, cn-wrap." },
           { name: ".cn-stack", values: "grid, gap 12", notes: "A column of things. cn-gap-* changes the rhythm." },
           { name: ".cn-cluster", values: "flex, wrap, gap 8", notes: "Chips, tags, buttons that wrap." },
-          { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap 14", notes: "Collapse at 760 and 520." },
+          { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap 16", notes: "Collapse at 760 and 520." },
           { name: ".cn-grow / .cn-fixed / .cn-min-0", values: "flex children", notes: "grow is flex 1 with min-width 0, the one that truncates." },
           { name: ".cn-w-full / .cn-fit / .cn-block / .cn-auto-l", values: "sizing", notes: "auto-l pushes an item to the far end of a row." },
           { name: ".cn-divide", values: "children", notes: "surface-0 hairline between siblings, none on the first." },
@@ -111,10 +117,10 @@ export default function LayoutPage() {
       <Props
         title="Spacing scale"
         rows={[
-          { name: ".cn-gap-{4,8,12,16,22,28}", values: "gap", notes: "On any row, stack, cluster or grid." },
-          { name: ".cn-p-{0,4,8,12,16,22,28}", values: "padding", notes: "cn-px-* and cn-py-* for one axis (8 and up)." },
+          { name: ".cn-gap-{4,8,12,16,24,32}", values: "gap", notes: "On any row, stack, cluster or grid." },
+          { name: ".cn-p-{0,4,8,12,16,24,32}", values: "padding", notes: "cn-px-* and cn-py-* for one axis (8 and up)." },
           { name: ".cn-mt-* / .cn-mb-* / .cn-m-0", values: "margin", notes: "Same scale plus 0. There is no cn-mx: center with the page column or a grid." },
-          { name: ".panel-body", values: "recipe", notes: "20px 22px; the panel's content band. Compose cn-p-* to change it." },
+          { name: ".panel-body", values: "recipe", notes: "--body-pad (24px, 12px 16px compact); the panel's content band. Compose cn-p-* to change it." },
           { name: ".cn-icon-sm / .cn-icon / .cn-icon-lg", values: "13 / 16 / 20px", notes: "Inline svg anywhere a button or chip isn't already sizing it." },
         ]}
       />

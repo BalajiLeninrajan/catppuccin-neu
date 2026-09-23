@@ -29,7 +29,7 @@ export default function ButtonPage() {
   return (
     <Doc
       title="Button"
-      lede="Seven button styles, two presses. Primary and secondary carry the hard offset and half-slide onto their own shadow; ghost, flat, text, icon, and dashed sink with the soft press."
+      lede="One base class and four variants. Primary and secondary rest on a plate and half-slide onto it when pressed. Ghost and icon buttons sink into a soft inset."
     >
       <p class="cn-copy">
         Compose the base class with a variant: <code class="cn-code">class="btn btn-primary"</code>. Labels are
@@ -45,8 +45,9 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        One primary action per view. The offset is the one non-crust hard shadow in the system, mauve pressed into
-        the surface. Don't soften it. Disabled controls drop to 35% opacity and a soft inset.
+        One primary action per view. Its plate is mauve mixed into surface-0, the one plate that is not crust,
+        and a 1px gloss sits on its top-left edge. A disabled button drops to{" "}
+        <code class="cn-code">--disabled-opacity</code> (.5) and keeps its variant's rest shadow.
       </p>
 
       <Demo title="Secondary" classes="btn btn-secondary" row>
@@ -63,82 +64,96 @@ export default function ButtonPage() {
         </button>
       </Demo>
 
-      <Demo title="Flat" classes="btn-flat" row>
-        <button class="btn-flat" aria-pressed={muted} onClick={() => setMuted(!muted)}>
+      <Demo title="Ghost toggles" classes="btn btn-ghost is-sm  [aria-pressed]" row>
+        <button class="btn btn-ghost is-sm" aria-pressed={muted} onClick={() => setMuted(!muted)}>
           Mute thread
         </button>
-        <button class="btn-flat" aria-pressed={compact} onClick={() => setCompact(!compact)}>
+        <button class="btn btn-ghost is-sm" aria-pressed={compact} onClick={() => setCompact(!compact)}>
           Compact rows
         </button>
-        <button class="btn-flat" disabled>
+        <button class="btn btn-ghost is-sm" disabled>
           Pin column
         </button>
       </Demo>
 
       <p class="cn-copy">
-        The flat button is a toolbar toggle. No chrome at rest, a surface wash on hover. When{" "}
-        <code class="cn-code">aria-pressed="true"</code> or <code class="cn-code">.active</code> is set, it engages
-        in place, pressed in, mauve-keyed, borderless.
+        A small ghost button is the toolbar toggle. It has no chrome at rest and a surface wash on hover. With{" "}
+        <code class="cn-code">aria-pressed="true"</code> or <code class="cn-code">aria-current</code> it takes the
+        engaged state: pressed in, on the mauve wash, with no border.
+      </p>
+
+      <Demo title="Danger ghost" classes="btn btn-ghost is-danger" row>
+        <button class="btn btn-ghost is-danger">
+          <TrashIcon />
+          Delete workspace
+        </button>
+        <button class="btn btn-ghost is-danger is-sm">Remove member</button>
+      </Demo>
+
+      <p class="cn-copy">
+        <code class="cn-code">.is-danger</code> turns a ghost button red and gives it a red wash on hover. Use it
+        for a destructive action in a toolbar, a menu or a dialog footer. It is not a second primary.
       </p>
 
       <Demo title="Text" classes="btn-text" row>
         <button class="btn-text">View all members</button>
       </Demo>
 
-      <Demo title="Icon" classes="btn-icon" row>
-        <button class="btn-icon" aria-label="Settings">
+      <Demo title="Icon" classes="btn is-icon" row>
+        <button class="btn is-icon" aria-label="Settings">
           <GearIcon />
         </button>
-        <button class="btn-icon cn-tone-blue" aria-label="Notifications">
+        <button class="btn is-icon cn-tone-blue" aria-label="Notifications">
           <BellIcon />
         </button>
-        <button class="btn-icon cn-tone-red" aria-label="Delete row">
+        <button class="btn is-icon cn-tone-red" aria-label="Delete row">
           <TrashIcon />
         </button>
-        <button class="btn-icon" aria-label="Settings" disabled>
+        <button class="btn is-icon" aria-label="Settings" disabled>
           <GearIcon />
         </button>
       </Demo>
 
       <p class="cn-copy">
-        Icon buttons are flat until hovered, then tint toward <code class="cn-code">--tone</code>. Set it with a{" "}
-        <code class="cn-code">.cn-tone-*</code> class so destructive and informational actions read differently.
-        Always give them an <code class="cn-code">aria-label</code>.
+        Icon buttons are square at the small control height and flat until hovered. On hover they tint toward{" "}
+        <code class="cn-code">--tone</code>. Set it with a <code class="cn-code">.cn-tone-*</code> class so
+        destructive and informational actions read differently. Always give them an{" "}
+        <code class="cn-code">aria-label</code>.
       </p>
 
-      <Demo title="Sizes" classes="btn is-sm · btn · btn is-lg · btn-icon is-sm / is-lg" row>
+      <Demo title="Sizes" classes="btn is-sm · btn · btn is-lg · btn is-icon is-lg" row>
         <button class="btn btn-secondary is-sm">Small</button>
         <button class="btn btn-secondary">Default</button>
         <button class="btn btn-primary is-lg">Large</button>
-        <button class="btn-icon is-sm" aria-label="Settings"><GearIcon /></button>
-        <button class="btn-icon is-lg" aria-label="Settings"><GearIcon /></button>
+        <button class="btn is-icon" aria-label="Settings"><GearIcon /></button>
+        <button class="btn is-icon is-lg" aria-label="Settings"><GearIcon /></button>
       </Demo>
 
       <p class="cn-copy">
-        Small is the toolbar height (<code class="cn-code">--control-h-sm</code>); large is the one hero
-        action, the control height plus 12px. An svg inside any button is sized by the button, 16px by
-        default, 14 in small and 18 in large, so icons are never sized by hand.
+        Small is the toolbar height (<code class="cn-code">--control-h-sm</code>). Large is the one hero action:
+        the control height plus 12px. An svg inside a button is sized by the button: 16px by default, 14px in
+        small and 18px in large. Never size it by hand.
       </p>
 
-      <Demo title="Dashed" classes="btn-dashed">
-        <button class="btn-dashed" style="width: 100%">
+      <Demo title="Dashed" classes="btn btn-ghost is-dashed">
+        <button class="btn btn-ghost is-dashed" style="width: 100%">
           + Add team member
         </button>
       </Demo>
 
       <p class="cn-copy">
-        The only dashed border in the system. Use it as an open slot for drop zones, placeholder rows, and optional
-        extras. It fills toward mauve on hover instead of sliding.
+        The only dashed border in the system. Use it as an open slot: a drop zone, a placeholder row, an optional
+        extra. On hover the border and label turn mauve.
       </p>
 
       <h2 class="cn-label">The half-slide</h2>
       <p class="cn-copy">
-        Hard-offset controls never sink, they slide. At rest the control casts{" "}
-        <code class="cn-code">4px 4px 0</code> in <code class="cn-code">--hard-offset-color</code>. Hover lifts it{" "}
-        <code class="cn-code">translate(-1px, -1px)</code>, away from the shadow. Active slides it{" "}
-        <code class="cn-code">translate(2px, 2px)</code> while the shadow shrinks to{" "}
-        <code class="cn-code">2px 2px 0</code> to meet it. The control covers half the distance, the shadow covers
-        the rest.
+        Hard-offset controls slide instead of sinking. At rest the control casts{" "}
+        <code class="cn-code">4px 4px 0</code> in <code class="cn-code">--plate</code>. Hover lifts it{" "}
+        <code class="cn-code">translate(-1px, -1px)</code>, away from the plate. Active moves it{" "}
+        <code class="cn-code">translate(2px, 2px)</code> while the plate shrinks to{" "}
+        <code class="cn-code">2px 2px 0</code> to meet it. The control covers half the distance and the plate
+        covers the rest.
       </p>
 
       <Demo
@@ -147,29 +162,28 @@ export default function ButtonPage() {
         row
       >
         <button
-          class="cn-hard cn-pressable-slide cn-edge cn-r-control cn-bg-base cn-text-text"
-          style="padding: 14px 20px; cursor: pointer; font: 700 13px var(--sans); display: inline-flex; align-items: center; gap: 8px"
+          class="cn-hard cn-pressable-slide cn-edge cn-r-control cn-bg-base cn-text-text cn-ui cn-row cn-gap-8 cn-px-16 cn-py-12"
+          style="cursor: pointer"
         >
-          <span class="cn-value" style="font-size: 15px">
-            12
-          </span>
-          <span class="cn-microlabel">open tickets</span>
+          <span class="cn-value">12</span>
+          <span class="cn-label">open tickets</span>
         </button>
       </Demo>
 
       <p class="cn-copy">
-        Any clickable element may take the press. Compose <code class="cn-code">.cn-hard</code> for the offset with{" "}
-        <code class="cn-code">.cn-pressable-slide</code> for the motion. The slide utility is legal only alongside
-        the hard offset. Soft-shadowed controls use <code class="cn-code">.cn-pressable</code>, which sinks to an
-        inset instead.
+        Any clickable element can take the press. Compose <code class="cn-code">.cn-hard</code> for the plate with{" "}
+        <code class="cn-code">.cn-pressable-slide</code> for the motion. Use the slide only with the hard offset.
+        Soft-shadowed controls use <code class="cn-code">.cn-pressable</code>, which sinks to an inset instead.
       </p>
 
       <CodeBlock
         title="Markup"
         code={`<button class="btn btn-primary">Create invoice</button>
 <button class="btn btn-secondary">Export report</button>
-<button class="btn-flat" aria-pressed="true">Compact rows</button>
-<button class="btn-icon cn-tone-red" aria-label="Delete row">…svg…</button>
+<button class="btn btn-ghost is-sm" aria-pressed="true">Compact rows</button>
+<button class="btn btn-ghost is-danger">Delete workspace</button>
+<button class="btn is-icon cn-tone-red" aria-label="Delete row">…svg…</button>
+<button class="btn btn-ghost is-dashed">+ Add team member</button>
 
 <!-- the half-slide on a custom element -->
 <button class="cn-hard cn-pressable-slide cn-edge cn-r-control cn-bg-base">
@@ -178,21 +192,21 @@ export default function ButtonPage() {
       />
 
       <Props
-        title="Variants & knobs"
+        title="Variants and knobs"
         rows={[
-          { name: ".btn", values: "base class", notes: "Height var(--control-h), radius 10px, sans label. Compose with one variant." },
-          { name: ".btn-primary", notes: "Solid mauve, crust text, mauve-mix hard offset. One per view." },
-          { name: ".btn-secondary", notes: "Base ground, hairline edge, crust hard offset. The canon default." },
-          { name: ".btn-ghost", notes: "Transparent until hovered; surface wash on hover." },
-          { name: ".btn-flat", values: '.active / [aria-pressed="true"] / [aria-current]', notes: "Toolbar toggle; engaged state presses in with the mauve wash." },
+          { name: ".btn", values: "base class", notes: "Height --control-h, the control radius (8px), sans 700 13px. Compose with one variant." },
+          { name: ".btn-primary", notes: "Solid mauve, crust text, mauve-mix plate and a 1px gloss. One per view." },
+          { name: ".btn-secondary", notes: "Base ground, hairline edge, crust plate. The default for clickables." },
+          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current]', notes: "Transparent until hovered. Toggled or current, it takes the engaged state." },
+          { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
+          { name: ".btn-ghost.is-dashed", notes: "The only dashed border. An open slot; mauve on hover." },
+          { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", notes: "Square at --control-h-sm (34px), or --control-h in large. Tints toward --tone on hover. Needs aria-label." },
           { name: ".btn-text", notes: "Inline mauve text button; pink on hover." },
-          { name: ".btn-icon", values: ".cn-tone-* · .is-sm / .is-lg", notes: "34px square (28 small, --control-h large); tints toward --tone on hover. Needs aria-label." },
           { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 12px type, or the hero action at --control-h + 12px with 14px type." },
-          { name: "svg", values: "inside any button", notes: "Sized by the button: 16px (14 small, 18 large), 15 in flat, 13 in text. Never size by hand." },
-          { name: ".btn-dashed", notes: "The only dashed border. Open slot; fills toward mauve on hover, no slide." },
-          { name: ":disabled", notes: ".35 opacity, soft inset, not-allowed cursor on .btn variants." },
-          { name: "--hard-offset-color", default: "var(--crust)", notes: "The hard offset's color; read by .cn-hard and the half-slide." },
-          { name: "--control-h", default: "46px", notes: "30px under data-density=\"compact\"." },
+          { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },
+          { name: ":disabled", notes: "--disabled-opacity (.5) and a not-allowed cursor. Keeps the variant's rest shadow." },
+          { name: "--plate", default: "var(--crust)", notes: "The plate's color, read by the secondary button, segmented options and .cn-hard." },
+          { name: "--control-h", default: "46px", notes: '28px under data-density="compact".' },
         ]}
       />
     </Doc>

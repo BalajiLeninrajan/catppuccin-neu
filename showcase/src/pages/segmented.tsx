@@ -24,18 +24,18 @@ export default function SegmentedPage() {
     >
       <p class="cn-copy">
         The recipe styles every direct child of <code class="cn-code">.segmented</code>, so the same class works on
-        a row of buttons or a group of labels wrapping visually-hidden radios. Mark the selection with{" "}
-        <code class="cn-code">.active</code>. The selected option sits pressed in with the mauve wash and never
-        slides.
+        a row of buttons or a group of labels wrapping visually hidden radios. Mark the selection with{" "}
+        <code class="cn-code">aria-pressed="true"</code> on a button, or{" "}
+        <code class="cn-code">.active</code> on a label. The selected option sits pressed in with the mauve wash and
+        never slides.
       </p>
 
-      <Demo title="Button form" classes="segmented › button.active">
+      <Demo title="Button form" classes='segmented › button[aria-pressed="true"]'>
         <div class="segmented" role="group" aria-label="Billing period">
           {PERIODS.map((p) => (
             <button
               key={p.id}
               type="button"
-              class={period === p.id ? "active" : ""}
               aria-pressed={period === p.id}
               onClick={() => setPeriod(p.id)}
             >
@@ -47,8 +47,9 @@ export default function SegmentedPage() {
       </Demo>
 
       <p class="cn-copy">
-        Use buttons for switches the app reacts to immediately. Toggle{" "}
-        <code class="cn-code">.active</code> and <code class="cn-code">aria-pressed</code> from your state.
+        Use buttons for switches the app reacts to at once. Set{" "}
+        <code class="cn-code">aria-pressed</code> from your state; it is both the announced state and the style
+        hook.
       </p>
 
       <Demo title="Radio form" classes="segmented › label.active > input.cn-sr-only">
@@ -103,7 +104,7 @@ export default function SegmentedPage() {
         title="Markup"
         code={`<!-- button form -->
 <div class="segmented" role="group" aria-label="Billing period">
-  <button type="button" class="active" aria-pressed="true">
+  <button type="button" aria-pressed="true">
     <b>Monthly</b> <small>pay as you go</small>
   </button>
   <button type="button"><b>Yearly</b> <small>save 20%</small></button>
@@ -125,14 +126,14 @@ export default function SegmentedPage() {
       <Props
         title="Variants & knobs"
         rows={[
-          { name: ".segmented", notes: "Equal-width column grid, 7px gap. Styles every direct child, buttons or labels." },
-          { name: '.segmented > .active / [aria-pressed="true"] / [aria-checked="true"]', notes: "The selection. Pressed in, mauve wash, borderless; <b> turns mauve. The attributes mean a framework sets state without touching classes." },
+          { name: ".segmented", notes: "Equal-width column grid, 8px gap. Styles every direct child, buttons or labels." },
+          { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', notes: "The selection. Pressed in, mauve wash, borderless; <b> turns mauve." },
           { name: "svg inside an option", notes: "16px, sized by the recipe." },
-          { name: ".is-stacked", notes: "Vertical list, 12px gap, roomier rows, 17px <b>. For described options." },
-          { name: "<b> / <small>", notes: "Option title (sans 750) and quiet hint line inside each option." },
+          { name: ".is-stacked", notes: "Vertical list, 12px gap, taller rows, 16px <b>. For described options." },
+          { name: "<b> / <small>", notes: "Option title (sans 700) and a quiet hint line inside each option." },
           { name: ".cn-sr-only", notes: "Hides the radio in the label form; label:has(input:focus-visible) draws the focus outline." },
-          { name: "--control-h", default: "46px", notes: "Option min-height is the knob + 12px (58px); stacked adds 22px." },
-          { name: "--hard-offset-color", default: "var(--crust)", notes: "Rest-state offset under every unselected option." },
+          { name: "--control-h", default: "46px", notes: "Option min-height is the knob + 12px (58px); stacked is the knob + 24px." },
+          { name: "--plate", default: "var(--crust)", notes: "The plate under every unselected option." },
         ]}
       />
     </Doc>

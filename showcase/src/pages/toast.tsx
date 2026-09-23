@@ -103,7 +103,7 @@ function ToastSpawner() {
               </div>
               <button
                 type="button"
-                class="btn-icon"
+                class="btn is-icon"
                 aria-label="Dismiss"
                 onClick={() => dismiss(t.id)}
               >
@@ -129,8 +129,8 @@ export default function ToastPage() {
         so arrivals are announced, and append new toasts at the bottom.{" "}
         <code class="cn-code">.toast</code> is one item: a content column with a{" "}
         <code class="cn-code">b</code> title over a span or p description, then trailing
-        controls, a <code class="cn-code">.btn-text</code> action and/or a{" "}
-        <code class="cn-code">.btn-icon</code> close. The border is the neutral
+        controls: a <code class="cn-code">.btn-text</code> action, a{" "}
+        <code class="cn-code">.btn.is-icon</code> close, or both. The border is the neutral
         surface-1 hairline; the toast carries no accent color.
       </p>
 
@@ -142,7 +142,7 @@ export default function ToastPage() {
       </p>
 
       <p class="cn-copy">
-        Toasts fade in, rising 6px. The exit animates only if
+        Toasts fade in and slide 16px from the right edge. The exit animates only if
         the toast stays mounted and <code class="cn-code">hidden</code> is toggled;
         unmount it after the transition. Unmounting directly gets the entrance only.
         Auto-dismiss after a few seconds and keep a manual dismiss for anything a
@@ -159,7 +159,7 @@ export default function ToastPage() {
             <b>Event created</b>
             <span>Sunday, December 3 at 9:00 AM</span>
           </div>
-          <button type="button" class="btn-icon" aria-label="Dismiss">
+          <button type="button" class="btn is-icon" aria-label="Dismiss">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
           </button>
         </div>
@@ -224,7 +224,7 @@ function resume() {
             values: "the viewport",
             default: "·",
             notes:
-              "Fixed 20px from the right and bottom, z-index 90, column flex aligned to the end, 10px gap, min(380px, calc(100vw - 40px)) wide. Mark it aria-live=\"polite\"; append at the bottom.",
+              "Fixed 24px from the right and bottom, z-index 90, column flex aligned to the end, 8px gap, min(380px, 100vw - 48px) wide. Mark it aria-live=\"polite\"; append at the bottom.",
           },
           {
             name: "stack states",
@@ -238,7 +238,7 @@ function resume() {
             values: "one stack item",
             default: "·",
             notes:
-              "Flex row on base with the neutral surface-1 border (no accent); floats on --shadow-pop; 13px radius.",
+              "Flex row on base with the neutral surface-1 border (no accent); floats on --shadow-pop; the card radius (12px).",
           },
           {
             name: "b + span/p",
@@ -248,18 +248,18 @@ function resume() {
               "The content column. b is the block title; the span or p after it is the muted description.",
           },
           {
-            name: ".btn-text / .btn-icon",
+            name: ".btn-text / .btn.is-icon",
             values: "trailing controls",
             default: "·",
             notes:
-              "One action and/or an icon close with an aria-label. They sit at the end of the row.",
+              "One action, an icon close with an aria-label, or both. They sit at the end of the row.",
           },
           {
             name: "[hidden]",
             values: "exit state",
             default: "·",
             notes:
-              "Toggle on a mounted toast to fade it back down (.2s), then unmount. Unmounting directly gets the entrance only.",
+              "Toggle on a mounted toast to play the exit (--t-exit, .14s), then unmount. Unmounting directly gets the entrance only.",
           },
         ]}
       />
@@ -272,7 +272,7 @@ function resume() {
       <b>Event created</b>
       <span>Sunday, December 3 at 9:00 AM</span>
     </div>
-    <button class="btn-icon" aria-label="Dismiss"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg></button>
+    <button class="btn is-icon" aria-label="Dismiss"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg></button>
   </div>
 
   <!-- dismissing: toggle hidden to play the exit, then remove -->

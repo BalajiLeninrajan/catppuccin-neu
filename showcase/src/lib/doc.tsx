@@ -2,31 +2,64 @@
    Every docs page composes these four pieces. Pages put pure system markup
    (cn-* utilities + recipes) inside <Demo>; the kit owns all sc- chrome.
 
-   Per R5, <Demo> renders children DIRECTLY on the page's --base ground.
-   No well/mantle stage, so neumorphic depth reads correctly.     */
+   <Demo> renders children directly on the page's --base ground, with no
+   well or mantle stage, so neumorphic depth reads correctly.             */
 
 import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
 
-/* Semantic tones, canonical order (matches the .cn-tone-* setters). */
+/* Semantic tones, in the order of the .cn-tone-* setters. */
 export const TONES = ["red", "green", "peach", "yellow", "blue", "mauve"] as const;
 
 export type Tone = (typeof TONES)[number];
 
-export interface Accent {
+/* Accent hexes by name. */
+export const ACCENT = {
+  mauve: "#cba6f7",
+  teal: "#94e2d5",
+  yellow: "#f9e2af",
+  blue: "#89b4fa",
+  peach: "#fab387",
+  pink: "#f5c2e7",
+} as const;
+
+export type AccentName = keyof typeof ACCENT;
+
+/* Demo records. Each one stores its accent with the rest of its data, so a
+   team or a person wears the same color on every page that shows it. */
+export interface Team {
   name: string;
-  color: string;
+  accent: AccentName;
+  meta: string;
+  revenue: string;
 }
 
-/* The accent cycle (R6): assign hex to `--accent` inline from data. */
-export const ACCENTS: Accent[] = [
-  { name: "mauve", color: "#cba6f7" },
-  { name: "teal", color: "#94e2d5" },
-  { name: "yellow", color: "#f9e2af" },
-  { name: "blue", color: "#89b4fa" },
-  { name: "peach", color: "#fab387" },
-  { name: "pink", color: "#f5c2e7" },
+export const TEAMS: Team[] = [
+  { name: "Payments", accent: "teal", meta: "12 members · 4 open invoices", revenue: "$48,210" },
+  { name: "Analytics", accent: "blue", meta: "6 members · 3 dashboards", revenue: "$31,876" },
+  { name: "Messaging", accent: "pink", meta: "18 members · 92 threads", revenue: "$18,455" },
+  { name: "Storage", accent: "yellow", meta: "4 members · 1.2 TB used", revenue: "$12,730" },
+  { name: "Identity", accent: "mauve", meta: "9 members · 2 policies", revenue: "$10,388" },
+  { name: "Support", accent: "peach", meta: "14 members · 7 queues", revenue: "$9,102" },
 ];
+
+export interface Person {
+  initials: string;
+  name: string;
+  accent: AccentName;
+}
+
+export const PEOPLE: Person[] = [
+  { initials: "NR", name: "Nadia Rahman", accent: "mauve" },
+  { initials: "TS", name: "Tomas Silva", accent: "teal" },
+  { initials: "AK", name: "Aya Kato", accent: "yellow" },
+  { initials: "JL", name: "Jon Lindqvist", accent: "blue" },
+  { initials: "MD", name: "Mara Diaz", accent: "peach" },
+  { initials: "EO", name: "Efe Okafor", accent: "pink" },
+];
+
+/* Inline style for a record's accent. */
+export const accentStyle = (a: AccentName) => `--accent:${ACCENT[a]}`;
 
 interface CopyLineProps {
   text: string;
@@ -76,7 +109,7 @@ export function Doc({ title, lede, children }: DocProps) {
   return (
     <article class="sc-doc page-enter">
       <header class="sc-doc-header">
-        <h1 class="cn-display-sm">{title}</h1>
+        <h1 class="cn-display is-sm">{title}</h1>
         {lede ? <p class="cn-lede">{lede}</p> : null}
       </header>
       {children}
@@ -85,7 +118,7 @@ export function Doc({ title, lede, children }: DocProps) {
 }
 
 /**
- * Demo: a captioned specimen stage. Children sit directly on --base (R5).
+ * Demo: a captioned specimen stage. Children sit directly on --base.
  * props: {
  *   title?: string,     // .cn-label caption above the stage
  *   classes?: string,   // class string shown in a copyable code line below
@@ -111,7 +144,7 @@ export function Demo({ title, classes, row, children }: DemoProps) {
 }
 
 /**
- * Props: a variants/knobs documentation table (renders .table-neu).
+ * Props: a variants/knobs documentation table (renders .data-table).
  * props: {
  *   title?: string,
  *   rows: Array<{ name: string, values?: string, default?: string, notes?: string }>,
@@ -135,7 +168,7 @@ export function Props({ title, rows }: PropsProps) {
     <section class="sc-props">
       {title ? <h2 class="cn-label">{title}</h2> : null}
       <div class="sc-props-scroll">
-        <table class="table-neu">
+        <table class="data-table">
           <thead>
             <tr>
               <th>Name</th>

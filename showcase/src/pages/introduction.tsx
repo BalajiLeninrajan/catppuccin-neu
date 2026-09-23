@@ -5,9 +5,9 @@ const LAYER_CODE = `@layer cn.tokens, cn.recipes, cn.utilities;
 @import "./recipes.css" layer(cn.recipes);
 @import "./utilities.css" layer(cn.utilities);`;
 
-const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.3.2/css/index.css">`;
+const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.0/css/index.css">`;
 
-const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.3.2`;
+const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.0`;
 
 const IMPORT_CODE = `/* your entry stylesheet */
 @import "catppuccin-neu/css/index.css";`;
@@ -59,7 +59,7 @@ export default function IntroductionPage() {
         <button type="button" class="btn btn-primary">New invoice</button>
         <button type="button" class="btn btn-secondary">Export</button>
         <span class="chip"><span class="live-dot" /> 3 online</span>
-        <span class="chip-tone cn-tone-green">paid</span>
+        <span class="tag cn-tone-green">Paid</span>
       </Demo>
 
       <section>
@@ -70,7 +70,7 @@ export default function IntroductionPage() {
           contract properties, and reset. <code class="cn-code">cn.recipes</code>{" "}
           holds full components. <code class="cn-code">cn.utilities</code>{" "}
           holds single-purpose <code class="cn-code">cn-*</code> classes with
-          blessed values only, and sits above the recipes, so a utility on an
+          token values only, and sits above the recipes, so a utility on an
           element always beats the recipe on that element:{" "}
           <code class="cn-code">well cn-bg-well</code> fills the well. Your own
           CSS stays unlayered, so it always wins; overrides never need{" "}
@@ -84,8 +84,8 @@ export default function IntroductionPage() {
         <p class="cn-copy">
           A hand-written page with no <code class="cn-code">package.json</code>{" "}
           links the CDN: jsDelivr serves the repo's tags straight from GitHub.
-          Pin a full tag — <code class="cn-code">@main</code> and truncated
-          ranges float and re-cache every 12 hours — and link{" "}
+          Pin a full tag. <code class="cn-code">@main</code> and truncated
+          ranges float and re-cache every 12 hours. Link{" "}
           <code class="cn-code">index.css</code> rather than the three files,
           so the relative imports keep their layer wrappers.
         </p>
@@ -105,7 +105,7 @@ export default function IntroductionPage() {
         <h2 class="cn-title">Zero-build sites</h2>
         <p class="cn-copy">
           Building a static site? <code class="cn-code">scripts/sync.mjs</code>{" "}
-          copies the CSS files into any directory you point it at — run it in a
+          copies the CSS files into any directory you point it at. Run it in a
           pre-build hook and gitignore the output. Node 18+, no dependencies.
           The three files also work as plain{" "}
           <code class="cn-code">&lt;link&gt;</code> tags loaded in order:
@@ -120,9 +120,12 @@ export default function IntroductionPage() {
         <p class="cn-copy">
           A Tailwind preset maps the system onto theme keys: palette colors
           plus <code class="cn-code">accent</code> and{" "}
-          <code class="cn-code">tone</code>, font stacks, role-named radii, the
-          shadow set, and control heights. Components still come from the CSS
-          recipes; the preset carries no plugin logic.
+          <code class="cn-code">tone</code>, the type roles{" "}
+          (<code class="cn-code">text-label</code>,{" "}
+          <code class="cn-code">text-meta</code> and the rest), font stacks,
+          role-named radii, the shadow set, control heights and the motion
+          durations. Components still come from the CSS recipes; the preset
+          carries no plugin logic.
         </p>
         <CodeBlock title="Preset (v3) / theme (v4)" code={TAILWIND_CODE} />
       </section>

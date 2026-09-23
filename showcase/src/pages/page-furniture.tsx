@@ -1,22 +1,27 @@
+import { useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const headerSnippet = `<header>
-  <p class="eyebrow">Quarterly report</p>
-  <h1 class="display-title">Revenue, <em>at a glance</em>.</h1>
+  <h1 class="cn-display">Revenue, <em>last 90 days</em></h1>
   <p class="lede">
-    Every invoice, payout, and adjustment from the last ninety days,
-    rolled into one page you can actually read.
+    412 invoices, 38 payouts and 6 adjustments, grouped by team.
+    Figures settle nightly at 02:00 UTC.
   </p>
 </header>`;
 
 const shellSnippet = `<body class="app-shell">
   <header class="topbar">…</header>
   <main class="page-main">…</main>
-  <footer class="footer-neu">…</footer>
+  <footer class="page-footer">…</footer>
 </body>
 
-/* a different column for one page: */
-<main class="page-main" style="--page-width: 980px">…</main>`;
+<!-- a different column for one page -->
+<main class="page-main" style="--page-width: 980px">…</main>
+
+<!-- an app that owns the viewport: panes scroll, the page does not -->
+<body class="app-shell is-fixed">…</body>`;
+
+const NAV = ["Dashboard", "Invoices", "Teams"];
 
 function GearIcon() {
   return (
@@ -28,35 +33,43 @@ function GearIcon() {
 }
 
 export default function PageFurniturePage() {
+  const [current, setCurrent] = useState("Dashboard");
+
   return (
     <Doc
       title="Page furniture"
-      lede="The pieces that frame a page: the topbar, the footer rule, the eyebrow-title-lede header stack, the live dot, and the shell wash."
+      lede="The pieces that frame a page: the header, the topbar, the page column, the footer and the live dot."
     >
       <p class="cn-copy">
-        The furniture recipes never style bare elements. <code class="cn-code">.topbar</code> goes on
-        a <code class="cn-code">header</code>, <code class="cn-code">.footer-neu</code> on
-        a <code class="cn-code">footer</code>. The package leaves <code class="cn-code">main</code> alone;
-        apply the main-column width pattern in your own CSS.
+        The furniture recipes never style bare elements.{" "}
+        <code class="cn-code">.topbar</code> goes on a{" "}
+        <code class="cn-code">header</code>,{" "}
+        <code class="cn-code">.page-main</code> on{" "}
+        <code class="cn-code">main</code> and{" "}
+        <code class="cn-code">.page-footer</code> on a{" "}
+        <code class="cn-code">footer</code>.
       </p>
 
-      <Demo title="Page header" classes="eyebrow · display-title · lede">
+      <Demo title="Page header" classes="cn-display · lede">
         <header>
-          <p class="eyebrow">Quarterly report</p>
-          <h1 class="display-title">
-            Revenue, <em>at a glance</em>.
+          <h1 class="cn-display">
+            Revenue, <em>last 90 days</em>
           </h1>
           <p class="lede">
-            Every invoice, payout, and adjustment from the last ninety days, rolled into one page you can
-            actually read.
+            412 invoices, 38 payouts and 6 adjustments, grouped by team. Figures settle nightly at 02:00 UTC.
           </p>
         </header>
       </Demo>
 
       <p class="cn-copy">
-        The header stack is the one place display type appears. The three classes are aliases
-        of <code class="cn-code">.cn-eyebrow</code>, <code class="cn-code">.cn-display</code>,
-        and <code class="cn-code">.cn-lede</code>. Either name works.
+        A page header is a display title and a lede. The title names the
+        page. The lede says what is on it, with numbers where there are
+        numbers. Nothing sits above the title: a kicker there repeats the
+        lede. An <code class="cn-code">em</code> inside the title turns mauve
+        and upright. <code class="cn-code">.display-title</code> is an alias
+        of <code class="cn-code">.cn-display</code>. Both zero the heading's
+        margin, and <code class="cn-code">.lede</code> is the lede role with
+        its own margins.
       </p>
 
       <CodeBlock title="Header markup" code={headerSnippet} />
@@ -64,78 +77,96 @@ export default function PageFurniturePage() {
       <Demo title="Topbar" classes=".topbar">
         <header class="topbar">
           <span class="cn-title">Ledger</span>
-          <nav class="nav-secondary sc-row" aria-label="Primary">
-            <button type="button" class="btn-flat active" aria-pressed="true">
-              Dashboard
-            </button>
-            <button type="button" class="btn-flat">Invoices</button>
-            <button type="button" class="btn-flat">Teams</button>
+          <nav class="nav-secondary" aria-label="Primary">
+            {NAV.map((item) => (
+              <button
+                key={item}
+                type="button"
+                class="btn btn-ghost is-sm"
+                aria-current={current === item ? "page" : undefined}
+                onClick={() => setCurrent(item)}
+              >
+                {item}
+              </button>
+            ))}
           </nav>
-          <div class="sc-row" style="justify-content:flex-end">
+          <div class="cn-row cn-end">
             <span class="chip">
               <span class="live-dot" aria-hidden="true"></span> Synced
             </span>
-            <button type="button" class="btn-icon" data-tip="Settings">
+            <button type="button" class="btn is-icon" aria-label="Open settings" data-tip="Settings">
               <GearIcon />
-              <span class="cn-sr-only">Open settings</span>
             </button>
           </div>
         </header>
       </Demo>
 
       <p class="cn-copy">
-        The topbar is sticky, translucent over a 14px blur, and casts <code class="cn-code">--shadow-cast</code>{" "}
-        with a lit hairline. Its grid is 1fr / auto / 1fr, so the center nav stays centered. At 1060px the grid
-        collapses to two columns and anything tagged <code class="cn-code">.nav-secondary</code> hides; at 760px
-        the bar tightens and chips inside it go icon-only.
+        The topbar is sticky, translucent over a 14px blur, and casts{" "}
+        <code class="cn-code">--shadow-cast</code> with a lit hairline. Its
+        grid is 1fr, auto, 1fr, so the center nav stays centered. The nav is a
+        row of small ghost buttons; the current page takes{" "}
+        <code class="cn-code">aria-current</code> and the engaged state. At
+        1060px the grid drops to two columns and anything with{" "}
+        <code class="cn-code">.nav-secondary</code> hides. At 760px the bar
+        tightens and a nav that outgrows it scrolls sideways inside the bar.
       </p>
 
-      <Demo title="Split topbar with a wordmark" classes="topbar is-split · wordmark > mark-solid">
+      <Demo title="Split topbar with a wordmark" classes="topbar is-split · wordmark > mark">
         <header class="topbar is-split">
-          <a class="wordmark" href="#"><span class="mark-solid" aria-hidden="true">L</span>Ledg<em>er</em></a>
+          <a class="wordmark" href="#" onClick={(e) => e.preventDefault()}>
+            <span class="mark" aria-hidden="true">L</span>Ledg<em>er</em>
+          </a>
           <div class="cn-row">
             <span class="chip"><span class="live-dot" aria-hidden="true"></span> Synced</span>
+            <button type="button" class="btn btn-ghost is-sm">Docs</button>
             <button type="button" class="btn btn-secondary is-sm">Sign in</button>
           </div>
         </header>
       </Demo>
 
       <p class="cn-copy">
-        A page with no center nav takes <code class="cn-code">is-split</code>: brand left, actions right,
-        nothing centered by accident. <code class="cn-code">is-compact</code> is the 52px app strip. The
-        wordmark is a flex row, so a <code class="cn-code">.mark-solid</code> before the name is the brand
-        tile, and <code class="cn-code">is-lg</code> is the 22px hero size.
+        A page with no center nav takes <code class="cn-code">is-split</code>:
+        brand left, actions right. At 760px the action row wraps onto more
+        rows, right-aligned, so no action hides.{" "}
+        <code class="cn-code">is-compact</code> is the 52px app strip, 44px
+        at compact density. A{" "}
+        <code class="cn-code">.mark</code> before the wordmark's name is the
+        brand tile, and <code class="cn-code">.wordmark.is-lg</code> is the
+        20px hero size.
       </p>
 
-      <Demo title="Footer" classes=".footer-neu · .footer-brand">
-        <footer class="footer-neu">
-          <span class="footer-brand"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="6" /></svg>Ledger <b>Console</b><span>build 4.2.1</span></span>
+      <Demo title="Footer" classes=".page-footer · .wordmark.is-sm">
+        <footer class="page-footer">
+          <span class="wordmark is-sm">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="6" /></svg>
+            Ledger <b>Console</b>
+            <span>build 4.2.1</span>
+          </span>
           <p>Deployed 24 Aug 2026</p>
           <span class="chip">v4.2.1</span>
         </footer>
       </Demo>
 
       <p class="cn-copy">
-        The footer is a hairline rule and metadata. No depth, no fill. It follows the page column's{" "}
-        <code class="cn-code">--page-width</code>, so it lines up with the content above it, and stacks at
-        760px. <code class="cn-code">.footer-brand</code> is its brand slot: a glyph in mauve, the name,
-        an optional note.
+        The footer is a hairline rule and metadata, with no depth or fill. It
+        follows the page column's <code class="cn-code">--page-width</code>,
+        so it lines up with the content above it, and stacks at 760px.{" "}
+        <code class="cn-code">.wordmark.is-sm</code> is its brand: a glyph in
+        mauve, the name, and an optional note.
       </p>
 
-      <CodeBlock
-        title="The page shell"
-        code={`<body class="app-shell">
-  <header class="topbar is-split">…</header>
-  <main class="page-main is-narrow">…</main>
-  <footer class="footer-neu">…</footer>
-</body>`}
-      />
+      <CodeBlock title="The page shell" code={shellSnippet} />
 
       <p class="cn-copy">
-        <code class="cn-code">.page-main</code> is the column: 1440px or the viewport minus 40, centered,
-        with the vertical padding. <code class="cn-code">is-narrow</code> is 860px,{" "}
-        <code class="cn-code">is-reading</code> 740px, <code class="cn-code">--page-width</code> anything
-        else. <code class="cn-code">.app-shell</code> fills the viewport and pushes the footer to the bottom.
+        <code class="cn-code">.page-main</code> is the column: 1440px, or the
+        viewport less a <code class="cn-code">--page-gutter</code> on each
+        side, centered, with <code class="cn-code">--page-pad</code> above and
+        below. <code class="cn-code">is-narrow</code> is 860px,{" "}
+        <code class="cn-code">is-reading</code> 740px, and{" "}
+        <code class="cn-code">--page-width</code> sets anything else.{" "}
+        <code class="cn-code">.app-shell</code> fills the viewport and pushes
+        the footer to the bottom.
       </p>
 
       <Demo title="Live dot" classes=".live-dot" row>
@@ -143,84 +174,70 @@ export default function PageFurniturePage() {
         <span class="cn-meta sc-row">
           <span class="live-dot" aria-hidden="true"></span> 12 teammates online
         </span>
-        <span class="chip cn-tone-green">
+        <span class="chip">
           <span class="live-dot" aria-hidden="true"></span> All systems operational
         </span>
       </Demo>
 
       <p class="cn-copy">
-        The live dot is presentational. Pair it with text and keep it{" "}
-        <code class="cn-code">aria-hidden</code>. Under reduced motion the pulse stops on the first frame.
+        The live dot is decoration. Pair it with text and keep it{" "}
+        <code class="cn-code">aria-hidden</code>. Under reduced motion the
+        pulse stops on its first frame.
       </p>
-
-      <p class="cn-copy">
-        Two more pieces have no specimen here. <code class="cn-code">.app-shell</code> goes on the page root,
-        usually <code class="cn-code">body</code>, and lays a faint mauve bloom over the top-left
-        of <code class="cn-code">--base</code>. This site's own shell wears it.{" "}
-        <code class="cn-code">.cn-scrim</code> is the fixed, blurred crust backdrop that modals and drawers
-        sit on. See those pages for it in action.
-      </p>
-
-      <CodeBlock title="Page shell, re-keyed" code={shellSnippet} />
 
       <Props
         title="Furniture reference"
         rows={[
           {
+            name: ".cn-display / .display-title",
+            values: "h1",
+            notes: "700, clamp(36px, 4.6vw, 56px), -0.03em, balanced. em turns mauve. Margin zeroed. .display-title is an alias.",
+          },
+          {
+            name: ".cn-display.is-sm",
+            values: "h1",
+            notes: "The page-title size: clamp(26px, 3.4vw, 36px).",
+          },
+          {
+            name: ".lede / .cn-lede",
+            values: "p",
+            notes: "16px/1.6 subtext-1, max-width 690px. .lede adds 24px block margins and drops to 14px at 760px.",
+          },
+          {
             name: ".topbar",
             values: "sticky header · .is-split · .is-compact",
-            notes: "Translucent base, blur, --shadow-cast + lit hairline. 1fr/auto/1fr grid; is-split is 1fr/auto; is-compact is 52px. .nav-secondary hides ≤1060px.",
+            notes: "Translucent base, blur, --shadow-cast with a lit hairline. 1fr/auto/1fr grid; is-split is two columns; is-compact is 52px, 44px compact. .nav-secondary hides at 1060px.",
           },
           {
             name: ".wordmark",
-            values: "text · > .mark-solid · .is-lg",
-            notes: "800 16px, tight tracking, em in mauve. Flex row: a mark-solid before the name is the brand tile (28px, 34 in is-lg). is-lg is 22px.",
+            values: "text · > .mark · .is-lg · .is-sm",
+            notes: "700 16px, -0.03em, em in mauve. A .mark before the name is the brand tile (28px, 34 in is-lg, 20 in is-sm). is-lg is 20px; is-sm is the footer brand.",
           },
           {
             name: ".page-main",
             values: ".is-narrow / .is-reading / --page-width",
-            notes: "The page column: min(--page-width, 100% - 40px), centered, clamp(24px, 4vw, 46px) vertical padding. 860 / 740 / any.",
+            notes: "min(--page-width, 100% - 2 × --page-gutter), centered, --page-pad block padding. 860 / 740 / any.",
           },
           {
-            name: ".footer-neu",
-            values: "page footer · .footer-brand",
-            notes: "Hairline top rule, --page-width, quiet meta; stacks ≤760px. footer-brand: glyph in mauve, name, optional note. Middle paragraph drops ≤520px.",
+            name: "--page-gutter / --page-pad",
+            values: "tokens",
+            notes: "clamp(12px, 3vw, 32px) inline and clamp(24px, 4vw, 48px) block. The topbar reads the same gutter.",
           },
           {
-            name: ".panel-body",
-            values: "content band",
-            notes: "20px 22px inside a panel. The panel ships no padding so tables fill it; prose goes in a body.",
+            name: ".page-footer",
+            values: "page footer",
+            notes: "Hairline top rule, --page-width, quiet meta. Stacks at 760px; nothing hides.",
           },
           {
-            name: ".eyebrow",
-            values: "alias of .cn-eyebrow",
-            notes: "Uppercase mauve kicker; flex with 8px gap for a leading mark.",
-          },
-          {
-            name: ".display-title",
-            values: "alias of .cn-display",
-            notes: "clamp(36px to 56px), weight 760, -0.03em; <em> renders mauve. Steps to 38/34px at 760/520px.",
-          },
-          {
-            name: ".lede",
-            values: "alias of .cn-lede",
-            notes: "16px/1.65 subtext, max-width 690px.",
+            name: ".app-shell",
+            values: "page root · .is-fixed",
+            notes: "A viewport-tall column whose main takes the slack. is-fixed makes the shell exactly the viewport and drops the root scrollbar gutter.",
           },
           {
             name: ".live-dot",
             values: "7px pulse dot",
             default: "green",
-            notes: "currentColor fill + halo; recolor via a .cn-text-* utility. Keep aria-hidden.",
-          },
-          {
-            name: ".app-shell",
-            values: "page root wash",
-            notes: "Radial accent bloom at top-left over --base.",
-          },
-          {
-            name: ".cn-scrim",
-            values: "fixed overlay backdrop",
-            notes: "Crust at 80% with a 2px blur, z-index 70. Modals and drawers render inside it.",
+            notes: "currentColor fill and halo; recolor with a .cn-text-* utility. Keep aria-hidden.",
           },
         ]}
       />

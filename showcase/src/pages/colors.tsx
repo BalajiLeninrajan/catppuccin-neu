@@ -1,9 +1,9 @@
-import { Doc, Demo, Props, CodeBlock, TONES, ACCENTS } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock, TONES, TEAMS, ACCENT, accentStyle } from "../lib/doc";
 
 /* The full Mocha set, grouped by role. name → token, hex, one-line role note. */
 const GROUNDS = [
-  { name: "crust", hex: "#11111b", note: "Deepest ground: scrims, hard offsets, text on accent fills." },
-  { name: "mantle", hex: "#181825", note: "Recessed bands: panel headings, wells, table heads." },
+  { name: "crust", hex: "#11111b", note: "Deepest ground: scrims, the default plate, text on accent fills." },
+  { name: "mantle", hex: "#181825", note: "Recessed bands: panel headers, wells, table heads." },
   { name: "base", hex: "#1e1e2e", note: "The page ground. Every component sits on it." },
   { name: "surface-0", hex: "#313244", note: "Row separators and the quietest border mixes." },
   { name: "surface-1", hex: "#45475a", note: "Dashed borders, soft edges, the lift highlight." },
@@ -11,9 +11,9 @@ const GROUNDS = [
 ];
 
 const NEUTRAL_TEXT = [
-  { name: "overlay-0", hex: "#6c7086", note: "Faintest text: disabled hints, placeholders." },
-  { name: "overlay-1", hex: "#7f849c", note: "Metadata and microlabels." },
-  { name: "overlay-2", hex: "#9399b2", note: "Labels and captions." },
+  { name: "overlay-0", hex: "#6c7086", note: "Disabled text and the unchecked control edge. Not for readable text." },
+  { name: "overlay-1", hex: "#7f849c", note: "Placeholders, icons and hover edges. Not for readable text." },
+  { name: "overlay-2", hex: "#9399b2", note: "Labels, meta and captions. The faintest readable text." },
   { name: "subtext-0", hex: "#a6adc8", note: "Body copy." },
   { name: "subtext-1", hex: "#bac2de", note: "Ledes and emphasized copy." },
   { name: "text", hex: "#cdd6f4", note: "Headings and primary content." },
@@ -21,13 +21,13 @@ const NEUTRAL_TEXT = [
 
 const HUES = [
   { name: "rosewater", hex: "#f5e0dc", note: "Warm highlight. Rarely used." },
-  { name: "pink", hex: "#f5c2e7", note: "Primary-button hover; in the accent cycle." },
+  { name: "pink", hex: "#f5c2e7", note: "Primary-button hover. One of the six accents." },
   { name: "mauve", hex: "#cba6f7", note: "The accent: focus, selection, engaged states." },
   { name: "red", hex: "#f38ba8", note: "Danger and destructive actions." },
   { name: "peach", hex: "#fab387", note: "Warnings and attention; the default --tone." },
   { name: "yellow", hex: "#f9e2af", note: "Caution and pending states." },
   { name: "green", hex: "#a6e3a1", note: "Success, live indicators, positive deltas." },
-  { name: "teal", hex: "#94e2d5", note: "In the accent cycle." },
+  { name: "teal", hex: "#94e2d5", note: "One of the six accents." },
   { name: "sky", hex: "#89dceb", note: "Reserved for data-visualization ramps." },
   { name: "blue", hex: "#89b4fa", note: "Informational status and links." },
   { name: "lavender", hex: "#b4befe", note: "Quiet accent text." },
@@ -42,7 +42,7 @@ const TONE_LABELS = {
   mauve: "Scheduled",
 };
 
-const RAMP = ["text", "subtext-1", "subtext-0", "overlay-2", "overlay-1", "overlay-0"];
+const RAMP = ["text", "subtext-1", "subtext-0", "overlay-2"];
 
 interface SwatchProps {
   name: string;
@@ -122,41 +122,49 @@ export default function ColorsPage() {
         ]}
       />
 
-      <Demo title="Tones in use" classes="chip-tone cn-tone-green" row>
+      <Demo title="Tones in use" classes="tag cn-tone-green" row>
         {TONES.map((tone) => (
-          <span key={tone} class={`chip-tone cn-tone-${tone}`}>
+          <span key={tone} class={`tag cn-tone-${tone}`}>
             {TONE_LABELS[tone]}
           </span>
         ))}
       </Demo>
 
-      <h2 class="cn-title">The accent cycle</h2>
+      <h2 class="cn-title">Accent by identity</h2>
       <p class="cn-copy">
-        <code class="cn-code">--accent</code> is the per-instance identity
-        color, read by accent cards, spines, solid marks, avatars, hero values,
-        and the <code class="cn-code">cn-*-accent</code> utilities. Assign it inline
-        from data, cycling through six hues in this order.
+        <code class="cn-code">--accent</code> is the color of one thing: a
+        team, a person, a project. Accent cards, marks, avatars, hero values
+        and the <code class="cn-code">cn-*-accent</code> utilities read it.
+        Store the accent on the record, or derive it from a stable id, and
+        set it inline wherever the record renders. It never comes from list
+        position, so sorting or filtering never recolors an item.
       </p>
 
-      <Demo title="--accent swatches" classes='style="--accent:#94e2d5"' row>
-        {ACCENTS.map((a, i) => (
+      <Demo title="Six accents, one per team" classes='style="--accent:#94e2d5"  (from the record)' row>
+        {TEAMS.map((team) => (
           <div
-            key={a.name}
-            style={`--accent:${a.color};display:grid;gap:6px;justify-items:center`}
+            key={team.name}
+            style={`${accentStyle(team.accent)};display:grid;gap:6px;justify-items:center`}
           >
-            <span class="mark-solid">{i + 1}</span>
-            <span class="cn-meta">{a.name}</span>
-            <code class="cn-code cn-text-accent">{a.color}</code>
+            <span class="mark" aria-hidden="true">{team.name[0]}</span>
+            <span class="cn-name">{team.name}</span>
+            <code class="cn-code cn-text-overlay-2">
+              {team.accent} {ACCENT[team.accent]}
+            </code>
           </div>
         ))}
       </Demo>
 
       <CodeBlock
         title="Assigning an accent"
-        code={`<article class="accent-card" style="--accent:#94e2d5">
-  <span class="mark-solid">2</span>
-  <h3 class="cn-name">Billing team</h3>
-  <span class="cn-value-lg">48</span>
+        code={`// stored on the team record
+{ id: "payments", name: "Payments", accent: "#94e2d5" }
+
+<!-- rendered the same wherever Payments appears -->
+<article class="accent-card" style="--accent: #94e2d5">
+  <span class="mark">P</span>
+  <h3 class="cn-name">Payments</h3>
+  <p class="cn-meta">12 members</p>
 </article>`}
       />
 
@@ -164,18 +172,20 @@ export default function ColorsPage() {
       <p class="cn-copy">
         Tinted surfaces are never opaque hue fills. Every tint is a{" "}
         <code class="cn-code">color-mix(in srgb, …)</code> of its tone at a
-        blessed strength. State backgrounds mix 7 to 10% into the ground. Edges
+        set strength. State backgrounds mix 7 to 10% into the ground. Edges
         mix 25 to 45%, and tinted surfaces keep their hairline. The faintest
         hover and selected washes mix 4 to 5%.
       </p>
 
       <CodeBlock
-        title="Blessed percentages"
-        code={`/* The four mix tokens carry the shared expressions; use them, not the mix */
+        title="The mix strengths"
+        code={`/* The mix tokens hold the shared expressions; use them, not the mix */
 --edge:      color-mix(in srgb, var(--surface-2) 40%, transparent); /* raised-surface hairline */
 --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
---tint:      color-mix(in srgb, var(--tone) 4%, transparent);       /* every tinted surface */
 --wash:      color-mix(in srgb, var(--mauve) 7%, var(--base));      /* the engaged state */
+
+/* --tint is declared on each tinted recipe, so it reads that element's --tone */
+--tint:      color-mix(in srgb, var(--tone) 4%, transparent);
 
 /* Tone edges: 25 to 45% tone; the tint keeps its hairline */
 border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
@@ -196,15 +206,17 @@ background: color-mix(in srgb, var(--mauve) 6%, var(--base));`}
 
       <h2 class="cn-title">Text color utilities</h2>
       <p class="cn-copy">
-        The neutral ramp maps one-to-one onto{" "}
+        The neutral ramp maps one to one onto{" "}
         <code class="cn-code">.cn-text-*</code> utilities, brightest to
-        faintest. Palette hues get the same treatment, like{" "}
+        faintest. Readable text stops at overlay-2. overlay-1 and overlay-0
+        are for placeholders, icons, borders and disabled text, because they
+        fall under 4.5:1 on base. Palette hues get the same treatment, like{" "}
         <code class="cn-code">.cn-text-mauve</code>, plus{" "}
         <code class="cn-code">.cn-text-accent</code> and{" "}
         <code class="cn-code">.cn-text-tone</code> for the contract properties.
       </p>
 
-      <Demo title="Text ramp" classes="cn-text-text … cn-text-overlay-0">
+      <Demo title="Readable text ramp" classes="cn-text-text … cn-text-overlay-2">
         {RAMP.map((step) => (
           <p key={step} class={`cn-copy cn-text-${step}`} style="margin:0">
             <code class="cn-code">cn-text-{step}</code> · Monthly report ready,
@@ -215,7 +227,7 @@ background: color-mix(in srgb, var(--mauve) 6%, var(--base));`}
 
       <h2 class="cn-title">Border utilities</h2>
       <p class="cn-copy">
-        Six hairlines, blessed mixes only. Hairlines belong to raised and
+        Each edge utility is a fixed mix. Hairlines belong to raised and
         tinted surfaces; inset surfaces stay borderless.{" "}
         <code class="cn-code">.cn-edge-tone</code> reads{" "}
         <code class="cn-code">--tone</code>;{" "}
@@ -283,7 +295,7 @@ background: color-mix(in srgb, var(--mauve) 6%, var(--base));`}
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill; the terminal ground." },
           { name: ".cn-bg-well", values: "crust 38% into mantle", notes: "Explicit well fill; compose onto .well." },
           { name: ".cn-bg-head", values: "crust 30% into mantle", notes: "Band fill for headers; panel headings use the same mix." },
-          { name: ".cn-tint", values: "tone 4% into transparent", notes: "Semantic wash; pair with .cn-tone-*. One number for every tinted surface." },
+          { name: ".cn-tint", values: "tone 4% into transparent", notes: "Semantic wash; pair with .cn-tone-*. Every tinted surface uses this one strength." },
         ]}
       />
     </Doc>

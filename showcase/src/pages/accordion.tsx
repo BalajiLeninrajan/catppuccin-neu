@@ -92,8 +92,10 @@ export default function AccordionPage() {
       <p class="cn-copy">
         Wrap the title in <code class="cn-code">b</code> and it grows, so the
         meta rides against the chevron instead of floating mid-row.{" "}
-        <code class="cn-code">.accordion-stack</code> pads the group and lets
-        the closed last row's divider yield to the panel edge.
+        <code class="cn-code">.accordion-stack</code> pads the group and drops
+        the closed last row's divider at the panel edge. At 520px and below
+        the meta wraps under the title and the chevron stays on the title
+        line.
       </p>
 
       <Demo title="Exclusive group, radios sharing a name" classes="accordion > label > input[type=radio]">
@@ -198,7 +200,7 @@ document.addEventListener("click", (e) => {
             name: ".fold",
             values: "one wrapper element inside",
             default: "·",
-            notes: "Animates open and closed, .3s. Put the body inside one wrapper element.",
+            notes: "Animates open and closed over --t-slow (.32s). Put the body inside one wrapper element.",
           },
           {
             name: "screen readers",

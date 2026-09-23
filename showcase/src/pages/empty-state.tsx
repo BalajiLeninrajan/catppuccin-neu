@@ -8,14 +8,13 @@ export default function EmptyStatePage() {
     >
       <p class="cn-copy">
         <code class="cn-code">.empty-state</code> is a centered flex column
-        with a 260px floor, so an empty list or panel body keeps its height.
-        The recipe styles three children directly. An{" "}
-        <code class="cn-code">svg</code> before the title sits on a 56px
-        carved plate, the same material as every input on the page, so the
-        emptiness reads as a place instead of a void.{" "}
+        with a floor from <code class="cn-code">--empty-h</code> (260px, 120px
+        compact), so an empty list or panel body keeps its height. The recipe
+        styles three children. An <code class="cn-code">svg</code> before the
+        title sits on a 56px carved plate, the same inset as an input.{" "}
         <code class="cn-code">strong</code> is the title,{" "}
         <code class="cn-code">span</code> the supporting line, and anything
-        else joins the 10px stack.
+        else joins the 8px stack.
       </p>
 
       <Demo title="Glyph, title, description, action" classes="empty-state">
@@ -40,14 +39,14 @@ export default function EmptyStatePage() {
           </svg>
           <strong>No teammates in this workspace</strong>
           <span>Invite people to start assigning work and sharing dashboards.</span>
-          <button type="button" class="btn-dashed">+ Invite a teammate</button>
+          <button type="button" class="btn btn-ghost is-dashed">+ Invite a teammate</button>
         </div>
       </Demo>
 
       <p class="cn-copy">
         Use <code class="cn-code">.btn .btn-secondary</code> for the ordinary
-        create step and <code class="cn-code">.btn-dashed</code> when the
-        action is itself an open slot. Reserve{" "}
+        create step and <code class="cn-code">.btn .btn-ghost .is-dashed</code>{" "}
+        when the action is itself an open slot. Reserve{" "}
         <code class="cn-code">.btn-primary</code> for an empty state that is
         the page's one job, like a first-run screen.
       </p>
@@ -59,12 +58,12 @@ export default function EmptyStatePage() {
             name: ".empty-state",
             values: "div inside any region",
             notes:
-              "Centered flex column, 10px gap, 260px min-height, overlay-1 base color.",
+              "Centered flex column, 8px gap, --empty-h min-height, overlay-2 text.",
           },
           {
             name: ".empty-state.is-fill",
             values: "modifier",
-            notes: "Fills the pane or drawer it sits in: height 100%, no 260px floor, 16px padding, 6px gap.",
+            notes: "Fills the pane or drawer it sits in: height 100%, no floor, 16px padding, 4px gap.",
           },
           {
             name: "svg",
@@ -73,7 +72,7 @@ export default function EmptyStatePage() {
           },
           {
             name: "strong",
-            notes: "The title. 15px, full text color.",
+            notes: "The title. 14px, full text color.",
           },
           {
             name: "span",
@@ -81,7 +80,7 @@ export default function EmptyStatePage() {
           },
           {
             name: "action",
-            values: ".btn .btn-secondary / .btn-dashed / .btn .btn-primary",
+            values: ".btn-secondary / .btn-ghost.is-dashed / .btn-primary",
             notes:
               "Optional. One action only; it joins the stack below the copy.",
           },

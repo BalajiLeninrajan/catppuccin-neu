@@ -82,7 +82,7 @@ export default function StepperPage() {
       <Props
         title="States"
         rows={[
-          { name: ".stepper", notes: "Wrapping flex track, 7px gap. Styles every direct child as an inset pill." },
+          { name: ".stepper", notes: "Wrapping flex track, 8px gap. Styles every direct child as an inset pill." },
           { name: "(rest)", default: "upcoming", notes: "Recessed well ground, soft inset, overlay text." },
           { name: '[aria-current="step"]', values: "or .active", notes: "Current phase. Mauve text on a mauve 8% tint; prefer the ARIA attribute." },
           { name: ".is-done", notes: "Completed phase: green text, same recessed ground." },

@@ -1,4 +1,4 @@
-/* ── catppuccin-neu — one-line entry point ──────────────────────────────────
+/* ── catppuccin-neu: one-line entry point ───────────────────────────────────
    Declares the layer order, then imports the three files into it. Recipes
    sit under utilities, Tailwind's own order: a utility on an element always
    beats the recipe on that element ("well cn-bg-well", "btn-secondary

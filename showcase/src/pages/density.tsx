@@ -1,27 +1,18 @@
 import { useState } from "preact/hooks";
-import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock, TEAMS, accentStyle } from "../lib/doc";
 
 const COMPACT_CODE = `<section data-density="compact">
   <button class="btn btn-primary">Save changes</button>
   <input class="input" placeholder="Search settings" />
 </section>`;
 
-const ACCENT_CARDS = [
-  { label: "Revenue", value: "48,210" },
-  { label: "Messages", value: "1,284" },
-  { label: "Invoices", value: "312" },
-  { label: "Members", value: "57" },
-  { label: "Uptime", value: "99.98" },
-  { label: "Storage", value: "1.2 TB" },
-];
-
 const TONE_TAGS = [
-  ["red", "overdue"],
-  ["green", "paid"],
-  ["peach", "pending"],
-  ["yellow", "draft"],
-  ["blue", "synced"],
-  ["mauve", "archived"],
+  ["red", "Overdue"],
+  ["green", "Paid"],
+  ["peach", "Pending"],
+  ["yellow", "Draft"],
+  ["blue", "Synced"],
+  ["mauve", "Archived"],
 ];
 
 export default function DensityPage() {
@@ -29,83 +20,54 @@ export default function DensityPage() {
 
   return (
     <Doc
-      title="Density & contract props"
-      lede="Every recipe reads a handful of custom properties. Four density knobs resize the whole system at once; three contract props re-key individual components from data."
+      title="Density and contract props"
+      lede="Every recipe reads a handful of custom properties. The density knobs resize the whole system at once. Three contract props re-key single components from data."
     >
       <section>
         <h2 class="cn-title">Density knobs</h2>
         <p class="cn-copy">
-          Control heights and the panel radius come from four properties on{" "}
-          <code class="cn-code">:root</code>. Setting{" "}
+          Control heights, band sizes and cell padding come from properties on{" "}
+          <code class="cn-code">:root</code>. Set{" "}
           <code class="cn-code">data-density="compact"</code> on any element
-          re-tunes them for that subtree. It is also the only way 12px enters
-          the radius scale. Pair compact regions with{" "}
-          <code class="cn-code">.cn-hard-sm</code> where you compose the hard
-          offset by hand. <code class="cn-code">data-density="dense"</code>{" "}
-          goes one step further for instrument panels: 28px controls, a 2px
-          offset, and the data surfaces tighten with them, so table cells go
-          to 6px 9px, chips and panel bands shrink, flat buttons and the
-          topbar drop to strip height. Compact was tuned for forms; dense is
-          for readouts.
+          to retune them for that subtree. Compact is for dense apps and
+          readouts: 28px controls, a 2px plate, the card radius on panels,
+          44px bands and tighter table cells, chips and code wells.
         </p>
       </section>
 
       <Props
         title="The knobs"
         rows={[
-          {
-            name: "--control-h",
-            values: "46px · 30px compact",
-            default: "46px",
-            notes: "Primary/secondary button height; segmented options add 12px on top.",
-          },
-          {
-            name: "--control-h-sm",
-            values: "34px · 24px compact",
-            default: "34px",
-            notes: "Small controls (btn-flat and toolbar-scale pieces).",
-          },
-          {
-            name: "--input-h",
-            values: "42px · 30px compact",
-            default: "42px",
-            notes: "Inputs, selects, textareas. The 58px input-lg hero opts out.",
-          },
-          {
-            name: "--pane-radius",
-            values: "16px · 12px compact",
-            default: "16px",
-            notes: "Panel-scale radius; panel heading/footer bands follow it minus 1px.",
-          },
-          {
-            name: "--hard-offset",
-            values: "4px · 3px compact · 2px dense",
-            default: "4px",
-            notes: "The hard offset's distance; the press slides half of it.",
-          },
-          {
-            name: 'data-density="dense"',
-            values: "28 / 22 / 28px, radius 12",
-            default: "·",
-            notes: "Plus table cells 6px 9px, chip 4px 8px, panel bands 44px, btn-flat 26px, topbar 44px, tighter code wells.",
-          },
+          { name: "--control-h", values: "46px · 28px compact", default: "46px", notes: "Buttons, inputs, selects. Segmented options add 12px." },
+          { name: "--control-h-sm", values: "34px · 24px compact", default: "34px", notes: "Small buttons, icon buttons and toolbar pieces." },
+          { name: "--hard-offset", values: "4px · 2px compact", default: "4px", notes: "The plate's distance. The press slides half of it." },
+          { name: "--cn-radius-panel", values: "16px · 12px compact", default: "16px", notes: "Panels and modals. Header bands follow it minus 1px." },
+          { name: "--band-h", values: "64px · 44px compact", default: "64px", notes: "Panel, modal and drawer header bands. The topbar is this plus 4px." },
+          { name: "--band-pad", values: "12px 24px · 8px 16px", default: "12px 24px", notes: "Band padding." },
+          { name: "--band-title-size", values: "20px · 14px", default: "20px", notes: "An h2 inside a panel header." },
+          { name: "--body-pad", values: "24px · 12px 16px", default: "24px", notes: ".panel-body padding." },
+          { name: "--cell-pad", values: "12px 16px · 4px 8px", default: "12px 16px", notes: "Table cells." },
+          { name: "--cell-font-size", values: "13px · 12px", default: "13px", notes: "Table body text." },
+          { name: "--chip-pad", values: "8px 12px · 4px 8px", default: "8px 12px", notes: ".chip padding." },
+          { name: "--well-pad", values: "12px 16px · 8px 12px", default: "12px 16px", notes: "Code block and terminal padding." },
+          { name: "--empty-h", values: "260px · 120px", default: "260px", notes: "The empty-state floor." },
         ]}
       />
 
       <p class="cn-copy">
-        Three controls are deliberately fixed at every density: the checkbox
-        and radio (20px), the switch (50×28px), and the avatar (32px, 44px
-        for <code class="cn-code">.is-lg</code>).
+        Three controls keep one size at every density: the checkbox and
+        radio (20px), the switch (50 by 28px), and the avatar (32px, or 44px
+        with <code class="cn-code">.is-lg</code>).
       </p>
 
       <Demo title="Live density toggle" classes='data-density="compact"'>
         <button
           type="button"
-          class="btn-flat"
+          class="btn btn-ghost is-sm"
           aria-pressed={compact}
           onClick={() => setCompact(!compact)}
         >
-          compact density · {compact ? "on" : "off"}
+          Compact density: {compact ? "on" : "off"}
         </button>
         <div class="sc-grid" data-density={compact ? "compact" : null}>
           <div class="sc-row">
@@ -121,15 +83,15 @@ export default function DensityPage() {
               <b>Monthly</b>
               <small>Billed every month</small>
             </button>
-            <button type="button" class="active">
+            <button type="button" aria-pressed="true">
               <b>Yearly</b>
               <small>Two months free</small>
             </button>
           </div>
           <div class="panel">
-            <div class="panel-heading">
-              <span class="cn-label">Billing settings</span>
-              <span class="chip-tone cn-tone-green">active</span>
+            <div class="panel-header">
+              <h2>Billing settings</h2>
+              <span class="tag cn-tone-green">Active</span>
             </div>
             <div class="panel-footer">
               <button type="button" class="btn btn-ghost">Cancel</button>
@@ -145,8 +107,8 @@ export default function DensityPage() {
         <h2 class="cn-title">Contract props</h2>
         <p class="cn-copy">
           Three properties are the extension points every recipe reads. Set
-          them inline or on a wrapper to re-key a whole subtree. No recipe
-          needs a variant class for color.
+          them inline or on a wrapper to re-key a subtree. No recipe needs a
+          variant class for color.
         </p>
       </section>
 
@@ -155,61 +117,59 @@ export default function DensityPage() {
         rows={[
           {
             name: "--accent",
-            values: "the accent cycle: #cba6f7 #94e2d5 #f9e2af #89b4fa #fab387 #f5c2e7",
+            values: "a hex stored on the record",
             default: "var(--mauve)",
             notes:
-              "Per-instance accent. Read by accent-card (plate, border), mark-solid, avatar, cn-value-lg, the terminal caret, and cn-text-accent / cn-tint-accent / cn-edge-accent / cn-spine.",
+              "The color of one item. Read by the accent-card plate, .mark, .avatar, .cn-value-lg, the progress fill, the terminal caret and the cn-*-accent utilities.",
           },
           {
             name: "--tone",
-            values: "set via .cn-tone-{red,green,peach,yellow,blue,mauve}",
+            values: "set with .cn-tone-{red,green,peach,yellow,blue,mauve}",
             default: "var(--peach)",
-            notes:
-              "Semantic tint. Read by chip-tone, banner, cn-tint, cn-text-tone, cn-edge-tone, and the btn-icon hover.",
+            notes: "Semantic tint. Read by .tag, .banner, field validation, .cn-tint, .cn-text-tone, .cn-edge-tone and the icon-button hover.",
           },
           {
-            name: "--hard-offset-color",
-            values: "any Mocha token",
+            name: "--plate",
+            values: "any Mocha token or mix",
             default: "var(--crust)",
             notes:
-              "Colors the hard offset shadow on btn-secondary, segmented options, and the cn-hard family. Primary buttons override it with a mauve mix.",
+              "The plate under the secondary button, segmented options and the cn-hard family. The primary button and the accent card set their own.",
           },
         ]}
       />
 
-      <Demo title="--accent" classes='style="--accent:#94e2d5"'>
+      <Demo title="--accent" classes='style="--accent:#94e2d5"  (from the record)'>
         <div class="sc-grid">
-          {ACCENTS.map((a, i) => (
-            <div class="accent-card" style={`--accent:${a.color}`} key={a.name}>
-              <div class="metric is-hero">
-                <span>{ACCENT_CARDS[i].label}</span>
-                <strong>{ACCENT_CARDS[i].value}</strong>
-                <span>accent: {a.name}</span>
+          {TEAMS.map((team) => (
+            <div class="accent-card" style={accentStyle(team.accent)} key={team.name}>
+              <div class="stat is-lg" style="padding:0">
+                <span>{team.name}</span>
+                <strong>{team.revenue}</strong>
               </div>
             </div>
           ))}
         </div>
       </Demo>
 
-      <Demo title="--tone" classes="chip-tone cn-tone-green">
+      <Demo title="--tone" classes="tag cn-tone-green">
         <div class="sc-row">
           {TONE_TAGS.map(([tone, label]) => (
-            <span class={`chip-tone cn-tone-${tone}`} key={tone}>{label}</span>
+            <span class={`tag cn-tone-${tone}`} key={tone}>{label}</span>
           ))}
         </div>
         <div class="banner cn-tone-blue">
-          Scheduled maintenance on Sunday 02:00–03:00 UTC. Dashboards stay
-          read-only while it runs.
+          Scheduled maintenance on Sunday from 02:00 to 03:00 UTC. Dashboards
+          stay read-only while it runs.
         </div>
       </Demo>
 
-      <Demo title="--hard-offset-color" classes='style="--hard-offset-color:var(--mauve)"' row>
+      <Demo title="--plate" classes='style="--plate:var(--mauve)"' row>
         <button type="button" class="btn btn-secondary">Default (crust)</button>
-        <button type="button" class="btn btn-secondary" style="--hard-offset-color:var(--mauve)">
-          Mauve offset
+        <button type="button" class="btn btn-secondary" style="--plate:var(--mauve)">
+          Mauve plate
         </button>
-        <button type="button" class="btn btn-secondary" style="--hard-offset-color:var(--surface-0)">
-          Surface offset
+        <button type="button" class="btn btn-secondary" style="--plate:var(--surface-0)">
+          Surface plate
         </button>
       </Demo>
     </Doc>

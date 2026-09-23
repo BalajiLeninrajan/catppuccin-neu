@@ -1,69 +1,52 @@
-import { Doc, Demo, Props, CodeBlock, ACCENTS } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock, PEOPLE, accentStyle } from "../lib/doc";
 
-const PEOPLE = [
-  { initials: "NR", name: "Nadia Rahman" },
-  { initials: "TS", name: "Tomas Silva" },
-  { initials: "AK", name: "Aya Kato" },
-  { initials: "JL", name: "Jon Lindqvist" },
-  { initials: "MD", name: "Mara Diaz" },
-  { initials: "EO", name: "Efe Okafor" },
-];
+const TOMAS = PEOPLE[1];
+const EFE = PEOPLE[5];
 
 export default function AvatarPage() {
   return (
     <Doc
       title="Avatar"
-      lede="An initials round keyed by --accent. The tint, hairline border, and text all derive from the one property."
+      lede="An initials round keyed by --accent. The tint, the hairline border and the initials all come from that one property."
     >
-      <Demo title="The accent cycle" classes="avatar  (set --accent inline)" row>
-        {PEOPLE.map((p, i) => (
-          <span
-            key={p.initials}
-            class="avatar"
-            style={`--accent:${ACCENTS[i].color}`}
-            data-tip={p.name}
-          >
+      <Demo title="People, each in their own accent" classes="avatar  (set --accent from the record)" row>
+        {PEOPLE.map((p) => (
+          <span key={p.initials} class="avatar" style={accentStyle(p.accent)} data-tip={p.name}>
             {p.initials}
           </span>
         ))}
       </Demo>
 
       <p class="cn-copy">
-        Assign accents from data, index into the cycle by user id or list
-        position, so a person keeps the same color everywhere. An image
-        variant exists too, put an <code class="cn-code">img</code> inside and
-        it covers the round, the tint stays behind it as the loading ground.
+        Take the accent from the person: store it on the user record or
+        derive it from the user id. Never from list position, or a person
+        changes color when the list sorts. For an image, put an{" "}
+        <code class="cn-code">img</code> inside and it covers the round. The
+        tint stays behind it while it loads.
       </p>
 
       <Demo title="Large" classes="avatar is-lg" row>
-        <span class="avatar is-lg" style="--accent:#94e2d5" data-tip="Tomas Silva">
-          TS
+        <span class="avatar is-lg" style={accentStyle(TOMAS.accent)} data-tip={TOMAS.name}>
+          {TOMAS.initials}
         </span>
-        <span class="avatar is-lg" style="--accent:#f5c2e7" data-tip="Efe Okafor">
-          EO
+        <span class="avatar is-lg" style={accentStyle(EFE.accent)} data-tip={EFE.name}>
+          {EFE.initials}
         </span>
       </Demo>
 
       <Demo title="Stack" classes="avatar-stack > .avatar">
         <div class="avatar-stack">
-          <span class="avatar" style="--accent:#cba6f7" data-tip="Nadia Rahman">
-            NR
-          </span>
-          <span class="avatar" style="--accent:#94e2d5" data-tip="Tomas Silva">
-            TS
-          </span>
-          <span class="avatar" style="--accent:#f9e2af" data-tip="Aya Kato">
-            AK
-          </span>
-          <span class="avatar" style="--accent:#89b4fa" data-tip="Jon Lindqvist">
-            JL
-          </span>
+          {PEOPLE.slice(0, 4).map((p) => (
+            <span key={p.initials} class="avatar" style={accentStyle(p.accent)} data-tip={p.name}>
+              {p.initials}
+            </span>
+          ))}
         </div>
       </Demo>
 
       <p class="cn-copy">
-        In a stack each avatar rings itself with 2px of the page ground, so
-        the overlap reads as separate rounds instead of a blob.
+        In a stack each avatar draws a 2px ring in the page ground, so
+        overlapping rounds stay separate.
       </p>
 
       <CodeBlock
@@ -87,8 +70,7 @@ export default function AvatarPage() {
           {
             name: ".avatar",
             values: "initials text or one img",
-            notes:
-              "32px round, sans 700 12px. Accent text, 14% accent tint over mantle, 38% accent hairline.",
+            notes: "32px round, sans 700 12px. Accent initials, 14% accent tint over mantle, 38% accent hairline.",
           },
           {
             name: ".is-lg",
@@ -96,20 +78,19 @@ export default function AvatarPage() {
           },
           {
             name: ".avatar-stack",
-            notes:
-              "Inline flex. Each avatar after the first overlaps -8px, every avatar adds a 2px --base ring.",
+            notes: "Inline flex. Each avatar after the first overlaps by 8px, and every avatar adds a 2px ring.",
           },
           {
             name: "--ring-ground",
             values: "color",
             default: "var(--base)",
-            notes: "The stack ring matches the surface behind it; set this when the stack sits on a panel or mantle band.",
+            notes: "The ring color. Set it when the stack sits on a panel or a mantle band.",
           },
           {
             name: "--accent",
-            values: "any accent hex from the cycle",
+            values: "a hex from the record",
             default: "var(--mauve)",
-            notes: "Set inline from data. Keys tint, border, and initials at once.",
+            notes: "Set inline from data. Keys the tint, the border and the initials.",
           },
         ]}
       />

@@ -37,7 +37,7 @@ function CopyableBlock() {
       <pre>npx catppuccin-neu-sync public/styles</pre>
       <button
         type="button"
-        class="btn-icon"
+        class="btn is-icon"
         aria-label="Copy"
         onClick={copy}
       >
@@ -51,7 +51,7 @@ export default function CodeblockPage() {
   return (
     <Doc
       title="Code block"
-      lede="A carved well for snippets. Mono 500 12px on a 1.75 line height. One of the three mono carriers, with .cn-code and .terminal."
+      lede="A carved well for snippets, in mono 500 12px on a 1.6 line height. It shares its radius, fill and type with the terminal and the command."
     >
       <Demo title="Code block" classes="codeblock > pre">
         <div class="codeblock" style="width:min(560px,100%)">
@@ -59,12 +59,12 @@ export default function CodeblockPage() {
         </div>
       </Demo>
 
-      <Demo title="With a copy control" classes="codeblock > btn-icon">
+      <Demo title="With a copy control" classes="codeblock > btn is-icon">
         <CopyableBlock />
       </Demo>
 
       <p class="cn-copy">
-        Put a <code class="cn-code">.btn-icon</code> as a direct child; the
+        Put a <code class="cn-code">.btn.is-icon</code> as a direct child. The
         recipe pins it to the corner and pads the code clear of it. Copying is
         one delegated listener.
       </p>
@@ -72,7 +72,7 @@ export default function CodeblockPage() {
       <CodeBlock
         title="Copy listener"
         code={`document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".codeblock > .btn-icon");
+  const btn = e.target.closest(".codeblock > .btn.is-icon");
   if (btn) navigator.clipboard.writeText(
     btn.closest(".codeblock").querySelector("pre").innerText
   );
@@ -137,7 +137,6 @@ export default function CodeblockPage() {
         <code class="cn-code">max-height</code> and{" "}
         <code class="cn-code">overflow-y: auto</code>, and compose{" "}
         <code class="cn-code">.scroll-well</code> for the quiet scrollbar.
-        Copying to the clipboard needs consumer JS.
       </p>
 
       <CodeBlock
@@ -158,20 +157,20 @@ export default function CodeblockPage() {
           {
             name: ".codeblock",
             notes:
-              "Inset well, 10px radius, 14px 16px padding. Transparent ground, carved from the parent surface.",
+              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the crust-mix recess fill.",
           },
           {
             name: ".is-numbered",
             values: "one element per line inside the pre",
-            notes: "22px right-aligned gutter.",
+            notes: "A 3ch right-aligned gutter, so it scales with the font.",
           },
           {
             name: ".tok-keyword / -string / -number / -fn / -comment",
             values: "spans from your tokenizer",
-            notes: "blue / green / peach / mauve / overlay-0 italic.",
+            notes: "blue / green / peach / mauve / overlay-2 italic.",
           },
           {
-            name: ".codeblock > .btn-icon",
+            name: ".codeblock > .btn.is-icon",
             values: "optional copy control",
             notes:
               "Pinned to the corner, 26px; the block pads right to clear it. Wire with the copy listener.",

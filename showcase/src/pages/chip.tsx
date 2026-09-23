@@ -1,4 +1,4 @@
-import { Doc, Demo, Props, CodeBlock, TONES, ACCENTS } from "../lib/doc";
+import { Doc, Demo, Props, CodeBlock, TONES, TEAMS, accentStyle } from "../lib/doc";
 
 /* Small inline glyphs (24-unit grid, stroke = currentColor). Decorative:
    always paired with a text label, always aria-hidden. */
@@ -73,7 +73,7 @@ export default function ChipPage() {
   return (
     <Doc
       title="Chip"
-      lede="Two small metadata marks. The outlined .chip carries facts like counts and versions; the tinted .chip-tone carries semantic states through --tone. Both stay on one line."
+      lede="Two small metadata marks. The outlined .chip holds facts such as counts and versions. The tinted .tag holds a semantic state through --tone. Both stay on one line."
     >
       <Demo title="Chip" classes="chip" row>
         <span class="chip">v2.4.1</span>
@@ -97,36 +97,46 @@ export default function ChipPage() {
       </Demo>
 
       <p class="cn-copy">
-        Below 760px, only a chip containing an{" "}
-        <code class="cn-code">svg</code> glyph collapses to icon-only: the
-        label is hidden with <code class="cn-code">font-size: 0</code> and the
-        glyph scales up to 16px. Text-only chips keep their label at every
-        width. Keep the label in the markup, it stays the chip's accessible name
-        after the collapse. Mark the glyph{" "}
-        <code class="cn-code">aria-hidden="true"</code>, and never ship a chip
-        whose only content is the svg.
+        A chip keeps its label at every width. Mark the glyph{" "}
+        <code class="cn-code">aria-hidden="true"</code> so the label is the
+        accessible name. For an icon-only chip, add{" "}
+        <code class="cn-code">.is-glyph</code> and keep the label in the
+        markup or in an <code class="cn-code">aria-label</code>.
       </p>
 
-      <Demo title="Chip tones" classes="chip-tone cn-tone-{tone}" row>
+      <Demo title="Icon-only" classes="chip is-glyph" row>
+        <span class="chip is-glyph" aria-label="Auto-renew on">
+          <BoltGlyph />
+        </span>
+        <span class="chip is-glyph" aria-label="12 members">
+          <UsersGlyph />
+        </span>
+      </Demo>
+
+      <Demo title="Tags" classes="tag cn-tone-{tone}" row>
         {TONES.map((tone) => (
-          <span key={tone} class={`chip-tone cn-tone-${tone}`}>
+          <span key={tone} class={`tag cn-tone-${tone}`}>
             {TONE_LABELS[tone]}
           </span>
         ))}
       </Demo>
 
-      <Demo title="Solid marks" classes='mark-solid · set style="--accent:#…"' row>
-        {ACCENTS.map((a, i) => (
-          <span class="mark-solid" style={`--accent:${a.color}`}>
-            {i + 1}
+      <Demo title="Marks" classes='mark  (set --accent from the record)' row>
+        {TEAMS.map((team) => (
+          <span class="sc-row" key={team.name}>
+            <span class="mark" style={accentStyle(team.accent)} aria-hidden="true">
+              {team.name[0]}
+            </span>
+            <span class="cn-name">{team.name}</span>
           </span>
         ))}
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.mark-solid</code> is the 28px identity square for step numbers, ranks, and the
-        logo tile. Re-key it per instance by setting <code class="cn-code">--accent</code> inline from your
-        data.
+        <code class="cn-code">.mark</code> is the 28px identity square for a
+        team tile, a rank or the logo. Set <code class="cn-code">--accent</code>{" "}
+        inline from the record it stands for, so the same team gets the same
+        square everywhere.
       </p>
 
       <Props
@@ -135,37 +145,34 @@ export default function ChipPage() {
           {
             name: ".chip",
             values: "span, a, or button",
-            notes:
-              "Outlined pill on --base with raised-soft depth. White-space: nowrap, keep labels short.",
+            notes: "Outlined pill on --base with raised-soft depth. No wrapping; keep labels short.",
           },
           {
             name: ".chip svg",
             values: "one leading glyph",
-            notes:
-              "14px at rest, 16px icon-only below 760px. Decorative: aria-hidden, label text carries the name.",
+            notes: "14px. Decorative: aria-hidden, and the label text carries the name.",
           },
           {
             name: ".chip.is-glyph",
             values: "modifier",
-            notes: "Icon-only at any width: 7px padding, 16px svg, label hidden with font-size 0. Keep an accessible name.",
+            notes: "Icon-only at any width: 8px padding, 16px svg, label hidden with font-size 0. Keep an accessible name.",
           },
           {
-            name: ".chip-tone",
+            name: ".tag",
             values: "span",
-            notes:
-              "Tinted status tag, 4px radius. Tint and hairline edge both derive from --tone.",
+            notes: "Tinted status tag, 4px radius. The tint and the hairline edge both come from --tone.",
           },
           {
             name: "--tone",
             values: ".cn-tone-red / -green / -peach / -yellow / -blue / -mauve",
             default: "var(--peach)",
-            notes: "Semantic color contract prop; set via a tone utility or inline.",
+            notes: "Semantic color. Set it with a tone utility or inline.",
           },
           {
-            name: ".mark-solid",
+            name: ".mark",
             values: "28px square",
             default: "--accent: var(--mauve)",
-            notes: "Solid accent fill, --shadow-mark, tabular numeral. Set --accent inline per instance.",
+            notes: "Solid accent fill, --shadow-mark, tabular numerals. Set --accent inline per record.",
           },
         ]}
       />
@@ -179,7 +186,9 @@ export default function ChipPage() {
   12 members
 </span>
 
-<span class="chip-tone cn-tone-green">Paid</span>`}
+<span class="tag cn-tone-green">Paid</span>
+
+<span class="mark" style="--accent: #94e2d5">P</span>`}
       />
     </Doc>
   );

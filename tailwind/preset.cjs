@@ -1,13 +1,31 @@
-/* ── catppuccin-neu — Tailwind v3 preset ────────────────────────────────────
+/* ── catppuccin-neu: Tailwind v3 preset ─────────────────────────────────────
    Maps the token vocabulary into Tailwind's theme so utilities like
-   bg-mantle, text-overlay-1, shadow-neu-raised, and rounded-panel resolve
+   bg-mantle, text-overlay-1, shadow-neu-raised and rounded-panel resolve
    to the same custom properties the CSS files use. Requires css/tokens.css
-   (or css/index.css) to be loaded — the preset carries no values of its own
-   beyond the fixed radii. No plugin logic; recipes come from the CSS files.
+   (or css/index.css). Values read the tokens, except the font stacks,
+   which repeat --sans and --mono. No plugin logic; recipes come from the CSS files.
 
    usage: // tailwind.config.cjs
           module.exports = { presets: [require("catppuccin-neu/tailwind/preset.cjs")], … };
 */
+
+/* A type role as a fontSize tuple read from its four tokens. */
+const role = (name) => [
+  `var(--cn-type-${name}-size)`,
+  {
+    lineHeight: `var(--cn-type-${name}-leading)`,
+    letterSpacing: `var(--cn-type-${name}-tracking)`,
+    fontWeight: `var(--cn-type-${name}-weight)`,
+  },
+];
+const display = (size) => [
+  size,
+  {
+    lineHeight: "var(--cn-type-display-leading)",
+    letterSpacing: "var(--cn-type-display-tracking)",
+    fontWeight: "var(--cn-type-display-weight)",
+  },
+];
 
 module.exports = {
   theme: {
@@ -39,36 +57,55 @@ module.exports = {
         /* Contract properties */
         accent: "var(--accent)",
         tone: "var(--tone)",
-        /* Mix tokens — border-edge, border-edge-soft, bg-tint, bg-wash */
+        /* Mix tokens: border-edge, border-edge-soft, bg-tint, bg-wash, border-control-edge */
         edge: "var(--edge)",
         "edge-soft": "var(--edge-soft)",
-        tint: "var(--tint)",
+        tint: "color-mix(in srgb, var(--tone) 4%, transparent)",
         wash: "var(--wash)",
+        "control-edge": "var(--control-edge)",
       },
-      /* Motion tokens — ease-out / ease-in / ease-spring, duration-fast/base/slow */
+      /* Motion: ease-out/in/spring, duration-press/exit/fast/base/slow */
       transitionTimingFunction: {
         out: "var(--ease-out)",
         in: "var(--ease-in)",
         spring: "var(--ease-spring)",
       },
       transitionDuration: {
+        press: "var(--t-press)",
+        exit: "var(--t-exit)",
         fast: "var(--t-fast)",
         base: "var(--t-base)",
         slow: "var(--t-slow)",
       },
-      /* No spacing extension. Tailwind's default scale already holds the
-         system's six values: 4px = 1, 8px = 2, 12px = 3, 16px = 4,
-         22px = 5.5, 28px = 7. (v0.2.0 shipped pixel-named keys, which
-         overrode Tailwind's own 4/8/12/16/28 and shrank every gap-4 on
-         upgrade; removed in v0.2.1.) */
-      /* Type roles — text-label, text-meta, text-name, text-title, text-display */
+      /* Tailwind's default numeric scale already holds --space-1..6:
+         1 = 4px, 2 = 8px, 3 = 12px, 4 = 16px, 6 = 24px, 8 = 32px. Only the
+         named density and layout knobs are added: h-control, h-band,
+         px-gutter and the rest. */
+      spacing: {
+        control: "var(--control-h)",
+        "control-sm": "var(--control-h-sm)",
+        band: "var(--band-h)",
+        gutter: "var(--page-gutter)",
+        "page-pad": "var(--page-pad)",
+        input: "var(--control-h)", /* deprecated, removed in 0.5.0: use control */
+      },
+      /* Type roles: text-microlabel, text-label, text-meta and the rest.
+         Each reads its --cn-type-<role>-* tokens. */
       fontSize: {
-        micro: ["10px", { lineHeight: "1", letterSpacing: ".08em", fontWeight: "700" }],
-        label: ["12px", { lineHeight: "1", letterSpacing: ".01em", fontWeight: "650" }],
-        meta: ["12px", { lineHeight: "1.5", fontWeight: "550" }],
-        name: ["13px", { lineHeight: "1.3", fontWeight: "700" }],
-        title: ["20px", { letterSpacing: "-.03em", fontWeight: "800" }],
-        display: ["clamp(32px, 4vw, 46px)", { lineHeight: ".98", letterSpacing: "-.03em", fontWeight: "760" }],
+        microlabel: role("micro"),
+        label: role("label"),
+        meta: role("meta"),
+        ui: role("ui"),
+        name: role("name"),
+        body: role("body"),
+        lede: role("lede"),
+        title: role("title"),
+        value: role("value"),
+        "value-lg": role("value-lg"),
+        code: role("code"),
+        display: display("var(--cn-type-display-size)"),
+        "display-sm": display("var(--cn-type-display-sm-size)"),
+        micro: role("micro"), /* deprecated, removed in 0.5.0: use microlabel */
       },
       fontFamily: {
         sans: [
@@ -80,9 +117,9 @@ module.exports = {
           "sans-serif",
         ],
         mono: [
+          "JetBrains Mono",
           "JetBrainsMono Nerd Font",
           "JetBrainsMono Nerd Font Mono",
-          "JetBrains Mono",
           "ui-monospace",
           "SFMono-Regular",
           "Menlo",
@@ -90,15 +127,15 @@ module.exports = {
           "monospace",
         ],
       },
-      /* Role-named radii — the blessed scale. */
+      /* Role-named radii from the --cn-radius-* tokens. */
       borderRadius: {
-        panel: "var(--pane-radius)",
-        card: "13px",
-        control: "10px",
-        mark: "8px",
-        chip: "4px",
+        panel: "var(--cn-radius-panel)",
+        card: "var(--cn-radius-card)",
+        control: "var(--cn-radius-control)",
+        mark: "var(--cn-radius-control)",
+        chip: "var(--cn-radius-chip)",
       },
-      /* Depth — the four neu tokens, the promoted floats, the hard offsets. */
+      /* Depth: the four neu tokens, the floats and the hard offsets. */
       boxShadow: {
         "neu-raised": "var(--neu-raised)",
         "neu-raised-soft": "var(--neu-raised-soft)",
@@ -106,19 +143,26 @@ module.exports = {
         "neu-inset-soft": "var(--neu-inset-soft)",
         pop: "var(--shadow-pop)",
         cast: "var(--shadow-cast)",
-        hard: "var(--hard-offset) var(--hard-offset) 0 var(--hard-offset-color)",
-        "hard-lg": "10px 10px 0 var(--hard-offset-color)",
-        "hard-sm": "3px 3px 0 var(--hard-offset-color)",
+        hard: "var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust)))",
+        "hard-lg": "10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust)))",
+        "hard-sm": "3px 3px 0 var(--plate, var(--hard-offset-color, var(--crust)))",
         mark: "var(--shadow-mark)",
       },
-      /* Density knobs */
+      /* Heights also read spacing on Tailwind 3.4; these keep older 3.x working. */
       height: {
         control: "var(--control-h)",
-        input: "var(--input-h)",
+        "control-sm": "var(--control-h-sm)",
+        band: "var(--band-h)",
+        input: "var(--control-h)", /* deprecated, removed in 0.5.0: use control */
       },
       minHeight: {
         control: "var(--control-h)",
-        input: "var(--input-h)",
+        "control-sm": "var(--control-h-sm)",
+        band: "var(--band-h)",
+        input: "var(--control-h)", /* deprecated, removed in 0.5.0: use control */
+      },
+      opacity: {
+        disabled: "var(--disabled-opacity)",
       },
     },
   },

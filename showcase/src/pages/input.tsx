@@ -33,7 +33,7 @@ function MagnifierIcon() {
 export default function InputPage() {
   return (
     <Doc
-      title="Input & Field"
+      title="Input & field"
       lede="Text inputs, selects, and textareas are borderless. The background stays transparent; the inner shadow alone presses the well into the parent ground."
     >
       <p class="cn-copy">
@@ -117,7 +117,7 @@ export default function InputPage() {
           placeholder="Name your new dashboard"
         />
         <p class="cn-copy">
-          The hero variant: 58px tall, 13px radius, 15px type. One per page.
+          The hero variant: 58px tall, the card radius, 16px type. One per page.
         </p>
       </Demo>
 
@@ -148,9 +148,9 @@ export default function InputPage() {
         </p>
       </Demo>
 
-      <Demo title="Validation" classes="field is-error / field is-warning">
+      <Demo title="Validation" classes='field > [aria-invalid="true"] / field is-warning'>
         <div class="sc-grid">
-          <div class="field is-error">
+          <div class="field">
             <label for="demo-bad-email">Billing email</label>
             <input
               id="demo-bad-email"
@@ -167,12 +167,12 @@ export default function InputPage() {
           </div>
         </div>
         <p class="cn-copy">
-          The state class sets <code class="cn-code">--tone</code> and washes
-          the well in it at 4%, the same rule as an open accordion; the carve
-          is untouched, and label and message tint with it. Focus keeps the
-          mauve ring, over the wash. Set{" "}
-          <code class="cn-code">aria-invalid</code> alongside{" "}
-          <code class="cn-code">.is-error</code>.
+          Error state keys on <code class="cn-code">aria-invalid="true"</code>{" "}
+          on the control, so the attribute screen readers announce is also
+          the style hook. A warning uses <code class="cn-code">.is-warning</code>{" "}
+          on the field. Either state sets <code class="cn-code">--tone</code>{" "}
+          and washes the well in it at 4%. The carve stays, and the label and
+          message take the tone. Focus keeps the mauve ring over the wash.
         </p>
       </Demo>
 
@@ -200,12 +200,12 @@ export default function InputPage() {
             name: ".input",
             values: "on a bare input",
             notes:
-              "The borderless inset well. Sans, 13px, tabular numerals for amounts and dates.",
+              "The borderless inset well. Sans 500 13px, tabular numerals for amounts and dates.",
           },
           {
             name: ".input-lg",
             values: "compose with .input",
-            notes: "58px hero variant, 13px radius. One per page.",
+            notes: "58px hero variant, 16px type. One per page.",
           },
           {
             name: ".input-icon",
@@ -214,21 +214,21 @@ export default function InputPage() {
               "Absolutely positions a leading 18px icon; pads the input to 44px on the left.",
           },
           {
-            name: '.is-error / .is-warning / [aria-invalid="true"]',
-            values: "on .field or a bare .input",
+            name: '[aria-invalid="true"] / .is-warning',
+            values: "on the control / on .field or a bare .input",
             notes:
-              "Red or peach tone wash (4%) on the well, carve untouched; label and small tint. Focus keeps the mauve ring. A field with any aria-invalid control inside it is in error without the class. Disabled wins over both.",
+              "Red or peach tone wash (4%) on the well; the carve stays; label and small take the tone. Focus keeps the mauve ring. Disabled wins over both.",
           },
           {
             name: ".field small",
             values: "helper or message line",
-            notes: "11px under the control; overlay-1, tinted by the state.",
+            notes: "12px under the control in overlay-2; takes the state tone.",
           },
           {
-            name: "--input-h",
+            name: "--control-h",
             values: "length",
-            default: "42px",
-            notes: "Density knob; compact density sets 30px.",
+            default: "46px",
+            notes: "Height of inputs, selects and buttons; compact density sets 28px.",
           },
         ]}
       />
