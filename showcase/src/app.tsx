@@ -1,5 +1,6 @@
 import { LocationProvider, Router, Route, useLocation } from "preact-iso";
 import { useState, useEffect } from "preact/hooks";
+import posthog from "posthog-js";
 import { GROUPS, PAGES } from "./nav";
 import { Doc } from "./lib/doc";
 
@@ -141,6 +142,9 @@ export function App() {
               href="https://github.com/BalajiLeninrajan/catppuccin-neu"
               target="_blank"
               rel="noreferrer"
+              onClick={() =>
+                posthog.capture("open_repo", { page: location.pathname, button: "footer_github" })
+              }
             >
               GitHub
             </a>
