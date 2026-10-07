@@ -143,7 +143,7 @@ export function App() {
               target="_blank"
               rel="noreferrer"
               onClick={() =>
-                posthog.capture("open_repo", { page: location.pathname, button: "footer_github" })
+                posthog.capture("outbound_link", { destination: "github", location: "footer" })
               }
             >
               GitHub
