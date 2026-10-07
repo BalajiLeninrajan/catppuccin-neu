@@ -11,4 +11,11 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["preact-iso"],
   },
+  build: {
+    rollupOptions: {
+      // posthog-js alone would push the entry chunk past Vite's 500 kB
+      // warning; its own chunk also stays cached across showcase deploys.
+      output: { manualChunks: { posthog: ["posthog-js"] } },
+    },
+  },
 });
