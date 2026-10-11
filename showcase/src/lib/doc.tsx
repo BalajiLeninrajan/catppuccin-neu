@@ -7,6 +7,7 @@
 
 import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
+import posthog from "posthog-js";
 
 /* Semantic tones, in the order of the .cn-tone-* setters. */
 export const TONES = ["red", "green", "peach", "yellow", "blue", "mauve"] as const;
@@ -72,6 +73,10 @@ function CopyLine({ text, block }: CopyLineProps) {
 
   function copy() {
     const done = () => {
+      posthog.capture("copy_command", {
+        page: location.pathname,
+        button: block ? "code_block" : "class_line",
+      });
       setCopied(true);
       setTimeout(() => setCopied(false), 1200);
     };
