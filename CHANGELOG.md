@@ -3,7 +3,7 @@
 One line per change, newest version first. [SPEC.md](./SPEC.md) describes
 what ships now. This file records how it got there.
 
-## Unreleased
+## 0.4.1
 
 - Solid accent fills paint `--cn-fill-ramp`: the fill lit from the top left, lightness +.035 to -.045 on one hue. It covers `.btn-primary`, the checked `.checkbox`, the on `.switch` paddle, `.mark` and the progress fill.
 - Those fills, except the switch paddle, carry fractal film grain from the bottom right in a `::before` under their content. `--grain` sets its strength (.22); 0 turns it off.
