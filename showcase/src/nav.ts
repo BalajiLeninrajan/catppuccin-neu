@@ -6,7 +6,6 @@
 import type { ComponentType } from "preact";
 
 import Introduction from "./pages/introduction";
-import Migration from "./pages/migration";
 
 import Colors from "./pages/colors";
 import Typography from "./pages/typography";
@@ -66,7 +65,6 @@ export interface NavEntry {
 
 export const PAGES: NavEntry[] = [
   { path: "/", title: "Introduction", group: "Getting started", component: Introduction },
-  { path: "/migration", title: "Migrating to 0.4", group: "Getting started", component: Migration },
 
   { path: "/colors", title: "Colors", group: "Foundation", component: Colors },
   { path: "/typography", title: "Typography", group: "Foundation", component: Typography },
