@@ -257,7 +257,7 @@
   font-weight: var(--cn-type-name-weight);
   cursor: pointer;
   transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
-              background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+              background var(--t-fast), border-color var(--t-fast), color var(--t-fast), --cn-fill var(--t-fast);
 }
 /* Down is crisp on the fast-out; up comes back on the spring. */
 .btn:active:not(:disabled),
@@ -300,18 +300,43 @@ a:active > .accent-card {
   transition-duration: var(--t-press);
 }
 
-/* Primary: solid mauve on a mauve plate pressed into surface, plus the gloss. */
+/* Primary: the mauve ramp under grain, on a mauve plate pressed into
+   surface. The gloss is a white rim on top and a crust shade underneath.
+   The ramp runs under the border, so the border stays transparent. */
 .btn-primary {
+  --cn-fill: var(--mauve);
   --plate: color-mix(in srgb, var(--mauve) 25%, var(--surface-0));
-  --hard-extra: inset 1px 1px rgb(255 255 255 / .16);
+  --hard-extra: inset 0 1px rgb(255 255 255 / .3), inset 0 -2px color-mix(in srgb, var(--crust) 22%, transparent);
   color: var(--crust);
-  border: 1px solid var(--mauve);
-  background: var(--mauve);
+  border: 1px solid transparent;
+  background-color: var(--cn-fill);
+  background-image: var(--cn-fill-ramp);
+  background-origin: border-box;
 }
-.btn-primary:hover:not(:disabled) {
-  border-color: var(--pink);
-  background: var(--pink);
+.btn-primary:hover:not(:disabled) { --cn-fill: var(--pink); }
+
+/* ── Fill grain ─────────────────────────────────────────────────────────────
+   Solid accent fills carry film grain in a layer under their content. It
+   is densest at the bottom right, away from the light, and gone before the
+   top left. --grain sets the strength. The switch paddle is already a
+   pseudo-element, so it takes the ramp without grain. */
+:is(.btn-primary, .checkbox:checked, .mark, .progress-track span) {
+  position: relative;
+  isolation: isolate;
 }
+:is(.btn-primary, .checkbox:checked, .mark, .progress-track span)::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--cn-grain-image) 0 0 / var(--cn-grain-tile);
+  opacity: var(--grain);
+  mix-blend-mode: overlay;
+  mask-image: radial-gradient(farthest-corner at 100% 100%, #000 14%, transparent 115%);
+}
+.progress-track span::before { inset: 0; }
 
 /* Secondary: base fill on the crust plate, the default for clickables. */
 .btn-secondary {
@@ -691,7 +716,9 @@ a:active > .accent-card {
   color: var(--crust);
   border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
   border-radius: var(--cn-radius-control);
-  background: var(--accent);
+  background-color: var(--cn-fill);
+  background-image: var(--cn-fill-ramp);
+  background-origin: border-box;
   box-shadow: var(--shadow-mark);
   font: var(--cn-type-name-weight) var(--cn-type-label-size)/1 var(--sans);
   font-variant-numeric: tabular-nums;
@@ -788,8 +815,11 @@ a:active > .accent-card {
   transition: opacity var(--t-fast), transform var(--t-base) var(--ease-spring);
 }
 .checkbox:checked {
-  border-color: var(--mauve);
-  background: var(--mauve);
+  --cn-fill: var(--mauve);
+  border-color: transparent;
+  background-color: var(--cn-fill);
+  background-image: var(--cn-fill-ramp);
+  background-origin: border-box;
   box-shadow: var(--neu-inset-soft), inset 0 1px rgb(255 255 255 / .16);
 }
 .checkbox:checked::after { opacity: 1; transform: none; }
@@ -863,9 +893,11 @@ a:active > .accent-card {
   transition: translate var(--t-base) var(--ease-spring), transform var(--t-base) var(--ease-out), background var(--t-base), box-shadow var(--t-base) var(--ease-out), border-color var(--t-base);
 }
 .switch:checked::after {
+  --cn-fill: var(--mauve);
   translate: 23px 0;
   border-color: var(--mauve);
-  background: var(--mauve);
+  background-color: var(--cn-fill);
+  background-image: var(--cn-fill-ramp);
   box-shadow: 0 0 6px color-mix(in srgb, var(--mauve) 18%, transparent),
               inset 0 1px rgb(255 255 255 / .16);
   transform: perspective(120px) rotateY(-16deg);
@@ -1211,12 +1243,17 @@ a:hover:not(:active) > .accent-card {
   height: 100%;
   display: block;
   border-radius: inherit;
-  /* The fill is the accent. --progress-fill opts into a gradient. */
-  background: var(--progress-fill, var(--accent));
+  /* The fill is the accent ramp. --progress-fill replaces it with any
+     color or gradient. */
+  background: var(--progress-fill, var(--cn-fill));
   /* Decelerates into the value instead of stopping dead. */
   transition: width calc(var(--t-slow) * 2) var(--ease-out);
 }
 .progress-track.is-lg { height: 12px; }
+/* Without relative color the ramp is invalid, so the flat fill stays. */
+@supports (color: oklch(from red l c h)) {
+  .progress-track span { background: var(--progress-fill, var(--cn-fill-ramp)); }
+}
 
 /* Table: opt-in class on <table>; scopes all table styling. Sans tabular
    body, mantle header, hover presses the row in. Give each data cell a

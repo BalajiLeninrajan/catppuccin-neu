@@ -73,7 +73,8 @@ CSS is unlayered and beats both, so overrides never need `!important`.
 
 Re-key a subtree with the contract properties: `--accent` (the item's
 identity color), `--tone` (status color), `--plate` (the hard offset's
-color) and `--hard-offset`. Set `data-density="compact"` on any ancestor
+color), `--hard-offset` and `--grain` (grain strength on solid accent
+fills, 0 for none). Set `data-density="compact"` on any ancestor
 for 28px controls and tighter data surfaces.
 
 `tailwind/preset.cjs` (v3) and `tailwind/theme.css` (v4) map the tokens to

@@ -14,9 +14,9 @@ how each rule got here.
 - **Readable text is overlay-2 or lighter.** overlay-0 and overlay-1 are for placeholders, icons, borders and disabled text.
 - **Depth replaces borders on inset surfaces.** Inset surfaces paint no border and no background of their own. Hairlines stay on raised surfaces and tinted surfaces. The checkbox, radio and switch keep an edge, because at 20px the carve alone is invisible.
 - **One signal per item.** Color goes on plates and data marks such as a progress fill. Text stays text-colored. An accent comes from the item's identity, so the same item has the same accent on every page.
-- **The ornaments stay.** The tilted panel, colored plates, the switch rocker, the primary gloss, the empty-state plate, the spring curve, page-enter, the toast pile and the scrim blur are the package's identity.
+- **The ornaments stay.** The tilted panel, colored plates, the switch rocker, the primary gloss, the fill grain, the empty-state plate, the spring curve, page-enter, the toast pile and the scrim blur are the package's identity.
 - **One tilted panel per page**, holding a summary or an aside, not the page's main data.
-- **`color-mix` is `in srgb`.** `in oklab` is allowed only for data-visualization ramps.
+- **`color-mix` is `in srgb`.** `in oklab` is allowed only for data-visualization ramps. `oklch(from …)` is allowed only in `--cn-fill-ramp`, where it moves lightness and chroma, never hue.
 - **Fonts.** Every page links Inter (100..900) and JetBrains Mono (100..800) from Google Fonts.
 
 ### Cascade
@@ -115,7 +115,8 @@ Set these on an element or a wrapper to re-key a subtree.
 | `--page-gutter` | `clamp(12px, 3vw, 32px)` | Inline gutter of the page column, the footer and the topbar |
 | `--page-pad` | `clamp(24px, 4vw, 48px)` | Block padding of the page column |
 | `--page-width` | 1440px | Width of the page column and footer; unset on `:root` |
-| `--progress-fill` | `var(--accent)` | The progress fill; any token color or gradient |
+| `--progress-fill` | the accent ramp | The progress fill; any token color or gradient |
+| `--grain` | .22 | Grain strength on solid accent fills; 0 turns it off |
 | `--ring-ground` | `var(--base)` | The ring color between stacked avatars |
 
 ### Mix tokens
@@ -123,6 +124,24 @@ Set these on an element or a wrapper to re-key a subtree.
 - `--edge`: surface-2 at 40%. The raised-surface hairline.
 - `--edge-soft`: surface-1 at 38%. Inner separators.
 - `--tint`: the tone at 4%. Declared on `.cn-tint`, `.tag`, `.banner`, `.input` and field controls, so each reads its own `--tone`.
+
+### Fill ramp and grain
+
+Solid accent fills paint `--cn-fill-ramp` instead of a flat color: the
+primary button, the checked checkbox, the switch paddle when on, `.mark`
+and the progress fill. The ramp lights `--cn-fill` from the top left at
+165deg. It starts at lightness +.035, passes the fill at 50% and ends at
+lightness -.045 with chroma +.015. `--cn-fill` is the accent, or mauve on
+the primary, checkbox and switch, and pink on primary hover. It is a
+registered `<color>`, so the hover transitions. Without relative color
+support the flat `--cn-fill` stays.
+
+Every ramp but the switch paddle's carries grain in a `::before` under its
+content. `--cn-grain-image` is a 160-unit greyscale `feTurbulence` tile
+(fractal noise at .75, four octaves), blended with `overlay` at `--grain`.
+A radial mask holds full strength for 14% from the bottom right and fades
+to nothing by 115%, so the lit corner stays clean. Resolution queries size
+the tile to one device pixel per unit. Forced colors hide the grain.
 - `--wash`: mauve 7% into base. The engaged state.
 - `--control-edge`: overlay-0. The edge of an unchecked control, 3:1 on base.
 - `--disabled-opacity`: .5.
@@ -302,7 +321,7 @@ the density knobs.
 
 - `.btn`: `--control-h`, 16px inline padding, control radius, 13px at 700. Svg 16px.
 - `.is-sm`: `--control-h-sm`, 12px type, svg 14px. `.is-lg`: `--control-h` plus 12px, 14px type, svg 18px. One `.is-lg` per page.
-- `.btn-primary`: mauve fill, crust text, a plate of mauve 25% into surface-0, and a white gloss inset at .16. Hover turns pink.
+- `.btn-primary`: the mauve ramp under grain, crust text, a transparent border and a plate of mauve 25% into surface-0. The gloss is a white rim at .3 on top and crust at 22% along the bottom 2px. Hover moves the ramp to pink.
 - `.btn-secondary`: base fill, `--edge` border, crust plate. Hover warms the border toward mauve.
 - `.btn-ghost`: transparent until hovered. Held, it sinks onto `--neu-inset-soft`. With `aria-pressed="true"` or `aria-current` it wears the engaged state.
 - `.btn-ghost.is-dashed`: a dashed surface-1 border, card radius, a faint fill. Hover goes mauve. It marks an open slot such as a drop zone.
@@ -339,7 +358,7 @@ keyboard focus after .4s and rises 2px. It leaves at once. Never use
 
 ### Marks, chips, tags, banners
 
-- `.mark`: a 28px accent square, crust glyph, control radius, `--shadow-mark`, 12px at 700.
+- `.mark`: a 28px square in the accent ramp under grain, crust glyph, control radius, `--shadow-mark`, 12px at 700.
 - `.chip`: an outlined pill, `--chip-pad`, base fill, `--neu-raised-soft`, label role in overlay-2, svg 14px. `.chip.is-glyph` is icon-only; keep an accessible name.
 - `.tag`: a status tag in `--tone`. 4px padding, chip radius, tone 45% hairline, `--tint`, label role.
 - `.banner`: a tinted band in `--tone`. 12px 16px padding, card radius, `--tint`, `--neu-inset-soft`, meta size.
@@ -347,9 +366,9 @@ keyboard focus after .4s and rises 2px. It leaves at once. Never use
 ### Selection controls
 
 - `.choice`: a label row, `<label class="choice"><input>Text</label>`, gap 8, 13px. Dims to `--disabled-opacity` when its input is disabled.
-- `.checkbox`: 20px, chip radius, `--control-edge` border, `--neu-inset-soft`. Hover edge overlay-1. Checked is a mauve fill with a crust tick that lands on the spring from `scale(.4) rotate(-8deg)`.
+- `.checkbox`: 20px, chip radius, `--control-edge` border, `--neu-inset-soft`. Hover edge overlay-1. Checked is the mauve ramp under grain, a transparent border and a crust tick that lands on the spring from `scale(.4) rotate(-8deg)`.
 - `.radio`: the same well, round. Checked deepens to `--neu-inset` with a 9px mauve dot and a 3px halo.
-- `.switch`: 50x28, control radius, `--neu-inset` with a 1px `--control-edge` ring. The 21x22 paddle tilts 16deg at rest. Checked, it slides 23px on the spring, tilts the other way, turns mauve, and glows at 6px. Held, it flattens; held while on, the glow blooms to 12px.
+- `.switch`: 50x28, control radius, `--neu-inset` with a 1px `--control-edge` ring. The 21x22 paddle tilts 16deg at rest. Checked, it slides 23px on the spring, tilts the other way, takes the mauve ramp, and glows at 6px. Held, it flattens; held while on, the glow blooms to 12px.
 - Held checkbox and radio sink 1px onto the full inset.
 
 ### Accordion
@@ -413,7 +432,7 @@ press, and on hover the plate grows 1px.
 ### Data display
 
 - `.stat`: a label `span` over a value `strong` in the value role. `.is-lg` uses value-lg in the accent. `.is-inline` is a baseline row, label left and value (`b` or `strong`) right; stack rows in `.cn-divide`.
-- `.progress-track`: 7px, 999px, crust, `--neu-inset-soft`. The `span` fill reads `--progress-fill` and eases its width over twice `--t-slow`. `.is-lg` is 12px.
+- `.progress-track`: 7px, 999px, crust, `--neu-inset-soft`. The `span` fill is the accent ramp under grain; `--progress-fill` replaces the ramp. It eases its width over twice `--t-slow`. `.is-lg` is 12px.
 - `.data-table`: the class scopes all table styling. Header cells: `--cell-pad`, head fill, label role, overlay-2. Body cells: `--cell-pad`, 500 at `--cell-font-size`, subtext-1, tabular. `.cell-name` holds a 600 name over a meta line.
 - Row hover presses the row: a mauve 6% wash plus a vertical gradient on each cell, dark at the top 5px and lit at the bottom 4px. The edge colors are registered with `@property` so they fade in. `tr[aria-selected="true"]` takes `--wash` and a deeper press.
 - `th[aria-sort] > button`: a reset button with a chevron. The chevron hides while unsorted and flips for ascending.
@@ -473,8 +492,8 @@ Three breakpoints. Each removes decoration, never content.
 
 Reviewers also check:
 
-1. Every `box-shadow` is a neu token, `--shadow-pop/cast/mark`, the hard offset (full, half, the +1px link hover, the fixed 10px and 3px), the tilted composite, the focus ring over an inset, the white gloss at .16, the cast hairline, a 13% halo ring (radio, live dot), the avatar ground ring, the switch glow, the switch and sticky-header 1px inset rings, or `--hard-extra`.
-2. Every color is a Mocha hex from tokens, `currentColor`, `transparent`, `color-mix(in srgb, …)` of tokens, the white at .16 or .1, or the crust and surface-1 rgb values the neu tokens and the row press use. Data-URI glyphs use palette hexes. Mask gradients are exempt.
+1. Every `box-shadow` is a neu token, `--shadow-pop/cast/mark`, the hard offset (full, half, the +1px link hover, the fixed 10px and 3px), the tilted composite, the focus ring over an inset, the white gloss at .16, the primary rim (white at .3, crust 22%), the cast hairline, a 13% halo ring (radio, live dot), the avatar ground ring, the switch glow, the switch and sticky-header 1px inset rings, or `--hard-extra`.
+2. Every color is a Mocha hex from tokens, `currentColor`, `transparent`, `color-mix(in srgb, …)` of tokens, `oklch(from …)` of a token inside `--cn-fill-ramp`, the white at .16, .1 or .3, or the crust and surface-1 rgb values the neu tokens and the row press use. Data-URI glyphs use palette hexes; the grain tile is greyscale. Mask gradients are exempt.
 3. Every radius is a `--cn-radius-*` token, 999px, 50%, 0, or a parent radius minus 1px.
 4. Mono follows the ground rule. `text-transform: uppercase` appears only on `.cn-microlabel` and the deprecated eyebrows.
 5. Every transform or box-shadow transition names a curve. No transition uses `ease`, `linear` or `ease-in-out`.

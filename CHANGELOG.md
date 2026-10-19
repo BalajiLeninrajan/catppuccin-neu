@@ -3,6 +3,14 @@
 One line per change, newest version first. [SPEC.md](./SPEC.md) describes
 what ships now. This file records how it got there.
 
+## Unreleased
+
+- Solid accent fills paint `--cn-fill-ramp`: the fill lit from the top left, lightness +.035 to -.045 on one hue. It covers `.btn-primary`, the checked `.checkbox`, the on `.switch` paddle, `.mark` and the progress fill.
+- Those fills, except the switch paddle, carry fractal film grain from the bottom right in a `::before` under their content. `--grain` sets its strength (.22); 0 turns it off.
+- The primary gloss is a white rim at .3 on top and a crust shade along the bottom. The primary and checked checkbox borders are transparent so the ramp runs edge to edge.
+- Primary hover transitions the ramp from mauve to pink through the registered `--cn-fill`.
+- `oklch(from …)` is allowed in `--cn-fill-ramp` only, for lightness and chroma.
+
 ## 0.4.0
 
 Every renamed class, token and key keeps working through 0.4.x as a
