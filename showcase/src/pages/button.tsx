@@ -45,8 +45,10 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        One primary action per view. Its plate is mauve mixed into surface-0, the one plate that is not crust,
-        and a 1px gloss sits on its top-left edge. A disabled button drops to{" "}
+        One primary action per view. Its plate is mauve mixed into surface-0, the one plate that is not crust.
+        The fill is a mauve ramp lit from the top left, with film grain rising from the bottom right, and a
+        white rim runs along its top edge. Set <code class="cn-code">--grain: 0</code> to drop the grain. A
+        disabled button drops to{" "}
         <code class="cn-code">--disabled-opacity</code> (.5) and keeps its variant's rest shadow.
       </p>
 
@@ -195,7 +197,7 @@ export default function ButtonPage() {
         title="Variants and knobs"
         rows={[
           { name: ".btn", values: "base class", notes: "Height --control-h, the control radius (8px), sans 700 13px. Compose with one variant." },
-          { name: ".btn-primary", notes: "Solid mauve, crust text, mauve-mix plate and a 1px gloss. One per view." },
+          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. One per view." },
           { name: ".btn-secondary", notes: "Base ground, hairline edge, crust plate. The default for clickables." },
           { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current]', notes: "Transparent until hovered. Toggled or current, it takes the engaged state." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
@@ -205,6 +207,7 @@ export default function ButtonPage() {
           { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 12px type, or the hero action at --control-h + 12px with 14px type." },
           { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },
           { name: ":disabled", notes: "--disabled-opacity (.5) and a not-allowed cursor. Keeps the variant's rest shadow." },
+          { name: "--grain", default: ".22", notes: "Grain strength on the primary and every other solid accent fill. 0 turns it off." },
           { name: "--plate", default: "var(--crust)", notes: "The plate's color, read by the secondary button, segmented options and .cn-hard." },
           { name: "--control-h", default: "46px", notes: '28px under data-density="compact".' },
         ]}

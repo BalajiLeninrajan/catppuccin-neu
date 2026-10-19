@@ -172,7 +172,7 @@ export default function ChipPage() {
             name: ".mark",
             values: "28px square",
             default: "--accent: var(--mauve)",
-            notes: "Solid accent fill, --shadow-mark, tabular numerals. Set --accent inline per record.",
+            notes: "Accent ramp under grain, --shadow-mark, tabular numerals. Set --accent inline per record.",
           },
         ]}
       />

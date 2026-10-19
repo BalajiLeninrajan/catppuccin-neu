@@ -13,7 +13,7 @@ export default function ProgressPage() {
   return (
     <Doc
       title="Progress"
-      lede="A borderless inset track with a fill in --accent. The fill inherits the track's radius, so nothing needs overflow clipping."
+      lede="A borderless inset track with a fill in the --accent ramp. The fill inherits the track's radius, so nothing needs overflow clipping."
     >
       <Demo title="Live tracks" classes="progress-track > span">
         <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:18px">
@@ -54,7 +54,7 @@ export default function ProgressPage() {
       </Demo>
 
       <p class="cn-copy">
-        The fill is <code class="cn-code">--accent</code>, mauve by default.
+        The fill is the <code class="cn-code">--accent</code> ramp under grain, mauve by default.
         On an accent card the bar takes the card's accent, because a progress
         fill is a data mark.
       </p>
@@ -110,7 +110,7 @@ export default function ProgressPage() {
             values: "width: 0 to 100%",
             default: "width: 0",
             notes:
-              "Block fill; inherits the track radius; fills with var(--progress-fill), then var(--accent); width transitions over .64s on --ease-out.",
+              "Block fill; inherits the track radius; fills with var(--progress-fill), then the accent ramp under grain; width transitions over .64s on --ease-out.",
           },
           {
             name: ".progress-track.is-lg",
@@ -120,7 +120,7 @@ export default function ProgressPage() {
           {
             name: "--progress-fill",
             values: "token color or token gradient",
-            default: "var(--accent)",
+            default: "the accent ramp",
             notes:
               "Set on the track or a wrapper to re-key the fill per instance.",
           },
