@@ -20,7 +20,7 @@ Docs and every component: [catppuccin-neu.balajileninrajan.dev](https://catppucc
 With a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.0
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.1
 ```
 
 ```js
@@ -30,7 +30,7 @@ import "catppuccin-neu/css/index.css";
 From the CDN, for a page with no `package.json`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.0/css/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css" />
 ```
 
 Pin a full tag. `@main` and `@v0.4` float and re-cache every 12 hours. Link
