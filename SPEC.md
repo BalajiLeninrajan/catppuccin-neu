@@ -40,9 +40,9 @@ utilities layer lands on top.
 
 ### Distribution
 
-- Bundled apps install the git tag (`github:BalajiLeninrajan/catppuccin-neu#v0.4.0`) and import `catppuccin-neu/css/index.css`.
+- Bundled apps install the git tag (`github:BalajiLeninrajan/catppuccin-neu#v0.4.1`) and import `catppuccin-neu/css/index.css`.
 - Zero-build pages with a `package.json` run `catppuccin-neu-sync <dir>` in a pre-build hook and ignore the copies in git.
-- Pages with no `package.json` link `https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.0/css/index.css`. Pin a full tag. Link `index.css`, not the three files, so the layers survive.
+- Pages with no `package.json` link `https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css`. Pin a full tag. Link `index.css`, not the three files, so the layers survive.
 - Nobody commits copies of the CSS. Tags never move once pushed.
 
 The docs deploy as the `catppuccin-neu` Cloudflare Worker at
