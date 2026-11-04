@@ -72,7 +72,8 @@ export default function InputPage() {
         the carve. <code class="cn-code-inline">--cn-field-ring</code> draws that as
         a 1px overlay-1 edge,{" "}
         <code class="cn-code-inline">inset -1px -1px 0 var(--overlay-1)</code>:
-        4.4:1 on base, 3.7:1 on a panel and 3.5:1 in a dialog. An empty field
+        4.4:1 on base and on a panel, which share a color, and 3.5:1 in a
+        dialog. An empty field
         has no text inside it to show where it is, so the lip marks its
         bounds at rest (WCAG 1.4.11). Under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> the lip
@@ -90,8 +91,8 @@ export default function InputPage() {
 
       <p class="cn-copy">
         Placeholders are <code class="cn-code-inline">--cn-fg-placeholder</code>{" "}
-        (overlay-2), the floor for readable text: 5.8:1 on the page, 4.8:1 on
-        a panel and 4.6:1 in a dialog. Labels and help text sit a stop
+        (overlay-2), the floor for readable text: 5.8:1 on the page and on a
+        panel, and 4.6:1 in a dialog. Labels and help text sit a stop
         above, on <code class="cn-code-inline">--cn-fg-muted</code>{" "}
         (subtext-0), 7.4:1 on the page. The value is{" "}
         <code class="cn-code-inline">--cn-fg</code>, so a filled field never
@@ -221,9 +222,9 @@ export default function InputPage() {
           washes the well in it at 4%, and closes the lit lip into a full 1px
           ring in the tone,{" "}
           <code class="cn-code-inline">inset 0 0 0 1px var(--tone)</code>, so
-          the field itself changes and not only its label. The carve stays,
-          and the label and message take the tone. The message leads with the
-          tone's glyph, the crossed circle of{" "}
+          the field itself changes. The carve stays. The message is a
+          sentence, so it moves up to body text, and only its leading glyph
+          takes the tone, as on a banner: the crossed circle of{" "}
           <code class="cn-code-inline">--cn-glyph-danger</code> or the
           triangle of <code class="cn-code-inline">--cn-glyph-warning</code>,
           drawn in CSS and never read aloud, so the two states differ by shape
@@ -244,7 +245,7 @@ export default function InputPage() {
           Use the native attribute. The carve nearly fills in to the soft
           inset, the lip stays, and the text and label drop to{" "}
           <code class="cn-code-inline">--cn-fg-disabled</code> (overlay-1, 4.4:1 on the
-          page, 3.7:1 on a panel). There is
+          page and on a panel). There is
           no opacity on top. The browser only blocks input.
         </p>
       </Demo>
@@ -267,7 +268,7 @@ export default function InputPage() {
           <code class="cn-code-inline">--edge</code> rule underneath, with the
           value in <code class="cn-code-inline">--cn-fg-soft</code>. Only an
           editable field looks cut in. It still takes focus, and focus still
-          rings it. Use <code class="cn-code-inline">disabled</code>{" "}
+          rings it at the control radius, like every other field. Use <code class="cn-code-inline">disabled</code>{" "}
           for a value that is unavailable, and{" "}
           <code class="cn-code-inline">readonly</code> for one that is fixed.
         </p>
@@ -303,12 +304,12 @@ export default function InputPage() {
             name: '[aria-invalid="true"] / .is-warning',
             values: "on the control / on .field or a bare .input",
             notes:
-              "Red (--cn-danger) or yellow (--cn-warning). The well takes the tone at --cn-step-tint (4%) and the lip closes into a 1px ring in the tone, inset 0 0 0 1px var(--tone). The carve stays. Label and small take the tone, and the small leads with --cn-glyph-danger or --cn-glyph-warning. Focus keeps the --cn-focus outline. Disabled text and label take the disabled color over the tone.",
+              "Red (--cn-danger) or yellow (--cn-warning). The well takes the tone at --cn-step-tint (4%) and the lip closes into a 1px ring in the tone, inset 0 0 0 1px var(--tone). The carve stays. The label keeps --cn-fg-muted; the small moves up to --cn-fg-body and leads with --cn-glyph-danger or --cn-glyph-warning in the tone. Focus keeps the --cn-focus outline. Disabled text and label take the disabled color over the tone.",
           },
           {
             name: "[readonly]",
             values: "on an input or textarea",
-            notes: "Printed text: transparent, no carve or lip, square corners, a 1px --edge rule underneath, the value in --cn-fg-soft. Focus still rings it.",
+            notes: "Printed text: transparent, no carve or lip, square corners, a 1px --edge rule underneath, the value in --cn-fg-soft. Focus still rings it, at the control radius.",
           },
           {
             name: ":disabled",
@@ -324,17 +325,17 @@ export default function InputPage() {
             name: "--cn-field-ring",
             values: "box-shadow",
             default: "inset -1px -1px 0 var(--overlay-1)",
-            notes: "The lit lip: overlay-1 on the bottom and right inner walls, 4.4:1 on base, 3.7:1 raised, 3.5:1 on an overlay. A full overlay-2 ring under prefers-contrast: more.",
+            notes: "The lit lip: overlay-1 on the bottom and right inner walls, 4.4:1 on base and raised, 3.5:1 on an overlay. A full overlay-2 ring under prefers-contrast: more.",
           },
           {
             name: "::placeholder",
             values: "--cn-fg-placeholder",
-            notes: "overlay-2: 5.8:1 on base, 4.8:1 raised, 4.6:1 on an overlay. subtext-0 under prefers-contrast: more. --cn-fg-disabled on a disabled field.",
+            notes: "overlay-2: 5.8:1 on base and raised, 4.6:1 on an overlay. subtext-0 under prefers-contrast: more. --cn-fg-disabled on a disabled field.",
           },
           {
             name: ".field small",
             values: "helper or message line",
-            notes: "The meta role under the control in --cn-fg-muted (subtext-0). In an error or warning it takes the tone and leads with the tone's 12px glyph. Link it with aria-describedby.",
+            notes: "The meta role under the control in --cn-fg-muted (subtext-0). In an error or warning it moves up to --cn-fg-body and leads with the 12px glyph in the tone. Link it with aria-describedby.",
           },
           {
             name: "--control-h",

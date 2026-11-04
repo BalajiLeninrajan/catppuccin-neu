@@ -79,7 +79,7 @@ export default function ButtonPage() {
 
       <p class="cn-copy">
         The secondary rests on <code class="cn-code-inline">--cn-surface-raised</code>,
-        one step lighter than the page, with a hairline and the crust plate.
+        the page color, with a hairline, the lit top edge and the crust plate.
         Hover warms the border toward mauve and lifts the fill to{" "}
         <code class="cn-code-inline">--cn-surface-overlay</code>. The resting
         hairline is decoration: the label identifies the button, so the edge

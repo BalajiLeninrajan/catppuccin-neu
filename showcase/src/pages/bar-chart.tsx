@@ -165,7 +165,7 @@ export default function BarChartPage() {
         title="Contract"
         rows={[
           { name: ".bar-chart", values: "div", notes: "Grid: a max-content label column and a minmax(0, 1fr) bar column, 12px by 16px gap, rows centered." },
-          { name: ".bar-chart > :not(.bar-group)", values: "label", notes: "The meta role, 500 13px, in --cn-fg-muted." },
+          { name: ".bar-chart > :not(.bar-group)", values: "label", notes: "The meta role, 400 13px, in --cn-fg-muted." },
           { name: ".bar-group", values: "div", notes: "One row's bars, stacked 4px apart. Holds one .bar or several." },
           { name: ".bar", values: "div", notes: "A row: an 8px bar on the chip radius in --series, then the value as text in the meta role, --cn-fg-soft, tabular." },
           { name: "--value", values: "percentage", default: "0%", notes: "The bar's share of the track. The bar is --value × 80% of the track wide. Set it from data." },

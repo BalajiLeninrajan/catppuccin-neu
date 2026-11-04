@@ -95,9 +95,9 @@ export default function TabsPage() {
         chosen tab lifts toward the reader on{" "}
         <code class="cn-code-inline">--cn-surface-raised</code> with the soft raise,
         the lit top edge and the{" "}
-        <code class="cn-code-inline">--engaged-edge</code> mauve rim. A raised
-        tab alone sits only 1.21:1 off the carve, so the rim, 4.7:1 on the
-        page, is what marks the choice. The carve under them is{" "}
+        <code class="cn-code-inline">--engaged-edge</code> mauve rim. The
+        raised fill is the page color, the same as the carve around it, so
+        the rim, 4.7:1 on the page, is what marks the choice. The carve under them is{" "}
         <code class="cn-code-inline">--neu-inset-soft</code> with{" "}
         <code class="cn-code-inline">--cn-well-lip</code> on its bottom and right
         walls, so it reads on the page without a border.

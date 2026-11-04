@@ -189,9 +189,10 @@ export default function PageFurniturePage() {
         scrolls on its own. <code class="cn-code-inline">.sidebar-head</code>{" "}
         holds the wordmark and a <code class="cn-code-inline">.sidebar-toggle</code>;{" "}
         <code class="cn-code-inline">.sidebar-nav</code> stacks groups 24px
-        apart, each a microlabel over links in the ui role. Hover is the
-        ghost hover and <code class="cn-code-inline">aria-current="page"</code>{" "}
-        is the engaged state, with its mauve rim. The rule sits on the
+        apart, each a microlabel over links at the ui size and 500, so the
+        links sit under the content they lead to. Hover is the ghost hover
+        and <code class="cn-code-inline">aria-current="page"</code> is the
+        engaged state at 600, with its mauve rim. The rule sits on the
         sidebar's inline end, so it moves to the other side in right-to-left
         text.
       </p>
@@ -199,8 +200,13 @@ export default function PageFurniturePage() {
         At 1060px and below the sidebar folds into a sticky blurred bar and
         the toggle shows. Your script sets{" "}
         <code class="cn-code-inline">.is-open</code> on the sidebar and{" "}
-        <code class="cn-code-inline">aria-expanded</code> on the toggle. Under
-        reduced transparency the folded bar goes opaque.
+        <code class="cn-code-inline">aria-expanded</code> on the toggle. The
+        body fades in and settles 4px over{" "}
+        <code class="cn-code-inline">--t-base</code> on the ease-out, and
+        leaves on the ease-in over{" "}
+        <code class="cn-code-inline">--t-exit</code>; it lands at once under
+        reduced motion. Crossing 1060px does not animate. Under reduced
+        transparency the folded bar goes opaque.
       </p>
 
       <CodeBlock

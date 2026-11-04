@@ -76,7 +76,7 @@ export default function SkeletonPage() {
         Mark the loading region <code class="cn-code-inline">aria-busy="true"</code>{" "}
         so assistive tech waits for it, and give every skeleton{" "}
         <code class="cn-code-inline">aria-hidden="true"</code>. Under reduced motion
-        the skeleton holds still.
+        the skeleton holds still at .75 opacity, the midpoint of its breath.
       </p>
 
       <p class="cn-copy">
@@ -112,7 +112,7 @@ export default function SkeletonPage() {
           {
             name: ".skeleton",
             values: "block",
-            notes: "16px min-height, the control radius, the --cn-surface-sunken fill in the soft inset. Breathes to .5 opacity over 1.6s.",
+            notes: "16px min-height, the control radius, the --cn-surface-band fill, one step under whatever holds it, in the soft inset. Never darker than the content it stands in for. Breathes to .5 opacity over 1.6s.",
           },
           {
             name: ".skeleton.is-text",
@@ -142,7 +142,7 @@ export default function SkeletonPage() {
           {
             name: "prefers-reduced-motion",
             values: "reduce",
-            notes: "The animation stops and the skeleton holds still.",
+            notes: "The animation stops and the skeleton holds still at .75 opacity.",
           },
         ]}
       />

@@ -193,7 +193,7 @@ document.addEventListener("focusout", undismiss, true);`}
             name: ".popover",
             values: "child of a position: relative anchor",
             default: "·",
-            notes: "width min(390px, 100vw - 32px); z-index 80; --cn-surface-overlay fill, the --edge-strong (surface-1) border, floats on --shadow-pop. Add .menu for an action list.",
+            notes: "width min(390px, 100vw - 32px); z-index 80; --cn-surface-overlay fill, the --edge-strong (surface-2) border, floats on --shadow-pop. Add .menu for an action list.",
           },
           {
             name: ".popover > :first-child",

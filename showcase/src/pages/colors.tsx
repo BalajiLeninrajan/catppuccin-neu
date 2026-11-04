@@ -44,16 +44,16 @@ const GROUNDS = [
   { name: "crust", hex: "#11111b", note: "Deepest ground: scrims, the default plate, the progress track, text on accent fills." },
   { name: "mantle", hex: "#181825", note: "Crust mixes into it for the table head and sunken surfaces." },
   { name: "base", hex: "#1e1e2e", note: "The page ground, --cn-surface-page." },
-  { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the raised and overlay surfaces." },
-  { name: "surface-1", hex: "#45475a", note: "--edge-strong, the overlay and drawer hairline. The hover wash at 40%, dashed open slots and the lit walls of carves." },
-  { name: "surface-2", hex: "#585b70", note: "The --edge hairline and the lit top edge of raised surfaces, both at 80%. --cn-well-lip at 55%, scrollbar thumbs." },
+  { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
+  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 40%, dashed open slots and the lit walls of carves." },
+  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 55%, the lit top edge of raised surfaces at 45%, --cn-well-lip solid, scrollbar thumbs." },
 ];
 
 const NEUTRAL_TEXT = [
-  { name: "overlay-0", hex: "#6c7086", note: "No recipe reads it. 2.8:1 on a panel, under the 3:1 a control edge needs. Not for text." },
+  { name: "overlay-0", hex: "#6c7086", note: "The lead panel's bright top rim in --neu-lifted, 3.4:1 on base, and --edge-strong under prefers-contrast: more. Not for text." },
   { name: "overlay-1", hex: "#7f849c", note: "The field lip, unchecked control edges, the slider thumb edge, disabled text, resting icons and list markers. Not for readable text." },
   { name: "overlay-2", hex: "#9399b2", note: "Placeholders, --cn-fg-placeholder. The faintest readable text." },
-  { name: "subtext-0", hex: "#a6adc8", note: "Labels, meta, help and table heads, --cn-fg-muted. The --muted alias." },
+  { name: "subtext-0", hex: "#a6adc8", note: "Labels, meta, help and table heads, --cn-fg-muted." },
   { name: "subtext-1", hex: "#bac2de", note: "Body copy, ledes, table cells and code." },
   { name: "text", hex: "#cdd6f4", note: "Headings and primary content. The focus ring, --cn-focus." },
 ];
@@ -537,7 +537,7 @@ export default function ColorsPage() {
       <p class="cn-copy">
         Tinted surfaces are never opaque hue fills. Every tint is a{" "}
         <code class="cn-code-inline">color-mix(in srgb, …)</code> of a hue into a
-        ground or into transparent, at one of eight steps. Every hue tint in
+        ground or into transparent, at one of nine steps. Every hue tint in
         the recipes reads one of these tokens, so a wash is the same strength
         on every component.
       </p>
@@ -545,7 +545,8 @@ export default function ColorsPage() {
       <Props
         title="The steps"
         rows={[
-          { name: "--cn-step-tint", values: "4%", notes: "A field or banner in its tone (--tint), the open accordion row, table and ranked row hovers." },
+          { name: "--cn-step-tint", values: "4%", notes: "A field or banner in its tone (--tint), the open accordion row." },
+          { name: "--cn-step-row", values: "8%", notes: "Table and ranked row hovers: 1.17:1 for mauve on base, past the open carve's 1.08:1 and 1.30:1 under a selected row." },
           { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
           { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.24:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
           { name: "--cn-step-fill", values: "14%", notes: "Avatar grounds, the radio and live-dot halos, the .mark border and the switch glow." },
@@ -556,9 +557,10 @@ export default function ColorsPage() {
         ]}
       />
 
-      <Demo title="The eight steps of mauve into base" row>
+      <Demo title="The nine steps of mauve into base" row>
         {[
           ["tint", 4],
+          ["row", 8],
           ["wash", 12],
           ["engaged", 20],
           ["fill", 14],
@@ -581,13 +583,13 @@ export default function ColorsPage() {
       <CodeBlock
         title="The steps in use"
         code={`/* The mix tokens hold the shared expressions; use them, not the mix */
---edge:      color-mix(in srgb, var(--surface-2) 80%, transparent); /* raised-surface hairline */
+--edge:      color-mix(in srgb, var(--surface-2) 55%, transparent); /* raised-surface hairline: 1.6:1 */
 --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
---edge-strong: var(--surface-1);                                   /* overlay and drawer hairline */
+--edge-strong: var(--surface-2);                                   /* lead panel and overlay hairline: 2.5:1 */
 --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
 --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its wash */
 --hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay */
---cn-well-lip: inset -1px -1px 0 color-mix(in srgb, var(--surface-2) 55%, transparent); /* wells, tabs, mono wells */
+--cn-well-lip: inset -1px -1px 0 var(--surface-2); /* wells, tabs, mono wells: 2.5:1 */
 
 /* The tone stops are declared on each tinted recipe, so they read that
    element's --tone. A status .cn-tone-* swaps in its ladder. */
@@ -685,7 +687,7 @@ export default function ColorsPage() {
       <Props
         title="Edge reference"
         rows={[
-          { name: ".cn-edge", values: "surface-2 80%", notes: "Raised-surface hairline, 2.0:1 on base and 1.8:1 on the raised fill. The cut edge of panels, chips and controls." },
+          { name: ".cn-edge", values: "surface-2 55%", notes: "Raised-surface hairline, 1.6:1 on base, which is also the raised fill, and 1.4:1 on an overlay. The cut edge of panels, chips and controls." },
           { name: ".cn-edge-soft", values: "surface-1 38%", notes: "Inner separators." },
           { name: ".cn-edge-line", values: "surface-0", notes: "Row separators, footer rules." },
           { name: ".cn-edge-mauve", values: "mauve at --cn-step-plate (25%)", notes: "Accent-forward edge." },
@@ -725,11 +727,11 @@ export default function ColorsPage() {
         title="Background reference"
         rows={[
           { name: ".cn-bg-base", values: "var(--base)", notes: "The page ground, the same color as --cn-surface-page." },
-          { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", notes: "surface-0 75% into base, 1.21:1. The panel fill." },
+          { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", notes: "base, the page color. The panel fill; a panel lifts by its edges and shadow." },
           { name: ".cn-bg-overlay", values: "var(--cn-surface-overlay)", notes: "surface-0 90% into base, 1.27:1. The popover, dialog and toast fill." },
           { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "mantle 55% into base. The sidebar fill." },
           { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 40% over the ground, 1.24:1 on base. The ghost hover as a fill." },
-          { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 30% over transparent, one step under its parent. Table heads." },
+          { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 30% over transparent, one step under its parent. Table heads and skeletons." },
           { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust 38% into mantle. Explicit well fill; compose onto .well." },
           { name: ".cn-bg-mantle", values: "var(--mantle)", notes: "Raw mantle." },
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill." },

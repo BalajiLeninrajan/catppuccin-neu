@@ -67,7 +67,7 @@ export default function SliderPage() {
         20px raised round on <code class="cn-code-inline">--cn-surface-raised</code>{" "}
         with the soft raise and the lit top edge, inside a 1px{" "}
         <code class="cn-code-inline">--control-edge</code>: overlay-1, 4.4:1
-        on the page, 3.7:1 on a raised fill and 3.5:1 on an overlay, so the
+        on the page and on a raised fill, and 3.5:1 on an overlay, so the
         thumb clears 3:1 wherever the slider sits. On hover its edge warms to{" "}
         <code class="cn-code-inline">--engaged-edge</code>, and held it shrinks
         to .92 and springs back on release.

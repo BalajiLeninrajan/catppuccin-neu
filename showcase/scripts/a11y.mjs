@@ -5,13 +5,17 @@
    pnpm test:a11y --review      also list what axe could not decide
 
    For every path in src/nav.ts it runs axe-core at 1400x900 with the
-   wcag2a, wcag2aa, wcag21aa and wcag22aa tags, then reloads the route at
-   390px wide and fails if the page scrolls sideways. Uses the system
-   Chromium; puppeteer-core never downloads a browser. Exits 1 on any
-   violation that ALLOW does not list.                                      */
+   wcag2a, wcag2aa, wcag21aa and wcag22aa tags. It then applies the WCAG
+   1.4.12 text-spacing overrides and fails on any element that clips its
+   text, reloads the route under forced colors, saves a full-page
+   screenshot to a11y-shots/forced-colors/ for review and checks that a
+   focused control rings in Highlight, and finally reloads at 390px wide
+   and fails if the page scrolls sideways. Uses the system Chromium;
+   puppeteer-core never downloads a browser. Exits 1 on any violation that
+   ALLOW does not list.                                                     */
 
 import { spawn, spawnSync, execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { createServer } from "node:net";
 import { dirname, join } from "node:path";
@@ -145,6 +149,58 @@ function overflow(page) {
   });
 }
 
+/* WCAG 1.4.12: text must survive these overrides without loss. */
+const TEXT_SPACING = `
+  * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
+  p { margin-bottom: 2em !important; }
+`;
+
+/* Elements that clip their text under the text-spacing overrides: an
+   overflow of hidden or clip, visible, holding text of its own, and
+   scrolling past its box. Clipping by design is skipped: the screen-reader
+   clip, accordion folds, aria-hidden content and .cn-truncate, which ends a
+   line in an ellipsis on purpose. */
+function clippedText(page) {
+  return page.evaluate(() => {
+    const skip = (el) => el.closest(".cn-sr-only, .fold, [aria-hidden='true'], .cn-truncate");
+    const path = (el) => {
+      const parts = [];
+      for (let e = el; e && e !== document.body && parts.length < 4; e = e.parentElement) {
+        const cls = [...e.classList].slice(0, 2).map((c) => `.${c}`).join("");
+        parts.unshift(e.tagName.toLowerCase() + (e.id ? `#${e.id}` : "") + cls);
+      }
+      return parts.join(" > ");
+    };
+    const out = [];
+    for (const el of document.body.querySelectorAll("*")) {
+      const cs = getComputedStyle(el);
+      const clipX = /hidden|clip/.test(cs.overflowX), clipY = /hidden|clip/.test(cs.overflowY);
+      if (!clipX && !clipY) continue;
+      if (!el.checkVisibility?.() || !el.clientWidth || !el.clientHeight || skip(el)) continue;
+      if (!el.textContent.trim()) continue;
+      const over = (clipX && el.scrollWidth > el.clientWidth + 1) || (clipY && el.scrollHeight > el.clientHeight + 1);
+      if (over) out.push(`${path(el)} (${el.scrollWidth}x${el.scrollHeight} in ${el.clientWidth}x${el.clientHeight})`);
+    }
+    return out.slice(0, 8);
+  });
+}
+
+/* Under forced colors the focus ring must be Highlight. Tab to the first
+   focusable control and compare its outline with a Highlight probe. */
+function focusRing(page) {
+  return page.evaluate(() => {
+    const el = document.activeElement;
+    if (!el || el === document.body) return null;
+    const probe = document.createElement("div");
+    probe.style.color = "Highlight";
+    document.body.append(probe);
+    const want = getComputedStyle(probe).color;
+    probe.remove();
+    const got = getComputedStyle(el).outlineColor;
+    return got === want ? null : `focus ring is ${got}, not Highlight (${want})`;
+  });
+}
+
 async function main() {
   const skipBuild = process.argv.includes("--no-build");
   const showReview = process.argv.includes("--review");
@@ -161,6 +217,7 @@ async function main() {
     args: ["--no-sandbox", "--disable-gpu"],
   });
 
+  const shots = join(root, "a11y-shots/forced-colors");
   let failures = 0;
   let skipped = 0;
   const review = new Map();
@@ -196,6 +253,28 @@ async function main() {
         if (nodes.length > 8) lines.push(`    and ${nodes.length - 8} more`);
       }
 
+      await page.addStyleTag({ content: TEXT_SPACING });
+      await new Promise((r) => setTimeout(r, 50));
+      const clipped = await clippedText(page);
+      if (clipped.length) {
+        failures += clipped.length;
+        lines.push(`  text spacing (1.4.12) clips text:`);
+        for (const c of clipped) lines.push(`    ${c}`);
+      }
+
+      await page.emulateMediaFeatures([{ name: "forced-colors", value: "active" }]);
+      await open(page, url + route);
+      mkdirSync(shots, { recursive: true });
+      const name = route === "/" ? "index" : route.replace(/^\//, "").replace(/[^\w-]+/g, "-");
+      await page.screenshot({ path: join(shots, `${name}.png`), fullPage: true });
+      await page.keyboard.press("Tab");
+      const ring = await focusRing(page);
+      if (ring) {
+        failures++;
+        lines.push(`  forced colors: ${ring}`);
+      }
+      await page.emulateMediaFeatures([]);
+
       await page.setViewport(PHONE);
       await open(page, url + route);
       const o = await overflow(page);
@@ -225,7 +304,8 @@ async function main() {
     console.log(`\n${failures} problem(s) across ${count} routes${note}.`);
     process.exit(1);
   }
-  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}) and fit 390px${note}.`);
+  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}), keep their text under 1.4.12 spacing, ring in Highlight under forced colors and fit 390px${note}.`);
+  console.log(`Forced-colors screenshots for review: ${shots}`);
 }
 
 main().catch((err) => {

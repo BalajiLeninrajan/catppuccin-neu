@@ -139,7 +139,7 @@ export default function SelectionPage() {
         raised rocker paddle on <code class="cn-code-inline">--cn-surface-raised</code>.
         The off paddle carries a 1px{" "}
         <code class="cn-code-inline">--control-edge</code>, overlay-1 at 4.4:1 on
-        the page, 3.7:1 on a raised fill and 3.5:1 on an overlay, so it reads
+        the page and on a raised fill, and 3.5:1 on an overlay, so it reads
         as a control and not as a disabled one.
         Checking slides the paddle across, flips its tilt, lights it mauve,
         sets a 2 by 8px crust bar at its center, the "I" of a wall switch, and
@@ -264,7 +264,7 @@ export default function SelectionPage() {
             name: ".checkbox",
             values: 'input[type="checkbox"]',
             notes:
-              "20px square well, 4px radius, a --control-edge border: overlay-1, 4.4:1 on the page, 3.7:1 raised, 3.5:1 on an overlay. Checked fills mauve and the crust check lands on the spring.",
+              "20px square well, 4px radius, a --control-edge border: overlay-1, 4.4:1 on the page and raised, 3.5:1 on an overlay. Checked fills mauve and the crust check lands on the spring.",
           },
           {
             name: ".checkbox:indeterminate",

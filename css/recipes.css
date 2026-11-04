@@ -20,12 +20,14 @@
   background: var(--cn-surface-raised);
   box-shadow: var(--neu-raised);
 }
-/* A panel inside a panel rests on its parent: the soft raise, no long
-   cast. */
-.panel .panel { box-shadow: var(--neu-raised-soft); }
-/* The lead panel: the one a view is about, one per view. It keeps the
-   raised fill, so raised children inside it still sit a step lighter, and
-   stands higher: the strong hairline and the longer cast of --neu-lifted.
+/* A panel inside a panel rests on its parent: the soft raise and the lit
+   edge, no long cast. Its fill matches its parent's, so the lit edge and
+   the hairline show where it ends. */
+.panel .panel { box-shadow: var(--neu-raised-soft), var(--cn-lit-edge); }
+/* The lead panel: the one a view is about, one per view. It sits on the
+   page color like every panel and stands higher by its edges: the bright
+   --edge-strong hairline, and --neu-lifted's bright top rim over a longer
+   cast. A cast barely shows on a dark page, so the edges carry the rank.
    It outranks its neighbors by height, not by an ornament. */
 .panel.is-lead {
   border-color: var(--edge-strong);
@@ -278,7 +280,8 @@
    One rule for every control that rests on a plate: hover lifts 1px, held
    half-slides onto the plate, which shrinks to meet it. --hard-extra holds
    shadow layers a recipe draws over the plate (the primary gloss). The
-   .cn-pressable-slide utility draws the same press. */
+   .cn-pressable-slide utility draws the same press, and a link or button
+   chip repeats it after its own recipe. */
 :is(.btn-primary, .btn-secondary, .segmented > *, .accent-card) {
   --hard-extra: var(--cn-lit-edge);
   box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--hard-extra);
@@ -481,7 +484,7 @@ a:active > .accent-card {
   box-shadow: var(--neu-inset), var(--cn-field-ring);
   font-family: var(--sans);
   font-size: var(--cn-type-ui-size);
-  font-weight: var(--cn-type-meta-weight);
+  font-weight: var(--cn-type-label-weight);
   letter-spacing: normal;
   text-transform: none;
   font-variant-numeric: tabular-nums;
@@ -493,15 +496,15 @@ a:active > .accent-card {
   padding: var(--space-3) var(--space-4);
   resize: vertical;
 }
-/* --cn-fg-placeholder, overlay-2 and the text floor: 5.8:1 on the page,
-   4.8:1 on a panel and 4.6:1 in a dialog, so a placeholder clears 4.5:1
+/* --cn-fg-placeholder, overlay-2 and the text floor: 5.8:1 on the page
+   and on a panel, and 4.6:1 in a dialog, so a placeholder clears 4.5:1
    wherever forms sit. The value is --cn-fg, so the two never read alike. */
 :is(.input, .field :is(input, textarea))::placeholder { color: var(--cn-fg-placeholder); }
 /* Fields take the global ring on pointer focus too, since typing follows
    either way. The ring is the one focus shape: 2px of --cn-focus standing
    3px off the edge, where the engaged rim is 1px on the edge. */
 :is(.input, .field :is(input, select, textarea)):focus { outline: 2px solid var(--cn-focus); outline-offset: 3px; }
-/* Helper or message line inside a field. Tints with the state. */
+/* Helper or message line inside a field. */
 .field small {
   display: block;
   margin: var(--space-1) 1px 0;
@@ -510,9 +513,10 @@ a:active > .accent-card {
 }
 /* Validation keys on aria-invalid="true" (error) or .is-warning. The state
    sets --tone, washes the well in its 4% tint, and closes the lip into a
-   full ring in the tone, so the field itself changes, not only its label.
-   The help text leads with the tone's glyph. The carve and the focus ring
-   stay. */
+   full ring in the tone, so the field itself changes. The message is a
+   sentence, so it moves up to body text and only its leading glyph takes
+   the tone, as on a banner. The label keeps its color. The carve and the
+   focus ring stay. */
 .field:has([aria-invalid="true"]), .input[aria-invalid="true"] { --tone: var(--cn-danger); }
 .field.is-warning, .input.is-warning { --tone: var(--cn-warning); }
 :is(.field:has([aria-invalid="true"]), .field.is-warning) :is(input, select, textarea),
@@ -520,7 +524,7 @@ a:active > .accent-card {
   background: var(--tint);
   box-shadow: var(--neu-inset), inset 0 0 0 1px var(--tone);
 }
-:is(.field:has([aria-invalid="true"]), .field.is-warning) :is(label, small) { color: var(--tone); }
+:is(.field:has([aria-invalid="true"]), .field.is-warning) small { color: var(--cn-fg-body); }
 .field:has([aria-invalid="true"]) { --cn-glyph: var(--cn-glyph-danger); }
 .field.is-warning { --cn-glyph: var(--cn-glyph-warning); }
 :is(.field:has([aria-invalid="true"]), .field.is-warning) small::before {
@@ -530,7 +534,7 @@ a:active > .accent-card {
   block-size: 12px;
   margin-inline-end: var(--space-1);
   vertical-align: -1px;
-  background: currentColor;
+  background: var(--tone);
   mask: var(--cn-glyph) center / contain no-repeat;
 }
 
@@ -552,6 +556,9 @@ a:active > .accent-card {
   border-radius: 0;
   cursor: default;
 }
+/* The ring follows border-radius, so a focused read-only field takes the
+   control radius back and rings like every other field. */
+:is(.input, .field :is(input, textarea))[readonly]:focus { border-radius: var(--cn-radius-control); }
 .field:has(:disabled) label { color: var(--cn-fg-disabled); }
 /* Selects read as dropdowns: a chevron glyph (overlay-1, a palette hex, as
    data URIs can't read custom properties) sits in the trailing padding. */
@@ -592,7 +599,7 @@ a:active > .accent-card {
     border-radius: var(--cn-radius-control);
     color: var(--cn-fg-soft);
     background: transparent;
-    font: var(--cn-type-meta-weight) var(--cn-type-ui-size) var(--sans);
+    font: var(--cn-type-label-weight) var(--cn-type-ui-size) var(--sans);
   }
   /* Hover lights an option the way it lights a menu row; the checked
      option wears the engaged wash, so it outranks the hovered one. */
@@ -769,8 +776,9 @@ a:active > .accent-card {
   font-variant-numeric: tabular-nums;
 }
 
-/* Outlined pill: version tags, status, stat chips. A chip that is a link
-   or a button lifts on hover and presses in when held. */
+/* Outlined pill: version tags, status, stat chips. A static chip rests on
+   the page on the soft raise. A chip that is a link or a button is a
+   clickable, so it stands on the crust plate with the shared press. */
 .chip {
   padding: var(--chip-pad);
   display: inline-flex; align-items: center; gap: var(--space-2);
@@ -778,15 +786,21 @@ a:active > .accent-card {
   border: 1px solid var(--edge);
   border-radius: 999px;
   background: var(--cn-surface-raised);
-  box-shadow: var(--neu-raised-soft);
+  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .chip > svg { width: 14px; height: 14px; flex: 0 0 auto; }
-:is(a, button).chip { text-decoration: none; cursor: pointer; transition: color var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast) var(--ease-out), translate var(--t-fast) var(--ease-spring); }
-:is(a, button).chip:hover { color: var(--cn-fg); border-color: var(--control-edge); }
-:is(a, button).chip:active { translate: 0 1px; box-shadow: var(--neu-inset-soft); transition-duration: var(--t-press); }
+:is(a, button).chip { text-decoration: none; cursor: pointer; transition: color var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast) var(--ease-spring), transform var(--t-fast) var(--ease-spring); }
+:is(a, button).chip { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--cn-lit-edge); }
+:is(a, button).chip:hover { color: var(--cn-fg); border-color: var(--control-edge); transform: translate(-1px, -1px); }
+:is(a, button).chip:active {
+  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
+  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--crust)), var(--cn-lit-edge);
+  transition-timing-function: var(--ease-out);
+  transition-duration: var(--t-press);
+}
 /* Icon-only at any width: the glyph is the chip. Keep an accessible name on
    the element (aria-label, or the label text still in the markup). */
 .chip.is-glyph { padding: var(--space-2); font-size: 0; }
@@ -808,11 +822,12 @@ a:active > .accent-card {
 .tag > svg { width: 12px; height: 12px; flex: 0 0 auto; }
 
 /* Inline banner: semantic tint band, no card chrome. The tint keeps its
-   hairline edge. */
+   hairline edge. The message is body text; the tone stays on the glyph,
+   the edge and the tint, so a sentence never sets in an accent. */
 .banner {
   padding: var(--space-3) var(--space-4);
   display: flex; align-items: center; gap: var(--space-2);
-  color: var(--tone);
+  color: var(--cn-fg-body);
   border: 1px solid var(--tone-border);
   border-radius: var(--cn-radius-card);
   background: var(--tint);
@@ -820,7 +835,7 @@ a:active > .accent-card {
   font-size: var(--cn-type-meta-size);
   line-height: var(--cn-type-meta-leading);
 }
-.banner > svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.banner > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--tone); }
 /* Status glyph: a .cn-tone-danger, -warning, -success or -info tag or
    banner with no svg of its own draws the matching --cn-glyph-* first,
    in its tone. Bring an svg to use a different shape. */
@@ -829,7 +844,7 @@ a:active > .accent-card {
   flex: 0 0 auto;
   inline-size: 12px;
   block-size: 12px;
-  background: currentColor;
+  background: var(--tone);
   mask: var(--cn-glyph) center / contain no-repeat;
 }
 .banner:is(.cn-tone-danger, .cn-tone-warning, .cn-tone-success, .cn-tone-info):not(:has(> svg))::before { inline-size: 16px; block-size: 16px; }
@@ -842,7 +857,7 @@ a:active > .accent-card {
   align-items: center;
   gap: var(--space-2);
   color: var(--cn-fg-soft);
-  font: var(--cn-type-meta-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
   cursor: pointer;
 }
 .choice:has(:disabled) { color: var(--cn-fg-disabled); cursor: not-allowed; }
@@ -857,6 +872,7 @@ a:active > .accent-card {
    alone is invisible, so small selection controls keep a hairline. */
 .checkbox {
   appearance: none;
+  margin: 0;
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
@@ -912,6 +928,7 @@ a:active > .accent-card {
 /* Radio: same edged well, round, a mauve dot pressed into the center. */
 .radio {
   appearance: none;
+  margin: 0;
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
@@ -951,6 +968,7 @@ a:active > .accent-card {
    lights it mauve with a soft glow. */
 .switch {
   appearance: none;
+  margin: 0;
   width: 50px;
   height: 28px;
   flex: 0 0 auto;
@@ -1134,8 +1152,10 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   animation: spin .8s linear infinite;
 }
 
-/* Skeleton: a carved placeholder where content is loading. It is shallow
-   (the soft inset) and breathes on the breathe keyframe. Size it to the
+/* Skeleton: a carved placeholder where content is loading. It is shallow:
+   the band fill, one step under whatever holds it, and the soft inset, so
+   it never reads darker than the content it stands in for. It breathes on
+   the breathe keyframe. Size it to the
    content it stands in for; .is-text is one line of body copy, .is-round
    an avatar. Mark the loading region aria-busy="true" so assistive tech
    waits for it, and keep skeletons aria-hidden. */
@@ -1143,7 +1163,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   display: block;
   min-height: var(--space-4);
   border-radius: var(--cn-radius-control);
-  background: var(--cn-surface-sunken);
+  background: var(--cn-surface-band);
   box-shadow: var(--neu-inset-soft);
   animation: breathe 1.6s var(--ease-in) infinite alternate;
 }
@@ -1343,6 +1363,24 @@ a:hover:not(:active) > .accent-card {
   font-variant-numeric: tabular-nums;
 }
 .cn-divide > .stat.is-inline { padding-block: var(--space-2); }
+/* A summary total: the row a list of inline stats adds up to. It follows
+   the .cn-divide list rather than sitting in it. The label is the name role
+   and the value the value role, both in --cn-fg, under an --edge rule,
+   1.6:1 against the 1.3:1 row hairlines, with 12px of air, so the total
+   outweighs the rows above it. */
+.stat.is-inline.is-total {
+  margin-block-start: var(--space-3);
+  padding-block-start: var(--space-3);
+  color: var(--cn-fg);
+  border-top: 1px solid var(--edge);
+  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
+}
+.stat.is-inline.is-total > span { color: var(--cn-fg); font: inherit; }
+.stat.is-inline.is-total :is(b, strong) {
+  color: var(--cn-fg);
+  font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans);
+  letter-spacing: var(--cn-type-value-tracking);
+}
 
 /* Progress: borderless inset track, accent fill. The fill inherits
    the track radius, so no overflow clipping is needed. Re-key the fill per
@@ -1387,7 +1425,7 @@ a:hover:not(:active) > .accent-card {
   padding: var(--cell-pad);
   color: var(--cn-fg-soft);
   border-bottom: 1px solid var(--surface-0);
-  font: var(--cn-type-meta-weight) var(--cell-font-size) var(--sans);
+  font: var(--cn-type-label-weight) var(--cell-font-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .data-table tbody tr:last-child td { border-bottom: 0; }
@@ -1454,8 +1492,9 @@ a:hover:not(:active) > .accent-card {
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
   --press-bottom: rgb(69 71 90 / .3);
-  /* The tint step, so a hovered row stays lighter than a selected one. */
-  background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-tint), var(--base));
+  /* Its own step, 1.17:1 on the page: past the open carve's 1.08:1 and
+     1.30:1 under a selected row's wash. */
+  background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
 }
 /* Selected row: the engaged treatment, the wash with the full press. */
 .data-table tbody tr[aria-selected="true"] td {
@@ -1473,7 +1512,7 @@ a:hover:not(:active) > .accent-card {
   padding: var(--space-3) var(--space-4);
   color: var(--cn-fg-soft);
   border-bottom: 1px solid var(--surface-0);
-  font: var(--cn-type-meta-weight) var(--cn-type-ui-size) var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .ranked-row:last-child { border-bottom: 0; }
@@ -1559,7 +1598,7 @@ a:hover:not(:active) > .accent-card {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   gap: var(--space-2) var(--space-4);
-  font: var(--cn-type-meta-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
 }
 .kv dt { color: var(--cn-fg-muted); font-weight: var(--cn-type-label-weight); font-size: var(--cn-type-label-size); line-height: inherit; }
 .kv dd {
@@ -1639,7 +1678,7 @@ a:hover:not(:active) > .accent-card {
 /* Toast: a stack of title and description cards. `.toast-stack` is the fixed viewport; toasts append
    at its bottom. Each `.toast` is a row: a content column (`b` title over a
    span/p description) plus trailing controls (.btn-text and/or .btn.is-icon).
-   Neutral surface-1 border. The toast carries no accent color. */
+   Neutral --edge-strong (surface-2) border. The toast carries no accent color. */
 .toast-stack {
   position: fixed;
   right: var(--space-5);
@@ -1911,7 +1950,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
     --press-bottom: rgb(69 71 90 / .3);
-    background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-tint), var(--base));
+    background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
     --press-top: rgb(17 17 27 / .66);
@@ -1937,6 +1976,27 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   /* A row-select checkbox rides at the end of the row instead of taking a
      labeled line. */
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td.cell-select { float: right; padding: 0; margin-inline-start: var(--space-3); }
+  /* Trailing cells (td.is-trail) leave the label stack and ride beside the
+     name, so a figure such as the amount sits on the title line. The row
+     becomes a grid: the name and the stack on the left, the last trailing
+     cell on the title line and the one before it under it, and a
+     row-select checkbox at the far end of the title line. */
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: baseline;
+  }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td { grid-column: 1 / -1; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.cell-name { grid-column: 1; grid-row: 1 / span 2; align-self: start; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.is-trail {
+    grid-column: 2;
+    grid-row: 1;
+    padding-inline-start: var(--space-3);
+    text-align: end;
+  }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.is-trail:has(~ td.is-trail) { grid-row: 2; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td.is-trail::before { content: none; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.cell-select { grid-column: 3; grid-row: 1; float: none; align-self: start; }
   .panel > .data-table:is(:not(.table-scroll > *), :has(td[data-label])):last-child tbody tr:last-child {
     border-radius: 0 0 calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px);
   }
@@ -1994,6 +2054,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
    press runs there, and a chosen segmented option keeps its 1px press. */
 @media (hover: none) {
   :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:active, .active, [aria-pressed="true"], [aria-checked="true"]),
+  :is(a, button).chip:hover:not(:active),
   a:hover:not(:active) > .accent-card { transform: none; }
   a:hover:not(:active) > .accent-card { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--hard-extra); }
 }
@@ -2063,7 +2124,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   border: 0;
   border-radius: var(--cn-radius-control);
   background: transparent;
-  font: var(--cn-type-meta-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
   text-align: start;
   text-decoration: none;
   cursor: pointer;
@@ -2285,7 +2346,9 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   color: var(--cn-fg-body);
   border: 1px solid transparent;
   border-radius: var(--cn-radius-control);
-  font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  /* 500 at the ui size, so the links sit under the content; the current
+     page takes 600. */
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
   text-decoration: none;
   transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
 }
@@ -2310,8 +2373,24 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   }
   .sidebar-head { padding: var(--space-3) var(--page-gutter); }
   .sidebar-toggle { display: inline-flex; }
-  .sidebar-body { display: none; max-height: min(60vh, 480px); padding: 0 var(--page-gutter) var(--space-5); }
-  .sidebar.is-open .sidebar-body { display: grid; }
+  /* The body opens the way an overlay does: it fades and settles 4px over
+     --t-base on the ease-out, and leaves on the ease-in over --t-exit.
+     Opacity and translate only, so no box that holds text changes height. */
+  .sidebar-body {
+    display: none;
+    max-height: min(60vh, 480px);
+    padding: 0 var(--page-gutter) var(--space-5);
+    opacity: 0;
+    translate: 0 -4px;
+    transition: opacity var(--t-exit) var(--ease-in), translate var(--t-exit) var(--ease-in), display var(--t-exit) allow-discrete;
+  }
+  .sidebar.is-open .sidebar-body {
+    display: grid;
+    opacity: 1;
+    translate: none;
+    transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), display var(--t-base) allow-discrete;
+  }
+  @starting-style { .sidebar.is-open .sidebar-body { opacity: 0; translate: 0 -4px; } }
 }
 
 /* ── App shell and live dot ─────────────────────────────────────────────── */

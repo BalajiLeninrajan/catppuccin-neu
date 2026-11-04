@@ -159,6 +159,36 @@ export default function StatPage() {
         needs a frame.
       </p>
 
+      <Demo title="A summary total" classes="cn-divide > stat is-inline · stat is-inline is-total">
+        <div style="width:min(320px,100%)">
+          <div class="cn-divide">
+            <div class="stat is-inline">
+              <span>Subtotal</span>
+              <b>$1,097.35</b>
+            </div>
+            <div class="stat is-inline">
+              <span>HST, 13%</span>
+              <b>$142.65</b>
+            </div>
+          </div>
+          <div class="stat is-inline is-total">
+            <span>Total due</span>
+            <b>$1,240.00</b>
+          </div>
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        The row a list adds up to takes{" "}
+        <code class="cn-code-inline">.is-total</code>. Put it after the{" "}
+        <code class="cn-code-inline">.cn-divide</code> list, not inside it. Its
+        label is the name role and its value the value role, 24px at 600, both
+        in <code class="cn-code-inline">--cn-fg</code>, under an{" "}
+        <code class="cn-code-inline">--edge</code> rule with 12px above and
+        below the rule. It stays text-colored: only the hero value takes the
+        accent.
+      </p>
+
       <Props
         title="Stat classes"
         rows={[
@@ -193,6 +223,11 @@ export default function StatPage() {
             name: ".cn-divide > .stat.is-inline",
             values: "row stack",
             notes: "Hairline between rows, 8px block padding on each.",
+          },
+          {
+            name: ".stat.is-inline.is-total",
+            values: "summary total row",
+            notes: "After the divided rows. Name-role label and value-role figure, both --cn-fg, under a 1px --edge rule with 12px above and below.",
           },
         ]}
       />

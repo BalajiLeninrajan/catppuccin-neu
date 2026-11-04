@@ -323,15 +323,20 @@
 .cn-with-side > :first-child { flex: 1 1 var(--side-w, 16rem); }
 .cn-with-side > :last-child { flex: 999 1 0; min-inline-size: 60%; }
 
-/* Column grids collapse on the system's own breakpoints. */
-.cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
-.cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
-.cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+/* Column grids collapse on the system's own breakpoints. Every grid reads
+   --cn-grid-gap, the 24px between panels in a region; a grid of smaller
+   items composes .cn-gap-16. */
+.cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
+.cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
+.cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 @media (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
 /* The page grid: twelve columns 24px apart. A child spans with
-   .cn-span-3/4/5/6/7/8/9/12 and takes the full row at 760px and below. */
-.cn-grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-5); }
+   .cn-span-3/4/5/6/7/8/9/12. Children keep their content height, so a
+   short panel beside a tall one never stretches into an empty tail. At
+   1060px every split becomes halves and a 9 takes the row; at 760px every
+   span takes the row. */
+.cn-grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; gap: var(--cn-grid-gap); }
 .cn-span-3 { grid-column: span 3; }
 .cn-span-4 { grid-column: span 4; }
 .cn-span-5 { grid-column: span 5; }
@@ -340,6 +345,24 @@
 .cn-span-8 { grid-column: span 8; }
 .cn-span-9 { grid-column: span 9; }
 .cn-span-12 { grid-column: 1 / -1; }
+/* Two cases leave a half alone in its row, and each takes the row:
+   - In a grid where every child folds to a half (only 3, 4, 5, 7 and 8
+     spans), an odd last child. Three 4s fold to two and one. Any other
+     child breaks the count, so the rule stays off there.
+   - A 3 right after a 9, because the 9 already took the row above it.
+   Any other mix can leave a half beside an empty half. */
+@media (max-width: 1060px) {
+  .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
+  .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),
+  .cn-grid-12 > .cn-span-9 + .cn-span-3 { grid-column: 1 / -1; }
+  .cn-grid-12 > .cn-span-9 { grid-column: 1 / -1; }
+}
+@container (max-width: 1060px) {
+  .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
+  .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),
+  .cn-grid-12 > .cn-span-9 + .cn-span-3 { grid-column: 1 / -1; }
+  .cn-grid-12 > .cn-span-9 { grid-column: 1 / -1; }
+}
 @media (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
 @container (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
 /* Inside a .cn-container the grids answer the container's width instead,

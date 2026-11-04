@@ -82,13 +82,13 @@ function SubscriptionsTable() {
                 <small>{r.email}</small>
               </td>
               <td data-label="Plan">{r.plan}</td>
-              <td data-label="Status">
+              <td class="is-trail" data-label="Status">
                 <span class={`tag cn-tone-${r.tone}`}>
                   <Glyph />
                   {r.status}
                 </span>
               </td>
-              <td class="is-num" data-label="Amount">{money(r.amount)}</td>
+              <td class="is-num is-trail" data-label="Amount">{money(r.amount)}</td>
               <td data-label="Renews">{r.renews}</td>
             </tr>
           );
@@ -117,7 +117,10 @@ export default function TablePage() {
         focus ring, and screen readers announce the sort from the attribute.
         A selected row takes <code class="cn-code-inline">aria-selected="true"</code>:
         the engaged wash with a deeper press. Hovering a row presses it in, drawn
-        as a gradient on each cell so the row has no seams.
+        as a gradient on each cell so the row has no seams, on mauve at{" "}
+        <code class="cn-code-inline">--cn-step-row</code> (8%): 1.17:1 on the
+        page, clear of the open accordion's 1.08:1 and 1.30:1 under a
+        selected row.
       </p>
 
       <p class="cn-copy">
@@ -150,7 +153,12 @@ export default function TablePage() {
         Labels hold a 120px column and values flow beside them. A cell without
         the attribute, such as the name, spans the row. A{" "}
         <code class="cn-code-inline">td.cell-select</code> checkbox rides at the row's
-        end. Narrow this window to see the table above switch.
+        end. Mark the cells a reader scans for with{" "}
+        <code class="cn-code-inline">td.is-trail</code>, such as the amount and
+        the status: they leave the stack and ride beside the name, the last
+        one on the title line and the one before it under it, so the figure
+        is not buried at the bottom of the card. Narrow this window to see
+        the table above switch.
       </p>
 
       <Demo title="Opting out: a scrolling table" classes="table-scroll > data-table.is-sticky-head">
@@ -227,9 +235,10 @@ export default function TablePage() {
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
-          { name: "tbody tr:hover", values: "state", notes: "The row presses in: a gradient edge on each cell and a mauve tint at --cn-step-tint (4%), lighter than a selected row." },
+          { name: "tbody tr:hover", values: "state", notes: "The row presses in: a gradient edge on each cell and mauve at --cn-step-row (8%) into base, 1.17:1 on the page, a step under a selected row." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },
+          { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. The last trailing cell sits on the title line, the one before it under it. Keep its data-label for the desktop header." },
           { name: ".table-scroll", values: "wrapper", notes: "Opts a table with no data-label cells out of phone mode. The table scrolls sideways inside it. Panel corner rules reach through it." },
           { name: ".data-table.is-sticky-head", values: "modifier", notes: "Header pinned to the top of the scroll container, ruled with an inset shadow. The wrapper needs a max-height to scroll vertically." },
           { name: ".ranked-row", values: "mark + strong + b", notes: "Flex row, hairline divider, same hover press. b right-aligns the value." },

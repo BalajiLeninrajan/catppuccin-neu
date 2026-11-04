@@ -39,7 +39,7 @@ export default function SettingsExample() {
           <div class="panel-header">
             <h2 id="set-workspace">Workspace</h2>
           </div>
-          <div class="panel-body cn-grid-2 cn-gap-24">
+          <div class="panel-body cn-grid-2">
             <div class="field">
               <label for="set-name">Legal name</label>
               <input id="set-name" type="text" value="Northwind Operations Ltd." aria-describedby="set-name-help" />

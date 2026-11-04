@@ -23,6 +23,14 @@ const tokensSnippet = `:root {
 const viewTransitionSnippet = `/* your stylesheet: opt in to cross-document route changes */
 @view-transition { navigation: auto; }
 
+/* optional: shared elements morph instead of cross-fading */
+.panel.is-lead { view-transition-name: lead; }
+.btn-primary   { view-transition-name: primary; }
+::view-transition-group(lead), ::view-transition-group(primary) {
+  animation-duration: var(--t-base);
+  animation-timing-function: var(--ease-out);
+}
+
 /* the package already times the root cross-fade (tokens.css) */
 ::view-transition-old(root), ::view-transition-new(root) {
   animation-duration: var(--t-base);
@@ -53,7 +61,7 @@ const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
     animation-iteration-count: infinite !important;
   }
   /* The skeleton holds still at its midpoint instead of pulsing. */
-  .skeleton { animation: none !important; }
+  .skeleton { animation: none !important; opacity: .75; }
 }`;
 
 const arriveSnippet = `/* tokens.css: no stagger, the whole set arrives at once */
@@ -380,6 +388,16 @@ document.startViewTransition(() => showBanner());`}
         app like this site changes routes in script and does not use it.
       </p>
 
+      <p class="cn-copy">
+        A consumer may also name what both pages share. Give the lead panel
+        and the page's primary the same{" "}
+        <code class="cn-code-inline">view-transition-name</code> on every
+        route, and they morph from one page to the next instead of
+        cross-fading, on the same <code class="cn-code-inline">--t-base</code>{" "}
+        and ease-out. The package ships the root cross-fade only, because
+        only the consumer knows which elements match across its routes.
+      </p>
+
       <CodeBlock title="Opting in" code={viewTransitionSnippet} />
 
       <h2 class="cn-label">Reduced motion</h2>
@@ -397,8 +415,8 @@ document.startViewTransition(() => showBanner());`}
         tooltips still fade over <code class="cn-code-inline">--t-fast</code>,
         in place: recipes.css drops their travel and scale, so a drawer fades
         instead of sliding. The spinner and a busy button keep a slow 2.4s
-        spin, because a frozen ring reads as broken. The skeleton holds still
-        instead of breathing.
+        spin, because a frozen ring reads as broken. The skeleton holds still at
+        .75 opacity, the midpoint of its breath, instead of breathing.
       </p>
 
       <CodeBlock title="Reduced motion (tokens.css)" code={reducedMotionSnippet} />

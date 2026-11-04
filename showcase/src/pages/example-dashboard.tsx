@@ -152,13 +152,13 @@ function InvoiceTable() {
                   <td data-label="Team">{inv.team}</td>
                   <td data-label="Issued">{inv.issued}</td>
                   <td data-label="Due">{inv.due}</td>
-                  <td data-label="Status">
+                  <td class="is-trail" data-label="Status">
                     <span class={`tag ${s.tone}`}>
                       <s.Glyph />
                       {s.label}
                     </span>
                   </td>
-                  <td class="is-num" data-label="Amount">{money(inv.amount)}</td>
+                  <td class="is-num is-trail" data-label="Amount">{money(inv.amount)}</td>
                 </tr>
               );
             })}

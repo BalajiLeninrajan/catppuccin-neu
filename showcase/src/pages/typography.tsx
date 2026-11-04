@@ -15,8 +15,9 @@ export default function TypographyPage() {
         700. 700 is for the display and the heading, and the wordmark reads the
         display weight. The title is 600, so a panel title never outweighs the
         page heading. Names, titles and buttons (<code class="cn-code-inline">.btn</code>) are 600.
-        Chrome, the label and the microlabel, is 500, so 600 marks what a
-        reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
+        Chrome, the label and the microlabel, is 500, and meta is 400, so the
+        two 13px roles read apart by weight as well as leading, and 600 marks
+        what a reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
         heading and value-lg, so a stat value outweighs the panel title above
         it. At 520px both step down: the value to 18px and the band title to
         16px. Tracking tightens with size: 0 through 18px, -0.01em
@@ -39,8 +40,10 @@ export default function TypographyPage() {
       <p class="cn-copy">
         Every size is rem, so the reader's browser font-size setting scales
         every role. The px on this page are at the 16px default. The
-        microlabel is the one 12px role; the label and meta are 13px, and the
-        name shares the ui size, 14px, set apart by its color. Body copy is 16px, and
+        microlabel is the one 12px role; the label and meta are 13px. The
+        name is the ui role in <code class="cn-code-inline">--cn-fg</code>:
+        its tokens alias the ui tokens, so it is the same 14px at 600, set
+        apart by its color. Body copy is 16px, and
         compact density steps it to 15px. Display titles set at 1.08 leading.
         The micro, label and ui roles lead at 1.25, so a label that wraps, or
         a reader's text-spacing override, never runs one line into the
@@ -81,7 +84,7 @@ export default function TypographyPage() {
         <h2 class="cn-title">Workspace settings</h2>
       </Demo>
 
-      <Demo title="cn-name · 600 · 14px/1.3 · text" classes="cn-name">
+      <Demo title="cn-name · the ui role in text · 600 · 14px/1.25" classes="cn-name">
         <span class="cn-name">Ada Larsen</span>
       </Demo>
 
@@ -137,7 +140,7 @@ export default function TypographyPage() {
         Inside an accent card the large value is text-colored instead.
       </p>
 
-      <Demo title="cn-meta · 500 · 13px/1.5 · tabular-nums · subtext-0" classes="cn-meta">
+      <Demo title="cn-meta · 400 · 13px/1.5 · tabular-nums · subtext-0" classes="cn-meta">
         <span class="cn-meta">Updated Aug 24, 2026 · 14 members · v3.2.1</span>
       </Demo>
 
@@ -227,7 +230,7 @@ export default function TypographyPage() {
           { name: ".cn-display", values: "sans", default: "700 · clamp(36px, 4px + 4.2vw, 56px)/1.08 · -0.03em", notes: "Hero headline; balanced. .is-sm is the page-title size. .display-title is the same type." },
           { name: ".cn-heading", values: "sans", default: "700 · 28px/1.25 · -0.025em", notes: "Top-level sections of a long page; balanced. Tailwind text-heading." },
           { name: ".cn-title", values: "sans", default: "600 · 20px/1.3 · -0.01em", notes: "Section and card headings. A bare h3 takes it, and so does a header band's h2 or h3 at --band-title-size." },
-          { name: ".cn-name", values: "sans", default: "600 · 14px/1.3 · text", notes: "Proper names at the ui size, set apart by full-strength color." },
+          { name: ".cn-name", values: "sans", default: "600 · 14px/1.25 · text", notes: "The ui role in --cn-fg. Its tokens alias the ui tokens; proper names are set apart by full-strength color." },
           { name: ".cn-lede", values: "sans", default: "400 · 18px/1.6 · subtext-1", notes: "Intro paragraph; max-width --cn-measure (68ch). 20px in .page-main.is-reading. .lede is the recipe form." },
           { name: ".cn-copy", values: "sans", default: "400 · 16px/1.6 · subtext-1", notes: "Body prose in --cn-fg-body, the same role as body. 15px at compact density." },
           { name: ".cn-ui", values: "sans", default: "600 · 14px/1.25", notes: "Control text outside a recipe." },
@@ -235,7 +238,7 @@ export default function TypographyPage() {
           { name: ".cn-microlabel", values: "sans", default: "500 · 12px/1.25 · +0.08em · uppercase · subtext-0", notes: "A fact's label. The only uppercase role and the only 12px one." },
           { name: ".cn-value", values: "sans", default: "600 · 24px/1 · -0.02em · tabular", notes: "Stat numbers." },
           { name: ".cn-value-lg", values: "sans", default: "600 · 32px/1 · -0.025em · tabular", notes: "Large stat in var(--accent); text inside an accent card. Opt out with a color utility." },
-          { name: ".cn-meta", values: "sans", default: "500 · 13px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions." },
+          { name: ".cn-meta", values: "sans", default: "400 · 13px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. A weight under the 500 label." },
           { name: ".cn-code", values: "mono", default: "500 · 13px/1.6 · tabular", notes: "Machine literals, CLI strings." },
           { name: ".cn-code-inline", values: "mono", default: "500 · 0.92em · subtext-1", notes: "Code inside prose, in --cn-fg-soft." },
           { name: ".cn-code-meta", values: "mono", default: "500 · 13px/1 · subtext-0", notes: "A model id, a path or a hash under a name." },

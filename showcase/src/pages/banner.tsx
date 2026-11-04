@@ -17,10 +17,13 @@ export default function BannerPage() {
       lede="An inline message band with a semantic tint. It sits in the content flow wherever the message applies."
     >
       <p class="cn-copy">
-        Text, tint, and edge all derive from the{" "}
+        The glyph, tint and edge derive from the{" "}
         <code class="cn-code-inline">--tone</code> contract prop, so a single{" "}
         <code class="cn-code-inline">.cn-tone-*</code> utility switches the whole
-        band. A status tone also swaps in its ladder and its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
+        band. The message itself is{" "}
+        <code class="cn-code-inline">--cn-fg-body</code>, so a sentence stays
+        text-colored like every other sentence, 8.7:1 on a danger tint. A
+        status tone also swaps in its ladder and its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
         The tint needs the edge to hold its shape on the base ground.
       </p>
 
@@ -75,8 +78,9 @@ export default function BannerPage() {
         leads with a glyph, because those are the tones a reader must not
         miss. The palette tones draw none, so a red or yellow banner brings
         an svg. Other palette tones may drop it, as in the blue banner above.
-        The svg goes first, at the 16px the recipe sets. Stroke it with{" "}
-        <code class="cn-code-inline">currentColor</code> so it takes the tone,
+        The svg goes first, at the 16px the recipe sets. The recipe sets the
+        svg's color to the tone, so stroke it with{" "}
+        <code class="cn-code-inline">currentColor</code>,
         and mark it <code class="cn-code-inline">aria-hidden="true"</code>; the
         text carries the message. For messages
         that arrive dynamically, put <code class="cn-code-inline">role="status"</code>{" "}
@@ -91,24 +95,24 @@ export default function BannerPage() {
             name: ".banner",
             values: "div (or a status/alert region)",
             notes:
-              "Tint band: --tone text at the meta size, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). The tint is the tone at 4% and the edge the tone 25% into surface-0, or the status ladder's stops. Its words state the status.",
+              "Tint band: --cn-fg-body text at the meta size, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). The tint is the tone at 4% and the edge the tone 25% into surface-0, or the status ladder's stops. Its words state the status.",
           },
           {
             name: ".banner svg",
             values: "one leading glyph",
             notes:
-              "16px, first in the banner, currentColor stroke, aria-hidden. Seated by the flex gap, no extra wrapper. Replaces the CSS glyph on a status tone. Needed on .cn-tone-red and -yellow, which draw none.",
+              "16px, first in the banner, color set to --tone, currentColor stroke, aria-hidden. Seated by the flex gap, no extra wrapper. Replaces the CSS glyph on a status tone. Needed on .cn-tone-red and -yellow, which draw none.",
           },
           {
             name: ".banner::before",
             values: "status glyph",
-            notes: "On .cn-tone-danger, -warning, -success or -info with no svg child: a 16px --cn-glyph-* mask in currentColor.",
+            notes: "On .cn-tone-danger, -warning, -success or -info with no svg child: a 16px --cn-glyph-* mask in --tone.",
           },
           {
             name: "--tone",
             values: ".cn-tone-danger / -warning / -success / -info · .cn-tone-red / -green / -peach / -yellow / -blue / -mauve",
             default: "var(--cn-info)",
-            notes: "One prop drives text, tint, and edge together.",
+            notes: "One prop drives the glyph, tint and edge together. The message stays --cn-fg-body.",
           },
         ]}
       />

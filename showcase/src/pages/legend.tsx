@@ -98,7 +98,7 @@ export default function LegendPage() {
         title="Contract"
         rows={[
           { name: ".legend", values: "ul", notes: "Wrapping flex row, 8px by 16px gap, no bullets." },
-          { name: ".legend-item", values: "li", notes: "A 10px swatch in --series, then the label in --cn-fg-body at the meta role, 500 13px." },
+          { name: ".legend-item", values: "li", notes: "A 10px swatch in --series, then the label in --cn-fg-body at the meta role, 400 13px." },
           { name: "--series", values: "inline token color", default: "var(--accent)", notes: "The swatch color: a --cn-series-* for a series, a status role for a status, or a palette tone for a status with no role. Match it to the series' mark in the chart." },
           { name: ".is-hatched", values: "on .legend-item", notes: "Diagonal stripes over the swatch, base at 45%, 2px on and 3px off. The matching .bar takes the same class." },
         ]}

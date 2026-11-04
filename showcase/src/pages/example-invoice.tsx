@@ -177,20 +177,22 @@ export default function InvoiceExample() {
           </tbody>
         </table>
         <div class="panel-body cn-row cn-end">
-          <div class="cn-divide" style="width:min(320px,100%)">
-            <div class="stat is-inline cn-py-8">
-              <span>Subtotal</span>
-              <b>{money(SUBTOTAL)}</b>
+          <div style="width:min(320px,100%)">
+            <div class="cn-divide">
+              <div class="stat is-inline cn-py-8">
+                <span>Subtotal</span>
+                <b>{money(SUBTOTAL)}</b>
+              </div>
+              <div class="stat is-inline cn-py-8">
+                <span>HST, 13%</span>
+                <b>{money(TAX)}</b>
+              </div>
+              <div class="stat is-inline cn-py-8">
+                <span>Paid</span>
+                <b>{money(0)}</b>
+              </div>
             </div>
-            <div class="stat is-inline cn-py-8">
-              <span>HST, 13%</span>
-              <b>{money(TAX)}</b>
-            </div>
-            <div class="stat is-inline cn-py-8">
-              <span>Paid</span>
-              <b>{money(0)}</b>
-            </div>
-            <div class="stat is-inline cn-py-8">
+            <div class="stat is-inline is-total">
               <span>Total due</span>
               <b>{money(TOTAL)}</b>
             </div>

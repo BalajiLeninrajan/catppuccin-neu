@@ -131,7 +131,7 @@ export default function DrawerPage() {
             name: "border-inline-start",
             values: "1px solid var(--edge-strong)",
             default: "·",
-            notes: "The one hairline, surface-1. It follows the writing direction; the drawer itself stays pinned right. The pop shadow does the rest.",
+            notes: "The one hairline, surface-2. It follows the writing direction; the drawer itself stays pinned right. The pop shadow does the rest.",
           },
           {
             name: "::backdrop",

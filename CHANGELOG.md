@@ -7,12 +7,12 @@ what ships now. This file records how it got there.
 
 This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 
-**Removed.** Every name deprecated in 0.4.0, including the `.cn-scrim` div modals and drawers, `data-density="dense"`, `--hard-offset-color`, `--pane-radius`, the `-22` and `-28` utilities and Tailwind `micro` and `input`. The [migration table](#migrating-to-040) maps each to its replacement.
+**Removed.** Every name deprecated in 0.4.0, including the `.cn-scrim` div modals and drawers, `data-density="dense"`, `--hard-offset-color`, `--pane-radius`, the `-22` and `-28` utilities and Tailwind `micro` and `input`. The [migration table](#migrating-to-040) maps each to its replacement. The legacy `--line`, `--muted` and `--soft` go too: use `--surface-0` (or `--edge`), `--cn-fg-muted` and `--cn-fg-soft`.
 
 **Color**
 - Semantic roles: `--cn-fg` (text), `-soft` (subtext-1), `-body` (subtext-1), `-muted` (subtext-0), `-placeholder` (overlay-2), `-faint` (overlay-1), `-disabled` (overlay-1), `--cn-fg-on-accent`, `--cn-interactive`, `--cn-interactive-hover`, `--cn-focus` (text) and `--cn-danger`, `-warning` (yellow), `-success`, `-info`. Recipes read roles, never palette stops, and `.cn-fg-*`, `.cn-tone-*` and the Tailwind maps expose them.
 - All 26 Mocha colors: `--flamingo`, `--maroon` and `--sapphire` join.
-- Mix steps `--cn-step-tint/-wash/-engaged/-fill/-plate/-edge/-strong/-vivid` (4, 12, 20, 14, 25, 40, 50, 70%) replace loose percentages. `.cn-tint-accent` mixes at `--cn-step-wash`, `.cn-edge-mauve` and `.cn-edge-accent` at `--cn-step-plate`, and the `.mark` border and live-dot halo at `--cn-step-fill`.
+- Mix steps `--cn-step-tint/-row/-wash/-engaged/-fill/-plate/-edge/-strong/-vivid` (4, 8, 12, 20, 14, 25, 40, 50, 70%) replace loose percentages. `.cn-tint-accent` mixes at `--cn-step-wash`, `.cn-edge-mauve` and `.cn-edge-accent` at `--cn-step-plate`, and the `.mark` border and live-dot halo at `--cn-step-fill`.
 - Status ladders: `--cn-<role>-tint/-wash/-edge/-border`, read through `--tint`, `--tone-wash`, `--tone-edge` and `--tone-border`.
 - Data colors: `--cn-series-1..6` (mauve, yellow, teal, peach, blue, pink, alternating cool and warm), `--cn-ramp-1..5` and `--cn-diverge-1..5`, with Tailwind keys. The SPEC names the hue pairs that never sit side by side; status tags and banners are exempt, because they carry a word and a glyph.
 - `.bar` and `.legend-item` read `--series`, falling back to `--accent`, instead of `--tone`.
@@ -22,36 +22,40 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - Code line numbers use `--cn-fg-placeholder`.
 
 **Surfaces and depth**
-- A surface ladder: sunken, band, recessed, page, raised (surface-0 75%, 1.21:1) and overlay (90%, 1.27:1). Panels and plated controls fill raised; overlays fill overlay.
-- `--cn-lit-edge`, a 1px top rim, joins `--neu-raised` and every plate but the primary, which has its gloss.
-- `--neu-lifted`: the raised layers with a longer 14px 18px 36px cast. `.panel.is-lead` keeps the raised fill and stands on it inside `--edge-strong`, so raised controls inside it still sit a step lighter.
+- A surface ladder: sunken, band, recessed, page, raised and overlay (surface-0 90% into base, 1.27:1). Raised is base, the page color: panels and plated controls lift by the contact edge, cast, lit top edge and hairline, not by a lighter fill. Overlays float, so they keep the lighter fill.
+- `--cn-lit-edge`, a 1px top rim of surface-2 at 45% (1.5:1 on base), joins `--neu-raised` and every plate but the primary, which has its gloss.
+- `--neu-lifted`: the raised layers with a longer 14px 18px 36px cast and a bright overlay-0 top rim (3.4:1). `.panel.is-lead` stands on it inside `--edge-strong`, so the edges carry its rank where a cast barely shows.
 - Raised shadows use crust halfway to black (`--neu-shade`, `--neu-contact`) with a 1px contact edge, so the lift reads on base. The SPEC draws every depth as one height model.
 - The engaged wash is mauve at `--cn-step-engaged` (20%, 1.52:1), a step past the 1.24:1 hover.
 - `--cn-fg-muted` is subtext-0 (7.4:1); placeholders take `--cn-fg-placeholder` (overlay-2).
 - `.bar-chart`, `.bar-group` and `.bar` for horizontal bar charts.
 - `--control-edge` and `--cn-fg-disabled` are overlay-1 (4.4:1), so unchecked controls and the slider thumb clear 3:1 on raised and overlay fills too. Lint checks the control edge on every ground.
-- An invalid or warning field closes its lip into a ring in the tone, and its help text leads with the tone's glyph.
+- An invalid or warning field closes its lip into a ring in the tone, and its help text leads with the glyph in the tone. The label and help text no longer take the tone: the label stays `--cn-fg-muted` and the help text moves up to `--cn-fg-body`, as on a banner.
 - Micro, label and ui lead at 1.25, so a wrapped label or text-spacing override never collides.
 - `data-density="cozy"`: 38px controls between the default and compact.
 - Bare `h1` to `h4` take the display-sm, heading, title and name roles at zero specificity; header-band titles are the title role.
 - `prefers-contrast: more` stands the tilted panel upright.
 - Focus is `--cn-focus` text, a bright neutral, so it differs from the mauve engaged rim by hue as well as shape. Lavender joins the identity hues.
-- Raised shadows drop the top-left highlight: contact, cast and a stronger lit edge (surface-2 80%). Carves and the pop shadow share the halfway-to-black base; the pop has a tighter second layer. `--edge` is surface-2 80%. A panel inside a panel takes the soft raise.
+- Raised shadows drop the top-left highlight: contact, cast and the lit edge. Carves and the pop shadow share the halfway-to-black base; the pop has a tighter second layer. A panel inside a panel takes the soft raise with the lit edge.
 - Label is 13px and name 14px, so micro is the one 12px role.
 - Series 5 and 6 step down in lightness for color-vision deficiency; `.is-hatched` adds stripes to a bar or legend swatch.
 - Dashed means an open slot only. The on switch paddle carries a crust bar.
 - Component folds also answer `.cn-container`.
 - The SPEC states the one idea behind the ornaments, a three-panel depth budget per region, and the halation mitigations.
-- `.panel.is-lead`, `.stat-grid.is-ruled`, a press on chip links and buttons, and the `.cn-grid-12` page grid with `.cn-span-*`. The SPEC adds composition rules and a job for every hue.
+- `.panel.is-lead`, `.stat-grid.is-ruled`, and the `.cn-grid-12` page grid with `.cn-span-*`. The SPEC adds composition rules and a job for every hue.
 - Panel, modal, drawer and popover headers sit on their parent's fill behind a divider. `--cn-surface-band` darkens table heads one step under whatever holds them.
-- Hairlines fold into `--edge` (surface-2 80%), `--edge-soft` and `--edge-strong`. `--hover` is surface-1 40% over transparent.
-- Carved fields draw a lit lip (`--cn-field-ring`, overlay-1, 3.5:1 or more on every surface); wells and the mono wells carry `--cn-well-lip`.
+- Hairlines fold into `--edge` (surface-2 55%, 1.6:1 on base), `--edge-soft` and `--edge-strong` (solid surface-2, 2.5:1 on base, overlay-0 under `prefers-contrast: more`), so the lead panel and overlays wear a brighter cut edge than a plain panel in both modes. `--hover` is surface-1 40% over transparent.
+- Carved fields draw a lit lip (`--cn-field-ring`, overlay-1, 3.5:1 or more on every surface); wells and the mono wells carry `--cn-well-lip`, solid surface-2 (2.5:1 on base).
+- Link and button chips stand on the crust plate with the shared hover lift and half-slide press; static chips keep the soft raise and gain the lit edge, so the plate tells them apart.
+- `.cn-grid-2/3/4` and `.cn-grid-12` read one `--cn-grid-gap` (24px), so equal-column grids of panels no longer need `cn-gap-24`; a grid of small items composes `.cn-gap-16`. This changes the `.cn-grid-2/3/4` default from 16px.
+- `.cn-grid-12` children keep their content height (`align-items: start`), and at 1060px, or in a `.cn-container` that narrow, splits become halves and a 9 takes the row. In a grid of only 3, 4, 5, 7 and 8 spans an odd last child takes the row, and so does a 3 after a 9.
+- Skeletons fill with `--cn-surface-band`, one step under whatever holds them, instead of the sunken fill.
 - The tilted panel takes content height in a grid.
 - A ranked row at the top of a panel takes the panel's top corners too.
 
 **Type**
-- Sizes are rem. micro 12, label 13, meta 13, ui 14, name 14, body 16 (15 at compact density), lede 18, title 20, value 24, heading 28 (new, `.cn-heading`), value-lg 32, code 13, display-sm 30 to 40, display 36 to 56 at 1.08.
-- Weights: label and micro 500; name, buttons and title 600; 700 for heading, display and the wordmark. Tracking tightens with size, -.01em at 20px to -.03em at display.
+- Sizes are rem. micro 12, label 13, meta 13, ui 14, name 14 (aliases of the ui tokens: the ui role in `--cn-fg`), body 16 (15 at compact density), lede 18, title 20, value 24, heading 28 (new, `.cn-heading`), value-lg 32, code 13, display-sm 30 to 40, display 36 to 56 at 1.08.
+- Weights: label and micro 500; meta 400, so it reads apart from the 13px label; name, buttons and title 600; 700 for heading, display and the wordmark. Tracking tightens with size, -.01em at 20px to -.03em at display.
 - At 520px, and in a 520px container, band titles step down to 16px with the stat value, so the value still outweighs the title.
 - Inter loads its optical-size axis. Metric-matched local fallbacks for Inter and JetBrains Mono. Mono surfaces turn ligatures off. `p` and `li` wrap pretty.
 
@@ -66,15 +70,22 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - `.input-lg` also works inside a `.field`.
 - In a customizable select, a hovered option takes `--hover` like a menu row and the checked option takes `--wash`.
 - The open accordion is its own step, the open carve (mauve at `--cn-step-tint`), not the engaged state, so body text in the fold keeps 7:1.
-- The phone row-mode table hover uses `--cn-step-tint`, like the desktop row hover.
+- Table and ranked row hovers, desktop and phone row mode, take mauve at `--cn-step-row` (8%) into base: 1.17:1 on the page, apart from the open carve's 1.08:1 and 1.30:1 under a selected row.
+- In phone mode a `td.is-trail` leaves the label stack and rides beside the name: the last trailing cell on the title line, the one before it under it.
+- `.stat.is-inline.is-total`: a summary total in the name and value roles under an `--edge` rule.
+- Sidebar links are 500 and the current page 600. Below 1060px the sidebar body fades in and settles 4px when it opens.
+- A focused read-only field rings at the control radius.
+- Banner text is `--cn-fg-body`; the glyph, edge and tint keep the tone.
+- Checkboxes, radios and switches drop the user-agent margin, and a `legend` drops its inline padding, so a fieldset's legend, controls and message share one start edge.
 - Under `hover: none`, a chosen segmented option keeps its 1px press after a tap.
 - `.checkbox:indeterminate`; `aria-invalid` on a checkbox, radio or fieldset edges them in danger.
 - Danger, warning, success and info tags and banners draw a glyph from `--cn-glyph-*` when the markup brings none.
 
 **Motion**
 - `--ease-spring` is a `linear()` damped spring where supported. An opt-in root view-transition cross-fade.
-- Reduced motion keeps overlay fades, drops travel, keeps spinners turning and holds skeletons still.
+- Reduced motion keeps overlay fades, drops travel, keeps spinners turning and holds skeletons still at .75 opacity, the midpoint of their breath.
 - A Data changes section in the SPEC, and `.cn-arrive` for content that replaces a skeleton.
+- The SPEC allows a consumer to name the lead panel and the primary with `view-transition-name` so they morph across routes, and documents how the fanned toast pile closes over a dismissed middle toast.
 
 **Accessibility**
 - `prefers-contrast: more`, `prefers-reduced-transparency`, `forced-colors`, `pointer: coarse` (44px targets) and `hover: none` are answered.
@@ -89,6 +100,8 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 **Behavior.** `catppuccin-neu/js`, optional: `tabs()`, `menu()`, `slider()`, `tooltips()`, `toast()` (with swipe to dismiss) and `init()`. The toast timer runs only while neither the pointer nor focus is in the stack, and a swiped toast exits through `[hidden]`.
 
 **Lint.** Fails on palette text stops and bare accent hues in recipes, hand-mixed hairlines, `outline: none`, a SPEC type table that disagrees with the tokens, a token comment whose ratio is off, and any WCAG or APCA pairing under its floor, computed from the tokens in both contrast modes.
+
+**Showcase.** `test:a11y` applies the WCAG 1.4.12 text-spacing override on every route and fails on clipped text, and under forced colors checks the focus ring and saves a screenshot per route to `showcase/a11y-shots/forced-colors/`.
 
 **Docs.** An ornament budget (one job per ornament kind, the ramp and grain counted as one fill, five named composites) and dark-only stance in the ground rules, the inset rule narrowed to transparent carves, sanctioned slot names (`.command-copy`, `.sidebar-toggle`, `td.cell-select`, `.copy-glyph`, `.done-glyph`), the primary's place in forms and first-run screens, the physical light, icon guidance, and Accessibility, Behavior, Dashboard and Settings pages in the showcase.
 

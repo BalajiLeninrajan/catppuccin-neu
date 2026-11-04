@@ -171,7 +171,7 @@ export default function ToastPage() {
         <code class="cn-code-inline">b</code> title over a span or p description, then trailing
         controls: a <code class="cn-code-inline">.btn-text</code> action, a{" "}
         <code class="cn-code-inline">.btn.is-icon</code> close, or both. The border is{" "}
-        <code class="cn-code-inline">--edge-strong</code>, the neutral surface-1 overlay hairline; the toast
+        <code class="cn-code-inline">--edge-strong</code>, the neutral surface-2 overlay hairline; the toast
         carries no accent color.
       </p>
 
@@ -188,6 +188,14 @@ export default function ToastPage() {
         ones peek behind it, scaled back, and the fourth and older hide until
         the stack thins. Hover or keyboard focus fans the stack out into the
         column.
+      </p>
+
+      <p class="cn-copy">
+        Dismissing a toast from the middle needs no extra rule. Collapsed,
+        depth counts visible toasts only, so the pile re-steps on its
+        translate and scale. Fanned, the leaving toast collapses its height
+        and margin as it fades, so the toasts above it ride down instead of
+        jumping.
       </p>
 
       <p class="cn-copy">
@@ -316,7 +324,7 @@ function resume() {
             values: "one stack item",
             default: "·",
             notes:
-              "Flex row on --cn-surface-overlay with the --edge-strong border (surface-1, no accent); floats on --shadow-pop; the card radius (12px). The meta role.",
+              "Flex row on --cn-surface-overlay with the --edge-strong border (surface-2, no accent); floats on --shadow-pop; the card radius (12px). The meta role.",
           },
           {
             name: "b + span/p",

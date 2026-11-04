@@ -130,9 +130,23 @@ export default function LayoutPage() {
         <code class="cn-code-inline">-9</code> or{" "}
         <code class="cn-code-inline">-12</code>. Pairs that add to twelve,
         such as 7 and 5 or 8 and 4, give a wide panel and a narrow one; three
-        4s give equal thirds. At 760px and below, or inside a{" "}
+        4s give equal thirds. Children keep their content height, so a short
+        panel beside a tall one never stretches into an empty tail.
+      </p>
+
+      <p class="cn-copy">
+        The grid folds in two steps. At 1060px and below, or inside a{" "}
         <code class="cn-code-inline">.cn-container</code> that narrow, every
-        span takes the full row, in source order.
+        split becomes halves: 7 and 5 or 8 and 4 go to 6 and 6, four 3s go
+        two by two, and a 9 takes the row. When every child is a 3, 4, 5, 7
+        or 8, an odd last child takes the row, so three 4s fold to two and
+        one. A 3 right after a 9 takes the row too. Other mixes, such as a 6
+        among splits, can leave a half beside a hole, so give each row its
+        own grid. At 760px every
+        span takes the full row, in source order. In an app shell with a
+        sidebar, the content column is 264px narrower than the viewport, so
+        put <code class="cn-code-inline">.cn-container</code> on it and the
+        step answers the column's width.
       </p>
 
       <Demo title="7 and 5, 8 and 4, three 4s" classes="cn-grid-12 > cn-span-7 + cn-span-5">
@@ -163,9 +177,11 @@ export default function LayoutPage() {
         (24px) apart, which is the page grid's gap. Content inside a panel
         takes <code class="cn-code-inline">--body-pad</code>: put it in a{" "}
         <code class="cn-code-inline">.panel-body</code>, not fixed padding
-        utilities, so it follows density. The equal-column grids,{" "}
-        <code class="cn-code-inline">.cn-grid-2/3/4</code>, keep a 16px gap, so
-        add <code class="cn-code-inline">cn-gap-24</code> when they hold panels.
+        utilities, so it follows density. Every grid, the equal-column{" "}
+        <code class="cn-code-inline">.cn-grid-2/3/4</code> included, reads{" "}
+        <code class="cn-code-inline">--cn-grid-gap</code>, 24px. A grid of
+        small items rather than panels composes{" "}
+        <code class="cn-code-inline">.cn-gap-16</code>.
       </p>
 
       <p class="cn-copy">
@@ -406,9 +422,10 @@ export default function LayoutPage() {
           { name: ".cn-split", values: "wrapping flex, gap 12 by 16", notes: "Two groups at opposite ends; the first takes the slack, and the second wraps under it when they no longer fit. A header with actions." },
           { name: ".cn-measure", values: "max-inline-size --cn-measure", notes: "A centered column at 68ch for prose inside a wide page." },
           { name: ".cn-with-side", values: "--side-w", default: "16rem", notes: "The first child is the side, the last takes the rest, gap 24. They stack when the content would drop under 60% of the row." },
-          { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap 16", notes: "Collapse at 760 and 520. Add cn-gap-24 when they hold panels." },
-          { name: ".cn-grid-12", values: "twelve columns, gap 24", notes: "The page grid for one region's panels. Children span with .cn-span-*." },
-          { name: ".cn-span-3 / 4 / 5 / 6 / 7 / 8 / 9 / 12", values: "children of .cn-grid-12", notes: "Columns to span. Each takes the full row at 760px and below, or inside a .cn-container that narrow." },
+          { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap --cn-grid-gap (24px)", notes: "Collapse at 760 and 520. Compose cn-gap-16 for a grid of small items." },
+          { name: ".cn-grid-12", values: "twelve columns, gap --cn-grid-gap (24px)", notes: "The page grid for one region's panels. Children span with .cn-span-* and keep their content height (align-items: start)." },
+          { name: ".cn-span-3 / 4 / 5 / 6 / 7 / 8 / 9 / 12", values: "children of .cn-grid-12", notes: "Columns to span. At 1060px, or in a .cn-container that narrow, splits become halves and a 9 takes the row. An odd last child takes the row when every child is a 3, 4, 5, 7 or 8, and so does a 3 after a 9. Each takes the full row at 760px and below." },
+          { name: "--cn-grid-gap", values: "token", default: "var(--space-5)", notes: "The gap of every .cn-grid-*, the 24px between panels in a region." },
           { name: ".cn-container", values: "container-type: inline-size", notes: "Grids and component folds inside it answer its width, not the viewport's: the stat grid and panel footer at 760, the segmented control, stats, accordion meta and .kv at 520." },
           { name: ".cn-grow / .cn-fixed / .cn-min-0", values: "flex children", notes: "grow is flex 1 with min-width 0, the one that truncates." },
           { name: ".cn-w-full / .cn-fit / .cn-block / .cn-auto-l / .cn-mx-auto", values: "sizing", notes: "auto-l pushes an item to the far end of a row; mx-auto centers a box that has its own width." },

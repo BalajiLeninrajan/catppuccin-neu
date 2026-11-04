@@ -3,11 +3,11 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 /* The surface ladder, from the page up and then down into the carves. */
 const LADDER = [
   { token: "--cn-surface-page", util: "cn-bg-base", mix: "base", use: "The ground." },
-  { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "surface-0 75% into base · 1.21:1", use: "Panels, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
+  { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "base, the page color", use: "Panels, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
   { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base · 1.27:1", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
   { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "mantle 55% into base", use: "The sidebar." },
-  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", use: "Table heads." },
-  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 38% into mantle", use: "Filled wells, the mono wells, stepper pills, skeletons." },
+  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", use: "Table heads, skeletons." },
+  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 38% into mantle", use: "Filled wells, the mono wells, stepper pills." },
 ];
 
 const ACTIVITY = [
@@ -25,23 +25,25 @@ export default function SurfacesPage() {
   return (
     <Doc
       title="Surfaces"
-      lede="A ladder of six fills, and two containers built on it. The raised panel lifts content off the page on a lighter fill. The inset well presses it in, with no border."
+      lede="A ladder of six fills, and two containers built on it. The raised panel lifts content off the page by its edges and shadow, on the page's own color. The inset well presses it in, with no border."
     >
       <h2 class="cn-title">The surface ladder</h2>
       <p class="cn-copy">
-        Raised surfaces sit one step lighter than the page, the way an
-        elevated layer does, so the lift reads before the shadow does.
-        Overlays sit one step lighter again. Table heads and carved fills go
+        Panels and plated controls sit on the page color. A raised surface
+        lifts by its contact edge, its cast, its lit top edge and its
+        hairline, never by a lighter fill. Overlays float free of the page,
+        so they take the one lighter step. Table heads and carved fills go
         the other way, darker than the page. Recipes read these six tokens,
         never a raw ground. The ratios are against the page.
       </p>
 
       <p class="cn-copy">
-        The ladder stops at 1.27:1 because a lighter step would drop the
-        placeholder role under 4.5:1. Body text stays above 7:1 and placeholders above
-        4.5:1 on both fills. The field lip is overlay-1, so it clears 3:1 on
-        both: 3.7:1 on the raised fill and 3.5:1 on the overlay. An empty
-        field inside a panel or a dialog keeps its edge.
+        The overlay stops at 1.27:1 because a lighter step would drop the
+        placeholder role under 4.5:1. Body text stays above 7:1 and
+        placeholders above 4.5:1 on it. The field lip is overlay-1, so it
+        clears 3:1 everywhere: 4.4:1 on the page and in a panel, which share
+        a color, and 3.5:1 on the overlay. An empty field inside a panel or a
+        dialog keeps its edge.
       </p>
 
       <Demo title="Six fills" classes="cn-bg-base / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well" row>
@@ -112,7 +114,8 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         A panel inside a panel rests on its parent, not on the page, so it
-        takes <code class="cn-code-inline">--neu-raised-soft</code>. A region of
+        takes <code class="cn-code-inline">--neu-raised-soft</code> and keeps
+        the lit edge. A region of
         a view holds at most three raised panels. More items go in one panel,
         a ruled stat grid on the ground or a table, so raised stays a rank
         and not a texture.
@@ -171,12 +174,13 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.panel.is-lead</code> marks the panel a
         view is about, such as the invoice table on a billing dashboard. It
-        keeps the raised fill inside an{" "}
-        <code class="cn-code-inline">--edge-strong</code> hairline and stands on{" "}
-        <code class="cn-code-inline">--neu-lifted</code>, a longer cast, so it
-        sits one step above the raised panels beside it while a secondary
-        button inside it still reads lighter than the panel. It adds height,
-        not an ornament: no plate, tilt or color. Use one per view at most.
+        sits on the page color like every panel, inside the bright{" "}
+        <code class="cn-code-inline">--edge-strong</code> hairline, solid
+        surface-2 at 2.5:1 against a panel's 1.6:1, and stands on{" "}
+        <code class="cn-code-inline">--neu-lifted</code>: a longer cast under
+        a bright overlay-0 top rim at 3.4:1. A cast barely shows on a dark
+        page, so the two edges carry the rank. It adds height, not an
+        ornament: no plate, tilt or color. Use one per view at most.
         The tilted aside comments on the data; the lead panel holds it.
       </p>
 
@@ -250,13 +254,14 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         The well's ground is transparent; the carve defines it, with{" "}
-        <code class="cn-code-inline">--cn-well-lip</code>, a 1px surface-2 line
-        at 55% on the bottom and right inner walls, so it reads on the page
-        without a border. Compose{" "}
+        <code class="cn-code-inline">--cn-well-lip</code>, a 1px solid surface-2
+        line, 2.5:1 on the page, on the bottom and right inner walls, so it
+        reads on the page without a border and stays softer than a field's
+        4.4:1 lip. Compose{" "}
         <code class="cn-code-inline">.cn-bg-well</code> onto{" "}
         <code class="cn-code-inline">.well</code> for the{" "}
-        <code class="cn-code-inline">--cn-surface-sunken</code> fill the code wells,
-        stepper pills and skeletons use.
+        <code class="cn-code-inline">--cn-surface-sunken</code> fill the code
+        wells and stepper pills use.
       </p>
 
       <Props
@@ -265,7 +270,7 @@ export default function SurfacesPage() {
           {
             name: ".panel",
             values: "raised container",
-            notes: "--cn-surface-raised fill, --neu-raised (contact, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft. At most three per region.",
+            notes: "--cn-surface-raised fill (the page color), --neu-raised (contact, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",
@@ -290,7 +295,7 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-lead",
             values: "one per view",
-            notes: "The panel the view is about. The raised fill inside an --edge-strong hairline, on --neu-lifted, so it outranks its neighbors by height. No ornament.",
+            notes: "The panel the view is about. The page color inside the bright --edge-strong hairline, on --neu-lifted with its bright overlay-0 rim, so it outranks its neighbors by height. No ornament.",
           },
           {
             name: ".panel.is-shell",

@@ -122,13 +122,14 @@ export default function ChipPage() {
 
       <p class="cn-copy">
         A chip that is an <code class="cn-code-inline">a</code> or a{" "}
-        <code class="cn-code-inline">button</code> answers the pointer. On
-        hover its label turns <code class="cn-code-inline">--cn-fg</code> and
-        its border takes <code class="cn-code-inline">--control-edge</code>.
-        Held, it presses 1px into the page onto{" "}
-        <code class="cn-code-inline">--neu-inset-soft</code> and springs back
-        on release. A chip on a span stays still, so only the clickable ones
-        move. Keep it to a link or an action on one fact; a choice between
+        <code class="cn-code-inline">button</code> is a
+        clickable, so it stands on the crust plate under the lit top edge,
+        like every clickable, and a static chip on a span rests on the page
+        on the soft raise. The plate is what tells the two apart at rest. On
+        hover a clickable chip lifts 1px, its label turns{" "}
+        <code class="cn-code-inline">--cn-fg</code> and its border takes{" "}
+        <code class="cn-code-inline">--control-edge</code>. Held, it slides
+        half the offset onto its plate and springs back on release. Keep it to a link or an action on one fact; a choice between
         options is a segmented control or tabs.
       </p>
 
@@ -227,12 +228,12 @@ export default function ChipPage() {
           {
             name: ".chip",
             values: "span, a, or button",
-            notes: "Outlined pill on --cn-surface-raised with raised-soft depth. No wrapping; keep labels short.",
+            notes: "Outlined pill on --cn-surface-raised with raised-soft depth and the lit edge when static. No wrapping; keep labels short.",
           },
           {
             name: ":is(a, button).chip",
             values: ":hover · :active",
-            notes: "Hover: --cn-fg label and a --control-edge border. Held: translate 1px down onto --neu-inset-soft in --t-press, back on the spring.",
+            notes: "Stands on the hard offset in --plate under --cn-lit-edge. Hover: lifts 1px, --cn-fg label and a --control-edge border. Held: the half-slide onto the plate in --t-press, back on the spring.",
           },
           {
             name: ".chip svg",

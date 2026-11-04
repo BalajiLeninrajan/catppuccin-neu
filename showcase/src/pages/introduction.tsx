@@ -57,8 +57,8 @@ export default function IntroductionPage() {
         <h2 class="cn-title">The idea</h2>
         <p class="cn-copy">
           Surfaces get their definition from depth, not strokes. Raised panels
-          sit one step lighter than the page and lift off it on a cast shadow
-          with a lit top edge; inputs, wells, and
+          share the page color and lift off it on a contact edge, a cast
+          shadow, a lit top edge and a hairline; inputs, wells, and
           selected states press in with an inset. Clickable controls carry a
           flat hard-offset shadow and press with a half-slide onto it. Type is
           Inter everywhere, JetBrains Mono for code. Mauve is the one accent;
