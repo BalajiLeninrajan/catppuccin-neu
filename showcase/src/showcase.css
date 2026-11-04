@@ -1,109 +1,26 @@
 /* ── docs-site chrome ────────────────────────────────────────────────────────
    Unlayered, so it always wins over the cn.* layers. Prefix: sc-.
-   Chrome only. Specimens use system classes only.                          */
-
-/* ── shell ── */
-
-.sc-shell {
-  min-height: 100vh;
-}
-
-.sc-sidebar {
-  position: fixed;
-  inset: 0 auto 0 0;
-  width: 264px;
-  display: flex;
-  flex-direction: column;
-  background: color-mix(in srgb, var(--mantle) 55%, var(--base));
-  border-right: 1px solid color-mix(in srgb, var(--surface-1) 45%, transparent);
-  z-index: 50;
-}
-
-.sc-sidebar-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 20px 20px 30px;
-}
-
-.sc-sidebar-scroll {
-  overflow-y: auto;
-  padding: 0 14px 28px;
-  flex: 1;
-}
-
-.sc-wordmark {
-  font: 800 16px/1 var(--sans);
-  letter-spacing: -0.03em;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.sc-wordmark em {
-  color: var(--mauve);
-  font-style: normal;
-}
-
-.sc-menu-btn {
-  display: none;
-}
-
-/* ── nav ── */
-
-.sc-nav {
-  display: grid;
-  gap: 22px;
-}
-
-.sc-nav-group {
-  display: grid;
-  gap: 2px;
-}
-
-.sc-nav-group-title {
-  margin: 0 0 6px;
-  padding: 0 10px;
-}
-
-.sc-nav-link {
-  font: 550 13px/1 var(--sans);
-  color: var(--subtext-0);
-  text-decoration: none;
-  padding: 8px 10px;
-  border: 1px solid transparent; /* keeps box size stable when .cn-engaged clears border-color */
-  border-radius: 10px;
-  transition: color 0.16s, background 0.16s;
-}
-
-.sc-nav-link:hover {
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface-0) 40%, transparent);
-}
-
-.sc-nav-link.is-active {
-  color: var(--text);
-  font-weight: 700;
-}
+   Chrome only. Specimens use system classes only. The chrome follows the
+   package's own rules: spacing from --space-*, motion from --t-* on a named
+   --ease-*, color from the --cn-* roles.                                   */
 
 /* ── content column ── */
 
 .sc-content {
-  margin-left: 264px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.sc-measure {
-  width: min(860px, calc(100% - 48px));
-  margin: 0 auto;
-  padding: 48px 0 96px;
-  flex: 1;
+.sc-measure,
+.sc-content .page-footer {
+  width: min(860px, calc(100% - 2 * var(--space-5)));
 }
 
-.sc-content .page-footer {
-  width: min(860px, calc(100% - 48px));
+.sc-measure {
+  margin: 0 auto;
+  padding: var(--space-7) 0 calc(var(--space-8) + var(--space-6));
+  flex: 1;
 }
 
 /* ── doc kit ── */
@@ -113,65 +30,77 @@
   /* minmax(0, 1fr): a wide code block scrolls inside its own box instead of
      growing the track past the measure and dragging the page sideways */
   grid-template-columns: minmax(0, 1fr);
-  gap: 34px;
+  gap: var(--space-6);
 }
 
 .sc-doc-header {
   display: grid;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .sc-demo {
   margin: 0;
   min-width: 0;
   display: grid;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
 }
 
 /* The stage is the page ground itself: --base, no surface swap.
    A soft hairline frames the demo area; depth reads against --base. The
-   system has one dashed border (.is-dashed / .cn-edge-dashed) and the docs
-   don't get to add two more per page, which read as a wireframe. */
+   system keeps dashes for open slots (.is-dashed / .cn-edge-dashed) and
+   disabled controls, and the docs don't get to add two more per page,
+   which read as a wireframe. */
 .sc-demo-stage {
-  padding: clamp(24px, 4vw, 40px);
-  border: 1px solid color-mix(in srgb, var(--surface-1) 38%, transparent);
+  padding: clamp(var(--space-5), 4vw, var(--space-6));
+  border: 1px solid var(--edge-soft);
   border-radius: var(--cn-radius-panel);
   display: grid;
-  gap: 18px;
+  /* One column at the stage width, as on .sc-demo, so a wide specimen
+     such as .tabs scrolls inside it instead of widening the page. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
   justify-items: start;
 }
 
+/* Specimens in a row start at the inline start, like the text above and
+   below them, and wrap onto more rows. */
 .sc-demo-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
+  justify-content: flex-start;
+  gap: var(--space-4);
 }
 
-/* Snippet line: a flat copy row under the stage with a top rule, not a
-   second dashed box. The markup (doc.tsx) still composes .cn-edge-dashed +
-   .cn-r-chip; this unlayered rule flattens it. */
+/* Snippet line: a flat copy row under the stage with a top rule. The
+   system keeps dashes for open slots and disabled controls, so the row
+   draws none. Its "Copy" hint reads as the package's .btn-text: mauve at
+   rest, pink while the row is hovered, green once copied. */
 .sc-snippet {
   appearance: none;
   background: transparent;
-  color: var(--subtext-0);
+  color: var(--cn-fg-body);
   border: 0;
   border-top: 1px solid var(--surface-0);
   border-radius: 0;
-  padding: 6px 10px;
+  padding: var(--space-2) var(--space-3);
   text-align: left;
   cursor: pointer;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
-  transition: border-color 0.16s, color 0.16s;
+  gap: var(--space-3);
+  transition: border-color var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
 }
 
 .sc-snippet:hover {
-  border-color: color-mix(in srgb, var(--mauve) 30%, var(--surface-0));
-  color: var(--text);
+  border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), var(--surface-0));
+  color: var(--cn-fg);
+}
+
+.sc-snippet:hover .sc-snippet-hint {
+  color: var(--cn-interactive-hover);
 }
 
 .sc-snippet pre {
@@ -184,15 +113,19 @@
 
 .sc-snippet-block {
   align-items: flex-start;
-  padding: 12px 14px;
+  padding: var(--space-3) var(--space-4);
 }
 
 .sc-snippet-hint {
   flex: none;
 }
 
+.sc-snippet .sc-snippet-hint {
+  pointer-events: none;
+}
+
 .sc-snippet.is-copied .sc-snippet-hint {
-  color: var(--green);
+  color: var(--cn-success);
 }
 
 /* Props tables + code blocks. */
@@ -200,26 +133,26 @@
 .sc-codeblock {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
+  gap: var(--space-3);
 }
 
 /* Inside a flowed <section>, code blocks need their own space;
    otherwise a block sits flush against the previous one and its title reads
    as a caption of the box above it. */
-.sc-doc section .sc-codeblock { margin-top: 26px; }
+.sc-doc section .sc-codeblock { margin-top: var(--space-5); }
 .sc-doc section .sc-codeblock:first-child { margin-top: 0; }
-.sc-doc section .sc-codeblock + p { margin-top: 26px; }
+.sc-doc section .sc-codeblock + p { margin-top: var(--space-5); }
 
 /* The grid gap owns ALL spacing between top-level blocks. UA margins on
    direct children (p margin-bottom, h2 margin-bottom) otherwise stack onto
-   the 34px gap unevenly. */
+   the gap unevenly. */
 .sc-doc > * { margin-block: 0; }
 
 /* Headings group with what follows: extra room above, hug below. */
-.sc-doc > :is(h2, h3):not(.cn-label) { margin-top: 22px; }
-.sc-doc > :is(h2, h3):not(.cn-label) + * { margin-top: -16px; }
-.sc-doc > .cn-label { margin-top: 8px; }
-.sc-doc > .cn-label + * { margin-top: -20px; }
+.sc-doc > :is(h2, h3):not(.cn-label) { margin-top: var(--space-5); }
+.sc-doc > :is(h2, h3):not(.cn-label) + * { margin-top: calc(-1 * var(--space-4)); }
+.sc-doc > .cn-label { margin-top: var(--space-2); }
+.sc-doc > .cn-label + * { margin-top: calc(-1 * (var(--space-4) + var(--space-1))); }
 
 .sc-props-scroll {
   overflow-x: auto;
@@ -230,58 +163,25 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .sc-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+  gap: var(--space-4);
   width: 100%;
 }
 
-/* ── mobile: sidebar collapses to a topbar + disclosure ── */
+/* ── narrow: the measure tightens on phones ── */
 
-@media (max-width: 900px) {
-  .sc-sidebar {
-    position: sticky;
-    top: 0;
-    inset: auto;
-    width: auto;
-    border-right: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 45%, transparent);
-    background: color-mix(in srgb, var(--mantle) 82%, var(--base));
-    backdrop-filter: blur(14px);
-  }
-
-  .sc-sidebar-top {
-    padding: 12px 18px;
-  }
-
-  .sc-menu-btn {
-    display: inline-flex;
-  }
-
-  .sc-sidebar-scroll {
-    display: none;
-    max-height: min(60vh, 480px);
-    padding: 0 18px 22px;
-  }
-
-  .sc-sidebar.is-open .sc-sidebar-scroll {
-    display: block;
-  }
-
-  .sc-content {
-    margin-left: 0;
+@media (max-width: 760px) {
+  .sc-measure,
+  .sc-content .page-footer {
+    width: calc(100% - 2 * var(--space-4));
   }
 
   .sc-measure {
-    width: calc(100% - 36px);
-    padding: 30px 0 72px;
-  }
-
-  .sc-content .page-footer {
-    width: calc(100% - 36px);
+    padding: var(--space-6) 0 var(--space-8);
   }
 }

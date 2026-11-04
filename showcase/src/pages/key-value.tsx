@@ -35,24 +35,24 @@ export default function KeyValuePage() {
       </Demo>
 
       <p class="cn-copy">
-        Use <code class="cn-code">.kv</code> when the reader looks up one
+        Use <code class="cn-code-inline">.kv</code> when the reader looks up one
         value at a time: a record's settings, a deploy's metadata, an
-        invoice's header. Keys are labels in overlay-2. Values are text with
+        invoice's header. Keys are labels in subtext-0. Values are text with
         tabular numerals, and a long value wraps inside its column. At 520px
         and below each key sits over its value.
       </p>
 
       <p class="cn-copy">
         For label and value pairs that compare down a list, such as a plan
-        summary, use <code class="cn-code">.stat.is-inline</code> rows
+        summary, use <code class="cn-code-inline">.stat.is-inline</code> rows
         instead, which put the value at the far right.
       </p>
 
       <Props
         title="Contract"
         rows={[
-          { name: ".kv", values: "dl", notes: "Grid: max-content keys, minmax(0, 1fr) values, 8px by 16px gap, 13px text." },
-          { name: "dt", values: "key", notes: "600 12px in overlay-2." },
+          { name: ".kv", values: "dl", notes: "Grid: max-content keys, minmax(0, 1fr) values, 8px by 16px gap, 14px text." },
+          { name: "dt", values: "key", notes: "The label role, 500 13px, in --cn-fg-muted (subtext-0)." },
           { name: "dd", values: "value", notes: "Text color, tabular numerals, wraps anywhere." },
           { name: "at 520px", values: "responsive", notes: "One column: key over value, 8px between pairs." },
         ]}

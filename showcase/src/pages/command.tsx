@@ -50,8 +50,11 @@ export default function CommandPage() {
 
       <p class="cn-copy">
         The text is mono because it is a command. The well shares the
-        terminal's full inset and crust-mix fill. The copy control is the icon
-        button with <code class="cn-code">--tone</code> set to mauve. Use the
+        terminal's full inset, its <code class="cn-code-inline">--cn-well-lip</code>{" "}
+        and the <code class="cn-code-inline">--cn-surface-sunken</code>{" "}
+        fill, with ligatures off, so the command copies as it reads. The copy control
+        is the icon button with <code class="cn-code-inline">--tone</code> set to
+        mauve. Use the
         icon, not a worded "Copy" button, so the command stays the thing the
         reader sees first.
       </p>
@@ -65,10 +68,10 @@ export default function CommandPage() {
       <Props
         title="Contract"
         rows={[
-          { name: ".command", values: "div", notes: "min(480px, 100%) wide, 50px tall at every density, the card radius (12px), crust-mix fill on --neu-inset." },
+          { name: ".command", values: "div", notes: "min(480px, 100%) wide, 50px tall at every density, the card radius (12px), --cn-surface-sunken fill on --neu-inset with --cn-well-lip. Ligatures off." },
           { name: ".command.is-full", values: "modifier", notes: "Fills its container." },
           { name: ".command.is-wrap", values: "modifier", notes: "A long statement wraps instead of scrolling; the text becomes a block so inline spans inside it keep their whitespace." },
-          { name: ".command-text", values: "code", notes: "Mono 500 13px, tabular. Scrolls sideways with no scrollbar when the command is longer than the well." },
+          { name: ".command-text", values: "code", notes: "Mono 500 14px, tabular. Scrolls sideways with no scrollbar when the command is longer than the well." },
           { name: ".command-prompt", values: "span", notes: "The $ in mauve, unselectable so a copy never carries it." },
           { name: ".command-copy", values: "button.btn.is-icon", notes: "Both glyphs in the markup; .copy-glyph shows at rest, .done-glyph while the command is .is-copied." },
           { name: ".is-copied", values: "state on .command", notes: "Set by the consumer for a moment after a copy. The control turns green." },

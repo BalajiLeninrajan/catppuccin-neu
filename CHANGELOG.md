@@ -3,6 +3,82 @@
 One line per change, newest version first. [SPEC.md](./SPEC.md) describes
 what ships now. This file records how it got there.
 
+## Unreleased
+
+This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
+
+**Removed.** Every name deprecated in 0.4.0, including the `.cn-scrim` div modals and drawers, `data-density="dense"`, `--hard-offset-color`, `--pane-radius`, the `-22` and `-28` utilities and Tailwind `micro` and `input`. The [migration table](#migrating-to-040) maps each to its replacement.
+
+**Color**
+- Semantic roles: `--cn-fg` (text), `-soft` (subtext-1), `-body` (subtext-1), `-muted` (subtext-0), `-placeholder` (overlay-2), `-faint` (overlay-1), `-disabled` (overlay-1), `--cn-fg-on-accent`, `--cn-interactive`, `--cn-interactive-hover`, `--cn-focus` (text) and `--cn-danger`, `-warning` (yellow), `-success`, `-info`. Recipes read roles, never palette stops, and `.cn-fg-*`, `.cn-tone-*` and the Tailwind maps expose them.
+- All 26 Mocha colors: `--flamingo`, `--maroon` and `--sapphire` join.
+- Mix steps `--cn-step-tint/-wash/-fill/-plate/-edge/-strong/-vivid` (4, 12, 14, 25, 40, 50, 70%) replace loose percentages.
+- Status ladders: `--cn-<role>-tint/-wash/-edge/-border`, read through `--tint`, `--tone-wash`, `--tone-edge` and `--tone-border`.
+- Data colors: `--cn-series-1..6` (mauve, yellow, teal, peach, blue, pink, alternating cool and warm), `--cn-ramp-1..5` and `--cn-diverge-1..5`, with Tailwind keys. The SPEC names the hue pairs that never sit side by side.
+
+**Surfaces and depth**
+- A surface ladder: sunken, band, recessed, page, raised (surface-0 75%, 1.21:1) and overlay (90%, 1.27:1). Panels and plated controls fill raised; overlays fill overlay.
+- `--cn-lit-edge`, a 1px top rim, joins `--neu-raised` and every plate.
+- Raised shadows use crust halfway to black (`--neu-shade`, `--neu-contact`) with a 1px contact edge, so the lift reads on base. The SPEC draws every depth as one height model.
+- The engaged wash is mauve at `--cn-step-engaged` (20%, 1.52:1), a step past the 1.24:1 hover.
+- `--cn-fg-muted` is subtext-0 (7.4:1); placeholders take `--cn-fg-placeholder` (overlay-2).
+- `.bar-chart`, `.bar-group` and `.bar` for horizontal bar charts.
+- `--control-edge` and `--cn-fg-disabled` are overlay-1 (4.4:1), so unchecked controls and the slider thumb clear 3:1 on raised and overlay fills too. Lint checks the control edge on every ground.
+- An invalid or warning field closes its lip into a ring in the tone, and its help text leads with the tone's glyph.
+- Micro, label and ui lead at 1.25, so a wrapped label or text-spacing override never collides.
+- `data-density="cozy"`: 38px controls between the default and compact.
+- Bare `h1` to `h4` take the display-sm, heading, title and name roles at zero specificity; header-band titles are the title role.
+- `prefers-contrast: more` stands the tilted panel upright.
+- Focus is `--cn-focus` text, a bright neutral, so it differs from the mauve engaged rim by hue as well as shape. Lavender joins the identity hues.
+- Raised shadows drop the top-left highlight: contact, cast and a stronger lit edge (surface-2 80%). Carves and the pop shadow share the halfway-to-black base; the pop has a tighter second layer. `--edge` is surface-2 80%. A panel inside a panel takes the soft raise.
+- Label is 13px and name 14px, so micro is the one 12px role.
+- Series 5 and 6 step down in lightness for color-vision deficiency; `.is-hatched` adds stripes to a bar or legend swatch.
+- Dashed means an open slot only. The on switch paddle carries a crust bar.
+- Component folds also answer `.cn-container`.
+- The SPEC states the one idea behind the ornaments, a three-panel depth budget per region, and the halation mitigations.
+- `.panel.is-lead`, `.stat-grid.is-ruled`, a press on chip links and buttons, and the `.cn-grid-12` page grid with `.cn-span-*`. The SPEC adds composition rules and a job for every hue.
+- Panel, modal, drawer and popover headers sit on their parent's fill behind a divider. `--cn-surface-band` darkens table heads one step under whatever holds them.
+- Hairlines fold into `--edge` (surface-2 70%), `--edge-soft` and `--edge-strong`. `--hover` is surface-1 40% over transparent.
+- Carved fields draw a lit lip (`--cn-field-ring`, overlay-1, 3.5:1 or more on every surface); wells and the mono wells carry `--cn-well-lip`.
+- The tilted panel takes content height in a grid.
+
+**Type**
+- Sizes are rem. micro 12, label 12, meta 13, ui 14, name 15, body 16 (15 at compact density), lede 18, title 20, value 24, heading 28 (new, `.cn-heading`), value-lg 32, code 13, display-sm 30 to 40, display 36 to 56 at 1.08.
+- Weights: label and micro 500; name, buttons and title 600; 700 for heading, display and the wordmark. Tracking tightens with size, -.01em at 20px to -.03em at display.
+- Inter loads its optical-size axis. Metric-matched local fallbacks for Inter and JetBrains Mono. Mono surfaces turn ligatures off. `p` and `li` wrap pretty.
+
+**States**
+- Links underline at 40% of their color and go solid on hover; links in `nav` stay bare.
+- Focus is one shape everywhere: a 2px `--cn-focus` (text) outline 3px off the edge, text fields included. Menu rows and select options keep an inset ring under keyboard focus.
+- Engaged states wear `--engaged-edge`, a mauve rim at 4.7:1, and keep it under hover. The selected tab wears it too. `aria-expanded="true"` engages a ghost button.
+- Ghost hover adds an `--edge` hairline. The secondary hover lifts its fill.
+- A disabled primary goes flat and sinks: the sunken fill in a plain edge, no plate, ramp, grain or gloss. Other buttons dim to .6. Disabled fields use `--cn-fg-disabled` without opacity. Disabled checkboxes, radios and switches drop to the soft `--edge`; the off switch paddle has a 3:1 edge, and the on paddle a crust bar. Dashed means an open slot only.
+- `.btn[aria-busy="true"]` turns a spinner in the label's place. `aria-disabled="true"` looks disabled and keeps focus.
+- Read-only fields read as printed text: no carve, a rule underneath.
+- `.checkbox:indeterminate`; `aria-invalid` on a checkbox, radio or fieldset edges them in danger.
+- Danger, warning, success and info tags and banners draw a glyph from `--cn-glyph-*` when the markup brings none.
+
+**Motion**
+- `--ease-spring` is a `linear()` damped spring where supported. An opt-in root view-transition cross-fade.
+- Reduced motion keeps overlay fades, drops travel, keeps spinners turning and holds skeletons still.
+- A Data changes section in the SPEC, and `.cn-arrive` for content that replaces a skeleton.
+
+**Accessibility**
+- `prefers-contrast: more`, `prefers-reduced-transparency`, `forced-colors`, `pointer: coarse` (44px targets) and `hover: none` are answered.
+- The tooltip shows while a control inside it has focus, keeps its text out of the accessible name, and has an Escape hook, `data-tip-dismissed`.
+- `.cn-skip-link`.
+
+**New recipes and utilities**
+- `.tabs`, `.menu`, `.slider`, `.pagination`, `.breadcrumbs`, `.cn-prose`, `.skeleton`, `details.accordion`, `.sidebar` in `.app-shell.has-sidebar`, `.stat-grid`, `.is-num` table columns, `.codeblock` `.is-copied`.
+- `.cn-split`, `.cn-measure`, `.cn-with-side`, `.cn-mx-auto`, `.cn-container` grid folds, 48 and 64 spacing (`--space-7`, `--space-8`), page width tokens and `--cn-measure`.
+- Recipes use logical properties.
+
+**Behavior.** `catppuccin-neu/js`, optional: `tabs()`, `menu()`, `slider()`, `tooltips()`, `toast()` (with swipe to dismiss) and `init()`.
+
+**Lint.** Fails on palette text stops and bare accent hues in recipes, hand-mixed hairlines, `outline: none`, a SPEC type table that disagrees with the tokens, a token comment whose ratio is off, and any WCAG or APCA pairing under its floor, computed from the tokens in both contrast modes.
+
+**Docs.** An ornament budget and dark-only stance in the ground rules, the physical light, icon guidance, and Accessibility, Behavior, Dashboard and Settings pages in the showcase.
+
 ## 0.4.1
 
 - Solid accent fills paint `--cn-fill-ramp`: the fill lit from the top left, lightness +.035 to -.045 on one hue. It covers `.btn-primary`, the checked `.checkbox`, the on `.switch` paddle, `.mark` and the progress fill.

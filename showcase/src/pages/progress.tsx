@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
+import { WarningGlyph } from "../lib/glyphs";
 
 const LABELS = ["Storage used", "Seats filled", "Profile complete"];
 
@@ -39,7 +40,7 @@ export default function ProgressPage() {
       <p class="cn-copy">
         Width is the only thing you set, inline, from data. The fill eases to
         its new width over .64s and slows into the value. Pair each track
-        with a <code class="cn-code">.stat.is-inline</code> for the label and
+        with a <code class="cn-code-inline">.stat.is-inline</code> for the label and
         value above it.
       </p>
 
@@ -54,7 +55,7 @@ export default function ProgressPage() {
       </Demo>
 
       <p class="cn-copy">
-        The fill is the <code class="cn-code">--accent</code> ramp under grain, mauve by default.
+        The fill is the <code class="cn-code-inline">--accent</code> ramp under grain, mauve by default.
         On an accent card the bar takes the card's accent, because a progress
         fill is a data mark.
       </p>
@@ -68,32 +69,60 @@ export default function ProgressPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.is-lg</code> makes the track 12px tall, for the
+        <code class="cn-code-inline">.is-lg</code> makes the track 12px tall, for the
         one bar a page is about: a quota, an upload, a plan limit.
       </p>
 
       <Demo title="Custom fill · --progress-fill" classes="progress-track">
-        <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:14px">
-          <div class="progress-track" style="--progress-fill: var(--green)">
-            <span style="width:82%" />
+        <div class="cn-stack cn-gap-16" style="width:min(460px,100%)">
+          <div class="cn-stack cn-gap-8">
+            <div class="stat is-inline">
+              <span>Invoices reconciled</span>
+              <b>82%</b>
+            </div>
+            <div class="progress-track" style="--progress-fill: var(--cn-success)">
+              <span style="width:82%" />
+            </div>
           </div>
-          <div class="progress-track" style="--progress-fill: var(--peach)">
-            <span style="width:46%" />
+          <div class="cn-stack cn-gap-8">
+            <div class="stat is-inline">
+              <span>API quota, near the limit</span>
+              <b>91%</b>
+            </div>
+            <div class="progress-track" style="--progress-fill: var(--cn-warning)">
+              <span style="width:91%" />
+            </div>
+            <div class="cn-row cn-between">
+              <span class="tag cn-tone-warning">
+                <WarningGlyph />
+                Near the limit
+              </span>
+              <span class="cn-meta">Resets Oct 01</span>
+            </div>
           </div>
-          <div
-            class="progress-track"
-            style="--progress-fill: linear-gradient(90deg, var(--blue), var(--teal))"
-          >
-            <span style="width:64%" />
+          <div class="cn-stack cn-gap-8">
+            <div class="stat is-inline">
+              <span>Export</span>
+              <b>64%</b>
+            </div>
+            <div
+              class="progress-track"
+              style="--progress-fill: linear-gradient(90deg, var(--blue), var(--teal))"
+            >
+              <span style="width:64%" />
+            </div>
           </div>
         </div>
       </Demo>
 
       <p class="cn-copy">
-        Set <code class="cn-code">--progress-fill</code> on the track (or a
+        Set <code class="cn-code-inline">--progress-fill</code> on the track (or a
         wrapper) to re-key the fill per instance: any token color or a
-        gradient built from tokens. A green success meter or a peach quota
-        warning stays on the palette without touching the recipe.
+        gradient built from tokens. A success meter or a yellow quota warning
+        reads the status roles and stays on the palette without touching the
+        recipe. The fill color never states the status alone; the label and
+        the value beside the bar do. When the bar is a warning, say so in a
+        tag, and lead it with the warning glyph like every warning tag.
       </p>
 
       <Props

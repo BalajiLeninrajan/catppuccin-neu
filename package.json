@@ -11,6 +11,7 @@
   "license": "MIT",
   "files": [
     "css",
+    "js",
     "tailwind",
     "scripts",
     "SPEC.md",
@@ -20,6 +21,10 @@
   ],
   "exports": {
     ".": "./css/index.css",
+    "./js": {
+      "types": "./js/index.d.ts",
+      "default": "./js/index.js"
+    },
     "./css/*": "./css/*",
     "./tailwind/*": "./tailwind/*",
     "./scripts/*": "./scripts/*"

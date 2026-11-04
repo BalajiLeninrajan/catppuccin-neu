@@ -1,5 +1,15 @@
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
+/* The surface ladder, from the page up and then down into the carves. */
+const LADDER = [
+  { token: "--cn-surface-page", util: "cn-bg-base", mix: "base", use: "The ground." },
+  { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "surface-0 75% into base · 1.21:1", use: "Panels, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
+  { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base · 1.27:1", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
+  { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "mantle 55% into base", use: "The sidebar." },
+  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", use: "Table heads." },
+  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 38% into mantle", use: "Filled wells, the mono wells, stepper pills, skeletons." },
+];
+
 const ACTIVITY = [
   ["Invoice #1042 issued", "Today"],
   ["Member added to Support", "Today"],
@@ -15,8 +25,52 @@ export default function SurfacesPage() {
   return (
     <Doc
       title="Surfaces"
-      lede="Two containers: the raised panel and the inset well. A panel lifts content off the page. A well presses it in, with no border."
+      lede="A ladder of six fills, and two containers built on it. The raised panel lifts content off the page on a lighter fill. The inset well presses it in, with no border."
     >
+      <h2 class="cn-title">The surface ladder</h2>
+      <p class="cn-copy">
+        Raised surfaces sit one step lighter than the page, the way an
+        elevated layer does, so the lift reads before the shadow does.
+        Overlays sit one step lighter again. Table heads and carved fills go
+        the other way, darker than the page. Recipes read these six tokens,
+        never a raw ground. The ratios are against the page.
+      </p>
+
+      <p class="cn-copy">
+        The ladder stops at 1.27:1 because a lighter step would drop the
+        placeholder role under 4.5:1. Body text stays above 7:1 and placeholders above
+        4.5:1 on both fills. The field lip is overlay-1, so it clears 3:1 on
+        both: 3.7:1 on the raised fill and 3.5:1 on the overlay. An empty
+        field inside a panel or a dialog keeps its edge.
+      </p>
+
+      <Demo title="Six fills" classes="cn-bg-base / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well" row>
+        {LADDER.map((l) => (
+          <div key={l.token} class="cn-stack cn-gap-8" style="justify-items:center">
+            <div
+              class={`${l.util} cn-edge-soft cn-r-card`}
+              style={`width:96px;height:64px${l.util ? "" : `;background:var(${l.token})`}`}
+            />
+            <code class="cn-code-meta">{l.token}</code>
+            <span class="cn-meta">{l.util ? `.${l.util}` : "no utility"}</span>
+          </div>
+        ))}
+      </Demo>
+
+      <Props
+        title="Surface tokens"
+        rows={LADDER.map((l) => ({ name: l.token, values: l.mix, default: l.util ? `.${l.util}` : undefined, notes: l.use }))}
+      />
+
+      <p class="cn-copy">
+        Tailwind maps all six as{" "}
+        <code class="cn-code-inline">bg-surface-page</code>,{" "}
+        <code class="cn-code-inline">bg-surface-raised</code> and the rest. The{" "}
+        <a href="/depth">Depth</a> page orders every elevation and the token
+        each one uses.
+      </p>
+
+      <h2 class="cn-title">Panel</h2>
       <Demo title="Panel with header, body and footer" classes="panel / panel-header / panel-body / panel-footer">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
@@ -38,16 +92,30 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        The header and footer are bands. Their height and padding come from{" "}
-        <code class="cn-code">--band-h</code> and{" "}
-        <code class="cn-code">--band-pad</code>, the same rule the modal and
-        drawer headers use. A filled band carries its own radius,{" "}
-        <code class="cn-code">calc(var(--cn-radius-panel) - 1px)</code> on the
-        outer corners. Never fix a band corner with{" "}
-        <code class="cn-code">overflow: hidden</code>; that clips anchored
+        The panel fills with <code class="cn-code-inline">--cn-surface-raised</code>{" "}
+        under <code class="cn-code-inline">--neu-raised</code> and a hairline. The
+        header and footer are bands on the panel's own fill, each parted from
+        the body by an <code class="cn-code-inline">--edge-soft</code> divider. A
+        darker header would sink below the surface it titles, so the title's
+        weight anchors it instead. Their height and padding come from{" "}
+        <code class="cn-code-inline">--band-h</code> and{" "}
+        <code class="cn-code-inline">--band-pad</code>, the same rule the modal and
+        drawer headers use. A filled child at a panel edge, such as a table
+        head, carries its own radius,{" "}
+        <code class="cn-code-inline">calc(var(--cn-radius-panel) - 1px)</code> on the
+        outer corners. Never fix a corner with{" "}
+        <code class="cn-code-inline">overflow: hidden</code>; that clips anchored
         popovers and hard-offset shadows. The panel has no padding of its own,
         so tables can fill it; put prose and controls in{" "}
-        <code class="cn-code">.panel-body</code>.
+        <code class="cn-code-inline">.panel-body</code>.
+      </p>
+
+      <p class="cn-copy">
+        A panel inside a panel rests on its parent, not on the page, so it
+        takes <code class="cn-code-inline">--neu-raised-soft</code>. A region of
+        a view holds at most three raised panels. More items go in one panel,
+        a ruled stat grid on the ground or a table, so raised stays a rank
+        and not a texture.
       </p>
 
       <Demo title="Header with an action cluster" classes="panel-header > h2 + .band-actions">
@@ -68,7 +136,7 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.band-actions</code> holds the right side of a
+        <code class="cn-code-inline">.band-actions</code> holds the right side of a
         band. When the actions outgrow the row, the band wraps them under the
         title, and the cluster wraps inside itself. Nothing hides.
       </p>
@@ -83,12 +151,56 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.is-tilted</code> is the one rotated surface: a
+        <code class="cn-code-inline">.is-tilted</code> is the one rotated surface: a
         1.2° turn with the 10px plate over the neu raise, so the card still
-        answers the top-left light. Use it once per page at most, for a
-        summary or an aside, never for the page's main data. It flattens to
-        the regular raised panel at 1060px.
+        answers the top-left light. Use it once per view at most, for a
+        summary or an aside, never for the page's main data, and never on a
+        panel holding a table or a form. It takes{" "}
+        <code class="cn-code-inline">align-self: start</code>, so in a grid it
+        keeps its content height instead of stretching to the row and showing
+        an empty tail under the turn. It flattens to the regular raised panel
+        at 1060px. Under{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code> it stands
+        upright and keeps its 10px plate, because rotated text renders soft.
+        The{" "}
+        <a href="/#ornament-budget">ornament budget</a> lists the other
+        once-per-view pieces.
       </p>
+
+      <h2 class="cn-title">Lead panel</h2>
+      <p class="cn-copy">
+        <code class="cn-code-inline">.panel.is-lead</code> marks the panel a
+        view is about, such as the invoice table on a billing dashboard. It
+        fills with <code class="cn-code-inline">--cn-surface-overlay</code>{" "}
+        inside an <code class="cn-code-inline">--edge-strong</code> hairline, so
+        it sits one step above the raised panels beside it. It adds height,
+        not an ornament: no plate, tilt or color. Use one per view at most.
+        The tilted aside comments on the data; the lead panel holds it.
+      </p>
+
+      <Demo title="A lead panel beside a raised one" classes="panel is-lead">
+        <div class="cn-grid-12" style="width:100%">
+          <section class="panel is-lead cn-span-8" aria-labelledby="sf-lead">
+            <div class="panel-header">
+              <h2 id="sf-lead">Open invoices</h2>
+              <span class="chip">12 open</span>
+            </div>
+            <div class="panel-body">
+              <p class="cn-copy cn-m-0">$18,420 outstanding across 6 teams. The oldest is 26 days past due.</p>
+            </div>
+          </section>
+          <section class="panel cn-span-4" aria-labelledby="sf-plain">
+            <div class="panel-header">
+              <h2 id="sf-plain">Payouts</h2>
+            </div>
+            <div class="panel-body">
+              <p class="cn-copy cn-m-0">Next on Oct 01.</p>
+            </div>
+          </section>
+        </div>
+      </Demo>
+
+      <h2 class="cn-title">Well</h2>
 
       <Demo title="Well" classes="well">
         <div class="well cn-px-16 cn-py-8" style="width:min(560px,100%)">
@@ -110,7 +222,13 @@ export default function SurfacesPage() {
       </Demo>
 
       <Demo title="Scrolling well" classes="well scroll-well">
-        <div class="well scroll-well cn-px-16 cn-py-8" style="width:min(560px,100%);max-height:180px;overflow:auto">
+        <div
+          class="well scroll-well cn-px-16 cn-py-8"
+          style="width:min(560px,100%);max-height:180px;overflow:auto"
+          tabIndex={0}
+          role="region"
+          aria-label="Recent activity"
+        >
           <div class="cn-divide">
             {ACTIVITY.map(([label, when]) => (
               <div class="stat is-inline" key={label}>
@@ -123,15 +241,20 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        When a well scrolls, add <code class="cn-code">.scroll-well</code>. The
+        When a well scrolls, add <code class="cn-code-inline">.scroll-well</code>. The
         scrollbar takes the dark-well thumb color, and the bottom edge of the
         well fades out to show there is more.
       </p>
 
       <p class="cn-copy">
-        The well's ground is transparent; the carve alone defines it. Compose{" "}
-        <code class="cn-code">.cn-bg-well</code> onto{" "}
-        <code class="cn-code">.well</code> for an explicit darker fill.
+        The well's ground is transparent; the carve defines it, with{" "}
+        <code class="cn-code-inline">--cn-well-lip</code>, a 1px surface-2 line
+        at 55% on the bottom and right inner walls, so it reads on the page
+        without a border. Compose{" "}
+        <code class="cn-code-inline">.cn-bg-well</code> onto{" "}
+        <code class="cn-code-inline">.well</code> for the{" "}
+        <code class="cn-code-inline">--cn-surface-sunken</code> fill the code wells,
+        stepper pills and skeletons use.
       </p>
 
       <Props
@@ -140,12 +263,12 @@ export default function SurfacesPage() {
           {
             name: ".panel",
             values: "raised container",
-            notes: "The full neu-raised shadow and a hairline edge. Radius from --cn-radius-panel.",
+            notes: "--cn-surface-raised fill, --neu-raised (contact, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",
             values: "bands",
-            notes: "--band-h tall with --band-pad. The header has the recessed fill; the footer has only the divider. Both wrap.",
+            notes: "--band-h tall with --band-pad, on the panel's fill. The header has a bottom divider and the footer a top one. A band holding .band-actions wraps; panel footers also wrap at 760px.",
           },
           {
             name: ".band-actions",
@@ -155,12 +278,17 @@ export default function SurfacesPage() {
           {
             name: ".panel-body",
             values: "content band",
-            notes: "--body-pad: 24px, or 12px 16px in compact.",
+            notes: "--body-pad: 24px, 16px 24px at cozy density, 12px 16px at compact.",
           },
           {
             name: ".panel.is-tilted",
-            values: "one per page",
-            notes: "rotate(1.2deg) and a 10px plate over neu-raised. A summary or an aside, not the main data. Flattens at 1060px.",
+            values: "one per view",
+            notes: "rotate(1.2deg) and a 10px plate over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside, never a table or a form. Flattens at 1060px and stands upright under prefers-contrast: more.",
+          },
+          {
+            name: ".panel.is-lead",
+            values: "one per view",
+            notes: "The panel the view is about. --cn-surface-overlay fill inside an --edge-strong hairline, so it outranks its neighbors by height. No ornament.",
           },
           {
             name: ".panel.is-shell",
@@ -170,7 +298,7 @@ export default function SurfacesPage() {
           {
             name: ".well",
             values: "inset container",
-            notes: "No border, transparent ground; the full inner shadow defines it. The card radius (12px).",
+            notes: "No border, transparent ground; the full inner shadow and --cn-well-lip define it. The card radius (12px).",
           },
           {
             name: ".scroll-well",
@@ -179,7 +307,7 @@ export default function SurfacesPage() {
           },
           {
             name: "--cn-radius-panel",
-            values: "16px · 12px compact",
+            values: "16px · 16px cozy · 12px compact",
             default: "16px",
             notes: 'Compact density sets it to the card radius.',
           },
@@ -203,7 +331,8 @@ export default function SurfacesPage() {
   </div>
 </div>
 
-<div class="well scroll-well" style="max-height: 180px; overflow: auto">…</div>`}
+<div class="well scroll-well" style="max-height: 180px; overflow: auto"
+     tabindex="0" role="region" aria-label="Recent activity">…</div>`}
       />
     </Doc>
   );

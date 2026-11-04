@@ -6,54 +6,28 @@ import { Doc } from "./lib/doc";
 
 function Wordmark() {
   return (
-    <a class="sc-wordmark" href="/">
+    <a class="wordmark" href="/">
       catppuccin<em>·</em>neu
     </a>
   );
 }
 
-/* Grouped nav links. Active link gets the system's own engaged treatment. */
-function NavGroups() {
-  const { path } = useLocation();
-  return (
-    <nav class="sc-nav" aria-label="Documentation">
-      {GROUPS.map((group) => (
-        <div key={group} class="sc-nav-group">
-          <p class="cn-microlabel sc-nav-group-title">{group}</p>
-          {PAGES.filter((p) => p.group === group).map((p) => {
-            const active = path === p.path;
-            return (
-              <a
-                key={p.path}
-                href={p.path}
-                class={`sc-nav-link cn-r-control${active ? " cn-engaged is-active" : ""}`}
-                aria-current={active ? "page" : undefined}
-              >
-                {p.title}
-              </a>
-            );
-          })}
-        </div>
-      ))}
-    </nav>
-  );
-}
-
-/* Fixed left sidebar; collapses to a topbar + disclosure below 900px. */
+/* The package sidebar. The current page wears the engaged state through
+   aria-current; below 1060px the nav folds behind the Menu toggle. */
 function Sidebar() {
   const { path } = useLocation();
   const [open, setOpen] = useState(false);
 
-  /* Close the mobile disclosure whenever the route changes. */
+  /* Close the folded nav whenever the route changes. */
   useEffect(() => setOpen(false), [path]);
 
   return (
-    <aside class={`sc-sidebar${open ? " is-open" : ""}`}>
-      <div class="sc-sidebar-top">
+    <aside class={`sidebar${open ? " is-open" : ""}`}>
+      <div class="sidebar-head">
         <Wordmark />
         <button
           type="button"
-          class="btn btn-ghost is-sm sc-menu-btn"
+          class="btn btn-ghost is-sm sidebar-toggle"
           aria-expanded={open}
           aria-controls="sc-nav"
           onClick={() => setOpen((v) => !v)}
@@ -61,9 +35,18 @@ function Sidebar() {
           Menu
         </button>
       </div>
-      <div id="sc-nav" class="sc-sidebar-scroll">
-        <NavGroups />
-      </div>
+      <nav id="sc-nav" class="sidebar-body sidebar-nav" aria-label="Documentation">
+        {GROUPS.map((group) => (
+          <div key={group}>
+            <p class="cn-microlabel">{group}</p>
+            {PAGES.filter((p) => p.group === group).map((p) => (
+              <a key={p.path} href={p.path} aria-current={path === p.path ? "page" : undefined}>
+                {p.title}
+              </a>
+            ))}
+          </div>
+        ))}
+      </nav>
     </aside>
   );
 }
@@ -81,52 +64,16 @@ function NotFound() {
 }
 
 export function App() {
-  /* Enter toggles a focused accordion input (Space works natively). */
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const t = e.target as HTMLElement;
-      if (e.key === "Enter" && t.matches?.(".accordion input")) {
-        (t as HTMLInputElement).click();
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, []);
-
-  /* A checked accordion radio unchecks on its next click, so an exclusive
-     group can close fully. The press arms the radio that was already
-     checked (capture, so it runs before the Enter listener's click); the
-     click that follows clears it. */
-  useEffect(() => {
-    let held: HTMLInputElement | null = null;
-    const radio = (el: EventTarget | null) =>
-      (el as HTMLElement | null)?.closest?.(".accordion > label")?.querySelector<HTMLInputElement>("input[type=radio]") ?? null;
-    const arm = (r: HTMLInputElement | null) => {
-      held = r?.checked ? r : null;
-    };
-    const onPress = (e: Event) => arm(radio(e.target));
-    const onClick = (e: Event) => {
-      const t = e.target as HTMLInputElement;
-      if (!t.matches?.(".accordion input[type=radio]")) return;
-      if (t === held) t.checked = false;
-      held = null;
-    };
-    document.addEventListener("pointerdown", onPress, true);
-    document.addEventListener("keydown", onPress, true);
-    document.addEventListener("click", onClick);
-    return () => {
-      document.removeEventListener("pointerdown", onPress, true);
-      document.removeEventListener("keydown", onPress, true);
-      document.removeEventListener("click", onClick);
-    };
-  }, []);
-
   return (
     <LocationProvider>
-      <div class="app-shell sc-shell">
+      {/* The first focusable element: Tab from the top of any page shows it. */}
+      <a class="cn-skip-link" href="#main">
+        Skip to content
+      </a>
+      <div class="app-shell has-sidebar">
         <Sidebar />
         <div class="sc-content">
-          <main class="sc-measure">
+          <main id="main" tabIndex={-1} class="sc-measure">
             <Router onRouteChange={() => window.scrollTo(0, 0)}>
               {PAGES.map((p) => (
                 <Route key={p.path} path={p.path} component={p.component} />

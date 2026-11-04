@@ -1,82 +1,140 @@
 import { useState } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock, TEAMS, accentStyle } from "../lib/doc";
+import { TONE_GLYPH, NEEDS_GLYPH } from "../lib/glyphs";
 
-const COMPACT_CODE = `<section data-density="compact">
+const COMPACT_CODE = `<section data-density="cozy">
+  <!-- 38px controls, 52px bands, 8px 12px table cells -->
   <button class="btn btn-primary">Save changes</button>
   <input class="input" placeholder="Search settings" />
+</section>
+
+<section data-density="compact">
+  <!-- 28px controls, 44px bands, the card radius on panels -->
+  <button class="btn btn-secondary">Export</button>
 </section>`;
 
 const TONE_TAGS = [
   ["red", "Overdue"],
   ["green", "Paid"],
   ["peach", "Pending"],
-  ["yellow", "Draft"],
   ["blue", "Synced"],
+  ["yellow", "Due soon"],
   ["mauve", "Archived"],
 ];
 
+/* The SPEC's density table: knob, default, cozy, compact, what it sets. */
+const KNOBS: Array<[string, string, string, string, string]> = [
+  ["--control-h", "46px (2.875rem)", "38px", "28px", "Buttons, inputs, selects. Segmented options add 12px."],
+  ["--control-h-sm", "34px (2.125rem)", "28px", "24px", "Small buttons, icon buttons, tabs, menu rows, page targets."],
+  ["--hard-offset", "4px", "3px", "2px", "The plate's distance. The press slides half of it."],
+  ["--cn-radius-panel", "16px", "16px", "12px", "Panels and modals. A table head at a panel edge follows it minus 1px."],
+  ["--band-h", "64px", "52px", "44px", "Panel, modal and drawer header bands. The topbar is this plus 4px."],
+  ["--band-pad", "12px 24px", "8px 24px", "8px 16px", "Band padding."],
+  ["--band-title-size", "20px", "15px", "14px", "An h2 or h3 in a header band."],
+  ["--body-pad", "24px", "16px 24px", "12px 16px", ".panel-body padding."],
+  ["--cell-pad", "12px 16px", "8px 12px", "4px 8px", "Table cells."],
+  ["--cell-font-size", "14px", "14px", "13px", "Table body text."],
+  ["--cn-type-body-size", "16px", "16px", "15px", "The body role: body, .cn-copy and .cn-prose."],
+  ["--chip-pad", "8px 12px", "4px 12px", "4px 8px", ".chip padding."],
+  ["--well-pad", "12px 16px", "12px 16px", "8px 12px", "Code block and terminal padding."],
+  ["--empty-h", "260px", "180px", "120px", "The empty-state floor."],
+];
+
+const DENSITIES = [
+  { id: null, label: "Default" },
+  { id: "cozy", label: "Cozy" },
+  { id: "compact", label: "Compact" },
+] as const;
+
 export default function DensityPage() {
-  const [compact, setCompact] = useState(false);
+  const [density, setDensity] = useState<"cozy" | "compact" | null>(null);
 
   return (
     <Doc
       title="Density and contract props"
-      lede="Every recipe reads a handful of custom properties. The density knobs resize the whole system at once. Three contract props re-key single components from data."
+      lede="Every recipe reads a handful of custom properties. The density knobs resize the whole system at once. The contract props re-key single components from data."
     >
       <section>
         <h2 class="cn-title">Density knobs</h2>
         <p class="cn-copy">
           Control heights, band sizes and cell padding come from properties on{" "}
-          <code class="cn-code">:root</code>. Set{" "}
-          <code class="cn-code">data-density="compact"</code> on any element
-          to retune them for that subtree. Compact is for dense apps and
+          <code class="cn-code-inline">:root</code>. Set{" "}
+          <code class="cn-code-inline">data-density="cozy"</code> or{" "}
+          <code class="cn-code-inline">data-density="compact"</code> on any element
+          to retune them for that subtree. Cozy is for desktop data tools
+          that want more rows on screen: 38px controls, a 3px plate, 52px
+          bands, 15px band titles and 8px by 12px table cells, with the body
+          size and panel radius left alone. Compact is the dense strip for
           readouts: 28px controls, a 2px plate, the card radius on panels,
-          44px bands and tighter table cells, chips and code wells.
+          44px bands and tighter table cells, chips and code wells. Control
+          heights are rem (46px is 2.875rem), so a reader who raises the
+          browser font size gets taller controls along with larger labels.
         </p>
       </section>
 
-      <Props
-        title="The knobs"
-        rows={[
-          { name: "--control-h", values: "46px · 28px compact", default: "46px", notes: "Buttons, inputs, selects. Segmented options add 12px." },
-          { name: "--control-h-sm", values: "34px · 24px compact", default: "34px", notes: "Small buttons, icon buttons and toolbar pieces." },
-          { name: "--hard-offset", values: "4px · 2px compact", default: "4px", notes: "The plate's distance. The press slides half of it." },
-          { name: "--cn-radius-panel", values: "16px · 12px compact", default: "16px", notes: "Panels and modals. Header bands follow it minus 1px." },
-          { name: "--band-h", values: "64px · 44px compact", default: "64px", notes: "Panel, modal and drawer header bands. The topbar is this plus 4px." },
-          { name: "--band-pad", values: "12px 24px · 8px 16px", default: "12px 24px", notes: "Band padding." },
-          { name: "--band-title-size", values: "20px · 14px", default: "20px", notes: "An h2 inside a panel header." },
-          { name: "--body-pad", values: "24px · 12px 16px", default: "24px", notes: ".panel-body padding." },
-          { name: "--cell-pad", values: "12px 16px · 4px 8px", default: "12px 16px", notes: "Table cells." },
-          { name: "--cell-font-size", values: "13px · 12px", default: "13px", notes: "Table body text." },
-          { name: "--chip-pad", values: "8px 12px · 4px 8px", default: "8px 12px", notes: ".chip padding." },
-          { name: "--well-pad", values: "12px 16px · 8px 12px", default: "12px 16px", notes: "Code block and terminal padding." },
-          { name: "--empty-h", values: "260px · 120px", default: "260px", notes: "The empty-state floor." },
-        ]}
-      />
+      <Demo title="The knobs at each density">
+        <div style="width:100%">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">Knob</th>
+                <th scope="col">Default</th>
+                <th scope="col">Cozy</th>
+                <th scope="col">Compact</th>
+                <th scope="col">Sets</th>
+              </tr>
+            </thead>
+            <tbody>
+              {KNOBS.map(([name, def, cozy, compact, sets]) => (
+                <tr key={name}>
+                  <td data-label="Knob" class="cell-name">
+                    <code class="cn-code-inline">{name}</code>
+                  </td>
+                  <td data-label="Default">{def}</td>
+                  <td data-label="Cozy">{cozy}</td>
+                  <td data-label="Compact">{compact}</td>
+                  <td data-label="Sets">{sets}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Demo>
 
       <p class="cn-copy">
-        Three controls keep one size at every density: the checkbox and
-        radio (20px), the switch (50 by 28px), and the avatar (32px, or 44px
-        with <code class="cn-code">.is-lg</code>).
+        Some sizes ignore density: the checkbox and radio (20px), the switch
+        (50 by 28px), the avatar (32px, or 44px with{" "}
+        <code class="cn-code-inline">.is-lg</code>), the mark (28px) and the
+        command's copy control (34px). Wrap a checkbox, radio or switch in{" "}
+        <code class="cn-code-inline">.choice</code> so the label row is the
+        target. Under <code class="cn-code-inline">pointer: coarse</code>,{" "}
+        <code class="cn-code-inline">--control-h</code> is 46px and{" "}
+        <code class="cn-code-inline">--control-h-sm</code> 44px at every
+        density.
       </p>
 
-      <Demo title="Live density toggle" classes='data-density="compact"'>
-        <button
-          type="button"
-          class="btn btn-ghost is-sm"
-          aria-pressed={compact}
-          onClick={() => setCompact(!compact)}
-        >
-          Compact density: {compact ? "on" : "off"}
-        </button>
-        <div class="sc-grid" data-density={compact ? "compact" : null}>
+      <Demo title="Live density switch" classes='data-density="cozy" · data-density="compact"'>
+        <div class="cn-row cn-wrap" role="group" aria-label="Density">
+          {DENSITIES.map((d) => (
+            <button
+              key={d.label}
+              type="button"
+              class="btn btn-ghost is-sm"
+              aria-pressed={density === d.id}
+              onClick={() => setDensity(d.id)}
+            >
+              {d.label}
+            </button>
+          ))}
+        </div>
+        <div class="sc-grid" data-density={density}>
           <div class="sc-row">
             <button type="button" class="btn btn-primary">New invoice</button>
             <button type="button" class="btn btn-secondary">Export</button>
           </div>
           <div class="field">
-            <label>Team name</label>
-            <input class="input" placeholder="Acme Operations" />
+            <label for="density-team">Team name</label>
+            <input id="density-team" class="input" placeholder="Acme Operations" />
           </div>
           <div class="segmented">
             <button type="button">
@@ -93,9 +151,27 @@ export default function DensityPage() {
               <h2>Billing settings</h2>
               <span class="tag cn-tone-green">Active</span>
             </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Invoice</th>
+                  <th scope="col" class="is-num">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Invoice">INV-2083</td>
+                  <td data-label="Amount" class="is-num">$1,240.00</td>
+                </tr>
+                <tr>
+                  <td data-label="Invoice">INV-2082</td>
+                  <td data-label="Amount" class="is-num">$1,195.00</td>
+                </tr>
+              </tbody>
+            </table>
             <div class="panel-footer">
               <button type="button" class="btn btn-ghost">Cancel</button>
-              <button type="button" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-secondary">Save</button>
             </div>
           </div>
         </div>
@@ -106,9 +182,9 @@ export default function DensityPage() {
       <section>
         <h2 class="cn-title">Contract props</h2>
         <p class="cn-copy">
-          Three properties are the extension points every recipe reads. Set
+          Three properties carry color and are read by most recipes. Set
           them inline or on a wrapper to re-key a subtree. No recipe needs a
-          variant class for color.
+          variant class for color. The rest of the contract follows them.
         </p>
       </section>
 
@@ -133,8 +209,21 @@ export default function DensityPage() {
             values: "any Mocha token or mix",
             default: "var(--crust)",
             notes:
-              "The plate under the secondary button, segmented options and the cn-hard family. The primary button and the accent card set their own.",
+              "The plate under the secondary button, segmented options and the cn-hard family. The primary button and the accent card set their own. Undeclared on :root; recipes read var(--plate, var(--crust)).",
           },
+        ]}
+      />
+
+      <Props
+        title="The rest of the contract"
+        rows={[
+          { name: "--hard-offset", default: "4px", notes: "The plate's distance; 3px cozy, 2px compact." },
+          { name: "--page-gutter", default: "clamp(12px, 3vw, 32px)", notes: "Inline gutter of the page column, the footer and the topbar." },
+          { name: "--page-pad", default: "clamp(24px, 4vw, 48px)", notes: "Block padding of the page column." },
+          { name: "--page-width", default: "unset", notes: "Width of the page column and footer; falls back to --cn-width-page (1440px)." },
+          { name: "--progress-fill", default: "the accent ramp", notes: "The progress fill: any token color or gradient." },
+          { name: "--grain", default: ".22", notes: "Grain strength on solid accent fills; 0 turns it off." },
+          { name: "--ring-ground", default: "var(--base)", notes: "The ring between stacked avatars. Set it to the surface behind the stack." },
         ]}
       />
 
@@ -153,9 +242,15 @@ export default function DensityPage() {
 
       <Demo title="--tone" classes="tag cn-tone-green">
         <div class="sc-row">
-          {TONE_TAGS.map(([tone, label]) => (
-            <span class={`tag cn-tone-${tone}`} key={tone}>{label}</span>
-          ))}
+          {TONE_TAGS.map(([tone, label]) => {
+            const Glyph = TONE_GLYPH[tone];
+            return (
+              <span class={`tag cn-tone-${tone}`} key={tone}>
+                {NEEDS_GLYPH.has(tone) ? <Glyph /> : null}
+                {label}
+              </span>
+            );
+          })}
         </div>
         <div class="banner cn-tone-blue">
           Scheduled maintenance on Sunday from 02:00 to 03:00 UTC. Dashboards

@@ -53,10 +53,10 @@ Then link the fonts on every page:
 
 ## Upgrading from 0.3
 
-Every renamed class and token still works through 0.4.x and is removed in
-0.5.0. `--input-h` is the one removal now; inputs read `--control-h`. The
-[migration table](./CHANGELOG.md#migrating-to-040) lists each old name and
-its replacement.
+The 0.4 aliases are gone as of 0.5.0: every class and token renamed in
+0.4.0 answers only to its new name, and inputs read `--control-h` in place
+of `--input-h`. The [migration table](./CHANGELOG.md#migrating-to-040)
+lists each old name and its replacement.
 
 ## What ships
 
@@ -86,11 +86,18 @@ Tailwind names. With v4, import the package first:
 @import "tailwindcss";
 ```
 
+Optional behavior, if you don't bring your own widgets:
+
+```js
+import { init, toast } from "catppuccin-neu/js";
+init(); // tabs, menu buttons, sliders and the tooltip Escape
+```
+
 ## Caveats
 
 - Recipe classes are unprefixed. `.btn`, `.panel`, `.input` and `.data-table` collide with any other CSS that uses those names.
 - Dark only. There is no light palette.
-- No JavaScript ships. Overlays use `<dialog>`, `showModal()` and `close()`; toasts and copy buttons need your own listeners.
+- The CSS needs no JavaScript. Overlays use `<dialog>`, `showModal()` and `close()`. The optional `catppuccin-neu/js` module adds the keyboard model for tabs and menus, the tooltip Escape, slider fill and toasts; copy buttons still need your own listener.
 - Depth reads correctly only on the `--base` ground it was tuned for.
 - The sizes and tracking assume Inter and JetBrains Mono. The fallback stacks stay readable but look different.
 

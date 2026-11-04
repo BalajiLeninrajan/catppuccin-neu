@@ -18,117 +18,173 @@ const ITEMS: Array<[string, string, boolean]> = [
   ],
 ];
 
+const REVIEWS: Array<[string, string, string, boolean]> = [
+  [
+    "Q3 infrastructure review",
+    "Sep 2025",
+    "Capacity held through the sale window. Two regions ran hot; both have headroom orders filed.",
+    true,
+  ],
+  [
+    "Q2 infrastructure review",
+    "Jun 2025",
+    "Quiet quarter. One certificate rotation incident, resolved inside the error budget.",
+    false,
+  ],
+  [
+    "Q1 infrastructure review",
+    "Mar 2025",
+    "Baseline quarter for the new fleet; numbers here seed the yearly comparison.",
+    false,
+  ],
+];
+
+const CYCLES: Array<[string, string, boolean]> = [
+  ["Monthly billing", "One invoice per workspace on the 1st.", true],
+  ["Annual billing", "Two months free, invoiced in January.", false],
+  ["Invoice billing", "Net 30 terms for teams over 50 seats.", false],
+];
+
 export default function AccordionPage() {
   return (
     <Doc
       title="Accordion"
-      lede="Stacked disclosure rows on a label and a hidden checkbox. No JS."
+      lede="Stacked disclosure rows on native details and summary. No JS."
     >
-      <Demo title="Accordion" classes="accordion > label + .fold">
+      <Demo title="Accordion" classes="details.accordion > summary + .fold">
         <div style="width:min(640px,100%)">
           {ITEMS.map(([title, body, open]) => (
-            <div class="accordion" key={title}>
-              <label>
-                <input type="checkbox" checked={open} />
-                {title}
-              </label>
+            <details class="accordion" key={title} open={open}>
+              <summary>{title}</summary>
               <div class="fold">
                 <div>
                   <p class="cn-copy">{body}</p>
                 </div>
               </div>
-            </div>
+            </details>
           ))}
         </div>
       </Demo>
 
       <p class="cn-copy">
-        The whole label is the hit target; Space toggles the focused input.
-        Closed content leaves the tab order and the accessibility tree.
+        The summary is the row and the whole row is the hit target. Enter and
+        Space toggle it, and assistive tech announces it as a disclosure.{" "}
+        <code class="cn-code-inline">[open]</code> is the open state. Closed content
+        leaves the tab order and the accessibility tree.
       </p>
 
       <Demo
         title="Trailing meta, stacked in a panel"
-        classes="panel accordion-stack · label > b + .cn-meta"
+        classes="panel accordion-stack · summary > b + .cn-meta"
       >
         <div class="panel accordion-stack" style="width:min(640px,100%)">
-          {[
-            [
-              "Q3 infrastructure review",
-              "Sep 2025",
-              "Capacity held through the sale window. Two regions ran hot; both have headroom orders filed.",
-              true,
-            ],
-            [
-              "Q2 infrastructure review",
-              "Jun 2025",
-              "Quiet quarter. One certificate rotation incident, resolved inside the error budget.",
-              false,
-            ],
-            [
-              "Q1 infrastructure review",
-              "Mar 2025",
-              "Baseline quarter for the new fleet; numbers here seed the yearly comparison.",
-              false,
-            ],
-          ].map(([title, meta, body, open]) => (
-            <div class="accordion" key={title as string}>
-              <label>
-                <input type="checkbox" checked={open as boolean} />
+          {REVIEWS.map(([title, meta, body, open]) => (
+            <details class="accordion" key={title} open={open}>
+              <summary>
                 <b>{title}</b>
                 <span class="cn-meta">{meta}</span>
-              </label>
+              </summary>
               <div class="fold">
                 {/* Bare p: the copy voice is a tokens-reset given. */}
                 <div>
                   <p>{body}</p>
                 </div>
               </div>
-            </div>
+            </details>
           ))}
         </div>
       </Demo>
 
       <p class="cn-copy">
-        Wrap the title in <code class="cn-code">b</code> and it grows, so the
+        Wrap the title in <code class="cn-code-inline">b</code> (bold) or{" "}
+        <code class="cn-code-inline">p</code> (regular) and it grows, so the
         meta rides against the chevron instead of floating mid-row.{" "}
-        <code class="cn-code">.accordion-stack</code> pads the group and drops
+        <code class="cn-code-inline">.accordion-stack</code> pads the group and drops
         the closed last row's divider at the panel edge. At 520px and below
         the meta wraps under the title and the chevron stays on the title
         line.
       </p>
 
-      <Demo title="Exclusive group, radios sharing a name" classes="accordion > label > input[type=radio]">
+      <Demo title="Exclusive group, details sharing a name" classes='details.accordion[name="billing-cycle"]'>
         <div style="width:min(640px,100%)">
-          {[
-            ["Monthly billing", "One invoice per workspace on the 1st.", true],
-            ["Annual billing", "Two months free, invoiced in January.", false],
-          ].map(([title, body, open]) => (
-            <div class="accordion" key={title as string}>
-              <label>
-                <input type="radio" name="billing-cycle" checked={open as boolean} />
-                {title}
-              </label>
+          {CYCLES.map(([title, body, open]) => (
+            <details class="accordion" name="billing-cycle" key={title} open={open}>
+              <summary>{title}</summary>
               <div class="fold">
                 <div>
                   <p class="cn-copy">{body}</p>
                 </div>
               </div>
-            </div>
+            </details>
           ))}
         </div>
       </Demo>
 
       <p class="cn-copy">
-        Radios open one item and close the rest. A radio cannot uncheck
-        itself, so on its own the group always keeps one item open. This
-        demo runs the closable listener below, so clicking the open item
-        closes it too. Leave the listener out when one item must always be
-        open.
+        Give every <code class="cn-code-inline">details</code> in a group the same{" "}
+        <code class="cn-code-inline">name</code>. Opening one closes the rest, and
+        clicking the open one closes it, so the group can fully close.
       </p>
 
       <CodeBlock
         title="Markup"
+        code={`<details class="accordion" name="faq" open>
+  <summary><b>How does billing work?</b><span class="cn-meta">Billing</span></summary>
+  <div class="fold">
+    <div>
+      <p>Plans bill monthly per workspace.</p>
+    </div>
+  </div>
+</details>`}
+      />
+
+      <Props
+        title="Contract"
+        rows={[
+          {
+            name: "details.accordion",
+            values: "one disclosure row",
+            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] is the engaged state: card radius, full inset, mauve 4% wash, mauve title.",
+          },
+          {
+            name: "[name]",
+            values: "shared group name",
+            notes: "Makes the group exclusive. The open row still closes on click.",
+          },
+          {
+            name: "summary",
+            values: "title, or b + .cn-meta",
+            notes: "48px min-height row with a chevron. The native marker is hidden. Its focus ring draws inside the row.",
+          },
+          {
+            name: ".fold",
+            values: "one wrapper element inside",
+            notes: "Animates open and closed over --t-slow (.32s). Where ::details-content is missing, the close is instant.",
+          },
+          {
+            name: ".accordion-stack",
+            values: "on a .panel",
+            notes: "Pads the group and drops the closed last row's divider.",
+          },
+          {
+            name: ".is-open / [data-open]",
+            values: "state alias",
+            notes: "The open treatment on a div, for a framework that owns the state.",
+          },
+        ]}
+      />
+
+      <h2 class="cn-title">Label form</h2>
+      <p class="cn-copy">
+        The older form still works: a <code class="cn-code-inline">div.accordion</code>{" "}
+        holding a label with a hidden checkbox, or radios sharing a name for an
+        exclusive group, then the same fold. Screen readers announce it as a
+        checkbox. It needs two listeners that details does not: one for Enter,
+        and one that lets a radio group close.
+      </p>
+
+      <CodeBlock
+        title="Label markup"
         code={`<div class="accordion">
   <label>
     <input type="checkbox" checked />
@@ -142,10 +198,6 @@ export default function AccordionPage() {
 </div>`}
       />
 
-      <p class="cn-copy">
-        Space toggles natively; Enter needs this one delegated listener.
-      </p>
-
       <CodeBlock
         title="Enter key"
         code={`document.addEventListener("keydown", (e) => {
@@ -153,14 +205,6 @@ export default function AccordionPage() {
   if (e.key === "Enter" && t.matches(".accordion input")) t.click();
 });`}
       />
-
-      <p class="cn-copy">
-        Closable exclusive groups need this second listener. The press arms
-        the radio that was already checked, and the click that follows
-        unchecks it. From the keyboard, Enter closes the open item; Space
-        on a checked radio is inert natively. Narrow the selector to one
-        group's name if another group must stay sticky.
-      </p>
 
       <CodeBlock
         title="Closable radios"
@@ -177,44 +221,6 @@ document.addEventListener("click", (e) => {
   if (t === held) t.checked = false;
   held = null;
 });`}
-      />
-
-      <Props
-        title="Contract"
-        rows={[
-          {
-            name: ".accordion",
-            values: "one disclosure row",
-            default: "·",
-            notes:
-              "Hairline bottom divider. Stack siblings for a group; radios sharing a name make the group exclusive, and the closable listener lets that group close fully.",
-          },
-          {
-            name: ".accordion > label",
-            values: "title + hidden input",
-            default: "·",
-            notes:
-              "48px min-height row. The hidden input stays keyboard-reachable; its focus ring draws on the label.",
-          },
-          {
-            name: ".fold",
-            values: "one wrapper element inside",
-            default: "·",
-            notes: "Animates open and closed over --t-slow (.32s). Put the body inside one wrapper element.",
-          },
-          {
-            name: "screen readers",
-            values: "checkbox semantics",
-            default: "·",
-            notes: "Announced as a checkbox, not a disclosure button.",
-          },
-          {
-            name: ".is-open / [data-open]",
-            values: "state alias",
-            default: "·",
-            notes: "The open treatment without the checkbox, for a framework that owns the state or a hover-driven row.",
-          },
-        ]}
       />
     </Doc>
   );

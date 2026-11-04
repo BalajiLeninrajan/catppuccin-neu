@@ -3,8 +3,8 @@ import type { ComponentChildren } from "preact";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 const CloseIcon = () => (
-  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-    <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
+  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+    <path d="M6 6l12 12M18 6 6 18" />
   </svg>
 );
 
@@ -69,10 +69,10 @@ export default function ModalPage() {
       lede="A centered dialog on the native <dialog> element. showModal() opens it in the top layer, traps focus and draws the scrim. Escape closes it."
     >
       <p class="cn-copy">
-        Put <code class="cn-code">.modal</code> on a{" "}
-        <code class="cn-code">&lt;dialog&gt;</code>. The platform gives you the
+        Put <code class="cn-code-inline">.modal</code> on a{" "}
+        <code class="cn-code-inline">&lt;dialog&gt;</code>. The platform gives you the
         top layer, focus trapping, Escape, and{" "}
-        <code class="cn-code">::backdrop</code>, which the recipe draws as the
+        <code class="cn-code-inline">::backdrop</code>, which the recipe draws as the
         blurred crust scrim. The modal fades in, rises 8px and scales up from
         .98. It leaves on the ease-in in .14s. Add one listener if a backdrop
         click should close it.
@@ -125,7 +125,7 @@ export default function ModalPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code">.is-wide</code> is 760px, for a table or a
+        <code class="cn-code-inline">.is-wide</code> is 760px, for a table or a
         two-column form. Both widths leave 16px of viewport on each side.
       </p>
 
@@ -136,7 +136,7 @@ export default function ModalPage() {
             name: "dialog.modal",
             values: "showModal() / close()",
             default: "·",
-            notes: "width min(520px, 100vw - 32px); max-height 100dvh - 48px; --shadow-pop. Radius is --cn-radius-panel.",
+            notes: "width min(520px, 100vw - 32px); max-height 100dvh - 48px; --cn-surface-overlay fill, the --edge-strong hairline, --shadow-pop. Radius is --cn-radius-panel.",
           },
           {
             name: ".modal.is-wide",
@@ -148,7 +148,7 @@ export default function ModalPage() {
             name: ".modal > header",
             values: "title and close control",
             default: "·",
-            notes: "The shared band: --band-h tall, --band-pad, recessed fill. Top corners follow the panel radius minus 1px.",
+            notes: "The shared band: --band-h tall, --band-pad, on the dialog's overlay fill with an --edge-soft bottom divider. No darker fill, so the header never sinks below the surface it titles.",
           },
           {
             name: ".modal > footer.panel-footer",
@@ -160,7 +160,7 @@ export default function ModalPage() {
             name: "::backdrop",
             values: "the scrim",
             default: "·",
-            notes: "Crust at 80% with a 2px blur. Fades with the dialog.",
+            notes: "Crust at 80% with a 2px blur. Fades with the dialog. Under reduced transparency the blur goes and the crust deepens to 88%.",
           },
           {
             name: "motion",

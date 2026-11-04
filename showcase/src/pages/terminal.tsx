@@ -26,7 +26,7 @@ export default function TerminalPage() {
     >
       <Demo title="Log surface with caret" classes="terminal / terminal .caret">
         <div class="terminal" style="width:min(560px,100%);height:230px">
-          <pre class="scroll-well">
+          <pre class="scroll-well" tabIndex={0} role="region" aria-label="Deploy log">
             {LOG}
             <span class="caret" />
           </pre>
@@ -34,11 +34,11 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        The <code class="cn-code">&lt;pre&gt;</code> fills the surface and
-        scrolls on overflow; add <code class="cn-code">.scroll-well</code> so
+        The <code class="cn-code-inline">&lt;pre&gt;</code> fills the surface and
+        scrolls on overflow; add <code class="cn-code-inline">.scroll-well</code> so
         the scrollbar thumb matches the dark ground. Text wraps via{" "}
-        <code class="cn-code">white-space: pre-wrap</code> and{" "}
-        <code class="cn-code">overflow-wrap: anywhere</code>; there is no
+        <code class="cn-code-inline">white-space: pre-wrap</code> and{" "}
+        <code class="cn-code-inline">overflow-wrap: anywhere</code>; there is no
         horizontal scroll.
       </p>
 
@@ -55,8 +55,8 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        The blinking caret is a plain <code class="cn-code">span.caret</code>{" "}
-        filled with <code class="cn-code">var(--accent)</code>, mauve by
+        The blinking caret is a plain <code class="cn-code-inline">span.caret</code>{" "}
+        filled with <code class="cn-code-inline">var(--accent)</code>, mauve by
         default. A terminal that belongs to one team takes that team's
         accent, here Payments' teal. The blink stops under reduced motion.
       </p>
@@ -66,12 +66,12 @@ export default function TerminalPage() {
           <div class="panel-header">
             <h2>Deploy log</h2>
             <span class="chip">
-              <span class="live-dot" /> streaming
+              <span class="live-dot" aria-hidden="true" /> streaming
             </span>
           </div>
           <div class="panel-body">
             <div class="terminal" style="height:150px">
-              <pre class="scroll-well">
+              <pre class="scroll-well" tabIndex={0} role="region" aria-label="Streaming deploy log">
                 {LOG}
                 <span class="caret" />
               </pre>
@@ -93,13 +93,13 @@ export default function TerminalPage() {
             name: ".terminal",
             values: "surface",
             notes:
-              "The shared recess fill, full neu-inset, the card radius (12px), no border. Column flex; the pre stretches.",
+              "The shared --cn-surface-sunken fill, full neu-inset with --cn-well-lip, the card radius (12px), no border. Column flex; the pre stretches.",
           },
           {
             name: ".terminal pre",
             values: "content",
             notes:
-              "Mono 500 12px/1.6, --well-pad padding. Wraps; scrolls on overflow.",
+              "Mono 500 13px/1.6 in --cn-fg-soft with ligatures off, --well-pad padding. Wraps; scrolls on overflow.",
           },
           {
             name: ".terminal .caret",
@@ -118,7 +118,7 @@ export default function TerminalPage() {
       <CodeBlock
         title="Markup"
         code={`<div class="terminal" style="height: 230px">
-  <pre class="scroll-well">$ app deploy --env production
+  <pre class="scroll-well" tabindex="0" role="region" aria-label="Deploy log">$ app deploy --env production
 deployed v2.4.1 to production
 $ <span class="caret"></span></pre>
 </div>`}

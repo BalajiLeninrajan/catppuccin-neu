@@ -23,7 +23,7 @@ function DrawerDemo() {
             Workspace settings
           </h2>
           <button type="button" class="btn is-icon" aria-label="Close" onClick={close}>
-            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
           </button>
         </header>
         <div class="panel-body cn-stack cn-gap-16">
@@ -82,15 +82,16 @@ export default function DrawerPage() {
       lede="A side sheet pinned to the right edge, for settings, detail views and forms that outgrow a modal. It is a native <dialog>, so the platform handles focus, Escape and the scrim."
     >
       <p class="cn-copy">
-        Put <code class="cn-code">.drawer</code> on a{" "}
-        <code class="cn-code">&lt;dialog&gt;</code> and open it with{" "}
-        <code class="cn-code">showModal()</code>. The sheet is the full
+        Put <code class="cn-code-inline">.drawer</code> on a{" "}
+        <code class="cn-code-inline">&lt;dialog&gt;</code> and open it with{" "}
+        <code class="cn-code-inline">showModal()</code>. The sheet is the full
         viewport height with square corners and one hairline on the left. Its{" "}
-        <code class="cn-code">header</code> is the shared band, filled and
-        square. The footer is <code class="cn-code">.panel-footer</code>: no
-        fill, divider only. The sheet is a flex column that scrolls as a
+        <code class="cn-code-inline">header</code> is the shared band: it sits on
+        the sheet's overlay fill behind an <code class="cn-code-inline">--edge-soft</code>{" "}
+        divider. The footer is <code class="cn-code-inline">.panel-footer</code>,
+        also on the sheet's fill with a divider above it. The sheet is a flex column that scrolls as a
         whole; push the footer down with{" "}
-        <code class="cn-code">margin-top: auto</code>.
+        <code class="cn-code-inline">margin-top: auto</code>.
       </p>
 
       <Demo title="Live demo" classes="dialog.drawer">
@@ -99,8 +100,10 @@ export default function DrawerPage() {
 
       <p class="cn-copy">
         The drawer slides in from past the right edge over{" "}
-        <code class="cn-code">--t-slow</code> (.32s) and leaves on the ease-in
-        in .14s. The backdrop fades with it.
+        <code class="cn-code-inline">--t-slow</code> (.32s) and leaves on the ease-in
+        in .14s. The backdrop fades with it. Under reduced motion the drawer
+        fades in place over <code class="cn-code-inline">--t-fast</code>{" "}
+        instead of sliding.
       </p>
 
       <Props
@@ -110,13 +113,13 @@ export default function DrawerPage() {
             name: "dialog.drawer",
             values: "showModal() / close()",
             default: "·",
-            notes: "width min(420px, 100vw - 40px); full height; right-pinned flex column; --shadow-pop.",
+            notes: "width min(420px, 100vw - 40px); full height; right-pinned flex column; --cn-surface-overlay fill on --shadow-pop.",
           },
           {
             name: ".drawer > header",
             values: "title and close control",
             default: "·",
-            notes: "The shared band: --band-h tall, --band-pad, recessed fill, square corners.",
+            notes: "The shared band: --band-h tall, --band-pad, on the sheet's overlay fill with an --edge-soft bottom divider.",
           },
           {
             name: "footer band",
@@ -125,16 +128,16 @@ export default function DrawerPage() {
             notes: "No fill; the divider separates it. margin-top: auto pins it down.",
           },
           {
-            name: "border-left",
-            values: "1px solid var(--surface-1)",
+            name: "border-inline-start",
+            values: "1px solid var(--edge-strong)",
             default: "·",
-            notes: "The one hairline. The pop shadow does the rest.",
+            notes: "The one hairline, surface-1. It follows the writing direction; the drawer itself stays pinned right. The pop shadow does the rest.",
           },
           {
             name: "::backdrop",
             values: "the scrim",
             default: "·",
-            notes: "Crust at 80% with a 2px blur.",
+            notes: "Crust at 80% with a 2px blur. Under reduced transparency the blur goes and the crust deepens to 88%.",
           },
         ]}
       />

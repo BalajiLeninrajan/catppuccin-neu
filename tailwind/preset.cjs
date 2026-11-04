@@ -44,6 +44,9 @@ module.exports = {
         "subtext-1": "var(--subtext-1)",
         text: "var(--text)",
         rosewater: "var(--rosewater)",
+        flamingo: "var(--flamingo)",
+        maroon: "var(--maroon)",
+        sapphire: "var(--sapphire)",
         pink: "var(--pink)",
         mauve: "var(--mauve)",
         red: "var(--red)",
@@ -54,7 +57,33 @@ module.exports = {
         sky: "var(--sky)",
         blue: "var(--blue)",
         lavender: "var(--lavender)",
+        /* Semantic roles: text-fg-muted, ring-focus, bg-danger and the rest.
+           They follow prefers-contrast. */
+        fg: "var(--cn-fg)",
+        "fg-soft": "var(--cn-fg-soft)",
+        "fg-body": "var(--cn-fg-body)",
+        "fg-muted": "var(--cn-fg-muted)",
+        "fg-placeholder": "var(--cn-fg-placeholder)",
+        "fg-faint": "var(--cn-fg-faint)",
+        "fg-disabled": "var(--cn-fg-disabled)",
+        interactive: "var(--cn-interactive)",
+        "interactive-hover": "var(--cn-interactive-hover)",
+        focus: "var(--cn-focus)",
+        danger: "var(--cn-danger)",
+        warning: "var(--cn-warning)",
+        success: "var(--cn-success)",
+        info: "var(--cn-info)",
         /* Contract properties */
+        ...Object.fromEntries([1, 2, 3, 4, 5, 6].map((n) => [`series-${n}`, `var(--cn-series-${n})`])),
+        ...Object.fromEntries([1, 2, 3, 4, 5].map((n) => [`ramp-${n}`, `var(--cn-ramp-${n})`])),
+        ...Object.fromEntries([1, 2, 3, 4, 5].map((n) => [`diverge-${n}`, `var(--cn-diverge-${n})`])),
+        "surface-page": "var(--cn-surface-page)",
+        "surface-recessed": "var(--cn-surface-recessed)",
+        hover: "var(--hover)",
+        "surface-raised": "var(--cn-surface-raised)",
+        "surface-overlay": "var(--cn-surface-overlay)",
+        "surface-band": "var(--cn-surface-band)",
+        "surface-sunken": "var(--cn-surface-sunken)",
         accent: "var(--accent)",
         tone: "var(--tone)",
         /* Mix tokens: border-edge, border-edge-soft, bg-tint, bg-wash, border-control-edge */
@@ -78,7 +107,8 @@ module.exports = {
         slow: "var(--t-slow)",
       },
       /* Tailwind's default numeric scale already holds --space-1..6:
-         1 = 4px, 2 = 8px, 3 = 12px, 4 = 16px, 6 = 24px, 8 = 32px. Only the
+         1 = 4px, 2 = 8px, 3 = 12px, 4 = 16px, 6 = 24px, 8 = 32px, and
+         --space-7..8 are 12 = 48px and 16 = 64px. Only the
          named density and layout knobs are added: h-control, h-band,
          px-gutter and the rest. */
       spacing: {
@@ -87,7 +117,6 @@ module.exports = {
         band: "var(--band-h)",
         gutter: "var(--page-gutter)",
         "page-pad": "var(--page-pad)",
-        input: "var(--control-h)", /* deprecated, removed in 0.5.0: use control */
       },
       /* Type roles: text-microlabel, text-label, text-meta and the rest.
          Each reads its --cn-type-<role>-* tokens. */
@@ -99,13 +128,13 @@ module.exports = {
         name: role("name"),
         body: role("body"),
         lede: role("lede"),
+        heading: role("heading"),
         title: role("title"),
         value: role("value"),
         "value-lg": role("value-lg"),
         code: role("code"),
         display: display("var(--cn-type-display-size)"),
         "display-sm": display("var(--cn-type-display-sm-size)"),
-        micro: role("micro"), /* deprecated, removed in 0.5.0: use microlabel */
       },
       fontFamily: {
         sans: [
@@ -143,9 +172,9 @@ module.exports = {
         "neu-inset-soft": "var(--neu-inset-soft)",
         pop: "var(--shadow-pop)",
         cast: "var(--shadow-cast)",
-        hard: "var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust)))",
-        "hard-lg": "10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust)))",
-        "hard-sm": "3px 3px 0 var(--plate, var(--hard-offset-color, var(--crust)))",
+        hard: "var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust))",
+        "hard-lg": "10px 10px 0 var(--plate, var(--crust))",
+        "hard-sm": "3px 3px 0 var(--plate, var(--crust))",
         mark: "var(--shadow-mark)",
       },
       /* Heights also read spacing on Tailwind 3.4; these keep older 3.x working. */
@@ -153,13 +182,11 @@ module.exports = {
         control: "var(--control-h)",
         "control-sm": "var(--control-h-sm)",
         band: "var(--band-h)",
-        input: "var(--control-h)", /* deprecated, removed in 0.5.0: use control */
       },
       minHeight: {
         control: "var(--control-h)",
         "control-sm": "var(--control-h-sm)",
         band: "var(--band-h)",
-        input: "var(--control-h)", /* deprecated, removed in 0.5.0: use control */
       },
       opacity: {
         disabled: "var(--disabled-opacity)",

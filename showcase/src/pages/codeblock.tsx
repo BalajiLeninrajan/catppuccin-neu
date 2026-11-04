@@ -20,6 +20,20 @@ const LONG_SNIPPET = `# deploy.log
 [10:41:20] deploy live at v2.4.1
 [10:41:21] notified #releases`;
 
+const CopyGlyph = () => (
+  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+    <rect x="6" y="6" width="9" height="9" rx="2" />
+    <path d="M12 6V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+  </svg>
+);
+const DoneGlyph = () => (
+  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="m4 9.5 3.5 3.5L14 6" />
+  </svg>
+);
+
+/* The copy control holds .is-copied for a moment after a copy, which
+   turns it green; the glyph swaps to a check while it does. */
 function CopyableBlock() {
   const [copied, setCopied] = useState(false);
 
@@ -37,11 +51,11 @@ function CopyableBlock() {
       <pre>npx catppuccin-neu-sync public/styles</pre>
       <button
         type="button"
-        class="btn is-icon"
-        aria-label="Copy"
+        class={`btn is-icon${copied ? " is-copied" : ""}`}
+        aria-label={copied ? "Copied" : "Copy"}
         onClick={copy}
       >
-        {copied ? "✓" : "⧉"}
+        {copied ? <DoneGlyph /> : <CopyGlyph />}
       </button>
     </div>
   );
@@ -51,7 +65,7 @@ export default function CodeblockPage() {
   return (
     <Doc
       title="Code block"
-      lede="A carved well for snippets, in mono 500 12px on a 1.6 line height. It shares its radius, fill and type with the terminal and the command."
+      lede="A carved well for snippets, in mono 500 13px on a 1.6 line height. It shares its radius, fill, lip and type with the terminal and the command."
     >
       <Demo title="Code block" classes="codeblock > pre">
         <div class="codeblock" style="width:min(560px,100%)">
@@ -59,23 +73,28 @@ export default function CodeblockPage() {
         </div>
       </Demo>
 
-      <Demo title="With a copy control" classes="codeblock > btn is-icon">
+      <Demo title="With a copy control" classes="codeblock > btn is-icon · .is-copied">
         <CopyableBlock />
       </Demo>
 
       <p class="cn-copy">
-        Put a <code class="cn-code">.btn.is-icon</code> as a direct child. The
+        Put a <code class="cn-code-inline">.btn.is-icon</code> as a direct child. The
         recipe pins it to the corner and pads the code clear of it. Copying is
-        one delegated listener.
+        one delegated listener. Hold <code class="cn-code-inline">.is-copied</code>{" "}
+        on the button for a moment after the copy and it turns green, the
+        same signal as the <a href="/command">command</a>'s copy control.
       </p>
 
       <CodeBlock
         title="Copy listener"
         code={`document.addEventListener("click", (e) => {
   const btn = e.target.closest(".codeblock > .btn.is-icon");
-  if (btn) navigator.clipboard.writeText(
-    btn.closest(".codeblock").querySelector("pre").innerText
-  );
+  if (!btn) return;
+  const text = btn.closest(".codeblock").querySelector("pre").innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add("is-copied");
+    setTimeout(() => btn.classList.remove("is-copied"), 1200);
+  });
 });`}
       />
 
@@ -91,8 +110,8 @@ export default function CodeblockPage() {
       </Demo>
 
       <p class="cn-copy">
-        Add <code class="cn-code">.is-numbered</code> and wrap each line in its
-        own element inside the <code class="cn-code">pre</code>.
+        Add <code class="cn-code-inline">.is-numbered</code> and wrap each line in its
+        own element inside the <code class="cn-code-inline">pre</code>.
       </p>
 
       <Demo title="Syntax colors" classes="codeblock + .tok-*">
@@ -102,7 +121,21 @@ export default function CodeblockPage() {
       </Demo>
 
       <p class="cn-copy">
-        The five <code class="cn-code">.tok-*</code> classes work in any code
+        Ligatures are off in every mono well and in{" "}
+        <code class="cn-code-inline">.cn-code</code>, so{" "}
+        <code class="cn-code-inline">=&gt;</code>, <code class="cn-code-inline">!=</code> and{" "}
+        <code class="cn-code-inline">&gt;=</code> stay two characters. Code reads and
+        copies as typed.
+      </p>
+
+      <Demo title="No ligatures" classes="font-variant-ligatures: none">
+        <div class="codeblock" style="width:min(560px,100%)">
+          <pre><span class="tok-keyword">const</span> <span class="tok-fn">due</span> = (inv) =&gt; inv.days &gt;= <span class="tok-number">30</span> &amp;&amp; inv.status !== <span class="tok-string">"paid"</span>;</pre>
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        The five <code class="cn-code-inline">.tok-*</code> classes work in any code
         block, numbered or not. Producing the spans is a tokenizer's job
         (shiki, prism, or your build); the system only supplies the palette.
       </p>
@@ -114,9 +147,9 @@ export default function CodeblockPage() {
       </Demo>
 
       <p class="cn-copy">
-        The <code class="cn-code">pre</code> sets{" "}
-        <code class="cn-code">white-space: pre-wrap</code> and{" "}
-        <code class="cn-code">overflow-wrap: anywhere</code>, so long commands
+        The <code class="cn-code-inline">pre</code> sets{" "}
+        <code class="cn-code-inline">white-space: pre-wrap</code> and{" "}
+        <code class="cn-code-inline">overflow-wrap: anywhere</code>, so long commands
         break at the well edge instead of forcing a horizontal scroll.
       </p>
 
@@ -127,6 +160,9 @@ export default function CodeblockPage() {
         <div
           class="codeblock scroll-well"
           style="width:min(560px,100%);max-height:140px;overflow-y:auto"
+          tabIndex={0}
+          role="region"
+          aria-label="Build log"
         >
           <pre>{LONG_SNIPPET}</pre>
         </div>
@@ -134,9 +170,11 @@ export default function CodeblockPage() {
 
       <p class="cn-copy">
         For long content, cap the well with a{" "}
-        <code class="cn-code">max-height</code> and{" "}
-        <code class="cn-code">overflow-y: auto</code>, and compose{" "}
-        <code class="cn-code">.scroll-well</code> for the quiet scrollbar.
+        <code class="cn-code-inline">max-height</code> and{" "}
+        <code class="cn-code-inline">overflow-y: auto</code>, and compose{" "}
+        <code class="cn-code-inline">.scroll-well</code> for the quiet scrollbar.
+        Give the scroller <code class="cn-code-inline">tabindex="0"</code>, a
+        region role and an aria-label, so a keyboard can scroll it.
       </p>
 
       <CodeBlock
@@ -146,7 +184,8 @@ export default function CodeblockPage() {
 </div>
 
 <!-- capped and scrolling -->
-<div class="codeblock scroll-well" style="max-height: 140px; overflow-y: auto">
+<div class="codeblock scroll-well" style="max-height: 140px; overflow-y: auto"
+     tabindex="0" role="region" aria-label="Build log">
   <pre>...</pre>
 </div>`}
       />
@@ -157,7 +196,7 @@ export default function CodeblockPage() {
           {
             name: ".codeblock",
             notes:
-              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the crust-mix recess fill.",
+              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --neu-inset with --cn-well-lip. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
           },
           {
             name: ".is-numbered",
@@ -167,13 +206,18 @@ export default function CodeblockPage() {
           {
             name: ".tok-keyword / -string / -number / -fn / -comment",
             values: "spans from your tokenizer",
-            notes: "blue / green / peach / mauve / overlay-2 italic.",
+            notes: "blue / green / peach / mauve / --cn-fg-muted (subtext-0) italic.",
           },
           {
             name: ".codeblock > .btn.is-icon",
             values: "optional copy control",
             notes:
               "Pinned to the corner, 26px; the block pads right to clear it. Wire with the copy listener.",
+          },
+          {
+            name: ".codeblock > .btn.is-icon.is-copied",
+            values: "state on the copy control",
+            notes: "Turns the control green (--cn-success) while the consumer holds it.",
           },
           {
             name: ".codeblock pre",

@@ -8,6 +8,13 @@ export default function AccentCardPage() {
       title="Accent card"
       lede="A card on a plate in its accent. The plate is the only place the accent shows. The border, the name and the numbers stay neutral."
     >
+      <p class="cn-copy">
+        The plate is the accent mixed 70% into surface-0,{" "}
+        <code class="cn-code-inline">--cn-step-vivid</code>. The plates sit
+        well apart from the page, from 4.9:1 for blue to 7.5:1 for yellow, so
+        the plate reads as the card's color and not as a shadow.
+      </p>
+
       <Demo title="Teams, each in its own accent" classes="accent-card  (set --accent from the record)">
         <div class="sc-grid" style="width:100%">
           {TEAMS.map((team) => (
@@ -40,7 +47,7 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        Wrap the card in a plain <code class="cn-code">&lt;a&gt;</code>. Hover
+        Wrap the card in a plain <code class="cn-code-inline">&lt;a&gt;</code>. Hover
         lifts the card 1px off its plate and the plate grows 1px. Active
         half-slides it onto the plate, the same press as every button. The
         wrapper is the link, never the card itself.
@@ -79,7 +86,7 @@ export default function AccentCardPage() {
             name: ".accent-card",
             values: "recipe",
             notes:
-              "Base fill, --edge hairline, and the hard offset in --plate (accent 50% into surface-0). No other shadow.",
+              "--cn-surface-raised fill, --edge hairline, card radius, 12px 16px padding, and the hard offset in --plate (accent at --cn-step-vivid, 70%, into surface-0, so six accents stay apart) under the lit top edge. No neu shadow.",
           },
           {
             name: "a > .accent-card",

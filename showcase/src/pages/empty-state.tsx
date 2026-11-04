@@ -7,19 +7,19 @@ export default function EmptyStatePage() {
       lede="A centered placeholder for a region with nothing to show yet: a short title, one line of guidance, and the action that fills the space."
     >
       <p class="cn-copy">
-        <code class="cn-code">.empty-state</code> is a centered flex column
-        with a floor from <code class="cn-code">--empty-h</code> (260px, 120px
+        <code class="cn-code-inline">.empty-state</code> is a centered flex column
+        with a floor from <code class="cn-code-inline">--empty-h</code> (260px, 120px
         compact), so an empty list or panel body keeps its height. The recipe
-        styles three children. An <code class="cn-code">svg</code> before the
-        title sits on a 56px carved plate, the same inset as an input.{" "}
-        <code class="cn-code">strong</code> is the title,{" "}
-        <code class="cn-code">span</code> the supporting line, and anything
+        styles three children. An <code class="cn-code-inline">svg</code> before the
+        title sits on a 56px plate carved on the soft inset.{" "}
+        <code class="cn-code-inline">strong</code> is the title,{" "}
+        <code class="cn-code-inline">span</code> the supporting line, and anything
         else joins the 8px stack.
       </p>
 
       <Demo title="Glyph, title, description, action" classes="empty-state">
         <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
             <path d="M14 3v5h5M9 13h6M9 17h4" />
           </svg>
@@ -33,7 +33,7 @@ export default function EmptyStatePage() {
 
       <Demo title="With a dashed action" classes="empty-state">
         <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="9" cy="8" r="3.5" />
             <path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4.5-6.2" />
           </svg>
@@ -44,10 +44,10 @@ export default function EmptyStatePage() {
       </Demo>
 
       <p class="cn-copy">
-        Use <code class="cn-code">.btn .btn-secondary</code> for the ordinary
-        create step and <code class="cn-code">.btn .btn-ghost .is-dashed</code>{" "}
+        Use <code class="cn-code-inline">.btn .btn-secondary</code> for the ordinary
+        create step and <code class="cn-code-inline">.btn .btn-ghost .is-dashed</code>{" "}
         when the action is itself an open slot. Reserve{" "}
-        <code class="cn-code">.btn-primary</code> for an empty state that is
+        <code class="cn-code-inline">.btn-primary</code> for an empty state that is
         the page's one job, like a first-run screen.
       </p>
 
@@ -58,7 +58,7 @@ export default function EmptyStatePage() {
             name: ".empty-state",
             values: "div inside any region",
             notes:
-              "Centered flex column, 8px gap, --empty-h min-height, overlay-2 text.",
+              "Centered flex column, 8px gap, --empty-h min-height, --cn-fg-muted (subtext-0) text.",
           },
           {
             name: ".empty-state.is-fill",
@@ -72,11 +72,11 @@ export default function EmptyStatePage() {
           },
           {
             name: "strong",
-            notes: "The title. 14px, full text color.",
+            notes: "The title. The body size, 16px, in --cn-fg.",
           },
           {
             name: "span",
-            notes: "The supporting line. 12px, inherits the muted color.",
+            notes: "The supporting line. 13px, the meta size, in the muted color.",
           },
           {
             name: "action",
@@ -90,7 +90,7 @@ export default function EmptyStatePage() {
       <CodeBlock
         title="Markup"
         code={`<div class="empty-state">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">…</svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">…</svg>
   <strong>No invoices yet</strong>
   <span>Invoices you create or import will show up here.</span>
   <button class="btn btn-secondary">New invoice</button>

@@ -9,18 +9,19 @@ import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
 import posthog from "posthog-js";
 
-/* Semantic tones, in the order of the .cn-tone-* setters. */
-export const TONES = ["red", "green", "peach", "yellow", "blue", "mauve"] as const;
+/* The palette tones in a row order where no two warm hues sit side by
+   side: peach and yellow are split by blue, red and peach by green. */
+export const TONES = ["red", "green", "peach", "blue", "yellow", "mauve"] as const;
 
 export type Tone = (typeof TONES)[number];
 
-/* Accent hexes by name. */
+/* Accent hexes by name, in the data-series order (--cn-series-1..6). */
 export const ACCENT = {
   mauve: "#cba6f7",
-  teal: "#94e2d5",
   yellow: "#f9e2af",
-  blue: "#89b4fa",
+  teal: "#94e2d5",
   peach: "#fab387",
+  blue: "#89b4fa",
   pink: "#f5c2e7",
 } as const;
 
@@ -88,13 +89,12 @@ function CopyLine({ text, block }: CopyLineProps) {
   return (
     <button
       type="button"
-      class={`cn-code cn-edge-dashed cn-r-chip sc-snippet${block ? " sc-snippet-block" : ""}${copied ? " is-copied" : ""}`}
+      class={`cn-code sc-snippet${block ? " sc-snippet-block" : ""}${copied ? " is-copied" : ""}`}
       onClick={copy}
-      title="Copy"
     >
       {block ? <pre>{text}</pre> : <span>{text}</span>}
-      <span class="cn-microlabel sc-snippet-hint" aria-live="polite">
-        {copied ? "copied" : "copy"}
+      <span class="btn-text sc-snippet-hint" aria-live="polite">
+        {copied ? "Copied" : "Copy"}
       </span>
     </button>
   );
@@ -127,7 +127,7 @@ export function Doc({ title, lede, children }: DocProps) {
  * props: {
  *   title?: string,     // .cn-label caption above the stage
  *   classes?: string,   // class string shown in a copyable code line below
- *   row?: boolean,      // lay children out as a centered wrapping flex row
+ *   row?: boolean,      // lay children out as a wrapping flex row from the inline start
  *   children,
  * }
  */
@@ -186,7 +186,7 @@ export function Props({ title, rows }: PropsProps) {
             {rows.map((r) => (
               <tr key={r.name}>
                 <td data-label="Name" class="cell-name">
-                  <code class="cn-code">{r.name}</code>
+                  <code class="cn-code-inline">{r.name}</code>
                 </td>
                 <td data-label="Values">{r.values ?? "·"}</td>
                 <td data-label="Default">{r.default ?? "·"}</td>
