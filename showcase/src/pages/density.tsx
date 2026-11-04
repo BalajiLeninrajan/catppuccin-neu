@@ -25,12 +25,13 @@ const TONE_TAGS = [
 /* The SPEC's density table: knob, default, cozy, compact, what it sets. */
 const KNOBS: Array<[string, string, string, string, string]> = [
   ["--control-h", "46px (2.875rem)", "38px", "28px", "Buttons, inputs, selects. Segmented options add 12px."],
-  ["--control-h-sm", "34px (2.125rem)", "28px", "24px", "Small buttons, icon buttons, tabs, menu rows, page targets."],
+  ["--control-h-sm", "34px (2.125rem)", "28px", "26px, never under 24px", "Small buttons, icon buttons, tabs, menu rows, page targets."],
   ["--hard-offset", "4px", "3px", "2px", "The plate's distance. The press slides half of it."],
   ["--cn-radius-panel", "16px", "16px", "12px", "Panels and modals. A table head at a panel edge follows it minus 1px."],
   ["--band-h", "64px", "52px", "44px", "Panel, modal and drawer header bands. The topbar is this plus 4px."],
   ["--band-pad", "12px 24px", "8px 24px", "8px 16px", "Band padding."],
   ["--band-title-size", "20px", "14px", "14px", "An h2 or h3 in a header band."],
+  ["--lead-title-size", "28px", "28px", "20px", "The lead panel's band title, at the heading weight."],
   ["--body-pad", "24px", "16px 24px", "12px 16px", ".panel-body padding."],
   ["--cell-pad", "12px 16px", "8px 12px", "4px 8px", "Table cells."],
   ["--cell-font-size", "14px", "14px", "13px", "Table body text."],

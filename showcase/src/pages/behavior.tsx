@@ -181,7 +181,7 @@ export default function BehaviorPage() {
           {
             name: "tabs(tablist)",
             values: '[role="tablist"]',
-            notes: "Left, Right, Home and End move focus and select, so selection follows focus. Mirrored in right-to-left text. Only the selected tab is in the tab order, and each tab's aria-controls panel shows only while it is selected. Fires cn-select on the tablist with the tab in event.detail.",
+            notes: "Left, Right, Home and End move focus and select, so selection follows focus. Mirrored in right-to-left text. Only the selected tab is in the tab order, and each tab's aria-controls panel shows only while it is selected. Fires cn-select on the tablist with the tab in event.detail. On a .tabs carve it measures the selected tab into --cn-tab-x and --cn-tab-w and sets data-cn-indicator, so the raised pill slides.",
           },
           {
             name: "menu(trigger)",

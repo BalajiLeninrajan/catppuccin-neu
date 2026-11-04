@@ -3,7 +3,7 @@
    node scripts/lint.mjs   (or: pnpm lint)
    Checks the shipped CSS. Exits 1 on any failure.                           */
 
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import process from "node:process";
@@ -98,12 +98,91 @@ function outlineRemoved(css) {
     .map(({ line, prop, value }) => ({ line, message: `${prop}: ${value} removes focus; use a transparent outline` }));
 }
 
+/* Top-level comma or space parts of a value, ignoring those inside
+   parentheses. */
+function splitAt(value, sep) {
+  const parts = []; let depth = 0, cur = "";
+  for (const ch of value) {
+    if (ch === "(") depth++; if (ch === ")") depth--;
+    if ((sep === " " ? /\s/.test(ch) : ch === sep) && !depth) { if (cur.trim()) parts.push(cur.trim()); cur = ""; } else cur += ch;
+  }
+  if (cur.trim()) parts.push(cur.trim());
+  return parts;
+}
+
+/* Every box-shadow, and every --hard-extra a recipe sets, is none or a
+   comma list of var() tokens. A new shadow layer gets a name in
+   tokens.css first, so each layer has one job and one value. */
+function shadowTokens(css) {
+  return declarations(css, /box-shadow|--hard-extra/)
+    .filter(({ value }) => value !== "none" && !splitAt(value, ",").every((part) => /^var\(--[\w-]+\)$/.test(part)))
+    .map(({ line, prop, value }) => ({ line, message: `${prop}: ${value} is not a list of shadow tokens; name the layer in tokens.css` }));
+}
+
+/* Radii: a --cn-radius-* token, 999px, 50%, 0, inherit, or a radius
+   token minus 1px. */
+const RADIUS_OK = /^(?:var\(--cn-radius-[a-z]+\)|999px|50%|0|inherit|calc\(var\(--cn-radius-[a-z]+\) - 1px\))$/;
+function radiusValues(css) {
+  return declarations(css, /border(?:-[a-z]+)*-radius/)
+    .filter(({ value }) => !splitAt(value.replace(/\s*\/\s*/g, " "), " ").every((part) => RADIUS_OK.test(part)))
+    .map(({ line, prop, value }) => ({ line, message: `${prop}: ${value} is off the radius scale` }));
+}
+
+/* The selector and enclosing at-rules of each declaration, for checks
+   that depend on where a declaration sits. */
+function blocks(css) {
+  const out = [];
+  const stack = [];
+  let start = 0;
+  for (let i = 0; i < css.length; i++) {
+    const ch = css[i];
+    if (ch === "{") { stack.push(css.slice(start, i).trim().replace(/\s+/g, " ")); start = i + 1; }
+    else if (ch === "}") { if (stack.length) out.push({ preludes: [...stack], body: css.slice(start, i), at: start }); stack.pop(); start = i + 1; }
+    else if (ch === ";" && stack.length) { out.push({ preludes: [...stack], body: css.slice(start, i + 1), at: start }); start = i + 1; }
+  }
+  return out;
+}
+
+/* Uppercase is scarce: only .cn-microlabel sets it. */
+function uppercase(css) {
+  return blocks(css)
+    .filter(({ body, preludes }) => /text-transform\s*:\s*uppercase/.test(body) && preludes.at(-1) !== ".cn-microlabel")
+    .map(({ at, preludes }) => ({ line: lineOf(css, at), message: `text-transform: uppercase on ${preludes.at(-1)}; only .cn-microlabel is uppercase` }));
+}
+
+/* Transitions: a transform or box-shadow transition names a --ease-*
+   curve, and no transition uses the ease, linear or ease-in-out
+   keywords. Keyframe loops such as the spinner may run linear. */
+function transitionCurves(css) {
+  const out = [];
+  for (const { prop, value, line } of declarations(css, /transition(?:-timing-function)?/)) {
+    const bare = withoutVars(value).match(/(?<![\w-])(ease|ease-in|ease-out|ease-in-out|linear)(?![\w(-])/);
+    if (bare) out.push({ line, message: `${prop} uses the ${bare[1]} keyword; use a --ease-* token` });
+    if (prop !== "transition") continue;
+    for (const part of splitAt(value, ",")) {
+      const name = part.split(/\s+/)[0];
+      if (/^(transform|translate|scale|rotate|box-shadow|all)$/.test(name) && !/var\(--ease-/.test(part))
+        out.push({ line, message: `transition of ${name} names no curve; add a --ease-* token` });
+    }
+  }
+  return out;
+}
+
+/* !important belongs to the [hidden] rule, .cn-hidden, and the
+   reduced-motion and forced-colors blocks, nowhere else. */
+function importantUse(css) {
+  return blocks(css)
+    .filter(({ body }) => /!important/.test(body))
+    .filter(({ preludes }) => !preludes.some((p) => /prefers-reduced-motion|forced-colors/.test(p)) && !/^(\[hidden\]|\.cn-hidden$)/.test(preludes.at(-1)))
+    .map(({ at, preludes }) => ({ line: lineOf(css, at), message: `!important in ${preludes.at(-1)}; only [hidden], .cn-hidden and the reduced-motion and forced-colors blocks may use it` }));
+}
+
 /* Which checks run on which file. tokens.css holds the base element reset,
    which sits outside the spacing scale on purpose (list indent). */
 const CHECKS = {
-  "css/tokens.css": [selfReference, rawTransitionDuration, outlineRemoved],
-  "css/utilities.css": [selfReference, rawTransitionDuration, rawSpacing, looseHairline, outlineRemoved],
-  "css/recipes.css": [selfReference, rawTransitionDuration, rawSpacing, paletteText, paletteAccent, looseHairline, outlineRemoved],
+  "css/tokens.css": [selfReference, rawTransitionDuration, outlineRemoved, uppercase, transitionCurves, importantUse],
+  "css/utilities.css": [selfReference, rawTransitionDuration, rawSpacing, looseHairline, outlineRemoved, shadowTokens, radiusValues, uppercase, transitionCurves, importantUse],
+  "css/recipes.css": [selfReference, rawTransitionDuration, rawSpacing, paletteText, paletteAccent, looseHairline, outlineRemoved, shadowTokens, radiusValues, uppercase, transitionCurves, importantUse],
   "tailwind/theme.css": [selfReference, rawTransitionDuration],
 };
 
@@ -298,7 +377,35 @@ async function contrast() {
   return out.map((o) => ({ ...o, file }));
 }
 
+/* The showcase is the visual reference, so it follows the markup rules
+   too: no title= tooltips on elements, and no overflow: hidden standing
+   in for band corners. Skipped where showcase/src is not present, as in
+   the published package. */
+async function showcaseMarkup() {
+  const dir = join(root, "showcase/src");
+  let files;
+  try { files = await readdir(dir, { recursive: true }); } catch { return []; }
+  const out = [];
+  for (const name of files.filter((f) => /\.(tsx|ts|css)$/.test(f))) {
+    const text = await readFile(join(dir, name), "utf8");
+    const file = `showcase/src/${name}`;
+    const rules = name.endsWith(".css")
+      ? [[/overflow(?:-[xy])?\s*:\s*hidden/g, "overflow: hidden; never clip band corners"]]
+      : [
+          [/<[a-z][\w-]*\b[^>]*\stitle=/g, "title= on an element; use [data-tip]"],
+          [/style=[{"`][^}"`]*overflow(?:-[xy])?\s*:\s*hidden/g, "overflow: hidden in a style; never clip band corners"],
+        ];
+    for (const [re, message] of rules)
+      for (const m of text.matchAll(re)) out.push({ file, line: lineOf(text, m.index), message });
+  }
+  return out;
+}
+
 let failures = 0;
+for (const { file, line, message } of await showcaseMarkup()) {
+  console.error(`${file}:${line}: showcaseMarkup: ${message}`);
+  failures++;
+}
 for (const { line, message } of await specTypeTable()) {
   console.error(`SPEC.md:${line}: specTypeTable: ${message}`);
   failures++;

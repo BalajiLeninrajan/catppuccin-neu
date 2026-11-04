@@ -41,7 +41,7 @@
   --cn-fg-body: var(--subtext-1);        /* running text, Catppuccin's body stop below text: 9.3:1 */
   --cn-fg-muted: var(--subtext-0);       /* labels, meta, help, table heads: 7.4:1 */
   --cn-fg-placeholder: var(--overlay-2); /* placeholders and code line numbers, the floor for text: 5.8:1 */
-  --cn-fg-faint: var(--overlay-1);       /* resting icons, the field lip: 4.4:1 */
+  --cn-fg-faint: var(--overlay-1);       /* decorative icons, the field lip: 4.4:1 */
   --cn-fg-on-accent: var(--crust);       /* text and glyphs on a solid accent fill: 9.2:1 on mauve */
   --cn-fg-disabled: var(--overlay-1);    /* disabled text: 4.4:1 */
   --cn-interactive: var(--mauve);        /* links, the primary, checked controls: 8.1:1 */
@@ -114,7 +114,7 @@
      under 4.5:1, so the ladder stops here. */
   --cn-surface-recessed: color-mix(in srgb, var(--mantle) 55%, var(--base)); /* the sidebar, app chrome below the page */
   --cn-surface-band: color-mix(in srgb, var(--crust) 30%, transparent);      /* table heads and skeletons: one step under whatever holds them */
-  --cn-surface-sunken: color-mix(in srgb, var(--crust) 38%, var(--mantle));   /* filled wells, the mono wells, stepper pills */
+  --cn-surface-sunken: color-mix(in srgb, var(--crust) 38%, var(--mantle));   /* wells, the mono wells, stepper pills */
 
   /* Mix steps. Every tint of a hue into a ground or into transparent uses
      one of these, so a wash means the same strength everywhere. */
@@ -196,8 +196,10 @@
   --cn-type-code-leading: 1.6;
   --cn-type-code-tracking: 0;
 
-  --cn-type-display-size: clamp(2.25rem, .25rem + 4.2vw, 3.5rem);
-  --cn-type-display-sm-size: clamp(1.875rem, .5rem + 3vw, 2.5rem);
+  /* Display sizes grow from 520px and reach their maximum at 860px
+     (--cn-width-narrow), so above it the ratio to the heading holds. */
+  --cn-type-display-size: clamp(2.25rem, .34rem + 5.88vw, 3.5rem);
+  --cn-type-display-sm-size: clamp(1.875rem, .92rem + 2.94vw, 2.5rem);
   --cn-type-display-weight: 700;
   --cn-type-display-leading: 1.08;
   --cn-type-display-tracking: -.03em;
@@ -221,21 +223,26 @@
 
   /* Neumorphic depth, lit from the top left: five neu shadows, pop, cast
      and hard. */
-  --neu-dark: rgb(8 8 14 / .66);
+  --neu-dark: rgb(8 8 14 / .8);
   --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
   /* A shadow has to be darker than the darkest surface it falls on, and
      crust is only 1.1:1 under base, so the raised shadow is crust taken
      halfway to black: a 1px contact edge where the surface meets the
-     ground, then the cast. */
+     ground, a tight near shadow at .8 that darkens the first few pixels
+     past the bottom and right edges, then the cast. The cast tops out near
+     1.28:1, so the near shadow is what makes the contact read at 1x. */
   --neu-shade: rgb(8 8 14 / .72);
   --neu-contact: rgb(8 8 14 / .55);
-  --neu-raised: 1px 1px 0 var(--neu-contact), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+  --neu-near: rgb(8 8 14 / .8);
+  --neu-raised: 1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
   /* The lead panel: the raised layers with a longer cast and a bright
      overlay-0 top rim, 3.4:1 on base where the plain lit edge is 1.5:1.
      Shadows barely register on a dark page, so the rim carries the rank. */
-  --neu-lifted: 1px 1px 0 var(--neu-contact), 14px 18px 36px var(--neu-shade), inset 0 1px var(--overlay-0);
-  --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5), -2px -2px 5px rgb(69 71 90 / .16);
-  --neu-inset: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
+  --neu-lifted: 1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 14px 18px 36px var(--neu-shade), inset 0 1px var(--overlay-0);
+  /* The soft raise follows the same light: contact and a short cast, no
+     top-left highlight. Callers that want the lit side add --cn-lit-edge. */
+  --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
+  --neu-inset: inset 4px 4px 9px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
   --neu-inset-soft: inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
 
   /* The lit top edge: the top-left light catches a raised surface's top
@@ -246,6 +253,22 @@
   --shadow-pop:  0 24px 70px rgb(8 8 14 / .8), 0 8px 24px rgb(8 8 14 / .45); /* popovers, modals, toasts */
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);                 /* topbar cast */
   --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);  /* solid-mark drop */
+
+  /* Named shadow layers. Every box-shadow in recipes and utilities is
+     none or a list of var() tokens, and lint holds it to that, so each
+     layer below has one name and one job. The plates, the validation ring
+     and the avatar ground ring read --plate, --hard-offset, --tone or
+     --ring-ground, so they are declared at their use sites further down. */
+  --cn-gloss-inset: inset 0 1px rgb(255 255 255 / .16);   /* the white gloss on a checked checkbox and the on switch paddle */
+  --cn-primary-rim: inset 0 1px rgb(255 255 255 / .3), inset 0 -2px color-mix(in srgb, var(--crust) 22%, transparent); /* the primary's --hard-extra */
+  --cn-readonly-rule: inset 0 -1px 0 var(--edge);         /* the printed-text underline of a read-only field */
+  --cn-sticky-rule: inset 0 -1px var(--surface-0);        /* a sticky table head's bottom rule */
+  --cn-switch-ring: inset 0 0 0 1px var(--control-edge);  /* the switch plate's edge */
+  --cn-disabled-ring: inset 0 0 0 1px var(--edge);        /* a disabled switch plate's edge */
+  --cn-halo-ring: 0 0 0 3px color-mix(in srgb, var(--cn-interactive) var(--cn-step-fill), transparent); /* the checked radio's halo */
+  --cn-live-halo: 0 0 0 4px color-mix(in srgb, currentColor var(--cn-step-fill), transparent);         /* the live dot's halo */
+  --cn-switch-glow: 0 0 6px color-mix(in srgb, var(--cn-interactive) var(--cn-step-fill), transparent);
+  --cn-switch-glow-held: 0 0 12px color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), transparent);
 
   /* Contract properties: set on an element or wrapper to re-key a subtree.
      Accent comes from the item's identity and stays the same everywhere
@@ -313,6 +336,9 @@
   --band-h: 64px;                    /* panel, modal and drawer header bands */
   --band-pad: var(--space-3) var(--space-5);
   --band-title-size: var(--cn-type-title-size); /* an h2 in a panel header */
+  /* The lead panel's band title: the heading size at default and cozy
+     density, since one title per view buys no rows by shrinking. */
+  --lead-title-size: var(--cn-type-heading-size);
   --body-pad: var(--space-5);
   --cell-pad: var(--space-3) var(--space-4);
   --cell-font-size: var(--cn-type-ui-size);   /* 14px; compact is 13 */
@@ -366,6 +392,21 @@
   --tone-edge: color-mix(in srgb, var(--tone) var(--cn-step-edge), transparent);
   --tone-border: color-mix(in srgb, var(--tone) var(--cn-step-plate), var(--surface-0));
 }
+/* An invalid or warning field closes its lip into a ring in its tone. */
+:where(.input, .field :is(input, select, textarea)) { --cn-validation-ring: inset 0 0 0 1px var(--tone); }
+
+/* The plates read the element's own --plate and the density's
+   --hard-offset, so they are declared where they are drawn: rest, held
+   (half), the +1px link hover, and the fixed 10px and 3px. */
+:where(.btn-primary, .btn-secondary, .segmented > *, .accent-card, .chip, .panel.is-tilted, .cn-hard, .cn-hard-lg, .cn-hard-sm, .cn-pressable-slide) {
+  --cn-plate: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust));
+  --cn-plate-half: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--crust));
+  --cn-plate-hover: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--crust));
+  --cn-plate-lg: 10px 10px 0 var(--plate, var(--crust));
+  --cn-plate-sm: 3px 3px 0 var(--plate, var(--crust));
+}
+/* The ring between stacked avatars reads the stack's --ring-ground. */
+:where(.avatar) { --cn-ground-ring: 0 0 0 2px var(--ring-ground, var(--base)); }
 
 /* --cn-fill-ramp lights the element's own --cn-fill from the top left. The
    stops move lightness, and chroma a touch on the shadow side, never hue.
@@ -389,8 +430,14 @@
 
 /* Route changes: a consumer that opts in with @view-transition
    { navigation: auto; } gets a cross-fade on the tokens, and none under
-   reduced motion. */
+   reduced motion. .cn-morph on the lead panel and on the page's primary
+   names them, so they morph between routes instead of cross-fading. It is
+   a class, not a blanket rule: a page may hold more than one primary, and
+   two elements with one name abort the whole transition. */
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--t-base); animation-timing-function: var(--ease-out); }
+.panel.is-lead.cn-morph { view-transition-name: cn-lead; }
+.btn-primary.cn-morph { view-transition-name: cn-primary; }
+::view-transition-group(cn-lead), ::view-transition-group(cn-primary) { animation-duration: var(--t-base); animation-timing-function: var(--ease-out); }
 
 /* Grain tiles stay one device pixel per unit, browser zoom included. */
 @media (min-resolution: 1.5dppx) { :root { --cn-grain-tile: 106.667px; } }
@@ -417,11 +464,12 @@
 [data-density="compact"] {
   --hard-offset: 2px;
   --control-h: 1.75rem;   /* 28px */
-  --control-h-sm: 1.5rem; /* 24px */
+  --control-h-sm: max(24px, 1.625rem); /* 26px, never under the 24px target floor */
   --cn-radius-panel: var(--cn-radius-card);
   --band-h: 44px;
   --band-pad: var(--space-2) var(--space-4);
   --band-title-size: var(--cn-type-ui-size);
+  --lead-title-size: var(--cn-type-title-size); /* 20px, what a 44px band holds */
   --body-pad: var(--space-3) var(--space-4);
   --cell-pad: var(--space-1) var(--space-2);
   --cell-font-size: var(--cn-type-meta-size);
@@ -531,6 +579,9 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     transition-delay: 0s !important;
   }
   :is(.popover, .toast, dialog.modal, dialog.drawer), [data-tip]::after { transition-duration: var(--t-fast) !important; }
+  /* The universal selector does not reach view-transition pseudo-elements,
+     so route cross-fades and morphs are cut here by name. */
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01ms !important; animation-delay: 0s !important; }
   /* A frozen spinner reads as a broken ring, so it keeps a slow spin, and
      a busy button keeps its spinner turning. */
   .spinner, .btn[aria-busy="true"]::after {
@@ -558,9 +609,10 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --control-edge: var(--overlay-2);
     --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
     --cn-well-lip: inset 0 0 0 1px var(--surface-2);
-    --neu-dark: rgb(8 8 14 / .8);
+    --neu-dark: rgb(8 8 14 / .88);
     --neu-shade: rgb(8 8 14 / .86);
     --neu-contact: rgb(8 8 14 / .8);
+    --neu-near: rgb(8 8 14 / .9);
     --disabled-opacity: .7;
     --grain: 0;
   }

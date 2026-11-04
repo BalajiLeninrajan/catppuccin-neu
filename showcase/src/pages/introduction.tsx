@@ -105,7 +105,7 @@ export default function IntroductionPage() {
           holds single-purpose <code class="cn-code-inline">cn-*</code> classes with
           token values only, and sits above the recipes, so a utility on an
           element always beats the recipe on that element:{" "}
-          <code class="cn-code-inline">well cn-bg-well</code> fills the well. Your own
+          <code class="cn-code-inline">panel cn-flat</code> clears the panel's shadow. Your own
           CSS stays unlayered, so it always wins; overrides never need{" "}
           <code class="cn-code-inline">!important</code>.
         </p>

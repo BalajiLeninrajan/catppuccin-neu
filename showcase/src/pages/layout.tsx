@@ -7,7 +7,7 @@ const SHELL = `<body class="app-shell">
 </body>`;
 
 const COMPOSE = `<!-- a utility on an element beats the recipe on that element -->
-<div class="well cn-bg-well cn-p-16">…</div>
+<div class="well cn-p-16">…</div>
 <button class="btn btn-secondary cn-raised-soft">Soft</button>
 <div class="panel cn-stack cn-gap-12 cn-p-24">…</div>`;
 

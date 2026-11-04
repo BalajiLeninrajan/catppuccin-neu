@@ -16,9 +16,9 @@
 /* Solid-mark mini-drop. */
 .cn-mark-drop   { box-shadow: var(--shadow-mark); }
 /* The hard offset: a solid plate. Any clickable control may take it. */
-.cn-hard        { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--cn-lit-edge); }
-.cn-hard-lg     { box-shadow: 10px 10px 0 var(--plate, var(--crust)); }  /* tilted hero card */
-.cn-hard-sm     { box-shadow: 3px 3px 0 var(--plate, var(--crust)); }    /* fixed small offset */
+.cn-hard        { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
+.cn-hard-lg     { box-shadow: var(--cn-plate-lg); }  /* tilted hero card */
+.cn-hard-sm     { box-shadow: var(--cn-plate-sm); }  /* fixed small offset */
 .cn-flat        { box-shadow: none; }
 
 /* ── Interaction ────────────────────────────────────────────────────────── */
@@ -38,7 +38,7 @@
 /* The half-slide, only combined with .cn-hard. The control
    slides halfway onto its own offset shadow, which shrinks to meet it. */
 .cn-pressable-slide:hover:not(:disabled, [aria-disabled="true"])  { transform: translate(-1px, -1px); }
-.cn-pressable-slide:active:not(:disabled, [aria-disabled="true"]) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--crust)), var(--cn-lit-edge); }
+.cn-pressable-slide:active:not(:disabled, [aria-disabled="true"]) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: var(--cn-plate-half), var(--cn-lit-edge); }
 /* A touch screen keeps :hover after a tap, so the lift would stick. Only
    the press runs there. */
 @media (hover: none) {

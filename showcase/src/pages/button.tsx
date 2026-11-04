@@ -62,10 +62,11 @@ export default function ButtonPage() {
       <p class="cn-copy">
         A disabled primary, through <code class="cn-code-inline">disabled</code> or{" "}
         <code class="cn-code-inline">aria-disabled="true"</code>, goes flat and sinks. It loses the plate, ramp,
-        grain and gloss, and takes the <code class="cn-code-inline">--cn-surface-sunken</code> fill inside a plain{" "}
-        <code class="cn-code-inline">--edge</code> border, with its label in{" "}
+        grain and gloss, and takes the <code class="cn-code-inline">--cn-surface-sunken</code> fill pressed in by{" "}
+        <code class="cn-code-inline">--neu-inset-soft</code> inside a plain{" "}
+        <code class="cn-code-inline">--edge</code> border, like a disabled switch plate, with its label in{" "}
         <code class="cn-code-inline">--cn-fg-disabled</code>, overlay-1 at 4.9:1 on that fill. It stays at full opacity. A dimmed plate reads as a
-        second primary beside the live one, and a sunken slot never outshines a live secondary. A disabled
+        second primary beside the live one, and a pressed-in, unlit button never outshines a live secondary. A disabled
         switch, checkbox or radio drops to the same <code class="cn-code-inline">--edge</code>. A busy primary keeps its fill. Every other variant drops to{" "}
         <code class="cn-code-inline">--disabled-opacity</code> (.6) and keeps its rest shadow.
       </p>
@@ -214,7 +215,9 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        Icon buttons are square at the small control height and flat until hovered. On hover they tint toward{" "}
+        Icon buttons are square at the small control height and flat until hovered. The resting glyph is{" "}
+        <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0 at 7.4:1, because an icon alone is the
+        control's only visible label. On hover they tint toward{" "}
         <code class="cn-code-inline">--tone</code>. Set it with a <code class="cn-code-inline">.cn-tone-*</code> class so
         destructive and informational actions read differently. Always give them an{" "}
         <code class="cn-code-inline">aria-label</code>.
@@ -310,7 +313,7 @@ export default function ButtonPage() {
           { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', notes: "Transparent until hovered, then --hover and an --edge hairline. Toggled, current or holding an open menu, it takes the engaged state: --wash, --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },
-          { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", notes: "Square at --control-h-sm (34px), or --control-h in large. Tints toward --tone on hover. Needs aria-label." },
+          { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted and tints toward --tone on hover. Needs aria-label." },
           { name: ".btn-text", notes: "Inline mauve text button at 13px 600; pink on hover. Held, it moves 1px." },
           { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 13px type, or the hero action at --control-h + 12px with the body size, 16px. One .is-lg per view." },
           { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },

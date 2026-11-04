@@ -23,6 +23,8 @@ export const ACCENT = {
   peach: "#fab387",
   blue: "#89b4fa",
   pink: "#f5c2e7",
+  /* An identity hue, never a series: for a record beyond the six. */
+  sapphire: "#74c7ec",
 } as const;
 
 export type AccentName = keyof typeof ACCENT;

@@ -28,7 +28,7 @@ export default function SettingsExample() {
           </ol>
         </nav>
         <h1 class="cn-display is-sm">Billing settings</h1>
-        <p class="cn-lede cn-m-0">
+        <p class="cn-lede cn-m-0 cn-mt-12">
           How Northwind Ops invoices its customers and pays for its own plan.
           Changes apply to the next invoice, not to ones already sent.
         </p>

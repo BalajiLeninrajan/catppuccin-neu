@@ -219,6 +219,10 @@ export default function InvoiceExample() {
               <dd>CAD, Canadian dollar</dd>
               <dt>Team</dt>
               <dd>Payments</dd>
+              <dt>Payment method</dt>
+              <dd>Bank transfer</dd>
+              <dt>Created by</dt>
+              <dd>Tomas Silva</dd>
             </dl>
           </div>
         </section>
@@ -229,7 +233,7 @@ export default function InvoiceExample() {
           </div>
           <div class="panel-body">
             <ol class="cn-list-none cn-divide">
-              {ACTIVITY.map((a) => (
+              {ACTIVITY.slice(0, 3).map((a) => (
                 <li key={a.what + a.when} class="cn-row cn-between cn-top cn-gap-16 cn-py-12 cn-m-0">
                   <span class="cn-stack cn-gap-4 cn-grow">
                     <span class="cn-name">{a.what}</span>
@@ -239,6 +243,7 @@ export default function InvoiceExample() {
                 </li>
               ))}
             </ol>
+            <button type="button" class="btn-text cn-mt-12">Show all {ACTIVITY.length}</button>
           </div>
         </section>
       </div>

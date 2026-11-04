@@ -254,12 +254,12 @@ export default function PageFurniturePage() {
           {
             name: ".cn-display / .display-title",
             values: "h1",
-            notes: "700, clamp(36px, 4px + 4.2vw, 56px)/1.08, -0.03em, balanced. em turns mauve. Margin zeroed. .display-title is an alias.",
+            notes: "700, clamp(36px, 5.44px + 5.88vw, 56px)/1.08, -0.03em, balanced. em turns mauve. Margin zeroed. .display-title is an alias.",
           },
           {
             name: ".cn-display.is-sm",
             values: "h1",
-            notes: "The page-title size: clamp(30px, 8px + 3vw, 40px).",
+            notes: "The page-title size: clamp(30px, 14.72px + 2.94vw, 40px).",
           },
           {
             name: ".lede / .cn-lede",

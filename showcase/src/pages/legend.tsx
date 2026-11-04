@@ -25,15 +25,15 @@ export default function LegendPage() {
       <Demo title="A key under a stacked bar" classes="legend > legend-item[style=--series] · legend-item.is-hatched">
         <div class="cn-stack cn-gap-12" style="width:min(520px,100%)">
           <div
-            class="cn-r-pill"
-            style="display:flex;height:12px;gap:2px;overflow:hidden"
+            style="display:flex;height:12px;gap:2px"
             role="img"
             aria-label={STATUS.map((s) => `${s.label} ${s.count}`).join(", ")}
           >
-            {STATUS.map((s) => (
+            {/* The ends round themselves, so the bar needs no clipping. */}
+            {STATUS.map((s, i) => (
               <span
                 key={s.label}
-                style={`--series:var(--${s.tone});flex:${s.count} 0 0;background:${s.hatched ? `${HATCH}, ` : ""}var(--series)`}
+                style={`--series:var(--${s.tone});flex:${s.count} 0 0;background:${s.hatched ? `${HATCH}, ` : ""}var(--series);border-radius:${i === 0 ? "999px 0 0 999px" : i === STATUS.length - 1 ? "0 999px 999px 0" : "0"}`}
               />
             ))}
           </div>

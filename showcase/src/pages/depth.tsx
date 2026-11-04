@@ -4,17 +4,22 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 /* One model, lowest first. Height is distance from the ground; the light
    is above and to the top left. */
 const HEIGHTS = [
-  { height: "Below the ground", draws: "A carve: the dark wall top left, the lit lip bottom right. No hairline.", tokens: "--neu-inset or --neu-inset-soft, transparent, --cn-surface-sunken or --cn-surface-band", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states." },
+  { height: "Below the ground", draws: "A carve: the dark wall top left, the lit lip bottom right. No hairline. A well also takes the darker sunken fill.", tokens: "--neu-inset or --neu-inset-soft, transparent, --cn-surface-sunken or --cn-surface-band", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states." },
   { height: "The ground", draws: "Nothing.", tokens: "--cn-surface-page", who: "The page. Every other height is measured from it." },
-  { height: "Resting on it", draws: "The page color, the --edge hairline, the lit top edge, the contact edge, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Resting higher", draws: "The page color, the bright hairline and the bright lit edge, a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its edges carry the rank, since a longer cast barely shows on a dark page." },
+  { height: "Resting on it", draws: "The page color, the --edge hairline, the lit top edge, the contact edge and near shadow, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
+  { height: "Resting higher", draws: "The page color, the bright hairline and the bright lit edge, a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its edges and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
   { height: "Standing on a plate", draws: "The page color and lit top edge over a hard offset, the plate's side.", tokens: "--hard-offset in --plate, --hard-extra", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate." },
   { height: "Lifted off it", draws: "The plate's side grows to 10px and the card tips 1.2deg.", tokens: "a 10px plate over --neu-raised, rotate(1.2deg)", who: "The one tilted panel. Never a table or a form. Upright under prefers-contrast: more, on the same plate." },
   { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
 
 /* The height specimens share one footprint so only the depth differs. */
+/* Three columns, or one under 520px. The min track is a third of the row
+   over 520px and the full row under it, so auto-fit never lands on two. */
+const OFF_GROUND =
+  "display:grid;gap:var(--cn-grid-gap);grid-template-columns:repeat(auto-fit,minmax(clamp(calc((100% - 2 * var(--cn-grid-gap)) / 3 - 1px),calc((520px - 100%) * 999),100%),1fr))";
 const SPEC_BOX = "width:100%;height:88px;display:grid;place-items:center;padding:12px;text-align:center";
+
 
 function Height({ name, cls, children }: { name: string; cls: string; children?: ComponentChildren }) {
   return (
@@ -107,28 +112,37 @@ export default function DepthPage() {
       </Demo>
 
       <Demo title="One specimen per height, on the page" classes="well · (the ground) · panel · panel is-lead · cn-bg-raised cn-edge cn-hard · panel is-tilted · cn-bg-overlay cn-pop">
-        <div style="width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:24px 20px">
-          <Height name="Below the ground" cls=".well">
-            <div class="well cn-meta" style={SPEC_BOX}>Search invoices</div>
-          </Height>
-          <Height name="The ground" cls="--base">
-            <div class="cn-meta" style={SPEC_BOX}>Invoice #1042</div>
-          </Height>
-          <Height name="Resting on it" cls=".panel">
-            <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
-          </Height>
-          <Height name="Resting higher" cls=".is-lead">
-            <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
-          </Height>
-          <Height name="Standing on a plate" cls=".cn-hard">
-            <div class="cn-bg-raised cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
-          </Height>
-          <Height name="Lifted off it" cls=".is-tilted">
-            <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
-          </Height>
-          <Height name="Floating" cls=".cn-pop">
-            <div class="cn-bg-overlay cn-pop cn-r-card cn-meta" style={`${SPEC_BOX};border:1px solid var(--edge-strong)`}>Invoice sent</div>
-          </Height>
+        {/* Two groups that match the heights table: at or below the ground,
+            then off it, so rows break at the story's seam. The first sits on
+            four columns and folds to two. The second holds three, so it keeps
+            three columns until its box is under 520px and then drops to one,
+            never leaving one specimen alone on a row. */}
+        <div class="cn-stack cn-gap-32" style="width:100%">
+          <div class="cn-grid-4">
+            <Height name="Below the ground" cls=".well">
+              <div class="well cn-meta" style={SPEC_BOX}>Search invoices</div>
+            </Height>
+            <Height name="The ground" cls="--base">
+              <div class="cn-meta" style={SPEC_BOX}>Invoice #1042</div>
+            </Height>
+            <Height name="Resting on it" cls=".panel">
+              <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
+            </Height>
+            <Height name="Resting higher" cls=".is-lead">
+              <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
+            </Height>
+          </div>
+          <div style={OFF_GROUND}>
+            <Height name="Standing on a plate" cls=".cn-hard">
+              <div class="cn-bg-raised cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
+            </Height>
+            <Height name="Lifted off it" cls=".is-tilted">
+              <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
+            </Height>
+            <Height name="Floating" cls=".cn-pop">
+              <div class="cn-bg-overlay cn-pop cn-r-card cn-meta" style={`${SPEC_BOX};border:1px solid var(--edge-strong)`}>Invoice sent</div>
+            </Height>
+          </div>
         </div>
       </Demo>
 
@@ -219,18 +233,23 @@ export default function DepthPage() {
         halfway to black, <code class="cn-code-inline">rgb(8 8 14)</code>:{" "}
         <code class="cn-code-inline">--neu-shade</code> at .72 for the cast,{" "}
         <code class="cn-code-inline">--neu-contact</code> at .55 for a 1px
-        edge where the surface meets the ground, and{" "}
-        <code class="cn-code-inline">--neu-dark</code> at .66 for a carve's
-        dark wall, because a transparent well's wall falls on the page. The
-        raised token has three layers: contact, cast and the lit top edge.{" "}
-        <code class="cn-code-inline">--neu-lifted</code> is the same three
-        layers with a longer cast, 14px 18px 36px, and a brighter overlay-0
-        rim, for the one lead panel. Even black is only 1.28:1 under base, so
+        edge where the surface meets the ground,{" "}
+        <code class="cn-code-inline">--neu-near</code> at .8 for a tight
+        1px 2px 2px shadow that darkens the first pixels past the bottom and
+        right edges, and <code class="cn-code-inline">--neu-dark</code> at
+        .8 for a carve's dark wall, because a well's wall falls on the page.
+        The raised token has four layers: contact, near shadow, cast and the
+        lit top edge. <code class="cn-code-inline">--neu-lifted</code> is the
+        same four with a longer cast, 14px 18px 36px, and a brighter
+        overlay-0 rim, for the one lead panel. The soft raise keeps contact
+        and a short cast, so every raise answers the light the same way: no
+        raise draws a top-left highlight outside its edge. Even black is only 1.28:1 under base, so
         a longer cast barely shows; the bright rim and the{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, 2.5:1
         against the panel's 1.6:1, carry the rank.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> deepens the
-        cast to .86 and the contact and carve to .8, and stands the tilted
+        cast to .86, the contact to .8, the carve to .88 and the near
+        shadow to .9, and stands the tilted
         panel upright on its 10px plate, since rotated text renders soft.
       </p>
 
@@ -239,12 +258,13 @@ export default function DepthPage() {
         code={`/* The shadow base: crust taken halfway to black */
 --neu-shade:   rgb(8 8 14 / .72);   /* the cast */
 --neu-contact: rgb(8 8 14 / .55);   /* the 1px edge where a surface meets the ground */
---neu-dark:    rgb(8 8 14 / .66);   /* a carve's dark wall */
+--neu-near:    rgb(8 8 14 / .8);    /* the tight shadow just past the contact */
+--neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
 
---neu-raised:      1px 1px 0 var(--neu-contact), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
---neu-lifted:      1px 1px 0 var(--neu-contact), 14px 18px 36px var(--neu-shade), inset 0 1px var(--overlay-0);
---neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5), -2px -2px 5px rgb(69 71 90 / .16);
---neu-inset:       inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
+--neu-raised:      1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+--neu-lifted:      1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 14px 18px 36px var(--neu-shade), inset 0 1px var(--overlay-0);
+--neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
+--neu-inset:       inset 4px 4px 9px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
 --neu-inset-soft:  inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
 
 /* The lit top rim of a raised surface */
@@ -460,7 +480,7 @@ export default function DepthPage() {
           {
             name: ".cn-raised",
             values: "var(--neu-raised)",
-            notes: "Panels and cards, on --cn-surface-raised. The standard lift off the page: contact, cast and the lit top edge.",
+            notes: "Panels and cards, on --cn-surface-raised. The standard lift off the page: contact, near shadow, cast and the lit top edge.",
           },
           {
             name: ".cn-raised-soft",

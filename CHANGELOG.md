@@ -36,7 +36,11 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - Bare `h1` to `h4` take the display-sm, heading, title and name roles at zero specificity; header-band titles are the title role.
 - `prefers-contrast: more` stands the tilted panel upright.
 - Focus is `--cn-focus` text, a bright neutral, so it differs from the mauve engaged rim by hue as well as shape. Lavender joins the identity hues.
-- Raised shadows drop the top-left highlight: contact, cast and the lit edge. Carves and the pop shadow share the halfway-to-black base; the pop has a tighter second layer. A panel inside a panel takes the soft raise with the lit edge.
+- Raised shadows drop the top-left highlight, `--neu-raised-soft` included: contact, cast and the lit edge. Carves and the pop shadow share the halfway-to-black base; the pop has a tighter second layer. A panel inside a panel takes the soft raise with the lit edge.
+- `--neu-near`, a tight 1px 2px 2px shadow at .8 (.9 under `prefers-contrast: more`), joins `--neu-raised` and `--neu-lifted` after the contact edge, so a panel's bottom and right edges read crisp at 1x where the cast fades.
+- `.well` takes the `--cn-surface-sunken` fill, and `--neu-inset` deepens its dark wall to 4px 4px 9px with `--neu-dark` at .8 (.88 under `prefers-contrast: more`), so a well no longer reads as an outlined panel. Every full carve deepens with it.
+- The lead panel's band title is `--lead-title-size` at the heading weight and tracking: 28px at default and cozy density, 20px at compact, the body size at 520px.
+- Every shadow layer in recipes and utilities has a token: the plates (`--cn-plate`, `-half`, `-hover`, `-lg`, `-sm`), `--cn-primary-rim`, `--cn-gloss-inset`, `--cn-validation-ring`, `--cn-readonly-rule`, `--cn-sticky-rule`, `--cn-switch-ring`, `--cn-disabled-ring`, `--cn-halo-ring`, `--cn-live-halo`, `--cn-switch-glow`, `--cn-switch-glow-held` and `--cn-ground-ring`, with the values the recipes used.
 - Label is 13px and name 14px, so micro is the one 12px role.
 - Series 5 and 6 step down in lightness for color-vision deficiency; `.is-hatched` adds stripes to a bar or legend swatch.
 - Dashed means an open slot only. The on switch paddle carries a crust bar.
@@ -57,6 +61,7 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - Sizes are rem. micro 12, label 13, meta 13, ui 14, name 14 (aliases of the ui tokens: the ui role in `--cn-fg`), body 16 (15 at compact density), lede 18, title 20, value 24, heading 28 (new, `.cn-heading`), value-lg 32, code 13, display-sm 30 to 40, display 36 to 56 at 1.08.
 - Weights: label and micro 500; meta 400, so it reads apart from the 13px label; name, buttons and title 600; 700 for heading, display and the wordmark. Tracking tightens with size, -.01em at 20px to -.03em at display.
 - At 520px, and in a 520px container, band titles step down to 16px with the stat value, so the value still outweighs the title.
+- Display sizes reach their maximum at 860px: display `clamp(2.25rem, .34rem + 5.88vw, 3.5rem)` and display-sm `clamp(1.875rem, .92rem + 2.94vw, 2.5rem)`, so on desktop widths display is 2x the heading and display-sm 1.43x.
 - Inter loads its optical-size axis. Metric-matched local fallbacks for Inter and JetBrains Mono. Mono surfaces turn ligatures off. `p` and `li` wrap pretty.
 
 **States**
@@ -64,7 +69,9 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - Focus is one shape everywhere: a 2px `--cn-focus` (text) outline 3px off the edge, text fields included. Menu rows and select options keep an inset ring under keyboard focus.
 - Engaged states wear `--engaged-edge`, a mauve rim at 4.7:1, and keep it under hover. The selected tab wears it too. `aria-expanded="true"` engages a ghost button.
 - Ghost hover adds an `--edge` hairline. The secondary hover lifts its fill.
-- A disabled primary goes flat and sinks: the sunken fill in a plain edge, no plate, ramp, grain or gloss. Other buttons dim to .6. Disabled fields use `--cn-fg-disabled` without opacity. Disabled checkboxes, radios and switches drop to the soft `--edge`; the off switch paddle has a 3:1 edge, and the on paddle a crust bar. Dashed means an open slot only.
+- A disabled primary goes flat and sinks: the sunken fill pressed in by `--neu-inset-soft` inside a plain edge, no plate, ramp, grain or gloss. Other buttons dim to .6. Disabled fields use `--cn-fg-disabled` without opacity. Disabled checkboxes, radios and switches drop to the soft `--edge`; the off switch paddle has a 3:1 edge, and the on paddle a crust bar. Dashed means an open slot only.
+- The icon button's resting glyph is `--cn-fg-muted` (subtext-0, 7.4:1). `--cn-fg-faint` is for decorative icons and the field lip.
+- Compact `--control-h-sm` is `max(24px, 1.625rem)`, 26px at the default size, so small controls clear the WCAG 2.5.8 floor with room.
 - `.btn[aria-busy="true"]` turns a spinner in the label's place. `aria-disabled="true"` looks disabled and keeps focus.
 - Read-only fields read as printed text: no carve, a rule underneath.
 - `.input-lg` also works inside a `.field`.
@@ -85,7 +92,9 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - `--ease-spring` is a `linear()` damped spring where supported. An opt-in root view-transition cross-fade.
 - Reduced motion keeps overlay fades, drops travel, keeps spinners turning and holds skeletons still at .75 opacity, the midpoint of their breath.
 - A Data changes section in the SPEC, and `.cn-arrive` for content that replaces a skeleton.
-- The SPEC allows a consumer to name the lead panel and the primary with `view-transition-name` so they morph across routes, and documents how the fanned toast pile closes over a dismissed middle toast.
+- `.cn-morph` on the lead panel and the page's one primary names them `cn-lead` and `cn-primary`, so they morph across routes at `--t-base` on the ease-out. The SPEC documents how the fanned toast pile closes over a dismissed middle toast.
+- Reduced motion cuts view-transition pseudo-elements by name, since the universal selector does not reach them, so the root cross-fade and the morphs land at once.
+- With `tabs()` wired, the selected tab's raised fill is one pill that slides to the new tab over `--t-fast` on the ease-out.
 
 **Accessibility**
 - `prefers-contrast: more`, `prefers-reduced-transparency`, `forced-colors`, `pointer: coarse` (44px targets) and `hover: none` are answered.
@@ -93,17 +102,18 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - `.cn-skip-link`.
 
 **New recipes and utilities**
+- `.sparkline`: a 2px line in `--series` or `--accent` beside its value as text.
 - `.tabs`, `.menu`, `.slider`, `.pagination`, `.breadcrumbs`, `.cn-prose`, `.skeleton`, `details.accordion`, `.sidebar` in `.app-shell.has-sidebar`, `.stat-grid`, `.is-num` table columns, `.codeblock` `.is-copied`.
 - `.cn-split`, `.cn-measure`, `.cn-with-side`, `.cn-mx-auto`, `.cn-container` grid folds, 48 and 64 spacing (`--space-7`, `--space-8`), page width tokens and `--cn-measure`.
 - Recipes use logical properties.
 
-**Behavior.** `catppuccin-neu/js`, optional: `tabs()`, `menu()`, `slider()`, `tooltips()`, `toast()` (with swipe to dismiss) and `init()`. The toast timer runs only while neither the pointer nor focus is in the stack, and a swiped toast exits through `[hidden]`.
+**Behavior.** `catppuccin-neu/js`, optional: `tabs()`, `menu()`, `slider()`, `tooltips()`, `toast()` (with swipe to dismiss) and `init()`. The toast timer runs only while neither the pointer nor focus is in the stack, and a swiped toast exits through `[hidden]`. `tabs()` measures the selected tab into `--cn-tab-x` and `--cn-tab-w` for the sliding pill.
 
-**Lint.** Fails on palette text stops and bare accent hues in recipes, hand-mixed hairlines, `outline: none`, a SPEC type table that disagrees with the tokens, a token comment whose ratio is off, and any WCAG or APCA pairing under its floor, computed from the tokens in both contrast modes.
+**Lint.** Fails on palette text stops and bare accent hues in recipes, hand-mixed hairlines, `outline: none`, a SPEC type table that disagrees with the tokens, a token comment whose ratio is off, and any WCAG or APCA pairing under its floor, computed from the tokens in both contrast modes. It also fails on a box-shadow that is not a list of tokens, an off-scale radius, uppercase outside `.cn-microlabel`, a transform or box-shadow transition with no named curve, a transition keyword curve, `!important` outside its four allowed places, and `title=` or `overflow: hidden` in the showcase.
 
-**Showcase.** `test:a11y` applies the WCAG 1.4.12 text-spacing override on every route and fails on clipped text, and under forced colors checks the focus ring and saves a screenshot per route to `showcase/a11y-shots/forced-colors/`.
+**Showcase.** `test:a11y` applies the WCAG 1.4.12 text-spacing override on every route and fails on clipped text, under forced colors checks the focus ring and saves a screenshot per route to `showcase/a11y-shots/forced-colors/`, runs axe again under `prefers-contrast: more`, and under reduced motion fails on any transition or animation longer than 1ms apart from overlay fades and spinners. A Sparkline page. The depth specimens group at and below the ground, then off it. The dashboard's lead panel runs at cozy density with a short panel stacked under the tilted aside, the invoice's Details and Activity panels end near one line, the example ledes sit 24px under the display, and the colors page shows a seventh team on sapphire.
 
-**Docs.** An ornament budget (one job per ornament kind, the ramp and grain counted as one fill, five named composites) and dark-only stance in the ground rules, the inset rule narrowed to transparent carves, sanctioned slot names (`.command-copy`, `.sidebar-toggle`, `td.cell-select`, `.copy-glyph`, `.done-glyph`), the primary's place in forms and first-run screens, the physical light, icon guidance, and Accessibility, Behavior, Dashboard and Settings pages in the showcase.
+**Docs.** An ornament budget (one job per ornament kind, the ramp and grain counted as one fill, five named composites) and dark-only stance in the ground rules, the inset rule narrowed to transparent carves, sanctioned slot names (`.command-copy`, `.sidebar-toggle`, `td.cell-select`, `.copy-glyph`, `.done-glyph`), the primary's place in forms and first-run screens, the physical light, icon guidance, and Accessibility, Behavior, Dashboard and Settings pages in the showcase. The SPEC says why a tab rises and a segmented choice presses in, lists the selected tab among the resting heights, and says to even out a grid row by pairing or stacking panels, not by stretching one.
 
 ## 0.4.1
 

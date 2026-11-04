@@ -39,6 +39,7 @@ import Avatar from "./pages/avatar";
 import Stat from "./pages/stat";
 import KeyValue from "./pages/key-value";
 import BarChart from "./pages/bar-chart";
+import Sparkline from "./pages/sparkline";
 import Legend from "./pages/legend";
 import Table from "./pages/table";
 import Terminal from "./pages/terminal";
@@ -113,6 +114,7 @@ export const PAGES: NavEntry[] = [
   { path: "/stat", title: "Stat", group: "Containers & data", component: Stat },
   { path: "/key-value", title: "Key-value list", group: "Containers & data", component: KeyValue },
   { path: "/bar-chart", title: "Bar chart", group: "Containers & data", component: BarChart },
+  { path: "/sparkline", title: "Sparkline", group: "Containers & data", component: Sparkline },
   { path: "/legend", title: "Legend", group: "Containers & data", component: Legend },
   { path: "/table", title: "Table", group: "Containers & data", component: Table },
   { path: "/terminal", title: "Terminal", group: "Containers & data", component: Terminal },

@@ -39,9 +39,25 @@ function rove(e, items, axis) {
    aria-controls naming its [role="tabpanel"]. Arrows, Home and End move
    focus and select, so selection follows focus. Only the selected tab
    is in the tab order, and only its panel shows. Fires "cn-select" on
-   the tablist with the tab in event.detail. */
+   the tablist with the tab in event.detail. On a .tabs carve it also
+   measures the selected tab into --cn-tab-x and --cn-tab-w and sets
+   data-cn-indicator, so the raised pill slides to the new tab. */
 export function tabs(list) {
   const all = () => [...list.querySelectorAll('[role="tab"]')];
+  const pill = list.classList.contains("tabs");
+  const place = () => {
+    const tab = all().find((t) => t.getAttribute("aria-selected") === "true");
+    if (!tab) { list.removeAttribute("data-cn-indicator"); return; }
+    /* .tabs is positioned, so offsetLeft reads from its padding edge and
+       ignores scroll and transforms. Set before the attribute, so the
+       first pill lands without a slide. */
+    list.style.setProperty("--cn-tab-x", `${tab.offsetLeft}px`);
+    list.style.setProperty("--cn-tab-w", `${tab.offsetWidth}px`);
+    list.setAttribute("data-cn-indicator", "");
+  };
+  /* Fonts loading or a label changing moves the tabs, so the pill follows. */
+  const watch = pill && typeof ResizeObserver === "function" ? new ResizeObserver(place) : null;
+  if (watch) { watch.observe(list); all().forEach((t) => watch.observe(t)); }
   const select = (tab) => {
     for (const t of all()) {
       const on = t === tab;
@@ -50,6 +66,7 @@ export function tabs(list) {
       const panel = t.getAttribute("aria-controls") && document.getElementById(t.getAttribute("aria-controls"));
       if (panel) panel.hidden = !on;
     }
+    if (pill) place();
     list.dispatchEvent(new CustomEvent("cn-select", { detail: tab, bubbles: true }));
   };
   const current = all().find((t) => t.getAttribute("aria-selected") === "true") ?? all().find(ENABLED);
@@ -58,7 +75,16 @@ export function tabs(list) {
   const onClick = (e) => { const t = e.target.closest('[role="tab"]'); if (t && list.contains(t) && ENABLED(t)) select(t); };
   list.addEventListener("keydown", onKey);
   list.addEventListener("click", onClick);
-  return () => { list.removeEventListener("keydown", onKey); list.removeEventListener("click", onClick); };
+  return () => {
+    list.removeEventListener("keydown", onKey);
+    list.removeEventListener("click", onClick);
+    if (pill) {
+      watch?.disconnect();
+      list.removeAttribute("data-cn-indicator");
+      list.style.removeProperty("--cn-tab-x");
+      list.style.removeProperty("--cn-tab-w");
+    }
+  };
 }
 
 /* Menu button: a trigger with aria-haspopup="menu" and aria-controls

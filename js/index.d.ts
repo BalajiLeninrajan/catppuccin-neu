@@ -1,6 +1,6 @@
 /** Removes the listeners a wiring call added. */
 export type Cleanup = () => void;
-/** Roving tabs with selection that follows focus; toggles each tab's aria-controls panel. */
+/** Roving tabs with selection that follows focus; toggles each tab's aria-controls panel and, on a .tabs carve, slides the selected pill. */
 export function tabs(list: HTMLElement): Cleanup;
 /** Menu button: the trigger needs aria-haspopup="menu" and aria-controls naming a [role="menu"]. */
 export function menu(trigger: HTMLElement): Cleanup;

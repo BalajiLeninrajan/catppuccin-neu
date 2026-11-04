@@ -7,7 +7,7 @@ const LADDER = [
   { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base · 1.27:1", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
   { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "mantle 55% into base", use: "The sidebar." },
   { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", use: "Table heads, skeletons." },
-  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 38% into mantle", use: "Filled wells, the mono wells, stepper pills." },
+  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 38% into mantle", use: "Wells, the mono wells, stepper pills." },
 ];
 
 const ACTIVITY = [
@@ -178,9 +178,11 @@ export default function SurfacesPage() {
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
         surface-2 at 2.5:1 against a panel's 1.6:1, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a longer cast under
-        a bright overlay-0 top rim at 3.4:1. A cast barely shows on a dark
-        page, so the two edges carry the rank. It adds height, not an
-        ornament: no plate, tilt or color. Use one per view at most.
+        a bright overlay-0 top rim at 3.4:1. Its band title takes{" "}
+        <code class="cn-code-inline">--lead-title-size</code> at the heading
+        weight, 28px at default density where other panels use 20px. A cast barely shows on a
+        dark page, so the two edges and the title carry the rank. It adds
+        height and a larger title, not an ornament: no plate, tilt or color. Use one per view at most.
         The tilted aside comments on the data; the lead panel holds it.
       </p>
 
@@ -253,15 +255,13 @@ export default function SurfacesPage() {
       </p>
 
       <p class="cn-copy">
-        The well's ground is transparent; the carve defines it, with{" "}
-        <code class="cn-code-inline">--cn-well-lip</code>, a 1px solid surface-2
-        line, 2.5:1 on the page, on the bottom and right inner walls, so it
-        reads on the page without a border and stays softer than a field's
-        4.4:1 lip. Compose{" "}
-        <code class="cn-code-inline">.cn-bg-well</code> onto{" "}
-        <code class="cn-code-inline">.well</code> for the{" "}
+        The well takes the{" "}
         <code class="cn-code-inline">--cn-surface-sunken</code> fill the code
-        wells and stepper pills use.
+        wells and stepper pills use, so it sits below the ground and never
+        reads as an outlined panel. The carve and{" "}
+        <code class="cn-code-inline">--cn-well-lip</code>, a 1px solid surface-2
+        line, 2.5:1 on the page, on the bottom and right inner walls, finish
+        it without a border and stay softer than a field's 4.4:1 lip.
       </p>
 
       <Props
@@ -270,7 +270,7 @@ export default function SurfacesPage() {
           {
             name: ".panel",
             values: "raised container",
-            notes: "--cn-surface-raised fill (the page color), --neu-raised (contact, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
+            notes: "--cn-surface-raised fill (the page color), --neu-raised (contact, near shadow, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",
@@ -295,7 +295,7 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-lead",
             values: "one per view",
-            notes: "The panel the view is about. The page color inside the bright --edge-strong hairline, on --neu-lifted with its bright overlay-0 rim, so it outranks its neighbors by height. No ornament.",
+            notes: "The panel the view is about. The page color inside the bright --edge-strong hairline, on --neu-lifted with its bright overlay-0 rim, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height and by its title. No ornament.",
           },
           {
             name: ".panel.is-shell",
@@ -305,7 +305,7 @@ export default function SurfacesPage() {
           {
             name: ".well",
             values: "inset container",
-            notes: "No border, transparent ground; the full inner shadow and --cn-well-lip define it. The card radius (12px).",
+            notes: "No border, the --cn-surface-sunken fill; the full inner shadow and --cn-well-lip finish it. The card radius (12px).",
           },
           {
             name: ".scroll-well",

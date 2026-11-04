@@ -52,17 +52,23 @@ export default function TypographyPage() {
         sets at 20px for long prose.
       </p>
 
-      <Demo title="cn-display · 700 · clamp(36px, 4px + 4.2vw, 56px)/1.08 · -0.03em · balance" classes="cn-display">
+      <Demo title="cn-display · 700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.03em · balance" classes="cn-display">
         <h1 class="cn-display">
           Every team, <em>one dashboard</em>
         </h1>
       </Demo>
 
-      <Demo title="cn-display is-sm · 700 · clamp(30px, 8px + 3vw, 40px)/1.08 · -0.03em" classes="cn-display is-sm">
+      <Demo title="cn-display is-sm · 700 · clamp(30px, 14.72px + 2.94vw, 40px)/1.08 · -0.03em" classes="cn-display is-sm">
         <h1 class="cn-display is-sm">
           Invoices, <em>settled</em>
         </h1>
       </Demo>
+
+      <p class="cn-copy">
+        Both display sizes grow from 520px and reach their maximum at 860px,
+        the narrow page width. On desktop widths the ratio holds: display is
+        2x the 28px heading and display-sm 1.43x.
+      </p>
 
       <p class="cn-copy">
         An <code class="cn-code-inline">&lt;em&gt;</code> inside a display title or a
@@ -168,8 +174,11 @@ export default function TypographyPage() {
         <code class="cn-code-inline">h3</code> in a panel, modal or drawer
         header is the title role at{" "}
         <code class="cn-code-inline">--band-title-size</code> instead: 20px by
-        default and 14px at cozy and compact density. At 520px it steps
-        down to the body size, 16px, so a stat value still outweighs it. A class still sets
+        default and 14px at cozy and compact density. The lead panel's title
+        takes <code class="cn-code-inline">--lead-title-size</code> at the
+        heading weight: 28px at default and cozy, 20px at compact.
+        At 520px both step
+        down to the body size, 16px, so a stat value still outweighs them. A class still sets
         the size where the outline level and the look differ, as in{" "}
         <code class="cn-code-inline">&lt;h2 class="cn-title"&gt;</code> for
         the section titles on this site.
@@ -227,7 +236,7 @@ export default function TypographyPage() {
       <Props
         title="Role reference"
         rows={[
-          { name: ".cn-display", values: "sans", default: "700 · clamp(36px, 4px + 4.2vw, 56px)/1.08 · -0.03em", notes: "Hero headline; balanced. .is-sm is the page-title size. .display-title is the same type." },
+          { name: ".cn-display", values: "sans", default: "700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.03em", notes: "Hero headline; balanced. .is-sm is the page-title size. .display-title is the same type." },
           { name: ".cn-heading", values: "sans", default: "700 · 28px/1.25 · -0.025em", notes: "Top-level sections of a long page; balanced. Tailwind text-heading." },
           { name: ".cn-title", values: "sans", default: "600 · 20px/1.3 · -0.01em", notes: "Section and card headings. A bare h3 takes it, and so does a header band's h2 or h3 at --band-title-size." },
           { name: ".cn-name", values: "sans", default: "600 · 14px/1.25 · text", notes: "The ui role in --cn-fg. Its tokens alias the ui tokens; proper names are set apart by full-strength color." },

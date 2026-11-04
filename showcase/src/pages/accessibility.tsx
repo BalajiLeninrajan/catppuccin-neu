@@ -19,7 +19,7 @@ const CONTRAST: ContrastRow[] = [
   { role: "--cn-fg-body", palette: "subtext-1", swatch: "var(--cn-fg-body)", ratio: "9.3 · 7.3", apca: "68 · 65", use: "Running text." },
   { role: "--cn-fg-muted", palette: "subtext-0", swatch: "var(--cn-fg-muted)", ratio: "7.4 · 5.8", apca: "56 · 53", use: "Labels, meta, help, table heads. subtext-1 under prefers-contrast." },
   { role: "--cn-fg-placeholder", palette: "overlay-2", swatch: "var(--cn-fg-placeholder)", ratio: "5.8 · 4.6", apca: "46 · 42", use: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
-  { role: "--cn-fg-faint", palette: "overlay-1", swatch: "var(--cn-fg-faint)", ratio: "4.4 · 3.5", apca: "35 · 32", use: "Resting icons and the field lip. Not for text a reader needs." },
+  { role: "--cn-fg-faint", palette: "overlay-1", swatch: "var(--cn-fg-faint)", ratio: "4.4 · 3.5", apca: "35 · 32", use: "Decorative icons and the field lip. Not for text a reader needs." },
   { role: "--cn-fg-disabled", palette: "overlay-1", swatch: "var(--cn-fg-disabled)", ratio: "4.4 · 3.5", apca: "35 · 32", use: "Disabled field text and labels. Exempt from the text floor. overlay-2 under prefers-contrast." },
   { role: "--cn-interactive", palette: "mauve", swatch: "var(--cn-interactive)", ratio: "8.1 · 6.4", apca: "61 · 57", use: "Links, the primary, checked controls." },
   { role: "--cn-focus", palette: "text", swatch: "var(--cn-focus)", ratio: "11.3 · 9.0", apca: "80 · 77", use: "The focus ring. The one bright neutral no state uses." },
@@ -92,9 +92,9 @@ const WCAG: Array<[string, string, string, string]> = [
   ["2.1.1 Keyboard", "A", "Buttons, fields, details, dialog and range inputs work from the keyboard natively. Tabs and menus need the arrow-key model.", "JS module: tabs(), menu() and init(). axe checks that every docs scroller takes focus."],
   ["2.4.7 Focus visible", "AA", "Every focusable element draws a 2px --cn-focus ring, text, 3px off its edge. No recipe removes it.", "Lint fails on outline: none and computes the ring's contrast."],
   ["2.4.11 Focus not obscured (minimum)", "AA", "Not handled. A sticky topbar or folded sidebar can cover a focused element as the page scrolls.", "Manual. Set scroll-padding-top to the bar's height."],
-  ["2.5.8 Target size (minimum)", "AA", "The smallest control is 24px, the compact small control. A 20px checkbox, radio or the switch counts once wrapped in .choice, which makes the label row the target.", "Documented rule. Wrap choices in .choice. axe checks target size on every docs page."],
+  ["2.5.8 Target size (minimum)", "AA", "The smallest control is the compact small control, max(24px, 1.625rem): 26px at the default size and never under 24px. A 20px checkbox, radio or the switch counts once wrapped in .choice, which makes the label row the target.", "Documented rule. Wrap choices in .choice. axe checks target size on every docs page."],
   ["2.5.5 Target size (enhanced)", "AAA", "Under pointer: coarse every control is 44px or taller at every density.", "Documented rule."],
-  ["2.3.3 Animation from interactions", "AAA", "Under reduced motion presses, slides and the page entrance land at once and overlays fade in place. Spinners keep a slow turn.", "Documented rule. Check with the OS setting by hand."],
+  ["2.3.3 Animation from interactions", "AAA", "Under reduced motion presses, slides and the page entrance land at once and overlays fade in place. Spinners keep a slow turn.", "The browser check reloads every docs page under reduced motion and fails on any transition or animation longer than 1ms, overlay fades and spinners excepted."],
 ];
 
 function Swatch({ color }: { color: string }) {
@@ -400,8 +400,11 @@ export default function AccessibilityPage() {
         full-page screenshot to{" "}
         <code class="cn-code-inline">showcase/a11y-shots/forced-colors/</code>{" "}
         for a person to review, and fails if the first focused control does
-        not ring in Highlight. Last, it reloads the page 390px wide and fails
-        if it scrolls sideways. Any
+        not ring in Highlight. It reloads the page under prefers-contrast:
+        more and runs axe again, then under reduced motion and fails on any
+        transition or animation longer than 1ms. Overlay fades and spinners
+        are exempt. Last, it reloads the page 390px wide and fails if it
+        scrolls sideways. Any
         violation fails the run. Text that axe cannot measure, such as a link
         partly below the fold or text over a gradient, is listed as needing
         review and does not fail it.
@@ -409,10 +412,9 @@ export default function AccessibilityPage() {
 
       <p class="cn-copy">
         It checks each page as it loads. Menus, dialogs, drawers, toasts and
-        tooltips stay closed, and hover and focus states are not drawn. It
-        does not emulate prefers-contrast or reduced motion, and a forced
-        colors screenshot is a record for review, not a pass or fail beyond
-        the focus ring.
+        tooltips stay closed, and hover and focus states are not drawn. A
+        forced colors screenshot is a record for review, not a pass or fail
+        beyond the focus ring.
         No one has tested the docs or the package with a screen reader, and
         axe finds only part of what WCAG asks. It checks these docs, not
         your markup.

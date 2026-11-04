@@ -51,7 +51,7 @@ const GROUNDS = [
 
 const NEUTRAL_TEXT = [
   { name: "overlay-0", hex: "#6c7086", note: "The lead panel's bright top rim in --neu-lifted, 3.4:1 on base, and --edge-strong under prefers-contrast: more. Not for text." },
-  { name: "overlay-1", hex: "#7f849c", note: "The field lip, unchecked control edges, the slider thumb edge, disabled text, resting icons and list markers. Not for readable text." },
+  { name: "overlay-1", hex: "#7f849c", note: "The field lip, unchecked control edges, the slider thumb edge, disabled text, decorative icons and list markers. Not for readable text." },
   { name: "overlay-2", hex: "#9399b2", note: "Placeholders, --cn-fg-placeholder. The faintest readable text." },
   { name: "subtext-0", hex: "#a6adc8", note: "Labels, meta, help and table heads, --cn-fg-muted." },
   { name: "subtext-1", hex: "#bac2de", note: "Body copy, ledes, table cells and code." },
@@ -218,7 +218,7 @@ export default function ColorsPage() {
           { name: "--cn-fg-body", values: "subtext-1", notes: "Running text: body, .cn-copy, .cn-prose. text under prefers-contrast." },
           { name: "--cn-fg-muted", values: "subtext-0", notes: "Labels, meta, help, table heads. subtext-1 under prefers-contrast." },
           { name: "--cn-fg-placeholder", values: "overlay-2", notes: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
-          { name: "--cn-fg-faint", values: "overlay-1", notes: "Resting icons and the field lip. overlay-2 under prefers-contrast." },
+          { name: "--cn-fg-faint", values: "overlay-1", notes: "Decorative icons and the field lip. Icon buttons rest in --cn-fg-muted. overlay-2 under prefers-contrast." },
           { name: "--cn-fg-disabled", values: "overlay-1", notes: "Disabled text, 4.4:1 on base. --control-edge, the unchecked edge and slider thumb edge, is overlay-1 too. Both move to overlay-2 under prefers-contrast." },
           { name: "--cn-fg-on-accent", values: "crust", notes: "Text and glyphs on a solid accent fill: 9.2:1 on mauve." },
           { name: "--cn-interactive", values: "mauve", notes: "Links, the primary, checked controls." },
@@ -357,11 +357,14 @@ export default function ColorsPage() {
         set it inline wherever the record renders. It never comes from list
         position, so sorting or filtering never recolors an item. The six
         accents are the six data series below: mauve, yellow, teal, peach,
-        blue and pink.
+        blue and pink. A seventh record takes one of the six identity hues
+        (rosewater, flamingo, maroon, sky, sapphire or lavender), which
+        never mean status or interaction. Here Billing takes sapphire, which
+        sits beside peach and away from blue, its cool pair.
       </p>
 
-      <Demo title="Six accents, one per team" classes='style="--accent:#94e2d5"  (from the record)' row>
-        {TEAMS.map((team) => (
+      <Demo title="Six accents, one per team, and a seventh team on an identity hue" classes='style="--accent:#94e2d5"  (from the record)' row>
+        {[...TEAMS, { name: "Billing", accent: "sapphire" as const }].map((team) => (
           <div
             key={team.name}
             class="cn-stack cn-gap-8"
@@ -636,7 +639,7 @@ export default function ColorsPage() {
         <code class="cn-code-inline">.cn-text-*</code> utilities, brightest to
         faintest. Readable text stops at overlay-2, the placeholder color,
         5.8:1 on base. Labels and meta sit a stop above it on subtext-0.
-        overlay-1, 4.4:1 on base, is for icons, the field lip, control edges
+        overlay-1, 4.4:1 on base, is for decorative icons, the field lip, control edges
         and disabled text, because it falls under 4.5:1. No recipe reads
         overlay-0. Palette hues get the same treatment, like{" "}
         <code class="cn-code-inline">.cn-text-mauve</code>, plus{" "}
@@ -732,7 +735,7 @@ export default function ColorsPage() {
           { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "mantle 55% into base. The sidebar fill." },
           { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 40% over the ground, 1.24:1 on base. The ghost hover as a fill." },
           { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 30% over transparent, one step under its parent. Table heads and skeletons." },
-          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust 38% into mantle. Explicit well fill; compose onto .well." },
+          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust 38% into mantle. The well fill; .well already carries it." },
           { name: ".cn-bg-mantle", values: "var(--mantle)", notes: "Raw mantle." },
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill." },
           { name: ".cn-tint", values: "tone 4% into transparent", notes: "Semantic wash; pair with .cn-tone-*. Every tinted surface uses this one strength." },

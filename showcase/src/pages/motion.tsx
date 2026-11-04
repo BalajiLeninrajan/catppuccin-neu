@@ -23,19 +23,16 @@ const tokensSnippet = `:root {
 const viewTransitionSnippet = `/* your stylesheet: opt in to cross-document route changes */
 @view-transition { navigation: auto; }
 
-/* optional: shared elements morph instead of cross-fading */
-.panel.is-lead { view-transition-name: lead; }
-.btn-primary   { view-transition-name: primary; }
-::view-transition-group(lead), ::view-transition-group(primary) {
-  animation-duration: var(--t-base);
-  animation-timing-function: var(--ease-out);
-}
-
-/* the package already times the root cross-fade (tokens.css) */
+/* the package already times the root cross-fade and the cn-morph
+   groups (tokens.css), and cuts both under reduced motion */
 ::view-transition-old(root), ::view-transition-new(root) {
   animation-duration: var(--t-base);
   animation-timing-function: var(--ease-out);
 }`;
+
+const morphSnippet = `<!-- the same two names on every route: they morph instead of cross-fading -->
+<section class="panel is-lead cn-morph">…</section>
+<button class="btn btn-primary cn-morph">New invoice</button>`;
 
 const keyframesSnippet = `@keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
 @keyframes spin  { to { transform: rotate(360deg); } }
@@ -54,6 +51,9 @@ const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
     transition-delay: 0s !important;
   }
   :is(.popover, .toast, dialog.modal, dialog.drawer), [data-tip]::after { transition-duration: var(--t-fast) !important; }
+  /* The universal selector does not reach view-transition pseudo-elements,
+     so route cross-fades and morphs are cut here by name. */
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01ms !important; animation-delay: 0s !important; }
   /* A frozen spinner reads as a broken ring, so it keeps a slow spin, and
      a busy button keeps its spinner turning. */
   .spinner, .btn[aria-busy="true"]::after {
@@ -381,24 +381,32 @@ document.startViewTransition(() => showBanner());`}
       <p class="cn-copy">
         A multi-page site can opt in to a cross-fade between pages with{" "}
         <code class="cn-code-inline">@view-transition {"{ navigation: auto; }"}</code>{" "}
-        in its own CSS. The package does not opt in for you. It only times
-        the root cross-fade: <code class="cn-code-inline">--t-base</code> on{" "}
+        in its own CSS. The package does not opt in for you. It times the
+        root cross-fade and the <code class="cn-code-inline">.cn-morph</code>{" "}
+        groups, both at <code class="cn-code-inline">--t-base</code> on{" "}
         <code class="cn-code-inline">--ease-out</code>. Under reduced motion
-        the animation runs in .01ms, so the page swaps at once. A single-page
+        every view-transition animation runs in .01ms, so the page swaps at
+        once. The reduced-motion block names the view-transition
+        pseudo-elements, because the universal selector does not reach them. A single-page
         app like this site changes routes in script and does not use it.
       </p>
 
       <p class="cn-copy">
-        A consumer may also name what both pages share. Give the lead panel
-        and the page's primary the same{" "}
-        <code class="cn-code-inline">view-transition-name</code> on every
-        route, and they morph from one page to the next instead of
-        cross-fading, on the same <code class="cn-code-inline">--t-base</code>{" "}
-        and ease-out. The package ships the root cross-fade only, because
-        only the consumer knows which elements match across its routes.
+        A consumer may also morph what both pages share. Add{" "}
+        <code class="cn-code-inline">.cn-morph</code> to the lead panel and to
+        the page's one primary on every route. It names them{" "}
+        <code class="cn-code-inline">cn-lead</code> and{" "}
+        <code class="cn-code-inline">cn-primary</code>, so they morph from one
+        page to the next instead of cross-fading, on the same{" "}
+        <code class="cn-code-inline">--t-base</code> and ease-out. It is a
+        class, not a rule on every primary: two elements with one{" "}
+        <code class="cn-code-inline">view-transition-name</code> abort the
+        whole transition, so put it on one primary per page.
       </p>
 
       <CodeBlock title="Opting in" code={viewTransitionSnippet} />
+
+      <CodeBlock title="Morphing the lead and the primary" code={morphSnippet} />
 
       <h2 class="cn-label">Reduced motion</h2>
 

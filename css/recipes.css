@@ -27,8 +27,10 @@
 /* The lead panel: the one a view is about, one per view. It sits on the
    page color like every panel and stands higher by its edges: the bright
    --edge-strong hairline, and --neu-lifted's bright top rim over a longer
-   cast. A cast barely shows on a dark page, so the edges carry the rank.
-   It outranks its neighbors by height, not by an ornament. */
+   cast. Its band title takes --lead-title-size at the heading weight (see
+   the panel-header rule below). A cast barely shows on a dark page, so the
+   edges and the title carry the rank. It outranks its neighbors by height
+   and by its title, not by an ornament. */
 .panel.is-lead {
   border-color: var(--edge-strong);
   box-shadow: var(--neu-lifted);
@@ -42,7 +44,7 @@
      tail. */
   align-self: start;
   transform: rotate(1.2deg);
-  box-shadow: 10px 10px 0 var(--plate, var(--crust)), var(--neu-raised);
+  box-shadow: var(--cn-plate-lg), var(--neu-raised);
 }
 
 /* Bands: the panel header and footer, and the modal and drawer headers.
@@ -72,6 +74,15 @@
   margin: 0;
   font: var(--cn-type-title-weight) var(--band-title-size)/var(--cn-type-title-leading) var(--sans);
   letter-spacing: var(--cn-type-title-tracking);
+}
+/* The lead panel's band title is a step larger and at the heading weight,
+   so its rank reads from the title as well as the edges. --lead-title-size
+   is the heading size at default and cozy density and the title size at
+   compact. */
+.panel.is-lead > .panel-header :is(h2, h3) {
+  font-size: var(--lead-title-size);
+  font-weight: var(--cn-type-heading-weight);
+  letter-spacing: var(--cn-type-heading-tracking);
 }
 /* A band holding a .band-actions cluster wraps when the actions outgrow
    the row; the cluster holds to the right and wraps inside itself. Other
@@ -110,12 +121,12 @@
 .panel > .ranked-row:only-child { border-radius: calc(var(--cn-radius-panel) - 1px); }
 
 /* Well: an inset container for grouped controls or scrolling content.
-   Borderless: the inset depth defines the surface. */
-/* Carved from the parent surface: transparent ground, depth alone. Compose
-   cn-bg-well when an explicit darker fill is wanted. */
+   Borderless: the carve and the sunken fill define it. A shadow alone
+   tops out near 1.28:1 on a dark page, so a transparent well read as an
+   outlined panel; the darker fill puts it below the ground. */
 .well {
   border-radius: var(--cn-radius-card);
-  background: transparent;
+  background: var(--cn-surface-sunken);
   box-shadow: var(--neu-inset), var(--cn-well-lip);
 }
 /* A scrolling well hints at its overflow: the bottom edge of the well
@@ -284,14 +295,14 @@
    chip repeats it after its own recipe. */
 :is(.btn-primary, .btn-secondary, .segmented > *, .accent-card) {
   --hard-extra: var(--cn-lit-edge);
-  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--hard-extra);
+  box-shadow: var(--cn-plate), var(--hard-extra);
 }
 :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:disabled, [aria-disabled="true"]),
 a:hover > .accent-card { transform: translate(-1px, -1px); }
 :is(.btn-primary, .btn-secondary, .segmented > *):active:not(:disabled, [aria-disabled="true"]),
 a:active > .accent-card {
   transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--crust)), var(--hard-extra);
+  box-shadow: var(--cn-plate-half), var(--hard-extra);
   transition-timing-function: var(--ease-out);
   transition-duration: var(--t-press);
 }
@@ -302,7 +313,7 @@ a:active > .accent-card {
 .btn-primary {
   --cn-fill: var(--cn-interactive);
   --plate: color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), var(--surface-0));
-  --hard-extra: inset 0 1px rgb(255 255 255 / .3), inset 0 -2px color-mix(in srgb, var(--crust) 22%, transparent);
+  --hard-extra: var(--cn-primary-rim);
   color: var(--cn-fg-on-accent);
   border: 1px solid transparent;
   background-color: var(--cn-fill);
@@ -311,16 +322,17 @@ a:active > .accent-card {
 }
 .btn-primary:hover:not(:disabled, [aria-disabled="true"]) { --cn-fill: var(--cn-interactive-hover); }
 /* Disabled primary goes flat and sinks: no plate, ramp, grain or gloss,
-   the sunken fill inside a plain --edge, the disabled text color, and no
-   dimming, the same vocabulary as a disabled switch. A dimmed plate reads
-   as a second primary beside the live one. A busy primary keeps its fill. */
+   the sunken fill pressed in by the soft carve inside a plain --edge, the
+   disabled text color, and no dimming, the same vocabulary as a disabled
+   switch. A dimmed plate reads as a second primary beside the live one.
+   A busy primary keeps its fill. */
 .btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
   --cn-fill: var(--cn-surface-sunken);
   --hard-extra: none;
   color: var(--cn-fg-disabled);
   border: 1px solid var(--edge);
   background-image: none;
-  box-shadow: none;
+  box-shadow: var(--neu-inset-soft);
   opacity: 1;
 }
 .btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"])::before { opacity: 0; }
@@ -405,7 +417,7 @@ a:active > .accent-card {
   height: var(--control-h-sm);
   min-height: var(--control-h-sm);
   padding: 0;
-  color: var(--cn-fg-faint);
+  color: var(--cn-fg-muted);
 }
 .btn.is-icon:hover:not(:disabled, [aria-disabled="true"]) {
   color: var(--tone);
@@ -522,7 +534,7 @@ a:active > .accent-card {
 :is(.field:has([aria-invalid="true"]), .field.is-warning) :is(input, select, textarea),
 .input:is([aria-invalid="true"], .is-warning) {
   background: var(--tint);
-  box-shadow: var(--neu-inset), inset 0 0 0 1px var(--tone);
+  box-shadow: var(--neu-inset), var(--cn-validation-ring);
 }
 :is(.field:has([aria-invalid="true"]), .field.is-warning) small { color: var(--cn-fg-body); }
 .field:has([aria-invalid="true"]) { --cn-glyph: var(--cn-glyph-danger); }
@@ -552,7 +564,7 @@ a:active > .accent-card {
 :is(.input, .field :is(input, textarea))[readonly] {
   color: var(--cn-fg-soft);
   background: transparent;
-  box-shadow: inset 0 -1px 0 var(--edge);
+  box-shadow: var(--cn-readonly-rule);
   border-radius: 0;
   cursor: default;
 }
@@ -793,11 +805,11 @@ a:active > .accent-card {
 }
 .chip > svg { width: 14px; height: 14px; flex: 0 0 auto; }
 :is(a, button).chip { text-decoration: none; cursor: pointer; transition: color var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast) var(--ease-spring), transform var(--t-fast) var(--ease-spring); }
-:is(a, button).chip { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--cn-lit-edge); }
+:is(a, button).chip { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
 :is(a, button).chip:hover { color: var(--cn-fg); border-color: var(--control-edge); transform: translate(-1px, -1px); }
 :is(a, button).chip:active {
   transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--crust)), var(--cn-lit-edge);
+  box-shadow: var(--cn-plate-half), var(--cn-lit-edge);
   transition-timing-function: var(--ease-out);
   transition-duration: var(--t-press);
 }
@@ -905,7 +917,7 @@ a:active > .accent-card {
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
   background-origin: border-box;
-  box-shadow: var(--neu-inset-soft), inset 0 1px rgb(255 255 255 / .16);
+  box-shadow: var(--neu-inset-soft), var(--cn-gloss-inset);
 }
 .checkbox:checked::after { opacity: 1; transform: none; }
 /* Indeterminate, for a parent row whose children are partly checked: the
@@ -917,7 +929,7 @@ a:active > .accent-card {
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
   background-origin: border-box;
-  box-shadow: var(--neu-inset-soft), inset 0 1px rgb(255 255 255 / .16);
+  box-shadow: var(--neu-inset-soft), var(--cn-gloss-inset);
 }
 .checkbox:indeterminate::after {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");
@@ -956,7 +968,7 @@ a:active > .accent-card {
   border-radius: 50%;
   background: var(--cn-interactive);
   /* Halo ring at --cn-step-fill, the same composite as the .live-dot. */
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cn-interactive) var(--cn-step-fill), transparent);
+  box-shadow: var(--cn-halo-ring);
   opacity: 0;
   transform: scale(.5);
   transition: opacity var(--t-fast), transform var(--t-fast) var(--ease-out);
@@ -976,7 +988,7 @@ a:active > .accent-card {
   border-radius: var(--cn-radius-control);
   background: transparent;
   /* The inset ring is the plate's 3:1 edge. */
-  box-shadow: var(--neu-inset), inset 0 0 0 1px var(--control-edge);
+  box-shadow: var(--neu-inset), var(--cn-switch-ring);
   cursor: pointer;
   transition: box-shadow var(--t-base) var(--ease-out);
 }
@@ -1007,15 +1019,13 @@ a:active > .accent-card {
   background-size: 2px 8px, auto;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: 0 0 6px color-mix(in srgb, var(--cn-interactive) var(--cn-step-fill), transparent),
-              inset 0 1px rgb(255 255 255 / .16);
+  box-shadow: var(--cn-switch-glow), var(--cn-gloss-inset);
   transform: perspective(120px) rotateY(-16deg);
 }
 .switch:active:not(:disabled, [aria-disabled="true"])::after { transform: perspective(120px) rotateY(0deg) scale(.96); }
 /* Held while on, the glow blooms for the frame the paddle is pressed. */
 .switch:checked:active:not(:disabled, [aria-disabled="true"])::after {
-  box-shadow: 0 0 12px color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), transparent),
-              inset 0 1px rgb(255 255 255 / .16);
+  box-shadow: var(--cn-switch-glow-held), var(--cn-gloss-inset);
 }
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
@@ -1023,7 +1033,7 @@ a:active > .accent-card {
    and no raise, and plate and paddle drop to the soft --edge, so it never
    reads as an off switch you could flip. Disabled boxes take --edge too. */
 .switch:disabled::after { transform: none; box-shadow: none; border-color: var(--edge); }
-.switch:disabled { box-shadow: var(--neu-inset-soft), inset 0 0 0 1px var(--edge); }
+.switch:disabled { box-shadow: var(--neu-inset-soft), var(--cn-disabled-ring); }
 :is(.checkbox, .radio):disabled { border-color: var(--edge); }
 
 /* ── Accordion: a disclosure row ────────────────────────────────────────────
@@ -1195,7 +1205,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
 .avatar-stack { display: inline-flex; }
 /* The ring matches the surface behind the stack; set --ring-ground when the
    stack sits on a panel or mantle band. */
-.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), 0 0 0 2px var(--ring-ground, var(--base)); }
+.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), var(--cn-ground-ring); }
 .avatar-stack .avatar + .avatar { margin-inline-start: calc(-1 * var(--space-2)); }
 
 /* ── Code block: a carved snippet well ──────────────────────────────────── */
@@ -1318,7 +1328,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
    the bare-link 4px. */
 a:has(> .accent-card) { border-radius: var(--cn-radius-card); color: inherit; text-decoration: none; }
 a:hover:not(:active) > .accent-card {
-  box-shadow: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate), var(--hard-extra);
+  box-shadow: var(--cn-plate-hover), var(--hard-extra);
 }
 
 /* ── Data display ───────────────────────────────────────────────────────── */
@@ -1476,7 +1486,7 @@ a:hover:not(:active) > .accent-card {
   top: 0;
   z-index: 1;
   border-bottom: 0;
-  box-shadow: inset 0 -1px var(--surface-0);
+  box-shadow: var(--cn-sticky-rule);
 }
 
 /* The row press: a dark top edge and a lit bottom edge drawn as a vertical
@@ -1556,6 +1566,34 @@ a:hover:not(:active) > .accent-card {
   background: var(--series, var(--accent));
   transition: inline-size calc(var(--t-slow) * 2) var(--ease-out);
 }
+
+/* Sparkline: one measure over time, drawn as a line beside its value.
+     <span class="sparkline" style="--series: var(--cn-series-1)">
+       <svg viewBox="0 0 96 24" aria-hidden="true"><polyline points="…"/><circle cx="96" cy="6" r="2.5"/></svg>
+       <span>$74.5k</span>
+     </span>
+   The line is a 2px stroke in --series (or --accent) with round caps and
+   joins; an optional circle marks the latest point. The value sits beside
+   it as text, so the mark is never keyed by color alone. The svg keeps a
+   fixed 96x24 box, and the stroke does not scale with it. */
+.sparkline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--cn-fg-soft);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+.sparkline > svg { width: 96px; height: 24px; flex: 0 0 auto; overflow: visible; }
+.sparkline > svg :is(polyline, path) {
+  fill: none;
+  stroke: var(--series, var(--accent));
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.sparkline > svg circle { fill: var(--series, var(--accent)); }
 
 /* Legend: a chart key. Each item's swatch takes its --series, or the
    record's --accent; the label is sentence case at the meta size.
@@ -2012,6 +2050,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
      outweighs the title above it. Cozy and compact titles are already
      smaller. */
   :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
+  .panel.is-lead > .panel-header :is(h2, h3) { font-size: min(var(--lead-title-size), var(--cn-type-body-size)); }
   .accordion-stack { padding: var(--space-2) var(--space-3); }
   /* Label meta wraps under the title; the chevron stays on the title line. */
   .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
@@ -2035,6 +2074,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .stat strong { font-size: var(--cn-type-lede-size); }
   .stat.is-lg strong { font-size: var(--cn-type-value-size); }
   :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
+  .panel.is-lead > .panel-header :is(h2, h3) { font-size: min(var(--lead-title-size), var(--cn-type-body-size)); }
   .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
   .accordion > :is(label, summary) > .cn-meta { order: 1; flex-basis: 100%; }
   .kv { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
@@ -2056,7 +2096,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:active, .active, [aria-pressed="true"], [aria-checked="true"]),
   :is(a, button).chip:hover:not(:active),
   a:hover:not(:active) > .accent-card { transform: none; }
-  a:hover:not(:active) > .accent-card { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--hard-extra); }
+  a:hover:not(:active) > .accent-card { box-shadow: var(--cn-plate), var(--hard-extra); }
 }
 
 /* ── Tabs: views of one panel ────────────────────────────────────────────────
@@ -2069,6 +2109,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
    presses in. Arrow keys move between tabs (a consumer listener; roving
    tabindex, the selected tab is the only one in the tab order).        */
 .tabs {
+  position: relative;
   max-width: 100%;
   padding: var(--space-1);
   display: inline-flex;
@@ -2101,6 +2142,29 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   background: var(--cn-surface-raised);
   box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
 }
+/* With tabs() wired, the selected tab's raised fill moves as one pill.
+   tabs() measures the selected tab into --cn-tab-x and --cn-tab-w and sets
+   data-cn-indicator; the pill slides over --t-fast on the ease-out, since
+   a moved selection answers the pointer, and lands at once under reduced
+   motion. Without the script each tab draws its own fill, as above. */
+.tabs[data-cn-indicator] { isolation: isolate; }
+.tabs[data-cn-indicator]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: var(--space-1);
+  bottom: var(--space-1);
+  left: 0;
+  width: var(--cn-tab-w, 0);
+  translate: var(--cn-tab-x, 0) 0;
+  border: 1px solid var(--engaged-edge);
+  border-radius: var(--cn-radius-control);
+  background: var(--cn-surface-raised);
+  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
+  pointer-events: none;
+  transition: translate var(--t-fast) var(--ease-out), width var(--t-fast) var(--ease-out);
+}
+.tabs[data-cn-indicator] > [role="tab"][aria-selected="true"] { border-color: transparent; background: transparent; box-shadow: none; }
 .tabs > [role="tab"] > svg { width: 16px; height: 16px; flex: 0 0 auto; }
 .tabs > [role="tab"]:disabled { opacity: var(--disabled-opacity); cursor: not-allowed; }
 
@@ -2413,6 +2477,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 .live-dot {
   width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
   color: var(--cn-success); background: currentColor;
-  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor var(--cn-step-fill), transparent);
+  box-shadow: var(--cn-live-halo);
   animation: pulse 1.5s var(--ease-out) infinite;
 }

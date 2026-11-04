@@ -9,8 +9,11 @@
    1.4.12 text-spacing overrides and fails on any element that clips its
    text, reloads the route under forced colors, saves a full-page
    screenshot to a11y-shots/forced-colors/ for review and checks that a
-   focused control rings in Highlight, and finally reloads at 390px wide
-   and fails if the page scrolls sideways. Uses the system Chromium;
+   focused control rings in Highlight. It reloads under prefers-contrast:
+   more and runs axe again, then under prefers-reduced-motion: reduce and
+   fails on any transition or animation longer than 1ms, apart from the
+   overlay fades and spinners the SPEC keeps. Finally it reloads at 390px
+   wide and fails if the page scrolls sideways. Uses the system Chromium;
    puppeteer-core never downloads a browser. Exits 1 on any violation that
    ALLOW does not list.                                                     */
 
@@ -185,6 +188,39 @@ function clippedText(page) {
   });
 }
 
+/* Under reduced motion every transition and animation lands at once.
+   The SPEC keeps three exceptions: overlays fade in place over --t-fast,
+   and a spinner or a busy button's spinner keeps turning. Returns the
+   elements that still move, with their longest duration. */
+function motionLeft(page) {
+  return page.evaluate(() => {
+    const ms = (list) => Math.max(0, ...list.split(",").map((v) => (v.trim().endsWith("ms") ? parseFloat(v) : parseFloat(v) * 1000)));
+    const keepsFade = (el, pseudo) =>
+      (!pseudo && el.matches(".popover, .toast, dialog.modal, dialog.drawer")) || (pseudo === "::after" && el.matches("[data-tip]"));
+    const keepsSpin = (el, pseudo) => (!pseudo && el.matches(".spinner")) || (pseudo === "::after" && el.matches('.btn[aria-busy="true"]'));
+    const path = (el) => {
+      const parts = [];
+      for (let e = el; e && e !== document.body && parts.length < 4; e = e.parentElement) {
+        const cls = [...e.classList].slice(0, 2).map((c) => `.${c}`).join("");
+        parts.unshift(e.tagName.toLowerCase() + (e.id ? `#${e.id}` : "") + cls);
+      }
+      return parts.join(" > ");
+    };
+    const out = [];
+    for (const el of document.body.querySelectorAll("*")) {
+      for (const pseudo of [null, "::before", "::after"]) {
+        const cs = getComputedStyle(el, pseudo);
+        if (pseudo && cs.content === "none") continue;
+        const t = ms(cs.transitionDuration) + ms(cs.transitionDelay);
+        const a = cs.animationName === "none" ? 0 : ms(cs.animationDuration) + ms(cs.animationDelay);
+        const longest = Math.max(keepsFade(el, pseudo) ? 0 : t, keepsSpin(el, pseudo) ? 0 : a);
+        if (longest > 1) out.push(`${path(el)}${pseudo ?? ""} (${longest}ms)`);
+      }
+    }
+    return out.slice(0, 8);
+  });
+}
+
 /* Under forced colors the focus ring must be Highlight. Tab to the first
    focusable control and compare its outline with a Highlight probe. */
 function focusRing(page) {
@@ -236,22 +272,26 @@ async function main() {
           for (const nd of v.nodes)
             notes.push(`  review ${v.id}: ${nd.target.join(" ")}\n    ${[...nd.any, ...nd.all, ...nd.none][0]?.message ?? ""}`);
       }
-      for (const v of violations) {
-        const nodes = v.nodes.filter((n) => {
-          const target = n.target.join(" ");
-          if (allowed(route, v.id, target)) return skipped++, false;
-          return true;
-        });
-        if (!nodes.length) continue;
-        failures += nodes.length;
-        lines.push(`  ${v.id} (${v.impact}) ${v.help}`);
-        for (const n of nodes.slice(0, 8)) {
-          lines.push(`    ${n.target.join(" ")}`);
-          const why = n.failureSummary?.split("\n").slice(1, 2).join(" ").trim();
-          if (why) lines.push(`      ${why}`);
+      /* Counts each violation node that ALLOW does not list. */
+      const report = (found, mode = "") => {
+        for (const v of found) {
+          const nodes = v.nodes.filter((n) => {
+            const target = n.target.join(" ");
+            if (allowed(route, v.id, target)) return skipped++, false;
+            return true;
+          });
+          if (!nodes.length) continue;
+          failures += nodes.length;
+          lines.push(`  ${mode}${v.id} (${v.impact}) ${v.help}`);
+          for (const n of nodes.slice(0, 8)) {
+            lines.push(`    ${n.target.join(" ")}`);
+            const why = n.failureSummary?.split("\n").slice(1, 2).join(" ").trim();
+            if (why) lines.push(`      ${why}`);
+          }
+          if (nodes.length > 8) lines.push(`    and ${nodes.length - 8} more`);
         }
-        if (nodes.length > 8) lines.push(`    and ${nodes.length - 8} more`);
-      }
+      };
+      report(violations);
 
       await page.addStyleTag({ content: TEXT_SPACING });
       await new Promise((r) => setTimeout(r, 50));
@@ -272,6 +312,18 @@ async function main() {
       if (ring) {
         failures++;
         lines.push(`  forced colors: ${ring}`);
+      }
+      await page.emulateMediaFeatures([{ name: "prefers-contrast", value: "more" }]);
+      await open(page, url + route);
+      report((await runAxe(page)).violations, "prefers-contrast: more: ");
+
+      await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
+      await open(page, url + route);
+      const moving = await motionLeft(page);
+      if (moving.length) {
+        failures += moving.length;
+        lines.push(`  reduced motion still moves:`);
+        for (const m of moving) lines.push(`    ${m}`);
       }
       await page.emulateMediaFeatures([]);
 
@@ -304,7 +356,7 @@ async function main() {
     console.log(`\n${failures} problem(s) across ${count} routes${note}.`);
     process.exit(1);
   }
-  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}), keep their text under 1.4.12 spacing, ring in Highlight under forced colors and fit 390px${note}.`);
+  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion and fit 390px${note}.`);
   console.log(`Forced-colors screenshots for review: ${shots}`);
 }
 

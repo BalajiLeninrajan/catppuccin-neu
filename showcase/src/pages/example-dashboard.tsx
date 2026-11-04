@@ -2,8 +2,10 @@
    A composed screen built only from package classes, no sc- chrome. It
    follows the SPEC's Composition section: regions 48px apart, in reading
    order. The title and its one primary, the key figures ruled on the page
-   ground, the invoice table as the lead panel, then the chart and the one
-   tilted aside on the page grid, the chart first.                        */
+   ground, the invoice table as the lead panel at cozy density, then the
+   chart and the one tilted aside on the page grid, the chart first. A
+   short panel stacks under the aside so the two columns end near the
+   same line.                                                             */
 
 import { useState } from "preact/hooks";
 import type { JSX } from "preact";
@@ -102,7 +104,7 @@ function InvoiceTable() {
   }
 
   return (
-    <section class="panel is-lead" aria-labelledby="dash-invoices">
+    <section class="panel is-lead" data-density="cozy" aria-labelledby="dash-invoices">
       <div class="panel-header">
         <h2 id="dash-invoices">Invoices</h2>
         <div class="band-actions">
@@ -183,7 +185,7 @@ export default function DashboardExample() {
           <h1 class="cn-display is-sm">
             Billing, <em>September</em>
           </h1>
-          <p class="cn-lede cn-m-0">
+          <p class="cn-lede cn-m-0 cn-mt-12">
             {INVOICES.length} invoices from the last six weeks, across 6 teams.
             Collections settle nightly at 02:00 UTC, so these figures are from
             this morning's run.
@@ -255,7 +257,8 @@ export default function DashboardExample() {
             </div>
           </figure>
         </section>
-        <aside class="panel is-tilted cn-span-5" aria-labelledby="dash-summary">
+        <div class="cn-stack cn-gap-24 cn-span-5">
+        <aside class="panel is-tilted" aria-labelledby="dash-summary">
           <div class="panel-body cn-stack cn-gap-12">
             <h2 id="dash-summary" class="cn-title cn-m-0">Where September stands</h2>
             <p class="cn-copy cn-m-0">Ahead of August, mostly on card.</p>
@@ -278,6 +281,22 @@ export default function DashboardExample() {
             </a>
           </div>
         </aside>
+        <section class="panel" aria-labelledby="dash-refunds">
+          <div class="panel-body cn-stack cn-gap-16">
+            <h2 id="dash-refunds" class="cn-title cn-m-0">Refunds and failures</h2>
+            <div class="stat-grid" style="--stat-cols:2">
+              <div class="stat">
+                <span>Refunded</span>
+                <strong>$1,120</strong>
+              </div>
+              <div class="stat">
+                <span>Failed payments</span>
+                <strong>3</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+        </div>
       </div>
     </div>
   );
