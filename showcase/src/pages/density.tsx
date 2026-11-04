@@ -30,7 +30,7 @@ const KNOBS: Array<[string, string, string, string, string]> = [
   ["--cn-radius-panel", "16px", "16px", "12px", "Panels and modals. A table head at a panel edge follows it minus 1px."],
   ["--band-h", "64px", "52px", "44px", "Panel, modal and drawer header bands. The topbar is this plus 4px."],
   ["--band-pad", "12px 24px", "8px 24px", "8px 16px", "Band padding."],
-  ["--band-title-size", "20px", "15px", "14px", "An h2 or h3 in a header band."],
+  ["--band-title-size", "20px", "14px", "14px", "An h2 or h3 in a header band."],
   ["--body-pad", "24px", "16px 24px", "12px 16px", ".panel-body padding."],
   ["--cell-pad", "12px 16px", "8px 12px", "4px 8px", "Table cells."],
   ["--cell-font-size", "14px", "14px", "13px", "Table body text."],
@@ -63,7 +63,7 @@ export default function DensityPage() {
           <code class="cn-code-inline">data-density="compact"</code> on any element
           to retune them for that subtree. Cozy is for desktop data tools
           that want more rows on screen: 38px controls, a 3px plate, 52px
-          bands, 15px band titles and 8px by 12px table cells, with the body
+          bands, 14px band titles and 8px by 12px table cells, with the body
           size and panel radius left alone. Compact is the dense strip for
           readouts: 28px controls, a 2px plate, the card radius on panels,
           44px bands and tighter table cells, chips and code wells. Control
@@ -196,12 +196,18 @@ export default function DensityPage() {
             values: "a hex stored on the record",
             default: "var(--mauve)",
             notes:
-              "The color of one item. Read by the accent-card plate, .mark, .avatar, .cn-value-lg, the progress fill, the terminal caret and the cn-*-accent utilities.",
+              "The color of one item. Read by the accent-card plate, .mark, .avatar, .cn-value-lg, the progress fill, the terminal caret, the cn-*-accent utilities, and a .bar or .legend-item with no --series.",
+          },
+          {
+            name: "--series",
+            values: "inline, a --cn-series-*, a status role, or a palette tone for a status with no role",
+            default: "unset, so var(--accent)",
+            notes: "The color of a .bar and its .legend-item swatch.",
           },
           {
             name: "--tone",
             values: "set with .cn-tone-{red,green,peach,yellow,blue,mauve}",
-            default: "var(--peach)",
+            default: "var(--cn-info)",
             notes: "Semantic tint. Read by .tag, .banner, field validation, .cn-tint, .cn-text-tone, .cn-edge-tone and the icon-button hover.",
           },
           {

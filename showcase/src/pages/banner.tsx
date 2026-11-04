@@ -107,7 +107,7 @@ export default function BannerPage() {
           {
             name: "--tone",
             values: ".cn-tone-danger / -warning / -success / -info · .cn-tone-red / -green / -peach / -yellow / -blue / -mauve",
-            default: "var(--peach)",
+            default: "var(--cn-info)",
             notes: "One prop drives text, tint, and edge together.",
           },
         ]}

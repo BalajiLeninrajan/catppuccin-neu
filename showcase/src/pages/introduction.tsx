@@ -227,16 +227,17 @@ export default function IntroductionPage() {
         <ul class="cn-copy">
           <li>one tilted panel, holding a summary or an aside, never a table or a form;</li>
           <li>one primary button;</li>
-          <li>at most one <code class="cn-code-inline">.is-lg</code> control;</li>
-          <li>one ornament per element.</li>
+          <li>at most one <code class="cn-code-inline">.is-lg</code> control.</li>
         </ul>
         <p class="cn-copy">
           <code class="cn-code-inline">.is-lg</code> here means a hero control: a
           large button or <code class="cn-code-inline">.input-lg</code>. A large
-          stat or a large avatar does not count. Each ornament also has one
-          home. Grain sits only on solid accent fills. Blur sits only on the
+          stat or a large avatar does not count. Each ornament kind also has one
+          job. Grain sits only on solid accent fills. Blur sits only on the
           topbar, the folded sidebar and the scrim. Plates sit only under
-          things a reader can click and under accent cards.
+          things a reader can click, under accent cards and under the one
+          tilted panel. Four elements stack several kinds on purpose: the
+          primary, the checked checkbox, the on switch and the tilted panel.
         </p>
         <p class="cn-copy">
           The four <a href="/examples/dashboard">Examples</a> pages, a

@@ -338,7 +338,7 @@ export default function AccessibilityPage() {
           },
           {
             name: "forced-colors: active",
-            notes: "Focus draws in Highlight. Carved fields, wells, the mono wells, stepper pills, the tabs carve and the progress track lose their shadows, so they draw a CanvasText edge, and so do the checkbox, radio and switch. Engaged states lose their wash, so the engaged ghost, the segmented choice, the selected tab, the current page and the current sidebar link draw a Highlight rim, and a selected table row a Highlight outline. Checked and indeterminate states fill with Highlight. The grain hides.",
+            notes: "Focus draws in Highlight. Carved fields, wells, the mono wells, stepper pills, the tabs carve and the progress track lose their shadows, so they draw a CanvasText edge, and so do the checkbox, radio and switch. Engaged states lose their wash, so the engaged ghost, the segmented choice, the current page and the current sidebar link draw a Highlight rim, and so does the selected tab, and a selected table row a Highlight outline. Checked and indeterminate states fill with Highlight. The grain hides.",
           },
         ]}
       />

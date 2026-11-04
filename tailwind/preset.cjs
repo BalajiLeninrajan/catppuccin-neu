@@ -164,9 +164,10 @@ module.exports = {
         mark: "var(--cn-radius-control)",
         chip: "var(--cn-radius-chip)",
       },
-      /* Depth: the four neu tokens, the floats and the hard offsets. */
+      /* Depth: the five neu tokens, the floats and the hard offsets. */
       boxShadow: {
         "neu-raised": "var(--neu-raised)",
+        "neu-lifted": "var(--neu-lifted)",
         "neu-raised-soft": "var(--neu-raised-soft)",
         "neu-inset": "var(--neu-inset)",
         "neu-inset-soft": "var(--neu-inset-soft)",

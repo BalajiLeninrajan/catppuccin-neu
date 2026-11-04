@@ -262,7 +262,7 @@ export default function ChipPage() {
           {
             name: "--tone",
             values: ".cn-tone-danger / -warning / -success / -info · .cn-tone-red / -green / -peach / -yellow / -blue / -mauve",
-            default: "var(--peach)",
+            default: "var(--cn-info)",
             notes: "Semantic color. Set it with a tone utility or inline.",
           },
           {

@@ -1,7 +1,9 @@
 /* ── Example: empty project ───────────────────────────────────────────────
    A first-run screen built only from package classes, no sc- chrome. The
    one job is to connect a source, so the empty state holds the one
-   primary and its panel is the lead panel. A checklist sits beside the content in .cn-with-side, and
+   primary and its panel is the lead panel. A first-run screen may put the
+   primary there instead of in the header. The page grid takes an 8 and a
+   4: the lead panel and the overview first, the checklist beside them, and
    skeletons stand where the data will land. The sample-data toggle swaps
    them for content that arrives with .cn-arrive.                        */
 
@@ -123,8 +125,31 @@ export default function EmptyProjectExample() {
         </div>
       </header>
 
-      <div class="cn-with-side">
-        <section class="panel" aria-labelledby="ep-steps">
+      <div class="cn-grid-12">
+        <div class="cn-span-8 cn-stack cn-gap-24">
+          <section class="panel is-lead" aria-labelledby="ep-sources">
+            <div class="panel-header">
+              <h2 id="ep-sources">Sources</h2>
+            </div>
+            <div class="panel-body">
+              <div class="empty-state">
+                <PlugIcon />
+                <strong>No sources connected</strong>
+                <span>Connect a database, a warehouse or a CSV upload. The first sync takes a few minutes.</span>
+                <button type="button" class="btn btn-primary">Connect a source</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="ep-overview" aria-busy={sample ? "false" : "true"}>
+            <div class="panel-header">
+              <h2 id="ep-overview">Overview</h2>
+              <span class="chip">{sample ? "Sample data" : "Waiting for a sync"}</span>
+            </div>
+            {sample ? <OverviewLoaded /> : <OverviewSkeleton />}
+          </section>
+        </div>
+        <section class="panel cn-span-4" style="align-self:start" aria-labelledby="ep-steps">
           <div class="panel-header">
             <h2 id="ep-steps">Get started</h2>
           </div>
@@ -158,29 +183,6 @@ export default function EmptyProjectExample() {
           </div>
         </section>
 
-        <div class="cn-stack cn-gap-24">
-          <section class="panel is-lead" aria-labelledby="ep-sources">
-            <div class="panel-header">
-              <h2 id="ep-sources">Sources</h2>
-            </div>
-            <div class="panel-body">
-              <div class="empty-state">
-                <PlugIcon />
-                <strong>No sources connected</strong>
-                <span>Connect a database, a warehouse or a CSV upload. The first sync takes a few minutes.</span>
-                <button type="button" class="btn btn-primary">Connect a source</button>
-              </div>
-            </div>
-          </section>
-
-          <section class="panel" aria-labelledby="ep-overview" aria-busy={sample ? "false" : "true"}>
-            <div class="panel-header">
-              <h2 id="ep-overview">Overview</h2>
-              <span class="chip">{sample ? "Sample data" : "Waiting for a sync"}</span>
-            </div>
-            {sample ? <OverviewLoaded /> : <OverviewSkeleton />}
-          </section>
-        </div>
       </div>
     </div>
   );

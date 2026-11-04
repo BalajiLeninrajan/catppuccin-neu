@@ -17,8 +17,9 @@ export default function TypographyPage() {
         page heading. Names, titles and buttons (<code class="cn-code-inline">.btn</code>) are 600.
         Chrome, the label and the microlabel, is 500, so 600 marks what a
         reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
-        heading and value-lg, so a stat value always outweighs the panel
-        title above it. Tracking tightens with size: 0 through 18px, -0.01em
+        heading and value-lg, so a stat value outweighs the panel title above
+        it. At 520px both step down: the value to 18px and the band title to
+        16px. Tracking tightens with size: 0 through 18px, -0.01em
         at 20px, -0.02em at 24px, -0.025em at 28 and 32px, and -0.03em at
         display sizes. Numeric roles keep{" "}
         <code class="cn-code-inline">tabular-nums</code> on the sans face, so figures align in
@@ -164,7 +165,8 @@ export default function TypographyPage() {
         <code class="cn-code-inline">h3</code> in a panel, modal or drawer
         header is the title role at{" "}
         <code class="cn-code-inline">--band-title-size</code> instead: 20px by
-        default, 15px at cozy density and 14px at compact. A class still sets
+        default and 14px at cozy and compact density. At 520px it steps
+        down to the body size, 16px, so a stat value still outweighs it. A class still sets
         the size where the outline level and the look differ, as in{" "}
         <code class="cn-code-inline">&lt;h2 class="cn-title"&gt;</code> for
         the section titles on this site.

@@ -20,16 +20,17 @@
   background: var(--cn-surface-raised);
   box-shadow: var(--neu-raised);
 }
-/* The lead panel: the one a view is about, one per view. It sits a step
-   higher on the overlay fill inside the strong hairline, so it outranks
-   its neighbors without an ornament. */
-.panel.is-lead {
-  border-color: var(--edge-strong);
-  background: var(--cn-surface-overlay);
-}
 /* A panel inside a panel rests on its parent: the soft raise, no long
    cast. */
 .panel .panel { box-shadow: var(--neu-raised-soft); }
+/* The lead panel: the one a view is about, one per view. It keeps the
+   raised fill, so raised children inside it still sit a step lighter, and
+   stands higher: the strong hairline and the longer cast of --neu-lifted.
+   It outranks its neighbors by height, not by an ornament. */
+.panel.is-lead {
+  border-color: var(--edge-strong);
+  box-shadow: var(--neu-lifted);
+}
 
 /* The one rotated hero card. The hard offset rides over the neu raise so
    the hero still answers the top-left light instead of floating as a flat
@@ -102,7 +103,9 @@
 .panel > .table-scroll:last-child > .data-table tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--cn-radius-panel) - 1px); }
 .panel > .data-table:last-child tbody tr:last-child td:last-child,
 .panel > .table-scroll:last-child > .data-table tbody tr:last-child td:last-child { border-bottom-right-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > .ranked-row:first-child { border-radius: calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px) 0 0; }
 .panel > .ranked-row:last-child { border-radius: 0 0 calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px); }
+.panel > .ranked-row:only-child { border-radius: calc(var(--cn-radius-panel) - 1px); }
 
 /* Well: an inset container for grouped controls or scrolling content.
    Borderless: the inset depth defines the surface. */
@@ -220,7 +223,7 @@
 .empty-state span { font-size: var(--cn-type-meta-size); }
 /* Fills the pane or drawer it sits in instead of holding the --empty-h floor. */
 .empty-state.is-fill { height: 100%; min-height: 0; padding: var(--space-4); gap: var(--space-1); }
-/* A glyph sits in a carved plate, the same inset as an input. */
+/* A glyph sits in a round carve on the soft inset, the empty-state carve. */
 .empty-state > svg {
   width: 56px;
   height: 56px;
@@ -297,7 +300,7 @@ a:active > .accent-card {
   --cn-fill: var(--cn-interactive);
   --plate: color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), var(--surface-0));
   --hard-extra: inset 0 1px rgb(255 255 255 / .3), inset 0 -2px color-mix(in srgb, var(--crust) 22%, transparent);
-  color: var(--crust);
+  color: var(--cn-fg-on-accent);
   border: 1px solid transparent;
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
@@ -449,7 +452,7 @@ a:active > .accent-card {
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
-.btn-primary[aria-busy="true"] { --btn-busy-ink: var(--crust); --btn-busy-ring: color-mix(in srgb, var(--crust) 25%, transparent); }
+.btn-primary[aria-busy="true"] { --btn-busy-ink: var(--cn-fg-on-accent); --btn-busy-ring: color-mix(in srgb, var(--cn-fg-on-accent) 25%, transparent); }
 .btn.is-sm[aria-busy="true"]::after { width: 14px; height: 14px; }
 
 /* ── Inputs ─────────────────────────────────────────────────────────────── */
@@ -465,7 +468,7 @@ a:active > .accent-card {
 /* Borderless inset well, carved from whatever surface it sits on: the
    background stays transparent so the parent ground shows through and only
    the inner shadow defines the field. Sans face; numbers stay tabular.
-   A plain list, not :is(), so .input-lg (0,1,0) can still override it. */
+   A plain list, not :is(), so the hero variant below can override it. */
 .input,
 .field input, .field select, .field textarea {
   width: 100%;
@@ -591,13 +594,15 @@ a:active > .accent-card {
     background: transparent;
     font: var(--cn-type-meta-weight) var(--cn-type-ui-size) var(--sans);
   }
+  /* Hover lights an option the way it lights a menu row; the checked
+     option wears the engaged wash, so it outranks the hovered one. */
   :is(select.input, .field select) option:is(:hover, :focus-visible) {
     color: var(--cn-fg);
-    background: var(--wash);
+    background: var(--hover);
     outline: 2px solid transparent;
   }
   :is(select.input, .field select) option:focus-visible { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
-  :is(select.input, .field select) option:checked { color: var(--cn-interactive); font-weight: var(--cn-type-name-weight); }
+  :is(select.input, .field select) option:checked { color: var(--cn-interactive); background: var(--wash); font-weight: var(--cn-type-name-weight); }
   :is(select.input, .field select) option::checkmark { color: var(--cn-interactive); }
 }
 
@@ -645,8 +650,9 @@ a:active > .accent-card {
    a fact lives. */
 [data-tip][data-tip-dismissed]::after { opacity: 0; visibility: hidden; transition-delay: 0s; }
 
-/* Hero variant: the one oversized input on a page. */
-.input-lg {
+/* Hero variant: the one oversized input on a page. Compounded with the
+   base selectors, so it also wins inside a .field. */
+:is(.input, .field input).input-lg {
   height: calc(var(--control-h) + var(--space-3));
   padding: 0 var(--space-4);
   border-radius: var(--cn-radius-card);
@@ -668,7 +674,7 @@ a:active > .accent-card {
 .input-icon .input, .input-icon input { padding-inline-start: calc(var(--space-6) + var(--space-3)); }
 
 /* ── Segmented / preset control ─────────────────────────────────────────────
-   Options rest on the plate and take the hard-offset press; selected, they
+   Options rest on the plate and take the hard-offset press; chosen, they
    press in (engaged). Height tracks the density knob (46+12 = 58px).       */
 
 .segmented {
@@ -693,7 +699,7 @@ a:active > .accent-card {
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
 .segmented > *:hover { border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-edge), var(--surface-1)); }
-/* Selected: the engaged treatment: pressed in on the wash, in a mauve rim. */
+/* Chosen: the engaged state, pressed in on the wash, in a mauve rim. */
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]),
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]):hover,
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]):active {
@@ -752,8 +758,8 @@ a:active > .accent-card {
   width: 28px; height: 28px;
   display: inline-grid; place-items: center;
   flex: 0 0 auto;
-  color: var(--crust);
-  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  color: var(--cn-fg-on-accent);
+  border: 1px solid color-mix(in srgb, currentColor var(--cn-step-fill), transparent);
   border-radius: var(--cn-radius-control);
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
@@ -871,7 +877,7 @@ a:active > .accent-card {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--crust);
+  background: var(--cn-fg-on-accent);
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / 13px no-repeat;
   opacity: 0;
   transform: scale(.4) rotate(-8deg);
@@ -932,7 +938,7 @@ a:active > .accent-card {
   height: 9px;
   border-radius: 50%;
   background: var(--cn-interactive);
-  /* Halo ring: the .live-dot composite (0 0 0 Npx currentColor-mix). */
+  /* Halo ring at --cn-step-fill, the same composite as the .live-dot. */
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--cn-interactive) var(--cn-step-fill), transparent);
   opacity: 0;
   transform: scale(.5);
@@ -979,7 +985,7 @@ a:active > .accent-card {
   background-color: var(--cn-fill);
   /* On carries a mark as well as color and position: a 2x8 crust bar, the
      "I" of a wall switch. */
-  background-image: linear-gradient(var(--crust), var(--crust)), var(--cn-fill-ramp);
+  background-image: linear-gradient(var(--cn-fg-on-accent), var(--cn-fg-on-accent)), var(--cn-fill-ramp);
   background-size: 2px 8px, auto;
   background-position: center;
   background-repeat: no-repeat;
@@ -1019,8 +1025,10 @@ a:active > .accent-card {
   border-bottom: 1px solid var(--edge-soft);
   transition: box-shadow var(--t-base) var(--ease-out), border-color var(--t-base), border-radius var(--t-base);
 }
-/* Open is the engaged treatment: the full carve and the mauve wash, the
-   same state a toggled flat button wears. */
+/* Open is its own step, the open carve: the full carve, a mauve tint at
+   --cn-step-tint into base and a mauve title. It is not the engaged state.
+   The engaged --wash would drop body text in the fold to 6.1:1, under the
+   7:1 body floor, so the open row stays near the page's own ground. */
 .accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) {
   border-radius: var(--cn-radius-card);
   border-bottom-color: transparent;
@@ -1204,7 +1212,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   position: absolute;
   left: 0;
   width: 3ch;
-  color: var(--cn-fg-disabled);
+  color: var(--cn-fg-placeholder);
   text-align: end;
   user-select: none;
 }
@@ -1269,9 +1277,9 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
 /* ── Accent cards keyed by --accent ─────────────────────────────────────── */
 
 /* A card on a plate in its accent, mixed toward surface-0 the way the
-   primary button mixes its plate. The plate is the only depth cue and the
-   only place the accent shows; the border and text stay neutral. Data marks
-   inside (a progress fill) keep the accent. */
+   primary button mixes its plate. The plate is the only depth cue. The
+   border and text stay neutral, the hero value included, so the accent
+   shows only on the plate and on data marks inside (a progress fill). */
 .accent-card {
   --plate: color-mix(in srgb, var(--accent) var(--cn-step-vivid), var(--surface-0));
   min-width: 0;
@@ -1363,7 +1371,7 @@ a:hover:not(:active) > .accent-card {
 }
 
 /* Table: opt-in class on <table>; scopes all table styling. Sans tabular
-   body, mantle header, hover presses the row in. Give each data cell a
+   body, a band header (--cn-surface-band), hover presses the row in. Give each data cell a
    data-label attribute: it becomes the row label at 760px and below. Inside
    .table-scroll the table stays a table and scrolls sideways instead. */
 .data-table { width: 100%; border-collapse: collapse; }
@@ -1476,12 +1484,13 @@ a:hover:not(:active) > .accent-card {
      <div class="bar-chart">
        <span>Jun</span>
        <div class="bar-group">
-         <div class="bar" style="--value: 62%; --tone: var(--cn-series-1)">$62.4k</div>
+         <div class="bar" style="--value: 62%; --series: var(--cn-series-1)">$62.4k</div>
        </div>
      </div>
    --value is the bar's share of the track; the label beside it keeps the
-   number readable, so color is never the only key. A bar eases to a new
-   value like progress does. */
+   number readable, so color is never the only key. --series colors the
+   bar and falls back to the record's --accent. A bar eases to a new value
+   like progress does. */
 .bar-chart {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -1505,13 +1514,13 @@ a:hover:not(:active) > .accent-card {
   inline-size: calc(var(--value, 0%) * .8);
   block-size: 8px;
   border-radius: var(--cn-radius-chip);
-  background: var(--tone);
+  background: var(--series, var(--accent));
   transition: inline-size calc(var(--t-slow) * 2) var(--ease-out);
 }
 
-/* Legend: a chart key. Each item's swatch takes its --tone; the label is
-   sentence case at the meta size.
-     <ul class="legend"><li class="legend-item cn-tone-blue">Reads</li></ul> */
+/* Legend: a chart key. Each item's swatch takes its --series, or the
+   record's --accent; the label is sentence case at the meta size.
+     <ul class="legend"><li class="legend-item" style="--series: var(--cn-series-5)">Reads</li></ul> */
 .legend {
   margin: 0;
   padding: 0;
@@ -1535,7 +1544,7 @@ a:hover:not(:active) > .accent-card {
   height: 10px;
   flex: 0 0 auto;
   border-radius: var(--cn-radius-chip);
-  background: var(--tone);
+  background: var(--series, var(--accent));
 }
 /* Hatched: a second key besides hue for a series that must stand apart
    without color. The bar and its legend swatch carry the same stripes. */
@@ -1902,7 +1911,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
     --press-bottom: rgb(69 71 90 / .3);
-    background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-wash), var(--base));
+    background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-tint), var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
     --press-top: rgb(17 17 27 / .66);
@@ -1939,6 +1948,10 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .stat { padding-inline: var(--space-2); }
   .stat strong { font-size: var(--cn-type-lede-size); }
   .stat.is-lg strong { font-size: var(--cn-type-value-size); }
+  /* The band title steps down with the stat value, so the value still
+     outweighs the title above it. Cozy and compact titles are already
+     smaller. */
+  :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
   .accordion-stack { padding: var(--space-2) var(--space-3); }
   /* Label meta wraps under the title; the chevron stays on the title line. */
   .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
@@ -1961,6 +1974,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .stat { padding-inline: var(--space-2); }
   .stat strong { font-size: var(--cn-type-lede-size); }
   .stat.is-lg strong { font-size: var(--cn-type-value-size); }
+  :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
   .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
   .accordion > :is(label, summary) > .cn-meta { order: 1; flex-basis: 100%; }
   .kv { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
@@ -1977,9 +1991,9 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 }
 
 /* Touch screens keep :hover after a tap, so a lift would stick. Only the
-   press runs there. */
+   press runs there, and a chosen segmented option keeps its 1px press. */
 @media (hover: none) {
-  :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:active),
+  :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:active, .active, [aria-pressed="true"], [aria-checked="true"]),
   a:hover:not(:active) > .accent-card { transform: none; }
   a:hover:not(:active) > .accent-card { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust)), var(--hard-extra); }
 }
@@ -1999,7 +2013,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   display: inline-flex;
   gap: var(--space-1);
   overflow-x: auto;
-  border-radius: calc(var(--cn-radius-control) + var(--space-1));
+  border-radius: var(--cn-radius-card);
   box-shadow: var(--neu-inset-soft), var(--cn-well-lip);
   scrollbar-width: none;
 }
@@ -2056,7 +2070,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 }
 .menu [role^="menuitem"]:is(:hover, :focus-visible) { color: var(--cn-fg); background: var(--hover); }
 /* Keyboard focus keeps the ring, inset so the row's neighbors don't
-   clip it; the pointer hover is the wash alone. */
+   clip it; the pointer hover is --hover alone. */
 .menu [role^="menuitem"]:focus-visible { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
 .menu [role^="menuitem"] > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--cn-fg-faint); }
 .menu [role^="menuitem"] > kbd { margin-inline-start: auto; color: var(--cn-fg-muted); font: var(--cn-type-code-weight) var(--cn-type-meta-size)/1 var(--mono); }
@@ -2320,6 +2334,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 .live-dot {
   width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
   color: var(--cn-success); background: currentColor;
-  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 13%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor var(--cn-step-fill), transparent);
   animation: pulse 1.5s var(--ease-out) infinite;
 }

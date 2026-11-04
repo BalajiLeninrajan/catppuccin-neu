@@ -45,8 +45,9 @@
   .cn-pressable:hover:not(:active), .cn-pressable-slide:hover:not(:active) { transform: none; }
 }
 
-/* (.cn-engaged, the selected or toggled state, is declared after the border
-   utilities so its border-color beats a composed .cn-edge-*.)              */
+/* (.cn-engaged, the engaged state for a chosen or toggled option, is
+   declared after the border utilities so its border-color beats a
+   composed .cn-edge-*.)                                                    */
 
 /* ── Type roles ─────────────────────────────────────────────────────────────
    No bare font-family utility exists: pick the role, not the face. Each
@@ -201,7 +202,7 @@
 .cn-bg-hover   { background: var(--hover); }
 .cn-tint      { background: var(--tint); }
 .cn-tint-accent {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) var(--cn-step-wash), var(--mantle)), var(--mantle) 48%);
 }
 
 /* Tone setters set --tone. The four status setters also bring their glyph
@@ -228,12 +229,12 @@
 .cn-edge        { border: 1px solid var(--edge); }
 .cn-edge-soft   { border: 1px solid var(--edge-soft); }  /* inner separators */
 .cn-edge-line   { border: 1px solid var(--surface-0); }  /* row separators, footer rules */
-.cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) 30%, transparent); }
+.cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) var(--cn-step-plate), transparent); }
 .cn-edge-tone   { border: 1px solid var(--tone-border); }
-.cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--surface-0)); }
-.cn-edge-dashed { border: 1px dashed var(--surface-1); }  /* an open slot; dashed otherwise means disabled */
+.cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) var(--cn-step-plate), var(--surface-0)); }
+.cn-edge-dashed { border: 1px dashed var(--surface-1); }  /* an open slot, and nothing else */
 
-/* The selected or toggled state: pressed in, on the mauve wash, inside a
+/* The engaged state, for a chosen or toggled option: pressed in, on the mauve wash, inside a
    mauve rim, so the chosen option outweighs the raised ones around it.
    Declared after the edge utilities so the rim wins over a composed edge. */
 .cn-engaged {
@@ -255,7 +256,8 @@
 
 /* ── Structure ──────────────────────────────────────────────────────────── */
 
-/* Left color spine: the accent identity cue. */
+/* Left spine: marks position (the current row, the selected item), not
+   identity, so it paints in the interactive color. */
 .cn-spine { position: relative; }
 .cn-spine::before {
   content: "";
@@ -263,7 +265,7 @@
   inset: var(--space-3) auto var(--space-3) 0;
   width: 4px;
   border-radius: 0 var(--cn-radius-chip) var(--cn-radius-chip) 0;
-  background: var(--accent);
+  background: var(--cn-interactive);
 }
 
 /* Screen-reader only: clipped, not hidden. */
@@ -282,8 +284,9 @@
 .cn-hidden { display: none !important; }
 
 /* ── Layout: primitives and one spacing scale ─────────────────────────────
-   Every gap, padding and margin reads --space-1..6: 4, 8, 12, 16, 24, 32.
-   The utilities are named by pixel value, and no other value exists.
+   Every gap, padding and margin reads --space-1..8: 4, 8, 12, 16, 24, 32
+   inside components, 48 and 64 for section rhythm. The utilities are named
+   by pixel value, and no other value exists.
    A row is a centered flex line, a stack is a grid column, a cluster wraps.
    A split pushes two groups apart, a measure centers a readable column,
    and a sidebar layout keeps a fixed side beside fluid content.

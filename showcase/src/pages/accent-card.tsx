@@ -6,7 +6,7 @@ export default function AccentCardPage() {
   return (
     <Doc
       title="Accent card"
-      lede="A card on a plate in its accent. The plate is the only place the accent shows. The border, the name and the numbers stay neutral."
+      lede="A card on a plate in its accent. The border, the name and the numbers stay neutral. The accent shows on the plate, on data marks such as a progress fill, and on avatars and .mark squares."
     >
       <p class="cn-copy">
         The plate is the accent mixed 70% into surface-0,{" "}
@@ -68,7 +68,9 @@ export default function AccentCardPage() {
       <p class="cn-copy">
         Inside the card the hero value is text-colored, so the accent is not
         repeated on the plate and the number. A data mark such as the
-        progress fill keeps the accent. Controls inside the card rest on their
+        progress fill keeps the accent, and so do an avatar and a
+        <code class="cn-code-inline">.mark</code>, which identify the record
+        the way the plate does. Controls inside the card rest on their
         own plate, not the card's.
       </p>
 

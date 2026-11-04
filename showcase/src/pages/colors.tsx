@@ -65,7 +65,7 @@ const HUES = [
   { name: "mauve", hex: "#cba6f7", note: "The interactive color: links, the primary, checked and engaged states. The first data series." },
   { name: "red", hex: "#f38ba8", note: "Danger and destructive actions, --cn-danger." },
   { name: "maroon", hex: "#eba0ac", note: "Record identity only, beyond the six series." },
-  { name: "peach", hex: "#fab387", note: "The fourth data series and the default --tone." },
+  { name: "peach", hex: "#fab387", note: "The fourth data series." },
   { name: "yellow", hex: "#f9e2af", note: "The warning role, --cn-warning: due soon, expiring. The second data series." },
   { name: "green", hex: "#a6e3a1", note: "Success, live indicators, positive deltas, --cn-success." },
   { name: "teal", hex: "#94e2d5", note: "The third data series." },
@@ -329,7 +329,7 @@ export default function ColorsPage() {
         rows={[
           { name: ".cn-tone-green", values: "#a6e3a1", notes: "Success: paid, live, positive deltas." },
           { name: ".cn-tone-red", values: "#f38ba8", notes: "Danger: errors, overdue, destructive actions." },
-          { name: ".cn-tone-peach", values: "#fab387", notes: "The default --tone. A held or paused state. Peach is warm: never beside a red, yellow or pink tag." },
+          { name: ".cn-tone-peach", values: "#fab387", notes: "A held or paused state. Peach is warm: never beside a red, yellow or pink tag." },
           { name: ".cn-tone-yellow", values: "#f9e2af", notes: "Warning: due soon, expiring. The same hue as .cn-tone-warning." },
           { name: ".cn-tone-blue", values: "#89b4fa", notes: "Info: drafts, syncing, neutral status." },
           { name: ".cn-tone-mauve", values: "#cba6f7", notes: "Brand accent as a tone: scheduled, selected." },
@@ -461,12 +461,12 @@ export default function ColorsPage() {
         ))}
       </Demo>
 
-      <Demo title="Two series, values beside the bars" classes="bar-chart · --tone: var(--cn-series-1) · var(--cn-series-2)">
+      <Demo title="Two series, values beside the bars" classes="bar-chart · --series: var(--cn-series-1) · var(--cn-series-2)">
         <figure class="cn-stack cn-gap-16 cn-m-0" style="width:min(520px,100%)">
           <figcaption class="cn-name">Messages by channel, in thousands</figcaption>
           <ul class="legend">
             {CHANNELS.map((c) => (
-              <li key={c.name} class="legend-item" style={`--tone:var(--cn-series-${c.series})`}>
+              <li key={c.name} class="legend-item" style={`--series:var(--cn-series-${c.series})`}>
                 {c.name}
               </li>
             ))}
@@ -479,7 +479,7 @@ export default function ColorsPage() {
                   <div
                     key={CHANNELS[i].name}
                     class="bar"
-                    style={`--value:${((v / MAX) * 100).toFixed(1)}%;--tone:var(--cn-series-${CHANNELS[i].series})`}
+                    style={`--value:${((v / MAX) * 100).toFixed(1)}%;--series:var(--cn-series-${CHANNELS[i].series})`}
                   >
                     {v.toFixed(1)}
                     <span class="cn-sr-only"> {CHANNELS[i].name}</span>
@@ -545,11 +545,11 @@ export default function ColorsPage() {
       <Props
         title="The steps"
         rows={[
-          { name: "--cn-step-tint", values: "4%", notes: "A field or banner in its tone (--tint), the open accordion row." },
-          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the current stepper phase, the dashed, icon and danger ghost hovers, the phone table row hover." },
+          { name: "--cn-step-tint", values: "4%", notes: "A field or banner in its tone (--tint), the open accordion row, table and ranked row hovers." },
+          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
           { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.24:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
-          { name: "--cn-step-fill", values: "14%", notes: "Avatar grounds, the radio halo and the switch glow." },
-          { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge and the switch glow while held." },
+          { name: "--cn-step-fill", values: "14%", notes: "Avatar grounds, the radio and live-dot halos, the .mark border and the switch glow." },
+          { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge, .cn-edge-mauve, .cn-edge-accent and the switch glow while held." },
           { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the tag and avatar edges, the icon-button hover edge, the segmented hover." },
           { name: "--cn-step-strong", values: "50%", notes: "The warmed secondary and checked radio borders." },
           { name: "--cn-step-vivid", values: "70%", notes: "Accent-card plates, so six accents stay apart, and --engaged-edge, so the rim clears 3:1." },
@@ -688,7 +688,7 @@ export default function ColorsPage() {
           { name: ".cn-edge", values: "surface-2 80%", notes: "Raised-surface hairline, 2.0:1 on base and 1.8:1 on the raised fill. The cut edge of panels, chips and controls." },
           { name: ".cn-edge-soft", values: "surface-1 38%", notes: "Inner separators." },
           { name: ".cn-edge-line", values: "surface-0", notes: "Row separators, footer rules." },
-          { name: ".cn-edge-mauve", values: "mauve 30%", notes: "Accent-forward edge." },
+          { name: ".cn-edge-mauve", values: "mauve at --cn-step-plate (25%)", notes: "Accent-forward edge." },
           { name: ".cn-edge-tone", values: "--tone-border", notes: "Semantic edge: the tone 25% into surface-0, or the status ladder's border. Pair with .cn-tone-*." },
           { name: ".cn-edge-dashed", values: "dashed surface-1", notes: "Open slots. The one dashed utility." },
         ]}

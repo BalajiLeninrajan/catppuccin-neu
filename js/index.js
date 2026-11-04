@@ -177,12 +177,28 @@ export function toast(stack, { title, body = "", timeout = 7000, closeLabel = "D
   el.append(text, close);
   stack.append(el);
 
-  let left = timeout, started = Date.now(), timer = 0;
-  const run = () => { if (timeout) { started = Date.now(); timer = setTimeout(dismiss, left); } };
-  const pause = () => { if (timer) { clearTimeout(timer); timer = 0; left -= Date.now() - started; } };
-  const hold = (e) => (e.type === "pointerenter" || e.type === "focusin" ? pause() : run());
+  /* The timer runs only while neither the pointer nor focus is in the
+     stack. Each input keeps its own flag, so leaving with one while the
+     other stays inside never restarts it, and every change clears the old
+     timer before it sets a new one. */
+  let left = timeout, started = 0, timer = 0;
+  let pointerInside = stack.matches(":hover");
+  let focusInside = stack.contains(document.activeElement);
+  const sync = () => {
+    if (!timeout) return;
+    if (timer) { clearTimeout(timer); timer = 0; left -= Date.now() - started; }
+    if (!pointerInside && !focusInside) { started = Date.now(); timer = setTimeout(dismiss, Math.max(0, left)); }
+  };
+  const hold = (e) => {
+    if (e.type === "pointerenter") pointerInside = true;
+    else if (e.type === "pointerleave") pointerInside = false;
+    else if (e.type === "focusin") focusInside = true;
+    else focusInside = stack.contains(e.relatedTarget);
+    sync();
+  };
   function dismiss() {
     clearTimeout(timer);
+    timer = 0;
     stack.removeEventListener("pointerenter", hold);
     stack.removeEventListener("pointerleave", hold);
     stack.removeEventListener("focusin", hold);
@@ -214,9 +230,11 @@ export function toast(stack, { title, body = "", timeout = 7000, closeLabel = "D
     id = null;
     el.style.transition = "";
     const flick = dx / Math.max(1, e.timeStamp - t0) > .6;
-    if (dx > 80 || (flick && dx > 24)) { dismiss(); return; }
+    /* Clear the drag's inline values either way, so a dismissal exits
+       through the [hidden] rule from where the drag left the toast. */
     el.style.translate = "";
     el.style.opacity = "";
+    if (dx > 80 || (flick && dx > 24)) dismiss();
   };
   el.addEventListener("pointerup", release);
   el.addEventListener("pointercancel", release);
@@ -225,7 +243,7 @@ export function toast(stack, { title, body = "", timeout = 7000, closeLabel = "D
   stack.addEventListener("pointerleave", hold);
   stack.addEventListener("focusin", hold);
   stack.addEventListener("focusout", hold);
-  run();
+  sync();
   return { el, dismiss };
 }
 

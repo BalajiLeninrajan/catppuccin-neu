@@ -171,9 +171,11 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.panel.is-lead</code> marks the panel a
         view is about, such as the invoice table on a billing dashboard. It
-        fills with <code class="cn-code-inline">--cn-surface-overlay</code>{" "}
-        inside an <code class="cn-code-inline">--edge-strong</code> hairline, so
-        it sits one step above the raised panels beside it. It adds height,
+        keeps the raised fill inside an{" "}
+        <code class="cn-code-inline">--edge-strong</code> hairline and stands on{" "}
+        <code class="cn-code-inline">--neu-lifted</code>, a longer cast, so it
+        sits one step above the raised panels beside it while a secondary
+        button inside it still reads lighter than the panel. It adds height,
         not an ornament: no plate, tilt or color. Use one per view at most.
         The tilted aside comments on the data; the lead panel holds it.
       </p>
@@ -288,7 +290,7 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-lead",
             values: "one per view",
-            notes: "The panel the view is about. --cn-surface-overlay fill inside an --edge-strong hairline, so it outranks its neighbors by height. No ornament.",
+            notes: "The panel the view is about. The raised fill inside an --edge-strong hairline, on --neu-lifted, so it outranks its neighbors by height. No ornament.",
           },
           {
             name: ".panel.is-shell",

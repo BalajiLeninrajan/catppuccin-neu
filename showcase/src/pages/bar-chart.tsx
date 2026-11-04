@@ -33,7 +33,7 @@ export default function BarChartPage() {
       title="Bar chart"
       lede="Horizontal bars with a label column and the value printed beside each bar. The number is always text, so the bar's color is never the only key."
     >
-      <Demo title="One bar per row, keyed by identity" classes='bar-chart > span + bar-group > bar[style="--value; --tone"]'>
+      <Demo title="One bar per row, keyed by identity" classes='bar-chart > span + bar-group > bar[style="--value; --accent"]'>
         <div class="cn-stack cn-gap-16" style="width:min(560px,100%)">
           <div class="segmented" role="group" aria-label="Month" style="width:min(240px,100%)">
             {MONTHS.map((m, i) => (
@@ -50,7 +50,7 @@ export default function BarChartPage() {
                 <div key={`${t.name}-g`} class="bar-group">
                   <div
                     class="bar"
-                    style={`--value:${pct(REVENUE[t.name][month], REVENUE_MAX)};--tone:var(--accent);${accentStyle(t.accent)}`}
+                    style={`--value:${pct(REVENUE[t.name][month], REVENUE_MAX)};${accentStyle(t.accent)}`}
                   >
                     ${REVENUE[t.name][month].toLocaleString("en-US")}
                   </div>
@@ -75,9 +75,10 @@ export default function BarChartPage() {
       </p>
 
       <p class="cn-copy">
-        Teams have an identity, so each bar reads the team's own{" "}
-        <code class="cn-code-inline">--accent</code> and Payments is teal here as
-        it is everywhere else. Set <code class="cn-code-inline">--value</code>{" "}
+        Teams have an identity, so each bar leaves{" "}
+        <code class="cn-code-inline">--series</code> unset and falls back to the
+        team's own <code class="cn-code-inline">--accent</code>. Payments is teal
+        here as it is everywhere else. Set <code class="cn-code-inline">--value</code>{" "}
         from data. The recipe does not scale it, so pick the maximum yourself
         and keep it fixed while the data changes, or a bar that stayed the
         same would appear to move.
@@ -88,7 +89,7 @@ export default function BarChartPage() {
           <figcaption class="cn-name">Messages by channel, in thousands</figcaption>
           <ul class="legend">
             {CHANNELS.map((c, i) => (
-              <li key={c} class="legend-item" style={`--tone:var(--cn-series-${i + 1})`}>
+              <li key={c} class="legend-item" style={`--series:var(--cn-series-${i + 1})`}>
                 {c}
               </li>
             ))}
@@ -101,7 +102,7 @@ export default function BarChartPage() {
                   <div
                     key={CHANNELS[i]}
                     class="bar"
-                    style={`--value:${pct(v, MESSAGES_MAX)};--tone:var(--cn-series-${i + 1})`}
+                    style={`--value:${pct(v, MESSAGES_MAX)};--series:var(--cn-series-${i + 1})`}
                   >
                     {v.toFixed(1)}
                     <span class="cn-sr-only"> {CHANNELS[i]}</span>
@@ -128,7 +129,7 @@ export default function BarChartPage() {
           <figcaption class="cn-name">Messages by channel, in thousands</figcaption>
           <ul class="legend">
             {CHANNELS.map((c, i) => (
-              <li key={c} class={`legend-item${i === 1 ? " is-hatched" : ""}`} style={`--tone:var(--cn-series-${i + 1})`}>
+              <li key={c} class={`legend-item${i === 1 ? " is-hatched" : ""}`} style={`--series:var(--cn-series-${i + 1})`}>
                 {c}
               </li>
             ))}
@@ -141,7 +142,7 @@ export default function BarChartPage() {
                   <div
                     key={CHANNELS[i]}
                     class={`bar${i === 1 ? " is-hatched" : ""}`}
-                    style={`--value:${pct(v, MESSAGES_MAX)};--tone:var(--cn-series-${i + 1})`}
+                    style={`--value:${pct(v, MESSAGES_MAX)};--series:var(--cn-series-${i + 1})`}
                   >
                     {v.toFixed(1)}
                     <span class="cn-sr-only"> {CHANNELS[i]}</span>
@@ -166,9 +167,9 @@ export default function BarChartPage() {
           { name: ".bar-chart", values: "div", notes: "Grid: a max-content label column and a minmax(0, 1fr) bar column, 12px by 16px gap, rows centered." },
           { name: ".bar-chart > :not(.bar-group)", values: "label", notes: "The meta role, 500 13px, in --cn-fg-muted." },
           { name: ".bar-group", values: "div", notes: "One row's bars, stacked 4px apart. Holds one .bar or several." },
-          { name: ".bar", values: "div", notes: "A row: an 8px bar on the chip radius in --tone, then the value as text in the meta role, --cn-fg-soft, tabular." },
+          { name: ".bar", values: "div", notes: "A row: an 8px bar on the chip radius in --series, then the value as text in the meta role, --cn-fg-soft, tabular." },
           { name: "--value", values: "percentage", default: "0%", notes: "The bar's share of the track. The bar is --value × 80% of the track wide. Set it from data." },
-          { name: "--tone", values: "token color", default: "var(--peach)", notes: "The bar color: --cn-series-* for series, the record's --accent for an identity, a status role for a status." },
+          { name: "--series", values: "token color", default: "var(--accent)", notes: "The bar color: --cn-series-* for series, a status role for a status, or a palette tone for a status with no role. Leave it unset and the bar takes the record's --accent." },
           { name: ".is-hatched", values: "on .bar", notes: "Diagonal stripes over the bar, base at 45%, 2px on and 3px off. The series' .legend-item takes the same class." },
           { name: "transition", values: "inline-size", notes: "Twice --t-slow on the ease-out, so a new value slides in. Instant under reduced motion." },
         ]}
@@ -177,16 +178,16 @@ export default function BarChartPage() {
       <CodeBlock
         title="Markup"
         code={`<ul class="legend">
-  <li class="legend-item" style="--tone: var(--cn-series-1)">Email</li>
-  <li class="legend-item" style="--tone: var(--cn-series-2)">Chat</li>
+  <li class="legend-item" style="--series: var(--cn-series-1)">Email</li>
+  <li class="legend-item" style="--series: var(--cn-series-2)">Chat</li>
 </ul>
 <div class="bar-chart">
   <span>May</span>
   <div class="bar-group">
-    <div class="bar" style="--value: 70%; --tone: var(--cn-series-1)">
+    <div class="bar" style="--value: 70%; --series: var(--cn-series-1)">
       4.2<span class="cn-sr-only"> Email</span>
     </div>
-    <div class="bar" style="--value: 46.7%; --tone: var(--cn-series-2)">
+    <div class="bar" style="--value: 46.7%; --series: var(--cn-series-2)">
       2.8<span class="cn-sr-only"> Chat</span>
     </div>
   </div>

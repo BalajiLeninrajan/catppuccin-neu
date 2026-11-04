@@ -185,8 +185,9 @@
   --radius-mark: var(--cn-radius-control);
   --radius-chip: var(--cn-radius-chip);
 
-  /* Depth: the four neu tokens, the floats and the hard offsets */
+  /* Depth: the five neu tokens, the floats and the hard offsets */
   --shadow-neu-raised: var(--neu-raised);
+  --shadow-neu-lifted: var(--neu-lifted);
   --shadow-neu-raised-soft: var(--neu-raised-soft);
   --shadow-neu-inset: var(--neu-inset);
   --shadow-neu-inset-soft: var(--neu-inset-soft);

@@ -6,7 +6,8 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 const HEIGHTS = [
   { height: "Below the ground", draws: "A carve: the dark wall top left, the lit lip bottom right. No hairline.", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states." },
   { height: "The ground", draws: "Nothing.", tokens: "--cn-surface-page", who: "The page. Every other height is measured from it." },
-  { height: "Resting on it", draws: "The raised fill, the lit top edge, the contact edge, a soft cast.", tokens: "--cn-surface-raised, --neu-raised or --neu-raised-soft", who: "Panels, chips. A panel inside a panel takes --neu-raised-soft. The one lead panel swaps in the overlay fill and --edge-strong, a step lighter on the same shadow." },
+  { height: "Resting on it", draws: "The raised fill, the lit top edge, the contact edge, a soft cast.", tokens: "--cn-surface-raised, --neu-raised or --neu-raised-soft", who: "Panels, chips. A panel inside a panel takes --neu-raised-soft." },
+  { height: "Resting higher", draws: "The same raised fill and lit top edge, the strong hairline, a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. It keeps the raised fill, so raised controls inside it still sit a step lighter." },
   { height: "Standing on a plate", draws: "The raised fill and lit top edge over a hard offset, the plate's side.", tokens: "--hard-offset in --plate, --hard-extra", who: "Secondary buttons, segmented options, accent cards. The primary stands on its own mauve plate." },
   { height: "Lifted off it", draws: "The plate's side grows to 10px and the card tips 1.2deg.", tokens: "a 10px plate over --neu-raised, rotate(1.2deg)", who: "The one tilted panel. Never a table or a form. Upright under prefers-contrast: more, on the same plate." },
   { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
@@ -167,7 +168,7 @@ export default function DepthPage() {
       <h2 class="cn-title">The shadows</h2>
 
       <Demo
-        title="The four neu shadows"
+        title="Four of the five neu shadows"
         classes="cn-bg-raised cn-r-card cn-raised | cn-raised-soft | cn-bg-base cn-inset | cn-inset-soft"
         row
       >
@@ -213,6 +214,8 @@ export default function DepthPage() {
         <code class="cn-code-inline">--neu-dark</code> at .66 for a carve's
         dark wall, because a transparent well's wall falls on the page. The
         raised token has three layers: contact, cast and the lit top edge.{" "}
+        <code class="cn-code-inline">--neu-lifted</code> is the same three
+        layers with a longer cast, 14px 18px 36px, for the one lead panel.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> deepens the
         cast to .86 and the contact and carve to .8, and stands the tilted
         panel upright on its 10px plate, since rotated text renders soft.
@@ -226,6 +229,7 @@ export default function DepthPage() {
 --neu-dark:    rgb(8 8 14 / .66);   /* a carve's dark wall */
 
 --neu-raised:      1px 1px 0 var(--neu-contact), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+--neu-lifted:      1px 1px 0 var(--neu-contact), 14px 18px 36px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5), -2px -2px 5px rgb(69 71 90 / .16);
 --neu-inset:       inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
 --neu-inset-soft:  inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
@@ -376,7 +380,7 @@ export default function DepthPage() {
         legal only with <code class="cn-code-inline">cn-hard</code>. The control
         slides halfway onto its own offset shadow, which shrinks from 4px to
         2px to meet it. <code class="cn-code-inline">cn-engaged</code> is the
-        selected state: pressed in on the mauve wash, inside an{" "}
+        engaged state, for a chosen or toggled option: pressed in on the mauve wash, inside an{" "}
         <code class="cn-code-inline">--engaged-edge</code> rim. The wash is
         mauve 20% into base, 1.52:1, a step past the 1.24:1 ghost hover, and
         the rim holds 3.5:1 on it, so a chosen option outweighs the raised
@@ -530,7 +534,7 @@ export default function DepthPage() {
           {
             name: ".cn-engaged",
             values: "inset, the mauve wash, the --engaged-edge rim, 1px sink",
-            notes: "Selected or toggled state. It sets border-color, so compose it on an element with a border. Under forced colors the rim draws in Highlight.",
+            notes: "The engaged state, for a chosen or toggled option. It sets border-color, so compose it on an element with a border. Under forced colors the rim draws in Highlight.",
           },
         ]}
       />

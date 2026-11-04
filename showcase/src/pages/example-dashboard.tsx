@@ -16,7 +16,9 @@ type Status = "paid" | "pending" | "due" | "overdue";
 const STATUS: Record<Status, { label: string; tone: string; Glyph: () => JSX.Element }> = {
   paid: { label: "Paid", tone: "cn-tone-success", Glyph: SuccessGlyph },
   /* Blue, a cool tone, so a pending tag never sits beside the yellow
-     due-soon tag in another warm hue. */
+     due-soon tag in another warm hue. Due soon may sit above Overdue:
+     status tags carry a word and a glyph, so the SPEC exempts them from
+     the warm-family adjacency rule. */
   pending: { label: "Pending", tone: "cn-tone-info", Glyph: PendingGlyph },
   due: { label: "Due soon", tone: "cn-tone-warning", Glyph: WarningGlyph },
   overdue: { label: "Overdue", tone: "cn-tone-danger", Glyph: DangerGlyph },
@@ -107,7 +109,7 @@ function InvoiceTable() {
           <button type="button" class="btn btn-secondary is-sm">Export CSV</button>
         </div>
       </div>
-      <div class="cn-px-24 cn-py-16">
+      <div class="panel-body">
         <div class="tabs" role="tablist" aria-label="Invoice status" onKeyDown={(e) => tabsKeydown(e, select)}>
           {VIEWS.map((v, i) => (
             <button
@@ -229,7 +231,7 @@ export default function DashboardExample() {
             <figcaption class="cn-sr-only">Collected by payment method, in thousands of dollars</figcaption>
             <ul class="legend">
               {METHODS.map((m, i) => (
-                <li key={m} class="legend-item" style={`--tone:var(--cn-series-${i + 1})`}>
+                <li key={m} class="legend-item" style={`--series:var(--cn-series-${i + 1})`}>
                   {m}
                 </li>
               ))}
@@ -242,7 +244,7 @@ export default function DashboardExample() {
                     <div
                       key={METHODS[i]}
                       class="bar"
-                      style={`--value:${((v / CHART_MAX) * 100).toFixed(1)}%;--tone:var(--cn-series-${i + 1})`}
+                      style={`--value:${((v / CHART_MAX) * 100).toFixed(1)}%;--series:var(--cn-series-${i + 1})`}
                     >
                       ${v.toFixed(1)}k
                       <span class="cn-sr-only"> {METHODS[i]}</span>

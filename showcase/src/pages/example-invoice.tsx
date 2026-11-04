@@ -2,9 +2,11 @@
    A composed detail screen built only from package classes, no sc- chrome.
    A split header with one primary, a secondary and a menu button wired by
    catppuccin-neu/js, the facts in a .kv, line items in a .data-table, an
-   activity list, and a banner because the invoice is past due. Regions
-   sit 48px apart in reading order: the header, the banner, the line items
-   as the lead panel, then the facts and activity on the page grid. No
+   activity list, and a banner because the invoice is past due. The banner
+   is the one past-due signal, so the header carries no status tag. The
+   breadcrumbs, the header and the banner form one region, 24px apart.
+   Regions sit 48px apart in reading order: that region, the line items as
+   the lead panel, then the facts and activity on the page grid. No
    tilted panel: every panel here holds a table, a list or the record's
    facts.                                                                */
 
@@ -127,10 +129,7 @@ export default function InvoiceExample() {
 
         <header class="cn-split">
           <div class="cn-stack cn-gap-12">
-            <div class="cn-row cn-wrap cn-gap-12">
-              <h1 class="cn-display is-sm">INV-2066</h1>
-              <span class="tag cn-tone-danger">Past due</span>
-            </div>
+            <h1 class="cn-display is-sm">INV-2066</h1>
             <p class="cn-meta cn-m-0">
               Lumen Labs · issued Sep 01, 2026 · due Sep 15, 2026
             </p>
@@ -226,17 +225,19 @@ export default function InvoiceExample() {
           <div class="panel-header">
             <h2 id="inv-activity">Activity</h2>
           </div>
-          <ol class="cn-list-none cn-divide cn-px-24 cn-py-8">
-            {ACTIVITY.map((a) => (
-              <li key={a.what + a.when} class="cn-row cn-between cn-top cn-gap-16 cn-py-12 cn-m-0">
-                <span class="cn-stack cn-gap-4 cn-grow">
-                  <span class="cn-name">{a.what}</span>
-                  <span class="cn-meta">{a.who}</span>
-                </span>
-                <span class="cn-meta cn-nowrap">{a.when}</span>
-              </li>
-            ))}
-          </ol>
+          <div class="panel-body">
+            <ol class="cn-list-none cn-divide">
+              {ACTIVITY.map((a) => (
+                <li key={a.what + a.when} class="cn-row cn-between cn-top cn-gap-16 cn-py-12 cn-m-0">
+                  <span class="cn-stack cn-gap-4 cn-grow">
+                    <span class="cn-name">{a.what}</span>
+                    <span class="cn-meta">{a.who}</span>
+                  </span>
+                  <span class="cn-meta cn-nowrap">{a.when}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </section>
       </div>
     </div>

@@ -161,7 +161,11 @@ export default function LayoutPage() {
         <code class="cn-code-inline">--space-7</code> (48px) apart. Panels
         inside a region sit <code class="cn-code-inline">--space-5</code>{" "}
         (24px) apart, which is the page grid's gap. Content inside a panel
-        takes <code class="cn-code-inline">--body-pad</code>.
+        takes <code class="cn-code-inline">--body-pad</code>: put it in a{" "}
+        <code class="cn-code-inline">.panel-body</code>, not fixed padding
+        utilities, so it follows density. The equal-column grids,{" "}
+        <code class="cn-code-inline">.cn-grid-2/3/4</code>, keep a 16px gap, so
+        add <code class="cn-code-inline">cn-gap-24</code> when they hold panels.
       </p>
 
       <p class="cn-copy">
@@ -178,6 +182,11 @@ export default function LayoutPage() {
         the 7 and comes first in the source, and the aside takes the 5. At
         760px the row stacks in that order, data above aside. The{" "}
         <a href="/examples/dashboard">dashboard example</a> is built this way.
+        Two kinds of view move the primary. A form puts it in the footer,
+        after the fields it submits, as the{" "}
+        <a href="/examples/settings">settings example</a> does. A first-run
+        screen puts it in the lead panel, beside the setup it starts, as the{" "}
+        <a href="/examples/empty-project">empty project</a> does.
       </p>
 
       <Demo title="A view in reading order, regions 48px apart" classes="cn-stack cn-gap-48 · stat-grid is-ruled · cn-grid-12 · panel is-lead">
@@ -397,7 +406,7 @@ export default function LayoutPage() {
           { name: ".cn-split", values: "wrapping flex, gap 12 by 16", notes: "Two groups at opposite ends; the first takes the slack, and the second wraps under it when they no longer fit. A header with actions." },
           { name: ".cn-measure", values: "max-inline-size --cn-measure", notes: "A centered column at 68ch for prose inside a wide page." },
           { name: ".cn-with-side", values: "--side-w", default: "16rem", notes: "The first child is the side, the last takes the rest, gap 24. They stack when the content would drop under 60% of the row." },
-          { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap 16", notes: "Collapse at 760 and 520." },
+          { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap 16", notes: "Collapse at 760 and 520. Add cn-gap-24 when they hold panels." },
           { name: ".cn-grid-12", values: "twelve columns, gap 24", notes: "The page grid for one region's panels. Children span with .cn-span-*." },
           { name: ".cn-span-3 / 4 / 5 / 6 / 7 / 8 / 9 / 12", values: "children of .cn-grid-12", notes: "Columns to span. Each takes the full row at 760px and below, or inside a .cn-container that narrow." },
           { name: ".cn-container", values: "container-type: inline-size", notes: "Grids and component folds inside it answer its width, not the viewport's: the stat grid and panel footer at 760, the segmented control, stats, accordion meta and .kv at 520." },

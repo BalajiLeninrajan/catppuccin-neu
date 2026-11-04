@@ -11,7 +11,7 @@ export default function EmptyStatePage() {
         with a floor from <code class="cn-code-inline">--empty-h</code> (260px, 120px
         compact), so an empty list or panel body keeps its height. The recipe
         styles three children. An <code class="cn-code-inline">svg</code> before the
-        title sits on a 56px plate carved on the soft inset.{" "}
+        title sits in a 56px round carve on the soft inset.{" "}
         <code class="cn-code-inline">strong</code> is the title,{" "}
         <code class="cn-code-inline">span</code> the supporting line, and anything
         else joins the 8px stack.
@@ -68,7 +68,7 @@ export default function EmptyStatePage() {
           {
             name: "svg",
             notes:
-              "Optional glyph, first child. 56px round plate on --neu-inset-soft, 16px padding, overlay-1 stroke.",
+              "Optional glyph, first child. A 56px round carve on --neu-inset-soft, 16px padding, overlay-1 stroke.",
           },
           {
             name: "strong",

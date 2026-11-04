@@ -45,7 +45,7 @@
   --cn-fg-soft: var(--subtext-1);        /* lede, table cells, code: 9.3:1 */
   --cn-fg-body: var(--subtext-1);        /* running text, Catppuccin's body stop below text: 9.3:1 */
   --cn-fg-muted: var(--subtext-0);       /* labels, meta, help, table heads: 7.4:1 */
-  --cn-fg-placeholder: var(--overlay-2); /* placeholders, the floor for text: 5.8:1 */
+  --cn-fg-placeholder: var(--overlay-2); /* placeholders and code line numbers, the floor for text: 5.8:1 */
   --cn-fg-faint: var(--overlay-1);       /* resting icons, the field lip: 4.4:1 */
   --cn-fg-on-accent: var(--crust);       /* text and glyphs on a solid accent fill: 9.2:1 on mauve */
   --cn-fg-disabled: var(--overlay-1);    /* disabled text: 4.4:1 */
@@ -114,18 +114,18 @@
   --cn-surface-raised: color-mix(in srgb, var(--surface-0) 75%, var(--base));  /* panels, plated controls: 1.21:1 */
   --cn-surface-overlay: color-mix(in srgb, var(--surface-0) 90%, var(--base)); /* popovers, dialogs, toasts: 1.27:1 */
   /* Body text stays above 7:1, labels above 5.5:1 and placeholders above 4.5:1 on both. A
-     lighter step costs the muted role its 4.5:1, so the ladder stops here. */
+     lighter step drops the placeholder role under 4.5:1, so the ladder stops here. */
   --cn-surface-recessed: color-mix(in srgb, var(--mantle) 55%, var(--base)); /* the sidebar, app chrome below the page */
   --cn-surface-band: color-mix(in srgb, var(--crust) 30%, transparent);      /* table heads: one step under whatever holds them */
-  --cn-surface-sunken: color-mix(in srgb, var(--crust) 38%, var(--mantle));   /* filled wells, code, stepper pills */
+  --cn-surface-sunken: color-mix(in srgb, var(--crust) 38%, var(--mantle));   /* filled wells, the mono wells, stepper pills, skeletons */
 
   /* Mix steps. Every tint of a hue into a ground or into transparent uses
      one of these, so a wash means the same strength everywhere. */
   --cn-step-tint: 4%;     /* a field or banner in its tone */
-  --cn-step-wash: 12%;    /* tone hover washes: 1.27:1 for mauve on base */
+  --cn-step-wash: 12%;    /* tone hover washes, the accent tint: 1.27:1 for mauve on base */
   --cn-step-engaged: 20%; /* the engaged wash: 1.52:1, a step past the 1.24:1 hover */
-  --cn-step-fill: 14%;    /* avatar grounds, halos */
-  --cn-step-plate: 25%;   /* the primary plate, banner edges */
+  --cn-step-fill: 14%;    /* avatar grounds, halos, the mark border */
+  --cn-step-plate: 25%;   /* the primary plate, banner edges, the mauve and accent edges */
   --cn-step-edge: 40%;    /* hue hairlines */
   --cn-step-strong: 50%;  /* warmed borders */
   --cn-step-vivid: 70%;   /* accent plates and the engaged rim */
@@ -219,7 +219,7 @@
   --cn-radius-control: 8px;
   --cn-radius-chip: 4px;
 
-  /* Neumorphic depth, lit from the top left: four neu shadows, pop, cast
+  /* Neumorphic depth, lit from the top left: five neu shadows, pop, cast
      and hard. */
   --neu-dark: rgb(8 8 14 / .66);
   --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
@@ -230,6 +230,9 @@
   --neu-shade: rgb(8 8 14 / .72);
   --neu-contact: rgb(8 8 14 / .55);
   --neu-raised: 1px 1px 0 var(--neu-contact), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+  /* The lead panel: the raised layers with a longer cast, so it stands a
+     step higher than its neighbors on the same fill. */
+  --neu-lifted: 1px 1px 0 var(--neu-contact), 14px 18px 36px var(--neu-shade), var(--cn-lit-edge);
   --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5), -2px -2px 5px rgb(69 71 90 / .16);
   --neu-inset: inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
   --neu-inset-soft: inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
@@ -247,8 +250,8 @@
      that item appears.
      --plate (the hard offset's color) is not declared here, so a subtree
      can set it. Read it as var(--plate, var(--crust)). */
-  --accent: var(--mauve);            /* per-instance accent: plates, marks, data */
-  --tone: var(--peach);              /* semantic color for tags, banners, validation */
+  --accent: var(--mauve);            /* per-instance accent: plates, marks, data; bars and legend swatches read --series first */
+  --tone: var(--cn-info);            /* status color for tags, banners, icon-button hover, validation; info until a .cn-tone-* sets it */
   --hard-offset: 4px;                /* the hard offset's distance */
   --page-gutter: clamp(var(--space-3), 3vw, var(--space-6)); /* page column and topbar inline gutter */
   --page-pad: clamp(var(--space-5), 4vw, var(--space-7));

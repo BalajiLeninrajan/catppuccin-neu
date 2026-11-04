@@ -129,7 +129,9 @@ export default function InputPage() {
         <p class="cn-copy">
           Selects share the input well. Where the browser supports customizable
           selects (Chrome 135+), the option list renders as a system popover
-          on the overlay fill, with the mauve wash on hover and a mauve
+          on the overlay fill. A hovered option takes{" "}
+          <code class="cn-code-inline">--hover</code>, like a menu row, and the
+          checked option sits on <code class="cn-code-inline">--wash</code> with a mauve
           checkmark. An option under keyboard focus also draws the 2px
           focus ring, inset 2px, the same indicator as a menu row.
           Elsewhere the OS picker stays.

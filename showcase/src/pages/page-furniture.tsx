@@ -294,7 +294,7 @@ export default function PageFurniturePage() {
             name: ".live-dot",
             values: "7px pulse dot",
             default: "green",
-            notes: "A 4px halo at 13%, pulsing every 1.5s on --ease-out. currentColor fill and halo; recolor with a .cn-text-* utility. Keep aria-hidden.",
+            notes: "A 4px halo at --cn-step-fill (14%), pulsing every 1.5s on --ease-out. currentColor fill and halo; recolor with a .cn-text-* utility. Keep aria-hidden.",
           },
         ]}
       />

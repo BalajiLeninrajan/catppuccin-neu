@@ -201,7 +201,7 @@ export default function CodeblockPage() {
           {
             name: ".is-numbered",
             values: "one element per line inside the pre",
-            notes: "A 3ch right-aligned gutter, so it scales with the font.",
+            notes: "A 3ch right-aligned gutter in --cn-fg-placeholder, so it scales with the font.",
           },
           {
             name: ".tok-keyword / -string / -number / -fn / -comment",
