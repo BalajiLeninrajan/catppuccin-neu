@@ -455,7 +455,10 @@ document.startViewTransition(() => showBanner());`}
         every view-transition animation runs in .01ms, so the page swaps at
         once. The reduced-motion block names the view-transition
         pseudo-elements, because the universal selector does not reach them. A single-page
-        app like this site changes routes in script and does not use it.
+        app changes routes in script, so it calls{" "}
+        <code class="cn-code-inline">document.startViewTransition</code> around
+        the route change instead, behind a check that the browser has it. This
+        site wraps every in-app link that way.
       </p>
 
       <p class="cn-copy">
@@ -468,7 +471,10 @@ document.startViewTransition(() => showBanner());`}
         <code class="cn-code-inline">--t-base</code> and ease-out. It is a
         class, not a rule on every primary: two elements with one{" "}
         <code class="cn-code-inline">view-transition-name</code> abort the
-        whole transition, so put it on one primary per page.
+        whole transition, so put it on one primary per page. To see it, go
+        from the <a href="/examples/dashboard">dashboard example</a> to the{" "}
+        <a href="/examples/invoice">invoice example</a>: the lead panel and
+        the primary move and resize into place.
       </p>
 
       <CodeBlock title="Opting in" code={viewTransitionSnippet} />

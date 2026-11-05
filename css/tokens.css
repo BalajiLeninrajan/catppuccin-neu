@@ -230,14 +230,18 @@
   --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
   /* A shadow has to be darker than the darkest surface it falls on, and
      crust is only 1.1:1 under base, so the raised shadow is crust taken
-     halfway to black: a 1px contact edge in the full ink where the surface
-     meets the ground, then a near shadow at .8 that lays a solid 3 to 4px
+     halfway to black: a 2px contact edge in the full ink where the surface
+     meets the ground, then a near shadow at .8 that lays a 4 to 6px
      dark foot along the bottom and right edges, then the cast. The cast
-     tops out near 1.28:1, so the foot is what makes the height read at 1x. */
+     tops out near 1.28:1, so the foot is what makes the height read at 1x.
+     The 2px contact stays under the lead's 3px 4px foot and the plate at
+     default (4px) and cozy (3px) density. Compact density drops the plate
+     to 2px, so it drops the contact to 1px and a plain panel still reads
+     lower than both. */
   --neu-shade: rgb(8 8 14 / .72);
   --neu-contact: var(--neu-ink);
   --neu-near: rgb(8 8 14 / .8);
-  --neu-raised: 1px 1px 0 var(--neu-contact), 2px 3px 4px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+  --neu-raised: 2px 2px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
   /* The lead panel stands higher by darkness on its bottom and right only,
      never by a line all round or a brighter one: a deeper full-ink contact,
      a deeper near shadow and a longer cast. It keeps the plain lit edge.
@@ -300,7 +304,7 @@
      var() resolves where it is declared. */
   --edge:      color-mix(in srgb, var(--surface-2) 85%, transparent); /* raised-surface hairline: 2.1:1 */
   --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
-  --cn-stat-rule: var(--surface-1); /* the .stat-grid.is-ruled rule, between --edge-soft and --edge: 1.8:1 on the page */
+  --cn-stat-rule: var(--edge); /* the .stat-grid.is-ruled rule, equal to --edge: 2.1:1 on the page at twice the width */
   --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
   --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its own wash */
   --hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay, so a menu row still lights */
@@ -308,21 +312,21 @@
   /* .6 keeps a disabled ghost label at 4.2:1. The primary goes flat instead
      of dimming. */
   --disabled-opacity: .6;
-  /* A carved field at rest has no edge of its own: its label and its dark
-     wall identify it, and a bright lip would read as a bevel. The ring
-     paints nothing by default. Under hover: none it takes the cell field's
-     even surface-1 hairline, and prefers-contrast closes it into a full
-     overlay-2 ring. Hover draws a full 1px --control-edge ring, 4.4:1 on
-     the page and on a panel and 3.5:1 on an overlay, and focus draws the
-     focus ring, so a field shows 3:1 bounds as soon as it is in use. Wells,
-     the mono wells and the tabs carve take --cn-well-ring, which also
-     paints nothing until prefers-contrast closes it into a surface-2 ring. */
-  --cn-field-ring: inset 0 0 0 1px transparent;
-  --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
-  /* A field in a table cell has no label above it, so it alone keeps a
-     quiet even hairline at rest: surface-1, 1.8:1 on the page and 1.4:1
-     on an overlay, the same on all four sides so it never reads as a lip. */
+  /* A carved field at rest is its dark wall plus a quiet even hairline:
+     surface-1 on all four sides, 1.8:1 on the page and 1.4:1 on an
+     overlay. It is the same on every side and never brightens the bottom
+     or right, so it reads as a cut edge, not a lip. prefers-contrast closes
+     it into a full overlay-2 ring. Hover draws a full 1px --control-edge
+     ring, 4.4:1 on the page and on a panel and 3.5:1 on an overlay, and
+     focus draws the focus ring, so a field shows 3:1 bounds as soon as it
+     is in use. Fields in table cells read the same hairline through
+     --cn-cell-field-ring. The tabs carve shares --cn-field-ring. Wells and
+     the mono wells take --cn-well-ring, which paints nothing until
+     prefers-contrast closes it into a surface-2 ring, because their sunken
+     fill already separates them. */
   --cn-cell-field-ring: inset 0 0 0 1px var(--surface-1);
+  --cn-field-ring: var(--cn-cell-field-ring);
+  --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
   --cn-well-ring: inset 0 0 0 1px transparent;
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
      for inner rules and dividers, --edge-strong for the lead panel and
@@ -490,6 +494,8 @@
 /* Compact density. */
 [data-density="compact"] {
   --hard-offset: 2px;
+  /* The contact stays under the 2px plate. */
+  --neu-raised: 1px 1px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
   --control-h: 1.75rem;   /* 28px */
   --control-h-sm: max(24px, 1.625rem); /* 26px, never under the 24px target floor */
   --cn-radius-panel: var(--cn-radius-card);
@@ -626,7 +632,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
 @media (prefers-contrast: more) {
   /* The panel hairline is overlay-0, 3.4:1 on base, so a panel shows a
      3:1 boundary. The lead and overlay hairline stays a step above it on
-     overlay-1, 4.4:1. The stat rule lifts to surface-2, 2.5:1, so it stays
+     overlay-1, 4.4:1. The stat rule lifts to surface-2, 2.5:1, so it sits
      between the surface-1 --edge-soft and the overlay-0 --edge. */
   :root {
     --cn-fg-body: var(--text);
@@ -658,14 +664,6 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --control-h: 2.875rem;    /* 46px */
     --control-h-sm: 2.75rem;  /* 44px */
   }
-}
-
-/* No hover: the hover ring never comes, so a resting field takes the cell
-   field's quiet even hairline, surface-1 on all four sides, 1.8:1 on the
-   page. It reads --cn-cell-field-ring, so prefers-contrast: more still
-   closes it into overlay-2. Pointer devices keep the edgeless carve. */
-@media (hover: none) {
-  :root { --cn-field-ring: var(--cn-cell-field-ring); }
 }
 
 /* Forced colors drop box-shadow, so rings and carves need real edges. */

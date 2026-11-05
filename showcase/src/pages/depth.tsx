@@ -170,14 +170,14 @@ export default function DepthPage() {
         <code class="cn-code-inline">--edge</code> or{" "}
         <code class="cn-code-inline">--edge-strong</code>. It is the
         surface's cut edge, not a border standing in for depth. Carved
-        surfaces have none at rest. A field's{" "}
-        <code class="cn-code-inline">--cn-field-ring</code> and a well's{" "}
-        <code class="cn-code-inline">--cn-well-ring</code> paint nothing until{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> closes them
+        surfaces have no lip. A resting field and the tabs carve take{" "}
+        <code class="cn-code-inline">--cn-field-ring</code>, a quiet even
+        surface-1 hairline at 1.8:1, the same on all four sides. A well's{" "}
+        <code class="cn-code-inline">--cn-well-ring</code> paints nothing,
+        since the sunken fill already sets it apart.{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code> closes both
         into a full even ring, and a hovered field closes its ring in{" "}
-        <code class="cn-code-inline">--control-edge</code>. Under{" "}
-        <code class="cn-code-inline">hover: none</code> a resting field keeps
-        a quiet even surface-1 hairline, since no hover ring comes. An engaged state is
+        <code class="cn-code-inline">--control-edge</code>. An engaged state is
         carved too, with an{" "}
         <code class="cn-code-inline">--engaged-edge</code> rim.
       </p>
@@ -258,9 +258,9 @@ export default function DepthPage() {
         halfway to black, <code class="cn-code-inline">rgb(8 8 14)</code>:{" "}
         <code class="cn-code-inline">--neu-shade</code> at .72 for the cast,{" "}
         <code class="cn-code-inline">--neu-contact</code>, the full ink at
-        1.22:1 on the page, for a 1px edge where the surface meets the
+        1.22:1 on the page, for a 2px edge where the surface meets the
         ground, <code class="cn-code-inline">--neu-near</code> at .8 for a
-        2px 3px 4px shadow that lays a solid 3 to 4px dark foot along the
+        3px 4px 6px shadow that lays a 4 to 6px dark foot along the
         bottom and right edges, and <code class="cn-code-inline">--neu-dark</code> at
         .8 for a carve's dark wall, because a well's wall falls on the page.
         The raised token has four layers: contact, near shadow, cast and the
@@ -270,7 +270,9 @@ export default function DepthPage() {
         shadow and an 18px 28px 48px cast. Even black is only 1.28:1 under
         base, so a longer cast barely shows; the deeper foot does the work,
         4px of full ink under the lead's bottom edge where a plain panel
-        has 1px, as deep as a button's plate. Nothing darkens its top and left, because a dark line all
+        has 2px, as deep as a button's plate. Compact density drops the
+        plate to 2px and the plain contact to 1px, so a plain panel stays
+        under a plated control. Nothing darkens its top and left, because a dark line all
         round reads as a heavier outline, not as height. The soft raise
         keeps contact and a short cast, so every raise answers the light
         the same way: no raise draws a top-left highlight outside its edge.
@@ -288,11 +290,11 @@ export default function DepthPage() {
         code={`/* The shadow base: crust taken halfway to black */
 --neu-shade:   rgb(8 8 14 / .72);   /* the cast */
 --neu-ink:     rgb(8 8 14);         /* the default plate */
---neu-contact: var(--neu-ink);      /* the 1px edge where a surface meets the ground */
+--neu-contact: var(--neu-ink);      /* the hard edge where a surface meets the ground */
 --neu-near:    rgb(8 8 14 / .8);    /* the dark foot just past the contact */
 --neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
 
---neu-raised:      1px 1px 0 var(--neu-contact), 2px 3px 4px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+--neu-raised:      2px 2px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
 --neu-lifted:      3px 4px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
 --neu-inset:       inset 3px 3px 8px var(--neu-dark);

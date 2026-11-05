@@ -260,7 +260,9 @@ export default function MenuPage() {
         the 2px <code class="cn-code-inline">--cn-focus</code> ring, inset 2px so the rows above and below
         never clip it. The pointer gets the wash alone, so a reader using the
         arrow keys always sees which row Enter will run. A leading svg sits at 16px
-        in <code class="cn-code-inline">--cn-fg-faint</code>. A trailing{" "}
+        in <code class="cn-code-inline">--cn-fg-faint</code>. Once any row has
+        one, rows without an svg and the group labels indent to the icon
+        column, so every label starts on one line. A trailing{" "}
         <code class="cn-code-inline">kbd</code> is the shortcut, in mono at the
         code size, 13px; mirror it in <code class="cn-code-inline">aria-keyshortcuts</code>.
         A <code class="cn-code-inline">menuitemcheckbox</code> with{" "}
@@ -346,13 +348,13 @@ export default function MenuPage() {
         rows={[
           { name: ".popover.menu", values: '[role="menu"]', notes: "Width auto, min 200px, max min(320px, 100vw - 32px), 4px padding. The popover fill, hairline, shadow and motion." },
           { name: '.menu > [role^="menuitem"]', values: "button or a", notes: "--control-h-sm row, 12px inline padding, the control radius, 500 14px in --cn-fg-soft. Hover and :focus-visible share --hover and --cn-fg; :focus-visible adds the 2px --cn-focus ring at a -2px offset." },
-          { name: "> svg", values: "leading glyph", notes: "16px in --cn-fg-faint, aria-hidden." },
+          { name: "> svg", values: "leading glyph", notes: "16px in --cn-fg-faint, aria-hidden. Once any row has one, iconless rows and group labels indent 36px, to the icon column's text edge." },
           { name: "> kbd", values: "trailing shortcut", notes: "Pushed to the end, mono 500 13px in --cn-fg-muted. Mirror it in aria-keyshortcuts." },
           { name: '[aria-checked="true"]', values: "menuitemcheckbox / menuitemradio", notes: "A 14px mauve check at the row's end." },
           { name: ".is-danger", values: "on a row", notes: "--cn-danger label, a red wash at --cn-step-wash on hover and focus." },
           { name: ':disabled / [aria-disabled="true"]', values: "on a row", notes: "--disabled-opacity, not-allowed, no hover fill." },
           { name: 'hr[role="separator"]', values: "between groups", notes: "An --edge-soft rule, 4px above and below." },
-          { name: ".cn-microlabel", values: "group label", notes: "Padded to line up with the rows. aria-hidden inside role=menu." },
+          { name: ".cn-microlabel", values: "group label", notes: "Padded to line up with the row labels, at the icon column when the menu has icons. aria-hidden inside role=menu." },
           { name: 'btn-ghost[aria-expanded="true"]', values: "the trigger", notes: "The engaged state while the menu is open: --wash, --neu-inset, the --engaged-edge rim." },
         ]}
       />

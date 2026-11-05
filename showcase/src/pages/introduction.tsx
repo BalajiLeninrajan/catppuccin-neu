@@ -54,7 +54,8 @@ export default function IntroductionPage() {
       lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, neumorphic depth from a fixed top-left light source, one mauve accent. It ships as four plain CSS files."
     >
       <p class="cn-copy">
-        Surfaces get their definition from depth, not strokes.
+        Surfaces sit on the page color. A quiet hairline cuts their edge,
+        and a dark foot on the bottom and right gives their height.
       </p>
 
       <Demo title="First look" row classes="btn btn-primary">

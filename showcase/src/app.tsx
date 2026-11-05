@@ -51,6 +51,41 @@ function Sidebar() {
   );
 }
 
+/* Route changes from a link click run inside document.startViewTransition
+   where the browser has it, so the root cross-fades and the .cn-morph lead
+   panel and primary morph between the two examples. The listener sits on
+   the document, so a link's own onClick runs first and preact-iso's
+   window listener runs after; it applies preact-iso's checks, stops the
+   event short of that listener and hands the route change to the
+   transition. Browsers without the API keep the plain swap. */
+function ViewTransitions() {
+  const { route } = useLocation();
+
+  useEffect(() => {
+    if (!("startViewTransition" in document)) return;
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
+      const link = e.composedPath().find((el): el is HTMLAnchorElement => el instanceof HTMLAnchorElement && !!el.href);
+      if (!link || link.origin !== location.origin || link.download || !/^(_?self)?$/i.test(link.target)) return;
+      if (/^#/.test(link.getAttribute("href") ?? "")) return;
+      const url = link.href.replace(location.origin, "");
+      if (url === location.pathname + location.search) return;
+      e.preventDefault();
+      e.stopPropagation();
+      document.startViewTransition(() => {
+        route(url);
+        /* Preact renders on a microtask; resolve after it so the new
+           route is in the DOM when the browser takes the new snapshot. */
+        return new Promise<void>((resolve) => setTimeout(resolve));
+      });
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [route]);
+
+  return null;
+}
+
 function NotFound() {
   return (
     <Doc title="Not found" lede="No page lives at this path.">
@@ -66,6 +101,7 @@ function NotFound() {
 export function App() {
   return (
     <LocationProvider>
+      <ViewTransitions />
       {/* The first focusable element: Tab from the top of any page shows it. */}
       <a class="cn-skip-link" href="#main">
         Skip to content

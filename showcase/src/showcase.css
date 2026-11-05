@@ -35,7 +35,7 @@
 
 .sc-doc-header {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 /* Docs prose stops at the 68ch measure. Demo stages and tables keep the
@@ -163,6 +163,12 @@
 .sc-doc > :is(h2, h3):not(.cn-label) + * { margin-top: calc(-1 * var(--space-4)); }
 .sc-doc > .cn-label { margin-top: var(--space-2); }
 .sc-doc > .cn-label + * { margin-top: calc(-1 * (var(--space-4) + var(--space-1))); }
+
+/* Prose runs together: title to lede, lede to first paragraph and
+   paragraph to paragraph are all 16px, so the 32px gap only opens before
+   a demo, a table or a section. */
+.sc-doc > .sc-doc-header + .cn-copy,
+.sc-doc > .cn-copy + .cn-copy { margin-top: calc(-1 * var(--space-4)); }
 
 .sc-props-scroll {
   overflow-x: auto;

@@ -73,11 +73,11 @@ export default function InputPage() {
       <p class="cn-copy">
         A carve is darkness only. The field's wall falls from the top left and
         its bottom and right walls fade into the ground with no light lip,
-        because a bright line there reads as a bevel. At rest a field has no
-        edge: its label above and the dark well under the label identify it.
-        Once the reader reaches for it the bounds show, as a full ring on hover
-        and the focus ring on focus. A touch screen has no hover, so there a
-        resting field keeps a quiet even surface-1 hairline, 1.8:1 on the page. Always give a field a visible label; a
+        because a bright line there reads as a bevel. At rest a field has a
+        quiet even surface-1 hairline, 1.8:1 on the page, the same on all four
+        sides, so its bounds show without a lip. Once the reader reaches for it
+        the bounds reach 3:1, as a full ring on hover and the focus ring on
+        focus. Always give a field a visible label; a
         field in a table cell has none, so it takes the{" "}
         <a href="/table">inline edit</a> instead.
       </p>
@@ -285,7 +285,7 @@ export default function InputPage() {
             name: ".input",
             values: "on a bare input",
             notes:
-              "The carved well: one dark wall, --neu-inset (inset 3px 3px 8px of crust halfway to black), no edge at rest on a pointer device and an even surface-1 hairline under hover: none, a --control-edge ring on hover. Sans 500 14px in --cn-fg, tabular numerals for amounts and dates.",
+              "The carved well: one dark wall, --neu-inset (inset 3px 3px 8px of crust halfway to black), an even surface-1 hairline at rest, a --control-edge ring on hover. Sans 500 14px in --cn-fg, tabular numerals for amounts and dates.",
           },
           {
             name: ".input-lg",
@@ -322,8 +322,8 @@ export default function InputPage() {
           {
             name: "--cn-field-ring",
             values: "box-shadow",
-            default: "inset 0 0 0 1px transparent",
-            notes: "The resting ring. Paints nothing on a pointer device, so a resting field is its carve and its label. Under hover: none it reads --cn-cell-field-ring, an even surface-1 hairline at 1.8:1 on base, because no hover ring comes. A full overlay-2 ring under prefers-contrast: more, 5.8:1 on base and raised, 4.6:1 on an overlay.",
+            default: "var(--cn-cell-field-ring)",
+            notes: "The resting ring. Reads --cn-cell-field-ring, an even surface-1 hairline, 1.8:1 on base and 1.4:1 on an overlay, never brighter on the bottom and right. The tabs carve shares it. A full overlay-2 ring under prefers-contrast: more, 5.8:1 on base and raised, 4.6:1 on an overlay.",
           },
           {
             name: "--cn-field-hover-ring",

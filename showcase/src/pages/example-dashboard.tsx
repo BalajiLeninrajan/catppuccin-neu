@@ -108,7 +108,7 @@ function InvoiceTable() {
   }
 
   return (
-    <section class="panel is-lead" aria-labelledby="dash-invoices">
+    <section class="panel is-lead cn-morph" aria-labelledby="dash-invoices">
       <div class="panel-header">
         <h2 id="dash-invoices">Invoices</h2>
         <div class="band-actions">
@@ -190,7 +190,7 @@ export default function DashboardExample() {
           <h1 class="cn-display is-sm">
             Billing, <em>September</em>
           </h1>
-          <button type="button" class="btn btn-primary">New invoice</button>
+          <button type="button" class="btn btn-primary cn-morph">New invoice</button>
         </div>
         <p class="cn-lede cn-m-0">
           {INVOICES.length} invoices from the last six weeks, across 6 teams.
@@ -199,8 +199,10 @@ export default function DashboardExample() {
         </p>
       </header>
 
+      {/* The headline figure is a large stat, 32px in the accent, so it
+          outranks the 28px lead band title below it. */}
       <section class="stat-grid is-ruled" aria-label="Key figures">
-        <div class="stat">
+        <div class="stat is-lg">
           <span>Collected this month</span>
           <strong>$126,940</strong>
           <p class="cn-meta cn-m-0">+8.2% on August</p>

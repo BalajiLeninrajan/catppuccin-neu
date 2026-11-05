@@ -599,7 +599,7 @@ export default function ColorsPage() {
 --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
 --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its wash */
 --hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay */
---cn-well-ring: inset 0 0 0 1px transparent; /* wells, tabs, mono wells: a surface-2 ring under prefers-contrast only */
+--cn-well-ring: inset 0 0 0 1px transparent; /* wells and mono wells: a surface-2 ring under prefers-contrast only */
 
 /* The tone stops are declared on each tinted recipe, so they read that
    element's --tone. A status .cn-tone-* swaps in its ladder. */

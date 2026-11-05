@@ -136,7 +136,7 @@ export default function InvoiceExample() {
           </div>
           <div class="cn-row cn-wrap">
             <button type="button" class="btn btn-secondary">Send reminder</button>
-            <button type="button" class="btn btn-primary">Record payment</button>
+            <button type="button" class="btn btn-primary cn-morph">Record payment</button>
             <MoreMenu />
           </div>
         </header>
@@ -147,7 +147,7 @@ export default function InvoiceExample() {
         </div>
       </div>
 
-      <section class="panel is-lead" aria-labelledby="inv-lines">
+      <section class="panel is-lead cn-morph" aria-labelledby="inv-lines">
         <div class="panel-header">
           <h2 id="inv-lines">Line items</h2>
           <span class="chip">{LINES.length} items</span>

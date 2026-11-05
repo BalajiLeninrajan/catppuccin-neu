@@ -134,7 +134,8 @@
    Borderless: the carve, one dark wall from the top left, and the sunken
    fill define it. A shadow alone tops out near 1.28:1 on a dark page, so
    a transparent well read as an outlined panel; the darker fill puts it
-   below the ground. --cn-well-ring paints only under prefers-contrast. */
+   below the ground, so it needs no hairline. --cn-well-ring paints only
+   under prefers-contrast. */
 .well {
   border-radius: var(--cn-radius-card);
   background: var(--cn-surface-sunken);
@@ -501,10 +502,10 @@ a:active > .accent-card {
 /* Borderless inset well, carved from whatever surface it sits on: the
    background stays transparent so the parent ground shows through and only
    the dark inner wall defines the field. A sunken fill was tried and
-   dropped: at 1x it flattened the carve into a dark box. On a pointer
-   device it has no edge at rest; under hover: none it takes the cell
-   field's even surface-1 hairline. Hover closes a 3:1 ring around it and
-   focus draws the focus ring.
+   dropped: at 1x it flattened the carve into a dark box. At rest it has
+   a quiet even surface-1 hairline, 1.8:1 on the page, the same on all
+   four sides, so its bounds show without a lip. Hover closes a 3:1 ring
+   around it and focus draws the focus ring.
    Sans face; numbers stay tabular. A plain list, not :is(), so the hero
    variant below can override it. */
 .input,
@@ -1390,8 +1391,9 @@ a:hover:not(:active) > .accent-card {
 }
 /* On the page ground, each stat hangs from a rule on its start side, so the
    row reads as one band without a panel around it. The rule is
-   --cn-stat-rule, between --edge-soft and --edge in every contrast mode, so
-   it holds its weight beside a panel's hairline and still reads quieter. */
+   --cn-stat-rule, equal to --edge, so at twice the width it holds its
+   weight beside a panel's hairline without stepping past the hairline
+   ladder. Under prefers-contrast it sits between --edge-soft and --edge. */
 .stat-grid.is-ruled > .stat { padding-block: var(--space-1); padding-inline: var(--space-4) 0; border-inline-start: 2px solid var(--cn-stat-rule); }
 
 .stat.is-inline {
@@ -1483,9 +1485,10 @@ a:hover:not(:active) > .accent-card {
 .data-table :is(th, td).is-num { text-align: end; }
 .data-table th.is-num[aria-sort] > button { flex-direction: row-reverse; }
 /* Inline edit: an .input in a table cell. It has no label above it, so it
-   takes its name from the column header through aria-labelledby and,
-   alone among fields, keeps a quiet even surface-1 hairline at rest,
-   1.8:1 on the page. The soft carve stays darkness only. :where() keeps
+   takes its name from the column header through aria-labelledby. It
+   reads --cn-cell-field-ring, the same even surface-1 hairline as any
+   resting field, 1.8:1 on the page, so it keeps that edge even where a
+   consumer clears --cn-field-ring. The soft carve stays darkness only. :where() keeps
    the selector as light as .input, so hover, focus, validation, disabled
    and read-only still win. */
 :where(.data-table td) .input {
@@ -2175,8 +2178,10 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
    <div role="tabpanel" id="p1" aria-labelledby="t1">…</div>
    The tabs sit in a shallow carve and the selected one rises out of it on
    the raised fill, the reverse of the segmented control, whose choice
-   presses in. Arrow keys move between tabs (a consumer listener; roving
-   tabindex, the selected tab is the only one in the tab order).        */
+   presses in. The carve takes the resting field's quiet even hairline,
+   --cn-field-ring, so its bounds show on the page color. Arrow keys move
+   between tabs (a consumer listener; roving tabindex, the selected tab is
+   the only one in the tab order).        */
 .tabs {
   position: relative;
   max-width: 100%;
@@ -2185,7 +2190,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   gap: var(--space-1);
   overflow-x: auto;
   border-radius: var(--cn-radius-card);
-  box-shadow: var(--neu-inset-soft), var(--cn-well-ring);
+  box-shadow: var(--neu-inset-soft), var(--cn-field-ring);
   scrollbar-width: none;
 }
 .tabs > [role="tab"] {
@@ -2282,6 +2287,10 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 .menu [role^="menuitem"]:is(:disabled, [aria-disabled="true"]) { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
 .menu > [role="separator"] { margin: var(--space-1) 0; border: 0; border-top: 1px solid var(--edge-soft); }
 .menu > .cn-microlabel { padding: var(--space-2) var(--space-3) var(--space-1); }
+/* Once any row leads with an icon, rows without one and the group labels
+   start at the icon column's text edge, so every label lines up. */
+.menu:has(> [role^="menuitem"] > svg) > [role^="menuitem"]:not(:has(> svg)),
+.menu:has(> [role^="menuitem"] > svg) > .cn-microlabel { padding-inline-start: calc(var(--space-3) + var(--space-4) + var(--space-2)); }
 
 /* ── Slider: a range input ──────────────────────────────────────────────────
    <input type="range" class="slider" style="--value: 40%">

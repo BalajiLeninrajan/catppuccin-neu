@@ -347,12 +347,11 @@
 .cn-span-8 { grid-column: span 8; }
 .cn-span-9 { grid-column: span 9; }
 .cn-span-12 { grid-column: 1 / -1; }
-/* Two cases leave a half alone in its row, and each takes the row:
-   - In a grid where every child folds to a half (only 3, 4, 5, 7 and 8
-     spans), an odd last child. Three 4s fold to two and one. Any other
-     child breaks the count, so the rule stays off there.
-   - A 3 right after a 9, because the 9 already took the row above it.
-   Any other mix can leave a half beside an empty half. */
+/* One row per .cn-grid-12. Splits go to halves, and a 9 and an odd last
+   child take the row: three 4s fold to two and one, and a 3 after a 9
+   takes the row because the 9 already took the one above it. A 6 or 12
+   never shares a row with splits, so the :has() guard only keeps the
+   odd-child rule off grids that break the contract. */
 @media (max-width: 1060px) {
   .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
   .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),

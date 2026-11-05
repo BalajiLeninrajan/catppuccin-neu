@@ -6,18 +6,19 @@ interface Row {
   name: string;
   email: string;
   plan: string;
-  /* A .cn-tone-* hue; its glyph comes from TONE_GLYPH. */
-  tone: "green" | "yellow" | "red";
+  /* A status .cn-tone-*, so the tag takes its status ladder; its glyph
+     comes from TONE_GLYPH. */
+  tone: "success" | "warning" | "danger";
   status: string;
   amount: number;
   renews: string;
 }
 
 const ROWS: Row[] = [
-  { name: "Maya Okafor", email: "maya@example.com", plan: "Enterprise", tone: "green", status: "Active", amount: 1240, renews: "Sep 01" },
-  { name: "Jonah Reyes", email: "jonah@example.com", plan: "Pro", tone: "green", status: "Active", amount: 96, renews: "Sep 04" },
-  { name: "Priya Raman", email: "priya@example.com", plan: "Pro", tone: "yellow", status: "Trial ends", amount: 0, renews: "Sep 12" },
-  { name: "Theo Lindqvist", email: "theo@example.com", plan: "Starter", tone: "red", status: "Past due", amount: 24, renews: "Aug 19" },
+  { name: "Maya Okafor", email: "maya@example.com", plan: "Enterprise", tone: "success", status: "Active", amount: 1240, renews: "Sep 01" },
+  { name: "Jonah Reyes", email: "jonah@example.com", plan: "Pro", tone: "success", status: "Active", amount: 96, renews: "Sep 04" },
+  { name: "Priya Raman", email: "priya@example.com", plan: "Pro", tone: "warning", status: "Trial ends", amount: 0, renews: "Sep 12" },
+  { name: "Theo Lindqvist", email: "theo@example.com", plan: "Starter", tone: "danger", status: "Past due", amount: 24, renews: "Aug 19" },
 ];
 
 const EVENTS = [
@@ -236,9 +237,9 @@ export default function TablePage() {
         edit: the small control height and the soft carve, so the row keeps
         its rhythm. A cell field has no label above it, so it takes its name
         from the column header and the row through{" "}
-        <code class="cn-code-inline">aria-labelledby</code>, and it alone
-        keeps a quiet hairline at rest so an empty one still shows where it
-        is. Hover and focus ring it like any field.
+        <code class="cn-code-inline">aria-labelledby</code>, and like any
+        resting field it keeps a quiet even hairline, so an empty one still
+        shows where it is. Hover and focus ring it like any field.
       </p>
 
       <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child">
@@ -276,7 +277,7 @@ export default function TablePage() {
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
           { name: "tbody tr:hover", values: "state", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (12%) into base, 1.27:1 on the page with --cn-fg-soft at 7.3:1, a step under a selected row." },
-          { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest --cn-cell-field-ring draws an even surface-1 hairline, 1.8:1 on the page, never a light lip. Name it with aria-labelledby pointing at the column header and the row's name cell." },
+          { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest --cn-cell-field-ring draws the same even surface-1 hairline as any field, 1.8:1 on the page, never a light lip. Name it with aria-labelledby pointing at the column header and the row's name cell." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },
           { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. The last trailing cell sits on the title line, the one before it under it. Keep its data-label for the desktop header." },
@@ -302,7 +303,7 @@ export default function TablePage() {
         <strong>Maya Okafor</strong>
         <small>maya@example.com</small>
       </td>
-      <td data-label="Status"><span class="tag cn-tone-green">Active</span></td>
+      <td data-label="Status"><span class="tag cn-tone-success">Active</span></td>
       <td class="is-num" data-label="Amount">$1,240.00</td>
     </tr>
     <tr>

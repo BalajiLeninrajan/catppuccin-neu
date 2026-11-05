@@ -127,7 +127,7 @@ export function Doc({ title, lede, children }: DocProps) {
 /**
  * Demo: a captioned specimen stage. Children sit directly on --base.
  * props: {
- *   title?: string,     // .cn-label caption above the stage
+ *   title?: string,     // .cn-name caption above the stage: the ui role, 14px at 600 in --cn-fg
  *   classes?: string,   // class string shown in a copyable code line below
  *   row?: boolean,      // lay children out as a wrapping flex row from the inline start
  *   children,
@@ -143,7 +143,7 @@ export interface DemoProps {
 export function Demo({ title, classes, row, children }: DemoProps) {
   return (
     <figure class="sc-demo">
-      {title ? <figcaption class="cn-label">{title}</figcaption> : null}
+      {title ? <figcaption class="cn-name">{title}</figcaption> : null}
       <div class={`sc-demo-stage${row ? " sc-demo-row" : ""}`}>{children}</div>
       {classes ? <CopyLine text={classes} /> : null}
     </figure>

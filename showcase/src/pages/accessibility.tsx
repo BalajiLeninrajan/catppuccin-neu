@@ -244,16 +244,13 @@ export default function AccessibilityPage() {
         the only way to find the control. A button is identified by its
         label, so its resting hairline is decoration and sits under 3:1 by
         design. A field is identified by the label above it and by its
-        carve, so at rest it has no 3:1 edge: a carve is darkness only, and a
-        light lip on its far walls reads as a bevel. Its state still shows at
-        3:1. Hover closes a full 1px{" "}
+        carve, so its resting edge is a quiet even surface-1 hairline, 1.8:1
+        on the page, not a 3:1 ring: a carve is darkness only, and a light lip
+        on its far walls reads as a bevel. Its state still shows at 3:1. Hover closes a full 1px{" "}
         <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on the
         page and on a panel and 3.5:1 in a dialog, and focus draws the 2px
         focus ring. So a field is findable the moment a reader reaches for
-        it. A touch screen has no hover, so under{" "}
-        <code class="cn-code-inline">hover: none</code> a resting field keeps
-        the cell field's even surface-1 hairline, 1.8:1 on the page. Give
-        every field a visible label. Checkboxes, radios and switches
+        it. Give every field a visible label. Checkboxes, radios and switches
         carry a full edge at rest, because the box is the whole control and
         has no label inside it. That edge and the slider thumb's are{" "}
         <code class="cn-code-inline">--control-edge</code>, overlay-1, so an
@@ -365,7 +362,7 @@ export default function AccessibilityPage() {
         rows={[
           {
             name: "prefers-contrast: more",
-            notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Panel hairlines move to overlay-0, 3.4:1, and the lead and overlay hairline to overlay-1, so a panel shows a 3:1 boundary. A resting field closes into a full overlay-2 ring and wells, tabs and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
+            notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Panel hairlines move to overlay-0, 3.4:1, and the lead and overlay hairline to overlay-1, so a panel shows a 3:1 boundary. A resting field and the tabs carve close into a full overlay-2 ring, and wells and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
           },
           {
             name: "prefers-reduced-motion: reduce",
@@ -430,7 +427,7 @@ export default function AccessibilityPage() {
           { name: "--cn-fg-placeholder", values: "4.5:1", notes: "On the page, raised and overlay fills." },
           { name: "status roles, links", values: "4.5:1", notes: "On the page, raised and overlay fills, and each status role on its own tint." },
           { name: "field hover ring, control edge, focus ring, engaged rim", values: "3:1", notes: "On the page, raised and overlay fills. The control edge covers the slider thumb. The rim also on --wash." },
-          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default a resting field paints no ring." },
+          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet surface-1 hairline at 1.8:1, below 3:1 by design." },
           { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.9, 2.4, 1.4:1 · 1.6, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill, so the depth ladder holds its order. --edge-strong must stay above --edge on every ground. Not WCAG obligations." },
           { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer falls from the top left and is darker than the page, so no carve draws a light lip or glow." },
           { name: "--cn-fg-on-accent", values: "4.5:1", notes: "On the primary and its hover." },
