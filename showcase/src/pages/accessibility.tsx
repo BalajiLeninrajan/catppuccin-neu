@@ -10,12 +10,21 @@ interface ContrastRow {
   use: string;
 }
 
+/* Curated captures from showcase/a11y-shots/forced-colors/, cropped to
+   the demo stage. Regenerate them after a test:a11y run when a forced
+   colors rule changes. */
+const FORCED_SHOTS: [string, string, number][] = [
+  ["/forced-colors/controls.png", "Under forced colors, a live primary and a disabled primary. Both draw a system-color edge; the disabled label is GrayText.", 150],
+  ["/forced-colors/fields.png", "Under forced colors, two labeled fields. Each carved field draws a CanvasText edge in place of its shadow.", 180],
+  ["/forced-colors/engaged.png", "Under forced colors, a segmented control. The chosen option draws a Highlight rim; the others keep a plain edge.", 160],
+];
+
 /* WCAG ratios and APCA 0.0.98G Lc on base (#1e1e2e), which is also the
    raised fill, and on the overlay fill, in that order. pnpm lint computes
    the same numbers from the tokens. */
 const CONTRAST: ContrastRow[] = [
   { role: "--cn-fg", palette: "text", swatch: "var(--cn-fg)", ratio: "11.3 · 9.0", apca: "80 · 77", use: "Headings, names, values." },
-  { role: "--cn-fg-soft", palette: "subtext-1", swatch: "var(--cn-fg-soft)", ratio: "9.3 · 7.3", apca: "68 · 65", use: "Ledes, table cells, code, .cn-label and field labels." },
+  { role: "--cn-fg-soft", palette: "subtext-1, an alias of --cn-fg-body", swatch: "var(--cn-fg-soft)", ratio: "9.3 · 7.3", apca: "68 · 65", use: "Ledes, table cells, code, .cn-label and field labels." },
   { role: "--cn-fg-body", palette: "subtext-1", swatch: "var(--cn-fg-body)", ratio: "9.3 · 7.3", apca: "68 · 65", use: "Running text." },
   { role: "--cn-fg-muted", palette: "subtext-0", swatch: "var(--cn-fg-muted)", ratio: "7.4 · 5.8", apca: "56 · 53", use: "Meta, help, table heads. subtext-1 under prefers-contrast." },
   { role: "--cn-fg-placeholder", palette: "overlay-2", swatch: "var(--cn-fg-placeholder)", ratio: "5.8 · 4.6", apca: "46 · 42", use: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
@@ -55,8 +64,8 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
   ["--hover", "surface-1 40% over the ground", "1.24:1 (1.15:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
-  ["--edge", "surface-2 85% over the ground", "2.1:1 (1.8:1 on an overlay)", "The hairline of panels and controls, with the 1.5:1 lit top edge the bound of a panel on the page color."],
-  ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-0 under prefers-contrast."],
+  ["--edge", "surface-2 85% over the ground", "2.1:1 (1.8:1 on an overlay)", "The hairline of panels and controls, with the 1.5:1 lit top edge the bound of a panel on the page color. overlay-0 under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
+  ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
 ];
 
 const COMPONENTS: Array<[string, string]> = [
@@ -241,7 +250,10 @@ export default function AccessibilityPage() {
         <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on the
         page and on a panel and 3.5:1 in a dialog, and focus draws the 2px
         focus ring. So a field is findable the moment a reader reaches for
-        it. Give every field a visible label. Checkboxes, radios and switches
+        it. A touch screen has no hover, so under{" "}
+        <code class="cn-code-inline">hover: none</code> a resting field keeps
+        the cell field's even surface-1 hairline, 1.8:1 on the page. Give
+        every field a visible label. Checkboxes, radios and switches
         carry a full edge at rest, because the box is the whole control and
         has no label inside it. That edge and the slider thumb's are{" "}
         <code class="cn-code-inline">--control-edge</code>, overlay-1, so an
@@ -328,8 +340,8 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         Every size is rem, so the reader's browser font-size setting scales
         every role. The microlabel is the one 12px role at the 16px default;
-        labels and meta are 13px, apart by weight and by ink: the label 500
-        in subtext-1, meta 400 in subtext-0. Body copy is 16px, and 15px at compact density.{" "}
+        labels are 13px at 500 in subtext-1 and meta is 14px at 400 in
+        subtext-0, so the two differ by size as well as weight and ink. Body copy is 16px, and 15px at compact density.{" "}
         <code class="cn-code-inline">.page-main.is-reading</code> sets the lede
         at 20px.
       </p>
@@ -353,7 +365,7 @@ export default function AccessibilityPage() {
         rows={[
           {
             name: "prefers-contrast: more",
-            notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Hairlines go solid, a resting field closes into a full overlay-2 ring and wells, tabs and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
+            notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Panel hairlines move to overlay-0, 3.4:1, and the lead and overlay hairline to overlay-1, so a panel shows a 3:1 boundary. A resting field closes into a full overlay-2 ring and wells, tabs and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
           },
           {
             name: "prefers-reduced-motion: reduce",
@@ -369,6 +381,20 @@ export default function AccessibilityPage() {
           },
         ]}
       />
+
+      <p class="cn-copy">
+        Under forced colors, from the{" "}
+        <code class="cn-code-inline">test:a11y</code> run in Chromium's
+        emulation. Shadows, fills and the plate are gone, so every control
+        keeps a system-color edge, the disabled primary keeps its edge in
+        GrayText, and the chosen segmented option draws a Highlight rim.
+      </p>
+
+      <div class="cn-stack cn-gap-16">
+        {FORCED_SHOTS.map(([src, alt, h]) => (
+          <img key={src} src={src} alt={alt} width={870} height={h} loading="lazy" style="max-width:100%;height:auto" />
+        ))}
+      </div>
 
       <h2 class="cn-title">Per component</h2>
       <p class="cn-copy">

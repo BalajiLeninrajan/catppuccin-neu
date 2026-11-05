@@ -108,7 +108,7 @@ export default function TypographyPage() {
         Inside an accent card the large value is text-colored instead.
       </p>
 
-      <Demo title="cn-meta · 400 · 13px/1.5 · tabular-nums · subtext-0" classes="cn-meta">
+      <Demo title="cn-meta · 400 · 14px/1.5 · tabular-nums · subtext-0" classes="cn-meta">
         <span class="cn-meta">Updated Aug 24, 2026 · 14 members · v3.2.1</span>
       </Demo>
 
@@ -154,7 +154,8 @@ export default function TypographyPage() {
       <p class="cn-copy">
         Every size is rem, so the reader's browser font-size setting scales
         every role. The px on this page are at the 16px default. The
-        microlabel is the one 12px role; the label and meta are 13px. The
+        microlabel is the one 12px role; the label and code are 13px, and
+        meta is 14px so it reads apart from the label at 1x. The
         name is the ui role in <code class="cn-code-inline">--cn-fg</code>:
         its tokens alias the ui tokens, so it is the same 14px at 600, set
         apart by its color. Body copy is 16px, and
@@ -253,7 +254,7 @@ export default function TypographyPage() {
           { name: ".cn-microlabel", values: "sans", default: "500 · 12px/1.25 · +0.08em · uppercase · subtext-0", notes: "A fact's label. The only uppercase role and the only 12px one." },
           { name: ".cn-value", values: "sans", default: "600 · 24px/1 · -0.02em · tabular", notes: "Stat numbers." },
           { name: ".cn-value-lg", values: "sans", default: "600 · 32px/1 · -0.025em · tabular", notes: "Large stat in var(--accent); text inside an accent card. Opt out with a color utility." },
-          { name: ".cn-meta", values: "sans", default: "400 · 13px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. A weight under the 500 label and a stop dimmer, --cn-fg-muted." },
+          { name: ".cn-meta", values: "sans", default: "400 · 14px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. A size above the 13px label, a weight under its 500 and a stop dimmer, --cn-fg-muted." },
           { name: ".cn-code", values: "mono", default: "500 · 13px/1.6 · tabular", notes: "Machine literals, CLI strings." },
           { name: ".cn-code-inline", values: "mono", default: "500 · 0.92em · subtext-1", notes: "Code inside prose, in --cn-fg-soft." },
           { name: ".cn-code-meta", values: "mono", default: "500 · 13px/1 · subtext-0", notes: "A model id, a path or a hash under a name." },

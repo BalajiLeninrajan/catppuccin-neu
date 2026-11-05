@@ -102,8 +102,8 @@ export default function StatPage() {
       <p class="cn-copy">
         A row of key figures often sits straight on the page, under the title
         and before any panel. <code class="cn-code-inline">.is-ruled</code>{" "}
-        hangs each stat from a 2px{" "}
-        <code class="cn-code-inline">--edge-soft</code> rule on its start side,
+        hangs each stat from a 2px <code class="cn-code-inline">--cn-stat-rule</code>,
+        solid surface-1, 1.8:1 on the page, on its start side,
         with 16px between the rule and the label, so the row reads as one
         band without a panel around it. The rule follows the writing
         direction. Inside a panel, use the plain grid.
@@ -212,7 +212,7 @@ export default function StatPage() {
           {
             name: ".stat-grid.is-ruled",
             values: "stats on the page ground",
-            notes: "Each stat hangs from a 2px --edge-soft rule on its inline-start side, 16px in, with 4px block padding. For a figures band outside any panel.",
+            notes: "Each stat hangs from a 2px --cn-stat-rule (solid surface-1, 1.8:1 on the page; surface-2 under prefers-contrast: more) on its inline-start side, 16px in, with 4px block padding. For a figures band outside any panel.",
           },
           {
             name: ".stat.is-inline",

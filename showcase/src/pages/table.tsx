@@ -282,7 +282,7 @@ export default function TablePage() {
           { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. The last trailing cell sits on the title line, the one before it under it. Keep its data-label for the desktop header." },
           { name: ".table-scroll", values: "wrapper", notes: "Opts a table with no data-label cells out of phone mode. The table scrolls sideways inside it. Panel corner rules reach through it." },
           { name: ".data-table.is-sticky-head", values: "modifier", notes: "Header pinned to the top of the scroll container, ruled with an inset shadow. The wrapper needs a max-height to scroll vertically." },
-          { name: ".ranked-row", values: "mark + strong + b", notes: "Flex row, hairline divider, same hover press. b right-aligns the value." },
+          { name: ".ranked-row", values: "mark + strong + b", notes: "Flex row, hairline divider, same hover press. The .mark shrinks to a 22px key at 13px. b right-aligns the value." },
         ]}
       />
 

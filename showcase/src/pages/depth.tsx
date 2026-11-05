@@ -4,12 +4,12 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 /* One model, lowest first. Height is distance from the ground; the light
    is above and to the top left. */
 const HEIGHTS = [
-  { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. A well also takes the darker sunken fill.", tokens: "--neu-inset or --neu-inset-soft, transparent, --cn-surface-sunken or --cn-surface-band", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states." },
+  { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. A well also takes the darker sunken fill.", tokens: "--neu-inset or --neu-inset-soft, transparent, --cn-surface-sunken or --cn-surface-band", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states, the disabled primary." },
   { height: "The ground", draws: "Nothing.", tokens: "--cn-surface-page", who: "The page. Every other height is measured from it." },
   { height: "Resting on it", draws: "The page color, the plain hairline, the lit top edge, a dark foot of contact edge and near shadow on the bottom and right, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Resting higher", draws: "The page color, the brighter hairline, a dark foot about twice as deep on the bottom and right, and a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its deeper foot and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
+  { height: "Resting higher", draws: "The page color, the brighter hairline, a hard dark foot on the bottom and right as deep as the 4px plate, and a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its deeper foot and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
   { height: "Standing on a plate", draws: "The page color and lit top edge over a hard offset, the plate's side in the shadow ink.", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate." },
-  { height: "Lifted off it", draws: "The plate's side grows to 10px and the card tips 1.2deg.", tokens: "a 10px plate over --neu-raised, rotate(1.2deg)", who: "The one tilted panel, holding prose: never a table, a form or ruled rows. Upright under prefers-contrast: more, on the same plate." },
+  { height: "Lifted off it", draws: "The plate's side grows to 6px and the card tips 1.2deg.", tokens: "--cn-plate-tilt, a 6px plate, over --neu-raised, rotate(1.2deg)", who: "The one tilted panel, holding prose: never a table, a form or ruled rows. Upright under prefers-contrast: more, on the same plate." },
   { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
 
@@ -175,7 +175,9 @@ export default function DepthPage() {
         <code class="cn-code-inline">--cn-well-ring</code> paint nothing until{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> closes them
         into a full even ring, and a hovered field closes its ring in{" "}
-        <code class="cn-code-inline">--control-edge</code>. An engaged state is
+        <code class="cn-code-inline">--control-edge</code>. Under{" "}
+        <code class="cn-code-inline">hover: none</code> a resting field keeps
+        a quiet even surface-1 hairline, since no hover ring comes. An engaged state is
         carved too, with an{" "}
         <code class="cn-code-inline">--engaged-edge</code> rim.
       </p>
@@ -264,11 +266,11 @@ export default function DepthPage() {
         The raised token has four layers: contact, near shadow, cast and the
         lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
         the one lead panel, spends its extra darkness on the bottom and
-        right only: a 2px 3px contact in the full ink, a 4px 8px 10px near
+        right only: a 3px 4px contact in the full ink, a 4px 8px 10px near
         shadow and an 18px 28px 48px cast. Even black is only 1.28:1 under
         base, so a longer cast barely shows; the deeper foot does the work,
-        3px of full ink under the lead's bottom edge where a plain panel
-        has 1px. Nothing darkens its top and left, because a dark line all
+        4px of full ink under the lead's bottom edge where a plain panel
+        has 1px, as deep as a button's plate. Nothing darkens its top and left, because a dark line all
         round reads as a heavier outline, not as height. The soft raise
         keeps contact and a short cast, so every raise answers the light
         the same way: no raise draws a top-left highlight outside its edge.
@@ -277,7 +279,7 @@ export default function DepthPage() {
         crust halfway to black at .5 and 2px 2px 5px for the soft carve.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> deepens the
         cast to .86, the carve to .88 and the near shadow to .9, and stands
-        the tilted panel upright on its 10px plate, since rotated text
+        the tilted panel upright on its 6px plate, since rotated text
         renders soft.
       </p>
 
@@ -291,7 +293,7 @@ export default function DepthPage() {
 --neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
 
 --neu-raised:      1px 1px 0 var(--neu-contact), 2px 3px 4px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
---neu-lifted:      2px 3px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
+--neu-lifted:      3px 4px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
 --neu-inset:       inset 3px 3px 8px var(--neu-dark);
 --neu-inset-soft:  inset 2px 2px 5px rgb(8 8 14 / .5);
@@ -402,11 +404,13 @@ export default function DepthPage() {
       <p class="cn-copy">
         The hard offset is a solid, blur-free shadow, available to any
         clickable control and the default on primary and secondary buttons. It
-        reads <code class="cn-code-inline">--plate</code>, crust by default, so a
+        reads <code class="cn-code-inline">--plate</code>, the shadow ink by default, so a
         control can re-key it inline.{" "}
-        <code class="cn-code-inline">cn-hard-lg</code> belongs to the tilted hero
-        card, which layers it over <code class="cn-code-inline">--neu-raised</code>{" "}
-        so the hero still answers the light.{" "}
+        <code class="cn-code-inline">cn-hard-lg</code> is a fixed 10px offset.
+        The tilted hero card takes its own 6px plate,{" "}
+        <code class="cn-code-inline">--cn-plate-tilt</code>, over{" "}
+        <code class="cn-code-inline">--neu-raised</code>, so it still answers
+        the light without outweighing the data beside it.{" "}
         <code class="cn-code-inline">cn-hard-sm</code> is a fixed 3px offset for small
         pieces.
       </p>
@@ -549,7 +553,7 @@ export default function DepthPage() {
           {
             name: ".cn-hard-lg",
             values: "10px 10px 0 var(--plate)",
-            notes: "Tilted hero card.",
+            notes: "A fixed large offset. The tilted panel takes the 6px --cn-plate-tilt instead.",
           },
           {
             name: ".cn-hard-sm",

@@ -258,7 +258,7 @@ export default function IntroductionPage() {
         </p>
         <ol class="cn-copy">
           <li><code class="cn-code-inline">.page-main</code> holding a stack 48px apart.</li>
-          <li>The title and its one primary, in a <code class="cn-code-inline">.cn-split</code> header.</li>
+          <li>The title and its one primary on one line in a <code class="cn-code-inline">.cn-split</code>, with the lede below the split.</li>
           <li>The key figures on the ground, in a <code class="cn-code-inline">.stat-grid.is-ruled</code>.</li>
           <li>One <code class="cn-code-inline">.panel.is-lead</code>, the thing the view is about.</li>
           <li>A <code class="cn-code-inline">.cn-grid-12</code> row of 7 and 5: the data first, the aside last, tilted, in prose.</li>

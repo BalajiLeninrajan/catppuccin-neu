@@ -17,7 +17,7 @@
 .cn-mark-drop   { box-shadow: var(--shadow-mark); }
 /* The hard offset: a solid plate. Any clickable control may take it. */
 .cn-hard        { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
-.cn-hard-lg     { box-shadow: var(--cn-plate-lg); }  /* tilted hero card */
+.cn-hard-lg     { box-shadow: var(--cn-plate-lg); }  /* fixed large offset */
 .cn-hard-sm     { box-shadow: var(--cn-plate-sm); }  /* fixed small offset */
 .cn-flat        { box-shadow: none; }
 
@@ -56,8 +56,8 @@
    Numbers keep tabular-nums on the sans face. Uppercase is scarce: only
    the microlabel shouts, and it labels a fact, never a section.            */
 
-/* Label and meta share 13px. The label is 500 in --cn-fg-soft and meta
-   400 in --cn-fg-muted, so the two read apart by ink as well as weight. */
+/* The label is 13px at 500 in --cn-fg-soft and meta is 14px at 400 in
+   --cn-fg-muted, so the two differ by size, weight and ink. */
 .cn-label {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   letter-spacing: var(--cn-type-label-tracking);

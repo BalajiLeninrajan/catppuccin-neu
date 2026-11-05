@@ -166,6 +166,14 @@ export default function PopoverPage() {
       </p>
 
       <p class="cn-copy">
+        CSS alone does not hide a tip on Escape. A CSS-only consumer must add
+        the listener below or call{" "}
+        <code class="cn-code-inline">tooltips()</code> from{" "}
+        <code class="cn-code-inline">catppuccin-neu/js</code>, or the tip fails
+        WCAG 1.4.13.
+      </p>
+
+      <p class="cn-copy">
         Escape hides a showing tooltip. The listener below sets{" "}
         <code class="cn-code-inline">data-tip-dismissed</code> on Escape and clears it
         when the pointer or focus leaves. This site runs it, so hover a

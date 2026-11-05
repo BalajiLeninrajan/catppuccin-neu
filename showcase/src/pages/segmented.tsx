@@ -136,7 +136,7 @@ export default function SegmentedPage() {
           { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
           { name: "svg inside an option", notes: "16px, sized by the recipe." },
           { name: ".is-stacked", notes: "Vertical list, 12px gap, taller rows, 18px <b>. For described options." },
-          { name: "<b> / <small>", notes: "Option title (sans 600 14px) and a quiet 13px hint line in --cn-fg-muted inside each option." },
+          { name: "<b> / <small>", notes: "Option title (sans 600 14px) and a quiet hint line at the 14px meta role in --cn-fg-muted inside each option." },
           { name: ".cn-sr-only", notes: "Hides the radio in the label form; label:has(input:focus-visible) draws the focus outline." },
           { name: "--control-h", default: "46px", notes: "Option min-height is the knob + 12px (58px); stacked is the knob + 24px." },
           { name: "--plate", default: "var(--neu-ink)", notes: "The plate under every unselected option." },

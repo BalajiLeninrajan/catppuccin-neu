@@ -27,7 +27,8 @@
 /* The lead panel: the one a view is about, one per view. It sits on the
    page color like every panel and stands higher by darkness on the side
    away from the light: --neu-lifted's foot on the bottom and right is
-   about twice a plain panel's, a 2px 3px full-ink contact over a deeper
+   deeper than a plain panel's, a 3px 4px full-ink contact, as deep as the
+   4px plate, over a deeper
    near shadow and a longer cast. The --edge-strong hairline is its one
    step in line strength; it keeps the plain lit edge and draws no outline
    all round, since neither a bright line nor a heavier outline reads as
@@ -39,9 +40,10 @@
   box-shadow: var(--neu-lifted);
 }
 
-/* The one rotated hero card. The hard offset rides over the neu raise so
+/* The one rotated hero card. A 6px plate rides over the neu raise so
    the hero still answers the top-left light instead of floating as a flat
-   sticker. Flattened at ≤1060px. It is the aside, so its prose sets one
+   sticker. The plate stays at 6px, two past a button's, so the aside does
+   not outshout the data panel beside it. Flattened at ≤1060px. It is the aside, so its prose sets one
    step down at the ui size, 14px on the body leading, and the data panel
    beside it stays the louder block. The size rides on the body token
    because .cn-copy is a utility and outranks any recipe rule. */
@@ -52,7 +54,7 @@
      tail. */
   align-self: start;
   transform: rotate(1.2deg);
-  box-shadow: var(--cn-plate-lg), var(--neu-raised);
+  box-shadow: var(--cn-plate-tilt), var(--neu-raised);
 }
 
 /* Bands: the panel header and footer, and the modal and drawer headers.
@@ -331,17 +333,19 @@ a:active > .accent-card {
 }
 .btn-primary:hover:not(:disabled, [aria-disabled="true"]) { --cn-fill: var(--cn-interactive-hover); }
 /* Disabled primary goes flat and sinks: no plate, ramp, grain or gloss,
-   the sunken fill pressed in by the soft carve inside a plain --edge, the
-   disabled text color, and no dimming, the same vocabulary as a disabled
-   switch. A dimmed plate reads as a second primary beside the live one.
-   A busy primary keeps its fill. */
+   no edge, just the sunken fill under the full carve and the well ring,
+   like an empty slot pressed into the page. A secondary keeps its outline
+   and plate, so the two never share a silhouette. The border stays 1px
+   and transparent so the size holds. Darkness only, no lip. The disabled
+   text color, and no dimming: a dimmed plate reads as a second primary
+   beside the live one. A busy primary keeps its fill. */
 .btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
   --cn-fill: var(--cn-surface-sunken);
   --hard-extra: none;
   color: var(--cn-fg-disabled);
-  border: 1px solid var(--edge);
+  border: 1px solid transparent;
   background-image: none;
-  box-shadow: var(--neu-inset-soft);
+  box-shadow: var(--neu-inset), var(--cn-well-ring);
   opacity: 1;
 }
 .btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"])::before { opacity: 0; }
@@ -440,8 +444,10 @@ a:active > .accent-card {
 .btn.is-icon.is-lg { width: var(--control-h); height: var(--control-h); min-height: var(--control-h); }
 .btn.is-icon.is-lg > svg { width: 20px; height: 20px; }
 
-/* Inline text button: mauve, sans, no chrome. */
+/* Inline text button: mauve, sans, no chrome. No padding, so a button
+   and an anchor both sit flush with the content edge of the row above. */
 .btn-text {
+  padding: 0;
   text-decoration: none;
   color: var(--cn-interactive);
   border: 0;
@@ -495,8 +501,10 @@ a:active > .accent-card {
 /* Borderless inset well, carved from whatever surface it sits on: the
    background stays transparent so the parent ground shows through and only
    the dark inner wall defines the field. A sunken fill was tried and
-   dropped: at 1x it flattened the carve into a dark box. At rest it has no
-   edge; hover closes a 3:1 ring around it and focus draws the focus ring.
+   dropped: at 1x it flattened the carve into a dark box. On a pointer
+   device it has no edge at rest; under hover: none it takes the cell
+   field's even surface-1 hairline. Hover closes a 3:1 ring around it and
+   focus draws the focus ring.
    Sans face; numbers stay tabular. A plain list, not :is(), so the hero
    variant below can override it. */
 .input,
@@ -1381,8 +1389,10 @@ a:hover:not(:active) > .accent-card {
   gap: var(--space-4);
 }
 /* On the page ground, each stat hangs from a rule on its start side, so the
-   row reads as one band without a panel around it. */
-.stat-grid.is-ruled > .stat { padding-block: var(--space-1); padding-inline: var(--space-4) 0; border-inline-start: 2px solid var(--edge-soft); }
+   row reads as one band without a panel around it. The rule is
+   --cn-stat-rule, between --edge-soft and --edge in every contrast mode, so
+   it holds its weight beside a panel's hairline and still reads quieter. */
+.stat-grid.is-ruled > .stat { padding-block: var(--space-1); padding-inline: var(--space-4) 0; border-inline-start: 2px solid var(--cn-stat-rule); }
 
 .stat.is-inline {
   padding: 0;
@@ -1573,6 +1583,9 @@ a:hover:not(:active) > .accent-card {
 .ranked-row:last-child { border-bottom: 0; }
 .ranked-row strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
 .ranked-row b { margin-inline-start: auto; color: var(--cn-fg); font-weight: var(--cn-type-value-weight); }
+/* The rank mark is a small key, not a block: at 22px a list of pastel
+   marks reads as color-coded ranks instead of competing tiles. */
+.ranked-row .mark { width: 22px; height: 22px; font-size: var(--cn-type-label-size); }
 
 /* Bar chart: horizontal bars with a label column, values beside the bars.
      <div class="bar-chart">
@@ -1997,7 +2010,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   }
 }
 /* More contrast: rotated text renders soft, so the tilt stands upright and
-   keeps its 10px plate. */
+   keeps its 6px plate. */
 @media (prefers-contrast: more) {
   .panel.is-tilted { transform: none; }
 }
@@ -2254,7 +2267,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
    clip it; the pointer hover is --hover alone. */
 .menu [role^="menuitem"]:focus-visible { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
 .menu [role^="menuitem"] > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--cn-fg-faint); }
-.menu [role^="menuitem"] > kbd { margin-inline-start: auto; color: var(--cn-fg-muted); font: var(--cn-type-code-weight) var(--cn-type-meta-size)/1 var(--mono); }
+.menu [role^="menuitem"] > kbd { margin-inline-start: auto; color: var(--cn-fg-muted); font: var(--cn-type-code-weight) var(--cn-type-code-size)/1 var(--mono); }
 .menu [role^="menuitem"][aria-checked="true"]::after {
   content: "";
   width: 14px;

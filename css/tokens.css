@@ -37,7 +37,7 @@
      hex, and the prefers-contrast block re-keys them. Every value is a
      Mocha color above. Ratios are on base. */
   --cn-fg: var(--text);                  /* headings, names, values: 11.3:1 */
-  --cn-fg-soft: var(--subtext-1);        /* lede, table cells, code, labels: 9.3:1 */
+  --cn-fg-soft: var(--cn-fg-body);       /* lede, table cells, code, labels: a job alias of body, 9.3:1 */
   --cn-fg-body: var(--subtext-1);        /* running text, Catppuccin's body stop below text: 9.3:1 */
   --cn-fg-muted: var(--subtext-0);       /* meta, help, table heads: 7.4:1 */
   --cn-fg-placeholder: var(--overlay-2); /* placeholders and code line numbers, the floor for text: 5.8:1 */
@@ -146,8 +146,8 @@
   --cn-type-label-leading: 1.25;
   --cn-type-label-tracking: 0;
 
-  --cn-type-meta-size: .8125rem;   /* 13px */
-  --cn-type-meta-weight: 400;      /* a step under the 500 label, and a stop dimmer in ink, so the two 13px roles read apart */
+  --cn-type-meta-size: .875rem;    /* 14px, a size above the 13px label, so the two read apart at 1x */
+  --cn-type-meta-weight: 400;      /* a step under the 500 label, and a stop dimmer in ink */
   --cn-type-meta-leading: 1.5;
   --cn-type-meta-tracking: 0;
 
@@ -240,8 +240,11 @@
   --neu-raised: 1px 1px 0 var(--neu-contact), 2px 3px 4px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
   /* The lead panel stands higher by darkness on its bottom and right only,
      never by a line all round or a brighter one: a deeper full-ink contact,
-     a deeper near shadow and a longer cast. It keeps the plain lit edge. */
-  --neu-lifted: 2px 3px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
+     a deeper near shadow and a longer cast. It keeps the plain lit edge.
+     The 3px 4px contact is a hard foot as deep as the 4px plate, so the
+     lead answers the same light as the plated controls and never reads
+     lower than a button. */
+  --neu-lifted: 3px 4px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
   --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
@@ -297,6 +300,7 @@
      var() resolves where it is declared. */
   --edge:      color-mix(in srgb, var(--surface-2) 85%, transparent); /* raised-surface hairline: 2.1:1 */
   --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
+  --cn-stat-rule: var(--surface-1); /* the .stat-grid.is-ruled rule, between --edge-soft and --edge: 1.8:1 on the page */
   --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
   --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its own wash */
   --hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay, so a menu row still lights */
@@ -306,7 +310,8 @@
   --disabled-opacity: .6;
   /* A carved field at rest has no edge of its own: its label and its dark
      wall identify it, and a bright lip would read as a bevel. The ring
-     paints nothing by default. prefers-contrast closes it into a full
+     paints nothing by default. Under hover: none it takes the cell field's
+     even surface-1 hairline, and prefers-contrast closes it into a full
      overlay-2 ring. Hover draws a full 1px --control-edge ring, 4.4:1 on
      the page and on a panel and 3.5:1 on an overlay, and focus draws the
      focus ring, so a field shows 3:1 bounds as soon as it is in use. Wells,
@@ -413,13 +418,16 @@
 
 /* The plates read the element's own --plate and the density's
    --hard-offset, so they are declared where they are drawn: rest, held
-   (half), the +1px link hover, and the fixed 10px and 3px. */
+   (half), the +1px link hover, the fixed 10px and 3px, and the tilted
+   panel's 6px, which stays short so the aside never outweighs the data
+   beside it. */
 :where(.btn-primary, .btn-secondary, .segmented > *, .accent-card, .chip, .panel.is-tilted, .cn-hard, .cn-hard-lg, .cn-hard-sm, .cn-pressable-slide) {
   --cn-plate: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
   --cn-plate-half: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--neu-ink));
   --cn-plate-hover: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--neu-ink));
   --cn-plate-lg: 10px 10px 0 var(--plate, var(--neu-ink));
   --cn-plate-sm: 3px 3px 0 var(--plate, var(--neu-ink));
+  --cn-plate-tilt: 6px 6px 0 var(--plate, var(--neu-ink));
 }
 /* The ring between stacked avatars reads the stack's --ring-ground. */
 :where(.avatar) { --cn-ground-ring: 0 0 0 2px var(--ring-ground, var(--base)); }
@@ -491,7 +499,7 @@
   --lead-title-size: var(--cn-type-title-size); /* 20px, what a 44px band holds */
   --body-pad: var(--space-3) var(--space-4);
   --cell-pad: var(--space-1) var(--space-2);
-  --cell-font-size: var(--cn-type-meta-size);
+  --cell-font-size: var(--cn-type-label-size);
   --cn-type-body-size: .9375rem;
   --chip-pad: var(--space-1) var(--space-2);
   --well-pad: var(--space-2) var(--space-3);
@@ -611,20 +619,25 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
   .skeleton { animation: none !important; opacity: .75; }
 }
 
-/* More contrast: text steps up one palette stop, hairlines and control
-   edges go solid, carved fields and wells get a full ring, links underline at full
-   strength, and the grain goes. The look stays Mocha. */
+/* More contrast: text steps up one palette stop, the panel hairline
+   reaches a 3:1 boundary, control edges brighten, carved fields and wells
+   get a full ring, links underline at full strength, and the grain goes.
+   The look stays Mocha. */
 @media (prefers-contrast: more) {
+  /* The panel hairline is overlay-0, 3.4:1 on base, so a panel shows a
+     3:1 boundary. The lead and overlay hairline stays a step above it on
+     overlay-1, 4.4:1. The stat rule lifts to surface-2, 2.5:1, so it stays
+     between the surface-1 --edge-soft and the overlay-0 --edge. */
   :root {
-    --cn-fg-soft: var(--text);
     --cn-fg-body: var(--text);
     --cn-fg-muted: var(--subtext-1);
     --cn-fg-placeholder: var(--subtext-0);
     --cn-fg-faint: var(--overlay-2);
     --cn-fg-disabled: var(--overlay-2);
-    --edge: var(--surface-2);
+    --edge: var(--overlay-0);
     --edge-soft: var(--surface-1);
-    --edge-strong: var(--overlay-0);
+    --edge-strong: var(--overlay-1);
+    --cn-stat-rule: var(--surface-2);
     --control-edge: var(--overlay-2);
     --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
     --cn-cell-field-ring: inset 0 0 0 1px var(--overlay-2);
@@ -645,6 +658,14 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --control-h: 2.875rem;    /* 46px */
     --control-h-sm: 2.75rem;  /* 44px */
   }
+}
+
+/* No hover: the hover ring never comes, so a resting field takes the cell
+   field's quiet even hairline, surface-1 on all four sides, 1.8:1 on the
+   page. It reads --cn-cell-field-ring, so prefers-contrast: more still
+   closes it into overlay-2. Pointer devices keep the edgeless carve. */
+@media (hover: none) {
+  :root { --cn-field-ring: var(--cn-cell-field-ring); }
 }
 
 /* Forced colors drop box-shadow, so rings and carves need real edges. */

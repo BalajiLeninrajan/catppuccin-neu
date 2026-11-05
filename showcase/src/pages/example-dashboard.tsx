@@ -1,7 +1,8 @@
 /* ── Example: billing dashboard ────────────────────────────────────────────
    A composed screen built only from package classes, no sc- chrome. It
    follows the SPEC's Composition section: regions 48px apart, in reading
-   order. The title and its one primary, the key figures ruled on the page
+   order. The title and its one primary on one line in a split with the
+   lede under them, the key figures ruled on the page
    ground, the invoice table as the lead panel, then the chart and the one
    tilted aside on the page grid, the chart first. The whole view runs at
    cozy density, the SPEC's density for a desktop data tool. The aside
@@ -182,18 +183,20 @@ function InvoiceTable() {
 export default function DashboardExample() {
   return (
     <div class="cn-stack cn-gap-48 page-enter" data-density="cozy">
-      <header class="cn-row cn-between cn-top cn-wrap cn-gap-24">
-        <div class="cn-stack cn-gap-12 cn-grow">
+      {/* The title and its primary share one line in a split, and the lede
+          sits under them, so the button never stands alone below the copy. */}
+      <header class="cn-stack cn-gap-24">
+        <div class="cn-split">
           <h1 class="cn-display is-sm">
             Billing, <em>September</em>
           </h1>
-          <p class="cn-lede cn-m-0 cn-mt-12">
-            {INVOICES.length} invoices from the last six weeks, across 6 teams.
-            Collections settle nightly at 02:00 UTC, so these figures are from
-            this morning's run.
-          </p>
+          <button type="button" class="btn btn-primary">New invoice</button>
         </div>
-        <button type="button" class="btn btn-primary">New invoice</button>
+        <p class="cn-lede cn-m-0">
+          {INVOICES.length} invoices from the last six weeks, across 6 teams.
+          Collections settle nightly at 02:00 UTC, so these figures are from
+          this morning's run.
+        </p>
       </header>
 
       <section class="stat-grid is-ruled" aria-label="Key figures">

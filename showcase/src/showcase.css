@@ -38,6 +38,10 @@
   gap: var(--space-3);
 }
 
+/* Docs prose stops at the 68ch measure. Demo stages and tables keep the
+   full column. */
+.sc-doc .cn-copy { max-width: var(--cn-measure); }
+
 .sc-demo {
   margin: 0;
   min-width: 0;

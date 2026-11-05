@@ -50,8 +50,8 @@ const GROUNDS = [
 ];
 
 const NEUTRAL_TEXT = [
-  { name: "overlay-0", hex: "#6c7086", note: "--edge-strong under prefers-contrast: more, 3.4:1 on base. Not for text." },
-  { name: "overlay-1", hex: "#7f849c", note: "A hovered field's ring, unchecked control edges, the slider thumb edge, disabled text, decorative icons and list markers. Not for readable text." },
+  { name: "overlay-0", hex: "#6c7086", note: "--edge under prefers-contrast: more, 3.4:1 on base, so a panel shows a 3:1 boundary. Not for text." },
+  { name: "overlay-1", hex: "#7f849c", note: "A hovered field's ring, --edge-strong under prefers-contrast: more, unchecked control edges, the slider thumb edge, disabled text, decorative icons and list markers. Not for readable text." },
   { name: "overlay-2", hex: "#9399b2", note: "Placeholders, --cn-fg-placeholder. The faintest readable text." },
   { name: "subtext-0", hex: "#a6adc8", note: "Meta, help and table heads, --cn-fg-muted." },
   { name: "subtext-1", hex: "#bac2de", note: "Body copy, ledes, table cells and code." },
@@ -218,7 +218,7 @@ export default function ColorsPage() {
         title="Role tokens"
         rows={[
           { name: "--cn-fg", values: "text", notes: "Headings, names, values." },
-          { name: "--cn-fg-soft", values: "subtext-1", notes: "Ledes, table cells, code, .cn-label and field labels." },
+          { name: "--cn-fg-soft", values: "var(--cn-fg-body)", notes: "Ledes, table cells, code, .cn-label and field labels. A job alias of body: Mocha has no stop between subtext-1 and text, so the two share a value and soft follows body under prefers-contrast: more." },
           { name: "--cn-fg-body", values: "subtext-1", notes: "Running text: body, .cn-copy, .cn-prose. text under prefers-contrast." },
           { name: "--cn-fg-muted", values: "subtext-0", notes: "Meta, help, table heads. subtext-1 under prefers-contrast." },
           { name: "--cn-fg-placeholder", values: "overlay-2", notes: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
@@ -649,7 +649,8 @@ export default function ColorsPage() {
         a stop above that on subtext-1. overlay-1, 4.4:1 on base, is for
         decorative icons, a hovered field's ring, control edges
         and disabled text, because it falls under 4.5:1. No recipe reads
-        overlay-0. Palette hues get the same treatment, like{" "}
+        overlay-0 by default; it is the panel hairline under{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code>. Palette hues get the same treatment, like{" "}
         <code class="cn-code-inline">.cn-text-mauve</code>, plus{" "}
         <code class="cn-code-inline">.cn-text-accent</code> and{" "}
         <code class="cn-code-inline">.cn-text-tone</code> for the contract properties.
@@ -671,9 +672,10 @@ export default function ColorsPage() {
         <code class="cn-code-inline">.cn-edge-tone</code> reads{" "}
         <code class="cn-code-inline">--tone</code>;{" "}
         <code class="cn-code-inline">.cn-edge-dashed</code> is the open-slot edge.
-        Dashed means an open slot and nothing else. The disabled primary,
-        checkbox, radio and switch drop to a plain{" "}
-        <code class="cn-code-inline">--edge</code> instead.
+        Dashed means an open slot and nothing else. The disabled checkbox,
+        radio and switch drop to a plain{" "}
+        <code class="cn-code-inline">--edge</code> instead, and the disabled
+        primary drops its edge for a carve.
       </p>
 
       <Demo

@@ -56,7 +56,7 @@ export default function ButtonPage() {
       </p>
 
       <p class="cn-copy">
-        One primary action per view. Its plate is mauve mixed into surface-0, the one button plate that is not crust.
+        One primary action per view. Its plate is mauve mixed into surface-0, the one button plate that is not ink. A plate takes color only when its block is the accent signal, so the secondary beside it stands on ink.
         The fill is a mauve ramp lit from the top left, with film grain rising from the bottom right, and a
         white rim runs along its top edge. Set <code class="cn-code-inline">--grain: 0</code> to drop the grain.
       </p>
@@ -64,7 +64,7 @@ export default function ButtonPage() {
       <p class="cn-copy">
         A disabled primary, through <code class="cn-code-inline">disabled</code> or{" "}
         <code class="cn-code-inline">aria-disabled="true"</code>, goes flat and sinks. It loses the plate, ramp,
-        grain and gloss and is pressed into a darker fill, like a disabled switch plate, at full opacity. A dimmed plate reads as a
+        grain and gloss, drops its edge and is carved into the darker sunken fill like a well, an empty slot in the page, at full opacity. The secondary keeps its outline and plate, so the two never share a silhouette. A dimmed plate reads as a
         second primary beside the live one, and a pressed-in, unlit button never outshines a live secondary. A busy primary keeps its fill. Every other variant dims and keeps its rest shadow.
       </p>
 
@@ -244,8 +244,8 @@ export default function ButtonPage() {
       <p class="cn-copy">
         The one control with a dashed border. Use it as an open slot: a drop zone, a placeholder row, an
         optional extra. On hover the border and label turn mauve. Dashed means an open slot and nothing else, so
-        disabled controls never take it: the sunken primary, disabled checkboxes and radios, and the disabled
-        switch drop to a plain <code class="cn-code-inline">--edge</code>.
+        disabled controls never take it: the sunken primary drops its edge for a carve, and disabled checkboxes
+        and radios and the disabled switch drop to a plain <code class="cn-code-inline">--edge</code>.
       </p>
 
       <h2 class="cn-label">The half-slide</h2>
@@ -301,13 +301,13 @@ export default function ButtonPage() {
         title="Variants and knobs"
         rows={[
           { name: ".btn", values: "base class", notes: "Height --control-h, 16px inline padding, the control radius (8px), sans 600 14px. Compose with one variant." },
-          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken pressed in by --neu-inset-soft inside a plain --edge, a --cn-fg-disabled label (overlay-1, 4.9:1 on that fill), no plate, ramp, grain, gloss or dimming. One per view." },
+          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the full carve, --neu-inset with --cn-well-ring, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1, 4.9:1 on that fill), no plate, ramp, grain, gloss or dimming. One per view." },
           { name: ".btn-secondary", notes: "--cn-surface-raised fill (the page color), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong, 4.1:1 on base and 3.2:1 on the overlay, and lifts the fill to --cn-surface-overlay. The default for clickables." },
           { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', notes: "Transparent until hovered, then --hover and an --edge hairline. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base, 1.52:1, past the 1.24:1 hover), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },
           { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted (subtext-0, 7.4:1 on base) and tints toward --tone on hover. Needs aria-label." },
-          { name: ".btn-text", notes: "Inline mauve text button at 13px 600; pink on hover. Held, it moves 1px." },
+          { name: ".btn-text", notes: "Inline mauve text button at 13px 600 with no padding, so it sits flush with the content edge; pink on hover. Held, it moves 1px." },
           { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 13px type, or the hero action at --control-h + 12px with the body size, 16px. One .is-lg per view." },
           { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },
           { name: ":disabled", notes: "--disabled-opacity (.6) and a not-allowed cursor. Keeps the variant's rest shadow. The primary sinks instead of dimming. Drops focus." },

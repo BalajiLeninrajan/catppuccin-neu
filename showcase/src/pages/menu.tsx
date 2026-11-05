@@ -262,7 +262,7 @@ export default function MenuPage() {
         arrow keys always sees which row Enter will run. A leading svg sits at 16px
         in <code class="cn-code-inline">--cn-fg-faint</code>. A trailing{" "}
         <code class="cn-code-inline">kbd</code> is the shortcut, in mono at the
-        meta size; mirror it in <code class="cn-code-inline">aria-keyshortcuts</code>.
+        code size, 13px; mirror it in <code class="cn-code-inline">aria-keyshortcuts</code>.
         A <code class="cn-code-inline">menuitemcheckbox</code> with{" "}
         <code class="cn-code-inline">aria-checked="true"</code> draws a mauve check
         at the row's end. <code class="cn-code-inline">.is-danger</code> is red with

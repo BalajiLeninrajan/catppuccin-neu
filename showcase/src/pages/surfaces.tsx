@@ -162,7 +162,7 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         <code class="cn-code-inline">.is-tilted</code> is the one rotated surface: a
-        1.2° turn with the 10px plate over the neu raise, so the card still
+        1.2° turn with a 6px plate over the neu raise, so the card still
         answers the top-left light. Use it once per view at most, for a
         summary or an aside in prose, never for the page's main data, and
         never on a panel holding a table, a form or ruled rows, because
@@ -174,7 +174,7 @@ export default function SurfacesPage() {
         an empty tail under the turn. It flattens to the regular raised panel
         at 1060px. Under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> it stands
-        upright and keeps its 10px plate, because rotated text renders soft.
+        upright and keeps its 6px plate, because rotated text renders soft.
         The{" "}
         <a href="/#ornament-budget">ornament budget</a> lists the other
         once-per-view pieces.
@@ -187,9 +187,9 @@ export default function SurfacesPage() {
         sits on the page color like every panel, inside the brighter{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
         surface-2 at 2.5:1 against a panel's 2.1:1, and stands on{" "}
-        <code class="cn-code-inline">--neu-lifted</code>: a dark foot on the
-        bottom and right about twice as deep as a plain panel's, and a
-        longer cast. It keeps the plain lit edge and draws no outline all
+        <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
+        the bottom and right, 4px deep like a button's plate where a plain
+        panel's is 1px, and a longer cast. It keeps the plain lit edge and draws no outline all
         round, because neither a bright line nor a heavier outline reads as
         height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
@@ -305,7 +305,7 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-tilted",
             values: "one per view",
-            notes: "rotate(1.2deg) and a 10px plate over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside in prose, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
+            notes: "rotate(1.2deg) and a 6px plate, --cn-plate-tilt, over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside in prose, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
           },
           {
             name: ".panel.is-lead",

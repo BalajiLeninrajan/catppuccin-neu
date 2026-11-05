@@ -80,7 +80,7 @@ export default function EmptyStatePage() {
           },
           {
             name: "span",
-            notes: "The supporting line. 13px, the meta size, in the muted color.",
+            notes: "The supporting line. 14px, the meta size, in the muted color.",
           },
           {
             name: "action",
