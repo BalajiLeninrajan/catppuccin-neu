@@ -458,7 +458,10 @@ export default function AccessibilityPage() {
         and 320px and fails if it scrolls sideways. In the desktop pass it
         fails when any element holds more than three raised panels, and when
         an example view holds more than one primary, tilted panel or lead
-        panel. axe covers the WCAG 2.5.8 target size. Any
+        panel. It also captures the Depth page and the dashboard and invoice
+        examples at 1x and fails when more than 0.1% of the pixels differ
+        from the committed baselines, so a depth cue cannot drift without a
+        deliberate baseline update. axe covers the WCAG 2.5.8 target size. Any
         violation fails the run. Text that axe cannot measure, such as a link
         partly below the fold or text over a gradient, is listed as needing
         review and does not fail it.
@@ -497,7 +500,17 @@ export default function AccessibilityPage() {
         The system is dark by design. It sets{" "}
         <code class="cn-code-inline">color-scheme: dark</code>, so native scrollbars
         and form controls match, and it does not answer{" "}
-        <code class="cn-code-inline">prefers-color-scheme: light</code>.
+        <code class="cn-code-inline">prefers-color-scheme: light</code>. It
+        is built on Catppuccin Mocha, and every shadow, plate and contrast
+        ratio is tuned against Mocha's base, so a light theme would need its
+        own depth model, not a palette swap.
+      </p>
+      <p class="cn-copy">
+        Light text on a dark ground blooms for readers with astigmatism, so
+        the system keeps the mitigations that fit dark mode: body text is
+        subtext-1 rather than white, body weight is 400, leading is 1.6, and{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code> lifts every
+        text role a stop.
       </p>
     </Doc>
   );

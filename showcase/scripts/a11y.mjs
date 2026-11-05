@@ -3,6 +3,7 @@
    pnpm test:a11y               build, serve dist, check every route
    pnpm test:a11y --no-build    reuse the existing dist
    pnpm test:a11y --review      also list what axe could not decide
+   pnpm test:a11y --update-shots  rewrite the visual baselines
 
    For every path in src/nav.ts it runs axe-core at 1400x900 with the
    wcag2a, wcag2aa, wcag21aa and wcag22aa tags. It then applies the WCAG
@@ -18,6 +19,15 @@
    1.4.10 reflow) and fails on sideways scroll. axe covers the WCAG 2.5.8
    target size through the wcag22aa tag.
 
+   In the desktop pass it also captures the depth-sensitive routes (VISUAL)
+   full page at 1400x900 and 1x in the default modes, and diffs each
+   capture against its baseline in visual-baselines/ with pixelmatch. A
+   route fails when its size changes or more than VISUAL_LIMIT of its
+   pixels differ; the diff image goes to a11y-shots/visual/. The
+   baselines depend on the system Chromium and its installed fonts, so
+   refresh them with --update-shots after a deliberate visual change or
+   on a new machine, and look at them before committing.
+
    In the desktop pass it also checks the composition rules the SPEC
    states: no parent holds more than three raised panels as direct
    children, outside the docs' demo stages, and an example view holds at
@@ -27,13 +37,15 @@
    Exits 1 on any violation that ALLOW does not list.                       */
 
 import { spawn, spawnSync, execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { createServer } from "node:net";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import process from "node:process";
 import puppeteer from "puppeteer-core";
+import pixelmatch from "pixelmatch";
+import { PNG } from "pngjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
@@ -43,6 +55,40 @@ const DESKTOP = { width: 1400, height: 900 };
 const ZOOM = { width: 700, height: 900 };
 const PHONE = { width: 390, height: 844 };
 const NARROW = { width: 320, height: 640 };
+
+/* Routes whose look rests on 1x depth cues: the foot, the plates, the
+   hairline ladder. Their default-mode captures are diffed against
+   baselines. VISUAL_THRESHOLD is pixelmatch's per-pixel color tolerance;
+   VISUAL_LIMIT is the share of pixels that may differ before a route
+   fails, enough for antialiasing noise and no more. */
+const VISUAL = ["/depth", "/examples/dashboard", "/examples/invoice"];
+const VISUAL_THRESHOLD = 0.1;
+const VISUAL_LIMIT = 0.001;
+const shotName = (route) => (route === "/" ? "index" : route.replace(/^\//, "").replace(/[^\w-]+/g, "-"));
+
+/* Compares a capture with its baseline, or writes the baseline when
+   updating. Returns a problem string or null. */
+function visualDiff(route, png, baselines, diffs, update) {
+  const file = join(baselines, `${shotName(route)}.png`);
+  if (update) {
+    mkdirSync(baselines, { recursive: true });
+    writeFileSync(file, png);
+    return null;
+  }
+  if (!existsSync(file)) return `no baseline at ${file}; run with --update-shots`;
+  const [want, got] = [PNG.sync.read(readFileSync(file)), PNG.sync.read(Buffer.from(png))];
+  if (want.width !== got.width || want.height !== got.height)
+    return `size ${got.width}x${got.height} differs from the baseline's ${want.width}x${want.height}`;
+  const diff = new PNG({ width: got.width, height: got.height });
+  const n = pixelmatch(want.data, got.data, diff.data, got.width, got.height, { threshold: VISUAL_THRESHOLD });
+  const share = n / (got.width * got.height);
+  if (share <= VISUAL_LIMIT) return null;
+  mkdirSync(diffs, { recursive: true });
+  const out = join(diffs, `${shotName(route)}-diff.png`);
+  writeFileSync(out, PNG.sync.write(diff));
+  writeFileSync(join(diffs, `${shotName(route)}.png`), png);
+  return `${n} pixels (${(share * 100).toFixed(2)}%) differ from the baseline, over ${VISUAL_LIMIT * 100}%; see ${out}`;
+}
 
 /* Known false positives, as rule + selector pairs. A violation node is
    skipped only when its rule and its full axe target both match. Each
@@ -283,6 +329,7 @@ function focusRing(page) {
 async function main() {
   const skipBuild = process.argv.includes("--no-build");
   const showReview = process.argv.includes("--review");
+  const updateShots = process.argv.includes("--update-shots");
   if (!skipBuild || !existsSync(join(root, "dist/index.html"))) {
     console.log("Building the showcase...");
     execFileSync("pnpm", ["build"], { cwd: root, stdio: "inherit" });
@@ -297,6 +344,8 @@ async function main() {
   });
 
   const shots = join(root, "a11y-shots/forced-colors");
+  const baselines = join(root, "visual-baselines");
+  const diffs = join(root, "a11y-shots/visual");
   let failures = 0;
   let skipped = 0;
   const review = new Map();
@@ -336,6 +385,15 @@ async function main() {
       };
       report(violations);
 
+      if (VISUAL.includes(route)) {
+        const png = await page.screenshot({ fullPage: true });
+        const problem = visualDiff(route, png, baselines, diffs, updateShots);
+        if (problem) {
+          failures++;
+          lines.push(`  visual: ${problem}`);
+        }
+      }
+
       const composed = await composition(page, route.startsWith("/examples/"));
       if (composed.length) {
         failures += composed.length;
@@ -355,8 +413,7 @@ async function main() {
       await page.emulateMediaFeatures([{ name: "forced-colors", value: "active" }]);
       await open(page, url + route);
       mkdirSync(shots, { recursive: true });
-      const name = route === "/" ? "index" : route.replace(/^\//, "").replace(/[^\w-]+/g, "-");
-      await page.screenshot({ path: join(shots, `${name}.png`), fullPage: true });
+      await page.screenshot({ path: join(shots, `${shotName(route)}.png`), fullPage: true });
       await page.keyboard.press("Tab");
       const ring = await focusRing(page);
       if (ring) {
@@ -414,7 +471,7 @@ async function main() {
     console.log(`\n${failures} problem(s) across ${count} routes${note}.`);
     process.exit(1);
   }
-  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion, fit 700px (200% zoom) without clipping, fit 390px and 320px, and keep the composition budget${note}.`);
+  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion, fit 700px (200% zoom) without clipping, fit 390px and 320px, keep the composition budget${note}, and ${updateShots ? "wrote new visual baselines" : "match the visual baselines"} for ${VISUAL.join(", ")}.`);
   console.log(`Forced-colors screenshots for review: ${shots}`);
 }
 

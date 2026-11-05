@@ -234,7 +234,7 @@
      meets the ground, then a near shadow at .8 that lays a 4 to 6px
      dark foot along the bottom and right edges, then the cast. The cast
      tops out near 1.28:1, so the foot is what makes the height read at 1x.
-     The 2px contact stays under the lead's 3px 4px foot and the plate at
+     The 2px contact stays under the lead's 4px 6px foot and the plate at
      default (4px) and cozy (3px) density. Compact density drops the plate
      to 2px, so it drops the contact to 1px and a plain panel still reads
      lower than both. */
@@ -245,10 +245,11 @@
   /* The lead panel stands higher by darkness on its bottom and right only,
      never by a line all round or a brighter one: a deeper full-ink contact,
      a deeper near shadow and a longer cast. It keeps the plain lit edge.
-     The 3px 4px contact is a hard foot as deep as the 4px plate, so the
-     lead answers the same light as the plated controls and never reads
-     lower than a button. */
-  --neu-lifted: 3px 4px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
+     The 4px 6px contact is a hard foot 6px deep and 4px wide, past the 4px
+     plate, so at 1x the lead stands a clear step over a plain panel's 2px
+     and never reads lower than a button. It is as deep as the tilted
+     panel's 6px plate on the bottom and 2px narrower on the right. */
+  --neu-lifted: 4px 6px 0 var(--neu-contact), 6px 12px 14px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
   --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
@@ -275,7 +276,7 @@
   --cn-gloss-inset: inset 0 1px rgb(255 255 255 / .16);   /* the white gloss on a checked checkbox and the on switch paddle */
   --cn-primary-rim: inset 0 1px rgb(255 255 255 / .3), inset 0 -2px color-mix(in srgb, var(--crust) 22%, transparent); /* the primary's --hard-extra */
   --cn-readonly-rule: inset 0 -1px 0 var(--edge);         /* the printed-text underline of a read-only field */
-  --cn-sticky-rule: inset 0 -1px var(--surface-0);        /* a sticky table head's bottom rule */
+  --cn-sticky-rule: inset 0 -1px var(--edge);             /* a sticky table head's bottom rule, the --edge head rule */
   --cn-switch-ring: inset 0 0 0 1px var(--control-edge);  /* the switch plate's edge */
   --cn-disabled-ring: inset 0 0 0 1px var(--edge);        /* a disabled switch plate's edge */
   --cn-halo-ring: 0 0 0 3px color-mix(in srgb, var(--cn-interactive) var(--cn-step-fill), transparent); /* the checked radio's halo */
@@ -319,13 +320,12 @@
      it into a full overlay-2 ring. Hover draws a full 1px --control-edge
      ring, 4.4:1 on the page and on a panel and 3.5:1 on an overlay, and
      focus draws the focus ring, so a field shows 3:1 bounds as soon as it
-     is in use. Fields in table cells read the same hairline through
-     --cn-cell-field-ring. The tabs carve shares --cn-field-ring. Wells and
+     is in use. Every field paints the ring over its carve, table cells
+     included, and the tabs carve shares it. Wells and
      the mono wells take --cn-well-ring, which paints nothing until
      prefers-contrast closes it into a surface-2 ring, because their sunken
      fill already separates them. */
-  --cn-cell-field-ring: inset 0 0 0 1px var(--surface-1);
-  --cn-field-ring: var(--cn-cell-field-ring);
+  --cn-field-ring: inset 0 0 0 1px var(--surface-1);
   --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
   --cn-well-ring: inset 0 0 0 1px transparent;
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
@@ -424,14 +424,18 @@
    --hard-offset, so they are declared where they are drawn: rest, held
    (half), the +1px link hover, the fixed 10px and 3px, and the tilted
    panel's 6px, which stays short so the aside never outweighs the data
-   beside it. */
+   beside it. Each plate is a stack of the same ink at even steps out to
+   its offset, about 1px apart, so the top-right and bottom-left corners
+   join into a solid side instead of leaving the notch of a single
+   offset copy. Rest, half and hover each have four layers, so the press
+   and the hover lift still interpolate layer by layer. */
 :where(.btn-primary, .btn-secondary, .segmented > *, .accent-card, .chip, .panel.is-tilted, .cn-hard, .cn-hard-lg, .cn-hard-sm, .cn-pressable-slide) {
-  --cn-plate: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
-  --cn-plate-half: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--neu-ink));
-  --cn-plate-hover: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--neu-ink));
-  --cn-plate-lg: 10px 10px 0 var(--plate, var(--neu-ink));
-  --cn-plate-sm: 3px 3px 0 var(--plate, var(--neu-ink));
-  --cn-plate-tilt: 6px 6px 0 var(--plate, var(--neu-ink));
+  --cn-plate: calc(var(--hard-offset) * .25) calc(var(--hard-offset) * .25) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .5) calc(var(--hard-offset) * .5) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .75) calc(var(--hard-offset) * .75) 0 var(--plate, var(--neu-ink)), var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
+  --cn-plate-half: calc(var(--hard-offset) * .125) calc(var(--hard-offset) * .125) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .25) calc(var(--hard-offset) * .25) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .375) calc(var(--hard-offset) * .375) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--neu-ink));
+  --cn-plate-hover: calc((var(--hard-offset) + 1px) * .25) calc((var(--hard-offset) + 1px) * .25) 0 var(--plate, var(--neu-ink)), calc((var(--hard-offset) + 1px) * .5) calc((var(--hard-offset) + 1px) * .5) 0 var(--plate, var(--neu-ink)), calc((var(--hard-offset) + 1px) * .75) calc((var(--hard-offset) + 1px) * .75) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--neu-ink));
+  --cn-plate-lg: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink)), 4px 4px 0 var(--plate, var(--neu-ink)), 5px 5px 0 var(--plate, var(--neu-ink)), 6px 6px 0 var(--plate, var(--neu-ink)), 7px 7px 0 var(--plate, var(--neu-ink)), 8px 8px 0 var(--plate, var(--neu-ink)), 9px 9px 0 var(--plate, var(--neu-ink)), 10px 10px 0 var(--plate, var(--neu-ink));
+  --cn-plate-sm: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink));
+  --cn-plate-tilt: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink)), 4px 4px 0 var(--plate, var(--neu-ink)), 5px 5px 0 var(--plate, var(--neu-ink)), 6px 6px 0 var(--plate, var(--neu-ink));
 }
 /* The ring between stacked avatars reads the stack's --ring-ground. */
 :where(.avatar) { --cn-ground-ring: 0 0 0 2px var(--ring-ground, var(--base)); }
@@ -646,7 +650,6 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --cn-stat-rule: var(--surface-2);
     --control-edge: var(--overlay-2);
     --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
-    --cn-cell-field-ring: inset 0 0 0 1px var(--overlay-2);
     --cn-well-ring: inset 0 0 0 1px var(--surface-2);
     --neu-dark: rgb(8 8 14 / .88);
     --neu-shade: rgb(8 8 14 / .86);

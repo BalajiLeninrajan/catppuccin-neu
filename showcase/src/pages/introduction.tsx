@@ -258,6 +258,7 @@ export default function IntroductionPage() {
           the <a href="/layout">Layout</a> page give the reasons.
         </p>
         <ol class="cn-copy">
+          <li>A <code class="cn-code-inline">.cn-skip-link</code> to <code class="cn-code-inline">#main</code> as the first focusable element, with <code class="cn-code-inline">tabindex="-1"</code> on the <code class="cn-code-inline">main</code> it targets. CSS cannot add it, so the markup does.</li>
           <li><code class="cn-code-inline">.page-main</code> holding a stack 48px apart.</li>
           <li>The title and its one primary on one line in a <code class="cn-code-inline">.cn-split</code>, with the lede below the split.</li>
           <li>The key figures on the ground, in a <code class="cn-code-inline">.stat-grid.is-ruled</code>.</li>

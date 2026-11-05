@@ -193,9 +193,9 @@
   --shadow-neu-inset-soft: var(--neu-inset-soft);
   --shadow-pop: 0 24px 70px rgb(17 17 27 / .78);
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);
-  --shadow-hard: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
-  --shadow-hard-lg: 10px 10px 0 var(--plate, var(--neu-ink));
-  --shadow-hard-sm: 3px 3px 0 var(--plate, var(--neu-ink));
+  --shadow-hard: calc(var(--hard-offset) * .25) calc(var(--hard-offset) * .25) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .5) calc(var(--hard-offset) * .5) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .75) calc(var(--hard-offset) * .75) 0 var(--plate, var(--neu-ink)), var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
+  --shadow-hard-lg: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink)), 4px 4px 0 var(--plate, var(--neu-ink)), 5px 5px 0 var(--plate, var(--neu-ink)), 6px 6px 0 var(--plate, var(--neu-ink)), 7px 7px 0 var(--plate, var(--neu-ink)), 8px 8px 0 var(--plate, var(--neu-ink)), 9px 9px 0 var(--plate, var(--neu-ink)), 10px 10px 0 var(--plate, var(--neu-ink));
+  --shadow-hard-sm: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink));
   --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);
 }
 

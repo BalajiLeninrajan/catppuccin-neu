@@ -184,11 +184,13 @@ export default function DashboardExample() {
   return (
     <div class="cn-stack cn-gap-48 page-enter" data-density="cozy">
       {/* The title and its primary share one line in a split, and the lede
-          sits under them, so the button never stands alone below the copy. */}
+          sits under them, so the button never stands alone below the copy.
+          The title has no mauve em: the hero stat is the view's one
+          mauve text mark; the Wallet series bar is a data mark. */}
       <header class="cn-stack cn-gap-24">
         <div class="cn-split">
           <h1 class="cn-display is-sm">
-            Billing, <em>September</em>
+            Billing, September
           </h1>
           <button type="button" class="btn btn-primary cn-morph">New invoice</button>
         </div>

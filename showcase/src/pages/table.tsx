@@ -271,13 +271,13 @@ export default function TablePage() {
       <Props
         title="Table classes"
         rows={[
-          { name: ".data-table", values: "on <table>", notes: "Scopes all table styling. Sans tabular body at 500 and --cell-font-size (14px, 13px compact), a --cn-surface-band header, hairline rows. Cell padding is --cell-pad." },
+          { name: ".data-table", values: "on <table>", notes: "Scopes all table styling. Sans tabular body at 500 and --cell-font-size (14px, 13px compact), a --cn-surface-band header over an --edge rule (2.1:1), surface-0 rules between rows (1.3:1). Cell padding is --cell-pad." },
           { name: ".is-num", values: "on th and td", notes: "Right-aligns a numeric column. On a sortable header the button reverses, so the label meets the right edge and the chevron sits on its inner side." },
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
           { name: "tbody tr:hover", values: "state", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (12%) into base, 1.27:1 on the page with --cn-fg-soft at 7.3:1, a step under a selected row." },
-          { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest --cn-cell-field-ring draws the same even surface-1 hairline as any field, 1.8:1 on the page, never a light lip. Name it with aria-labelledby pointing at the column header and the row's name cell." },
+          { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest it takes --cn-field-ring over the soft carve, like any field. Name it with aria-labelledby pointing at the column header and the row's name cell." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },
           { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. The last trailing cell sits on the title line, the one before it under it. Keep its data-label for the desktop header." },

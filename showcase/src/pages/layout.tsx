@@ -243,7 +243,8 @@ export default function LayoutPage() {
 
       <CodeBlock
         title="The skeleton of a view"
-        code={`<main class="page-main cn-stack cn-gap-48">
+        code={`<a class="cn-skip-link" href="#main">Skip to content</a>
+<main id="main" tabindex="-1" class="page-main cn-stack cn-gap-48">
   <header class="cn-split">…title… <button class="btn btn-primary">…</button></header>
   <section class="stat-grid is-ruled" aria-label="Key figures">…</section>
   <section class="panel is-lead">…the table…</section>

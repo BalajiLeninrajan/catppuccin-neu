@@ -173,9 +173,9 @@ module.exports = {
         "neu-inset-soft": "var(--neu-inset-soft)",
         pop: "var(--shadow-pop)",
         cast: "var(--shadow-cast)",
-        hard: "var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink))",
-        "hard-lg": "10px 10px 0 var(--plate, var(--neu-ink))",
-        "hard-sm": "3px 3px 0 var(--plate, var(--neu-ink))",
+        hard: "calc(var(--hard-offset) * .25) calc(var(--hard-offset) * .25) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .5) calc(var(--hard-offset) * .5) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .75) calc(var(--hard-offset) * .75) 0 var(--plate, var(--neu-ink)), var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink))",
+        "hard-lg": "1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink)), 4px 4px 0 var(--plate, var(--neu-ink)), 5px 5px 0 var(--plate, var(--neu-ink)), 6px 6px 0 var(--plate, var(--neu-ink)), 7px 7px 0 var(--plate, var(--neu-ink)), 8px 8px 0 var(--plate, var(--neu-ink)), 9px 9px 0 var(--plate, var(--neu-ink)), 10px 10px 0 var(--plate, var(--neu-ink))",
+        "hard-sm": "1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink))",
         mark: "var(--shadow-mark)",
       },
       /* Heights also read spacing on Tailwind 3.4; these keep older 3.x working. */

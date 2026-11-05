@@ -175,7 +175,18 @@ export default function InvoiceExample() {
             ))}
           </tbody>
         </table>
-        <div class="panel-body cn-row cn-end">
+        {/* The payment note fills the space left of the totals, which stay
+            320px wide against the Amount column. */}
+        <div class="panel-body cn-split" style="align-items:flex-start">
+          <div class="cn-stack cn-gap-8" style="flex:1 1 240px;max-width:46ch">
+            <p class="cn-name cn-m-0">How to pay</p>
+            <p class="cn-meta cn-m-0">
+              Bank transfer to account 0042-118907, transit 00152, with the
+              invoice number as the reference, so the payment matches on the
+              nightly run. Terms are net 14, and a reminder goes out every 7 days while
+              a balance is open.
+            </p>
+          </div>
           <div style="width:min(320px,100%)">
             <div class="cn-divide">
               <div class="stat is-inline cn-py-8">

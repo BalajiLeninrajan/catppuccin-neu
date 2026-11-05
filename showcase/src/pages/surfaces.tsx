@@ -188,8 +188,8 @@ export default function SurfacesPage() {
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
         surface-2 at 2.5:1 against a panel's 2.1:1, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
-        the bottom and right, 4px deep like a button's plate where a plain
-        panel's is 1px, and a longer cast. It keeps the plain lit edge and draws no outline all
+        the bottom and right, 6px deep where a button's plate is 4px and a
+        plain panel's contact 2px, and a longer cast. It keeps the plain lit edge and draws no outline all
         round, because neither a bright line nor a heavier outline reads as
         height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading

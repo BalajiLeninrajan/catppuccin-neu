@@ -7,8 +7,8 @@ const HEIGHTS = [
   { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. A well also takes the darker sunken fill.", tokens: "--neu-inset or --neu-inset-soft, transparent, --cn-surface-sunken or --cn-surface-band", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states, the disabled primary." },
   { height: "The ground", draws: "Nothing.", tokens: "--cn-surface-page", who: "The page. Every other height is measured from it." },
   { height: "Resting on it", draws: "The page color, the plain hairline, the lit top edge, a dark foot of contact edge and near shadow on the bottom and right, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Resting higher", draws: "The page color, the brighter hairline, a hard dark foot on the bottom and right as deep as the 4px plate, and a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its deeper foot and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
   { height: "Standing on a plate", draws: "The page color and lit top edge over a hard offset, the plate's side in the shadow ink.", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate." },
+  { height: "Resting higher", draws: "The page color, the brighter hairline, a hard dark foot 6px deep and 4px wide on the bottom and right, past the 4px plate, and a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its deeper foot and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
   { height: "Lifted off it", draws: "The plate's side grows to 6px and the card tips 1.2deg.", tokens: "--cn-plate-tilt, a 6px plate, over --neu-raised, rotate(1.2deg)", who: "The one tilted panel, holding prose: never a table, a form or ruled rows. Upright under prefers-contrast: more, on the same plate." },
   { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
@@ -16,7 +16,7 @@ const HEIGHTS = [
 /* The height specimens share one footprint so only the depth differs. */
 /* Three columns, or one under 520px. The min track is a third of the row
    over 520px and the full row under it, so auto-fit never lands on two. */
-const OFF_GROUND =
+const THREE_UP =
   "display:grid;gap:var(--cn-grid-gap);grid-template-columns:repeat(auto-fit,minmax(clamp(calc((100% - 2 * var(--cn-grid-gap)) / 3 - 1px),calc((520px - 100%) * 999),100%),1fr))";
 const SPEC_BOX = "width:100%;height:88px;display:grid;place-items:center;padding:12px;text-align:center";
 
@@ -130,14 +130,15 @@ export default function DepthPage() {
         the page, take a lighter step.
       </p>
 
-      <Demo title="One specimen per height, on the page" classes="well · (the ground) · panel · panel is-lead · cn-bg-raised cn-edge cn-hard · panel is-tilted · cn-bg-overlay cn-pop">
-        {/* Two groups that match the heights table: at or below the ground,
-            then off it, so rows break at the story's seam. The first sits on
-            four columns and folds to two. The second holds three, so it keeps
-            three columns until its box is under 520px and then drops to one,
-            never leaving one specimen alone on a row. */}
+      <Demo title="One specimen per height, on the page" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-lead · panel is-tilted · cn-bg-overlay cn-pop">
+        {/* Two groups in the heights table's order: at or below the ground
+            and a plain panel resting on it, then the plate, the lead, the
+            tilt and the float, so rows break at the story's seam. The first
+            holds three, so it keeps three columns until its box is under
+            520px and then drops to one, never leaving one specimen alone on
+            a row. The second sits on four columns and folds to two. */}
         <div class="cn-stack cn-gap-32" style="width:100%">
-          <div class="cn-grid-4">
+          <div style={THREE_UP}>
             <Height name="Below the ground" cls=".well">
               <div class="well cn-meta" style={SPEC_BOX}>Search invoices</div>
             </Height>
@@ -147,13 +148,13 @@ export default function DepthPage() {
             <Height name="Resting on it" cls=".panel">
               <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
             </Height>
-            <Height name="Resting higher" cls=".is-lead">
-              <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
-            </Height>
           </div>
-          <div style={OFF_GROUND}>
+          <div class="cn-grid-4">
             <Height name="Standing on a plate" cls=".cn-hard">
               <div class="cn-bg-raised cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
+            </Height>
+            <Height name="Resting higher" cls=".is-lead">
+              <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
             </Height>
             <Height name="Lifted off it" cls=".is-tilted">
               <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
@@ -266,11 +267,12 @@ export default function DepthPage() {
         The raised token has four layers: contact, near shadow, cast and the
         lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
         the one lead panel, spends its extra darkness on the bottom and
-        right only: a 3px 4px contact in the full ink, a 4px 8px 10px near
+        right only: a 4px 6px contact in the full ink, a 6px 12px 14px near
         shadow and an 18px 28px 48px cast. Even black is only 1.28:1 under
         base, so a longer cast barely shows; the deeper foot does the work,
-        4px of full ink under the lead's bottom edge where a plain panel
-        has 2px, as deep as a button's plate. Compact density drops the
+        6px of full ink under the lead's bottom edge where a plain panel
+        has 2px, past a button's 4px plate and as deep as the tilted
+        panel's 6px one on the bottom, 2px narrower on the right. Compact density drops the
         plate to 2px and the plain contact to 1px, so a plain panel stays
         under a plated control. Nothing darkens its top and left, because a dark line all
         round reads as a heavier outline, not as height. The soft raise
@@ -295,7 +297,7 @@ export default function DepthPage() {
 --neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
 
 --neu-raised:      2px 2px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
---neu-lifted:      3px 4px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
+--neu-lifted:      4px 6px 0 var(--neu-contact), 6px 12px 14px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
 --neu-inset:       inset 3px 3px 8px var(--neu-dark);
 --neu-inset-soft:  inset 2px 2px 5px rgb(8 8 14 / .5);
@@ -404,7 +406,9 @@ export default function DepthPage() {
       </Demo>
 
       <p class="cn-copy">
-        The hard offset is a solid, blur-free shadow, available to any
+        The hard offset is a solid, blur-free shadow, stacked in steps of
+        about 1px out to its offset so the corners join into the side of a
+        block. It is available to any
         clickable control and the default on primary and secondary buttons. It
         reads <code class="cn-code-inline">--plate</code>, the shadow ink by default, so a
         control can re-key it inline.{" "}
@@ -549,17 +553,17 @@ export default function DepthPage() {
           },
           {
             name: ".cn-hard",
-            values: "--hard-offset --hard-offset 0 var(--plate)",
+            values: "--cn-plate: var(--plate) at 1/4, 1/2, 3/4 and all of --hard-offset",
             notes: "The flat graphic note; any clickable control may take it. The utility draws the plate only; the plated recipes add --hard-extra over it.",
           },
           {
             name: ".cn-hard-lg",
-            values: "10px 10px 0 var(--plate)",
+            values: "--cn-plate-lg: var(--plate) in 1px steps to 10px",
             notes: "A fixed large offset. The tilted panel takes the 6px --cn-plate-tilt instead.",
           },
           {
             name: ".cn-hard-sm",
-            values: "3px 3px 0 var(--plate)",
+            values: "--cn-plate-sm: var(--plate) in 1px steps to 3px",
             notes: "A fixed small offset.",
           },
           {

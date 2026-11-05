@@ -27,9 +27,9 @@
 /* The lead panel: the one a view is about, one per view. It sits on the
    page color like every panel and stands higher by darkness on the side
    away from the light: --neu-lifted's foot on the bottom and right is
-   deeper than a plain panel's, a 3px 4px full-ink contact, as deep as the
-   4px plate, over a deeper
-   near shadow and a longer cast. The --edge-strong hairline is its one
+   deeper than a plain panel's, a 4px 6px full-ink contact, past the 4px
+   plate and as deep as the tilted panel's 6px one on the bottom, 2px
+   narrower on the right, over a deeper near shadow and a longer cast. The --edge-strong hairline is its one
    step in line strength; it keeps the plain lit edge and draws no outline
    all round, since neither a bright line nor a heavier outline reads as
    height. Its band title takes --lead-title-size at the heading weight
@@ -504,7 +504,9 @@ a:active > .accent-card {
    the dark inner wall defines the field. A sunken fill was tried and
    dropped: at 1x it flattened the carve into a dark box. At rest it has
    a quiet even surface-1 hairline, 1.8:1 on the page, the same on all
-   four sides, so its bounds show without a lip. Hover closes a 3:1 ring
+   four sides, so its bounds show without a lip. The ring is listed first,
+   so it paints over the carve: under it, the dark wall dimmed the top and
+   left and left the bottom and right brighter. Hover closes a 3:1 ring
    around it and focus draws the focus ring.
    Sans face; numbers stay tabular. A plain list, not :is(), so the hero
    variant below can override it. */
@@ -517,7 +519,7 @@ a:active > .accent-card {
   border: 0;
   border-radius: var(--cn-radius-card);
   background: transparent;
-  box-shadow: var(--neu-inset), var(--cn-field-ring);
+  box-shadow: var(--cn-field-ring), var(--neu-inset);
   font-family: var(--sans);
   font-size: var(--cn-type-ui-size);
   font-weight: var(--cn-type-label-weight);
@@ -564,7 +566,7 @@ a:active > .accent-card {
   /* background-color, not the shorthand, so an invalid select keeps its
      chevron. */
   background-color: var(--tint);
-  box-shadow: var(--neu-inset), var(--cn-validation-ring);
+  box-shadow: var(--cn-validation-ring), var(--neu-inset);
 }
 :is(.field:has([aria-invalid="true"]), .field.is-warning) small { color: var(--cn-fg-body); }
 .field:has([aria-invalid="true"]) { --cn-glyph: var(--cn-glyph-danger); }
@@ -584,7 +586,7 @@ a:active > .accent-card {
    to the disabled color, 4.4:1, with no opacity on top. */
 :is(.input, .field :is(input, select, textarea)):disabled {
   color: var(--cn-fg-disabled);
-  box-shadow: var(--neu-inset-soft), var(--cn-field-ring);
+  box-shadow: var(--cn-field-ring), var(--neu-inset-soft);
   cursor: not-allowed;
 }
 :is(.input, .field :is(input, textarea)):disabled::placeholder { color: var(--cn-fg-disabled); }
@@ -1459,14 +1461,16 @@ a:hover:not(:active) > .accent-card {
 }
 
 /* Table: opt-in class on <table>; scopes all table styling. Sans tabular
-   body, a band header (--cn-surface-band), hover presses the row in. Give each data cell a
+   body, a band header (--cn-surface-band) over an --edge rule, 2.1:1 on
+   the page against the surface-0 row rules' 1.3:1, so the head parts from
+   the rows by more than its text color. Hover presses the row in. Give each data cell a
    data-label attribute: it becomes the row label at 760px and below. Inside
    .table-scroll the table stays a table and scrolls sideways instead. */
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th {
   padding: var(--cell-pad);
   color: var(--cn-fg-muted);
-  border-bottom: 1px solid var(--surface-0);
+  border-bottom: 1px solid var(--edge);
   background: var(--cn-surface-band);
   text-align: start;
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
@@ -1486,17 +1490,14 @@ a:hover:not(:active) > .accent-card {
 .data-table th.is-num[aria-sort] > button { flex-direction: row-reverse; }
 /* Inline edit: an .input in a table cell. It has no label above it, so it
    takes its name from the column header through aria-labelledby. It
-   reads --cn-cell-field-ring, the same even surface-1 hairline as any
-   resting field, 1.8:1 on the page, so it keeps that edge even where a
-   consumer clears --cn-field-ring. The soft carve stays darkness only. :where() keeps
-   the selector as light as .input, so hover, focus, validation, disabled
-   and read-only still win. */
+   takes --cn-field-ring over the soft carve, like any resting field.
+   :where() keeps the selector as light as .input, so hover, focus,
+   validation, disabled and read-only still win. */
 :where(.data-table td) .input {
-  --cn-field-ring: var(--cn-cell-field-ring);
   height: var(--control-h-sm);
   padding: 0 var(--space-3);
   border-radius: var(--cn-radius-control);
-  box-shadow: var(--neu-inset-soft), var(--cn-field-ring);
+  box-shadow: var(--cn-field-ring), var(--neu-inset-soft);
   font-size: var(--cell-font-size);
 }
 /* Emphasized name cell: full-strength primary line, quiet secondary line.
@@ -2190,7 +2191,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   gap: var(--space-1);
   overflow-x: auto;
   border-radius: var(--cn-radius-card);
-  box-shadow: var(--neu-inset-soft), var(--cn-field-ring);
+  box-shadow: var(--cn-field-ring), var(--neu-inset-soft);
   scrollbar-width: none;
 }
 .tabs > [role="tab"] {

@@ -75,7 +75,9 @@ export default function InputPage() {
         its bottom and right walls fade into the ground with no light lip,
         because a bright line there reads as a bevel. At rest a field has a
         quiet even surface-1 hairline, 1.8:1 on the page, the same on all four
-        sides, so its bounds show without a lip. Once the reader reaches for it
+        sides, so its bounds show without a lip. The hairline paints over the
+        carve, so the dark wall never dims its top and left and leaves the
+        bottom and right brighter. Once the reader reaches for it
         the bounds reach 3:1, as a full ring on hover and the focus ring on
         focus. Always give a field a visible label; a
         field in a table cell has none, so it takes the{" "}
@@ -322,8 +324,8 @@ export default function InputPage() {
           {
             name: "--cn-field-ring",
             values: "box-shadow",
-            default: "var(--cn-cell-field-ring)",
-            notes: "The resting ring. Reads --cn-cell-field-ring, an even surface-1 hairline, 1.8:1 on base and 1.4:1 on an overlay, never brighter on the bottom and right. The tabs carve shares it. A full overlay-2 ring under prefers-contrast: more, 5.8:1 on base and raised, 4.6:1 on an overlay.",
+            default: "inset 0 0 0 1px var(--surface-1)",
+            notes: "The resting ring, an even surface-1 hairline, 1.8:1 on base and 1.4:1 on an overlay. Listed before the carve, so it paints over the dark wall and is never brighter on the bottom and right. Table-cell fields, disabled fields and the tabs carve share it. A full overlay-2 ring under prefers-contrast: more, 5.8:1 on base and raised, 4.6:1 on an overlay.",
           },
           {
             name: "--cn-field-hover-ring",
