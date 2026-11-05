@@ -266,6 +266,8 @@ function resolver(map) {
     if (!r) return null;
     if (/^#[0-9a-f]{6}$/i.test(r)) return hexRGBA(r);
     if (r === "transparent") return [0, 0, 0, 0];
+    const rgb = r.match(/^rgb\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+)\s*)?\)$/);
+    if (rgb) return [+rgb[1], +rgb[2], +rgb[3], rgb[4] == null ? 1 : +rgb[4]];
     const mix = r.match(/^color-mix\(\s*in srgb\s*,(.*)\)$/s);
     if (!mix) return null;
     const [a, b] = splitTop(mix[1]).map((part) => {
@@ -289,14 +291,27 @@ const lum = (c) => c.slice(0, 3).reduce((sum, v, i) => {
 const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + .05) / (y + .05); };
 
 const GROUNDS = ["--cn-surface-page", "--cn-surface-raised", "--cn-surface-overlay"];
-/* [foreground, grounds, floor, what the SPEC promises] */
+const ON_PAGE = ["--cn-surface-page", "--cn-surface-raised"];
+const ON_OVERLAY = ["--cn-surface-overlay"];
+/* [foreground, grounds, floor, what the SPEC promises, mode]. A name that
+   starts with @ is the color of a one-layer shadow token: @field-ring reads
+   --cn-field-ring. A row with a mode runs in that mode only. The --edge,
+   --edge-strong and lit-edge rows are design floors that keep the depth
+   ladder in order, not WCAG obligations. */
 const PAIRS = [
   ["--cn-fg", GROUNDS, 7, "headings and values"],
   ["--cn-fg-soft", GROUNDS, 7, "ledes and cells"],
   ["--cn-fg-body", GROUNDS, 7, "running text"],
-  ["--cn-fg-muted", GROUNDS, 5.5, "labels, meta and table heads"],
+  ["--cn-fg-muted", GROUNDS, 5.5, "meta, help and table heads"],
   ["--cn-fg-placeholder", GROUNDS, 4.5, "placeholders"],
-  ["@field-lip", GROUNDS, 3, "the field lip (1.4.11)"],
+  ["@field-hover-ring", GROUNDS, 3, "a hovered field's ring (1.4.11)"],
+  ["@field-ring", GROUNDS, 3, "a resting field's ring under prefers-contrast", "prefers-contrast"],
+  ["--edge", ON_PAGE, 1.9, "the raised hairline (design floor)"],
+  ["--edge", ON_OVERLAY, 1.6, "the raised hairline (design floor)"],
+  ["--edge-strong", ON_PAGE, 2.4, "the lead and overlay hairline (design floor)"],
+  ["--edge-strong", ON_OVERLAY, 1.9, "the lead and overlay hairline (design floor)"],
+  ["@lit-edge", ON_PAGE, 1.4, "the lit top edge (design floor)"],
+  ["@lit-edge", ON_OVERLAY, 1.3, "the lit top edge (design floor)"],
   ["--cn-focus", GROUNDS, 3, "the focus ring (1.4.11)"],
   ["--control-edge", GROUNDS, 3, "unchecked control edges and the slider thumb (1.4.11)"],
   ["--engaged-edge", [...GROUNDS, "--wash"], 3, "the engaged rim (1.4.11)"],
@@ -335,8 +350,9 @@ async function contrast() {
   for (const [mode, map] of [["default", base], ["prefers-contrast", more]]) {
     const { color } = resolver(map);
     const ground = (name) => { const c = color(`var(${name})`); return c && over(c, color("var(--base)")); };
-    const fgOf = (name) => name === "@field-lip"
-      ? color((map.get("--cn-field-ring") || "").match(/var\(--[\w-]+\)\s*$/)?.[0] ?? "")
+    /* The color of a one-layer shadow: drop inset and the lengths. */
+    const fgOf = (name) => name.startsWith("@")
+      ? color((map.get(`--cn-${name.slice(1)}`) || "").replace(/^inset\s+/, "").replace(/^(?:-?[\d.]+(?:px)?\s+)+/, ""))
       : color(`var(${name})`);
     const check = (fgName, fg, grounds, floor, what) => {
       for (const g of grounds) {
@@ -347,7 +363,28 @@ async function contrast() {
         if (r < floor) out.push({ line: 1, message: `${mode}: ${fgName} on ${label} is ${r.toFixed(2)}:1, under ${floor}:1 for ${what}` });
       }
     };
-    for (const [fgName, grounds, floor, what] of PAIRS) check(fgName, fgOf(fgName), grounds, floor, what);
+    for (const [fgName, grounds, floor, what, only] of PAIRS) if (!only || only === mode) check(fgName, fgOf(fgName), grounds, floor, what);
+    /* A carve is darkness only: every layer of the inset tokens falls from
+       the top left and is darker than the page, so no carve draws a light
+       lip or glow on its far walls. */
+    for (const name of ["--neu-inset", "--neu-inset-soft"]) {
+      for (const layer of splitTop(map.get(name) || "")) {
+        const parts = layer.replace(/^inset\s+/, "").match(/^((?:-?[\d.]+(?:px)?\s+)+)(.*)$/s);
+        const [x, y] = parts ? parts[1].trim().split(/\s+/).map(parseFloat) : [];
+        const c = parts && color(parts[2]);
+        const page = color("var(--base)");
+        if (!c) { out.push({ line: 1, message: `${mode}: cannot resolve a layer of ${name}` }); continue; }
+        if (x < 0 || y < 0) out.push({ line: 1, message: `${mode}: ${name} has a layer from the bottom right (${layer}); a carve has no lit side` });
+        if (lum(over(c, page)) > lum(page)) out.push({ line: 1, message: `${mode}: ${name} has a layer lighter than the page (${layer}); a carve is darkness only` });
+      }
+    }
+    /* The lead and overlay hairline outranks the plain one on every ground. */
+    for (const g of GROUNDS) {
+      const bg = ground(g), [plain, strong] = ["--edge", "--edge-strong"].map((n) => color(`var(${n})`));
+      if (!bg || !plain || !strong) { out.push({ line: 1, message: `${mode}: cannot resolve the hairlines on ${g}` }); continue; }
+      const [rp, rs] = [plain, strong].map((c) => ratio(over(c, bg), bg));
+      if (rs <= rp) out.push({ line: 1, message: `${mode}: --edge-strong on ${g} is ${rs.toFixed(2)}:1, not above --edge at ${rp.toFixed(2)}:1` });
+    }
     for (const [fgName, floor] of APCA) {
       for (const g of GROUNDS) {
         const fg = color(`var(${fgName})`), bg = ground(g);

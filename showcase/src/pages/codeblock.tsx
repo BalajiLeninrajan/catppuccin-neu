@@ -65,7 +65,7 @@ export default function CodeblockPage() {
   return (
     <Doc
       title="Code block"
-      lede="A carved well for snippets, in mono 500 13px on a 1.6 line height. It shares its radius, fill, lip and type with the terminal and the command."
+      lede="A carved well for snippets, in mono 500 13px on a 1.6 line height. It shares its radius, fill, carve and type with the terminal and the command."
     >
       <Demo title="Code block" classes="codeblock > pre">
         <div class="codeblock" style="width:min(560px,100%)">
@@ -196,7 +196,7 @@ export default function CodeblockPage() {
           {
             name: ".codeblock",
             notes:
-              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --neu-inset with --cn-well-lip. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
+              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --neu-inset with --cn-well-ring. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
           },
           {
             name: ".is-numbered",

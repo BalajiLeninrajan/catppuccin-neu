@@ -120,6 +120,12 @@
   flex: none;
 }
 
+/* A one-line snippet wraps anywhere rather than push a 320px page sideways. */
+.sc-snippet > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .sc-snippet .sc-snippet-hint {
   pointer-events: none;
 }
@@ -185,3 +191,8 @@
     padding: var(--space-6) 0 var(--space-8);
   }
 }
+
+/* A single token in a table cell (.cn-nowrap) never breaks at its own
+   hyphens, except on a phone, where a long token would push the page
+   sideways at 320px. */
+@media (max-width: 520px) { .sc-doc td code.cn-nowrap { white-space: normal; overflow-wrap: anywhere; } }

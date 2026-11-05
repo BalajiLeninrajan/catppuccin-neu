@@ -16,7 +16,8 @@ export default function TypographyPage() {
         display weight. The title is 600, so a panel title never outweighs the
         page heading. Names, titles and buttons (<code class="cn-code-inline">.btn</code>) are 600.
         Chrome, the label and the microlabel, is 500, and meta is 400, so the
-        two 13px roles read apart by weight as well as leading, and 600 marks
+        two 13px roles read apart by weight, leading and ink: the label is
+        subtext-1 and meta subtext-0. 600 marks
         what a reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
         heading and value-lg, so a stat value outweighs the panel title above
         it. At 520px both step down: the value to 18px and the band title to
@@ -112,7 +113,7 @@ export default function TypographyPage() {
         <span class="cn-ui">Export as CSV</span>
       </Demo>
 
-      <Demo title="cn-label · 500 · 13px/1.25 · subtext-0" classes="cn-label">
+      <Demo title="cn-label · 500 · 13px/1.25 · subtext-1" classes="cn-label">
         <span class="cn-label">Billing period</span>
       </Demo>
 
@@ -243,11 +244,11 @@ export default function TypographyPage() {
           { name: ".cn-lede", values: "sans", default: "400 · 18px/1.6 · subtext-1", notes: "Intro paragraph; max-width --cn-measure (68ch). 20px in .page-main.is-reading. .lede is the recipe form." },
           { name: ".cn-copy", values: "sans", default: "400 · 16px/1.6 · subtext-1", notes: "Body prose in --cn-fg-body, the same role as body. 15px at compact density." },
           { name: ".cn-ui", values: "sans", default: "600 · 14px/1.25", notes: "Control text outside a recipe." },
-          { name: ".cn-label", values: "sans", default: "500 · 13px/1.25 · subtext-0", notes: "Field and section labels; sentence case. --cn-fg-muted." },
+          { name: ".cn-label", values: "sans", default: "500 · 13px/1.25 · subtext-1", notes: "Field and section labels; sentence case. --cn-fg-soft, a stop above meta." },
           { name: ".cn-microlabel", values: "sans", default: "500 · 12px/1.25 · +0.08em · uppercase · subtext-0", notes: "A fact's label. The only uppercase role and the only 12px one." },
           { name: ".cn-value", values: "sans", default: "600 · 24px/1 · -0.02em · tabular", notes: "Stat numbers." },
           { name: ".cn-value-lg", values: "sans", default: "600 · 32px/1 · -0.025em · tabular", notes: "Large stat in var(--accent); text inside an accent card. Opt out with a color utility." },
-          { name: ".cn-meta", values: "sans", default: "400 · 13px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. A weight under the 500 label." },
+          { name: ".cn-meta", values: "sans", default: "400 · 13px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. A weight under the 500 label and a stop dimmer, --cn-fg-muted." },
           { name: ".cn-code", values: "mono", default: "500 · 13px/1.6 · tabular", notes: "Machine literals, CLI strings." },
           { name: ".cn-code-inline", values: "mono", default: "500 · 0.92em · subtext-1", notes: "Code inside prose, in --cn-fg-soft." },
           { name: ".cn-code-meta", values: "mono", default: "500 · 13px/1 · subtext-0", notes: "A model id, a path or a hash under a name." },

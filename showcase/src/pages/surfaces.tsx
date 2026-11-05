@@ -40,23 +40,26 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         The overlay stops at 1.27:1 because a lighter step would drop the
         placeholder role under 4.5:1. Body text stays above 7:1 and
-        placeholders above 4.5:1 on it. The field lip is overlay-1, so it
-        clears 3:1 everywhere: 4.4:1 on the page and in a panel, which share
-        a color, and 3.5:1 on the overlay. An empty field inside a panel or a
-        dialog keeps its edge.
+        placeholders above 4.5:1 on it. A hovered field rings in overlay-1,
+        so its bounds clear 3:1 everywhere: 4.4:1 on the page and in a panel,
+        which share a color, and 3.5:1 on the overlay.
       </p>
 
-      <Demo title="Six fills" classes="cn-bg-base / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well" row>
-        {LADDER.map((l) => (
-          <div key={l.token} class="cn-stack cn-gap-8" style="justify-items:center">
-            <div
-              class={`${l.util} cn-edge-soft cn-r-card`}
-              style={`width:96px;height:64px${l.util ? "" : `;background:var(${l.token})`}`}
-            />
-            <code class="cn-code-meta">{l.token}</code>
-            <span class="cn-meta">{l.util ? `.${l.util}` : "no utility"}</span>
-          </div>
-        ))}
+      <Demo title="Six fills" classes="cn-bg-base / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well">
+        {/* A fixed 176px track fits the longest token, so the six swatches
+            sit at an even pitch and still wrap on a narrow screen. */}
+        <div style="width:100%;display:grid;grid-template-columns:repeat(auto-fill,176px);gap:var(--space-4)">
+          {LADDER.map((l) => (
+            <div key={l.token} class="cn-stack cn-gap-8" style="justify-items:center">
+              <div
+                class={`${l.util} cn-edge-soft cn-r-card`}
+                style={`width:96px;height:64px${l.util ? "" : `;background:var(${l.token})`}`}
+              />
+              <code class="cn-code-meta">{l.token}</code>
+              <span class="cn-meta">{l.util ? `.${l.util}` : "no utility"}</span>
+            </div>
+          ))}
+        </div>
       </Demo>
 
       <Props
@@ -157,8 +160,11 @@ export default function SurfacesPage() {
         <code class="cn-code-inline">.is-tilted</code> is the one rotated surface: a
         1.2° turn with the 10px plate over the neu raise, so the card still
         answers the top-left light. Use it once per view at most, for a
-        summary or an aside, never for the page's main data, and never on a
-        panel holding a table or a form. It takes{" "}
+        summary or an aside in prose, never for the page's main data, and
+        never on a panel holding a table, a form or ruled rows, because
+        rotated rules drift against the text on them. Its heading takes the
+        name role, no larger than the panel titles beside it, so the tilt
+        does the lifting and the type does not. It takes{" "}
         <code class="cn-code-inline">align-self: start</code>, so in a grid it
         keeps its content height instead of stretching to the row and showing
         an empty tail under the turn. It flattens to the regular raised panel
@@ -174,14 +180,17 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.panel.is-lead</code> marks the panel a
         view is about, such as the invoice table on a billing dashboard. It
-        sits on the page color like every panel, inside the bright{" "}
+        sits on the page color like every panel, inside the brighter{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
-        surface-2 at 2.5:1 against a panel's 1.6:1, and stands on{" "}
-        <code class="cn-code-inline">--neu-lifted</code>: a longer cast under
-        a bright overlay-0 top rim at 3.4:1. Its band title takes{" "}
+        surface-2 at 2.5:1 against a panel's 1.9:1, and stands on{" "}
+        <code class="cn-code-inline">--neu-lifted</code>: a 2px dark contour
+        all round, a wider contact edge, a deeper near shadow and a longer
+        cast. It keeps the plain lit edge, because a bright line is never a
+        depth cue. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
-        weight, 28px at default density where other panels use 20px. A cast barely shows on a
-        dark page, so the two edges and the title carry the rank. It adds
+        weight, 28px at default density where other panels use 20px. A cast
+        barely shows on a dark page, so the dark contour and the title carry
+        the rank. It adds
         height and a larger title, not an ornament: no plate, tilt or color. Use one per view at most.
         The tilted aside comments on the data; the lead panel holds it.
       </p>
@@ -258,10 +267,11 @@ export default function SurfacesPage() {
         The well takes the{" "}
         <code class="cn-code-inline">--cn-surface-sunken</code> fill the code
         wells and stepper pills use, so it sits below the ground and never
-        reads as an outlined panel. The carve and{" "}
-        <code class="cn-code-inline">--cn-well-lip</code>, a 1px solid surface-2
-        line, 2.5:1 on the page, on the bottom and right inner walls, finish
-        it without a border and stay softer than a field's 4.4:1 lip.
+        reads as an outlined panel. The carve finishes it with one dark wall
+        from the top left and no border or light lip.{" "}
+        <code class="cn-code-inline">--cn-well-ring</code> paints nothing until{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code> closes it
+        into a surface-2 ring.
       </p>
 
       <Props
@@ -290,12 +300,12 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-tilted",
             values: "one per view",
-            notes: "rotate(1.2deg) and a 10px plate over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside, never a table or a form. Flattens at 1060px and stands upright under prefers-contrast: more.",
+            notes: "rotate(1.2deg) and a 10px plate over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside in prose, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
           },
           {
             name: ".panel.is-lead",
             values: "one per view",
-            notes: "The panel the view is about. The page color inside the bright --edge-strong hairline, on --neu-lifted with its bright overlay-0 rim, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height and by its title. No ornament.",
+            notes: "The panel the view is about. The page color inside the --edge-strong hairline, on --neu-lifted with its 2px dark contour, wider contact, deeper near shadow and longer cast, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height and by its title. No ornament.",
           },
           {
             name: ".panel.is-shell",
@@ -305,7 +315,7 @@ export default function SurfacesPage() {
           {
             name: ".well",
             values: "inset container",
-            notes: "No border, the --cn-surface-sunken fill; the full inner shadow and --cn-well-lip finish it. The card radius (12px).",
+            notes: "No border, the --cn-surface-sunken fill; the full inner shadow finishes it, and --cn-well-ring rings it under prefers-contrast: more. The card radius (12px).",
           },
           {
             name: ".scroll-well",

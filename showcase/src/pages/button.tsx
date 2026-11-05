@@ -80,7 +80,7 @@ export default function ButtonPage() {
 
       <p class="cn-copy">
         The secondary rests on <code class="cn-code-inline">--cn-surface-raised</code>,
-        the page color, with a hairline, the lit top edge and the crust plate.
+        the page color, with a hairline, the lit top edge and the ink plate, crust halfway to black.
         Hover warms the border toward mauve and lifts the fill to{" "}
         <code class="cn-code-inline">--cn-surface-overlay</code>. The resting
         hairline is decoration: the label identifies the button, so the edge
@@ -309,7 +309,7 @@ export default function ButtonPage() {
         rows={[
           { name: ".btn", values: "base class", notes: "Height --control-h, 16px inline padding, the control radius (8px), sans 600 14px. Compose with one variant." },
           { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken inside a plain --edge, --cn-fg-disabled label, no plate, ramp, grain, gloss or dimming. One per view." },
-          { name: ".btn-secondary", notes: "--cn-surface-raised fill, --edge hairline, crust plate. Hover warms the border to mauve at --cn-step-strong and lifts the fill to --cn-surface-overlay. The default for clickables." },
+          { name: ".btn-secondary", notes: "--cn-surface-raised fill, --edge hairline, the ink plate. Hover warms the border to mauve at --cn-step-strong and lifts the fill to --cn-surface-overlay. The default for clickables." },
           { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', notes: "Transparent until hovered, then --hover and an --edge hairline. Toggled, current or holding an open menu, it takes the engaged state: --wash, --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },
@@ -322,7 +322,7 @@ export default function ButtonPage() {
           { name: '[aria-busy="true"]', values: "on .btn", notes: "Hides the label and keeps the width, turns a 16px spinner (14px in small), stops clicks, stays focusable. Pair with aria-disabled." },
           { name: "--disabled-opacity", default: ".6", notes: "Keeps a disabled ghost label, --cn-fg-body at .6, at 4.2:1 on base. The primary does not read it; it sinks. .7 under prefers-contrast: more." },
           { name: "--grain", default: ".22", notes: "Grain strength on the primary and every other solid accent fill. 0 turns it off." },
-          { name: "--plate", default: "var(--crust)", notes: "The plate's color, read by the secondary button, segmented options and .cn-hard." },
+          { name: "--plate", default: "var(--neu-ink)", notes: "The plate's color, read by the secondary button, segmented options and .cn-hard." },
           { name: "--hard-extra", default: "var(--cn-lit-edge)", notes: "Layers drawn over the plate. The secondary keeps the lit top edge; the primary replaces it with its gloss." },
           { name: "--control-h", default: "46px (2.875rem)", notes: 'Rem, so the button grows with the browser font size. 38px under data-density="cozy", 28px under data-density="compact".' },
         ]}

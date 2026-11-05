@@ -37,11 +37,11 @@
      hex, and the prefers-contrast block re-keys them. Every value is a
      Mocha color above. Ratios are on base. */
   --cn-fg: var(--text);                  /* headings, names, values: 11.3:1 */
-  --cn-fg-soft: var(--subtext-1);        /* lede, table cells, code: 9.3:1 */
+  --cn-fg-soft: var(--subtext-1);        /* lede, table cells, code, labels: 9.3:1 */
   --cn-fg-body: var(--subtext-1);        /* running text, Catppuccin's body stop below text: 9.3:1 */
-  --cn-fg-muted: var(--subtext-0);       /* labels, meta, help, table heads: 7.4:1 */
+  --cn-fg-muted: var(--subtext-0);       /* meta, help, table heads: 7.4:1 */
   --cn-fg-placeholder: var(--overlay-2); /* placeholders and code line numbers, the floor for text: 5.8:1 */
-  --cn-fg-faint: var(--overlay-1);       /* decorative icons, the field lip: 4.4:1 */
+  --cn-fg-faint: var(--overlay-1);       /* decorative icons: 4.4:1 */
   --cn-fg-on-accent: var(--crust);       /* text and glyphs on a solid accent fill: 9.2:1 on mauve */
   --cn-fg-disabled: var(--overlay-1);    /* disabled text: 4.4:1 */
   --cn-interactive: var(--mauve);        /* links, the primary, checked controls: 8.1:1 */
@@ -77,14 +77,16 @@
   --mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono", "JetBrains Mono Fallback",
           ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-  /* Data series, in order. A chart's first series is mauve, then yellow,
-     teal, peach, blue and pink: the six accents, alternating cool and warm
-     so neighbors never share a hue family. A record that has an identity keeps its
-     own --accent instead. --cn-ramp-1..5 is a sequential ramp for one
-     measure, mauve mixed into surface-0 in oklab. */
-  --cn-series-1: var(--mauve);
+  /* Data series, in order. A chart's first series is teal, then yellow,
+     mauve, peach, blue and pink: the six accents, alternating cool and warm
+     so neighbors never share a hue family. Series 1 is not mauve, so the
+     biggest bar in a chart never reads as the interactive color. A record
+     that has an identity keeps its own --accent instead. --cn-ramp-1..5 is
+     a sequential ramp for one measure, mauve mixed into surface-0 in
+     oklab. */
+  --cn-series-1: var(--teal);
   --cn-series-2: var(--yellow);
-  --cn-series-3: var(--teal);
+  --cn-series-3: var(--mauve);
   --cn-series-4: var(--peach);
   /* 5 and 6 sit a lightness step down, so a reader who loses hue still
      tells them from 1 and 3. */
@@ -145,7 +147,7 @@
   --cn-type-label-tracking: 0;
 
   --cn-type-meta-size: .8125rem;   /* 13px */
-  --cn-type-meta-weight: 400;      /* a step under the 500 label, so the two 13px roles read apart */
+  --cn-type-meta-weight: 400;      /* a step under the 500 label, and a stop dimmer in ink, so the two 13px roles read apart */
   --cn-type-meta-leading: 1.5;
   --cn-type-meta-tracking: 0;
 
@@ -223,6 +225,7 @@
 
   /* Neumorphic depth, lit from the top left: five neu shadows, pop, cast
      and hard. */
+  --neu-ink: rgb(8 8 14);              /* crust halfway to black: the default plate, and the base of every shadow below */
   --neu-dark: rgb(8 8 14 / .8);
   --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
   /* A shadow has to be darker than the darkest surface it falls on, and
@@ -232,18 +235,21 @@
      past the bottom and right edges, then the cast. The cast tops out near
      1.28:1, so the near shadow is what makes the contact read at 1x. */
   --neu-shade: rgb(8 8 14 / .72);
-  --neu-contact: rgb(8 8 14 / .55);
+  --neu-contact: rgb(8 8 14 / .8);
   --neu-near: rgb(8 8 14 / .8);
   --neu-raised: 1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
-  /* The lead panel: the raised layers with a longer cast and a bright
-     overlay-0 top rim, 3.4:1 on base where the plain lit edge is 1.5:1.
-     Shadows barely register on a dark page, so the rim carries the rank. */
-  --neu-lifted: 1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 14px 18px 36px var(--neu-shade), inset 0 1px var(--overlay-0);
+  /* The lead panel stands higher by darkness, not by a brighter line: a
+     2px dark contour all round, a contact edge a pixel wider, a deeper
+     near shadow and a longer cast. It keeps the plain lit edge. */
+  --neu-lifted: 0 0 0 2px rgb(8 8 14 / .7), 2px 2px 0 1px var(--neu-contact), 3px 5px 6px var(--neu-near), 16px 22px 40px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
   --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
-  --neu-inset: inset 4px 4px 9px var(--neu-dark), inset -3px -3px 7px rgb(69 71 90 / .24);
-  --neu-inset-soft: inset 2px 2px 5px rgb(17 17 27 / .52), inset -2px -2px 4px rgb(69 71 90 / .18);
+  /* A carve is darkness only: one dark wall from the top left, no light
+     layer and no lip, because a light line on the far walls reads as a
+     bevel. */
+  --neu-inset: inset 3px 3px 8px var(--neu-dark);
+  --neu-inset-soft: inset 2px 2px 5px rgb(8 8 14 / .5);
 
   /* The lit top edge: the top-left light catches a raised surface's top
      rim, a 1px inner line of surface-2 at 45%, 1.5:1 on base, so a panel
@@ -274,7 +280,8 @@
      Accent comes from the item's identity and stays the same everywhere
      that item appears.
      --plate (the hard offset's color) is not declared here, so a subtree
-     can set it. Read it as var(--plate, var(--crust)). */
+     can set it. Read it as var(--plate, var(--neu-ink)): the shadow ink,
+     1.22:1 under base, where crust is 1.14:1. */
   --accent: var(--mauve);            /* per-instance accent: plates, marks, data; bars and legend swatches read --series first */
   --tone: var(--cn-info);            /* status color for tags, banners, icon-button hover, validation; info until a .cn-tone-* sets it */
   --hard-offset: 4px;                /* the hard offset's distance */
@@ -288,7 +295,7 @@
 
   /* Mix tokens. --tint is declared at its use sites below, because a
      var() resolves where it is declared. */
-  --edge:      color-mix(in srgb, var(--surface-2) 55%, transparent); /* raised-surface hairline: 1.6:1 */
+  --edge:      color-mix(in srgb, var(--surface-2) 75%, transparent); /* raised-surface hairline: 1.9:1 */
   --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
   --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
   --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its own wash */
@@ -297,19 +304,21 @@
   /* .6 keeps a disabled ghost label at 4.2:1. The primary goes flat instead
      of dimming. */
   --disabled-opacity: .6;
-  /* The lit lip of a carved field. Light from the top left catches the
-     bottom and right inner walls, drawn as a 1px overlay-1 edge: 4.4:1 on
-     the page and on a panel, which share a color, and 3.5:1 on an overlay,
-     so an empty field shows its bounds (WCAG 1.4.11). prefers-contrast
-     closes it into a full ring. Wells and the mono wells carry a softer
-     lip, --cn-well-lip, solid surface-2 at 2.5:1 on base, so a carve reads
-     on the page without a border and still stays apart from a field. */
-  --cn-field-ring: inset -1px -1px 0 var(--overlay-1);
-  --cn-well-lip: inset -1px -1px 0 var(--surface-2);
+  /* A carved field at rest has no edge of its own: its label and its dark
+     wall identify it, and a bright lip would read as a bevel. The ring
+     paints nothing by default. prefers-contrast closes it into a full
+     overlay-2 ring. Hover draws a full 1px --control-edge ring, 4.4:1 on
+     the page and on a panel and 3.5:1 on an overlay, and focus draws the
+     focus ring, so a field shows 3:1 bounds as soon as it is in use. Wells,
+     the mono wells and the tabs carve take --cn-well-ring, which also
+     paints nothing until prefers-contrast closes it into a surface-2 ring. */
+  --cn-field-ring: inset 0 0 0 1px transparent;
+  --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
+  --cn-well-ring: inset 0 0 0 1px transparent;
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
      for inner rules and dividers, --edge-strong for the lead panel and
      overlays: solid surface-2, 2.5:1 on base and 1.9:1 on an overlay,
-     above --edge's 1.6:1 and 1.4:1, so the higher surface has the brighter
+     above --edge's 1.9:1 and 1.6:1, so the higher surface has the brighter
      cut edge. */
   --edge-strong: var(--surface-2);
 
@@ -392,18 +401,18 @@
   --tone-edge: color-mix(in srgb, var(--tone) var(--cn-step-edge), transparent);
   --tone-border: color-mix(in srgb, var(--tone) var(--cn-step-plate), var(--surface-0));
 }
-/* An invalid or warning field closes its lip into a ring in its tone. */
+/* An invalid or warning field draws a full ring in its tone. */
 :where(.input, .field :is(input, select, textarea)) { --cn-validation-ring: inset 0 0 0 1px var(--tone); }
 
 /* The plates read the element's own --plate and the density's
    --hard-offset, so they are declared where they are drawn: rest, held
    (half), the +1px link hover, and the fixed 10px and 3px. */
 :where(.btn-primary, .btn-secondary, .segmented > *, .accent-card, .chip, .panel.is-tilted, .cn-hard, .cn-hard-lg, .cn-hard-sm, .cn-pressable-slide) {
-  --cn-plate: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust));
-  --cn-plate-half: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--crust));
-  --cn-plate-hover: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--crust));
-  --cn-plate-lg: 10px 10px 0 var(--plate, var(--crust));
-  --cn-plate-sm: 3px 3px 0 var(--plate, var(--crust));
+  --cn-plate: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
+  --cn-plate-half: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--neu-ink));
+  --cn-plate-hover: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--neu-ink));
+  --cn-plate-lg: 10px 10px 0 var(--plate, var(--neu-ink));
+  --cn-plate-sm: 3px 3px 0 var(--plate, var(--neu-ink));
 }
 /* The ring between stacked avatars reads the stack's --ring-ground. */
 :where(.avatar) { --cn-ground-ring: 0 0 0 2px var(--ring-ground, var(--base)); }
@@ -412,7 +421,7 @@
    stops move lightness, and chroma a touch on the shadow side, never hue.
    --cn-fill is registered so a hover from mauve to pink can transition. */
 @property --cn-fill { syntax: "<color>"; inherits: false; initial-value: transparent; }
-:where(.btn-primary, .checkbox, .mark, .progress-track span), :where(.switch)::after {
+:where(.btn-primary, .checkbox, .mark, .progress-track span), :where(.switch)::after, :where(.bar)::before {
   --cn-fill: var(--accent);
   --cn-fill-ramp: linear-gradient(165deg,
     oklch(from var(--cn-fill) calc(l + .035) c h),
@@ -593,7 +602,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
 }
 
 /* More contrast: text steps up one palette stop, hairlines and control
-   edges go solid, carved fields get an edge, links underline at full
+   edges go solid, carved fields and wells get a full ring, links underline at full
    strength, and the grain goes. The look stays Mocha. */
 @media (prefers-contrast: more) {
   :root {
@@ -608,10 +617,9 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --edge-strong: var(--overlay-0);
     --control-edge: var(--overlay-2);
     --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
-    --cn-well-lip: inset 0 0 0 1px var(--surface-2);
+    --cn-well-ring: inset 0 0 0 1px var(--surface-2);
     --neu-dark: rgb(8 8 14 / .88);
     --neu-shade: rgb(8 8 14 / .86);
-    --neu-contact: rgb(8 8 14 / .8);
     --neu-near: rgb(8 8 14 / .9);
     --disabled-opacity: .7;
     --grain: 0;
@@ -633,7 +641,10 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
   :focus-visible { outline-color: Highlight !important; }
   /* Engaged and selected states are fills and shadows, which vanish, so
      they draw a Highlight rim. */
-  :is(.cn-engaged, .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]), .btn-ghost:is([aria-pressed="true"], [aria-current], [aria-expanded="true"]), .tabs > [aria-selected="true"], .pagination > [aria-current="page"], .sidebar-nav a[aria-current="page"]) { border-color: Highlight !important; }
+  :is(.cn-engaged, .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]), .btn-ghost:is([aria-pressed="true"], [aria-current], [aria-expanded="true"]), .tabs > [aria-selected="true"], .pagination > [aria-current="page"]) { border-color: Highlight !important; }
+  /* The current sidebar link's spine is a fill, which forced colors would
+     repaint, so it draws in Highlight. */
+  .sidebar-nav a[aria-current="page"]::before { forced-color-adjust: none; background: Highlight !important; }
   .data-table tr[aria-selected="true"] td { outline: 1px solid Highlight; }
   /* Box-shadow carves vanish, so carved fields and wells draw an edge. */
   :is(.input, .field :is(input, select, textarea), .well, .terminal, .codeblock, .command, .stepper > *, .progress-track, .tabs) { outline: 1px solid CanvasText; outline-offset: -1px; }

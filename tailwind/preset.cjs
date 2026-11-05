@@ -173,9 +173,9 @@ module.exports = {
         "neu-inset-soft": "var(--neu-inset-soft)",
         pop: "var(--shadow-pop)",
         cast: "var(--shadow-cast)",
-        hard: "var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust))",
-        "hard-lg": "10px 10px 0 var(--plate, var(--crust))",
-        "hard-sm": "3px 3px 0 var(--plate, var(--crust))",
+        hard: "var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink))",
+        "hard-lg": "10px 10px 0 var(--plate, var(--neu-ink))",
+        "hard-sm": "3px 3px 0 var(--plate, var(--neu-ink))",
         mark: "var(--shadow-mark)",
       },
       /* Heights also read spacing on Tailwind 3.4; these keep older 3.x working. */

@@ -12,10 +12,19 @@
    focused control rings in Highlight. It reloads under prefers-contrast:
    more and runs axe again, then under prefers-reduced-motion: reduce and
    fails on any transition or animation longer than 1ms, apart from the
-   overlay fades and spinners the SPEC keeps. Finally it reloads at 390px
-   wide and fails if the page scrolls sideways. Uses the system Chromium;
-   puppeteer-core never downloads a browser. Exits 1 on any violation that
-   ALLOW does not list.                                                     */
+   overlay fades and spinners the SPEC keeps. It reloads at 700px wide,
+   which is the 1400px desktop at 200% zoom (WCAG 1.4.4), and fails on
+   sideways scroll or clipped text, then at 390px and at 320px (WCAG
+   1.4.10 reflow) and fails on sideways scroll. axe covers the WCAG 2.5.8
+   target size through the wcag22aa tag.
+
+   In the desktop pass it also checks the composition rules the SPEC
+   states: no parent holds more than three raised panels as direct
+   children, outside the docs' demo stages, and an example view holds at
+   most one primary, one tilted panel and one lead panel.
+
+   Uses the system Chromium; puppeteer-core never downloads a browser.
+   Exits 1 on any violation that ALLOW does not list.                       */
 
 import { spawn, spawnSync, execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
@@ -31,7 +40,9 @@ const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/
 
 const TAGS = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"];
 const DESKTOP = { width: 1400, height: 900 };
+const ZOOM = { width: 700, height: 900 };
 const PHONE = { width: 390, height: 844 };
+const NARROW = { width: 320, height: 640 };
 
 /* Known false positives, as rule + selector pairs. A violation node is
    skipped only when its rule and its full axe target both match. Each
@@ -221,6 +232,38 @@ function motionLeft(page) {
   });
 }
 
+/* Composition rules from the SPEC. A region holds at most three raised
+   panels: no element may hold more than three .panel children that sit on
+   the page, not in another panel or a docs demo stage. An example view
+   models the ornament budget: one primary, one tilted panel and one lead
+   panel at most. */
+function composition(page, isExample) {
+  return page.evaluate((isExample) => {
+    const path = (el) => {
+      const parts = [];
+      for (let e = el; e && e !== document.body && parts.length < 4; e = e.parentElement) {
+        const cls = [...e.classList].slice(0, 2).map((c) => `.${c}`).join("");
+        parts.unshift(e.tagName.toLowerCase() + (e.id ? `#${e.id}` : "") + cls);
+      }
+      return parts.join(" > ");
+    };
+    const out = [];
+    const parents = new Map();
+    for (const p of document.querySelectorAll("main .panel")) {
+      if (p.parentElement.closest(".panel, .sc-demo-stage")) continue;
+      parents.set(p.parentElement, (parents.get(p.parentElement) ?? 0) + 1);
+    }
+    for (const [parent, n] of parents) if (n > 3) out.push(`${path(parent)} holds ${n} raised panels, over 3`);
+    if (isExample) {
+      for (const [sel, what] of [[".btn-primary", "primaries"], [".panel.is-tilted", "tilted panels"], [".panel.is-lead", "lead panels"]]) {
+        const n = document.querySelectorAll(`main ${sel}`).length;
+        if (n > 1) out.push(`${n} ${what}, over 1`);
+      }
+    }
+    return out;
+  }, isExample);
+}
+
 /* Under forced colors the focus ring must be Highlight. Tab to the first
    focusable control and compare its outline with a Highlight probe. */
 function focusRing(page) {
@@ -293,6 +336,13 @@ async function main() {
       };
       report(violations);
 
+      const composed = await composition(page, route.startsWith("/examples/"));
+      if (composed.length) {
+        failures += composed.length;
+        lines.push(`  composition:`);
+        for (const c of composed) lines.push(`    ${c}`);
+      }
+
       await page.addStyleTag({ content: TEXT_SPACING });
       await new Promise((r) => setTimeout(r, 50));
       const clipped = await clippedText(page);
@@ -327,13 +377,21 @@ async function main() {
       }
       await page.emulateMediaFeatures([]);
 
-      await page.setViewport(PHONE);
-      await open(page, url + route);
-      const o = await overflow(page);
-      if (o) {
-        failures++;
-        lines.push(`  overflow at ${o.innerWidth}px: scrollWidth ${o.scrollWidth}`);
-        for (const c of o.culprits) lines.push(`    ${c.selector} reaches ${c.right}px`);
+      for (const [viewport, clips] of [[ZOOM, true], [PHONE, false], [NARROW, false]]) {
+        await page.setViewport(viewport);
+        await open(page, url + route);
+        const o = await overflow(page);
+        if (o) {
+          failures++;
+          lines.push(`  overflow at ${o.innerWidth}px: scrollWidth ${o.scrollWidth}`);
+          for (const c of o.culprits) lines.push(`    ${c.selector} reaches ${c.right}px`);
+        }
+        const cut = clips ? await clippedText(page) : [];
+        if (cut.length) {
+          failures += cut.length;
+          lines.push(`  clipped text at ${viewport.width}px:`);
+          for (const c of cut) lines.push(`    ${c}`);
+        }
       }
 
       console.log(`${lines.length ? "FAIL" : "ok  "} ${route}`);
@@ -356,7 +414,7 @@ async function main() {
     console.log(`\n${failures} problem(s) across ${count} routes${note}.`);
     process.exit(1);
   }
-  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion and fit 390px${note}.`);
+  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion, fit 700px (200% zoom) without clipping, fit 390px and 320px, and keep the composition budget${note}.`);
   console.log(`Forced-colors screenshots for review: ${shots}`);
 }
 

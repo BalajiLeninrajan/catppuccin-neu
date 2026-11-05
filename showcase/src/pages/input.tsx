@@ -34,7 +34,7 @@ export default function InputPage() {
   return (
     <Doc
       title="Input & field"
-      lede="Text inputs, selects and textareas are carved wells. The background stays transparent, the inner shadow presses the well into the parent ground, and a lit lip marks its bounds."
+      lede="Text inputs, selects and textareas are carved wells. The background stays transparent and one dark inner wall presses the well into the parent ground. Hover and focus ring it."
     >
       <p class="cn-copy">
         An input never paints its own background. On a panel it is carved from
@@ -66,21 +66,26 @@ export default function InputPage() {
         </div>
       </Demo>
 
-      <h2 class="cn-title">The lit lip</h2>
+      <h2 class="cn-title">The carve at rest</h2>
       <p class="cn-copy">
-        Light from the top left catches the bottom and right inner walls of
-        the carve. <code class="cn-code-inline">--cn-field-ring</code> draws that as
-        a 1px overlay-1 edge,{" "}
-        <code class="cn-code-inline">inset -1px -1px 0 var(--overlay-1)</code>:
-        4.4:1 on base and on a panel, which share a color, and 3.5:1 in a
-        dialog. An empty field
-        has no text inside it to show where it is, so the lip marks its
-        bounds at rest (WCAG 1.4.11). Under{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> the lip
-        closes into a full overlay-2 ring.
+        A carve is darkness only. The field's wall falls from the top left,{" "}
+        <code class="cn-code-inline">inset 3px 3px 8px</code> of crust halfway
+        to black, and its bottom and right walls fade into the ground with no
+        light lip, because a bright line there reads as a bevel. At rest a
+        field has no 3:1 edge. WCAG 1.4.11 asks for 3:1 on what a reader needs
+        to identify a control, and a field is identified by its label above
+        it and the dark well under the label, not by its outline. Once the
+        reader reaches for it, the bounds show at 3:1: hover closes{" "}
+        <code class="cn-code-inline">--cn-field-hover-ring</code>, a full 1px{" "}
+        <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on base
+        and on a panel and 3.5:1 in a dialog, and focus draws the 2px focus
+        ring at 11.3:1. Under{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code>{" "}
+        <code class="cn-code-inline">--cn-field-ring</code> closes into a full
+        overlay-2 ring at rest, 5.8:1. Always give a field a visible label.
       </p>
 
-      <Demo title="On the page and on a panel" classes="--cn-field-ring">
+      <Demo title="On the page and on a panel" classes="--cn-field-ring · --cn-field-hover-ring">
         <div class="sc-grid" style="width:100%">
           <input class="input" type="text" placeholder="On base" aria-label="Field on base" />
           <div class="panel panel-body">
@@ -92,9 +97,10 @@ export default function InputPage() {
       <p class="cn-copy">
         Placeholders are <code class="cn-code-inline">--cn-fg-placeholder</code>{" "}
         (overlay-2), the floor for readable text: 5.8:1 on the page and on a
-        panel, and 4.6:1 in a dialog. Labels and help text sit a stop
-        above, on <code class="cn-code-inline">--cn-fg-muted</code>{" "}
-        (subtext-0), 7.4:1 on the page. The value is{" "}
+        panel, and 4.6:1 in a dialog. Help text sits a stop above, on{" "}
+        <code class="cn-code-inline">--cn-fg-muted</code> (subtext-0), 7.4:1
+        on the page, and the label a stop above that, on{" "}
+        <code class="cn-code-inline">--cn-fg-soft</code> (subtext-1), 9.3:1. The value is{" "}
         <code class="cn-code-inline">--cn-fg</code>, so a filled field never
         reads as an empty one. A placeholder is an example, never the only
         copy of an instruction.
@@ -182,7 +188,7 @@ export default function InputPage() {
         <p class="cn-copy">
           Focus is the global outline: 2px of{" "}
           <code class="cn-code-inline">--cn-focus</code> (text) standing 3px
-          off the carve, over the unchanged inset and lip. Fields take it on{" "}
+          off the carve, over the unchanged inset. Fields take it on{" "}
           <code class="cn-code-inline">:focus</code>, so a click shows it as well
           as a tab, since typing follows either way. No border appears and
           nothing moves. Focus differs from the engaged rim by hue and by
@@ -219,8 +225,8 @@ export default function InputPage() {
           on the control, so the attribute screen readers announce is also
           the style hook. A warning uses <code class="cn-code-inline">.is-warning</code>{" "}
           on the field. Either state sets <code class="cn-code-inline">--tone</code>,
-          washes the well in it at 4%, and closes the lit lip into a full 1px
-          ring in the tone,{" "}
+          washes the well in it at 4%, and draws a full 1px ring in the tone
+          at rest,{" "}
           <code class="cn-code-inline">inset 0 0 0 1px var(--tone)</code>, so
           the field itself changes. The carve stays. The message is a
           sentence, so it moves up to body text, and only its leading glyph
@@ -243,7 +249,7 @@ export default function InputPage() {
         </div>
         <p class="cn-copy">
           Use the native attribute. The carve nearly fills in to the soft
-          inset, the lip stays, and the text and label drop to{" "}
+          inset, hover draws no ring, and the text and label drop to{" "}
           <code class="cn-code-inline">--cn-fg-disabled</code> (overlay-1, 4.4:1 on the
           page and on a panel). There is
           no opacity on top. The browser only blocks input.
@@ -264,7 +270,7 @@ export default function InputPage() {
         <p class="cn-copy">
           A <code class="cn-code-inline">readonly</code> field holds a value
           the reader can select and copy but not change. It reads as printed
-          text: no carve, no lip and no fill, square corners, and an{" "}
+          text: no carve and no fill, square corners, and an{" "}
           <code class="cn-code-inline">--edge</code> rule underneath, with the
           value in <code class="cn-code-inline">--cn-fg-soft</code>. Only an
           editable field looks cut in. It still takes focus, and focus still
@@ -287,7 +293,7 @@ export default function InputPage() {
             name: ".input",
             values: "on a bare input",
             notes:
-              "The carved well with the lit lip. Sans 500 14px, tabular numerals for amounts and dates.",
+              "The carved well: one dark wall, no edge at rest, a --control-edge ring on hover. Sans 500 14px, tabular numerals for amounts and dates.",
           },
           {
             name: ".input-lg",
@@ -304,12 +310,12 @@ export default function InputPage() {
             name: '[aria-invalid="true"] / .is-warning',
             values: "on the control / on .field or a bare .input",
             notes:
-              "Red (--cn-danger) or yellow (--cn-warning). The well takes the tone at --cn-step-tint (4%) and the lip closes into a 1px ring in the tone, inset 0 0 0 1px var(--tone). The carve stays. The label keeps --cn-fg-muted; the small moves up to --cn-fg-body and leads with --cn-glyph-danger or --cn-glyph-warning in the tone. Focus keeps the --cn-focus outline. Disabled text and label take the disabled color over the tone.",
+              "Red (--cn-danger) or yellow (--cn-warning). The well takes the tone at --cn-step-tint (4%) and a 1px ring in the tone at rest, inset 0 0 0 1px var(--tone), which hover keeps. The carve stays. The label keeps --cn-fg-soft; the small moves up to --cn-fg-body and leads with --cn-glyph-danger or --cn-glyph-warning in the tone. Focus keeps the --cn-focus outline. Disabled text and label take the disabled color over the tone.",
           },
           {
             name: "[readonly]",
             values: "on an input or textarea",
-            notes: "Printed text: transparent, no carve or lip, square corners, a 1px --edge rule underneath, the value in --cn-fg-soft. Focus still rings it, at the control radius.",
+            notes: "Printed text: transparent, no carve, square corners, a 1px --edge rule underneath, the value in --cn-fg-soft. Focus still rings it, at the control radius.",
           },
           {
             name: ":disabled",
@@ -324,8 +330,14 @@ export default function InputPage() {
           {
             name: "--cn-field-ring",
             values: "box-shadow",
-            default: "inset -1px -1px 0 var(--overlay-1)",
-            notes: "The lit lip: overlay-1 on the bottom and right inner walls, 4.4:1 on base and raised, 3.5:1 on an overlay. A full overlay-2 ring under prefers-contrast: more.",
+            default: "inset 0 0 0 1px transparent",
+            notes: "The resting ring. Paints nothing by default, so a resting field is its carve and its label. A full overlay-2 ring under prefers-contrast: more, 5.8:1 on base and raised, 4.6:1 on an overlay.",
+          },
+          {
+            name: "--cn-field-hover-ring",
+            values: "box-shadow",
+            default: "inset 0 0 0 1px var(--control-edge)",
+            notes: "Swapped in for --cn-field-ring on hover, not on a disabled field: overlay-1, 4.4:1 on base and raised, 3.5:1 on an overlay. A validation ring and a read-only rule keep their own shadow.",
           },
           {
             name: "::placeholder",

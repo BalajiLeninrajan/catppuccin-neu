@@ -2,10 +2,12 @@
    A composed screen built only from package classes, no sc- chrome. It
    follows the SPEC's Composition section: regions 48px apart, in reading
    order. The title and its one primary, the key figures ruled on the page
-   ground, the invoice table as the lead panel at cozy density, then the
-   chart and the one tilted aside on the page grid, the chart first. A
-   short panel stacks under the aside so the two columns end near the
-   same line.                                                             */
+   ground, the invoice table as the lead panel, then the chart and the one
+   tilted aside on the page grid, the chart first. The whole view runs at
+   cozy density, the SPEC's density for a desktop data tool. The aside
+   holds prose, a heading in the name role and a link; the ruled figures
+   live in the upright panel stacked under it, so the two columns end
+   near the same line.                                                    */
 
 import { useState } from "preact/hooks";
 import type { JSX } from "preact";
@@ -104,7 +106,7 @@ function InvoiceTable() {
   }
 
   return (
-    <section class="panel is-lead" data-density="cozy" aria-labelledby="dash-invoices">
+    <section class="panel is-lead" aria-labelledby="dash-invoices">
       <div class="panel-header">
         <h2 id="dash-invoices">Invoices</h2>
         <div class="band-actions">
@@ -179,7 +181,7 @@ function InvoiceTable() {
 
 export default function DashboardExample() {
   return (
-    <div class="cn-stack cn-gap-48 page-enter">
+    <div class="cn-stack cn-gap-48 page-enter" data-density="cozy">
       <header class="cn-row cn-between cn-top cn-wrap cn-gap-24">
         <div class="cn-stack cn-gap-12 cn-grow">
           <h1 class="cn-display is-sm">
@@ -260,8 +262,32 @@ export default function DashboardExample() {
         <div class="cn-stack cn-gap-24 cn-span-5">
         <aside class="panel is-tilted" aria-labelledby="dash-summary">
           <div class="panel-body cn-stack cn-gap-12">
-            <h2 id="dash-summary" class="cn-title cn-m-0">Where September stands</h2>
-            <p class="cn-copy cn-m-0">Ahead of August, mostly on card.</p>
+            <h2 id="dash-summary" class="cn-name cn-m-0">Where September stands</h2>
+            <p class="cn-copy cn-m-0">
+              Card carried the month, up $12.5k on August. Bank transfers
+              slipped $3.8k, their first drop in four months, so the gain
+              rests on one method.
+            </p>
+            <a class="btn-text" href="#" onClick={(e) => e.preventDefault()}>
+              Read the month-end report
+            </a>
+          </div>
+        </aside>
+        <section class="panel" aria-labelledby="dash-refunds">
+          <div class="panel-header">
+            <h2 id="dash-refunds">Payments this month</h2>
+          </div>
+          <div class="panel-body cn-stack cn-gap-16">
+            <div class="stat-grid" style="--stat-cols:2">
+              <div class="stat">
+                <span>Refunded</span>
+                <strong>$1,120</strong>
+              </div>
+              <div class="stat">
+                <span>Failed payments</span>
+                <strong>3</strong>
+              </div>
+            </div>
             <div class="cn-divide">
               <div class="stat is-inline cn-py-8">
                 <span>Paid in full</span>
@@ -274,24 +300,6 @@ export default function DashboardExample() {
               <div class="stat is-inline cn-py-8">
                 <span>Next payout</span>
                 <b>Oct 01</b>
-              </div>
-            </div>
-            <a class="btn-text" href="#" onClick={(e) => e.preventDefault()}>
-              Read the month-end report
-            </a>
-          </div>
-        </aside>
-        <section class="panel" aria-labelledby="dash-refunds">
-          <div class="panel-body cn-stack cn-gap-16">
-            <h2 id="dash-refunds" class="cn-title cn-m-0">Refunds and failures</h2>
-            <div class="stat-grid" style="--stat-cols:2">
-              <div class="stat">
-                <span>Refunded</span>
-                <strong>$1,120</strong>
-              </div>
-              <div class="stat">
-                <span>Failed payments</span>
-                <strong>3</strong>
               </div>
             </div>
           </div>

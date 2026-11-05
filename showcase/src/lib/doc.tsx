@@ -17,9 +17,9 @@ export type Tone = (typeof TONES)[number];
 
 /* Accent hexes by name, in the data-series order (--cn-series-1..6). */
 export const ACCENT = {
-  mauve: "#cba6f7",
-  yellow: "#f9e2af",
   teal: "#94e2d5",
+  yellow: "#f9e2af",
+  mauve: "#cba6f7",
   peach: "#fab387",
   blue: "#89b4fa",
   pink: "#f5c2e7",
@@ -188,7 +188,9 @@ export function Props({ title, rows }: PropsProps) {
             {rows.map((r) => (
               <tr key={r.name}>
                 <td data-label="Name" class="cell-name">
-                  <code class="cn-code-inline">{r.name}</code>
+                  {/* One token never breaks at its hyphens; a selector with
+                      spaces may wrap between its parts. */}
+                  <code class={`cn-code-inline${/\s/.test(r.name) ? "" : " cn-nowrap"}`}>{r.name}</code>
                 </td>
                 <td data-label="Values">{r.values ?? "·"}</td>
                 <td data-label="Default">{r.default ?? "·"}</td>

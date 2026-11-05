@@ -25,12 +25,14 @@
    the hairline show where it ends. */
 .panel .panel { box-shadow: var(--neu-raised-soft), var(--cn-lit-edge); }
 /* The lead panel: the one a view is about, one per view. It sits on the
-   page color like every panel and stands higher by its edges: the bright
-   --edge-strong hairline, and --neu-lifted's bright top rim over a longer
-   cast. Its band title takes --lead-title-size at the heading weight (see
-   the panel-header rule below). A cast barely shows on a dark page, so the
-   edges and the title carry the rank. It outranks its neighbors by height
-   and by its title, not by an ornament. */
+   page color like every panel and stands higher by darkness: the
+   --edge-strong hairline inside --neu-lifted's 2px dark contour, over a
+   wider contact edge, a deeper near shadow and a longer cast. It keeps the
+   plain lit edge, since a bright line is never a depth cue. Its band title
+   takes --lead-title-size at the heading weight (see the panel-header rule
+   below). A cast barely shows on a dark page, so the contour and the title
+   carry the rank. It outranks its neighbors by height and by its title,
+   not by an ornament. */
 .panel.is-lead {
   border-color: var(--edge-strong);
   box-shadow: var(--neu-lifted);
@@ -121,13 +123,14 @@
 .panel > .ranked-row:only-child { border-radius: calc(var(--cn-radius-panel) - 1px); }
 
 /* Well: an inset container for grouped controls or scrolling content.
-   Borderless: the carve and the sunken fill define it. A shadow alone
-   tops out near 1.28:1 on a dark page, so a transparent well read as an
-   outlined panel; the darker fill puts it below the ground. */
+   Borderless: the carve, one dark wall from the top left, and the sunken
+   fill define it. A shadow alone tops out near 1.28:1 on a dark page, so
+   a transparent well read as an outlined panel; the darker fill puts it
+   below the ground. --cn-well-ring paints only under prefers-contrast. */
 .well {
   border-radius: var(--cn-radius-card);
   background: var(--cn-surface-sunken);
-  box-shadow: var(--neu-inset), var(--cn-well-lip);
+  box-shadow: var(--neu-inset), var(--cn-well-ring);
 }
 /* A scrolling well hints at its overflow: the bottom edge of the well
    dissolves via a mask, so content visibly runs past the fold. */
@@ -140,7 +143,7 @@
 .terminal, .codeblock, .command {
   border-radius: var(--cn-radius-card);
   background: var(--cn-surface-sunken);
-  box-shadow: var(--neu-inset), var(--cn-well-lip);
+  box-shadow: var(--neu-inset), var(--cn-well-ring);
   color: var(--cn-fg-soft);
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
   font-variant-numeric: tabular-nums;
@@ -360,7 +363,7 @@ a:active > .accent-card {
 }
 .progress-track span::before { inset: 0; }
 
-/* Secondary: base fill on the crust plate, the default for clickables. */
+/* Secondary: base fill on the ink plate, the default for clickables. */
 .btn-secondary {
   color: var(--cn-fg);
   border: 1px solid var(--edge);
@@ -411,7 +414,9 @@ a:active > .accent-card {
 }
 
 /* Icon button: a square at the small height, flat until hovered, then
-   tinted toward its --tone. */
+   tinted toward its --tone. A plated icon button, btn-secondary is-icon,
+   keeps the secondary's ink, hover and plate press, for an icon that sits
+   beside plated buttons. */
 .btn.is-icon {
   width: var(--control-h-sm);
   height: var(--control-h-sm);
@@ -419,12 +424,13 @@ a:active > .accent-card {
   padding: 0;
   color: var(--cn-fg-muted);
 }
-.btn.is-icon:hover:not(:disabled, [aria-disabled="true"]) {
+.btn-secondary.is-icon { color: var(--cn-fg); }
+.btn.is-icon:not(.btn-secondary):hover:not(:disabled, [aria-disabled="true"]) {
   color: var(--tone);
   border-color: var(--tone-edge);
   background: var(--tone-wash);
 }
-.btn.is-icon:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
+.btn.is-icon:not(.btn-secondary):active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 .btn.is-icon.is-lg { width: var(--control-h); height: var(--control-h); min-height: var(--control-h); }
 .btn.is-icon.is-lg > svg { width: 20px; height: 20px; }
 
@@ -475,15 +481,17 @@ a:active > .accent-card {
 .field label {
   display: block;
   margin: 0 0 var(--space-2) 1px;
-  color: var(--cn-fg-muted);
+  color: var(--cn-fg-soft);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   letter-spacing: var(--cn-type-label-tracking);
 }
 
 /* Borderless inset well, carved from whatever surface it sits on: the
    background stays transparent so the parent ground shows through and only
-   the inner shadow defines the field. Sans face; numbers stay tabular.
-   A plain list, not :is(), so the hero variant below can override it. */
+   the dark inner wall defines the field. At rest it has no edge; hover
+   closes a 3:1 ring around it and focus draws the focus ring. Sans face;
+   numbers stay tabular. A plain list, not :is(), so the hero variant below
+   can override it. */
 .input,
 .field input, .field select, .field textarea {
   width: 100%;
@@ -516,6 +524,10 @@ a:active > .accent-card {
    either way. The ring is the one focus shape: 2px of --cn-focus standing
    3px off the edge, where the engaged rim is 1px on the edge. */
 :is(.input, .field :is(input, select, textarea)):focus { outline: 2px solid var(--cn-focus); outline-offset: 3px; }
+/* Hover closes the ring, so a field shows 3:1 bounds under the pointer.
+   It swaps the ring token rather than the shadow, so a validation ring,
+   a disabled field and a read-only rule keep their own shadow. */
+:is(.input, .field :is(input, select, textarea)):hover:not(:disabled) { --cn-field-ring: var(--cn-field-hover-ring); }
 /* Helper or message line inside a field. */
 .field small {
   display: block;
@@ -524,8 +536,8 @@ a:active > .accent-card {
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 /* Validation keys on aria-invalid="true" (error) or .is-warning. The state
-   sets --tone, washes the well in its 4% tint, and closes the lip into a
-   full ring in the tone, so the field itself changes. The message is a
+   sets --tone, washes the well in its 4% tint, and draws a full ring in
+   the tone, so the field itself changes. The message is a
    sentence, so it moves up to body text and only its leading glyph takes
    the tone, as on a banner. The label keeps its color. The carve and the
    focus ring stay. */
@@ -559,7 +571,7 @@ a:active > .accent-card {
 }
 :is(.input, .field :is(input, textarea)):disabled::placeholder { color: var(--cn-fg-disabled); }
 /* Read-only: the value can be selected and copied, not changed. It reads
-   as printed text: no carve, no lip, no fill, a rule underneath, so an
+   as printed text: no carve, no fill, a rule underneath, so an
    editable field is the only thing that looks cut in. Focus still rings it. */
 :is(.input, .field :is(input, textarea))[readonly] {
   color: var(--cn-fg-soft);
@@ -790,7 +802,7 @@ a:active > .accent-card {
 
 /* Outlined pill: version tags, status, stat chips. A static chip rests on
    the page on the soft raise. A chip that is a link or a button is a
-   clickable, so it stands on the crust plate with the shared press. */
+   clickable, so it stands on the ink plate with the shared press. */
 .chip {
   padding: var(--chip-pad);
   display: inline-flex; align-items: center; gap: var(--space-2);
@@ -1376,7 +1388,7 @@ a:hover:not(:active) > .accent-card {
 /* A summary total: the row a list of inline stats adds up to. It follows
    the .cn-divide list rather than sitting in it. The label is the name role
    and the value the value role, both in --cn-fg, under an --edge rule,
-   1.6:1 against the 1.3:1 row hairlines, with 12px of air, so the total
+   1.9:1 against the 1.3:1 row hairlines, with 12px of air, so the total
    outweighs the rows above it. */
 .stat.is-inline.is-total {
   margin-block-start: var(--space-3);
@@ -1446,7 +1458,9 @@ a:hover:not(:active) > .accent-card {
 .data-table th.is-num[aria-sort] > button { flex-direction: row-reverse; }
 /* Emphasized name cell: full-strength primary line, quiet secondary line. */
 .data-table .cell-name strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
-.data-table .cell-name small  { color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cn-type-meta-size) var(--sans); }
+/* The meta line follows the cell size: 14px at default and cozy, 13px at
+   compact. Weight and ink keep it apart from the name above it. */
+.data-table .cell-name small  { color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cell-font-size) var(--sans); }
 
 /* Sortable header: a button inside th[aria-sort]. The chevron shows the
    direction and hides while the column is unsorted. */
@@ -1489,19 +1503,18 @@ a:hover:not(:active) > .accent-card {
   box-shadow: var(--cn-sticky-rule);
 }
 
-/* The row press: a dark top edge and a lit bottom edge drawn as a vertical
-   gradient on every cell. Each cell paints the same gradient at the same
-   height, so the row reads as one strip with no seams. The edge colors are
-   registered so they fade in with the fill. */
+/* The row press: a dark top edge drawn as a vertical gradient on every
+   cell, and no lit edge, since a press is darkness only like any carve.
+   Each cell paints the same gradient at the same height, so the row reads
+   as one strip with no seams. The edge color is registered so it fades in
+   with the fill. */
 @property --press-top    { syntax: "<color>"; inherits: false; initial-value: transparent; }
-@property --press-bottom { syntax: "<color>"; inherits: false; initial-value: transparent; }
 .data-table td, .ranked-row {
-  background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px, transparent calc(100% - 4px), var(--press-bottom, transparent));
-  transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out), --press-bottom var(--t-fast) var(--ease-out);
+  background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px);
+  transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out);
 }
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
-  --press-bottom: rgb(69 71 90 / .3);
   /* Its own step, 1.17:1 on the page: past the open carve's 1.08:1 and
      1.30:1 under a selected row's wash. */
   background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
@@ -1509,7 +1522,6 @@ a:hover:not(:active) > .accent-card {
 /* Selected row: the engaged treatment, the wash with the full press. */
 .data-table tbody tr[aria-selected="true"] td {
   --press-top: rgb(17 17 27 / .66);
-  --press-bottom: rgb(69 71 90 / .3);
   color: var(--cn-fg);
   background-color: var(--wash);
 }
@@ -1563,7 +1575,11 @@ a:hover:not(:active) > .accent-card {
   inline-size: calc(var(--value, 0%) * .8);
   block-size: 8px;
   border-radius: var(--cn-radius-chip);
-  background: var(--series, var(--accent));
+  /* The bar is a solid fill, so it takes the ramp lit from the top left,
+     without grain, like the switch paddle. The flat fill stays where
+     relative color is missing; see the @supports rule after .is-hatched. */
+  --cn-fill: var(--series, var(--accent));
+  background: var(--cn-fill);
   transition: inline-size calc(var(--t-slow) * 2) var(--ease-out);
 }
 
@@ -1578,6 +1594,7 @@ a:hover:not(:active) > .accent-card {
    fixed 96x24 box, and the stroke does not scale with it. */
 .sparkline {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
   color: var(--cn-fg-soft);
@@ -1626,7 +1643,14 @@ a:hover:not(:active) > .accent-card {
 /* Hatched: a second key besides hue for a series that must stand apart
    without color. The bar and its legend swatch carry the same stripes. */
 :is(.bar, .legend-item).is-hatched::before {
-  background-image: repeating-linear-gradient(135deg, color-mix(in srgb, var(--base) 45%, transparent) 0 2px, transparent 2px 5px);
+  --cn-hatch: repeating-linear-gradient(135deg, color-mix(in srgb, var(--base) 45%, transparent) 0 2px, transparent 2px 5px);
+  background-image: var(--cn-hatch);
+}
+/* Without relative color the ramp is invalid, so the flat fill stays. The
+   stripes ride over the ramp on a hatched bar. */
+@supports (color: oklch(from red l c h)) {
+  .bar::before { background-image: var(--cn-fill-ramp); }
+  .bar.is-hatched::before { background-image: var(--cn-hatch), var(--cn-fill-ramp); }
 }
 
 /* Key-value list: a dl with the keys in a column that fits them.
@@ -1973,8 +1997,8 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr {
     padding: var(--cell-pad);
     border-bottom: 1px solid var(--surface-0);
-    background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px, transparent calc(100% - 4px), var(--press-bottom, transparent));
-    transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out), --press-bottom var(--t-fast) var(--ease-out);
+    background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px);
+    transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out);
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:last-child { border-bottom: 0; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td {
@@ -1987,12 +2011,10 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
-    --press-bottom: rgb(69 71 90 / .3);
     background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
     --press-top: rgb(17 17 27 / .66);
-    --press-bottom: rgb(69 71 90 / .3);
     background-color: var(--wash);
   }
   /* The label sits in a fixed left column; the value flows as one inline
@@ -2116,7 +2138,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   gap: var(--space-1);
   overflow-x: auto;
   border-radius: var(--cn-radius-card);
-  box-shadow: var(--neu-inset-soft), var(--cn-well-lip);
+  box-shadow: var(--neu-inset-soft), var(--cn-well-ring);
   scrollbar-width: none;
 }
 .tabs > [role="tab"] {
@@ -2417,13 +2439,24 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
 }
 .sidebar-nav a:hover { color: var(--cn-fg); background: var(--hover); }
+/* The current page is a position, not a press: 600 in --cn-fg and the
+   spine, a 4px --cn-interactive bar on the start edge, inset 8px so it
+   fits the row. No wash, rim or carve, so the nav never reads as a column
+   of pressed buttons. */
 .sidebar-nav a[aria-current="page"] {
-  transform: translateY(1px);
+  position: relative;
   color: var(--cn-fg);
-  border-color: var(--engaged-edge);
-  background: var(--wash);
-  box-shadow: var(--neu-inset);
   font-weight: var(--cn-type-name-weight);
+}
+.sidebar-nav a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-2);
+  inset-inline-start: 0;
+  width: 4px;
+  border-start-end-radius: var(--cn-radius-chip);
+  border-end-end-radius: var(--cn-radius-chip);
+  background: var(--cn-interactive);
 }
 @media (max-width: 1060px) {
   .app-shell.has-sidebar { flex-direction: column; }

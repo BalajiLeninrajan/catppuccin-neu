@@ -2,7 +2,7 @@ import { Doc, Demo, Props, CodeBlock, TONES, TEAMS, ACCENT, accentStyle } from "
 
 /* Data series in chart order, the sequential ramp for one measure, and the
    diverging ramp for a measure with a meaningful zero. */
-const SERIES = ["mauve", "yellow", "teal", "peach", "blue 70%", "pink 70%"];
+const SERIES = ["teal", "yellow", "mauve", "peach", "blue 70%", "pink 70%"];
 const RAMP_STOPS = [20, 40, 60, 80, 100];
 const DIVERGE_STOPS = ["red", "red 50%", "zero", "blue 50%", "blue"];
 
@@ -46,14 +46,14 @@ const GROUNDS = [
   { name: "base", hex: "#1e1e2e", note: "The page ground, --cn-surface-page." },
   { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
   { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 40%, dashed open slots and the lit walls of carves." },
-  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 55%, the lit top edge of raised surfaces at 45%, --cn-well-lip solid, scrollbar thumbs." },
+  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 75%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
 ];
 
 const NEUTRAL_TEXT = [
-  { name: "overlay-0", hex: "#6c7086", note: "The lead panel's bright top rim in --neu-lifted, 3.4:1 on base, and --edge-strong under prefers-contrast: more. Not for text." },
-  { name: "overlay-1", hex: "#7f849c", note: "The field lip, unchecked control edges, the slider thumb edge, disabled text, decorative icons and list markers. Not for readable text." },
+  { name: "overlay-0", hex: "#6c7086", note: "--edge-strong under prefers-contrast: more, 3.4:1 on base. Not for text." },
+  { name: "overlay-1", hex: "#7f849c", note: "A hovered field's ring, unchecked control edges, the slider thumb edge, disabled text, decorative icons and list markers. Not for readable text." },
   { name: "overlay-2", hex: "#9399b2", note: "Placeholders, --cn-fg-placeholder. The faintest readable text." },
-  { name: "subtext-0", hex: "#a6adc8", note: "Labels, meta, help and table heads, --cn-fg-muted." },
+  { name: "subtext-0", hex: "#a6adc8", note: "Meta, help and table heads, --cn-fg-muted." },
   { name: "subtext-1", hex: "#bac2de", note: "Body copy, ledes, table cells and code." },
   { name: "text", hex: "#cdd6f4", note: "Headings and primary content. The focus ring, --cn-focus." },
 ];
@@ -62,13 +62,13 @@ const HUES = [
   { name: "rosewater", hex: "#f5e0dc", note: "Record identity only, beyond the six series." },
   { name: "flamingo", hex: "#f2cdcd", note: "Record identity only, beyond the six series." },
   { name: "pink", hex: "#f5c2e7", note: "The hover of links and the primary. 70% into base, the sixth data series." },
-  { name: "mauve", hex: "#cba6f7", note: "The interactive color: links, the primary, checked and engaged states. The first data series." },
+  { name: "mauve", hex: "#cba6f7", note: "The interactive color: links, the primary, checked and engaged states. The third data series." },
   { name: "red", hex: "#f38ba8", note: "Danger and destructive actions, --cn-danger." },
   { name: "maroon", hex: "#eba0ac", note: "Record identity only, beyond the six series." },
   { name: "peach", hex: "#fab387", note: "The fourth data series." },
   { name: "yellow", hex: "#f9e2af", note: "The warning role, --cn-warning: due soon, expiring. The second data series." },
   { name: "green", hex: "#a6e3a1", note: "Success, live indicators, positive deltas, --cn-success." },
-  { name: "teal", hex: "#94e2d5", note: "The third data series." },
+  { name: "teal", hex: "#94e2d5", note: "The first data series." },
   { name: "sky", hex: "#89dceb", note: "Record identity only, beyond the six series." },
   { name: "sapphire", hex: "#74c7ec", note: "Record identity only, beyond the six series." },
   { name: "blue", hex: "#89b4fa", note: "Informational status, --cn-info. 70% into base, the fifth data series." },
@@ -77,13 +77,13 @@ const HUES = [
 
 /* Every hue's one job, from the SPEC's palette table. */
 const HUE_JOBS: Array<[string[], string]> = [
-  [["mauve"], "Interaction: links, the primary, checked and engaged states. Series 1."],
+  [["mauve"], "Interaction: links, the primary, checked and engaged states. Series 3."],
   [["pink"], "The interactive hover. Series 6."],
   [["red"], "Danger."],
   [["yellow"], "Warning. Series 2."],
   [["green"], "Success."],
   [["blue"], "Info. Series 5."],
-  [["teal"], "Series 3."],
+  [["teal"], "Series 1."],
   [["peach"], "Series 4."],
   [["rosewater", "flamingo", "maroon", "sky", "sapphire", "lavender"], "Record identity only: an --accent for a team, project or person beyond the six series. Never status or interaction."],
 ];
@@ -214,11 +214,11 @@ export default function ColorsPage() {
         title="Role tokens"
         rows={[
           { name: "--cn-fg", values: "text", notes: "Headings, names, values." },
-          { name: "--cn-fg-soft", values: "subtext-1", notes: "Ledes, table cells, code." },
+          { name: "--cn-fg-soft", values: "subtext-1", notes: "Ledes, table cells, code, .cn-label and field labels." },
           { name: "--cn-fg-body", values: "subtext-1", notes: "Running text: body, .cn-copy, .cn-prose. text under prefers-contrast." },
-          { name: "--cn-fg-muted", values: "subtext-0", notes: "Labels, meta, help, table heads. subtext-1 under prefers-contrast." },
+          { name: "--cn-fg-muted", values: "subtext-0", notes: "Meta, help, table heads. subtext-1 under prefers-contrast." },
           { name: "--cn-fg-placeholder", values: "overlay-2", notes: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
-          { name: "--cn-fg-faint", values: "overlay-1", notes: "Decorative icons and the field lip. Icon buttons rest in --cn-fg-muted. overlay-2 under prefers-contrast." },
+          { name: "--cn-fg-faint", values: "overlay-1", notes: "Decorative icons. Icon buttons rest in --cn-fg-muted. overlay-2 under prefers-contrast." },
           { name: "--cn-fg-disabled", values: "overlay-1", notes: "Disabled text, 4.4:1 on base. --control-edge, the unchecked edge and slider thumb edge, is overlay-1 too. Both move to overlay-2 under prefers-contrast." },
           { name: "--cn-fg-on-accent", values: "crust", notes: "Text and glyphs on a solid accent fill: 9.2:1 on mauve." },
           { name: "--cn-interactive", values: "mauve", notes: "Links, the primary, checked controls." },
@@ -356,7 +356,7 @@ export default function ColorsPage() {
         Store the accent on the record, or derive it from a stable id, and
         set it inline wherever the record renders. It never comes from list
         position, so sorting or filtering never recolors an item. The six
-        accents are the six data series below: mauve, yellow, teal, peach,
+        accents are the six data series below: teal, yellow, mauve, peach,
         blue and pink. A seventh record takes one of the six identity hues
         (rosewater, flamingo, maroon, sky, sapphire or lavender), which
         never mean status or interaction. Here Billing takes sapphire, which
@@ -395,14 +395,16 @@ export default function ColorsPage() {
       <h2 class="cn-title">Data series</h2>
       <p class="cn-copy">
         A chart takes <code class="cn-code-inline">--cn-series-1</code> to{" "}
-        <code class="cn-code-inline">--cn-series-6</code> in order: mauve,
-        yellow, teal, peach, blue and pink. These are the six accents,
+        <code class="cn-code-inline">--cn-series-6</code> in order: teal,
+        yellow, mauve, peach, blue and pink. These are the six accents,
         alternating cool and warm so neighbors never share a hue family.
-        Series 5 and 6 are blue and pink 70% into base in oklab, 4.3:1 and
-        5.6:1 on base, a lightness step under the rest. At full strength blue
-        collapses into mauve for a protan reader and pink into teal for a
-        deutan one. Under a full-severity simulation (Machado 2009) every
-        adjacent pair stays above dE 6 in OKLab. A record with an identity
+        Series 1 is teal, not mauve, so the biggest bar in a chart never
+        reads as the interactive color. Series 5 and 6 are blue and pink 70%
+        into base in oklab, 4.3:1 and 5.6:1 on base, a lightness step under
+        the rest. At full strength blue collapses into mauve for a protan
+        reader and pink into teal for a deutan one. Under a full-severity
+        simulation (Machado 2009) every adjacent pair stays above dE 6 in
+        OKLab, and series 1 and 5, teal and blue, sit at dE 25 or more. A record with an identity
         keeps its own <code class="cn-code-inline">--accent</code> instead, so
         Payments is teal in every chart, whatever position it plots in.
       </p>
@@ -525,9 +527,9 @@ export default function ColorsPage() {
       <Props
         title="Series and ramp tokens"
         rows={[
-          { name: "--cn-series-1", values: "mauve", notes: "The first series. Tailwind series-1." },
+          { name: "--cn-series-1", values: "teal", notes: "The first series, off mauve so a bar never reads as interactive. Tailwind series-1." },
           { name: "--cn-series-2", values: "yellow", notes: "Tailwind series-2." },
-          { name: "--cn-series-3", values: "teal", notes: "Tailwind series-3." },
+          { name: "--cn-series-3", values: "mauve", notes: "Tailwind series-3." },
           { name: "--cn-series-4", values: "peach", notes: "Tailwind series-4." },
           { name: "--cn-series-5", values: "blue 70% into base, oklab", notes: "4.3:1 on base. Tailwind series-5." },
           { name: "--cn-series-6", values: "pink 70% into base, oklab", notes: "5.6:1 on base. Tailwind series-6." },
@@ -586,13 +588,13 @@ export default function ColorsPage() {
       <CodeBlock
         title="The steps in use"
         code={`/* The mix tokens hold the shared expressions; use them, not the mix */
---edge:      color-mix(in srgb, var(--surface-2) 55%, transparent); /* raised-surface hairline: 1.6:1 */
+--edge:      color-mix(in srgb, var(--surface-2) 75%, transparent); /* raised-surface hairline: 1.9:1 */
 --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
 --edge-strong: var(--surface-2);                                   /* lead panel and overlay hairline: 2.5:1 */
 --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
 --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its wash */
 --hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay */
---cn-well-lip: inset -1px -1px 0 var(--surface-2); /* wells, tabs, mono wells: 2.5:1 */
+--cn-well-ring: inset 0 0 0 1px transparent; /* wells, tabs, mono wells: a surface-2 ring under prefers-contrast only */
 
 /* The tone stops are declared on each tinted recipe, so they read that
    element's --tone. A status .cn-tone-* swaps in its ladder. */
@@ -638,8 +640,9 @@ export default function ColorsPage() {
         The neutral ramp maps one to one onto{" "}
         <code class="cn-code-inline">.cn-text-*</code> utilities, brightest to
         faintest. Readable text stops at overlay-2, the placeholder color,
-        5.8:1 on base. Labels and meta sit a stop above it on subtext-0.
-        overlay-1, 4.4:1 on base, is for decorative icons, the field lip, control edges
+        5.8:1 on base. Meta sits a stop above it on subtext-0, and labels
+        a stop above that on subtext-1. overlay-1, 4.4:1 on base, is for
+        decorative icons, a hovered field's ring, control edges
         and disabled text, because it falls under 4.5:1. No recipe reads
         overlay-0. Palette hues get the same treatment, like{" "}
         <code class="cn-code-inline">.cn-text-mauve</code>, plus{" "}
@@ -690,7 +693,7 @@ export default function ColorsPage() {
       <Props
         title="Edge reference"
         rows={[
-          { name: ".cn-edge", values: "surface-2 55%", notes: "Raised-surface hairline, 1.6:1 on base, which is also the raised fill, and 1.4:1 on an overlay. The cut edge of panels, chips and controls." },
+          { name: ".cn-edge", values: "surface-2 75%", notes: "Raised-surface hairline, 1.9:1 on base, which is also the raised fill, and 1.6:1 on an overlay. The cut edge of panels, chips and controls." },
           { name: ".cn-edge-soft", values: "surface-1 38%", notes: "Inner separators." },
           { name: ".cn-edge-line", values: "surface-0", notes: "Row separators, footer rules." },
           { name: ".cn-edge-mauve", values: "mauve at --cn-step-plate (25%)", notes: "Accent-forward edge." },

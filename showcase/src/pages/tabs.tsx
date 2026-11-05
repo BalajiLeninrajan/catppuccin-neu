@@ -98,9 +98,11 @@ export default function TabsPage() {
         <code class="cn-code-inline">--engaged-edge</code> mauve rim. The
         raised fill is the page color, the same as the carve around it, so
         the rim, 4.7:1 on the page, is what marks the choice. The carve under them is{" "}
-        <code class="cn-code-inline">--neu-inset-soft</code> with{" "}
-        <code class="cn-code-inline">--cn-well-lip</code> on its bottom and right
-        walls, so it reads on the page without a border.
+        <code class="cn-code-inline">--neu-inset-soft</code>, a dark wall from
+        the top left with no light lip, and{" "}
+        <code class="cn-code-inline">--cn-well-ring</code>, which closes into a
+        surface-2 ring only under{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code>.
       </p>
 
       <Demo title="Tabs with panels" classes='tabs[role="tablist"] > [role="tab"][aria-selected="true"]'>
@@ -190,7 +192,7 @@ export default function TabsPage() {
       <Props
         title="Contract"
         rows={[
-          { name: ".tabs", values: '[role="tablist"]', notes: "Inline flex row, 4px padding and gap, the control radius plus 4px. --neu-inset-soft and --cn-well-lip. Scrolls sideways with no scrollbar when it overflows." },
+          { name: ".tabs", values: '[role="tablist"]', notes: "Inline flex row, 4px padding and gap, the control radius plus 4px. --neu-inset-soft and --cn-well-ring. Scrolls sideways with no scrollbar when it overflows." },
           { name: '.tabs > [role="tab"]', values: "button", notes: "--control-h-sm tall, 16px inline padding, the ui role (600 14px) in --cn-fg-muted, a transparent border. Hover turns the label --cn-fg." },
           { name: '[aria-selected="true"]', values: "on a tab", notes: "Rises out of the carve: --cn-surface-raised fill, the --engaged-edge rim, --neu-raised-soft and --cn-lit-edge, label in --cn-fg. A tab is a view, so it rises; a segmented choice is a setting, so it presses in. With tabs() wired, the fill is one .tabs::before pill that slides to the selected tab over --t-fast on the ease-out." },
           { name: '[role="tab"] > svg', values: "one leading glyph", notes: "16px, aria-hidden. The label stays the name." },

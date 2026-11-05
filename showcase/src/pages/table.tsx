@@ -116,8 +116,9 @@ export default function TablePage() {
         direction and hides while the column is unsorted. The button gets the
         focus ring, and screen readers announce the sort from the attribute.
         A selected row takes <code class="cn-code-inline">aria-selected="true"</code>:
-        the engaged wash with a deeper press. Hovering a row presses it in, drawn
-        as a gradient on each cell so the row has no seams, on mauve at{" "}
+        the engaged wash with a deeper press. Hovering a row presses it in, a
+        dark top edge drawn as a gradient on each cell so the row has no
+        seams, with no lit edge below, on mauve at{" "}
         <code class="cn-code-inline">--cn-step-row</code> (8%): 1.17:1 on the
         page, clear of the open accordion's 1.08:1 and 1.30:1 under a
         selected row.
@@ -235,7 +236,7 @@ export default function TablePage() {
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
-          { name: "tbody tr:hover", values: "state", notes: "The row presses in: a gradient edge on each cell and mauve at --cn-step-row (8%) into base, 1.17:1 on the page, a step under a selected row." },
+          { name: "tbody tr:hover", values: "state", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (8%) into base, 1.17:1 on the page, a step under a selected row." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },
           { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. The last trailing cell sits on the title line, the one before it under it. Keep its data-label for the desktop header." },

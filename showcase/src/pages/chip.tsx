@@ -123,7 +123,7 @@ export default function ChipPage() {
       <p class="cn-copy">
         A chip that is an <code class="cn-code-inline">a</code> or a{" "}
         <code class="cn-code-inline">button</code> is a
-        clickable, so it stands on the crust plate under the lit top edge,
+        clickable, so it stands on the ink plate under the lit top edge,
         like every clickable, and a static chip on a span rests on the page
         on the soft raise. The plate is what tells the two apart at rest. On
         hover a clickable chip lifts 1px, its label turns{" "}

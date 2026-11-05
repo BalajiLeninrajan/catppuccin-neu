@@ -193,9 +193,9 @@
   --shadow-neu-inset-soft: var(--neu-inset-soft);
   --shadow-pop: 0 24px 70px rgb(17 17 27 / .78);
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);
-  --shadow-hard: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--crust));
-  --shadow-hard-lg: 10px 10px 0 var(--plate, var(--crust));
-  --shadow-hard-sm: 3px 3px 0 var(--plate, var(--crust));
+  --shadow-hard: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
+  --shadow-hard-lg: 10px 10px 0 var(--plate, var(--neu-ink));
+  --shadow-hard-sm: 3px 3px 0 var(--plate, var(--neu-ink));
   --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);
 }
 

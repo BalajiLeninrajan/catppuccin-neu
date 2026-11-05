@@ -191,8 +191,10 @@ export default function PageFurniturePage() {
         <code class="cn-code-inline">.sidebar-nav</code> stacks groups 24px
         apart, each a microlabel over links at the ui size and 500, so the
         links sit under the content they lead to. Hover is the ghost hover
-        and <code class="cn-code-inline">aria-current="page"</code> is the
-        engaged state at 600, with its mauve rim. The rule sits on the
+        and <code class="cn-code-inline">aria-current="page"</code> is a
+        position, not a press: 600 in --cn-fg with a 4px mauve spine on its
+        start edge, so the nav never reads as a column of pressed buttons.
+        The rule sits on the
         sidebar's inline end, so it moves to the other side in right-to-left
         text.
       </p>

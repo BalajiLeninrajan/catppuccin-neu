@@ -135,7 +135,7 @@ export default function SegmentedPage() {
           { name: "<b> / <small>", notes: "Option title (sans 600 14px) and a quiet 13px hint line in --cn-fg-muted inside each option." },
           { name: ".cn-sr-only", notes: "Hides the radio in the label form; label:has(input:focus-visible) draws the focus outline." },
           { name: "--control-h", default: "46px", notes: "Option min-height is the knob + 12px (58px); stacked is the knob + 24px." },
-          { name: "--plate", default: "var(--crust)", notes: "The plate under every unselected option." },
+          { name: "--plate", default: "var(--neu-ink)", notes: "The plate under every unselected option." },
         ]}
       />
     </Doc>

@@ -15,11 +15,11 @@ interface ContrastRow {
    the same numbers from the tokens. */
 const CONTRAST: ContrastRow[] = [
   { role: "--cn-fg", palette: "text", swatch: "var(--cn-fg)", ratio: "11.3 · 9.0", apca: "80 · 77", use: "Headings, names, values." },
-  { role: "--cn-fg-soft", palette: "subtext-1", swatch: "var(--cn-fg-soft)", ratio: "9.3 · 7.3", apca: "68 · 65", use: "Ledes, table cells, code." },
+  { role: "--cn-fg-soft", palette: "subtext-1", swatch: "var(--cn-fg-soft)", ratio: "9.3 · 7.3", apca: "68 · 65", use: "Ledes, table cells, code, .cn-label and field labels." },
   { role: "--cn-fg-body", palette: "subtext-1", swatch: "var(--cn-fg-body)", ratio: "9.3 · 7.3", apca: "68 · 65", use: "Running text." },
-  { role: "--cn-fg-muted", palette: "subtext-0", swatch: "var(--cn-fg-muted)", ratio: "7.4 · 5.8", apca: "56 · 53", use: "Labels, meta, help, table heads. subtext-1 under prefers-contrast." },
+  { role: "--cn-fg-muted", palette: "subtext-0", swatch: "var(--cn-fg-muted)", ratio: "7.4 · 5.8", apca: "56 · 53", use: "Meta, help, table heads. subtext-1 under prefers-contrast." },
   { role: "--cn-fg-placeholder", palette: "overlay-2", swatch: "var(--cn-fg-placeholder)", ratio: "5.8 · 4.6", apca: "46 · 42", use: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
-  { role: "--cn-fg-faint", palette: "overlay-1", swatch: "var(--cn-fg-faint)", ratio: "4.4 · 3.5", apca: "35 · 32", use: "Decorative icons and the field lip. Not for text a reader needs." },
+  { role: "--cn-fg-faint", palette: "overlay-1", swatch: "var(--cn-fg-faint)", ratio: "4.4 · 3.5", apca: "35 · 32", use: "Decorative icons. Not for text a reader needs." },
   { role: "--cn-fg-disabled", palette: "overlay-1", swatch: "var(--cn-fg-disabled)", ratio: "4.4 · 3.5", apca: "35 · 32", use: "Disabled field text and labels. Exempt from the text floor. overlay-2 under prefers-contrast." },
   { role: "--cn-interactive", palette: "mauve", swatch: "var(--cn-interactive)", ratio: "8.1 · 6.4", apca: "61 · 57", use: "Links, the primary, checked controls." },
   { role: "--cn-focus", palette: "text", swatch: "var(--cn-focus)", ratio: "11.3 · 9.0", apca: "80 · 77", use: "The focus ring. The one bright neutral no state uses." },
@@ -38,9 +38,11 @@ interface EdgeRow {
   against: string;
 }
 
-/* Non-text contrast (WCAG 1.4.11): the edges that identify a control. */
+/* Non-text contrast (WCAG 1.4.11): the edges that identify a control or
+   its state. */
 const NON_TEXT: EdgeRow[] = [
-  { edge: "Field lip, --cn-field-ring", palette: "overlay-1", swatch: "var(--overlay-1)", ratio: "4.4:1 · 3.5:1", against: "Base and the raised fill · the overlay fill" },
+  { edge: "Hovered field ring, --cn-field-hover-ring", palette: "overlay-1", swatch: "var(--control-edge)", ratio: "4.4:1 · 3.5:1", against: "Base and the raised fill · the overlay fill" },
+  { edge: "Resting field ring under prefers-contrast: more, --cn-field-ring", palette: "overlay-2", swatch: "var(--overlay-2)", ratio: "5.8:1 · 4.6:1", against: "Base and the raised fill · the overlay fill" },
   { edge: "Checkbox, radio, switch plate, off paddle and slider thumb edges, --control-edge", palette: "overlay-1", swatch: "var(--control-edge)", ratio: "4.4:1 · 3.5:1", against: "Base and the raised fill · the overlay fill" },
   { edge: "Focus ring, --cn-focus", palette: "text", swatch: "var(--cn-focus)", ratio: "11.3:1 · 9.0:1", against: "Base and the raised fill · the overlay fill" },
   { edge: "Secondary button border, warmed on hover", palette: "mauve 50% into surface-1", swatch: "color-mix(in srgb, var(--cn-interactive) var(--cn-step-strong), var(--surface-1))", ratio: "4.1:1 · 3.2:1", against: "Base · the overlay fill it lifts to" },
@@ -53,7 +55,7 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
   ["--hover", "surface-1 40% over the ground", "1.24:1 (1.15:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
-  ["--edge", "surface-2 55% over the ground", "1.6:1 (1.4:1 on an overlay)", "The hairline of panels and controls, with the 1.5:1 lit top edge the bound of a panel on the page color."],
+  ["--edge", "surface-2 75% over the ground", "1.9:1 (1.6:1 on an overlay)", "The hairline of panels and controls, with the 1.5:1 lit top edge the bound of a panel on the page color."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-0 under prefers-contrast."],
 ];
 
@@ -82,11 +84,11 @@ const COMPONENTS: Array<[string, string]> = [
    about what runs: lint, axe on the docs, a documented rule, the JS
    module, or a person. */
 const WCAG: Array<[string, string, string, string]> = [
-  ["1.4.1 Use of color", "A", "Every status tag and banner holds a word, and a status tone draws a glyph. Links carry an underline. An invalid field closes its lip into a ring in the tone and leads its help text with a glyph. Chart marks keep a value beside them.", "Documented rule. Your markup supplies the word. axe checks that links in docs text stand apart from it."],
+  ["1.4.1 Use of color", "A", "Every status tag and banner holds a word, and a status tone draws a glyph. Links carry an underline. An invalid field draws a ring in the tone and leads its help text with a glyph. Chart marks keep a value beside them.", "Documented rule. Your markup supplies the word. axe checks that links in docs text stand apart from it."],
   ["1.4.3 Contrast (minimum)", "AA", "Text roles hold 4.5:1 or more on the page, raised and overlay fills, in both contrast modes. Running text holds 7:1. Disabled text is exempt and still sits at 3.5:1 or more.", "Lint computes it from the tokens. axe checks the rendered text on every docs page."],
-  ["1.4.4 Resize text", "AA", "Type sizes and control heights are rem, and display sizes clamp between rem bounds, so the browser font size and zoom scale every role.", "Documented rule. Check zoom by hand."],
-  ["1.4.10 Reflow", "AA", "The body holds a 320px minimum. Breakpoints at 1060, 760 and 520px fold the sidebar, grids and tables into one column. Code wells scroll sideways, which the criterion allows.", "The browser check fails any docs page that scrolls sideways at 390px. Check 320px by hand."],
-  ["1.4.11 Non-text contrast", "AA", "The field lip, the control edge, the slider thumb, the focus ring and the engaged rim hold 3:1 on every ground.", "Lint computes it from the tokens."],
+  ["1.4.4 Resize text", "AA", "Type sizes and control heights are rem, and display sizes clamp between rem bounds, so the browser font size and zoom scale every role.", "The browser check loads every docs page at 700px, the 1400px desktop at 200% zoom, and fails on sideways scroll or clipped text. Check the browser font size by hand."],
+  ["1.4.10 Reflow", "AA", "The body holds a 320px minimum. Breakpoints at 1060, 760 and 520px fold the sidebar, grids and tables into one column. Code wells scroll sideways, which the criterion allows.", "The browser check fails any docs page that scrolls sideways at 390px or at 320px."],
+  ["1.4.11 Non-text contrast", "AA", "A resting field is identified by its label and its carve, so it needs no 3:1 edge; hover rings it at 4.4:1 and focus at 11.3:1. The control edge, the slider thumb, the focus ring and the engaged rim hold 3:1 on every ground.", "Lint computes it from the tokens."],
   ["1.4.12 Text spacing", "AA", "The tightest roles lead at 1.25, and controls set a minimum height, not a fixed one, so a spacing override grows the box instead of clipping it.", "The browser check applies the 1.4.12 override on every docs page and fails on any box that clips its text."],
   ["1.4.13 Content on hover or focus", "AA", "Escape dismisses a tooltip, and it stays while the pointer is on its control or the bubble, or focus is inside it. On leave it lingers for --t-slow, so the pointer can cross onto the bubble.", "JS module: tooltips(), or the listener on the Popover page."],
   ["2.1.1 Keyboard", "A", "Buttons, fields, details, dialog and range inputs work from the keyboard natively. Tabs and menus need the arrow-key model.", "JS module: tabs(), menu() and init(). axe checks that every docs scroller takes focus."],
@@ -144,13 +146,14 @@ export default function AccessibilityPage() {
     >
       <h2 class="cn-title">Contrast</h2>
       <p class="cn-copy">
-        Text reads a semantic role, not a palette name. Labels, meta and
-        table heads are <code class="cn-code-inline">--cn-fg-muted</code>,
-        subtext-0, 7.4:1 on the page and 5.8:1 in an overlay. Readable text
-        stops at <code class="cn-code-inline">--cn-fg-placeholder</code>,
-        overlay-2, 5.8:1 on the page and 4.6:1 in an overlay, which only
-        placeholders use. The two roles under it are for icons, the field lip
-        and disabled states.
+        Text reads a semantic role, not a palette name. Labels are{" "}
+        <code class="cn-code-inline">--cn-fg-soft</code>, subtext-1, 9.3:1 on
+        the page. Meta, help and table heads are{" "}
+        <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0, 7.4:1 on
+        the page and 5.8:1 in an overlay. Readable text stops at{" "}
+        <code class="cn-code-inline">--cn-fg-placeholder</code>, overlay-2,
+        5.8:1 on the page and 4.6:1 in an overlay, which only placeholders
+        use. The two roles under it are for icons and disabled states.
         Running text in <code class="cn-code-inline">--cn-fg-body</code> is
         subtext-1, 9.3:1 on the page and 7.3:1 in a dialog, so it stays above
         7:1 on every ground.
@@ -163,7 +166,7 @@ export default function AccessibilityPage() {
         75, the soft and body roles Lc 60, which is APCA's level for content
         text, <code class="cn-code-inline">--cn-fg-muted</code> Lc 50 and{" "}
         <code class="cn-code-inline">--cn-fg-placeholder</code> Lc 40. Muted
-        text holds labels and meta, never running copy, which is what lets it
+        text holds meta and help, never running copy, which is what lets it
         sit under the content level. A placeholder is never the only copy of
         a fact.
       </p>
@@ -177,6 +180,16 @@ export default function AccessibilityPage() {
         with a glyph, because they are the tones a reader must not miss. The
         glyph is <code class="cn-code-inline">aria-hidden</code>; the word is
         what a screen reader hears. Other tones may take a glyph.
+      </p>
+
+      <p class="cn-copy">
+        Under a full-severity simulation (Machado 2009), the four status
+        roles stay apart in OKLab with one exception. Warning and success,
+        yellow and green, fall to dE 2.9 for a protan reader and 6.6 for a
+        deutan one. Every other pair stays at 10.7 or more. Those two are
+        told apart by shape and word: the warning triangle against the
+        checked circle, and "Due soon" against "Paid". An svg that replaces
+        a status glyph must keep a shape distinct from the other three.
       </p>
 
       <p class="cn-copy">
@@ -217,15 +230,22 @@ export default function AccessibilityPage() {
         A control's bounds need 3:1 against what surrounds them when they are
         the only way to find the control. A button is identified by its
         label, so its resting hairline is decoration and sits under 3:1 by
-        design. An empty field has no label inside it, so the field carries
-        the 3:1 lip on its bottom and right inner walls. Checkboxes, radios
-        and switches carry a full edge, because the box is the whole control.
-        That edge and the slider thumb's are{" "}
+        design. A field is identified by the label above it and by its
+        carve, so at rest it has no 3:1 edge: a carve is darkness only, and a
+        light lip on its far walls reads as a bevel. Its state still shows at
+        3:1. Hover closes a full 1px{" "}
+        <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on the
+        page and on a panel and 3.5:1 in a dialog, and focus draws the 2px
+        focus ring. So a field is findable the moment a reader reaches for
+        it. Give every field a visible label. Checkboxes, radios and switches
+        carry a full edge at rest, because the box is the whole control and
+        has no label inside it. That edge and the slider thumb's are{" "}
         <code class="cn-code-inline">--control-edge</code>, overlay-1, so an
         unchecked box inside a panel or a dialog still clears 3:1. Under{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> the edge,
-        the field lip and disabled text all move to overlay-2: 5.8:1 on the
-        page and on a panel, and 4.6:1 on an overlay.
+        <code class="cn-code-inline">prefers-contrast: more</code> the edge
+        and disabled text move to overlay-2, and a resting field closes into
+        a full overlay-2 ring: 5.8:1 on the page and on a panel, and 4.6:1
+        on an overlay.
       </p>
 
       <Demo title="Edges that identify a control">
@@ -248,13 +268,12 @@ export default function AccessibilityPage() {
         Panels and plated controls share the page color, so text on a panel
         reads exactly as it does on the page. Only the overlay fill sits a
         little lighter, and a lighter overlay would drop the placeholder role
-        under 4.5:1, so the ladder stops at 1.27:1. The field lip is
-        overlay-1: 4.4:1 on the page and in a panel and 3.5:1 on the overlay,
-        so a field inside a panel or a dialog keeps a visible edge.
+        under 4.5:1, so the ladder stops at 1.27:1. A hovered field's ring is
+        overlay-1: 4.4:1 on the page and in a panel and 3.5:1 on the overlay.
         Placeholders are{" "}
         <code class="cn-code-inline">--cn-fg-placeholder</code>: 5.8:1 on the
         page and in a panel, and 4.6:1 on an overlay. A raised surface shows
-        its bounds by a 1.6:1 hairline and a 1px lit top edge at 1.5:1, which
+        its bounds by a 1.9:1 hairline and a 1px lit top edge at 1.5:1, which
         mark the lift where the dark shadow is lost on the page. An engaged state is a wash at 1.52:1, a step past the
         hover's 1.24:1, and it also wears a mauve rim that holds 3.5:1 on
         that wash.
@@ -305,7 +324,8 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         Every size is rem, so the reader's browser font-size setting scales
         every role. The microlabel is the one 12px role at the 16px default;
-        labels and meta are 13px. Body copy is 16px, and 15px at compact density.{" "}
+        labels and meta are 13px, apart by weight and by ink: the label 500
+        in subtext-1, meta 400 in subtext-0. Body copy is 16px, and 15px at compact density.{" "}
         <code class="cn-code-inline">.page-main.is-reading</code> sets the lede
         at 20px.
       </p>
@@ -329,7 +349,7 @@ export default function AccessibilityPage() {
         rows={[
           {
             name: "prefers-contrast: more",
-            notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Hairlines go solid, the field lip closes into a full overlay-2 ring, the well lip on wells, tabs and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
+            notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Hairlines go solid, a resting field closes into a full overlay-2 ring and wells, tabs and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
           },
           {
             name: "prefers-reduced-motion: reduce",
@@ -341,7 +361,7 @@ export default function AccessibilityPage() {
           },
           {
             name: "forced-colors: active",
-            notes: "Focus draws in Highlight. Carved fields, wells, the mono wells, stepper pills, the tabs carve and the progress track lose their shadows, so they draw a CanvasText edge, and so do the checkbox, radio and switch. Engaged states lose their wash, so the engaged ghost, the segmented choice, the current page and the current sidebar link draw a Highlight rim, and so does the selected tab, and a selected table row a Highlight outline. Checked and indeterminate states fill with Highlight. The grain hides.",
+            notes: "Focus draws in Highlight. Carved fields, wells, the mono wells, stepper pills, the tabs carve and the progress track lose their shadows, so they draw a CanvasText edge, and so do the checkbox, radio and switch. Engaged states lose their wash, so the engaged ghost, the segmented choice and the current page draw a Highlight rim, and so does the selected tab, and a selected table row a Highlight outline. The current sidebar link's spine draws in Highlight. Checked and indeterminate states fill with Highlight. The grain hides.",
           },
         ]}
       />
@@ -379,7 +399,10 @@ export default function AccessibilityPage() {
           { name: "--cn-fg-muted", values: "5.5:1", notes: "On the page, raised and overlay fills." },
           { name: "--cn-fg-placeholder", values: "4.5:1", notes: "On the page, raised and overlay fills." },
           { name: "status roles, links", values: "4.5:1", notes: "On the page, raised and overlay fills, and each status role on its own tint." },
-          { name: "field lip, control edge, focus ring, engaged rim", values: "3:1", notes: "On the page, raised and overlay fills. The control edge covers the slider thumb. The rim also on --wash." },
+          { name: "field hover ring, control edge, focus ring, engaged rim", values: "3:1", notes: "On the page, raised and overlay fills. The control edge covers the slider thumb. The rim also on --wash." },
+          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default a resting field paints no ring." },
+          { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.9, 2.4, 1.4:1 · 1.6, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill, so the depth ladder holds its order. --edge-strong must stay above --edge on every ground. Not WCAG obligations." },
+          { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer falls from the top left and is darker than the page, so no carve draws a light lip or glow." },
           { name: "--cn-fg-on-accent", values: "4.5:1", notes: "On the primary and its hover." },
           { name: "--cn-fg", values: "APCA Lc 75", notes: "On the page, raised and overlay fills." },
           { name: "--cn-fg-soft, --cn-fg-body", values: "APCA Lc 60", notes: "On the page, raised and overlay fills. APCA's level for content text." },
@@ -403,8 +426,12 @@ export default function AccessibilityPage() {
         not ring in Highlight. It reloads the page under prefers-contrast:
         more and runs axe again, then under reduced motion and fails on any
         transition or animation longer than 1ms. Overlay fades and spinners
-        are exempt. Last, it reloads the page 390px wide and fails if it
-        scrolls sideways. Any
+        are exempt. Last, it reloads the page at 700px, the desktop at 200%
+        zoom, and fails on sideways scroll or clipped text, then at 390px
+        and 320px and fails if it scrolls sideways. In the desktop pass it
+        fails when any element holds more than three raised panels, and when
+        an example view holds more than one primary, tilted panel or lead
+        panel. axe covers the WCAG 2.5.8 target size. Any
         violation fails the run. Text that axe cannot measure, such as a link
         partly below the fold or text over a gradient, is listed as needing
         review and does not fail it.

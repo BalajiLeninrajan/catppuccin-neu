@@ -81,7 +81,7 @@ function MoreMenu() {
       <button
         ref={trigger}
         type="button"
-        class="btn btn-ghost is-icon"
+        class="btn btn-secondary is-icon is-lg"
         id="inv-more"
         aria-label="More actions"
         aria-haspopup="menu"

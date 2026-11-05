@@ -247,7 +247,7 @@ export default function LayoutPage() {
   <section class="panel is-lead">…the table…</section>
   <div class="cn-grid-12">
     <section class="panel cn-span-7">…the chart…</section>
-    <aside class="panel is-tilted cn-span-5">…what it means…</aside>
+    <aside class="panel is-tilted cn-span-5"><h2 class="cn-name">…</h2> <p>…what it means, in prose…</p></aside>
   </div>
 </main>`}
       />

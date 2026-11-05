@@ -214,9 +214,9 @@ export default function DensityPage() {
           {
             name: "--plate",
             values: "any Mocha token or mix",
-            default: "var(--crust)",
+            default: "var(--neu-ink)",
             notes:
-              "The plate under the secondary button, segmented options and the cn-hard family. The primary button and the accent card set their own. Undeclared on :root; recipes read var(--plate, var(--crust)).",
+              "The plate under the secondary button, segmented options and the cn-hard family. The primary button and the accent card set their own. Undeclared on :root; recipes read var(--plate, var(--neu-ink)), the shadow ink at 1.22:1 under base.",
           },
         ]}
       />

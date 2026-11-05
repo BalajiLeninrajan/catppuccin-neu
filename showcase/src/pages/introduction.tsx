@@ -225,14 +225,14 @@ export default function IntroductionPage() {
           ornaments when they are rare. A view holds:
         </p>
         <ul class="cn-copy">
-          <li>one tilted panel, holding a summary or an aside, never a table or a form;</li>
+          <li>one tilted panel, holding a summary or an aside in prose, never a table, a form or ruled rows, with its heading in the name role;</li>
           <li>one primary button;</li>
           <li>at most one <code class="cn-code-inline">.is-lg</code> control.</li>
         </ul>
         <p class="cn-copy">
           <code class="cn-code-inline">.is-lg</code> here means a hero control: a
           large button or <code class="cn-code-inline">.input-lg</code>. A large
-          stat or a large avatar does not count. Each ornament kind also has one
+          stat, a large avatar or a large icon button does not count. Each ornament kind also has one
           job. Grain sits only on solid accent fills. Blur sits only on the
           topbar, the folded sidebar and the scrim. Plates sit only under
           things a reader can click, under accent cards and under the one
@@ -244,6 +244,27 @@ export default function IntroductionPage() {
           dashboard, a settings screen, an invoice detail and an empty
           project, are built from package classes alone and stay inside this
           budget.
+        </p>
+      </section>
+
+      <section id="compose-a-view">
+        <h2 class="cn-title">Compose a view</h2>
+        <p class="cn-copy">
+          Most views follow one skeleton. The SPEC's Composition section and
+          the <a href="/layout">Layout</a> page give the reasons.
+        </p>
+        <ol class="cn-copy">
+          <li><code class="cn-code-inline">.page-main</code> holding a stack 48px apart.</li>
+          <li>The title and its one primary, in a <code class="cn-code-inline">.cn-split</code> header.</li>
+          <li>The key figures on the ground, in a <code class="cn-code-inline">.stat-grid.is-ruled</code>.</li>
+          <li>One <code class="cn-code-inline">.panel.is-lead</code>, the thing the view is about.</li>
+          <li>A <code class="cn-code-inline">.cn-grid-12</code> row of 7 and 5: the data first, the aside last, tilted, in prose.</li>
+          <li>At most three raised panels in any region.</li>
+        </ol>
+        <p class="cn-copy">
+          The <a href="/depth">Depth</a> page says what each height may wear,
+          and the <a href="/examples/dashboard">dashboard</a> follows the
+          skeleton step by step.
         </p>
       </section>
     </Doc>
