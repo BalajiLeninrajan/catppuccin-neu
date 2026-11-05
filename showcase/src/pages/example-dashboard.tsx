@@ -151,7 +151,6 @@ function InvoiceTable() {
                 <tr key={inv.id}>
                   <td class="cell-name">
                     <strong>{inv.id}</strong>
-                    <br />
                     <small>{inv.customer}</small>
                   </td>
                   <td data-label="Team">{inv.team}</td>
@@ -294,7 +293,7 @@ export default function DashboardExample() {
                 <p class="cn-meta cn-m-0">$2,340 to retry</p>
               </div>
             </div>
-            <div class="stat is-inline cn-py-8">
+            <div class="stat is-inline">
               <span>Paid in full</span>
               <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>
             </div>

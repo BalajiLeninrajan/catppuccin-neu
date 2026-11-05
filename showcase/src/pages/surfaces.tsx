@@ -186,7 +186,7 @@ export default function SurfacesPage() {
         view is about, such as the invoice table on a billing dashboard. It
         sits on the page color like every panel, inside the brighter{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
-        surface-2 at 2.5:1 against a panel's 1.9:1, and stands on{" "}
+        surface-2 at 2.5:1 against a panel's 2.1:1, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a dark foot on the
         bottom and right about twice as deep as a plain panel's, and a
         longer cast. It keeps the plain lit edge and draws no outline all

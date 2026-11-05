@@ -350,15 +350,15 @@ export default function MotionPage() {
       <p class="cn-copy">
         Each overlay page carries its own row of this table next to its
         specimens; see{" "}
-        <a class="btn-text" href="/popover">
+        <a href="/popover">
           Popover &amp; tooltip
         </a>
         ,{" "}
-        <a class="btn-text" href="/modal">
+        <a href="/modal">
           Modal
         </a>
         , and{" "}
-        <a class="btn-text" href="/drawer">
+        <a href="/drawer">
           Drawer
         </a>
         .
@@ -379,6 +379,8 @@ export default function MotionPage() {
           { name: ".cn-arrive", values: "--t-fast, --ease-out", notes: "Content that replaces a skeleton, and a row a live list inserts: a fade and a 2px settle. The whole set arrives at once." },
           { name: "a removed row", values: "leaves at once", notes: "A dismissed toast or a closed overlay is the only exit that animates." },
           { name: "a reorder the reader asked for", values: "cuts", notes: "A sort, a filter or a new page swaps with no motion." },
+          { name: "a tab change", values: "cuts; the pill slides", notes: "The reader asked for it, so the tab panel cuts. Only the selected tab's pill slides, over --t-fast on the ease-out." },
+          { name: "a filter that empties a table", values: "cuts", notes: "The table cuts to the .empty-state with no .cn-arrive." },
           { name: "a reorder from elsewhere", values: "--t-base, --ease-out", notes: "May use a view transition with a view-transition-name per row." },
           { name: "a layout the reader opened", values: "follows the reader", notes: "A panel that grows because the reader opened something moves with them. The accordion's height transition is the model." },
           { name: "a layout that shifts on its own", values: "--t-base, view transition", notes: "A column appears or a banner lands above content: name the moving regions with view-transition-name and run a view transition, so nothing jumps under the pointer." },
@@ -390,15 +392,15 @@ export default function MotionPage() {
       <p class="cn-copy">
         Three of these rules run live on their own pages: the progress fill
         on{" "}
-        <a class="btn-text" href="/progress">
+        <a href="/progress">
           Progress
         </a>
         , a number swapping in place on{" "}
-        <a class="btn-text" href="/bar-chart">
+        <a href="/bar-chart">
           Bar chart
         </a>
         , and a sort that cuts on{" "}
-        <a class="btn-text" href="/table">
+        <a href="/table">
           Table
         </a>
         .

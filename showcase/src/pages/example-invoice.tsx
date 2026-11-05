@@ -166,7 +166,6 @@ export default function InvoiceExample() {
               <tr key={l.item}>
                 <td class="cell-name">
                   <strong>{l.item}</strong>
-                  <br />
                   <small>{l.detail}</small>
                 </td>
                 <td class="is-num" data-label="Qty">{l.qty}</td>

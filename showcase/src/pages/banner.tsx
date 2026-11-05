@@ -99,7 +99,7 @@ export default function BannerPage() {
             name: ".banner",
             values: "div (or a status/alert region)",
             notes:
-              "Tint band: --cn-fg-body text at the meta size, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). The tint is the tone at 4% and the edge the tone 25% into surface-0, or the status ladder's stops. Its words state the status.",
+              "Tint band: --cn-fg-body text at the ui size, 14px at 400, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). The tint is the tone at 4% and the edge the tone 25% into surface-0, or the status ladder's stops. Its words state the status.",
           },
           {
             name: ".banner svg",

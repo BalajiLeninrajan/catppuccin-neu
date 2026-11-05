@@ -78,7 +78,6 @@ function SubscriptionsTable() {
               </td>
               <td class="cell-name">
                 <strong>{r.name}</strong>
-                <br />
                 <small>{r.email}</small>
               </td>
               <td data-label="Plan">{r.plan}</td>
@@ -127,7 +126,8 @@ export default function TablePage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.cell-name</code> marks the name column:{" "}
         <code class="cn-code-inline">&lt;strong&gt;</code> is the primary line at 600,{" "}
-        <code class="cn-code-inline">&lt;small&gt;</code> the secondary. Other cells
+        <code class="cn-code-inline">&lt;small&gt;</code> the secondary under it. Each
+        is a block, so the cell needs no <code class="cn-code-inline">&lt;br&gt;</code>. Other cells
         are 500 at <code class="cn-code-inline">--cell-font-size</code>, 14px by
         default and 13px compact. Status goes in a{" "}
         <code class="cn-code-inline">.tag</code> whose word states it, such as
@@ -272,7 +272,7 @@ export default function TablePage() {
         rows={[
           { name: ".data-table", values: "on <table>", notes: "Scopes all table styling. Sans tabular body at 500 and --cell-font-size (14px, 13px compact), a --cn-surface-band header, hairline rows. Cell padding is --cell-pad." },
           { name: ".is-num", values: "on th and td", notes: "Right-aligns a numeric column. On a sortable header the button reverses, so the label meets the right edge and the chevron sits on its inner side." },
-          { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line." },
+          { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
           { name: "tbody tr:hover", values: "state", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (12%) into base, 1.27:1 on the page with --cn-fg-soft at 7.3:1, a step under a selected row." },
@@ -299,14 +299,14 @@ export default function TablePage() {
   <tbody>
     <tr aria-selected="true">
       <td class="cell-name">
-        <strong>Maya Okafor</strong><br />
+        <strong>Maya Okafor</strong>
         <small>maya@example.com</small>
       </td>
       <td data-label="Status"><span class="tag cn-tone-green">Active</span></td>
       <td class="is-num" data-label="Amount">$1,240.00</td>
     </tr>
     <tr>
-      <td class="cell-name"><strong>Theo Lindqvist</strong><br /><small>theo@example.com</small></td>
+      <td class="cell-name"><strong>Theo Lindqvist</strong><small>theo@example.com</small></td>
       <!-- danger and warning tags lead with a glyph -->
       <td data-label="Status">
         <span class="tag cn-tone-danger"><svg aria-hidden="true">…</svg>Past due</span>

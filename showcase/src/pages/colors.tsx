@@ -46,7 +46,7 @@ const GROUNDS = [
   { name: "base", hex: "#1e1e2e", note: "The page ground, --cn-surface-page." },
   { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
   { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 40%, dashed open slots and the resting ring of a table-cell field." },
-  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 75%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
+  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 85%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
 ];
 
 const NEUTRAL_TEXT = [
@@ -124,7 +124,7 @@ export default function ColorsPage() {
     >
       <p class="cn-copy">
         Components read the{" "}
-        <a class="btn-text" href="https://catppuccin.com/" target="_blank" rel="noreferrer">
+        <a href="https://catppuccin.com/" target="_blank" rel="noreferrer">
           Catppuccin
         </a>{" "}
         Mocha tokens below and never a raw hex value.
@@ -593,7 +593,7 @@ export default function ColorsPage() {
       <CodeBlock
         title="The steps in use"
         code={`/* The mix tokens hold the shared expressions; use them, not the mix */
---edge:      color-mix(in srgb, var(--surface-2) 75%, transparent); /* raised-surface hairline: 1.9:1 */
+--edge:      color-mix(in srgb, var(--surface-2) 85%, transparent); /* raised-surface hairline: 2.1:1 */
 --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
 --edge-strong: var(--surface-2);                                   /* lead panel and overlay hairline: 2.5:1 */
 --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
@@ -698,7 +698,7 @@ export default function ColorsPage() {
       <Props
         title="Edge reference"
         rows={[
-          { name: ".cn-edge", values: "surface-2 75%", notes: "Raised-surface hairline, 1.9:1 on base, which is also the raised fill, and 1.6:1 on an overlay. The cut edge of panels, chips and controls." },
+          { name: ".cn-edge", values: "surface-2 85%", notes: "Raised-surface hairline, 2.1:1 on base, which is also the raised fill, and 1.8:1 on an overlay. The cut edge of panels, chips and controls." },
           { name: ".cn-edge-soft", values: "surface-1 38%", notes: "Inner separators." },
           { name: ".cn-edge-line", values: "surface-0", notes: "Row separators, footer rules." },
           { name: ".cn-edge-mauve", values: "mauve at --cn-step-plate (25%)", notes: "Accent-forward edge." },

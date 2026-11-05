@@ -55,7 +55,7 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
   ["--hover", "surface-1 40% over the ground", "1.24:1 (1.15:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
-  ["--edge", "surface-2 75% over the ground", "1.9:1 (1.6:1 on an overlay)", "The hairline of panels and controls, with the 1.5:1 lit top edge the bound of a panel on the page color."],
+  ["--edge", "surface-2 85% over the ground", "2.1:1 (1.8:1 on an overlay)", "The hairline of panels and controls, with the 1.5:1 lit top edge the bound of a panel on the page color."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-0 under prefers-contrast."],
 ];
 
@@ -277,7 +277,7 @@ export default function AccessibilityPage() {
         Placeholders are{" "}
         <code class="cn-code-inline">--cn-fg-placeholder</code>: 5.8:1 on the
         page and in a panel, and 4.6:1 on an overlay. A raised surface shows
-        its bounds by a 1.9:1 hairline and a 1px lit top edge at 1.5:1, which
+        its bounds by a 2.1:1 hairline and a 1px lit top edge at 1.5:1, which
         mark the lift where the dark shadow is lost on the page. An engaged state is a wash at 1.52:1, a step past the
         hover's 1.24:1, and it also wears a mauve rim that holds 3.5:1 on
         that wash.

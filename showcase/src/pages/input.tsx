@@ -78,7 +78,7 @@ export default function InputPage() {
         Once the reader reaches for it the bounds show, as a full ring on hover
         and the focus ring on focus. Always give a field a visible label; a
         field in a table cell has none, so it takes the{" "}
-        <a class="btn-text" href="/table">inline edit</a> instead.
+        <a href="/table">inline edit</a> instead.
       </p>
 
       <Demo title="On the page and on a panel" classes="--cn-field-ring · --cn-field-hover-ring">

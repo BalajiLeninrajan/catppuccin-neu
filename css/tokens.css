@@ -295,7 +295,7 @@
 
   /* Mix tokens. --tint is declared at its use sites below, because a
      var() resolves where it is declared. */
-  --edge:      color-mix(in srgb, var(--surface-2) 75%, transparent); /* raised-surface hairline: 1.9:1 */
+  --edge:      color-mix(in srgb, var(--surface-2) 85%, transparent); /* raised-surface hairline: 2.1:1 */
   --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
   --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
   --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its own wash */
@@ -322,8 +322,9 @@
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
      for inner rules and dividers, --edge-strong for the lead panel and
      overlays: solid surface-2, 2.5:1 on base and 1.9:1 on an overlay,
-     above --edge's 1.9:1 and 1.6:1, so the higher surface has the brighter
-     cut edge. */
+     above --edge's 2.1:1 and 1.8:1, so the higher surface has the brighter
+     cut edge. --edge stops at surface-2 85%: any brighter and a panel at 1x
+     reads as an outlined box. */
   --edge-strong: var(--surface-2);
 
   /* Fill grain. --grain is its strength on solid accent fills; 0 turns it
