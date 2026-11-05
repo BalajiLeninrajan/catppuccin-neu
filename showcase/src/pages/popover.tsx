@@ -90,7 +90,15 @@ export default function PopoverPage() {
     >
       <p class="cn-copy">
         Give the anchor <code class="cn-code-inline">position: relative</code> and drop the popover
-        inside it. Filled first and last children inherit the corner radius. Never clip
+        inside it.
+      </p>
+
+      <Demo title="Anchored, click to open" classes="popover">
+        <AnchoredDemo />
+      </Demo>
+
+      <p class="cn-copy">
+        Filled first and last children inherit the corner radius. Never clip
         with <code class="cn-code-inline">overflow: hidden</code>; it clips the shadow too. The
         recipe lays out <code class="cn-code-inline">header</code> and{" "}
         <code class="cn-code-inline">footer</code> bands on the overlay fill. The header takes no darker
@@ -106,10 +114,6 @@ export default function PopoverPage() {
         <code class="cn-code-inline">hidden</code> is toggled; unmounting gets the
         entrance only.
       </p>
-
-      <Demo title="Anchored, click to open" classes="popover">
-        <AnchoredDemo />
-      </Demo>
 
       <Demo title="Anatomy, pinned open" classes="popover">
         <AnatomyDemo />

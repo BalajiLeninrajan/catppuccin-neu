@@ -45,7 +45,7 @@ const GROUNDS = [
   { name: "mantle", hex: "#181825", note: "Crust mixes into it for the table head and sunken surfaces." },
   { name: "base", hex: "#1e1e2e", note: "The page ground, --cn-surface-page." },
   { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
-  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 40%, dashed open slots and the lit walls of carves." },
+  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 40%, dashed open slots and the resting ring of a table-cell field." },
   { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 75%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
 ];
 
@@ -123,14 +123,11 @@ export default function ColorsPage() {
       lede="Catppuccin Mocha, verbatim: all 26 colors, no substitute hexes. Twelve neutrals carry the grounds and the text ramp. Fourteen hues carry status, interaction and identity."
     >
       <p class="cn-copy">
-        The palette is{" "}
+        Components read the{" "}
         <a class="btn-text" href="https://catppuccin.com/" target="_blank" rel="noreferrer">
           Catppuccin
         </a>{" "}
-        Mocha. Components never use raw hex values. They read tokens directly,
-        or one of the two contract properties:{" "}
-        <code class="cn-code-inline">--tone</code> for semantic tinting and{" "}
-        <code class="cn-code-inline">--accent</code> for per-instance identity.
+        Mocha tokens below and never a raw hex value.
       </p>
 
       <Demo title="Grounds & surfaces">
@@ -156,6 +153,13 @@ export default function ColorsPage() {
           ))}
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        A component reads a token directly, or one of the two contract
+        properties: <code class="cn-code-inline">--tone</code> for semantic
+        tinting and <code class="cn-code-inline">--accent</code> for
+        per-instance identity.
+      </p>
 
       <h2 class="cn-title">Every hue has a job</h2>
       <p class="cn-copy">
@@ -291,9 +295,9 @@ export default function ColorsPage() {
       <Props
         title="Ladder stops"
         rows={[
-          { name: "--cn-{role}-tint", values: "role 4% into transparent", default: "--tint", notes: "The tag and banner ground, and the invalid-field well." },
-          { name: "--cn-{role}-wash", values: "role 12% into transparent", default: "--tone-wash", notes: "The icon-button hover. The danger ghost and the danger menu item read --cn-danger-wash directly." },
-          { name: "--cn-{role}-edge", values: "role 40% into transparent", default: "--tone-edge", notes: "The tag hairline and the icon-button hover edge." },
+          { name: "--cn-{role}-tint", values: "role 4% into transparent", default: "--tint", notes: "The banner ground and the invalid-field well." },
+          { name: "--cn-{role}-wash", values: "role 12% into transparent", default: "--tone-wash", notes: "The tag ground and the icon-button hover. The danger ghost and the danger menu item read --cn-danger-wash directly." },
+          { name: "--cn-{role}-edge", values: "role 40% into transparent", default: "--tone-edge", notes: "The icon-button hover edge." },
           { name: "--cn-{role}-border", values: "role 25% into surface-0", default: "--tone-border", notes: "The banner edge and .cn-edge-tone." },
         ]}
       />
@@ -311,7 +315,7 @@ export default function ColorsPage() {
   --cn-warning-border: color-mix(in srgb, var(--cn-warning) 35%, var(--surface-0));
 }
 
-<span class="tag cn-tone-warning">Due soon</span>  <!-- reads --cn-warning-edge -->
+<span class="tag cn-tone-warning">Due soon</span>  <!-- reads --cn-warning-wash -->
 <div class="banner cn-tone-warning">Card expires in 6 days.</div>  <!-- reads --cn-warning-border -->`}
       />
 
@@ -404,7 +408,8 @@ export default function ColorsPage() {
         the rest. At full strength blue collapses into mauve for a protan
         reader and pink into teal for a deutan one. Under a full-severity
         simulation (Machado 2009) every adjacent pair stays above dE 6 in
-        OKLab, and series 1 and 5, teal and blue, sit at dE 25 or more. A record with an identity
+        OKLab, the closest being series 5 and 6 at 6.2 for a protan reader,
+        and series 1 and 5, teal and blue, sit at dE 25 or more. A record with an identity
         keeps its own <code class="cn-code-inline">--accent</code> instead, so
         Payments is teal in every chart, whatever position it plots in.
       </p>
@@ -551,12 +556,12 @@ export default function ColorsPage() {
         title="The steps"
         rows={[
           { name: "--cn-step-tint", values: "4%", notes: "A field or banner in its tone (--tint), the open accordion row." },
-          { name: "--cn-step-row", values: "8%", notes: "Table and ranked row hovers: 1.17:1 for mauve on base, past the open carve's 1.08:1 and 1.30:1 under a selected row." },
-          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
+          { name: "--cn-step-row", values: "12%", notes: "Table and ranked row hovers: 1.27:1 for mauve on base, past the 1.24:1 hover and the open carve's 1.08:1, and 1.20:1 under a selected row." },
+          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
           { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.24:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
           { name: "--cn-step-fill", values: "14%", notes: "Avatar grounds, the radio and live-dot halos, the .mark border and the switch glow." },
           { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge, .cn-edge-mauve, .cn-edge-accent and the switch glow while held." },
-          { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the tag and avatar edges, the icon-button hover edge, the segmented hover." },
+          { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the avatar edge, the icon-button hover edge, the segmented hover." },
           { name: "--cn-step-strong", values: "50%", notes: "The warmed secondary and checked radio borders." },
           { name: "--cn-step-vivid", values: "70%", notes: "Accent-card plates, so six accents stay apart, and --engaged-edge, so the rim clears 3:1." },
         ]}
@@ -600,7 +605,7 @@ export default function ColorsPage() {
    element's --tone. A status .cn-tone-* swaps in its ladder. */
 --tint:        color-mix(in srgb, var(--tone) var(--cn-step-tint), transparent);
 --tone-wash:   color-mix(in srgb, var(--tone) var(--cn-step-wash), transparent);
---tone-edge:   color-mix(in srgb, var(--tone) var(--cn-step-edge), transparent);  /* the tag edge */
+--tone-edge:   color-mix(in srgb, var(--tone) var(--cn-step-edge), transparent);  /* the icon-button hover edge */
 --tone-border: color-mix(in srgb, var(--tone) var(--cn-step-plate), var(--surface-0)); /* the banner edge */`}
       />
 

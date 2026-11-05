@@ -10,9 +10,7 @@ export default function AccentCardPage() {
     >
       <p class="cn-copy">
         The plate is the accent mixed 70% into surface-0,{" "}
-        <code class="cn-code-inline">--cn-step-vivid</code>. The plates sit
-        well apart from the page, from 4.9:1 for blue to 7.5:1 for yellow, so
-        the plate reads as the card's color and not as a shadow.
+        <code class="cn-code-inline">--cn-step-vivid</code>.
       </p>
 
       <Demo title="Teams, each in its own accent" classes="accent-card  (set --accent from the record)">
@@ -25,6 +23,12 @@ export default function AccentCardPage() {
           ))}
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        The plates sit
+        well apart from the page, from 4.9:1 for blue to 7.5:1 for yellow, so
+        the plate reads as the card's color and not as a shadow.
+      </p>
 
       <p class="cn-copy">
         The accent belongs to the team, not to its place in the grid. Store it

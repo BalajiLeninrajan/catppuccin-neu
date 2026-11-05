@@ -13,9 +13,6 @@ export default function StepperPage() {
     >
       <p class="cn-copy">
         The recipe styles every direct child of <code class="cn-code-inline">.stepper</code> as a borderless inset pill.
-        Mark the current phase with <code class="cn-code-inline">aria-current="step"</code> or{" "}
-        <code class="cn-code-inline">.active</code>, and completed phases with <code class="cn-code-inline">.is-done</code>.
-        Everything else reads as upcoming.
       </p>
 
       <Demo title="The three states" classes="stepper › .is-done / [aria-current='step'] / (rest)" row>
@@ -25,6 +22,12 @@ export default function StepperPage() {
           <span>Upcoming</span>
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        Mark the current phase with <code class="cn-code-inline">aria-current="step"</code> or{" "}
+        <code class="cn-code-inline">.active</code>, and completed phases with <code class="cn-code-inline">.is-done</code>.
+        Everything else reads as upcoming.
+      </p>
 
       <Demo title="Click a phase to move the flow" classes="stepper">
         <div class="stepper">

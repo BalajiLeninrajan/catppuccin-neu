@@ -114,6 +114,39 @@ function ArriveDemo() {
   );
 }
 
+/* Every curve and duration side by side: identical blocks, each moving
+   24px, all fired by one button. Curves run over --t-slow so the shapes
+   differ visibly; durations run on --ease-out. */
+const CURVES = ["--ease-out", "--ease-in", "--ease-spring"];
+const DURATIONS = [["--t-press", ".08s"], ["--t-exit", ".14s"], ["--t-fast", ".16s"], ["--t-base", ".22s"], ["--t-slow", ".32s"]];
+
+function Track({ label, note, transition, moved }: { label: string; note: string; transition: string; moved: boolean }) {
+  return (
+    <div class="sc-row cn-gap-16">
+      <code class="cn-code-inline" style="min-width:13ch">{label}</code>
+      <div class="well" style="width:56px;padding:4px">
+        <span style={`display:block;width:16px;height:16px;border-radius:4px;background:var(--cn-fg-soft);transition:${transition};translate:${moved ? "24px" : "0"} 0`} />
+      </div>
+      <span class="cn-meta">{note}</span>
+    </div>
+  );
+}
+
+function CurvesDemo() {
+  const [moved, setMoved] = useState(false);
+  return (
+    <div class="sc-row cn-gap-24 cn-top">
+      <div class="cn-stack cn-gap-8" aria-hidden="true">
+        {CURVES.map((c) => <Track key={c} label={c} note="over --t-slow" transition={`translate var(--t-slow) var(${c})`} moved={moved} />)}
+        {DURATIONS.map(([t, v]) => <Track key={t} label={t} note={`${v} on --ease-out`} transition={`translate var(${t}) var(--ease-out)`} moved={moved} />)}
+      </div>
+      <button type="button" class="btn btn-secondary" onClick={() => setMoved((m) => !m)}>
+        Replay
+      </button>
+    </div>
+  );
+}
+
 /* Remount the block on demand so the enter animation replays. */
 function PageEnterDemo() {
   const [key, setKey] = useState(0);
@@ -142,8 +175,23 @@ export default function MotionPage() {
       <h2 class="cn-label">Motion tokens</h2>
 
       <p class="cn-copy">
-        Every transition in the package rides one of three curves. Anything
-        answering the pointer or arriving takes{" "}
+        Every transition in the package rides one of three curves and names
+        one of five durations.
+      </p>
+
+      <Demo title="Curves and durations" classes="--ease-out · --ease-in · --ease-spring · --t-*">
+        <CurvesDemo />
+      </Demo>
+
+      <p class="cn-copy">
+        Each block travels 24px. The three curves run over{" "}
+        <code class="cn-code-inline">--t-slow</code> so their shapes read: the
+        fast-out lands early, the ease-in starts late, and the spring passes
+        its mark and settles. The five durations run on the fast-out.
+      </p>
+
+      <p class="cn-copy">
+        Anything answering the pointer or arriving takes{" "}
         <code class="cn-code-inline">--ease-out</code>: it covers most of its travel
         early and lands. Anything leaving takes{" "}
         <code class="cn-code-inline">--ease-in</code>. Anything returning takes{" "}
@@ -338,6 +386,23 @@ export default function MotionPage() {
           { name: ".page-enter", values: "the one stagger", notes: "A view's first render only. Five steps 40ms apart, then the rest together, so no reveal runs past .2s plus --t-slow." },
         ]}
       />
+
+      <p class="cn-copy">
+        Three of these rules run live on their own pages: the progress fill
+        on{" "}
+        <a class="btn-text" href="/progress">
+          Progress
+        </a>
+        , a number swapping in place on{" "}
+        <a class="btn-text" href="/bar-chart">
+          Bar chart
+        </a>
+        , and a sort that cuts on{" "}
+        <a class="btn-text" href="/table">
+          Table
+        </a>
+        .
+      </p>
 
       <Demo title="A live list" classes="cn-arrive">
         <ArriveDemo />

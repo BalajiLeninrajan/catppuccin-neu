@@ -11,9 +11,7 @@ export default function ProsePage() {
       <h2 class="cn-title">Prose</h2>
       <p class="cn-copy">
         <code class="cn-code-inline">.cn-prose</code> is the one recipe that styles
-        bare elements, and only inside itself. Put it on the element that holds
-        rendered Markdown or CMS content, where you cannot add a class to each
-        heading and list.
+        bare elements, and only inside itself.
       </p>
 
       <Demo title="A help article" classes="cn-prose">
@@ -62,6 +60,11 @@ export default function ProsePage() {
           </p>
         </article>
       </Demo>
+
+      <p class="cn-copy">
+        Put it on the element that holds rendered Markdown or CMS content,
+        where you cannot add a class to each heading and list.
+      </p>
 
       <p class="cn-copy">
         Text sets in the body role at <code class="cn-code-inline">--cn-measure</code>{" "}

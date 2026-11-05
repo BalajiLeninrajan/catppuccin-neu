@@ -197,15 +197,16 @@ function MenuRows({ archived, compact, onArchived, onCompact, onAct }: MenuRowsP
 }
 
 /* Pinned open for inspection: the trigger in its engaged state over the
-   open menu. Not wired; the live demo below has the keys. */
+   open menu. Not wired; the live demo below has the keys. The menu sits in
+   normal flow under the trigger, so the stage takes the menu's height. */
 function PinnedDemo() {
   return (
-    <div style="position:relative;min-height:380px;width:min(320px,100%)">
+    <div class="cn-stack cn-gap-8" style="justify-items:start;width:min(320px,100%)">
       <button type="button" class="btn btn-ghost" aria-haspopup="menu" aria-expanded="true" tabIndex={-1}>
         Invoice actions
         <ChevronIcon />
       </button>
-      <div class="popover menu" role="menu" aria-label="Invoice actions, pinned specimen" style="top:54px;left:0">
+      <div class="popover menu" role="menu" aria-label="Invoice actions, pinned specimen" style="position:relative;z-index:auto">
         <MenuRows archived compact={false} />
       </div>
     </div>
@@ -221,16 +222,20 @@ export default function MenuPage() {
       <p class="cn-copy">
         Add <code class="cn-code-inline">.menu</code> to a{" "}
         <code class="cn-code-inline">.popover</code> and give it{" "}
-        <code class="cn-code-inline">role="menu"</code>. The menu sizes to its
-        rows, at least 200px and at most 320px wide, on the overlay fill with
-        the <code class="cn-code-inline">--edge-strong</code> hairline and{" "}
-        <code class="cn-code-inline">--shadow-pop</code>. It opens and leaves
-        with the popover motion.
+        <code class="cn-code-inline">role="menu"</code>.
       </p>
 
       <Demo title="Anatomy, pinned open" classes='btn btn-ghost[aria-expanded="true"] · popover menu[role="menu"]'>
         <PinnedDemo />
       </Demo>
+
+      <p class="cn-copy">
+        The menu sizes to its
+        rows, at least 200px and at most 320px wide, on the overlay fill with
+        the <code class="cn-code-inline">--edge-strong</code> hairline and{" "}
+        <code class="cn-code-inline">--shadow-pop</code>. It opens and leaves
+        with the popover motion.
+      </p>
 
       <Demo title="Menu button, click or press ArrowDown" classes='btn btn-ghost[aria-haspopup="menu"] · popover menu[hidden]'>
         <MenuDemo />

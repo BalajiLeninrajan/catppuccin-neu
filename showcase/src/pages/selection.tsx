@@ -51,13 +51,7 @@ export default function SelectionPage() {
       lede="Checkbox, radio, and switch. Each is a restyled native input, so forms, keyboard, and focus behavior come for free."
     >
       <p class="cn-copy">
-        Wrap control and text in <code class="cn-code-inline">label.choice</code>. The
-        whole label is the hit target. When the input is disabled the
-        control dims itself to{" "}
-        <code class="cn-code-inline">--disabled-opacity</code> (.6) and the
-        label text takes <code class="cn-code-inline">--cn-fg-disabled</code>,
-        with no extra class. A disabled control dims the same way outside a{" "}
-        <code class="cn-code-inline">.choice</code>.
+        Wrap control and text in <code class="cn-code-inline">label.choice</code>.
       </p>
 
       <Demo title="Checkbox" classes="label.choice > input.checkbox" row>
@@ -74,6 +68,16 @@ export default function SelectionPage() {
           Usage alerts
         </label>
       </Demo>
+
+      <p class="cn-copy">
+        The
+        whole label is the hit target. When the input is disabled the
+        control dims itself to{" "}
+        <code class="cn-code-inline">--disabled-opacity</code> (.6) and the
+        label text takes <code class="cn-code-inline">--cn-fg-disabled</code>,
+        with no extra class. A disabled control dims the same way outside a{" "}
+        <code class="cn-code-inline">.choice</code>.
+      </p>
 
       <Demo title="Mixed" classes="input.checkbox:indeterminate">
         <MixedDemo />

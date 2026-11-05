@@ -31,7 +31,7 @@ const KNOBS: Array<[string, string, string, string, string]> = [
   ["--band-h", "64px", "52px", "44px", "Panel, modal and drawer header bands. The topbar is this plus 4px."],
   ["--band-pad", "12px 24px", "8px 24px", "8px 16px", "Band padding."],
   ["--band-title-size", "20px", "14px", "14px", "An h2 or h3 in a header band."],
-  ["--lead-title-size", "28px", "28px", "20px", "The lead panel's band title, at the heading weight."],
+  ["--lead-title-size", "28px", "28px", "20px", "The lead panel's band title, at the heading weight. 20px at 655px and under, where display-sm drops under 34px."],
   ["--body-pad", "24px", "16px 24px", "12px 16px", ".panel-body padding."],
   ["--cell-pad", "12px 16px", "8px 12px", "4px 8px", "Table cells."],
   ["--cell-font-size", "14px", "14px", "13px", "Table body text."],
@@ -59,17 +59,7 @@ export default function DensityPage() {
         <h2 class="cn-title">Density knobs</h2>
         <p class="cn-copy">
           Control heights, band sizes and cell padding come from properties on{" "}
-          <code class="cn-code-inline">:root</code>. Set{" "}
-          <code class="cn-code-inline">data-density="cozy"</code> or{" "}
-          <code class="cn-code-inline">data-density="compact"</code> on any element
-          to retune them for that subtree. Cozy is for desktop data tools
-          that want more rows on screen: 38px controls, a 3px plate, 52px
-          bands, 14px band titles and 8px by 12px table cells, with the body
-          size and panel radius left alone. Compact is the dense strip for
-          readouts: 28px controls, a 2px plate, the card radius on panels,
-          44px bands and tighter table cells, chips and code wells. Control
-          heights are rem (46px is 2.875rem), so a reader who raises the
-          browser font size gets taller controls along with larger labels.
+          <code class="cn-code-inline">:root</code>.
         </p>
       </section>
 
@@ -101,6 +91,19 @@ export default function DensityPage() {
           </table>
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        Set <code class="cn-code-inline">data-density="cozy"</code> or{" "}
+        <code class="cn-code-inline">data-density="compact"</code> on any element
+        to retune them for that subtree. Cozy is for desktop data tools
+        that want more rows on screen: 38px controls, a 3px plate, 52px
+        bands, 14px band titles and 8px by 12px table cells, with the body
+        size and panel radius left alone. Compact is the dense strip for
+        readouts: 28px controls, a 2px plate, the card radius on panels,
+        44px bands and tighter table cells, chips and code wells. Control
+        heights are rem (46px is 2.875rem), so a reader who raises the
+        browser font size gets taller controls along with larger labels.
+      </p>
 
       <p class="cn-copy">
         Some sizes ignore density: the checkbox and radio (20px), the switch

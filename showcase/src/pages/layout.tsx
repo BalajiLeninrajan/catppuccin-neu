@@ -18,18 +18,8 @@ export default function LayoutPage() {
       lede="A few layout primitives, one spacing scale, and a page column. Utilities sit above recipes in the cascade, so a gap or a padding on a component is a class, not a stylesheet."
     >
       <p class="cn-copy">
-        The package's layers are tokens, then recipes, then utilities. A{" "}
-        <code class="cn-code-inline">cn-*</code> class on an element always beats the
-        recipe on that element, the same order Tailwind uses. The spacing
-        scale is six tokens, <code class="cn-code-inline">--space-1</code> to{" "}
-        <code class="cn-code-inline">--space-6</code>: 4, 8, 12, 16, 24 and 32. The
-        recipes use only these inside components. Two more,{" "}
-        <code class="cn-code-inline">--space-7</code> (48) and{" "}
-        <code class="cn-code-inline">--space-8</code> (64), set the rhythm between
-        panels and page regions, never inside them.
+        Three primitives place children: a row, a stack and a wrapping cluster.
       </p>
-
-      <CodeBlock title="A utility over a recipe" code={COMPOSE} />
 
       <Demo title="Row, stack, cluster" classes="cn-row · cn-stack · cn-cluster">
         <div class="cn-stack cn-gap-16" style="width:min(520px,100%)">
@@ -50,6 +40,20 @@ export default function LayoutPage() {
           </div>
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        The package's layers are tokens, then recipes, then utilities. A{" "}
+        <code class="cn-code-inline">cn-*</code> class on an element always beats the
+        recipe on that element, the same order Tailwind uses. The spacing
+        scale is six tokens, <code class="cn-code-inline">--space-1</code> to{" "}
+        <code class="cn-code-inline">--space-6</code>: 4, 8, 12, 16, 24 and 32. The
+        recipes use only these inside components. Two more,{" "}
+        <code class="cn-code-inline">--space-7</code> (48) and{" "}
+        <code class="cn-code-inline">--space-8</code> (64), set the rhythm between
+        panels and page regions, never inside them.
+      </p>
+
+      <CodeBlock title="A utility over a recipe" code={COMPOSE} />
 
       <Demo title="Column grids" classes="cn-grid-2 / cn-grid-3 / cn-grid-4">
         <div class="cn-grid-3" style="width:100%">

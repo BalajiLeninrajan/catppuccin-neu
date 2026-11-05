@@ -121,7 +121,7 @@
   /* Mix steps. Every tint of a hue into a ground or into transparent uses
      one of these, so a wash means the same strength everywhere. */
   --cn-step-tint: 4%;     /* a field or banner in its tone, the open carve */
-  --cn-step-row: 8%;      /* the row hover: 1.17:1 for mauve on base, a step under the 1.24:1 hover */
+  --cn-step-row: 12%;     /* the row hover: 1.27:1 for mauve on base, past the 1.24:1 hover, under the 1.52:1 selected row */
   --cn-step-wash: 12%;    /* tone hover washes, the accent tint: 1.27:1 for mauve on base */
   --cn-step-engaged: 20%; /* the engaged wash: 1.52:1, a step past the 1.24:1 hover */
   --cn-step-fill: 14%;    /* avatar grounds, halos, the mark border */
@@ -230,18 +230,18 @@
   --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
   /* A shadow has to be darker than the darkest surface it falls on, and
      crust is only 1.1:1 under base, so the raised shadow is crust taken
-     halfway to black: a 1px contact edge where the surface meets the
-     ground, a tight near shadow at .8 that darkens the first few pixels
-     past the bottom and right edges, then the cast. The cast tops out near
-     1.28:1, so the near shadow is what makes the contact read at 1x. */
+     halfway to black: a 1px contact edge in the full ink where the surface
+     meets the ground, then a near shadow at .8 that lays a solid 3 to 4px
+     dark foot along the bottom and right edges, then the cast. The cast
+     tops out near 1.28:1, so the foot is what makes the height read at 1x. */
   --neu-shade: rgb(8 8 14 / .72);
-  --neu-contact: rgb(8 8 14 / .8);
+  --neu-contact: var(--neu-ink);
   --neu-near: rgb(8 8 14 / .8);
-  --neu-raised: 1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
-  /* The lead panel stands higher by darkness, not by a brighter line: a
-     2px dark contour all round, a contact edge a pixel wider, a deeper
-     near shadow and a longer cast. It keeps the plain lit edge. */
-  --neu-lifted: 0 0 0 2px rgb(8 8 14 / .7), 2px 2px 0 1px var(--neu-contact), 3px 5px 6px var(--neu-near), 16px 22px 40px var(--neu-shade), var(--cn-lit-edge);
+  --neu-raised: 1px 1px 0 var(--neu-contact), 2px 3px 4px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+  /* The lead panel stands higher by darkness on its bottom and right only,
+     never by a line all round or a brighter one: a deeper full-ink contact,
+     a deeper near shadow and a longer cast. It keeps the plain lit edge. */
+  --neu-lifted: 2px 3px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
   --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
@@ -314,6 +314,10 @@
      paints nothing until prefers-contrast closes it into a surface-2 ring. */
   --cn-field-ring: inset 0 0 0 1px transparent;
   --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
+  /* A field in a table cell has no label above it, so it alone keeps a
+     quiet even hairline at rest: surface-1, 1.8:1 on the page and 1.4:1
+     on an overlay, the same on all four sides so it never reads as a lip. */
+  --cn-cell-field-ring: inset 0 0 0 1px var(--surface-1);
   --cn-well-ring: inset 0 0 0 1px transparent;
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
      for inner rules and dividers, --edge-strong for the lead panel and
@@ -346,7 +350,9 @@
   --band-pad: var(--space-3) var(--space-5);
   --band-title-size: var(--cn-type-title-size); /* an h2 in a panel header */
   /* The lead panel's band title: the heading size at default and cozy
-     density, since one title per view buys no rows by shrinking. */
+     density, since one title per view buys no rows by shrinking. At 655px
+     and under, where display-sm drops under 34px, it steps down to the
+     title size so the page title stays the one headline. */
   --lead-title-size: var(--cn-type-heading-size);
   --body-pad: var(--space-5);
   --cell-pad: var(--space-3) var(--space-4);
@@ -447,6 +453,9 @@
 .panel.is-lead.cn-morph { view-transition-name: cn-lead; }
 .btn-primary.cn-morph { view-transition-name: cn-primary; }
 ::view-transition-group(cn-lead), ::view-transition-group(cn-primary) { animation-duration: var(--t-base); animation-timing-function: var(--ease-out); }
+
+/* Under 34px of display-sm a 28px band title reads as a second headline. */
+@media (max-width: 655px) { :root { --lead-title-size: var(--cn-type-title-size); } }
 
 /* Grain tiles stay one device pixel per unit, browser zoom included. */
 @media (min-resolution: 1.5dppx) { :root { --cn-grain-tile: 106.667px; } }
@@ -617,6 +626,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --edge-strong: var(--overlay-0);
     --control-edge: var(--overlay-2);
     --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
+    --cn-cell-field-ring: inset 0 0 0 1px var(--overlay-2);
     --cn-well-ring: inset 0 0 0 1px var(--surface-2);
     --neu-dark: rgb(8 8 14 / .88);
     --neu-shade: rgb(8 8 14 / .86);

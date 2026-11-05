@@ -6,8 +6,8 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 const HEIGHTS = [
   { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. A well also takes the darker sunken fill.", tokens: "--neu-inset or --neu-inset-soft, transparent, --cn-surface-sunken or --cn-surface-band", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states." },
   { height: "The ground", draws: "Nothing.", tokens: "--cn-surface-page", who: "The page. Every other height is measured from it." },
-  { height: "Resting on it", draws: "The page color, the plain hairline, the lit top edge, the contact edge and near shadow, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Resting higher", draws: "The page color, the brighter hairline, a 2px dark contour, a wider contact edge, a deeper near shadow and a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its dark contour and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
+  { height: "Resting on it", draws: "The page color, the plain hairline, the lit top edge, a dark foot of contact edge and near shadow on the bottom and right, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
+  { height: "Resting higher", draws: "The page color, the brighter hairline, a dark foot about twice as deep on the bottom and right, and a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its deeper foot and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
   { height: "Standing on a plate", draws: "The page color and lit top edge over a hard offset, the plate's side in the shadow ink.", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate." },
   { height: "Lifted off it", draws: "The plate's side grows to 10px and the card tips 1.2deg.", tokens: "a 10px plate over --neu-raised, rotate(1.2deg)", who: "The one tilted panel, holding prose: never a table, a form or ruled rows. Upright under prefers-contrast: more, on the same plate." },
   { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
@@ -77,28 +77,10 @@ export default function DepthPage() {
       title="Depth"
       lede="Every elevation is one of a small set of shadows, lit from one light at the top left. Height above the page separates surfaces; a hairline only cuts their edge."
     >
-      <p class="cn-copy">
-        The light source never moves. The dark shadow falls bottom right. A
-        raised surface marks its lit side with a 1px top edge. A carve is
-        darkness only: one dark wall from the top left, and nothing on its
-        bottom and right walls, because a light line there reads as a
-        bevel. No component
-        composes its own{" "}
-        <code class="cn-code-inline">box-shadow</code>; it picks one of the tokens
-        below. Neumorphic depth only reads when a surface sits close to the
-        page color, so raised and plated surfaces take{" "}
-        <code class="cn-code-inline">--cn-surface-raised</code>, which is{" "}
-        <code class="cn-code-inline">--base</code> itself. A raised surface
-        lifts by its contact edge, its cast, its lit top edge and its
-        hairline, never by a lighter fill. Only overlays, which float free of
-        the page, take a lighter step.
-      </p>
-
       <h2 class="cn-title">One model</h2>
       <p class="cn-copy">
         Every depth on the page is a height above or below the ground, under
-        the one light. Pick the height for a new surface and its fill and
-        shadow follow from the row.
+        the one light.
       </p>
 
       <Demo title="Heights, lowest first">
@@ -125,6 +107,28 @@ export default function DepthPage() {
           </table>
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        Pick the height for a new surface and its fill and shadow follow from
+        the row.
+      </p>
+
+      <p class="cn-copy">
+        The light source never moves. The dark shadow falls bottom right. A
+        raised surface marks its lit side with a 1px top edge. A carve is
+        darkness only: one dark wall from the top left, and nothing on its
+        bottom and right walls, because a light line there reads as a
+        bevel. No component
+        composes its own{" "}
+        <code class="cn-code-inline">box-shadow</code>; it picks one of the tokens
+        on this page. Neumorphic depth only reads when a surface sits close to the
+        page color, so raised and plated surfaces take{" "}
+        <code class="cn-code-inline">--cn-surface-raised</code>, which is{" "}
+        <code class="cn-code-inline">--base</code> itself. A raised surface
+        lifts by its contact edge, its cast, its lit top edge and its
+        hairline, never by a lighter fill. Only overlays, which float free of
+        the page, take a lighter step.
+      </p>
 
       <Demo title="One specimen per height, on the page" classes="well · (the ground) · panel · panel is-lead · cn-bg-raised cn-edge cn-hard · panel is-tilted · cn-bg-overlay cn-pop">
         {/* Two groups that match the heights table: at or below the ground,
@@ -251,24 +255,24 @@ export default function DepthPage() {
         crust sits only 1.1:1 under base. So the shadows use crust taken
         halfway to black, <code class="cn-code-inline">rgb(8 8 14)</code>:{" "}
         <code class="cn-code-inline">--neu-shade</code> at .72 for the cast,{" "}
-        <code class="cn-code-inline">--neu-contact</code> at .8 for a 1px
-        edge where the surface meets the ground, 1.18:1 on the page,{" "}
-        <code class="cn-code-inline">--neu-near</code> at .8 for a tight
-        1px 2px 2px shadow that darkens the first pixels past the bottom and
-        right edges, and <code class="cn-code-inline">--neu-dark</code> at
+        <code class="cn-code-inline">--neu-contact</code>, the full ink at
+        1.22:1 on the page, for a 1px edge where the surface meets the
+        ground, <code class="cn-code-inline">--neu-near</code> at .8 for a
+        2px 3px 4px shadow that lays a solid 3 to 4px dark foot along the
+        bottom and right edges, and <code class="cn-code-inline">--neu-dark</code> at
         .8 for a carve's dark wall, because a well's wall falls on the page.
         The raised token has four layers: contact, near shadow, cast and the
-        lit top edge. <code class="cn-code-inline">--neu-lifted</code> adds a
-        2px dark contour all round, at .7, and widens the rest: a 2px
-        contact edge, a 3px 5px 6px near shadow and a 16px 22px 40px cast,
-        for the one lead panel. The soft raise keeps contact and a short
-        cast, so every raise answers the light the same way: no raise draws
-        a top-left highlight outside its edge. Even black is only 1.28:1
-        under base, so a longer cast barely shows. The dark contour does
-        the work: it frames the{" "}
-        <code class="cn-code-inline">--edge-strong</code> hairline, 2.5:1 on
-        the page against the plain panel's 1.9:1, at 2.9:1 against the
-        contour itself. A carve's wall is one layer,{" "}
+        lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
+        the one lead panel, spends its extra darkness on the bottom and
+        right only: a 2px 3px contact in the full ink, a 4px 8px 10px near
+        shadow and an 18px 28px 48px cast. Even black is only 1.28:1 under
+        base, so a longer cast barely shows; the deeper foot does the work,
+        3px of full ink under the lead's bottom edge where a plain panel
+        has 1px. Nothing darkens its top and left, because a dark line all
+        round reads as a heavier outline, not as height. The soft raise
+        keeps contact and a short cast, so every raise answers the light
+        the same way: no raise draws a top-left highlight outside its edge.
+        A carve's wall is one layer,{" "}
         <code class="cn-code-inline">--neu-dark</code> at 3px 3px 8px, or
         crust halfway to black at .5 and 2px 2px 5px for the soft carve.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> deepens the
@@ -282,12 +286,12 @@ export default function DepthPage() {
         code={`/* The shadow base: crust taken halfway to black */
 --neu-shade:   rgb(8 8 14 / .72);   /* the cast */
 --neu-ink:     rgb(8 8 14);         /* the default plate */
---neu-contact: rgb(8 8 14 / .8);    /* the 1px edge where a surface meets the ground */
---neu-near:    rgb(8 8 14 / .8);    /* the tight shadow just past the contact */
+--neu-contact: var(--neu-ink);      /* the 1px edge where a surface meets the ground */
+--neu-near:    rgb(8 8 14 / .8);    /* the dark foot just past the contact */
 --neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
 
---neu-raised:      1px 1px 0 var(--neu-contact), 1px 2px 2px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
---neu-lifted:      0 0 0 2px rgb(8 8 14 / .7), 2px 2px 0 1px var(--neu-contact), 3px 5px 6px var(--neu-near), 16px 22px 40px var(--neu-shade), var(--cn-lit-edge);
+--neu-raised:      1px 1px 0 var(--neu-contact), 2px 3px 4px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+--neu-lifted:      2px 3px 0 var(--neu-contact), 4px 8px 10px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
 --neu-inset:       inset 3px 3px 8px var(--neu-dark);
 --neu-inset-soft:  inset 2px 2px 5px rgb(8 8 14 / .5);

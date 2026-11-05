@@ -20,11 +20,7 @@ export default function BannerPage() {
         The glyph, tint and edge derive from the{" "}
         <code class="cn-code-inline">--tone</code> contract prop, so a single{" "}
         <code class="cn-code-inline">.cn-tone-*</code> utility switches the whole
-        band. The message itself is{" "}
-        <code class="cn-code-inline">--cn-fg-body</code>, so a sentence stays
-        text-colored like every other sentence, 8.7:1 on a danger tint. A
-        status tone also swaps in its ladder and its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
-        The tint needs the edge to hold its shape on the base ground.
+        band.
       </p>
 
       <Demo title="Status tones: the glyph comes from CSS" classes="banner cn-tone-danger · -warning · -success · -info > text">
@@ -41,6 +37,14 @@ export default function BannerPage() {
           A newer version of this report is available.
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        The message itself is{" "}
+        <code class="cn-code-inline">--cn-fg-body</code>, so a sentence stays
+        text-colored like every other sentence, 8.7:1 on a danger tint. A
+        status tone also swaps in its ladder and its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
+        The tint needs the edge to hold its shape on the base ground.
+      </p>
 
       <p class="cn-copy">
         A banner with <code class="cn-code-inline">.cn-tone-danger</code>,{" "}

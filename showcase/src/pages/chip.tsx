@@ -74,7 +74,7 @@ export default function ChipPage() {
   return (
     <Doc
       title="Chip"
-      lede="Two small metadata marks. The outlined .chip holds facts such as counts and versions. The tinted .tag holds a semantic state through --tone. Both stay on one line."
+      lede="Two small metadata marks. The outlined .chip holds facts such as counts and versions. The carved .tag holds a semantic state through --tone. Both stay on one line."
     >
       <Demo title="Chip" classes="chip" row>
         <span class="chip">v2.4.1</span>
@@ -248,7 +248,7 @@ export default function ChipPage() {
           {
             name: ".tag",
             values: "span",
-            notes: "Tinted status tag: 4px padding, the chip radius, label role. The ground is --tint and the hairline --tone-edge, mixed from --tone, or the status ladder under a status .cn-tone-*. Always holds a word that states the status.",
+            notes: "Status tag: 4px padding, the chip radius, label role. A shallow carve in --tone-wash with no outline: --neu-inset-soft, darkness only, no lip. The wash mixes from --tone, or the status ladder under a status .cn-tone-*. Tone text on it is 5.7:1 (red) to 9.4:1 (yellow) on the page. Always holds a word that states the status.",
           },
           {
             name: ".tag svg",

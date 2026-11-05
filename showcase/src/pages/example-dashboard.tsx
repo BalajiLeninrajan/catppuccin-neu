@@ -91,6 +91,7 @@ const COLLECTED = [
   { month: "Sep", values: [74.5, 39.3, 13.1] },
 ];
 const CHART_MAX = 80;
+const COLLECTED_TOTAL = COLLECTED.reduce((sum, row) => sum + row.values.reduce((a, b) => a + b, 0), 0);
 
 function InvoiceTable() {
   const [view, setView] = useState(0);
@@ -258,15 +259,19 @@ export default function DashboardExample() {
               ])}
             </div>
           </figure>
+          <div class="panel-footer">
+            <span class="cn-meta">Total, Jun to Sep</span>
+            <strong class="cn-name">${COLLECTED_TOTAL.toFixed(1)}k</strong>
+          </div>
         </section>
         <div class="cn-stack cn-gap-24 cn-span-5">
         <aside class="panel is-tilted" aria-labelledby="dash-summary">
           <div class="panel-body cn-stack cn-gap-12">
             <h2 id="dash-summary" class="cn-name cn-m-0">Where September stands</h2>
             <p class="cn-copy cn-m-0">
-              Card carried the month, up $12.5k on August. Bank transfers
-              slipped $3.8k, their first drop in four months, so the gain
-              rests on one method.
+              Card carried the month, up $12.5k on August to $74.5k. Bank
+              transfers slipped $3.8k, their first drop since June, so nearly
+              all of the gain rests on one method.
             </p>
             <a class="btn-text" href="#" onClick={(e) => e.preventDefault()}>
               Read the month-end report
@@ -284,23 +289,14 @@ export default function DashboardExample() {
                 <strong>$1,120</strong>
               </div>
               <div class="stat">
-                <span>Failed payments</span>
+                <span>Failed</span>
                 <strong>3</strong>
+                <p class="cn-meta cn-m-0">$2,340 to retry</p>
               </div>
             </div>
-            <div class="cn-divide">
-              <div class="stat is-inline cn-py-8">
-                <span>Paid in full</span>
-                <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>
-              </div>
-              <div class="stat is-inline cn-py-8">
-                <span>Disputes open</span>
-                <b>None</b>
-              </div>
-              <div class="stat is-inline cn-py-8">
-                <span>Next payout</span>
-                <b>Oct 01</b>
-              </div>
+            <div class="stat is-inline cn-py-8">
+              <span>Paid in full</span>
+              <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>
             </div>
           </div>
         </section>

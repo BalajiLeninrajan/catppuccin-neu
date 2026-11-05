@@ -41,15 +41,7 @@ export default function PageFurniturePage() {
       lede="The pieces that frame a page: the header, the topbar, the page column, the sidebar, the footer and the live dot."
     >
       <p class="cn-copy">
-        The furniture recipes never style bare elements.{" "}
-        <code class="cn-code-inline">.topbar</code> goes on a{" "}
-        <code class="cn-code-inline">header</code>,{" "}
-        <code class="cn-code-inline">.page-main</code> on{" "}
-        <code class="cn-code-inline">main</code> and{" "}
-        <code class="cn-code-inline">.page-footer</code> on a{" "}
-        <code class="cn-code-inline">footer</code>. The first focusable element
-        on the page is a <a href="/prose">skip link</a> to{" "}
-        <code class="cn-code-inline">main</code>.
+        The furniture recipes never style bare elements.
       </p>
 
       <Demo title="Page header" classes="cn-display · lede">
@@ -62,6 +54,17 @@ export default function PageFurniturePage() {
           </p>
         </header>
       </Demo>
+
+      <p class="cn-copy">
+        <code class="cn-code-inline">.topbar</code> goes on a{" "}
+        <code class="cn-code-inline">header</code>,{" "}
+        <code class="cn-code-inline">.page-main</code> on{" "}
+        <code class="cn-code-inline">main</code> and{" "}
+        <code class="cn-code-inline">.page-footer</code> on a{" "}
+        <code class="cn-code-inline">footer</code>. The first focusable element
+        on the page is a <a href="/prose">skip link</a> to{" "}
+        <code class="cn-code-inline">main</code>.
+      </p>
 
       <p class="cn-copy">
         A page header is a display title and a lede. The title names the

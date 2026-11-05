@@ -9,12 +9,7 @@ export default function EmptyStatePage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.empty-state</code> is a centered flex column
         with a floor from <code class="cn-code-inline">--empty-h</code> (260px, 120px
-        compact), so an empty list or panel body keeps its height. The recipe
-        styles three children. An <code class="cn-code-inline">svg</code> before the
-        title sits in a 56px round carve on the soft inset.{" "}
-        <code class="cn-code-inline">strong</code> is the title,{" "}
-        <code class="cn-code-inline">span</code> the supporting line, and anything
-        else joins the 8px stack.
+        compact), so an empty list or panel body keeps its height.
       </p>
 
       <Demo title="Glyph, title, description, action" classes="empty-state">
@@ -30,6 +25,15 @@ export default function EmptyStatePage() {
           </button>
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        The recipe
+        styles three children. An <code class="cn-code-inline">svg</code> before the
+        title sits in a 56px round carve on the soft inset.{" "}
+        <code class="cn-code-inline">strong</code> is the title,{" "}
+        <code class="cn-code-inline">span</code> the supporting line, and anything
+        else joins the 8px stack.
+      </p>
 
       <Demo title="With a dashed action" classes="empty-state">
         <div class="empty-state">

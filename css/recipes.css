@@ -25,14 +25,15 @@
    the hairline show where it ends. */
 .panel .panel { box-shadow: var(--neu-raised-soft), var(--cn-lit-edge); }
 /* The lead panel: the one a view is about, one per view. It sits on the
-   page color like every panel and stands higher by darkness: the
-   --edge-strong hairline inside --neu-lifted's 2px dark contour, over a
-   wider contact edge, a deeper near shadow and a longer cast. It keeps the
-   plain lit edge, since a bright line is never a depth cue. Its band title
-   takes --lead-title-size at the heading weight (see the panel-header rule
-   below). A cast barely shows on a dark page, so the contour and the title
-   carry the rank. It outranks its neighbors by height and by its title,
-   not by an ornament. */
+   page color like every panel and stands higher by darkness on the side
+   away from the light: --neu-lifted's foot on the bottom and right is
+   about twice a plain panel's, a 2px 3px full-ink contact over a deeper
+   near shadow and a longer cast. The --edge-strong hairline is its one
+   step in line strength; it keeps the plain lit edge and draws no outline
+   all round, since neither a bright line nor a heavier outline reads as
+   height. Its band title takes --lead-title-size at the heading weight
+   (see the panel-header rule below). It outranks its neighbors by height
+   and by its title, not by an ornament. */
 .panel.is-lead {
   border-color: var(--edge-strong);
   box-shadow: var(--neu-lifted);
@@ -79,8 +80,8 @@
 }
 /* The lead panel's band title is a step larger and at the heading weight,
    so its rank reads from the title as well as the edges. --lead-title-size
-   is the heading size at default and cozy density and the title size at
-   compact. */
+   is the heading size at default and cozy density, and the title size at
+   compact and at 655px and under, where display-sm drops under 34px. */
 .panel.is-lead > .panel-header :is(h2, h3) {
   font-size: var(--lead-title-size);
   font-weight: var(--cn-type-heading-weight);
@@ -830,17 +831,21 @@ a:active > .accent-card {
 .chip.is-glyph { padding: var(--space-2); font-size: 0; }
 .chip.is-glyph > svg { width: 16px; height: 16px; }
 
-/* Tinted status tag: pass a semantic color via --tone (.cn-tone-*). The
-   tint keeps its hairline edge. */
+/* Status tag: pass a semantic color via --tone (.cn-tone-*). A shallow
+   carve in --tone-wash, no outline: the soft carve is darkness only, so
+   the tag sits just under the surface like a banner, with no lip. The
+   border stays transparent so forced colors still draws one. Tone text on
+   the wash is 5.7:1 (red) to 9.4:1 (yellow) on the page. */
 /* A tone never carries meaning alone: the tag's word states the status.
    Danger and warning also lead with a glyph; other tones may. */
 .tag {
   padding: var(--space-1);
   display: inline-flex; align-items: center; gap: var(--space-1);
   color: var(--tone);
-  border: 1px solid var(--tone-edge);
+  border: 1px solid transparent;
   border-radius: var(--cn-radius-chip);
-  background: var(--tint);
+  background: var(--tone-wash);
+  box-shadow: var(--neu-inset-soft);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 .tag > svg { width: 12px; height: 12px; flex: 0 0 auto; }
@@ -1456,6 +1461,20 @@ a:hover:not(:active) > .accent-card {
    header's button sits against that edge too. */
 .data-table :is(th, td).is-num { text-align: end; }
 .data-table th.is-num[aria-sort] > button { flex-direction: row-reverse; }
+/* Inline edit: an .input in a table cell. It has no label above it, so it
+   takes its name from the column header through aria-labelledby and,
+   alone among fields, keeps a quiet even surface-1 hairline at rest,
+   1.8:1 on the page. The soft carve stays darkness only. :where() keeps
+   the selector as light as .input, so hover, focus, validation, disabled
+   and read-only still win. */
+:where(.data-table td) .input {
+  --cn-field-ring: var(--cn-cell-field-ring);
+  height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  border-radius: var(--cn-radius-control);
+  box-shadow: var(--neu-inset-soft), var(--cn-field-ring);
+  font-size: var(--cell-font-size);
+}
 /* Emphasized name cell: full-strength primary line, quiet secondary line. */
 .data-table .cell-name strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
 /* The meta line follows the cell size: 14px at default and cozy, 13px at
@@ -1515,8 +1534,8 @@ a:hover:not(:active) > .accent-card {
 }
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
-  /* Its own step, 1.17:1 on the page: past the open carve's 1.08:1 and
-     1.30:1 under a selected row's wash. */
+  /* Its own step, 1.27:1 on the page: past the 1.24:1 hover and the open
+     carve's 1.08:1, and 1.20:1 under a selected row's wash. */
   background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
 }
 /* Selected row: the engaged treatment, the wash with the full press. */
@@ -2011,6 +2030,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
+    /* The same 1.27:1 row hover as the desktop table. */
     background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {

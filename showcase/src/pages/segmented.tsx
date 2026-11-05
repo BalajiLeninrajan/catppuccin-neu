@@ -24,11 +24,7 @@ export default function SegmentedPage() {
     >
       <p class="cn-copy">
         The recipe styles every direct child of <code class="cn-code-inline">.segmented</code>, so the same class works on
-        a row of buttons or a group of labels wrapping visually hidden radios. Mark the selection with{" "}
-        <code class="cn-code-inline">aria-pressed="true"</code> on a button, or{" "}
-        <code class="cn-code-inline">.active</code> on a label. The selected option sits pressed in on the mauve wash,
-        inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides. The wash is mauve 20% into
-        base, 1.52:1, and the rim holds 3.5:1 on it, so the choice outweighs the raised options beside it.
+        a row of buttons or a group of labels wrapping visually hidden radios.
       </p>
 
       <Demo title="Button form" classes='segmented › button[aria-pressed="true"]'>
@@ -46,6 +42,14 @@ export default function SegmentedPage() {
           ))}
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        Mark the selection with{" "}
+        <code class="cn-code-inline">aria-pressed="true"</code> on a button, or{" "}
+        <code class="cn-code-inline">.active</code> on a label. The selected option sits pressed in on the mauve wash,
+        inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides. The wash is mauve 20% into
+        base, 1.52:1, and the rim holds 3.5:1 on it, so the choice outweighs the raised options beside it.
+      </p>
 
       <p class="cn-copy">
         Use buttons for switches the app reacts to at once. Set{" "}

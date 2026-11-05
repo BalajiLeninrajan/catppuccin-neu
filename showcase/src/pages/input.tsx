@@ -37,12 +37,8 @@ export default function InputPage() {
       lede="Text inputs, selects and textareas are carved wells. The background stays transparent and one dark inner wall presses the well into the parent ground. Hover and focus ring it."
     >
       <p class="cn-copy">
-        An input never paints its own background. On a panel it is carved from
-        the panel, on the page from the page. Focus adds no border: the
-        text-colored outline stands off the carve, so the field never shifts or
-        reflows on focus. Labels are small sentence-case
-        sans. Values are sans with tabular numerals, so amounts and dates
-        align in forms the same way they do in tables.
+        An input never paints its own background, so it is carved from
+        whatever it sits on.
       </p>
 
       <Demo title="Field" classes="field">
@@ -66,23 +62,23 @@ export default function InputPage() {
         </div>
       </Demo>
 
+      <p class="cn-copy">
+        Focus adds no border: the outline stands off the carve, so the field
+        never shifts or reflows on focus. Labels are small sentence-case sans.
+        Values are sans with tabular numerals, so amounts and dates align in
+        forms the same way they do in tables.
+      </p>
+
       <h2 class="cn-title">The carve at rest</h2>
       <p class="cn-copy">
-        A carve is darkness only. The field's wall falls from the top left,{" "}
-        <code class="cn-code-inline">inset 3px 3px 8px</code> of crust halfway
-        to black, and its bottom and right walls fade into the ground with no
-        light lip, because a bright line there reads as a bevel. At rest a
-        field has no 3:1 edge. WCAG 1.4.11 asks for 3:1 on what a reader needs
-        to identify a control, and a field is identified by its label above
-        it and the dark well under the label, not by its outline. Once the
-        reader reaches for it, the bounds show at 3:1: hover closes{" "}
-        <code class="cn-code-inline">--cn-field-hover-ring</code>, a full 1px{" "}
-        <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on base
-        and on a panel and 3.5:1 in a dialog, and focus draws the 2px focus
-        ring at 11.3:1. Under{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code>{" "}
-        <code class="cn-code-inline">--cn-field-ring</code> closes into a full
-        overlay-2 ring at rest, 5.8:1. Always give a field a visible label.
+        A carve is darkness only. The field's wall falls from the top left and
+        its bottom and right walls fade into the ground with no light lip,
+        because a bright line there reads as a bevel. At rest a field has no
+        edge: its label above and the dark well under the label identify it.
+        Once the reader reaches for it the bounds show, as a full ring on hover
+        and the focus ring on focus. Always give a field a visible label; a
+        field in a table cell has none, so it takes the{" "}
+        <a class="btn-text" href="/table">inline edit</a> instead.
       </p>
 
       <Demo title="On the page and on a panel" classes="--cn-field-ring · --cn-field-hover-ring">
@@ -95,15 +91,10 @@ export default function InputPage() {
       </Demo>
 
       <p class="cn-copy">
-        Placeholders are <code class="cn-code-inline">--cn-fg-placeholder</code>{" "}
-        (overlay-2), the floor for readable text: 5.8:1 on the page and on a
-        panel, and 4.6:1 in a dialog. Help text sits a stop above, on{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code> (subtext-0), 7.4:1
-        on the page, and the label a stop above that, on{" "}
-        <code class="cn-code-inline">--cn-fg-soft</code> (subtext-1), 9.3:1. The value is{" "}
-        <code class="cn-code-inline">--cn-fg</code>, so a filled field never
-        reads as an empty one. A placeholder is an example, never the only
-        copy of an instruction.
+        A placeholder sits on the floor for readable text, help text a stop
+        above it and the label a stop above that. The value is full text
+        color, so a filled field never reads as an empty one. A placeholder is
+        an example, never the only copy of an instruction.
       </p>
 
       <Demo title="Bare input" classes="input">
@@ -287,13 +278,13 @@ export default function InputPage() {
             name: ".field",
             values: "wrapper around label + input/select/textarea",
             notes:
-              "Styles its label (small sentence-case sans) and any native control inside it.",
+              "Styles its label (small sentence-case sans in --cn-fg-soft, subtext-1, 9.3:1 on base) and any native control inside it.",
           },
           {
             name: ".input",
             values: "on a bare input",
             notes:
-              "The carved well: one dark wall, no edge at rest, a --control-edge ring on hover. Sans 500 14px, tabular numerals for amounts and dates.",
+              "The carved well: one dark wall, --neu-inset (inset 3px 3px 8px of crust halfway to black), no edge at rest, a --control-edge ring on hover. Sans 500 14px in --cn-fg, tabular numerals for amounts and dates.",
           },
           {
             name: ".input-lg",
@@ -325,7 +316,7 @@ export default function InputPage() {
           {
             name: ":focus",
             values: "on the control",
-            notes: "The global outline, 2px --cn-focus at a 3px offset, on pointer and keyboard focus. No box-shadow ring.",
+            notes: "The global outline, 2px --cn-focus at a 3px offset, on pointer and keyboard focus: 11.3:1 on base. No box-shadow ring.",
           },
           {
             name: "--cn-field-ring",
@@ -347,7 +338,7 @@ export default function InputPage() {
           {
             name: ".field small",
             values: "helper or message line",
-            notes: "The meta role under the control in --cn-fg-muted (subtext-0). In an error or warning it moves up to --cn-fg-body and leads with the 12px glyph in the tone. Link it with aria-describedby.",
+            notes: "The meta role under the control in --cn-fg-muted (subtext-0, 7.4:1 on base). In an error or warning it moves up to --cn-fg-body and leads with the 12px glyph in the tone. Link it with aria-describedby.",
           },
           {
             name: "--control-h",

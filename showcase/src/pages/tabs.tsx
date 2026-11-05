@@ -90,7 +90,15 @@ export default function TabsPage() {
     >
       <p class="cn-copy">
         Tabs are the reverse of the{" "}
-        <a href="/segmented">segmented control</a>. A segmented choice is a
+        <a href="/segmented">segmented control</a>.
+      </p>
+
+      <Demo title="Tabs with panels" classes='tabs[role="tablist"] > [role="tab"][aria-selected="true"]'>
+        <TabsDemo name="views" />
+      </Demo>
+
+      <p class="cn-copy">
+        A segmented choice is a
         setting, so the chosen option presses in. A tab is a view, so the
         chosen tab lifts toward the reader on{" "}
         <code class="cn-code-inline">--cn-surface-raised</code> with the soft raise,
@@ -104,10 +112,6 @@ export default function TabsPage() {
         surface-2 ring only under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code>.
       </p>
-
-      <Demo title="Tabs with panels" classes='tabs[role="tablist"] > [role="tab"][aria-selected="true"]'>
-        <TabsDemo name="views" />
-      </Demo>
 
       <p class="cn-copy">
         Click a tab, or focus the selected one and use the arrow keys. Focus

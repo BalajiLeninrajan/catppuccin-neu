@@ -11,46 +11,7 @@ export default function TypographyPage() {
       <p class="cn-copy">
         Each role is four tokens, <code class="cn-code-inline">--cn-type-&lt;role&gt;-size</code>,{" "}
         <code class="cn-code-inline">-weight</code>, <code class="cn-code-inline">-leading</code> and{" "}
-        <code class="cn-code-inline">-tracking</code>, and one class that reads them. The weights are 400, 500, 600 and
-        700. 700 is for the display and the heading, and the wordmark reads the
-        display weight. The title is 600, so a panel title never outweighs the
-        page heading. Names, titles and buttons (<code class="cn-code-inline">.btn</code>) are 600.
-        Chrome, the label and the microlabel, is 500, and meta is 400, so the
-        two 13px roles read apart by weight, leading and ink: the label is
-        subtext-1 and meta subtext-0. 600 marks
-        what a reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
-        heading and value-lg, so a stat value outweighs the panel title above
-        it. At 520px both step down: the value to 18px and the band title to
-        16px. Tracking tightens with size: 0 through 18px, -0.01em
-        at 20px, -0.02em at 24px, -0.025em at 28 and 32px, and -0.03em at
-        display sizes. Numeric roles keep{" "}
-        <code class="cn-code-inline">tabular-nums</code> on the sans face, so figures align in
-        columns without mono. Only the microlabel is uppercase.
-      </p>
-
-      <p class="cn-copy">
-        The root sets <code class="cn-code-inline">font-optical-sizing: auto</code>,
-        so Inter's optical-size axis tightens display sizes and opens small
-        ones. Link Inter with that axis,{" "}
-        <code class="cn-code-inline">Inter:opsz,wght@14..32,100..900</code>.
-        Paragraphs and list items wrap with{" "}
-        <code class="cn-code-inline">text-wrap: pretty</code>, which keeps a
-        lone word off the last line. The display and heading roles balance instead.
-      </p>
-
-      <p class="cn-copy">
-        Every size is rem, so the reader's browser font-size setting scales
-        every role. The px on this page are at the 16px default. The
-        microlabel is the one 12px role; the label and meta are 13px. The
-        name is the ui role in <code class="cn-code-inline">--cn-fg</code>:
-        its tokens alias the ui tokens, so it is the same 14px at 600, set
-        apart by its color. Body copy is 16px, and
-        compact density steps it to 15px. Display titles set at 1.08 leading.
-        The micro, label and ui roles lead at 1.25, so a label that wraps, or
-        a reader's text-spacing override, never runs one line into the
-        next.
-        Inside <code class="cn-code-inline">.page-main.is-reading</code> the lede
-        sets at 20px for long prose.
+        <code class="cn-code-inline">-tracking</code>, and one class that reads them.
       </p>
 
       <Demo title="cn-display · 700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.03em · balance" classes="cn-display">
@@ -162,6 +123,49 @@ export default function TypographyPage() {
         </div>
       </Demo>
 
+      <h2 class="cn-title">Weights, sizes and tracking</h2>
+      <p class="cn-copy">
+        The weights are 400, 500, 600 and 700. 700 is for the display and
+        the heading, and the wordmark reads the display weight. The title is 600, so a panel title never outweighs the
+        page heading. Names, titles and buttons (<code class="cn-code-inline">.btn</code>) are 600.
+        Chrome, the label and the microlabel, is 500, and meta is 400, so the
+        two 13px roles read apart by weight, leading and ink: the label is
+        subtext-1 and meta subtext-0. 600 marks
+        what a reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
+        heading and value-lg, so a stat value outweighs the panel title above
+        it. At 520px both step down: the value to 18px and the band title to
+        16px. Tracking tightens with size: 0 through 18px, -0.01em
+        at 20px, -0.02em at 24px, -0.025em at 28 and 32px, and -0.03em at
+        display sizes. Numeric roles keep{" "}
+        <code class="cn-code-inline">tabular-nums</code> on the sans face, so figures align in
+        columns without mono. Only the microlabel is uppercase.
+      </p>
+
+      <p class="cn-copy">
+        The root sets <code class="cn-code-inline">font-optical-sizing: auto</code>,
+        so Inter's optical-size axis tightens display sizes and opens small
+        ones. Link Inter with that axis,{" "}
+        <code class="cn-code-inline">Inter:opsz,wght@14..32,100..900</code>.
+        Paragraphs and list items wrap with{" "}
+        <code class="cn-code-inline">text-wrap: pretty</code>, which keeps a
+        lone word off the last line. The display and heading roles balance instead.
+      </p>
+
+      <p class="cn-copy">
+        Every size is rem, so the reader's browser font-size setting scales
+        every role. The px on this page are at the 16px default. The
+        microlabel is the one 12px role; the label and meta are 13px. The
+        name is the ui role in <code class="cn-code-inline">--cn-fg</code>:
+        its tokens alias the ui tokens, so it is the same 14px at 600, set
+        apart by its color. Body copy is 16px, and
+        compact density steps it to 15px. Display titles set at 1.08 leading.
+        The micro, label and ui roles lead at 1.25, so a label that wraps, or
+        a reader's text-spacing override, never runs one line into the
+        next.
+        Inside <code class="cn-code-inline">.page-main.is-reading</code> the lede
+        sets at 20px for long prose.
+      </p>
+
       <h2 class="cn-title">Bare headings</h2>
       <p class="cn-copy">
         A heading with no class still takes a role. The rules sit at zero
@@ -177,7 +181,8 @@ export default function TypographyPage() {
         <code class="cn-code-inline">--band-title-size</code> instead: 20px by
         default and 14px at cozy and compact density. The lead panel's title
         takes <code class="cn-code-inline">--lead-title-size</code> at the
-        heading weight: 28px at default and cozy, 20px at compact.
+        heading weight: 28px at default and cozy, and 20px at compact and at
+        655px and under, where display-sm drops under 34px.
         At 520px both step
         down to the body size, 16px, so a stat value still outweighs them. A class still sets
         the size where the outline level and the look differ, as in{" "}

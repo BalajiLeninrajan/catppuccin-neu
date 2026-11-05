@@ -119,9 +119,9 @@ export default function TablePage() {
         the engaged wash with a deeper press. Hovering a row presses it in, a
         dark top edge drawn as a gradient on each cell so the row has no
         seams, with no lit edge below, on mauve at{" "}
-        <code class="cn-code-inline">--cn-step-row</code> (8%): 1.17:1 on the
-        page, clear of the open accordion's 1.08:1 and 1.30:1 under a
-        selected row.
+        <code class="cn-code-inline">--cn-step-row</code> (12%): 1.27:1 on the
+        page, past the 1.24:1 hover and the open accordion's 1.08:1, and
+        1.20:1 under a selected row.
       </p>
 
       <p class="cn-copy">
@@ -202,6 +202,45 @@ export default function TablePage() {
         inset shadow, because a collapsed border would scroll away.
       </p>
 
+      <Demo title="Inline edit: a field in a cell" classes='table-scroll > data-table > td > input[aria-labelledby]'>
+        <div class="panel" style="width:min(560px,100%)">
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col" id="seat-team">Team</th>
+                  <th scope="col" id="seat-count" class="is-num">Seats</th>
+                  <th scope="col" id="seat-owner">Billing contact</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[["Payments", "14", "maya@example.com"], ["Support", "9", "jonah@example.com"], ["Identity", "6", ""]].map(([team, seats, owner], i) => (
+                  <tr key={team}>
+                    <td id={`seat-row-${i}`}>{team}</td>
+                    <td class="is-num">
+                      <input class="input" type="number" inputMode="numeric" value={seats} aria-labelledby={`seat-count seat-row-${i}`} style="max-width:6rem;text-align:end" />
+                    </td>
+                    <td>
+                      <input class="input" type="email" value={owner} placeholder="name@example.com" aria-labelledby={`seat-owner seat-row-${i}`} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        An <code class="cn-code-inline">.input</code> in a cell is the inline
+        edit: the small control height and the soft carve, so the row keeps
+        its rhythm. A cell field has no label above it, so it takes its name
+        from the column header and the row through{" "}
+        <code class="cn-code-inline">aria-labelledby</code>, and it alone
+        keeps a quiet hairline at rest so an empty one still shows where it
+        is. Hover and focus ring it like any field.
+      </p>
+
       <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
@@ -236,7 +275,8 @@ export default function TablePage() {
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
-          { name: "tbody tr:hover", values: "state", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (8%) into base, 1.17:1 on the page, a step under a selected row." },
+          { name: "tbody tr:hover", values: "state", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (12%) into base, 1.27:1 on the page with --cn-fg-soft at 7.3:1, a step under a selected row." },
+          { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest --cn-cell-field-ring draws an even surface-1 hairline, 1.8:1 on the page, never a light lip. Name it with aria-labelledby pointing at the column header and the row's name cell." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },
           { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. The last trailing cell sits on the title line, the one before it under it. Keep its data-label for the desktop header." },

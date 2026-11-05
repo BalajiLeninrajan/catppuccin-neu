@@ -70,12 +70,7 @@ export default function ModalPage() {
     >
       <p class="cn-copy">
         Put <code class="cn-code-inline">.modal</code> on a{" "}
-        <code class="cn-code-inline">&lt;dialog&gt;</code>. The platform gives you the
-        top layer, focus trapping, Escape, and{" "}
-        <code class="cn-code-inline">::backdrop</code>, which the recipe draws as the
-        blurred crust scrim. The modal fades in, rises 8px and scales up from
-        .98. It leaves on the ease-in in .14s. Add one listener if a backdrop
-        click should close it.
+        <code class="cn-code-inline">&lt;dialog&gt;</code>.
       </p>
 
       <Demo title="Live demo" classes="dialog.modal">
@@ -98,6 +93,15 @@ export default function ModalPage() {
           </div>
         </ModalDemo>
       </Demo>
+
+      <p class="cn-copy">
+        The platform gives you the
+        top layer, focus trapping, Escape, and{" "}
+        <code class="cn-code-inline">::backdrop</code>, which the recipe draws as the
+        blurred crust scrim. The modal fades in, rises 8px and scales up from
+        .98. It leaves on the ease-in in .14s. Add one listener if a backdrop
+        click should close it.
+      </p>
 
       <Demo title="Wide" classes="dialog.modal.is-wide">
         <ModalDemo trigger="Review members" triggerClass="btn btn-secondary" title="Review members" action="Save roles" wide>

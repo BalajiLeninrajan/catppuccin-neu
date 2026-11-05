@@ -40,10 +40,7 @@ export default function ButtonPage() {
       lede="One base class and four variants. Primary and secondary rest on a plate and half-slide onto it when pressed. Ghost and icon buttons sink into a soft inset."
     >
       <p class="cn-copy">
-        Compose the base class with a variant: <code class="cn-code-inline">class="btn btn-primary"</code>. Labels are
-        always sans. Heights come from the density knobs, so every variant shrinks together under{" "}
-        <code class="cn-code-inline">data-density="cozy"</code> (38px) or{" "}
-        <code class="cn-code-inline">data-density="compact"</code> (28px).
+        Compose the base class with a variant: <code class="cn-code-inline">class="btn btn-primary"</code>.
       </p>
 
       <Demo title="Primary, live and disabled" classes="btn btn-primary · btn btn-primary[disabled]" row>
@@ -54,6 +51,11 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
+        Labels are always sans. Heights come from the density knobs, so every
+        variant shrinks together under cozy or compact density.
+      </p>
+
+      <p class="cn-copy">
         One primary action per view. Its plate is mauve mixed into surface-0, the one button plate that is not crust.
         The fill is a mauve ramp lit from the top left, with film grain rising from the bottom right, and a
         white rim runs along its top edge. Set <code class="cn-code-inline">--grain: 0</code> to drop the grain.
@@ -62,13 +64,8 @@ export default function ButtonPage() {
       <p class="cn-copy">
         A disabled primary, through <code class="cn-code-inline">disabled</code> or{" "}
         <code class="cn-code-inline">aria-disabled="true"</code>, goes flat and sinks. It loses the plate, ramp,
-        grain and gloss, and takes the <code class="cn-code-inline">--cn-surface-sunken</code> fill pressed in by{" "}
-        <code class="cn-code-inline">--neu-inset-soft</code> inside a plain{" "}
-        <code class="cn-code-inline">--edge</code> border, like a disabled switch plate, with its label in{" "}
-        <code class="cn-code-inline">--cn-fg-disabled</code>, overlay-1 at 4.9:1 on that fill. It stays at full opacity. A dimmed plate reads as a
-        second primary beside the live one, and a pressed-in, unlit button never outshines a live secondary. A disabled
-        switch, checkbox or radio drops to the same <code class="cn-code-inline">--edge</code>. A busy primary keeps its fill. Every other variant drops to{" "}
-        <code class="cn-code-inline">--disabled-opacity</code> (.6) and keeps its rest shadow.
+        grain and gloss and is pressed into a darker fill, like a disabled switch plate, at full opacity. A dimmed plate reads as a
+        second primary beside the live one, and a pressed-in, unlit button never outshines a live secondary. A busy primary keeps its fill. Every other variant dims and keeps its rest shadow.
       </p>
 
       <Demo title="Secondary" classes="btn btn-secondary" row>
@@ -79,13 +76,10 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        The secondary rests on <code class="cn-code-inline">--cn-surface-raised</code>,
-        the page color, with a hairline, the lit top edge and the ink plate, crust halfway to black.
-        Hover warms the border toward mauve and lifts the fill to{" "}
-        <code class="cn-code-inline">--cn-surface-overlay</code>. The resting
-        hairline is decoration: the label identifies the button, so the edge
-        does not need 3:1. Warmed on hover it is 4.1:1 on base and 3.2:1 on
-        the overlay fill it lifts to.
+        The secondary rests on the page color with a hairline, the lit top
+        edge and the ink plate. Hover warms the border toward mauve and lifts
+        the fill to the overlay step. The resting hairline is decoration: the
+        label identifies the button, so the edge does not need 3:1.
       </p>
 
       <Demo title="Ghost" classes="btn btn-ghost" row>
@@ -115,8 +109,7 @@ export default function ButtonPage() {
         <code class="cn-code-inline">aria-pressed="true"</code>, <code class="cn-code-inline">aria-current</code> or{" "}
         <code class="cn-code-inline">aria-expanded="true"</code> (a trigger whose{" "}
         <a href="/menu">menu</a> is open) it takes the engaged state: pressed in on the
-        mauve wash, inside an <code class="cn-code-inline">--engaged-edge</code> rim. The wash is mauve 20% into
-        base, 1.52:1, a step past the 1.24:1 hover, so the fill and the rim both tell a toggled button from a
+        mauve wash, inside a mauve rim, a step past the hover, so the fill and the rim both tell a toggled button from a
         hovered one.
         An engaged ghost keeps its wash and rim under the pointer, so hovering
         a toggled button never makes it look untoggled.
@@ -215,8 +208,8 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        Icon buttons are square at the small control height and flat until hovered. The resting glyph is{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0 at 7.4:1, because an icon alone is the
+        Icon buttons are square at the small control height and flat until hovered. The resting glyph is
+        the muted text color, not the faint one, because an icon alone is the
         control's only visible label. On hover they tint toward{" "}
         <code class="cn-code-inline">--tone</code>. Set it with a <code class="cn-code-inline">.cn-tone-*</code> class so
         destructive and informational actions read differently. Always give them an{" "}
@@ -308,12 +301,12 @@ export default function ButtonPage() {
         title="Variants and knobs"
         rows={[
           { name: ".btn", values: "base class", notes: "Height --control-h, 16px inline padding, the control radius (8px), sans 600 14px. Compose with one variant." },
-          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken inside a plain --edge, --cn-fg-disabled label, no plate, ramp, grain, gloss or dimming. One per view." },
-          { name: ".btn-secondary", notes: "--cn-surface-raised fill, --edge hairline, the ink plate. Hover warms the border to mauve at --cn-step-strong and lifts the fill to --cn-surface-overlay. The default for clickables." },
-          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', notes: "Transparent until hovered, then --hover and an --edge hairline. Toggled, current or holding an open menu, it takes the engaged state: --wash, --neu-inset and the --engaged-edge rim, which hover leaves in place." },
+          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken pressed in by --neu-inset-soft inside a plain --edge, a --cn-fg-disabled label (overlay-1, 4.9:1 on that fill), no plate, ramp, grain, gloss or dimming. One per view." },
+          { name: ".btn-secondary", notes: "--cn-surface-raised fill (the page color), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong, 4.1:1 on base and 3.2:1 on the overlay, and lifts the fill to --cn-surface-overlay. The default for clickables." },
+          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', notes: "Transparent until hovered, then --hover and an --edge hairline. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base, 1.52:1, past the 1.24:1 hover), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },
-          { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted and tints toward --tone on hover. Needs aria-label." },
+          { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted (subtext-0, 7.4:1 on base) and tints toward --tone on hover. Needs aria-label." },
           { name: ".btn-text", notes: "Inline mauve text button at 13px 600; pink on hover. Held, it moves 1px." },
           { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 13px type, or the hero action at --control-h + 12px with the body size, 16px. One .is-lg per view." },
           { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },

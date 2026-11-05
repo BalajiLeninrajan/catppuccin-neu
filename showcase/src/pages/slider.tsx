@@ -62,15 +62,7 @@ export default function SliderPage() {
     >
       <p class="cn-copy">
         Put <code class="cn-code-inline">.slider</code> on an{" "}
-        <code class="cn-code-inline">input type="range"</code>. The track is the
-        progress track's carve: 7px, crust, on the soft inset. The thumb is a
-        20px raised round on <code class="cn-code-inline">--cn-surface-raised</code>{" "}
-        with the soft raise and the lit top edge, inside a 1px{" "}
-        <code class="cn-code-inline">--control-edge</code>: overlay-1, 4.4:1
-        on the page and on a raised fill, and 3.5:1 on an overlay, so the
-        thumb clears 3:1 wherever the slider sits. On hover its edge warms to{" "}
-        <code class="cn-code-inline">--engaged-edge</code>, and held it shrinks
-        to .92 and springs back on release.
+        <code class="cn-code-inline">input type="range"</code>.
       </p>
 
       <Demo title="With a label and an output" classes='input[type="range"].slider[style="--value: …"] + output'>
@@ -93,6 +85,18 @@ export default function SliderPage() {
           format={(v) => `${v}%`}
         />
       </Demo>
+
+      <p class="cn-copy">
+        The track is the
+        progress track's carve: 7px, crust, on the soft inset. The thumb is a
+        20px raised round on <code class="cn-code-inline">--cn-surface-raised</code>{" "}
+        with the soft raise and the lit top edge, inside a 1px{" "}
+        <code class="cn-code-inline">--control-edge</code>: overlay-1, 4.4:1
+        on the page and on a raised fill, and 3.5:1 on an overlay, so the
+        thumb clears 3:1 wherever the slider sits. On hover its edge warms to{" "}
+        <code class="cn-code-inline">--engaged-edge</code>, and held it shrinks
+        to .92 and springs back on release.
+      </p>
 
       <Demo title="Disabled" classes="slider:disabled">
         <SliderRow

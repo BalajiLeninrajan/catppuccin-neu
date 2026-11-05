@@ -139,6 +139,23 @@ export default function BehaviorPage() {
       lede="An optional module, catppuccin-neu/js, that keeps ARIA state and the keyboard model in step for tabs, menus, sliders, tooltips and toasts. The CSS never needs it to look right."
     >
       <p class="cn-copy">
+        The tabs, menu, slider and toast below run on the module, not on
+        Preact.
+      </p>
+
+      <Demo title="The module, live" classes='import { tabs, menu, slider, toast } from "catppuccin-neu/js"'>
+        <LiveDemo />
+      </Demo>
+
+      <p class="cn-copy">
+        Focus the selected tab and use the arrow keys; the disabled tab is
+        skipped. Open the menu with a click, Enter, Space or ArrowDown, and
+        close it with Escape to see focus return to the trigger. Show
+        archived toggles and keeps the menu open. Show a toast, then drag it
+        to the right: past 80px, or on a quick flick, it dismisses.
+      </p>
+
+      <p class="cn-copy">
         The recipes style ARIA state: a tab with{" "}
         <code class="cn-code-inline">aria-selected="true"</code> rises, a trigger
         with <code class="cn-code-inline">aria-expanded="true"</code> wears the
@@ -161,18 +178,6 @@ export default function BehaviorPage() {
         and installs <code class="cn-code-inline">tooltips()</code>. It wires what
         is in the page when it runs. Call it again, or wire the new widget
         directly, for markup that renders later.
-      </p>
-
-      <Demo title="The module, live" classes='import { tabs, menu, slider, toast } from "catppuccin-neu/js"'>
-        <LiveDemo />
-      </Demo>
-
-      <p class="cn-copy">
-        Focus the selected tab and use the arrow keys; the disabled tab is
-        skipped. Open the menu with a click, Enter, Space or ArrowDown, and
-        close it with Escape to see focus return to the trigger. Show
-        archived toggles and keeps the menu open. Show a toast, then drag it
-        to the right: past 80px, or on a quick flick, it dismisses.
       </p>
 
       <Props

@@ -53,12 +53,22 @@ export default function IntroductionPage() {
       title="Introduction"
       lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, neumorphic depth from a fixed top-left light source, one mauve accent. It ships as four plain CSS files."
     >
+      <p class="cn-copy">
+        Surfaces get their definition from depth, not strokes.
+      </p>
+
+      <Demo title="First look" row classes="btn btn-primary">
+        <button type="button" class="btn btn-primary">New invoice</button>
+        <button type="button" class="btn btn-secondary">Export</button>
+        <span class="chip"><span class="live-dot" aria-hidden="true" /> 3 online</span>
+        <span class="tag cn-tone-green">Paid</span>
+      </Demo>
+
       <section>
         <h2 class="cn-title">The idea</h2>
         <p class="cn-copy">
-          Surfaces get their definition from depth, not strokes. Raised panels
-          share the page color and lift off it on a contact edge, a cast
-          shadow, a lit top edge and a hairline; inputs, wells, and
+          Raised panels share the page color and lift off it on a contact
+          edge, a cast shadow, a lit top edge and a hairline; inputs, wells, and
           selected states press in with an inset. Clickable controls carry a
           flat hard-offset shadow and press with a half-slide onto it. Type is
           Inter everywhere, JetBrains Mono for code. Mauve is the one accent;
@@ -87,13 +97,6 @@ export default function IntroductionPage() {
           role moves one stop lighter.
         </p>
       </section>
-
-      <Demo title="First look" row classes="btn btn-primary">
-        <button type="button" class="btn btn-primary">New invoice</button>
-        <button type="button" class="btn btn-secondary">Export</button>
-        <span class="chip"><span class="live-dot" aria-hidden="true" /> 3 online</span>
-        <span class="tag cn-tone-green">Paid</span>
-      </Demo>
 
       <section>
         <h2 class="cn-title">Three layers, one import</h2>

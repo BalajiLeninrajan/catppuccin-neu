@@ -392,11 +392,14 @@ async function contrast() {
         if (lc < floor) out.push({ line: 1, message: `${mode}: ${fgName} on ${g} is APCA Lc ${lc.toFixed(0)}, under Lc ${floor}` });
       }
     }
-    /* A status tone's text on its own tint, over each ground. */
+    /* A status tone's text on its own tint (fields, banners) and wash
+       (tags), over each ground. */
     for (const t of TINTED) {
-      const tint = color(`var(--cn-${t}-tint)`);
-      const grounds = GROUNDS.map((g) => ({ name: `--cn-${t}-tint over ${g}`, c: tint && ground(g) && over(tint, ground(g)) }));
-      check(`--cn-${t}`, color(`var(--cn-${t})`), grounds, 4.5, `${t} text on its tint`);
+      for (const stop of ["tint", "wash"]) {
+        const fill = color(`var(--cn-${t}-${stop})`);
+        const grounds = GROUNDS.map((g) => ({ name: `--cn-${t}-${stop} over ${g}`, c: fill && ground(g) && over(fill, ground(g)) }));
+        check(`--cn-${t}`, color(`var(--cn-${t})`), grounds, 4.5, `${t} text on its ${stop}`);
+      }
     }
   }
   /* Ratios written in :root comments, read against base. Only a ratio

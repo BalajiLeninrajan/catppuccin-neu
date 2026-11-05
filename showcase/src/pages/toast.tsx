@@ -165,7 +165,17 @@ export default function ToastPage() {
       lede="A transient confirmation in a fixed corner stack. The recipe is the look and the motion; the behavior is yours."
     >
       <p class="cn-copy">
-        Two classes. <code class="cn-code-inline">.toast-stack</code> is the viewport, fixed to
+        A <code class="cn-code-inline">.toast-stack</code> holds{" "}
+        <code class="cn-code-inline">.toast</code> items; spawn a few to see
+        the pile.
+      </p>
+
+      <Demo title="Spawner, auto-dismisses after 7s" classes="toast-stack toast">
+        <ToastSpawner />
+      </Demo>
+
+      <p class="cn-copy">
+        <code class="cn-code-inline">.toast-stack</code> is the viewport, fixed to
         the bottom-right corner. Append new toasts at the bottom.{" "}
         <code class="cn-code-inline">.toast</code> is one item: a content column with a{" "}
         <code class="cn-code-inline">b</code> title over a span or p description, then trailing
@@ -216,10 +226,6 @@ export default function ToastPage() {
         swipe. The close button stays, because a swipe is a shortcut, not
         the only way out.
       </p>
-
-      <Demo title="Spawner, auto-dismisses after 7s" classes="toast-stack toast">
-        <ToastSpawner />
-      </Demo>
 
       <Demo title="At rest, one item outside its stack" row>
         <div class="toast" role="status">

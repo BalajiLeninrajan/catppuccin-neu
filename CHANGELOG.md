@@ -12,7 +12,7 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 **Color**
 - Semantic roles: `--cn-fg` (text), `-soft` (subtext-1), `-body` (subtext-1), `-muted` (subtext-0), `-placeholder` (overlay-2), `-faint` (overlay-1), `-disabled` (overlay-1), `--cn-fg-on-accent`, `--cn-interactive`, `--cn-interactive-hover`, `--cn-focus` (text) and `--cn-danger`, `-warning` (yellow), `-success`, `-info`. Recipes read roles, never palette stops, and `.cn-fg-*`, `.cn-tone-*` and the Tailwind maps expose them.
 - All 26 Mocha colors: `--flamingo`, `--maroon` and `--sapphire` join.
-- Mix steps `--cn-step-tint/-row/-wash/-engaged/-fill/-plate/-edge/-strong/-vivid` (4, 8, 12, 20, 14, 25, 40, 50, 70%) replace loose percentages. `.cn-tint-accent` mixes at `--cn-step-wash`, `.cn-edge-mauve` and `.cn-edge-accent` at `--cn-step-plate`, and the `.mark` border and live-dot halo at `--cn-step-fill`.
+- Mix steps `--cn-step-tint/-row/-wash/-engaged/-fill/-plate/-edge/-strong/-vivid` (4, 12, 12, 20, 14, 25, 40, 50, 70%) replace loose percentages. `.cn-tint-accent` mixes at `--cn-step-wash`, `.cn-edge-mauve` and `.cn-edge-accent` at `--cn-step-plate`, and the `.mark` border and live-dot halo at `--cn-step-fill`.
 - Status ladders: `--cn-<role>-tint/-wash/-edge/-border`, read through `--tint`, `--tone-wash`, `--tone-edge` and `--tone-border`.
 - Data colors: `--cn-series-1..6` (teal, yellow, mauve, peach, blue, pink, alternating cool and warm; series 1 is off mauve so a bar never reads as interactive), `--cn-ramp-1..5` and `--cn-diverge-1..5`, with Tailwind keys. The SPEC names the hue pairs that never sit side by side; status tags and banners are exempt, because they carry a word and a glyph.
 - `.bar` and `.legend-item` read `--series`, falling back to `--accent`, instead of `--tone`.
@@ -24,8 +24,8 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 **Surfaces and depth**
 - A surface ladder: sunken, band, recessed, page, raised and overlay (surface-0 90% into base, 1.27:1). Raised is base, the page color: panels and plated controls lift by the contact edge, cast, lit top edge and hairline, not by a lighter fill. Overlays float, so they keep the lighter fill.
 - `--cn-lit-edge`, a 1px top rim of surface-2 at 45% (1.5:1 on base), joins `--neu-raised` and every plate but the primary, which has its gloss.
-- `--neu-lifted`: the lead panel's raise, ranked by darkness: a 2px dark contour at .7 all round, a 2px contact edge, a 3px 5px 6px near shadow, a 16px 22px 40px cast and the plain lit edge. `.panel.is-lead` stands on it inside `--edge-strong`, which the contour frames at 2.9:1, so the lead reads higher at 1x without a bright rim.
-- Raised shadows use crust halfway to black (`--neu-shade`, `--neu-contact` at .8, 1.18:1) with a 1px contact edge, so the lift reads on base. `--neu-ink` names the ink, `rgb(8 8 14)`. The SPEC draws every depth as one height model.
+- `--neu-lifted`: the lead panel's raise, ranked by darkness on the bottom and right only: a 2px 3px contact in the full ink, a 4px 8px 10px near shadow, an 18px 28px 48px cast and the plain lit edge. `.panel.is-lead` stands on it inside `--edge-strong`, so the lead reads higher at 1x with no bright rim and no dark outline all round.
+- Raised shadows use crust halfway to black (`--neu-shade`, and `--neu-contact`, the full ink at 1.22:1) with a 1px contact edge, so the lift reads on base. `--neu-ink` names the ink, `rgb(8 8 14)`. The SPEC draws every depth as one height model.
 - The engaged wash is mauve at `--cn-step-engaged` (20%, 1.52:1), a step past the 1.24:1 hover.
 - `--cn-fg-muted` is subtext-0 (7.4:1); placeholders take `--cn-fg-placeholder` (overlay-2).
 - `.bar-chart`, `.bar-group` and `.bar` for horizontal bar charts. Bars paint `--cn-fill-ramp` without grain, like the switch paddle.
@@ -37,10 +37,10 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - `prefers-contrast: more` stands the tilted panel upright.
 - Focus is `--cn-focus` text, a bright neutral, so it differs from the mauve engaged rim by hue as well as shape. Lavender joins the identity hues.
 - Raised shadows drop the top-left highlight, `--neu-raised-soft` included: contact, cast and the lit edge. Carves and the pop shadow share the halfway-to-black base; the pop has a tighter second layer. A panel inside a panel takes the soft raise with the lit edge.
-- `--neu-near`, a tight 1px 2px 2px shadow at .8 (.9 under `prefers-contrast: more`), joins `--neu-raised` and `--neu-lifted` after the contact edge, so a panel's bottom and right edges read crisp at 1x where the cast fades.
+- `--neu-near`, a 2px 3px 4px shadow at .8 (.9 under `prefers-contrast: more`), joins `--neu-raised` after the contact edge, and a 4px 8px 10px one joins `--neu-lifted`, so a panel stands on a solid 3 to 4px dark foot along its bottom and right edges at 1x where the cast fades.
 - `.well` takes the `--cn-surface-sunken` fill, so a well no longer reads as an outlined panel.
 - A carve is darkness only. `--neu-inset` is one layer, `inset 3px 3px 8px` in `--neu-dark` at .8 (.88 under `prefers-contrast: more`), and `--neu-inset-soft` is `inset 2px 2px 5px rgb(8 8 14 / .5)`. Neither draws a light layer on the bottom and right walls, so fields, selects, textareas, wells, the mono wells, the tabs carve, the switch plate, stepper pills, skeletons and engaged states no longer read as a sunken bevel. The row press drops its lit bottom edge too.
-- The lead panel's band title is `--lead-title-size` at the heading weight and tracking: 28px at default and cozy density, 20px at compact, the body size at 520px.
+- The lead panel's band title is `--lead-title-size` at the heading weight and tracking: 28px at default and cozy density, 20px at compact and at 655px and under, where display-sm drops under 34px, and the body size at 520px.
 - Every shadow layer in recipes and utilities has a token: the plates (`--cn-plate`, `-half`, `-hover`, `-lg`, `-sm`), `--cn-primary-rim`, `--cn-gloss-inset`, `--cn-validation-ring`, `--cn-readonly-rule`, `--cn-sticky-rule`, `--cn-switch-ring`, `--cn-disabled-ring`, `--cn-halo-ring`, `--cn-live-halo`, `--cn-switch-glow`, `--cn-switch-glow-held` and `--cn-ground-ring`, with the values the recipes used.
 - Label is 13px and name 14px, so micro is the one 12px role.
 - Series 5 and 6 step down in lightness for color-vision deficiency; `.is-hatched` adds stripes to a bar or legend swatch.
@@ -58,6 +58,7 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - Skeletons fill with `--cn-surface-band`, one step under whatever holds them, instead of the sunken fill.
 - The tilted panel takes content height in a grid.
 - A ranked row at the top of a panel takes the panel's top corners too.
+- `.tag` is a shallow carve in `--tone-wash` (12%) with `--neu-inset-soft` and no outline, in place of the `--tone-edge` hairline on `--tint`. Tone text on the wash is 5.7:1 (red) to 9.4:1 (yellow), and lint checks each status role on its wash as well as its tint.
 
 **Type**
 - Sizes are rem. micro 12, label 13, meta 13, ui 14, name 14 (aliases of the ui tokens: the ui role in `--cn-fg`), body 16 (15 at compact density), lede 18, title 20, value 24, heading 28 (new, `.cn-heading`), value-lg 32, code 13, display-sm 30 to 40, display 36 to 56 at 1.08.
@@ -78,10 +79,11 @@ This becomes 0.5.0: it removes the 0.4 aliases. Values below are final.
 - `.btn[aria-busy="true"]` turns a spinner in the label's place. `aria-disabled="true"` looks disabled and keeps focus.
 - Read-only fields read as printed text: no carve, a rule underneath.
 - `.input-lg` also works inside a `.field`.
+- `.data-table td .input` is the inline edit: `--control-h-sm`, the soft carve and `--cn-cell-field-ring`, an even surface-1 hairline at rest (1.8:1 on the page), since a cell field has no label above it. It takes its name from the column header through `aria-labelledby`. Standard fields stay edgeless at rest.
 - In a customizable select, a hovered option takes `--hover` like a menu row and the checked option takes `--wash`.
 - The open accordion is its own step, the open carve (mauve at `--cn-step-tint`), not the engaged state, so body text in the fold keeps 7:1.
 - A name cell's meta line follows `--cell-font-size`: 14px at default and cozy density, 13px at compact.
-- Table and ranked row hovers, desktop and phone row mode, take mauve at `--cn-step-row` (8%) into base: 1.17:1 on the page, apart from the open carve's 1.08:1 and 1.30:1 under a selected row.
+- Table and ranked row hovers, desktop and phone row mode, take mauve at `--cn-step-row` (12%) into base: 1.27:1 on the page, past the 1.24:1 hover and the open carve's 1.08:1, and 1.20:1 under a selected row, so pointer tracking holds on a dense table.
 - In phone mode a `td.is-trail` leaves the label stack and rides beside the name: the last trailing cell on the title line, the one before it under it.
 - `.stat.is-inline.is-total`: a summary total in the name and value roles under an `--edge` rule.
 - Sidebar links are 500. The current page is 600 with a 4px mauve spine on its start edge, a position rather than a press, and draws it in `Highlight` under forced colors. Below 1060px the sidebar body fades in and settles 4px when it opens.

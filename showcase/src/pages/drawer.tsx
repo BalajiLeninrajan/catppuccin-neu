@@ -84,7 +84,15 @@ export default function DrawerPage() {
       <p class="cn-copy">
         Put <code class="cn-code-inline">.drawer</code> on a{" "}
         <code class="cn-code-inline">&lt;dialog&gt;</code> and open it with{" "}
-        <code class="cn-code-inline">showModal()</code>. The sheet is the full
+        <code class="cn-code-inline">showModal()</code>.
+      </p>
+
+      <Demo title="Live demo" classes="dialog.drawer">
+        <DrawerDemo />
+      </Demo>
+
+      <p class="cn-copy">
+        The sheet is the full
         viewport height with square corners and one hairline on the left. Its{" "}
         <code class="cn-code-inline">header</code> is the shared band: it sits on
         the sheet's overlay fill behind an <code class="cn-code-inline">--edge-soft</code>{" "}
@@ -93,10 +101,6 @@ export default function DrawerPage() {
         whole; push the footer down with{" "}
         <code class="cn-code-inline">margin-top: auto</code>.
       </p>
-
-      <Demo title="Live demo" classes="dialog.drawer">
-        <DrawerDemo />
-      </Demo>
 
       <p class="cn-copy">
         The drawer slides in from past the right edge over{" "}

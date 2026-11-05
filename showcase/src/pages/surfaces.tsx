@@ -29,20 +29,7 @@ export default function SurfacesPage() {
     >
       <h2 class="cn-title">The surface ladder</h2>
       <p class="cn-copy">
-        Panels and plated controls sit on the page color. A raised surface
-        lifts by its contact edge, its cast, its lit top edge and its
-        hairline, never by a lighter fill. Overlays float free of the page,
-        so they take the one lighter step. Table heads and carved fills go
-        the other way, darker than the page. Recipes read these six tokens,
-        never a raw ground. The ratios are against the page.
-      </p>
-
-      <p class="cn-copy">
-        The overlay stops at 1.27:1 because a lighter step would drop the
-        placeholder role under 4.5:1. Body text stays above 7:1 and
-        placeholders above 4.5:1 on it. A hovered field rings in overlay-1,
-        so its bounds clear 3:1 everywhere: 4.4:1 on the page and in a panel,
-        which share a color, and 3.5:1 on the overlay.
+        Recipes read these six fills, never a raw ground.
       </p>
 
       <Demo title="Six fills" classes="cn-bg-base / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well">
@@ -61,6 +48,23 @@ export default function SurfacesPage() {
           ))}
         </div>
       </Demo>
+
+      <p class="cn-copy">
+        Panels and plated controls sit on the page color. A raised surface
+        lifts by its contact edge, its cast, its lit top edge and its
+        hairline, never by a lighter fill. Overlays float free of the page,
+        so they take the one lighter step. Table heads and carved fills go
+        the other way, darker than the page. The ratios below are against
+        the page.
+      </p>
+
+      <p class="cn-copy">
+        The overlay stops at 1.27:1 because a lighter step would drop the
+        placeholder role under 4.5:1. Body text stays above 7:1 and
+        placeholders above 4.5:1 on it. A hovered field rings in overlay-1,
+        so its bounds clear 3:1 everywhere: 4.4:1 on the page and in a panel,
+        which share a color, and 3.5:1 on the overlay.
+      </p>
 
       <Props
         title="Surface tokens"
@@ -183,14 +187,15 @@ export default function SurfacesPage() {
         sits on the page color like every panel, inside the brighter{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
         surface-2 at 2.5:1 against a panel's 1.9:1, and stands on{" "}
-        <code class="cn-code-inline">--neu-lifted</code>: a 2px dark contour
-        all round, a wider contact edge, a deeper near shadow and a longer
-        cast. It keeps the plain lit edge, because a bright line is never a
-        depth cue. Its band title takes{" "}
+        <code class="cn-code-inline">--neu-lifted</code>: a dark foot on the
+        bottom and right about twice as deep as a plain panel's, and a
+        longer cast. It keeps the plain lit edge and draws no outline all
+        round, because neither a bright line nor a heavier outline reads as
+        height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
-        weight, 28px at default density where other panels use 20px. A cast
-        barely shows on a dark page, so the dark contour and the title carry
-        the rank. It adds
+        weight, 28px at default density where other panels use 20px, and
+        20px at 655px and under. A cast barely shows on a dark page, so the
+        deeper foot and the title carry the rank. It adds
         height and a larger title, not an ornament: no plate, tilt or color. Use one per view at most.
         The tilted aside comments on the data; the lead panel holds it.
       </p>
@@ -305,7 +310,7 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-lead",
             values: "one per view",
-            notes: "The panel the view is about. The page color inside the --edge-strong hairline, on --neu-lifted with its 2px dark contour, wider contact, deeper near shadow and longer cast, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height and by its title. No ornament.",
+            notes: "The panel the view is about. The page color inside the --edge-strong hairline, on --neu-lifted with its deeper foot on the bottom and right and its longer cast, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height and by its title. No ornament.",
           },
           {
             name: ".panel.is-shell",

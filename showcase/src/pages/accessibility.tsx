@@ -146,7 +146,27 @@ export default function AccessibilityPage() {
     >
       <h2 class="cn-title">Contrast</h2>
       <p class="cn-copy">
-        Text reads a semantic role, not a palette name. Labels are{" "}
+        Text reads a semantic role, not a palette name.
+      </p>
+
+      <Demo title="Semantic roles on base, raised and overlay">
+        <div style="width:100%">
+          <Table
+            head={["Swatch", "Role", "Palette", "WCAG, page and raised · overlay", "APCA Lc, page and raised · overlay", "Use"]}
+            rows={CONTRAST.map((r) => [
+              <Swatch color={r.swatch} />,
+              <code class="cn-code-inline">{r.role}</code>,
+              r.palette,
+              <span class="cn-tabular">{r.ratio}</span>,
+              <span class="cn-tabular">{r.apca}</span>,
+              r.use,
+            ])}
+          />
+        </div>
+      </Demo>
+
+      <p class="cn-copy">
+        Labels are{" "}
         <code class="cn-code-inline">--cn-fg-soft</code>, subtext-1, 9.3:1 on
         the page. Meta, help and table heads are{" "}
         <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0, 7.4:1 on
@@ -161,7 +181,7 @@ export default function AccessibilityPage() {
 
       <p class="cn-copy">
         WCAG 2 ratios flatter light text on a dark ground, so the text roles
-        also answer APCA lightness contrast, written Lc. The table gives
+        also answer APCA lightness contrast, written Lc. The table above gives
         both. <code class="cn-code-inline">--cn-fg</code> holds Lc
         75, the soft and body roles Lc 60, which is APCA's level for content
         text, <code class="cn-code-inline">--cn-fg-muted</code> Lc 50 and{" "}
@@ -207,22 +227,6 @@ export default function AccessibilityPage() {
         <span class="tag cn-tone-success">Paid</span>
         <span class="tag cn-tone-warning">Due soon</span>
         <span class="tag cn-tone-info">Draft</span>
-      </Demo>
-
-      <Demo title="Semantic roles on base, raised and overlay">
-        <div style="width:100%">
-          <Table
-            head={["Swatch", "Role", "Palette", "WCAG, page and raised · overlay", "APCA Lc, page and raised · overlay", "Use"]}
-            rows={CONTRAST.map((r) => [
-              <Swatch color={r.swatch} />,
-              <code class="cn-code-inline">{r.role}</code>,
-              r.palette,
-              <span class="cn-tabular">{r.ratio}</span>,
-              <span class="cn-tabular">{r.apca}</span>,
-              r.use,
-            ])}
-          />
-        </div>
       </Demo>
 
       <h2 class="cn-title">Non-text contrast</h2>
