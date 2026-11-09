@@ -193,6 +193,7 @@
 .cn-text-tone      { color: var(--tone); }
 
 /* Backgrounds */
+.cn-bg-page   { background: var(--cn-surface-page); }
 .cn-bg-base   { background: var(--base); }
 .cn-bg-mantle { background: var(--mantle); }
 .cn-bg-crust  { background: var(--crust); }

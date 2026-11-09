@@ -56,7 +56,7 @@ export default function SkeletonPage() {
   return (
     <Doc
       title="Skeleton"
-      lede="A carved placeholder where content is loading. It sits in the soft inset and breathes until the content arrives."
+      lede="A carved placeholder where content is loading. It takes the well carve, below the ground, and breathes until the content arrives."
     >
       <Demo title="Loading a member row and a stat" classes="skeleton · skeleton is-text · skeleton is-round">
         <LoadingDemo />
@@ -76,7 +76,7 @@ export default function SkeletonPage() {
         Mark the loading region <code class="cn-code-inline">aria-busy="true"</code>{" "}
         so assistive tech waits for it, and give every skeleton{" "}
         <code class="cn-code-inline">aria-hidden="true"</code>. Under reduced motion
-        the skeleton holds still at .75 opacity, the midpoint of its breath.
+        the skeleton holds still at .85 opacity, the midpoint of its breath.
       </p>
 
       <p class="cn-copy">
@@ -112,7 +112,7 @@ export default function SkeletonPage() {
           {
             name: ".skeleton",
             values: "block",
-            notes: "16px min-height, the control radius, the --cn-surface-band fill, one step under whatever holds it, in the soft inset. Never darker than the content it stands in for. Breathes to .5 opacity over 1.6s.",
+            notes: "16px min-height, the control radius, the well carve: the --cn-surface-sunken fill, 1.12:1 under a panel and 1.05:1 under the page, under --neu-inset, darkness only with no ring. Breathes to .7 opacity over 1.6s, so at its faintest it still sits 1.09:1 under a panel.",
           },
           {
             name: ".skeleton.is-text",
@@ -142,7 +142,7 @@ export default function SkeletonPage() {
           {
             name: "prefers-reduced-motion",
             values: "reduce",
-            notes: "The animation stops and the skeleton holds still at .75 opacity.",
+            notes: "The animation stops and the skeleton holds still at .85 opacity.",
           },
         ]}
       />

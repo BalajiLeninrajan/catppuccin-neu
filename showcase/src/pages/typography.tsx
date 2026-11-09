@@ -6,7 +6,7 @@ export default function TypographyPage() {
   return (
     <Doc
       title="Typography"
-      lede="Inter for every role but code, JetBrains Mono for code. Four weights, one type scale, and a class per role. Pick the role, not the face."
+      lede="IBM Plex Sans for every role but code, JetBrains Mono for code. Four weights, one type scale, and a class per role. Pick the role, not the face."
     >
       <p class="cn-copy">
         Each role is four tokens, <code class="cn-code-inline">--cn-type-&lt;role&gt;-size</code>,{" "}
@@ -142,10 +142,14 @@ export default function TypographyPage() {
       </p>
 
       <p class="cn-copy">
-        The root sets <code class="cn-code-inline">font-optical-sizing: auto</code>,
-        so Inter's optical-size axis tightens display sizes and opens small
-        ones. Link Inter with that axis,{" "}
-        <code class="cn-code-inline">Inter:opsz,wght@14..32,100..900</code>.
+        The face is IBM Plex Sans because it has a voice of its own: angled
+        terminals and engineered figures that read as a tool, not a default,
+        beside JetBrains Mono. It stays clear at 13 and 14px on a dark ground
+        and has true tabular figures, so a dense table keeps its columns.
+        Link it from Google Fonts at 400 to 700 with its italic; the{" "}
+        <a href="/">introduction</a> has the tag. Until it loads, text sets in{" "}
+        <code class="cn-code-inline">IBM Plex Sans Fallback</code>, a local
+        Arial sized to Plex's metrics, so the swap does not reflow the page.
         Paragraphs and list items wrap with{" "}
         <code class="cn-code-inline">text-wrap: pretty</code>, which keeps a
         lone word off the last line. The display and heading roles balance instead.

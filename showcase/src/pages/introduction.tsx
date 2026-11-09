@@ -14,7 +14,7 @@ const IMPORT_CODE = `/* your entry stylesheet */
 
 const FONTS_CODE = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">`;
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">`;
 
 const SYNC_CODE = `# copies tokens.css, utilities.css, recipes.css, index.css into public/styles
 node node_modules/catppuccin-neu/scripts/sync.mjs public/styles
@@ -54,8 +54,9 @@ export default function IntroductionPage() {
       lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, neumorphic depth from a fixed top-left light source, one mauve accent. It ships as four plain CSS files."
     >
       <p class="cn-copy">
-        Surfaces sit on the page color. A quiet hairline cuts their edge,
-        and a dark foot on the bottom and right gives their height.
+        The page is mantle and surfaces sit a fill step above it on base. A
+        quiet hairline cuts their edge, and a dark foot on the bottom and
+        right gives their height.
       </p>
 
       <Demo title="First look" row classes="btn btn-primary">
@@ -68,11 +69,12 @@ export default function IntroductionPage() {
       <section>
         <h2 class="cn-title">The idea</h2>
         <p class="cn-copy">
-          Raised panels share the page color and lift off it on a contact
-          edge, a cast shadow, a lit top edge and a hairline; inputs, wells, and
+          Raised panels sit on base, one fill step above the mantle page, and
+          lift off it on a contact edge, a cast shadow, a lit top edge and a
+          hairline; nothing raised is lighter than base. Inputs, wells and
           selected states press in with an inset. Clickable controls carry a
           flat hard-offset shadow and press with a half-slide onto it. Type is
-          Inter everywhere, JetBrains Mono for code. Mauve is the one accent;
+          IBM Plex Sans everywhere, JetBrains Mono for code. Mauve is the one accent;
           everything else is a semantic tint passed through a custom property.
         </p>
         <p class="cn-copy">
@@ -132,8 +134,7 @@ export default function IntroductionPage() {
           version pin lives in one file rather than in every{" "}
           <code class="cn-code-inline">&lt;head&gt;</code>. Add it, import the one
           entry point, and link the two font families on every public page.
-          Link Inter with its optical-size axis; the root sets{" "}
-          <code class="cn-code-inline">font-optical-sizing: auto</code> and reads it.
+          The package ships no font files; both load from Google Fonts.
         </p>
         <CodeBlock title="Add the dependency" code={INSTALL_CODE} />
         <CodeBlock title="Import the CSS" code={IMPORT_CODE} />

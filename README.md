@@ -48,7 +48,7 @@ Then link the fonts on every page:
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" />
 ```
 
 ## Upgrading from 0.3
@@ -91,16 +91,16 @@ Optional behavior, if you don't bring your own widgets:
 
 ```js
 import { init, toast } from "catppuccin-neu/js";
-init(); // tabs, menu buttons, sliders and the tooltip Escape
+init(); // tabs, menu buttons, listboxes and comboboxes, sliders and the tooltip Escape
 ```
 
 ## Caveats
 
 - Recipe classes are unprefixed. `.btn`, `.panel`, `.input` and `.data-table` collide with any other CSS that uses those names.
 - Dark only. There is no light palette.
-- The CSS needs no JavaScript. Overlays use `<dialog>`, `showModal()` and `close()`. The optional `catppuccin-neu/js` module adds the keyboard model for tabs and menus, the tooltip Escape, slider fill and toasts; copy buttons still need your own listener.
-- Depth reads correctly only on the `--base` ground it was tuned for.
-- The sizes and tracking assume Inter and JetBrains Mono. The fallback stacks stay readable but look different.
+- The CSS needs no JavaScript. Overlays use `<dialog>`, `showModal()` and `close()`. The optional `catppuccin-neu/js` module adds the keyboard model for tabs, menus and listboxes, the tooltip Escape, slider fill and toasts; copy buttons still need your own listener.
+- Depth reads correctly only on the ground it was tuned for: a mantle page with panels and plated controls on base. Keep your page on `--cn-surface-page`.
+- The sizes and tracking assume IBM Plex Sans and JetBrains Mono. The fallback stacks stay readable but look different.
 
 ## Docs
 

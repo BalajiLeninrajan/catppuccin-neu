@@ -32,6 +32,8 @@ const KNOBS: Array<[string, string, string, string, string]> = [
   ["--band-pad", "12px 24px", "8px 24px", "8px 16px", "Band padding."],
   ["--band-title-size", "20px", "14px", "14px", "An h2 or h3 in a header band."],
   ["--lead-title-size", "28px", "28px", "20px", "The lead panel's band title, at the heading weight. 20px at 655px and under, where display-sm drops under 34px."],
+  ["--lead-band-h", "72px", "60px", "48px", "The lead panel's header band, taller than --band-h."],
+  ["--lead-pad", "32px", "24px", "16px", "The lead panel's header and footer inline padding, its body padding and a filling table's outer columns."],
   ["--body-pad", "24px", "16px 24px", "12px 16px", ".panel-body padding."],
   ["--cell-pad", "12px 16px", "8px 12px", "4px 8px", "Table cells."],
   ["--cell-font-size", "14px", "14px", "13px", "Table body text."],
@@ -233,7 +235,7 @@ export default function DensityPage() {
           { name: "--page-width", default: "unset", notes: "Width of the page column and footer; falls back to --cn-width-page (1440px)." },
           { name: "--progress-fill", default: "the accent ramp", notes: "The progress fill: any token color or gradient." },
           { name: "--grain", default: ".22", notes: "Grain strength on solid accent fills; 0 turns it off." },
-          { name: "--ring-ground", default: "var(--base)", notes: "The ring between stacked avatars. Set it to the surface behind the stack." },
+          { name: "--ring-ground", default: "var(--base)", notes: "The ring between stacked avatars: the panel fill by default. Set it to the surface behind the stack, var(--mantle) on the page." },
         ]}
       />
 

@@ -2,12 +2,12 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 /* The surface ladder, from the page up and then down into the carves. */
 const LADDER = [
-  { token: "--cn-surface-page", util: "cn-bg-base", mix: "base", use: "The ground." },
-  { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "base, the page color", use: "Panels, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
-  { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base · 1.27:1", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
-  { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "mantle 55% into base", use: "The sidebar." },
-  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", use: "Table heads, skeletons." },
-  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 38% into mantle", use: "Wells, the mono wells, stepper pills." },
+  { token: "--cn-surface-page", util: "cn-bg-page", mix: "mantle", use: "The ground: the body, the app shell, the topbar, stat bands." },
+  { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "base · 1.07:1 on the page", use: "Panels, the tilted panel, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
+  { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base · 1.27:1 on base", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
+  { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "crust 50% into mantle · 1.04:1 under the page", use: "The sidebar." },
+  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", use: "Table heads." },
+  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 70% into mantle · 1.05:1 under the page, 1.12:1 under base", use: "Wells, the mono wells, stepper pills, skeletons." },
 ];
 
 const ACTIVITY = [
@@ -25,14 +25,14 @@ export default function SurfacesPage() {
   return (
     <Doc
       title="Surfaces"
-      lede="A ladder of six fills, and two containers built on it. The raised panel lifts content off the page by its edges and shadow, on the page's own color. The inset well presses it in, with no border."
+      lede="A ladder of six fills, and two containers built on it. The raised panel lifts content off the mantle page on base, one fill step up, with its edges and shadow. The inset well presses it in, below the page, with no border."
     >
       <h2 class="cn-title">The surface ladder</h2>
       <p class="cn-copy">
         Recipes read these six fills, never a raw ground.
       </p>
 
-      <Demo title="Six fills" classes="cn-bg-base / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well">
+      <Demo title="Six fills" classes="cn-bg-page / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well">
         {/* A fixed 176px track fits the longest token, so the six swatches
             sit at an even pitch and still wrap on a narrow screen. */}
         <div style="width:100%;display:grid;grid-template-columns:repeat(auto-fill,176px);gap:var(--space-4)">
@@ -50,20 +50,20 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        Panels and plated controls sit on the page color. A raised surface
-        lifts by its contact edge, its cast, its lit top edge and its
-        hairline, never by a lighter fill. Overlays float free of the page,
-        so they take the one lighter step. Table heads and carved fills go
-        the other way, darker than the page. The ratios below are against
-        the page.
+        The page is mantle. Panels and plated controls sit on base, one fill
+        step above it, and lift by that step, their contact edge, their
+        cast, their lit top edge and their hairline. Nothing raised is
+        lighter than base: overlays float free of the page, so they alone
+        take a lighter step. Wells, skeletons and the sidebar go the other
+        way, darker than the page, with crust as the darker step.
       </p>
 
       <p class="cn-copy">
         The overlay stops at 1.27:1 because a lighter step would drop the
         placeholder role under 4.5:1. Body text stays above 7:1 and
         placeholders above 4.5:1 on it. A hovered field rings in overlay-1,
-        so its bounds clear 3:1 everywhere: 4.4:1 on the page and in a panel,
-        which share a color, and 3.5:1 on the overlay.
+        so its bounds clear 3:1 everywhere: 4.8:1 on the page, 4.4:1 in a
+        panel and 3.5:1 on the overlay.
       </p>
 
       <Props
@@ -184,9 +184,9 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.panel.is-lead</code> marks the panel a
         view is about, such as the invoice table on a billing dashboard. It
-        sits on the page color like every panel, inside the brighter{" "}
+        takes the base fill like every panel, inside the brighter{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
-        surface-2 at 2.5:1 against a panel's 2.1:1, and stands on{" "}
+        surface-2 at 2.5:1 against a panel's 1.85:1, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
         the bottom and right, 6px deep where a button's plate is 4px and a
         plain panel's contact 2px, and a longer cast. It keeps the plain lit edge and draws no outline all
@@ -194,9 +194,14 @@ export default function SurfacesPage() {
         height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
         weight, 28px at default density where other panels use 20px, and
-        20px at 655px and under. A cast barely shows on a dark page, so the
-        deeper foot and the title carry the rank. It adds
-        height and a larger title, not an ornament: no plate, tilt or color. Use one per view at most.
+        20px at 655px and under. Its header band is{" "}
+        <code class="cn-code-inline">--lead-band-h</code> tall, 72px where a
+        plain band is 64px, and{" "}
+        <code class="cn-code-inline">--lead-pad</code> gives its header, body
+        and footer 32px of room where a plain panel has 24px; both step down
+        with density. A cast barely shows on a dark page, so the deeper foot,
+        the title and the room carry the rank. It adds height, a larger title
+        and room, not an ornament: no plate, tilt or color. Use one per view at most.
         The tilted aside comments on the data; the lead panel holds it.
       </p>
 
@@ -285,7 +290,7 @@ export default function SurfacesPage() {
           {
             name: ".panel",
             values: "raised container",
-            notes: "--cn-surface-raised fill (the page color), --neu-raised (contact, near shadow, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
+            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",
@@ -305,12 +310,12 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-tilted",
             values: "one per view",
-            notes: "rotate(1.2deg) and a 6px plate, --cn-plate-tilt, over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside in prose, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
+            notes: "rotate(1.2deg) and a 6px plate, --cn-plate-tilt, over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside in prose at 15px, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
           },
           {
             name: ".panel.is-lead",
             values: "one per view",
-            notes: "The panel the view is about. The page color inside the --edge-strong hairline, on --neu-lifted with its deeper foot on the bottom and right and its longer cast, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height and by its title. No ornament.",
+            notes: "The panel the view is about. The base fill inside the --edge-strong hairline, on --neu-lifted with its deeper foot on the bottom and right and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
           },
           {
             name: ".panel.is-shell",

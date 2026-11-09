@@ -64,7 +64,7 @@ export default function ButtonPage() {
       <p class="cn-copy">
         A disabled primary, through <code class="cn-code-inline">disabled</code> or{" "}
         <code class="cn-code-inline">aria-disabled="true"</code>, goes flat and sinks. It loses the plate, ramp,
-        grain and gloss, drops its edge and is carved into the darker sunken fill like a well, an empty slot in the page, at full opacity. The secondary keeps its outline and plate, so the two never share a silhouette. A dimmed plate reads as a
+        grain and gloss, drops its edge and is carved into the darker sunken fill under the soft carve, the depth of a disabled field, like an empty slot in the page, at full opacity. The carve is shallower than any press, so it never reads as a held button. The secondary keeps its outline and plate, so the two never share a silhouette. A dimmed plate reads as a
         second primary beside the live one, and a pressed-in, unlit button never outshines a live secondary. A busy primary keeps its fill. Every other variant dims and keeps its rest shadow.
       </p>
 
@@ -76,8 +76,8 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        The secondary rests on the page color with a hairline, the lit top
-        edge and the ink plate. Hover warms the border toward mauve and lifts
+        The secondary rests on the base fill, a step above the mantle page,
+        with a hairline, the lit top edge and the ink plate. Hover warms the border toward mauve and lifts
         the fill to the overlay step. The resting hairline is decoration: the
         label identifies the button, so the edge does not need 3:1.
       </p>
@@ -301,8 +301,8 @@ export default function ButtonPage() {
         title="Variants and knobs"
         rows={[
           { name: ".btn", values: "base class", notes: "Height --control-h, 16px inline padding, the control radius (8px), sans 600 14px. Compose with one variant." },
-          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the full carve, --neu-inset with --cn-well-ring, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1, 4.9:1 on that fill), no plate, ramp, grain, gloss or dimming. One per view." },
-          { name: ".btn-secondary", notes: "--cn-surface-raised fill (the page color), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong, 4.1:1 on base and 3.2:1 on the overlay, and lifts the fill to --cn-surface-overlay. The default for clickables." },
+          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the soft carve, --neu-inset-soft with --cn-well-ring, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1, 5.0:1 on that fill), no plate, ramp, grain, gloss or dimming. One per view." },
+          { name: ".btn-secondary", notes: "--cn-surface-raised fill (base, a step above the page), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong, 4.1:1 on base, and deepens the plate 1px to --cn-plate-hover. The fill stays base, since nothing raised is lighter than base. The default for clickables." },
           { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', notes: "Transparent until hovered, then --hover and an --edge hairline. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base, 1.52:1, past the 1.24:1 hover), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },

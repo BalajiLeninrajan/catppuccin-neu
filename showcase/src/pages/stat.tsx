@@ -103,7 +103,7 @@ export default function StatPage() {
         A row of key figures often sits straight on the page, under the title
         and before any panel. <code class="cn-code-inline">.is-ruled</code>{" "}
         hangs each stat from a 2px <code class="cn-code-inline">--cn-stat-rule</code>,
-        equal to <code class="cn-code-inline">--edge</code>, 2.1:1 on the page, on its start side,
+        equal to <code class="cn-code-inline">--edge</code>, 1.92:1 on the mantle page, on its start side,
         with 16px between the rule and the label, so the row reads as one
         band without a panel around it. The rule follows the writing
         direction. Inside a panel, use the plain grid.
@@ -201,18 +201,18 @@ export default function StatPage() {
             name: ".stat.is-lg",
             values: "large tile",
             default: "--accent: var(--mauve)",
-            notes: "32px figure in the accent. Text-colored inside an accent card. Steps down to 24px at 520px.",
+            notes: "32px figure in the accent. Text-colored inside an accent card, and with .cn-fg on its strong when the view's mauve primary shares the band. Steps down to 24px at 520px.",
           },
           {
             name: ".stat-grid",
             values: "wrapper around .stat tiles",
             default: "--stat-cols: 4",
-            notes: "Equal columns, 16px gap. Two across at 760px and below; never one.",
+            notes: "Equal columns, 16px gap. Two across at 760px and below; never one. In a .panel-body an unruled grid's stats take no padding of their own, so they line up with the header title.",
           },
           {
             name: ".stat-grid.is-ruled",
             values: "stats on the page ground",
-            notes: "Each stat hangs from a 2px --cn-stat-rule (equal to --edge, 2.1:1 on the page; surface-2 under prefers-contrast: more) on its inline-start side, 16px in, with 4px block padding. For a figures band outside any panel.",
+            notes: "Each stat hangs from a 2px --cn-stat-rule (equal to --edge, 1.92:1 on the page; surface-2 under prefers-contrast: more) on its inline-start side, 16px in, with 4px block padding. For a figures band outside any panel.",
           },
           {
             name: ".stat.is-inline",

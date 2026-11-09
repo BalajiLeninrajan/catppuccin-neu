@@ -268,7 +268,7 @@ export default function SelectionPage() {
             name: ".checkbox",
             values: 'input[type="checkbox"]',
             notes:
-              "20px square well, 4px radius, a --control-edge border: overlay-1, 4.4:1 on the page and raised, 3.5:1 on an overlay. Checked fills mauve and the crust check lands on the spring.",
+              "20px square well, 4px radius, a --control-edge border: overlay-1, 4.4:1 on a panel, 4.8:1 on the page, 3.5:1 on an overlay. Checked fills mauve and the crust check lands on the spring.",
           },
           {
             name: ".checkbox:indeterminate",

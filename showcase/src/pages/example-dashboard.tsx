@@ -185,8 +185,9 @@ export default function DashboardExample() {
     <div class="cn-stack cn-gap-48 page-enter" data-density="cozy">
       {/* The title and its primary share one line in a split, and the lede
           sits under them, so the button never stands alone below the copy.
-          The title has no mauve em: the hero stat is the view's one
-          mauve text mark; the Wallet series bar is a data mark. */}
+          The title has no mauve em: the primary beside it is the top
+          band's one mauve mark, so the hero stat below is text-colored too;
+          the Wallet series bar is a data mark. */}
       <header class="cn-stack cn-gap-24">
         <div class="cn-split">
           <h1 class="cn-display is-sm">
@@ -201,12 +202,13 @@ export default function DashboardExample() {
         </p>
       </header>
 
-      {/* The headline figure is a large stat, 32px in the accent, so it
-          outranks the 28px lead band title below it. */}
+      {/* The headline figure is a large stat at 32px, so it outranks the
+          28px lead band title below it. It is text-colored, not mauve: the
+          primary sits in the same top band, and mauve stays on the primary. */}
       <section class="stat-grid is-ruled" aria-label="Key figures">
         <div class="stat is-lg">
           <span>Collected this month</span>
-          <strong>$126,940</strong>
+          <strong class="cn-fg">$126,940</strong>
           <p class="cn-meta cn-m-0">+8.2% on August</p>
         </div>
         <div class="stat">
@@ -293,6 +295,7 @@ export default function DashboardExample() {
               <div class="stat">
                 <span>Refunded</span>
                 <strong>$1,120</strong>
+                <p class="cn-meta cn-m-0">4 refunds</p>
               </div>
               <div class="stat">
                 <span>Failed</span>
@@ -300,9 +303,19 @@ export default function DashboardExample() {
                 <p class="cn-meta cn-m-0">$2,340 to retry</p>
               </div>
             </div>
-            <div class="stat is-inline">
-              <span>Paid in full</span>
-              <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>
+            <div class="cn-divide">
+              <div class="stat is-inline">
+                <span>Paid in full</span>
+                <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>
+              </div>
+              <div class="stat is-inline">
+                <span>Partially paid</span>
+                <b>2 of {INVOICES.length}</b>
+              </div>
+              <div class="stat is-inline">
+                <span>Disputed</span>
+                <b>1 of {INVOICES.length}</b>
+              </div>
             </div>
           </div>
         </section>

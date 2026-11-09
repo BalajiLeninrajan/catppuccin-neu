@@ -35,7 +35,8 @@
 
   /* Semantic roles. Recipes read these for a job instead of naming a
      hex, and the prefers-contrast block re-keys them. Every value is a
-     Mocha color above. Ratios are on base. */
+     Mocha color above. Ratios are on base, the panel fill; on the mantle
+     page each one reads about 7% higher, so base is the floor. */
   --cn-fg: var(--text);                  /* headings, names, values: 11.3:1 */
   --cn-fg-soft: var(--cn-fg-body);       /* lede, table cells, code, labels: a job alias of body, 9.3:1 */
   --cn-fg-body: var(--subtext-1);        /* running text, Catppuccin's body stop below text: 9.3:1 */
@@ -73,7 +74,7 @@
   --cn-info-edge: color-mix(in srgb, var(--cn-info) var(--cn-step-edge), transparent);
   --cn-info-border: color-mix(in srgb, var(--cn-info) var(--cn-step-plate), var(--surface-0));
 
-  --sans: "Inter", "Inter Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sans: "IBM Plex Sans", "IBM Plex Sans Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono", "JetBrains Mono Fallback",
           ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
@@ -104,19 +105,23 @@
   --cn-diverge-4: color-mix(in oklab, var(--blue) 50%, var(--surface-1));
   --cn-diverge-5: var(--blue);
 
-  /* Surfaces, from the page up. Panels and plated controls share the page
-     color: a raised surface lifts by its contact edge, cast, lit top edge
-     and hairline, never by a lighter fill. Overlays float, so they take
-     the one lighter step. Ratios are against the page. */
-  --cn-surface-page: var(--base);                                          /* the ground */
-  --cn-surface-raised: var(--base);                                        /* panels, plated controls: the page color */
-  --cn-surface-overlay: color-mix(in srgb, var(--surface-0) 90%, var(--base)); /* popovers, dialogs, toasts: 1.27:1 */
+  /* Surfaces, from the ground up. The page is mantle and every raised
+     surface is base, one fill step above it (1.07:1), so a panel stands
+     up from the page by its fill as well as its contact edge, cast, lit
+     top edge and hairline. Nothing raised is lighter than base: overlays
+     float free of the page, so they alone take the lighter step. Below
+     the ground, the darker steps lean on crust. */
+  --cn-surface-page: var(--mantle);                                            /* the ground: the body, the app shell, the topbar, stat bands */
+  --cn-surface-raised: var(--base);                                            /* panels, plated controls, the tilted panel: 1.07:1 on the page */
+  --cn-surface-overlay: color-mix(in srgb, var(--surface-0) 90%, var(--base)); /* popovers, dialogs, toasts: 1.27:1 on base */
   /* Body text stays above 7:1, labels above 5.5:1 and placeholders above
      4.5:1 on the overlay too. A lighter overlay drops the placeholder role
      under 4.5:1, so the ladder stops here. */
-  --cn-surface-recessed: color-mix(in srgb, var(--mantle) 55%, var(--base)); /* the sidebar, app chrome below the page */
-  --cn-surface-band: color-mix(in srgb, var(--crust) 30%, transparent);      /* table heads and skeletons: one step under whatever holds them */
-  --cn-surface-sunken: color-mix(in srgb, var(--crust) 38%, var(--mantle));   /* wells, the mono wells, stepper pills */
+  --cn-surface-recessed: color-mix(in srgb, var(--crust) 50%, var(--mantle)); /* the sidebar, app chrome a step under the page */
+  --cn-surface-band: color-mix(in srgb, var(--crust) 30%, transparent);      /* table heads: one step under whatever holds them */
+  /* Wells are below the ground wherever they sit: crust 70% into mantle is
+     darker than the mantle page (1.05:1) and than a base panel (1.12:1). */
+  --cn-surface-sunken: color-mix(in srgb, var(--crust) 70%, var(--mantle));   /* wells, the mono wells, stepper pills, skeletons */
 
   /* Mix steps. Every tint of a hue into a ground or into transparent uses
      one of these, so a wash means the same strength everywhere. */
@@ -228,12 +233,15 @@
   --neu-ink: rgb(8 8 14);              /* crust halfway to black: the default plate, and the base of every shadow below */
   --neu-dark: rgb(8 8 14 / .8);
   --neu-dark-soft: rgb(17 17 27 / .30); /* cast/mark strength only */
-  /* A shadow has to be darker than the darkest surface it falls on, and
-     crust is only 1.1:1 under base, so the raised shadow is crust taken
-     halfway to black: a 2px contact edge in the full ink where the surface
-     meets the ground, then a near shadow at .8 that lays a 4 to 6px
-     dark foot along the bottom and right edges, then the cast. The cast
-     tops out near 1.28:1, so the foot is what makes the height read at 1x.
+  /* A shadow has to be darker than the darkest surface it falls on. It
+     falls on the mantle page, and crust is only 1.07:1 under mantle, so the
+     raised shadow is crust taken halfway to black (1.14:1 on the page):
+     a 2px contact edge in the full ink where the surface meets the ground,
+     then a near shadow at .8 that lays a 4 to 6px dark foot along the
+     bottom and right edges, then the cast. Even black is only 1.2:1 on the
+     page, so the shadow cannot carry height alone: the base fill a step
+     above the page does the separating and the foot says which side is
+     down.
      The 2px contact stays under the lead's 4px 6px foot and the plate at
      default (4px) and cozy (3px) density. Compact density drops the plate
      to 2px, so it drops the contact to 1px and a plain panel still reads
@@ -260,9 +268,8 @@
   --neu-inset-soft: inset 2px 2px 5px rgb(8 8 14 / .5);
 
   /* The lit top edge: the top-left light catches a raised surface's top
-     rim, a 1px inner line of surface-2 at 45%, 1.5:1 on base, so a panel
-     on the page color reads as lifted even where the dark side of its
-     shadow is lost. */
+     rim, a 1px inner line of surface-2 at 45%, 1.5:1 on base, a quiet
+     line that marks the light side, never a bright rim. */
   --cn-lit-edge: inset 0 1px color-mix(in srgb, var(--surface-2) 45%, transparent);
   --shadow-pop:  0 24px 70px rgb(8 8 14 / .8), 0 8px 24px rgb(8 8 14 / .45); /* popovers, modals, toasts */
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);                 /* topbar cast */
@@ -289,7 +296,7 @@
      that item appears.
      --plate (the hard offset's color) is not declared here, so a subtree
      can set it. Read it as var(--plate, var(--neu-ink)): the shadow ink,
-     1.22:1 under base, where crust is 1.14:1. */
+     1.22:1 under base, where crust is 1.14:1, and 1.14:1 on the page. */
   --accent: var(--mauve);            /* per-instance accent: plates, marks, data; bars and legend swatches read --series first */
   --tone: var(--cn-info);            /* status color for tags, banners, icon-button hover, validation; info until a .cn-tone-* sets it */
   --hard-offset: 4px;                /* the hard offset's distance */
@@ -303,9 +310,9 @@
 
   /* Mix tokens. --tint is declared at its use sites below, because a
      var() resolves where it is declared. */
-  --edge:      color-mix(in srgb, var(--surface-2) 85%, transparent); /* raised-surface hairline: 2.1:1 */
+  --edge:      color-mix(in srgb, var(--surface-2) 70%, transparent); /* raised-surface hairline: 1.85:1 on base */
   --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
-  --cn-stat-rule: var(--edge); /* the .stat-grid.is-ruled rule, equal to --edge: 2.1:1 on the page at twice the width */
+  --cn-stat-rule: var(--edge); /* the .stat-grid.is-ruled rule, equal to --edge: 1.92:1 on the page at twice the width */
   --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
   --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its own wash */
   --hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay, so a menu row still lights */
@@ -314,11 +321,11 @@
      of dimming. */
   --disabled-opacity: .6;
   /* A carved field at rest is its dark wall plus a quiet even hairline:
-     surface-1 on all four sides, 1.8:1 on the page and 1.4:1 on an
-     overlay. It is the same on every side and never brightens the bottom
+     surface-1 on all four sides, 1.9:1 on the page, 1.8:1 on a panel
+     and 1.4:1 on an overlay. It is the same on every side and never brightens the bottom
      or right, so it reads as a cut edge, not a lip. prefers-contrast closes
      it into a full overlay-2 ring. Hover draws a full 1px --control-edge
-     ring, 4.4:1 on the page and on a panel and 3.5:1 on an overlay, and
+     ring, 4.8:1 on the page, 4.4:1 on a panel and 3.5:1 on an overlay, and
      focus draws the focus ring, so a field shows 3:1 bounds as soon as it
      is in use. Every field paints the ring over its carve, table cells
      included, and the tabs carve shares it. Wells and
@@ -331,9 +338,10 @@
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
      for inner rules and dividers, --edge-strong for the lead panel and
      overlays: solid surface-2, 2.5:1 on base and 1.9:1 on an overlay,
-     above --edge's 2.1:1 and 1.8:1, so the higher surface has the brighter
-     cut edge. --edge stops at surface-2 85%: any brighter and a panel at 1x
-     reads as an outlined box. */
+     above --edge's 1.85:1 and 1.6:1, so the higher surface has the
+     brighter cut edge. A panel stands a fill step above the mantle page,
+     so --edge only cuts its outline: surface-2 at 70%, down from 85%, as
+     anything brighter reads as an outlined box at 1x. */
   --edge-strong: var(--surface-2);
 
   /* Fill grain. --grain is its strength on solid accent fills; 0 turns it
@@ -350,6 +358,11 @@
   --cn-glyph-info: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 7.5h.01'/%3E%3C/svg%3E");
   --cn-grain-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncG type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncB type='linear' slope='2.4' intercept='-.7'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --cn-grain-tile: 160px;
+  /* Field glyphs in the overlay-1 icon color, as palette hexes, since a
+     data URI cannot read a custom property: the select and combobox
+     chevron and the date picker's calendar. */
+  --cn-chevron-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  --cn-calendar-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4.5' width='18' height='16' rx='2.5'/%3E%3Cpath d='M3 9.5h18M8 2.5v4M16 2.5v4'/%3E%3C/svg%3E");
 
   /* Density knobs. Default, then cozy and compact below. */
   /* Control heights are rem, so a larger browser font size grows the
@@ -364,6 +377,11 @@
      and under, where display-sm drops under 34px, it steps down to the
      title size so the page title stays the one headline. */
   --lead-title-size: var(--cn-type-heading-size);
+  /* The lead panel also ranks by room: a taller header band and wider
+     padding in its header, body, footer and a filling table's outer
+     columns than a plain panel's. */
+  --lead-band-h: 72px;
+  --lead-pad: var(--space-6);        /* 32px */
   --body-pad: var(--space-5);
   --cell-pad: var(--space-3) var(--space-4);
   --cell-font-size: var(--cn-type-ui-size);   /* 14px; compact is 13 */
@@ -383,21 +401,23 @@
   --t-slow: .32s;
 
   font-family: var(--sans);
-  font-optical-sizing: auto;
   color: var(--cn-fg);
-  background: var(--base);
+  background: var(--cn-surface-page);
   font-synthesis: none;
 }
 
 /* Metric-matched fallbacks. Until the web fonts load, or if they never do,
-   text sets in a local face sized to Inter's and JetBrains Mono's metrics,
-   so the swap does not reflow the page. */
+   text sets in a local face sized to IBM Plex Sans's and JetBrains Mono's
+   metrics, so the swap does not reflow the page. Plex Sans sets 1.13%
+   wider than Arial over running text and has a 1.025 ascent and .275
+   descent on a 1000 em with no line gap; the overrides divide those by
+   the size adjust. */
 @font-face {
-  font-family: "Inter Fallback";
+  font-family: "IBM Plex Sans Fallback";
   src: local("Arial"), local("Liberation Sans"), local("Helvetica");
-  size-adjust: 107.06%;
-  ascent-override: 90.49%;
-  descent-override: 22.56%;
+  size-adjust: 101.13%;
+  ascent-override: 101.36%;
+  descent-override: 27.19%;
   line-gap-override: 0%;
 }
 @font-face {
@@ -429,7 +449,7 @@
    join into a solid side instead of leaving the notch of a single
    offset copy. Rest, half and hover each have four layers, so the press
    and the hover lift still interpolate layer by layer. */
-:where(.btn-primary, .btn-secondary, .segmented > *, .accent-card, .chip, .panel.is-tilted, .cn-hard, .cn-hard-lg, .cn-hard-sm, .cn-pressable-slide) {
+:where(.btn-primary, .btn-secondary, .segmented > *, .accent-card, .chip, .panel.is-tilted, .cn-hard, .cn-hard-lg, .cn-hard-sm, .cn-pressable-slide, .input[type="file"], .field input[type="file"]) {
   --cn-plate: calc(var(--hard-offset) * .25) calc(var(--hard-offset) * .25) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .5) calc(var(--hard-offset) * .5) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .75) calc(var(--hard-offset) * .75) 0 var(--plate, var(--neu-ink)), var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
   --cn-plate-half: calc(var(--hard-offset) * .125) calc(var(--hard-offset) * .125) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .25) calc(var(--hard-offset) * .25) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .375) calc(var(--hard-offset) * .375) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--neu-ink));
   --cn-plate-hover: calc((var(--hard-offset) + 1px) * .25) calc((var(--hard-offset) + 1px) * .25) 0 var(--plate, var(--neu-ink)), calc((var(--hard-offset) + 1px) * .5) calc((var(--hard-offset) + 1px) * .5) 0 var(--plate, var(--neu-ink)), calc((var(--hard-offset) + 1px) * .75) calc((var(--hard-offset) + 1px) * .75) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--neu-ink));
@@ -488,6 +508,8 @@
   --band-h: 52px;
   --band-pad: var(--space-2) var(--space-5);
   --band-title-size: var(--cn-type-name-size);
+  --lead-band-h: 60px;
+  --lead-pad: var(--space-5);
   --body-pad: var(--space-4) var(--space-5);
   --cell-pad: var(--space-2) var(--space-3);
   --chip-pad: var(--space-1) var(--space-3);
@@ -506,7 +528,9 @@
   --band-h: 44px;
   --band-pad: var(--space-2) var(--space-4);
   --band-title-size: var(--cn-type-ui-size);
-  --lead-title-size: var(--cn-type-title-size); /* 20px, what a 44px band holds */
+  --lead-title-size: var(--cn-type-title-size); /* 20px, what a 48px band holds */
+  --lead-band-h: 48px;
+  --lead-pad: var(--space-4);
   --body-pad: var(--space-3) var(--space-4);
   --cell-pad: var(--space-1) var(--space-2);
   --cell-font-size: var(--cn-type-label-size);
@@ -522,7 +546,7 @@
    through [hidden] opts out with data-cn-animate-hidden. */
 [hidden]:not([hidden="until-found"], [data-cn-animate-hidden], .popover, .toast) { display: none !important; }
 html { scroll-behavior: smooth; scrollbar-gutter: stable; }
-body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--base); }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--cn-surface-page); }
 button, input, select, textarea { font: inherit; }
 /* A legend drops its user-agent inline padding, so it starts on the same
    line as the controls and message under it. */
@@ -582,7 +606,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
 @keyframes spin  { to { transform: rotate(360deg); } }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 0 7px transparent; } }
 @keyframes blink { 50% { opacity: 0; } }
-@keyframes breathe { to { opacity: .5; } }
+@keyframes breathe { to { opacity: .7; } }
 /* Scroll-driven topbar cast: fades in over the first 60px of scroll. */
 @keyframes cast  { from { box-shadow: 0 0 0 transparent; border-bottom-color: transparent; } }
 
@@ -626,17 +650,21 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     animation-iteration-count: infinite !important;
   }
   /* The skeleton holds still at its midpoint instead of pulsing. */
-  .skeleton { animation: none !important; opacity: .75; }
+  .skeleton { animation: none !important; opacity: .85; }
 }
 
 /* More contrast: text steps up one palette stop, the panel hairline
    reaches a 3:1 boundary, control edges brighten, carved fields and wells
    get a full ring, links underline at full strength, and the grain goes.
-   The look stays Mocha. */
+   The look stays Mocha. The same block runs without the OS setting when
+   the root element carries data-contrast="more", so a page can offer the
+   step as a toggle; lint holds the two blocks equal. It goes on the root
+   element, not a subtree, because tokens such as --neu-raised and
+   --cn-fg-soft resolve their parts where :root declares them. */
 @media (prefers-contrast: more) {
   /* The panel hairline is overlay-0, 3.4:1 on base, so a panel shows a
      3:1 boundary. The lead and overlay hairline stays a step above it on
-     overlay-1, 4.4:1. The stat rule lifts to surface-2, 2.5:1, so it sits
+     overlay-1, 4.4:1. The stat rule lifts to surface-2, 2.6:1 on the page, so it sits
      between the surface-1 --edge-soft and the overlay-0 --edge. */
   :root {
     --cn-fg-body: var(--text);
@@ -660,6 +688,27 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
   a { text-decoration-color: currentColor; }
 }
 
+:root[data-contrast="more"] {
+  --cn-fg-body: var(--text);
+  --cn-fg-muted: var(--subtext-1);
+  --cn-fg-placeholder: var(--subtext-0);
+  --cn-fg-faint: var(--overlay-2);
+  --cn-fg-disabled: var(--overlay-2);
+  --edge: var(--overlay-0);
+  --edge-soft: var(--surface-1);
+  --edge-strong: var(--overlay-1);
+  --cn-stat-rule: var(--surface-2);
+  --control-edge: var(--overlay-2);
+  --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
+  --cn-well-ring: inset 0 0 0 1px var(--surface-2);
+  --neu-dark: rgb(8 8 14 / .88);
+  --neu-shade: rgb(8 8 14 / .86);
+  --neu-near: rgb(8 8 14 / .9);
+  --disabled-opacity: .7;
+  --grain: 0;
+}
+:root[data-contrast="more"] a { text-decoration-color: currentColor; }
+
 /* Touch: a coarse pointer gets 44px targets at every density, the size
    Apple and WCAG 2.5.5 ask for. */
 @media (pointer: coarse) {
@@ -679,6 +728,11 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
      repaint, so it draws in Highlight. */
   .sidebar-nav a[aria-current="page"]::before { forced-color-adjust: none; background: Highlight !important; }
   .data-table tr[aria-selected="true"] td { outline: 1px solid Highlight; }
+  /* A selected listbox option loses its wash, so it draws a Highlight
+     rim, and the masked checks of a selected option or a checked menu
+     row paint CanvasText instead of vanishing. */
+  .listbox [role="option"][aria-selected="true"] { outline: 1px solid Highlight; outline-offset: -1px; }
+  :is(.listbox [role="option"][aria-selected="true"], .menu [role^="menuitem"][aria-checked="true"])::after { forced-color-adjust: none; background: CanvasText !important; }
   /* Box-shadow carves vanish, so carved fields and wells draw an edge. */
   :is(.input, .field :is(input, select, textarea), .well, .terminal, .codeblock, .command, .stepper > *, .progress-track, .tabs) { outline: 1px solid CanvasText; outline-offset: -1px; }
   .checkbox, .radio { border-color: CanvasText !important; }

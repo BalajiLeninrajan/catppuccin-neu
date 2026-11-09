@@ -34,8 +34,8 @@ export default function AvatarPage() {
         </span>
       </Demo>
 
-      <Demo title="Stack" classes="avatar-stack > .avatar">
-        <div class="avatar-stack">
+      <Demo title="Stack" classes="avatar-stack > .avatar · --ring-ground: var(--cn-surface-page)">
+        <div class="avatar-stack" style="--ring-ground:var(--cn-surface-page)">
           {PEOPLE.slice(0, 4).map((p) => (
             <span key={p.initials} class="avatar" style={accentStyle(p.accent)} role="img" aria-label={p.name} data-tip={p.name}>
               {p.initials}
@@ -93,7 +93,7 @@ export default function AvatarPage() {
             name: "--ring-ground",
             values: "color",
             default: "var(--base)",
-            notes: "The ring color. Set it to the surface behind the stack, such as var(--cn-surface-raised) on a panel.",
+            notes: "The ring color, base by default, the panel fill. Set it to the surface behind the stack, such as var(--cn-surface-page) on the page, as in the demo above.",
           },
           {
             name: "--accent",

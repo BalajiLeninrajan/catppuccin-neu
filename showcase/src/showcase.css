@@ -50,8 +50,9 @@
   gap: var(--space-3);
 }
 
-/* The stage is the page ground itself: --base, no surface swap.
-   A soft hairline frames the demo area; depth reads against --base. The
+/* The stage is the page ground itself: mantle, no surface swap, so a
+   specimen sits on the ground it sits on in an app. A soft hairline
+   frames the demo area; depth reads against the page. The
    system keeps dashes for open slots (.is-dashed / .cn-edge-dashed) and
    nothing else, and the docs don't get to add more per page, which would
    read as a wireframe. */

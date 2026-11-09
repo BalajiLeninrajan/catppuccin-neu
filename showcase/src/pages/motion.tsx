@@ -38,7 +38,7 @@ const keyframesSnippet = `@keyframes enter { from { opacity: 0; transform: trans
 @keyframes spin  { to { transform: rotate(360deg); } }
 @keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 0 7px transparent; } }
 @keyframes blink { 50% { opacity: 0; } }
-@keyframes breathe { to { opacity: .5; } }
+@keyframes breathe { to { opacity: .7; } }
 @keyframes cast  { from { box-shadow: 0 0 0 transparent; border-bottom-color: transparent; } }`;
 
 const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
@@ -61,7 +61,7 @@ const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
     animation-iteration-count: infinite !important;
   }
   /* The skeleton holds still at its midpoint instead of pulsing. */
-  .skeleton { animation: none !important; opacity: .75; }
+  .skeleton { animation: none !important; opacity: .85; }
 }`;
 
 const arriveSnippet = `/* tokens.css: no stagger, the whole set arrives at once */
@@ -188,6 +188,14 @@ export default function MotionPage() {
         <code class="cn-code-inline">--t-slow</code> so their shapes read: the
         fast-out lands early, the ease-in starts late, and the spring passes
         its mark and settles. The five durations run on the fast-out.
+      </p>
+
+      <p class="cn-copy">
+        Replay toggles the blocks, so press it again while they are still
+        travelling: each block turns back from where it is, not from its
+        start. Every state change in the package is a transition, so a press
+        released early or a toggle flipped back retargets mid-flight. Only
+        page-enter and the loops are keyframes, and those restart.
       </p>
 
       <p class="cn-copy">

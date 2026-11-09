@@ -4,14 +4,17 @@ import { tabs, menu, slider, toast } from "../../../js/index.js";
 
 const importSnippet = `import { init } from "catppuccin-neu/js";
 
-const cleanup = init();  // every tablist, menu button and slider, plus tooltips
+const cleanup = init();  // every tablist, menu button, listbox, combobox and slider, plus tooltips
 // later, on unmount or a route change
 cleanup();`;
 
-const oneAtATimeSnippet = `import { tabs, menu, slider, tooltips, toast } from "catppuccin-neu/js";
+const oneAtATimeSnippet = `import { tabs, menu, listbox, slider, tooltips, toast } from "catppuccin-neu/js";
 
 const offTabs = tabs(document.querySelector('[role="tablist"]'));
 const offMenu = menu(document.querySelector("#actions"));
+const offTeam = listbox(document.querySelector("#team-list"), {
+  combobox: document.querySelector("#team"),
+});
 const offSlider = slider(document.querySelector("#terms"));
 const offTips = tooltips();
 
@@ -34,6 +37,18 @@ const markupSnippet = `<!-- tabs(): each tab names its panel; only the selected 
        aria-labelledby="actions" hidden>
     <button role="menuitem" tabindex="-1">Rename</button>
     <button role="menuitemcheckbox" tabindex="-1" aria-checked="false">Show archived</button>
+  </div>
+</div>
+
+<!-- listbox(): a combobox names its listbox, which sits on a popover -->
+<div class="field" style="position: relative">
+  <label for="team">Owning team</label>
+  <input id="team" role="combobox" aria-controls="team-list"
+         aria-expanded="false" aria-autocomplete="list">
+  <div class="popover listbox" id="team-list" role="listbox"
+       aria-label="Teams" hidden>
+    <div role="option" aria-selected="false">Payments</div>
+    <div role="option" aria-selected="false">Analytics</div>
   </div>
 </div>
 
@@ -136,7 +151,7 @@ export default function BehaviorPage() {
   return (
     <Doc
       title="Behavior"
-      lede="An optional module, catppuccin-neu/js, that keeps ARIA state and the keyboard model in step for tabs, menus, sliders, tooltips and toasts. The CSS never needs it to look right."
+      lede="An optional module, catppuccin-neu/js, that keeps ARIA state and the keyboard model in step for tabs, menus, listboxes, sliders, tooltips and toasts. The CSS never needs it to look right."
     >
       <p class="cn-copy">
         The tabs, menu, slider and toast below run on the module, not on
@@ -172,7 +187,10 @@ export default function BehaviorPage() {
         <code class="cn-code-inline">init(root)</code> finds every{" "}
         <code class="cn-code-inline">[role="tablist"]</code>, every trigger with{" "}
         <code class="cn-code-inline">aria-haspopup="menu"</code> and{" "}
-        <code class="cn-code-inline">aria-controls</code>, and every{" "}
+        <code class="cn-code-inline">aria-controls</code>, every{" "}
+        <code class="cn-code-inline">[role="combobox"]</code> with{" "}
+        <code class="cn-code-inline">aria-controls</code> naming a listbox,
+        every other <code class="cn-code-inline">[role="listbox"]</code>, and every{" "}
         <code class="cn-code-inline">input[type="range"].slider</code> under{" "}
         <code class="cn-code-inline">root</code>, which defaults to the document,
         and installs <code class="cn-code-inline">tooltips()</code>. It wires what
@@ -192,6 +210,11 @@ export default function BehaviorPage() {
             name: "menu(trigger)",
             values: 'aria-haspopup="menu" + aria-controls',
             notes: "For a trigger naming a hidden .menu[role=\"menu\"]. Click, Enter, Space or ArrowDown opens on the first item, ArrowUp on the last. Arrows, Home and End move. Escape closes and returns focus. Tab or a press outside closes without moving focus. A menuitemcheckbox toggles aria-checked and stays open. Sets aria-expanded on the trigger.",
+          },
+          {
+            name: "listbox(list, { combobox })",
+            values: '[role="listbox"], input[role="combobox"]',
+            notes: "Focus stays on the listbox, or on the combobox that drives it, and aria-activedescendant names the active option, which also gets data-active. Up, Down, Home and End move it; Enter, or Space on a listbox, selects it and fires cn-select with the option in event.detail. aria-multiselectable toggles instead. With a combobox, ArrowDown, ArrowUp or typing opens the list; Escape, Tab, a pick or a press outside closes it, and a pick writes the option's text into the input. Filtering is yours. The input page has both, live.",
           },
           {
             name: "slider(input)",

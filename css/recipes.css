@@ -12,7 +12,8 @@
 
 /* ── Surfaces ───────────────────────────────────────────────────────────── */
 
-/* Panel: the primary content container. Raised. */
+/* Panel: the primary content container. Raised: the base fill a step
+   above the mantle page, the --edge hairline and the raised shadow. */
 .panel {
   min-width: 0;
   border: 1px solid var(--edge);
@@ -24,8 +25,8 @@
    edge, no long cast. Its fill matches its parent's, so the lit edge and
    the hairline show where it ends. */
 .panel .panel { box-shadow: var(--neu-raised-soft), var(--cn-lit-edge); }
-/* The lead panel: the one a view is about, one per view. It sits on the
-   page color like every panel and stands higher by darkness on the side
+/* The lead panel: the one a view is about, one per view. It takes the
+   base fill like every panel and stands higher by darkness on the side
    away from the light: --neu-lifted's foot on the bottom and right is
    deeper than a plain panel's, a 4px 6px full-ink contact, past the 4px
    plate and as deep as the tilted panel's 6px one on the bottom, 2px
@@ -43,13 +44,15 @@
 /* The one rotated hero card. A 6px plate rides over the neu raise so
    the hero still answers the top-left light instead of floating as a flat
    sticker. The plate stays at 6px, two past a button's, so the aside does
-   not outshout the data panel beside it. Flattened at ≤1060px. It is the aside, so its prose sets one
-   step down at the ui size, 14px on the body leading, and the data panel
-   beside it stays the louder block. The size rides on the body token
-   because .cn-copy is a utility and outranks any recipe rule. */
+   not outshout the data panel beside it. Flattened at ≤1060px. It is the
+   aside, so its prose sets one step down at 15px, the compact body size
+   (.9375rem): rotated text at 14px rendered soft at 1x, and 15px keeps it
+   crisp while the data panel beside it stays the louder block. The size
+   rides on the body token because .cn-copy is a utility and outranks any
+   recipe rule. */
 .panel.is-tilted {
-  --cn-type-body-size: var(--cn-type-ui-size);
-  font-size: var(--cn-type-ui-size);
+  --cn-type-body-size: .9375rem;
+  font-size: .9375rem;
   /* Content height, so a grid row never stretches the card into an empty
      tail. */
   align-self: start;
@@ -94,6 +97,20 @@
   font-weight: var(--cn-type-heading-weight);
   letter-spacing: var(--cn-type-heading-tracking);
 }
+/* The lead also ranks by room: its header band is --lead-band-h tall and
+   its header, body and footer pad --lead-pad, a step past a plain panel's
+   at every density. */
+.panel.is-lead > .panel-header { min-height: var(--lead-band-h); }
+.panel.is-lead > :is(.panel-header, .panel-footer) { padding-inline: var(--lead-pad); }
+.panel.is-lead > .panel-body { padding: var(--lead-pad); }
+/* A table that fills the lead panel, directly or through a scroll wrapper
+   or a tab panel, insets its outer columns to the same --lead-pad, so its
+   first and last columns line up with the band title and the body above
+   and below. Row mode at 760px keeps its own padding. */
+@media (min-width: 761px) {
+  :is(.panel.is-lead > .data-table, .panel.is-lead > :is(.table-scroll, [role="tabpanel"]) > .data-table, .panel.is-lead > [role="tabpanel"] > .table-scroll > .data-table) :is(th, td):first-child { padding-inline-start: var(--lead-pad); }
+  :is(.panel.is-lead > .data-table, .panel.is-lead > :is(.table-scroll, [role="tabpanel"]) > .data-table, .panel.is-lead > [role="tabpanel"] > .table-scroll > .data-table) :is(th, td):last-child { padding-inline-end: var(--lead-pad); }
+}
 /* A band holding a .band-actions cluster wraps when the actions outgrow
    the row; the cluster holds to the right and wraps inside itself. Other
    bands stay on one line. */
@@ -132,7 +149,7 @@
 
 /* Well: an inset container for grouped controls or scrolling content.
    Borderless: the carve, one dark wall from the top left, and the sunken
-   fill define it. A shadow alone tops out near 1.28:1 on a dark page, so
+   fill define it. A shadow alone tops out near 1.2:1 on the mantle page, so
    a transparent well read as an outlined panel; the darker fill puts it
    below the ground, so it needs no hairline. --cn-well-ring paints only
    under prefers-contrast. */
@@ -181,7 +198,8 @@
   animation: blink .75s steps(2) infinite;
 }
 
-/* Sticky top bar: translucent base, blurred, hairline + soft cast shadow. */
+/* Sticky top bar: the page ground, translucent and blurred, with a
+   hairline and a soft cast. It sits on the page, not above it. */
 .topbar {
   min-height: calc(var(--band-h) + var(--space-1));
   /* Same gutter as .page-main, so the brand lines up with the column edge. */
@@ -193,7 +211,7 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-5);
-  background: color-mix(in srgb, var(--base) 91%, transparent);
+  background: color-mix(in srgb, var(--cn-surface-page) 91%, transparent);
   border-bottom: 1px solid var(--edge-soft);
   backdrop-filter: blur(14px);
   box-shadow: var(--shadow-cast),
@@ -334,8 +352,10 @@ a:active > .accent-card {
 }
 .btn-primary:hover:not(:disabled, [aria-disabled="true"]) { --cn-fill: var(--cn-interactive-hover); }
 /* Disabled primary goes flat and sinks: no plate, ramp, grain or gloss,
-   no edge, just the sunken fill under the full carve and the well ring,
-   like an empty slot pressed into the page. A secondary keeps its outline
+   no edge, just the sunken fill under the soft carve and the well ring,
+   like an empty slot pressed into the page. The carve is --neu-inset-soft,
+   the depth of a disabled field, so it stays shallower than any press and
+   never reads as a held or engaged button. A secondary keeps its outline
    and plate, so the two never share a silhouette. The border stays 1px
    and transparent so the size holds. Darkness only, no lip. The disabled
    text color, and no dimming: a dimmed plate reads as a second primary
@@ -346,7 +366,7 @@ a:active > .accent-card {
   color: var(--cn-fg-disabled);
   border: 1px solid transparent;
   background-image: none;
-  box-shadow: var(--neu-inset), var(--cn-well-ring);
+  box-shadow: var(--neu-inset-soft), var(--cn-well-ring);
   opacity: 1;
 }
 .btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"])::before { opacity: 0; }
@@ -374,7 +394,9 @@ a:active > .accent-card {
 }
 .progress-track span::before { inset: 0; }
 
-/* Secondary: base fill on the ink plate, the default for clickables. */
+/* Secondary: base fill on the ink plate, the default for clickables.
+   Hover keeps the base fill, since nothing raised is lighter than base.
+   The border warms toward mauve and the plate deepens 1px under the lift. */
 .btn-secondary {
   color: var(--cn-fg);
   border: 1px solid var(--edge);
@@ -382,7 +404,9 @@ a:active > .accent-card {
 }
 .btn-secondary:hover:not(:disabled, [aria-disabled="true"]) {
   border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-strong), var(--surface-1));
-  background: var(--cn-surface-overlay);
+}
+.btn-secondary:hover:not(:active, :disabled, [aria-disabled="true"]) {
+  box-shadow: var(--cn-plate-hover), var(--hard-extra);
 }
 
 /* Ghost: chrome-free until hovered. Toggled or current, it wears the
@@ -503,7 +527,7 @@ a:active > .accent-card {
    background stays transparent so the parent ground shows through and only
    the dark inner wall defines the field. A sunken fill was tried and
    dropped: at 1x it flattened the carve into a dark box. At rest it has
-   a quiet even surface-1 hairline, 1.8:1 on the page, the same on all
+   a quiet even surface-1 hairline, 1.8:1 on a panel, the same on all
    four sides, so its bounds show without a lip. The ring is listed first,
    so it paints over the carve: under it, the dark wall dimmed the top and
    left and left the bottom and right brighter. Hover closes a 3:1 ring
@@ -534,8 +558,8 @@ a:active > .accent-card {
   padding: var(--space-3) var(--space-4);
   resize: vertical;
 }
-/* --cn-fg-placeholder, overlay-2 and the text floor: 5.8:1 on the page
-   and on a panel, and 4.6:1 in a dialog, so a placeholder clears 4.5:1
+/* --cn-fg-placeholder, overlay-2 and the text floor: 5.8:1 on a panel,
+   6.2:1 on the page and 4.6:1 in a dialog, so a placeholder clears 4.5:1
    wherever forms sit. The value is --cn-fg, so the two never read alike. */
 :is(.input, .field :is(input, textarea))::placeholder { color: var(--cn-fg-placeholder); }
 /* Fields take the global ring on pointer focus too, since typing follows
@@ -609,12 +633,57 @@ a:active > .accent-card {
 :is(select.input, .field select) {
   appearance: none;
   padding-inline-end: calc(var(--space-6) + var(--space-2));
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: var(--cn-chevron-image);
   background-repeat: no-repeat;
   background-position: right var(--space-3) center;
   background-size: 15px;
   cursor: pointer;
 }
+/* A combobox is a text field that opens a listbox: the field carve and
+   its states, with the select's chevron in the trailing padding. */
+:is(.input, .field input)[role="combobox"] {
+  padding-inline-end: calc(var(--space-6) + var(--space-2));
+  background-image: var(--cn-chevron-image);
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: 15px;
+}
+/* Date fields keep the field carve and every field state as they are;
+   the picker glyph takes the overlay-1 icon color. */
+:is(.input, .field input):is([type="date"], [type="datetime-local"], [type="month"], [type="week"])::-webkit-calendar-picker-indicator {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  background: var(--cn-calendar-image) center / contain no-repeat;
+  cursor: pointer;
+}
+/* A file field: the field carve holds a small secondary-shaped button,
+   the raised fill, the --edge hairline, the lit edge and a 3px ink plate,
+   inset evenly from the carve's edge. The field's hover, focus, disabled
+   and invalid states apply to the whole field. */
+:is(.input, .field input)[type="file"] {
+  padding-block: calc((var(--control-h) - var(--control-h-sm)) / 2);
+  padding-inline-start: calc((var(--control-h) - var(--control-h-sm)) / 2);
+  color: var(--cn-fg-soft);
+  line-height: var(--control-h-sm);
+  cursor: pointer;
+}
+:is(.input, .field input)[type="file"]::file-selector-button {
+  height: var(--control-h-sm);
+  margin-inline-end: var(--space-3);
+  padding: 0 var(--space-3);
+  color: var(--cn-fg);
+  border: 1px solid var(--edge);
+  border-radius: var(--cn-radius-control);
+  background: var(--cn-surface-raised);
+  box-shadow: var(--cn-plate-sm), var(--cn-lit-edge);
+  font: var(--cn-type-ui-weight) var(--cn-type-label-size)/1 var(--sans);
+  cursor: pointer;
+  transition: border-color var(--t-fast), translate var(--t-press) var(--ease-out), box-shadow var(--t-press) var(--ease-out);
+}
+:is(.input, .field input)[type="file"]:hover:not(:disabled)::file-selector-button { border-color: var(--control-edge); }
+:is(.input, .field input)[type="file"]:active:not(:disabled)::file-selector-button { translate: 1px 1px; box-shadow: var(--cn-plate-half), var(--cn-lit-edge); }
+:is(.input, .field input)[type="file"]:disabled::file-selector-button { color: var(--cn-fg-disabled); border-color: var(--edge-soft); box-shadow: none; cursor: not-allowed; }
 
 /* Where the browser supports customizable selects (Chrome 135+), the OS
    option list becomes a system popover. Elsewhere the native picker stays. */
@@ -1093,13 +1162,14 @@ a:active > .accent-card {
   transition: box-shadow var(--t-base) var(--ease-out), border-color var(--t-base), border-radius var(--t-base);
 }
 /* Open is its own step, the open carve: the full carve, a mauve tint at
-   --cn-step-tint into base and a mauve title. It is not the engaged state.
-   The engaged --wash would drop body text in the fold to 6.1:1, under the
-   7:1 body floor, so the open row stays near the page's own ground. */
+   --cn-step-tint over whatever holds it and a mauve title. It is not the
+   engaged state. The engaged --wash would drop body text in the fold to
+   6.1:1, under the 7:1 body floor, so the open row stays near its own
+   ground, and on the mantle page it never turns lighter than the page. */
 .accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) {
   border-radius: var(--cn-radius-card);
   border-bottom-color: transparent;
-  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-tint), var(--base));
+  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-tint), transparent);
   box-shadow: var(--neu-inset);
 }
 .accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) > :is(label, summary) { color: var(--cn-interactive); }
@@ -1201,19 +1271,21 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   animation: spin .8s linear infinite;
 }
 
-/* Skeleton: a carved placeholder where content is loading. It is shallow:
-   the band fill, one step under whatever holds it, and the soft inset, so
-   it never reads darker than the content it stands in for. It breathes on
-   the breathe keyframe. Size it to the
-   content it stands in for; .is-text is one line of body copy, .is-round
-   an avatar. Mark the loading region aria-busy="true" so assistive tech
-   waits for it, and keep skeletons aria-hidden. */
+/* Skeleton: a carved placeholder where content is loading. It takes the
+   well carve, the sunken fill under --neu-inset, darkness only with no
+   ring, so a loading block reads below the ground on a panel (1.12:1) and
+   on the page (1.05:1). It breathes on the breathe keyframe between full
+   and .7 opacity, so at its faintest it still sits a step under a panel
+   (1.09:1), past the 1.05:1 table head. Size it to the content it stands
+   in for; .is-text is one line of body copy, .is-round an avatar. Mark the
+   loading region aria-busy="true" so assistive tech waits for it, and
+   keep skeletons aria-hidden. */
 .skeleton {
   display: block;
   min-height: var(--space-4);
   border-radius: var(--cn-radius-control);
-  background: var(--cn-surface-band);
-  box-shadow: var(--neu-inset-soft);
+  background: var(--cn-surface-sunken);
+  box-shadow: var(--neu-inset);
   animation: breathe 1.6s var(--ease-in) infinite alternate;
 }
 .skeleton.is-text { height: 1em; min-height: 0; border-radius: var(--cn-radius-chip); }
@@ -1397,6 +1469,10 @@ a:hover:not(:active) > .accent-card {
    weight beside a panel's hairline without stepping past the hairline
    ladder. Under prefers-contrast it sits between --edge-soft and --edge. */
 .stat-grid.is-ruled > .stat { padding-block: var(--space-1); padding-inline: var(--space-4) 0; border-inline-start: 2px solid var(--cn-stat-rule); }
+/* Inside a panel body the body pad already insets the stats, so they take
+   no padding of their own and line up with the header title and the
+   inline rows at every width. This beats the 520px .stat padding. */
+.panel-body .stat-grid:not(.is-ruled) > .stat { padding: 0; }
 
 .stat.is-inline {
   padding: 0;
@@ -1418,8 +1494,8 @@ a:hover:not(:active) > .accent-card {
 /* A summary total: the row a list of inline stats adds up to. It follows
    the .cn-divide list rather than sitting in it. The label is the name role
    and the value the value role, both in --cn-fg, under an --edge rule,
-   2.1:1 against the 1.3:1 row hairlines, with 12px of air, so the total
-   outweighs the rows above it. */
+   1.85:1 on a panel against the 1.3:1 row hairlines, with 12px of air, so
+   the total outweighs the rows above it. */
 .stat.is-inline.is-total {
   margin-block-start: var(--space-3);
   padding-block-start: var(--space-3);
@@ -1461,8 +1537,8 @@ a:hover:not(:active) > .accent-card {
 }
 
 /* Table: opt-in class on <table>; scopes all table styling. Sans tabular
-   body, a band header (--cn-surface-band) over an --edge rule, 2.1:1 on
-   the page against the surface-0 row rules' 1.3:1, so the head parts from
+   body, a band header (--cn-surface-band) over an --edge rule, 1.85:1 on
+   a panel against the surface-0 row rules' 1.3:1, so the head parts from
    the rows by more than its text color. Hover presses the row in. Give each data cell a
    data-label attribute: it becomes the row label at 760px and below. Inside
    .table-scroll the table stays a table and scrolls sideways instead. */
@@ -1562,7 +1638,7 @@ a:hover:not(:active) > .accent-card {
 }
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
-  /* Its own step, 1.27:1 on the page: past the 1.24:1 hover and the open
+  /* Its own step, 1.27:1 on a panel: past the 1.24:1 hover and the open
      carve's 1.08:1, and 1.20:1 under a selected row's wash. */
   background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
 }
@@ -2018,6 +2094,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 @media (prefers-contrast: more) {
   .panel.is-tilted { transform: none; }
 }
+:root[data-contrast="more"] .panel.is-tilted { transform: none; }
 
 /* 760: tablet and phone: tighter chrome, tables become label and value rows. */
 @media (max-width: 760px) {
@@ -2157,7 +2234,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 /* Reduced transparency: blurred chrome goes opaque and the scrim stops
    blurring what is under it. */
 @media (prefers-reduced-transparency: reduce) {
-  .topbar { background: var(--base); backdrop-filter: none; }
+  .topbar { background: var(--cn-surface-page); backdrop-filter: none; }
   .sidebar { backdrop-filter: none; }
   @media (max-width: 1060px) { .sidebar { background: var(--cn-surface-recessed); } }
   dialog:is(.modal, .drawer)::backdrop { backdrop-filter: none; background: color-mix(in srgb, var(--crust) 88%, transparent); }
@@ -2169,7 +2246,8 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:active, .active, [aria-pressed="true"], [aria-checked="true"]),
   :is(a, button).chip:hover:not(:active),
   a:hover:not(:active) > .accent-card { transform: none; }
-  a:hover:not(:active) > .accent-card { box-shadow: var(--cn-plate), var(--hard-extra); }
+  a:hover:not(:active) > .accent-card,
+  .btn-secondary:hover:not(:active) { box-shadow: var(--cn-plate), var(--hard-extra); }
 }
 
 /* ── Tabs: views of one panel ────────────────────────────────────────────────
@@ -2180,7 +2258,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
    The tabs sit in a shallow carve and the selected one rises out of it on
    the raised fill, the reverse of the segmented control, whose choice
    presses in. The carve takes the resting field's quiet even hairline,
-   --cn-field-ring, so its bounds show on the page color. Arrow keys move
+   --cn-field-ring, so its bounds show on the page and on a panel. Arrow keys move
    between tabs (a consumer listener; roving tabindex, the selected tab is
    the only one in the tab order).        */
 .tabs {
@@ -2292,6 +2370,51 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
    start at the icon column's text edge, so every label lines up. */
 .menu:has(> [role^="menuitem"] > svg) > [role^="menuitem"]:not(:has(> svg)),
 .menu:has(> [role^="menuitem"] > svg) > .cn-microlabel { padding-inline-start: calc(var(--space-3) + var(--space-4) + var(--space-2)); }
+
+/* ── Listbox: a list of options to pick from ───────────────────────────────
+   <div class="listbox well" role="listbox" tabindex="0" aria-label="Team">
+     <div role="option" aria-selected="true">Payments</div> …</div>
+   Standalone it sits in a carve (compose .well); under a combobox it sits
+   on a .popover. Rows are the menu's: 14px at 500, --hover under the
+   pointer and on the active row, the one aria-activedescendant names
+   (listbox() in catppuccin-neu/js marks it data-active). The selected row
+   wears --wash with a mauve check, so it outranks the hovered one. Under
+   the keyboard the active row draws the focus ring inset 2px, and the
+   listbox hands its own ring to that row. */
+.listbox {
+  max-height: min(320px, 50vh);
+  padding: var(--space-1);
+  display: grid;
+  align-content: start;
+  overflow-y: auto;
+  scrollbar-color: var(--surface-2) transparent;
+}
+.popover.listbox { width: auto; min-width: 200px; }
+.listbox [role="option"] {
+  min-height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--cn-fg-soft);
+  border-radius: var(--cn-radius-control);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  cursor: pointer;
+}
+.listbox [role="option"]:is(:hover, [data-active]) { color: var(--cn-fg); background: var(--hover); }
+.listbox [role="option"][aria-selected="true"] { color: var(--cn-fg); background: var(--wash); font-weight: var(--cn-type-name-weight); }
+.listbox [role="option"][aria-selected="true"]::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  margin-inline-start: auto;
+  flex: 0 0 auto;
+  background: var(--cn-interactive);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.listbox [role="option"][aria-disabled="true"] { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
+.listbox:focus-visible:has([data-active]) { outline-color: transparent; }
+:is(.listbox:focus-visible, .listbox[data-cn-keyboard]) [role="option"][data-active] { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
 
 /* ── Slider: a range input ──────────────────────────────────────────────────
    <input type="range" class="slider" style="--value: 40%">
@@ -2448,8 +2571,9 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
      </aside>
      <main>…</main>
    </div>
-   The sidebar sits one step below the page and scrolls on its own. The
-   current link wears the engaged state. At 1060px and below it folds into
+   The sidebar sits one step below the mantle page, on crust 50% into
+   mantle, and scrolls on its own. The current link is a position: the
+   spine and 600, no press. At 1060px and below it folds into
    a sticky bar; the consumer toggles .is-open and aria-expanded.          */
 .app-shell.has-sidebar { flex-direction: row; }
 .app-shell.has-sidebar > :not(.sidebar) { flex: 1 1 0; min-width: 0; }

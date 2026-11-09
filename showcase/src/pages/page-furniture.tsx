@@ -116,7 +116,7 @@ export default function PageFurniturePage() {
         <code class="cn-code-inline">.nav-secondary</code> hides. At 760px the bar
         tightens and a nav that outgrows it scrolls sideways inside the bar.
         Under <code class="cn-code-inline">prefers-reduced-transparency: reduce</code>{" "}
-        the bar drops the blur and fills with opaque base.
+        the bar drops the blur and fills with the opaque page ground, mantle.
       </p>
 
       <Demo title="Split topbar with a wordmark" classes="topbar is-split · wordmark > mark">
@@ -187,8 +187,8 @@ export default function PageFurniturePage() {
         <code class="cn-code-inline">.sidebar</code> beside the content. This
         site's navigation is one. The sidebar is{" "}
         <code class="cn-code-inline">--sidebar-w</code> (264px) wide, full
-        height, sticky, on <code class="cn-code-inline">--cn-surface-recessed</code>{" "}
-        with an <code class="cn-code-inline">--edge-soft</code> rule, and
+        height, sticky, on <code class="cn-code-inline">--cn-surface-recessed</code>,{" "}
+        crust 50% into mantle, a step under the page, with an <code class="cn-code-inline">--edge-soft</code> rule, and
         scrolls on its own. <code class="cn-code-inline">.sidebar-head</code>{" "}
         holds the wordmark and a <code class="cn-code-inline">.sidebar-toggle</code>;{" "}
         <code class="cn-code-inline">.sidebar-nav</code> stacks groups 24px

@@ -290,7 +290,11 @@ const lum = (c) => c.slice(0, 3).reduce((sum, v, i) => {
 }, 0);
 const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + .05) / (y + .05); };
 
+/* The page is mantle and raised surfaces are base, so text is checked on
+   both, on the overlay, and below the ground on the recessed sidebar and
+   the sunken wells, which hold code and the disabled primary's label. */
 const GROUNDS = ["--cn-surface-page", "--cn-surface-raised", "--cn-surface-overlay"];
+const TEXT_GROUNDS = [...GROUNDS, "--cn-surface-recessed", "--cn-surface-sunken"];
 const ON_PAGE = ["--cn-surface-page", "--cn-surface-raised"];
 const ON_OVERLAY = ["--cn-surface-overlay"];
 /* [foreground, grounds, floor, what the SPEC promises, mode]. A name that
@@ -299,15 +303,15 @@ const ON_OVERLAY = ["--cn-surface-overlay"];
    --edge-strong and lit-edge rows are design floors that keep the depth
    ladder in order, not WCAG obligations. */
 const PAIRS = [
-  ["--cn-fg", GROUNDS, 7, "headings and values"],
-  ["--cn-fg-soft", GROUNDS, 7, "ledes and cells"],
-  ["--cn-fg-body", GROUNDS, 7, "running text"],
-  ["--cn-fg-muted", GROUNDS, 5.5, "meta, help and table heads"],
-  ["--cn-fg-placeholder", GROUNDS, 4.5, "placeholders"],
+  ["--cn-fg", TEXT_GROUNDS, 7, "headings and values"],
+  ["--cn-fg-soft", TEXT_GROUNDS, 7, "ledes and cells"],
+  ["--cn-fg-body", TEXT_GROUNDS, 7, "running text"],
+  ["--cn-fg-muted", TEXT_GROUNDS, 5.5, "meta, help and table heads"],
+  ["--cn-fg-placeholder", TEXT_GROUNDS, 4.5, "placeholders"],
   ["@field-hover-ring", GROUNDS, 3, "a hovered field's ring (1.4.11)"],
   ["@field-ring", GROUNDS, 3, "a resting field's ring under prefers-contrast", "prefers-contrast"],
-  ["--edge", ON_PAGE, 2.1, "the raised hairline (design floor)"],
-  ["--edge", ON_OVERLAY, 1.7, "the raised hairline (design floor)"],
+  ["--edge", ON_PAGE, 1.8, "the raised hairline (design floor)"],
+  ["--edge", ON_OVERLAY, 1.5, "the raised hairline (design floor)"],
   ["--edge-strong", ON_PAGE, 2.4, "the lead and overlay hairline (design floor)"],
   ["--edge-strong", ON_OVERLAY, 1.9, "the lead and overlay hairline (design floor)"],
   ["@lit-edge", ON_PAGE, 1.4, "the lit top edge (design floor)"],
@@ -345,11 +349,21 @@ async function contrast() {
   const base = new Map();
   for (const b of blocks.filter((b) => !b.nested)) for (const [k, v] of customProps(b.body)) if (!base.has(k)) base.set(k, v);
   const more = new Map(base);
-  for (const b of blocks.filter((b) => b.more)) for (const [k, v] of customProps(b.body)) more.set(k, v);
+  const moreOwn = new Map();
+  for (const b of blocks.filter((b) => b.more)) for (const [k, v] of customProps(b.body)) { more.set(k, v); moreOwn.set(k, v); }
   const out = [];
+  /* :root[data-contrast="more"] is the prefers-contrast block as an
+     opt-in attribute, so the two must declare the same tokens and values. */
+  const attr = css.match(/(?:^|\n):root\[data-contrast="more"\]\s*\{([^}]*)\}/);
+  if (!attr) out.push({ line: 1, message: `no :root[data-contrast="more"] block mirrors the prefers-contrast block` });
+  else {
+    const own = customProps(attr[1]);
+    for (const [k, v] of moreOwn) if (own.get(k) !== v) out.push({ line: lineOf(text, text.indexOf(':root[data-contrast="more"]')), message: `:root[data-contrast="more"] sets ${k} to ${own.get(k) ?? "nothing"}, the prefers-contrast block to ${v}` });
+    for (const k of own.keys()) if (!moreOwn.has(k)) out.push({ line: lineOf(text, text.indexOf(':root[data-contrast="more"]')), message: `:root[data-contrast="more"] sets ${k}, which the prefers-contrast block does not` });
+  }
   for (const [mode, map] of [["default", base], ["prefers-contrast", more]]) {
     const { color } = resolver(map);
-    const ground = (name) => { const c = color(`var(${name})`); return c && over(c, color("var(--base)")); };
+    const ground = (name) => { const c = color(`var(${name})`); return c && over(c, color("var(--cn-surface-page)")); };
     /* The color of a one-layer shadow: drop inset and the lengths. */
     const fgOf = (name) => name.startsWith("@")
       ? color((map.get(`--cn-${name.slice(1)}`) || "").replace(/^inset\s+/, "").replace(/^(?:-?[\d.]+(?:px)?\s+)+/, ""))
@@ -372,10 +386,12 @@ async function contrast() {
         const parts = layer.replace(/^inset\s+/, "").match(/^((?:-?[\d.]+(?:px)?\s+)+)(.*)$/s);
         const [x, y] = parts ? parts[1].trim().split(/\s+/).map(parseFloat) : [];
         const c = parts && color(parts[2]);
-        const page = color("var(--base)");
         if (!c) { out.push({ line: 1, message: `${mode}: cannot resolve a layer of ${name}` }); continue; }
         if (x < 0 || y < 0) out.push({ line: 1, message: `${mode}: ${name} has a layer from the bottom right (${layer}); a carve has no lit side` });
-        if (lum(over(c, page)) > lum(page)) out.push({ line: 1, message: `${mode}: ${name} has a layer lighter than the page (${layer}); a carve is darkness only` });
+        for (const g of ["--cn-surface-page", "--cn-surface-raised", "--cn-surface-sunken"]) {
+          const bg = ground(g);
+          if (bg && lum(over(c, bg)) > lum(bg)) out.push({ line: 1, message: `${mode}: ${name} has a layer lighter than ${g} (${layer}); a carve is darkness only` });
+        }
       }
     }
     /* The lead and overlay hairline outranks the plain one on every ground. */
@@ -402,17 +418,20 @@ async function contrast() {
       }
     }
   }
-  /* Ratios written in :root comments, read against base. Only a ratio
-     that ends its clause or says "on base" is checked. */
+  /* Ratios written in :root comments, read against base, or against the
+     mantle page when the clause says "on the page". Only a ratio that ends
+     its clause or names one of those grounds is checked. */
   const { color } = resolver(base);
-  const page = color("var(--base)");
+  const panel = color("var(--base)"), page = color("var(--cn-surface-page)");
   for (const m of text.matchAll(/^\s*(--[\w-]+)\s*:[^;]*;\s*\/\*([^*]*)\*\//gm)) {
     const r = m[2].match(/([\d.]+):1(\s*(?:$|,|on base\b|on the page\b))?/);
     if (!r || r[2] === undefined) continue;
     const c = color(`var(${m[1]})`);
     if (!c) continue;
-    const got = ratio(over(c, page), page);
-    if (Math.abs(got - +r[1]) > .06) out.push({ line: lineOf(text, m.index + m[0].indexOf(m[1])), message: `${m[1]} comment says ${r[1]}:1 but computes to ${got.toFixed(2)}:1 on base` });
+    const onPage = /on the page/.test(r[2]);
+    const g = onPage ? page : panel;
+    const got = ratio(over(c, g), g);
+    if (Math.abs(got - +r[1]) > .06) out.push({ line: lineOf(text, m.index + m[0].indexOf(m[1])), message: `${m[1]} comment says ${r[1]}:1 but computes to ${got.toFixed(2)}:1 ${onPage ? "on the page" : "on base"}` });
   }
   return out.map((o) => ({ ...o, file }));
 }

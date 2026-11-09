@@ -42,11 +42,11 @@ import { TONE_GLYPH, NEEDS_GLYPH } from "../lib/glyphs";
 /* The full Mocha set, grouped by role. name → token, hex, one-line role note. */
 const GROUNDS = [
   { name: "crust", hex: "#11111b", note: "Deepest ground: scrims, the default plate, the progress track, text on accent fills." },
-  { name: "mantle", hex: "#181825", note: "Crust mixes into it for the table head and sunken surfaces." },
-  { name: "base", hex: "#1e1e2e", note: "The page ground, --cn-surface-page." },
+  { name: "mantle", hex: "#181825", note: "The page ground, --cn-surface-page. Crust mixes into it for the sunken and recessed surfaces." },
+  { name: "base", hex: "#1e1e2e", note: "The raised fill, --cn-surface-raised: panels and plated controls, one step above the page." },
   { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
   { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 40%, dashed open slots and the resting ring of a table-cell field." },
-  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 85%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
+  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 70%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
 ];
 
 const NEUTRAL_TEXT = [
@@ -593,7 +593,7 @@ export default function ColorsPage() {
       <CodeBlock
         title="The steps in use"
         code={`/* The mix tokens hold the shared expressions; use them, not the mix */
---edge:      color-mix(in srgb, var(--surface-2) 85%, transparent); /* raised-surface hairline: 2.1:1 */
+--edge:      color-mix(in srgb, var(--surface-2) 70%, transparent); /* raised-surface hairline: 1.85:1 on base */
 --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
 --edge-strong: var(--surface-2);                                   /* lead panel and overlay hairline: 2.5:1 */
 --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
@@ -700,7 +700,7 @@ export default function ColorsPage() {
       <Props
         title="Edge reference"
         rows={[
-          { name: ".cn-edge", values: "surface-2 85%", notes: "Raised-surface hairline, 2.1:1 on base, which is also the raised fill, and 1.8:1 on an overlay. The cut edge of panels, chips and controls." },
+          { name: ".cn-edge", values: "surface-2 70%", notes: "Raised-surface hairline, 1.85:1 on base, the raised fill, 1.92:1 on the page and 1.6:1 on an overlay. The cut edge of panels, chips and controls." },
           { name: ".cn-edge-soft", values: "surface-1 38%", notes: "Inner separators." },
           { name: ".cn-edge-line", values: "surface-0", notes: "Row separators, footer rules." },
           { name: ".cn-edge-mauve", values: "mauve at --cn-step-plate (25%)", notes: "Accent-forward edge." },
@@ -713,16 +713,16 @@ export default function ColorsPage() {
       <p class="cn-copy">
         The first six follow the surface ladder on the{" "}
         <a href="/surfaces">Surfaces</a> page. <code class="cn-code-inline">.cn-bg-hover</code>{" "}
-        is the ghost hover as a fill. Mantle and crust are raw palette
+        is the ghost hover as a fill. Base, mantle and crust are raw palette
         grounds, and <code class="cn-code-inline">.cn-tint</code> reads{" "}
         <code class="cn-code-inline">--tone</code>.
       </p>
       <Demo
         title="Grounds & fills"
-        classes="cn-bg-base / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well / cn-bg-hover / cn-bg-mantle / cn-bg-crust / cn-tint"
+        classes="cn-bg-page / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well / cn-bg-hover / cn-bg-base / cn-bg-mantle / cn-bg-crust / cn-tint"
         row
       >
-        {["bg-base", "bg-raised", "bg-overlay", "bg-recessed", "bg-head", "bg-well", "bg-hover", "bg-mantle", "bg-crust", "tint"].map(
+        {["bg-page", "bg-raised", "bg-overlay", "bg-recessed", "bg-head", "bg-well", "bg-hover", "bg-base", "bg-mantle", "bg-crust", "tint"].map(
           (cls) => (
             <span
               key={cls}
@@ -739,13 +739,14 @@ export default function ColorsPage() {
       <Props
         title="Background reference"
         rows={[
-          { name: ".cn-bg-base", values: "var(--base)", notes: "The page ground, the same color as --cn-surface-page." },
-          { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", notes: "base, the page color. The panel fill; a panel lifts by its edges and shadow." },
-          { name: ".cn-bg-overlay", values: "var(--cn-surface-overlay)", notes: "surface-0 90% into base, 1.27:1. The popover, dialog and toast fill." },
-          { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "mantle 55% into base. The sidebar fill." },
+          { name: ".cn-bg-page", values: "var(--cn-surface-page)", notes: "mantle. The page ground." },
+          { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", notes: "base, 1.07:1 on the page. The panel fill; a panel lifts by that step and by its edges and shadow." },
+          { name: ".cn-bg-overlay", values: "var(--cn-surface-overlay)", notes: "surface-0 90% into base, 1.27:1 on base. The popover, dialog and toast fill." },
+          { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "crust 50% into mantle, a step under the page. The sidebar fill." },
           { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 40% over the ground, 1.24:1 on base. The ghost hover as a fill." },
-          { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 30% over transparent, one step under its parent. Table heads and skeletons." },
-          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust 38% into mantle. The well fill; .well already carries it." },
+          { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 30% over transparent, one step under its parent. Table heads." },
+          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust 70% into mantle, under the page and a panel. The well and skeleton fill; .well already carries it." },
+          { name: ".cn-bg-base", values: "var(--base)", notes: "Raw base, the same color as the raised fill." },
           { name: ".cn-bg-mantle", values: "var(--mantle)", notes: "Raw mantle." },
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill." },
           { name: ".cn-tint", values: "tone 4% into transparent", notes: "Semantic wash; pair with .cn-tone-*. Every tinted surface uses this one strength." },

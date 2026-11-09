@@ -104,13 +104,14 @@ export default function TabsPage() {
         <code class="cn-code-inline">--cn-surface-raised</code> with the soft raise,
         the lit top edge and the{" "}
         <code class="cn-code-inline">--engaged-edge</code> mauve rim. The
-        raised fill is the page color, the same as the carve around it, so
-        the rim, 4.7:1 on the page, is what marks the choice. The carve under them is{" "}
+        raised fill is base: a step above the carve on the mantle page, and
+        the same as the carve inside a panel, so the rim, 4.7:1 on base, is
+        what marks the choice. The carve under them is{" "}
         <code class="cn-code-inline">--neu-inset-soft</code>, a dark wall from
         the top left with no light lip, and{" "}
         <code class="cn-code-inline">--cn-field-ring</code>, the resting
-        field's quiet even surface-1 hairline, 1.8:1 on the page, so the
-        carve's bounds show on the page color. It closes into an overlay-2
+        field's quiet even surface-1 hairline, 1.9:1 on the page and 1.8:1
+        on a panel, so the carve's bounds show on both. It closes into an overlay-2
         ring under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code>.
       </p>

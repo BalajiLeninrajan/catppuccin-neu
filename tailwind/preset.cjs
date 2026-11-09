@@ -138,7 +138,8 @@ module.exports = {
       },
       fontFamily: {
         sans: [
-          "Inter",
+          "IBM Plex Sans",
+          "IBM Plex Sans Fallback",
           "ui-sans-serif",
           "-apple-system",
           "BlinkMacSystemFont",

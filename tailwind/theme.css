@@ -174,7 +174,7 @@
   --text-display-sm--font-weight: var(--cn-type-display-weight);
 
   /* Faces: the token stacks */
-  --font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "IBM Plex Sans", "IBM Plex Sans Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono",
                ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 

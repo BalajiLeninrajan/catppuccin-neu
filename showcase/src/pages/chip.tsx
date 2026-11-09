@@ -248,7 +248,7 @@ export default function ChipPage() {
           {
             name: ".tag",
             values: "span",
-            notes: "Status tag: 4px padding, the chip radius, label role. A shallow carve in --tone-wash with no outline: --neu-inset-soft, darkness only, no lip. The wash mixes from --tone, or the status ladder under a status .cn-tone-*. Tone text on it is 5.7:1 (red) to 9.4:1 (yellow) on the page. Always holds a word that states the status.",
+            notes: "Status tag: 4px padding, the chip radius, label role. A shallow carve in --tone-wash with no outline: --neu-inset-soft, darkness only, no lip. The wash mixes from --tone, or the status ladder under a status .cn-tone-*. Tone text on it is 5.7:1 (red) to 9.4:1 (yellow) on a panel, and higher on the page. Always holds a word that states the status.",
           },
           {
             name: ".tag svg",

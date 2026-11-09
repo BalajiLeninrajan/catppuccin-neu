@@ -1,5 +1,24 @@
 import type { ComponentChildren } from "preact";
+import { useState } from "preact/hooks";
 import { Doc, Demo, Props } from "../lib/doc";
+
+/* data-contrast="more" on the root element applies the prefers-contrast
+   step without the OS setting. The toggle sets it for the whole site, so
+   it stays on across pages until switched off. */
+function ContrastToggle() {
+  const [on, setOn] = useState(() => typeof document !== "undefined" && document.documentElement.dataset.contrast === "more");
+  const flip = () => {
+    const next = !on;
+    if (next) document.documentElement.dataset.contrast = "more";
+    else delete document.documentElement.dataset.contrast;
+    setOn(next);
+  };
+  return (
+    <button type="button" class="btn btn-secondary" aria-pressed={on} onClick={flip}>
+      {on ? "More contrast is on" : "Turn on more contrast"}
+    </button>
+  );
+}
 
 interface ContrastRow {
   role: string;
@@ -19,8 +38,9 @@ const FORCED_SHOTS: [string, string, number][] = [
   ["/forced-colors/engaged.png", "Under forced colors, a segmented control. The chosen option draws a Highlight rim; the others keep a plain edge.", 160],
 ];
 
-/* WCAG ratios and APCA 0.0.98G Lc on base (#1e1e2e), which is also the
-   raised fill, and on the overlay fill, in that order. pnpm lint computes
+/* WCAG ratios and APCA 0.0.98G Lc on base (#1e1e2e), the raised fill
+   panels take, and on the overlay fill, in that order. The mantle page is
+   darker than base, so every role reads higher there. pnpm lint computes
    the same numbers from the tokens. */
 const CONTRAST: ContrastRow[] = [
   { role: "--cn-fg", palette: "text", swatch: "var(--cn-fg)", ratio: "11.3 · 9.0", apca: "80 · 77", use: "Headings, names, values." },
@@ -50,21 +70,24 @@ interface EdgeRow {
 /* Non-text contrast (WCAG 1.4.11): the edges that identify a control or
    its state. */
 const NON_TEXT: EdgeRow[] = [
-  { edge: "Hovered field ring, --cn-field-hover-ring", palette: "overlay-1", swatch: "var(--control-edge)", ratio: "4.4:1 · 3.5:1", against: "Base and the raised fill · the overlay fill" },
-  { edge: "Resting field ring under prefers-contrast: more, --cn-field-ring", palette: "overlay-2", swatch: "var(--overlay-2)", ratio: "5.8:1 · 4.6:1", against: "Base and the raised fill · the overlay fill" },
-  { edge: "Checkbox, radio, switch plate, off paddle and slider thumb edges, --control-edge", palette: "overlay-1", swatch: "var(--control-edge)", ratio: "4.4:1 · 3.5:1", against: "Base and the raised fill · the overlay fill" },
-  { edge: "Focus ring, --cn-focus", palette: "text", swatch: "var(--cn-focus)", ratio: "11.3:1 · 9.0:1", against: "Base and the raised fill · the overlay fill" },
+  { edge: "Hovered field ring, --cn-field-hover-ring", palette: "overlay-1", swatch: "var(--control-edge)", ratio: "4.4:1 · 3.5:1", against: "A panel (4.8:1 on the page) · the overlay fill" },
+  { edge: "Resting field ring under prefers-contrast: more, --cn-field-ring", palette: "overlay-2", swatch: "var(--overlay-2)", ratio: "5.8:1 · 4.6:1", against: "A panel (6.2:1 on the page) · the overlay fill" },
+  { edge: "Checkbox, radio, switch plate, off paddle and slider thumb edges, --control-edge", palette: "overlay-1", swatch: "var(--control-edge)", ratio: "4.4:1 · 3.5:1", against: "A panel (4.8:1 on the page) · the overlay fill" },
+  { edge: "Focus ring, --cn-focus", palette: "text", swatch: "var(--cn-focus)", ratio: "11.3:1 · 9.0:1", against: "A panel (12.1:1 on the page) · the overlay fill" },
   { edge: "Secondary button border, warmed on hover", palette: "mauve 50% into surface-1", swatch: "color-mix(in srgb, var(--cn-interactive) var(--cn-step-strong), var(--surface-1))", ratio: "4.1:1 · 3.2:1", against: "Base · the overlay fill it lifts to" },
 ];
 
-/* Surfaces against the page: the lift, not text contrast. */
+/* Surfaces and lines: the lift, not text contrast. Ratios are on base,
+   the panel fill, unless the row names the page. */
 const SURFACES: Array<[string, string, string, string]> = [
-  ["--cn-surface-raised", "base", "1:1", "Panels, plated controls, chips, the selected tab. They share the page color and lift by their edges and shadow."],
-  ["--cn-surface-overlay", "surface-0 90% into base", "1.27:1", "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link."],
+  ["--cn-surface-page", "mantle", "the ground", "The body, the app shell, the topbar, stat bands."],
+  ["--cn-surface-raised", "base", "1.07:1 on the page", "Panels, plated controls, chips, the selected tab. A fill step above the page, never lighter than base, and they lift by their edges and shadow too."],
+  ["--cn-surface-overlay", "surface-0 90% into base", "1.27:1 (1.36:1 on the page)", "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link."],
+  ["--cn-surface-sunken", "crust 70% into mantle", "1.12:1 under base (1.05:1 under the page)", "Wells, the mono wells, stepper pills, skeletons: below the ground wherever they sit."],
   ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
   ["--hover", "surface-1 40% over the ground", "1.24:1 (1.15:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
-  ["--edge", "surface-2 85% over the ground", "2.1:1 (1.8:1 on an overlay)", "The hairline of panels and controls, with the 1.5:1 lit top edge the bound of a panel on the page color. overlay-0 under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
+  ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's outline; the fill step shows its bounds. overlay-0 under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
 ];
 
@@ -158,10 +181,10 @@ export default function AccessibilityPage() {
         Text reads a semantic role, not a palette name.
       </p>
 
-      <Demo title="Semantic roles on base, raised and overlay">
+      <Demo title="Semantic roles on a panel and an overlay">
         <div style="width:100%">
           <Table
-            head={["Swatch", "Role", "Palette", "WCAG, page and raised · overlay", "APCA Lc, page and raised · overlay", "Use"]}
+            head={["Swatch", "Role", "Palette", "WCAG, a panel · overlay", "APCA Lc, a panel · overlay", "Use"]}
             rows={CONTRAST.map((r) => [
               <Swatch color={r.swatch} />,
               <code class="cn-code-inline">{r.role}</code>,
@@ -177,15 +200,16 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         Labels are{" "}
         <code class="cn-code-inline">--cn-fg-soft</code>, subtext-1, 9.3:1 on
-        the page. Meta, help and table heads are{" "}
+        a panel. Meta, help and table heads are{" "}
         <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0, 7.4:1 on
-        the page and 5.8:1 in an overlay. Readable text stops at{" "}
+        a panel and 5.8:1 in an overlay. Readable text stops at{" "}
         <code class="cn-code-inline">--cn-fg-placeholder</code>, overlay-2,
-        5.8:1 on the page and 4.6:1 in an overlay, which only placeholders
+        5.8:1 on a panel and 4.6:1 in an overlay, which only placeholders
         use. The two roles under it are for icons and disabled states.
         Running text in <code class="cn-code-inline">--cn-fg-body</code> is
-        subtext-1, 9.3:1 on the page and 7.3:1 in a dialog, so it stays above
-        7:1 on every ground.
+        subtext-1, 9.3:1 on a panel and 7.3:1 in a dialog, so it stays above
+        7:1 on every ground. The page is mantle, darker than a panel, so text
+        there reads higher: subtext-1 is 9.9:1 and overlay-2 6.2:1.
       </p>
 
       <p class="cn-copy">
@@ -245,10 +269,10 @@ export default function AccessibilityPage() {
         label, so its resting hairline is decoration and sits under 3:1 by
         design. A field is identified by the label above it and by its
         carve, so its resting edge is a quiet even surface-1 hairline, 1.8:1
-        on the page, not a 3:1 ring: a carve is darkness only, and a light lip
+        on a panel and 1.9:1 on the page, not a 3:1 ring: a carve is darkness only, and a light lip
         on its far walls reads as a bevel. Its state still shows at 3:1. Hover closes a full 1px{" "}
-        <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on the
-        page and on a panel and 3.5:1 in a dialog, and focus draws the 2px
+        <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on a
+        panel, 4.8:1 on the page and 3.5:1 in a dialog, and focus draws the 2px
         focus ring. So a field is findable the moment a reader reaches for
         it. Give every field a visible label. Checkboxes, radios and switches
         carry a full edge at rest, because the box is the whole control and
@@ -257,7 +281,7 @@ export default function AccessibilityPage() {
         unchecked box inside a panel or a dialog still clears 3:1. Under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> the edge
         and disabled text move to overlay-2, and a resting field closes into
-        a full overlay-2 ring: 5.8:1 on the page and on a panel, and 4.6:1
+        a full overlay-2 ring: 5.8:1 on a panel, 6.2:1 on the page and 4.6:1
         on an overlay.
       </p>
 
@@ -278,21 +302,22 @@ export default function AccessibilityPage() {
 
       <h2 class="cn-title">Surfaces</h2>
       <p class="cn-copy">
-        Panels and plated controls share the page color, so text on a panel
-        reads exactly as it does on the page. Only the overlay fill sits a
-        little lighter, and a lighter overlay would drop the placeholder role
-        under 4.5:1, so the ladder stops at 1.27:1. A hovered field's ring is
-        overlay-1: 4.4:1 on the page and in a panel and 3.5:1 on the overlay.
-        Placeholders are{" "}
-        <code class="cn-code-inline">--cn-fg-placeholder</code>: 5.8:1 on the
-        page and in a panel, and 4.6:1 on an overlay. A raised surface shows
-        its bounds by a 2.1:1 hairline and a 1px lit top edge at 1.5:1, which
-        mark the lift where the dark shadow is lost on the page. An engaged state is a wash at 1.52:1, a step past the
-        hover's 1.24:1, and it also wears a mauve rim that holds 3.5:1 on
+        The page is mantle and panels and plated controls are base, one fill
+        step above it, so text on a panel reads a little lower than on the
+        page; every ratio here is quoted on the panel, the lower of the two.
+        Only the overlay fill sits lighter than base, and a lighter overlay
+        would drop the placeholder role under 4.5:1, so the ladder stops at
+        1.27:1. A hovered field's ring is overlay-1: 4.4:1 in a panel and
+        3.5:1 on the overlay. Placeholders are{" "}
+        <code class="cn-code-inline">--cn-fg-placeholder</code>: 5.8:1 in a
+        panel and 4.6:1 on an overlay. A raised surface shows its bounds by
+        the fill step, and its 1.85:1 hairline and 1px lit top edge at 1.5:1
+        cut its outline. An engaged state is a wash at 1.52:1, a step past
+        the hover's 1.24:1, and it also wears a mauve rim that holds 3.5:1 on
         that wash.
       </p>
 
-      <Demo title="Fills against base">
+      <Demo title="Fills and lines">
         <div style="width:100%">
           <Table
             head={["Swatch", "Token", "Mix", "Ratio", "Use"]}
@@ -354,14 +379,22 @@ export default function AccessibilityPage() {
       <h2 class="cn-title">Reader preferences</h2>
       <p class="cn-copy">
         The system answers four more media queries with no work on your
-        side.
+        side. Most readers never set the contrast preference, so the same
+        step also runs from{" "}
+        <code class="cn-code-inline">data-contrast="more"</code> on the root
+        element. Offer it as a toggle; this one sets it for the whole site.
       </p>
+
+      <Demo title="More contrast, without the OS setting" classes='html[data-contrast="more"]'>
+        <ContrastToggle />
+      </Demo>
 
       <Props
         title="Preference queries"
         rows={[
           {
             name: "prefers-contrast: more",
+            values: 'or data-contrast="more"',
             notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Panel hairlines move to overlay-0, 3.4:1, and the lead and overlay hairline to overlay-1, so a panel shows a 3:1 boundary. A resting field and the tabs carve close into a full overlay-2 ring, and wells and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
           },
           {
@@ -415,21 +448,24 @@ export default function AccessibilityPage() {
         <code class="cn-code-inline">color-mix</code>, composites mixes into
         transparent over the ground, and fails the build when a pairing drops
         under its floor. It also fails when a ratio written in a token comment
-        is more than .06 off the computed value on base. The text roles get a
+        is more than .06 off the computed value on base, or on the page when
+        the comment says so, and when the{" "}
+        <code class="cn-code-inline">data-contrast</code> block drifts from the
+        media block. The text roles get a
         second check in APCA 0.0.98G on the same grounds and in both modes.
       </p>
 
       <Props
         title="Floors"
         rows={[
-          { name: "--cn-fg, --cn-fg-soft, --cn-fg-body", values: "7:1", notes: "On the page, raised and overlay fills." },
-          { name: "--cn-fg-muted", values: "5.5:1", notes: "On the page, raised and overlay fills." },
-          { name: "--cn-fg-placeholder", values: "4.5:1", notes: "On the page, raised and overlay fills." },
+          { name: "--cn-fg, --cn-fg-soft, --cn-fg-body", values: "7:1", notes: "On the page, raised, overlay, recessed and sunken fills." },
+          { name: "--cn-fg-muted", values: "5.5:1", notes: "On the page, raised, overlay, recessed and sunken fills." },
+          { name: "--cn-fg-placeholder", values: "4.5:1", notes: "On the page, raised, overlay, recessed and sunken fills." },
           { name: "status roles, links", values: "4.5:1", notes: "On the page, raised and overlay fills, and each status role on its own tint." },
           { name: "field hover ring, control edge, focus ring, engaged rim", values: "3:1", notes: "On the page, raised and overlay fills. The control edge covers the slider thumb. The rim also on --wash." },
-          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet surface-1 hairline at 1.8:1, below 3:1 by design." },
-          { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.9, 2.4, 1.4:1 · 1.6, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill, so the depth ladder holds its order. --edge-strong must stay above --edge on every ground. Not WCAG obligations." },
-          { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer falls from the top left and is darker than the page, so no carve draws a light lip or glow." },
+          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet surface-1 hairline at 1.8:1 on a panel, below 3:1 by design." },
+          { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.8, 2.4, 1.4:1 · 1.5, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill, so the depth ladder holds its order. --edge-strong must stay above --edge on every ground. Not WCAG obligations." },
+          { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer falls from the top left and is darker than the page, a panel and a well, so no carve draws a light lip or glow." },
           { name: "--cn-fg-on-accent", values: "4.5:1", notes: "On the primary and its hover." },
           { name: "--cn-fg", values: "APCA Lc 75", notes: "On the page, raised and overlay fills." },
           { name: "--cn-fg-soft, --cn-fg-body", values: "APCA Lc 60", notes: "On the page, raised and overlay fills. APCA's level for content text." },

@@ -4,16 +4,20 @@ import posthog from "posthog-js";
 import { GROUPS, PAGES } from "./nav";
 import { Doc } from "./lib/doc";
 
+/* The brand tile, .mark, leads the name: the package's own fill, ramp,
+   grain and gloss, so the chrome carries an ornament no other docs site
+   has instead of a bare name. */
 function Wordmark() {
   return (
     <a class="wordmark" href="/">
+      <span class="mark" aria-hidden="true">cn</span>
       catppuccin<em>·</em>neu
     </a>
   );
 }
 
-/* The package sidebar. The current page wears the engaged state through
-   aria-current; below 1060px the nav folds behind the Menu toggle. */
+/* The package sidebar. The current page is marked through aria-current,
+   600 and the spine; below 1060px the nav folds behind the Menu toggle. */
 function Sidebar() {
   const { path } = useLocation();
   const [open, setOpen] = useState(false);

@@ -144,7 +144,7 @@ export default function AccordionPage() {
           {
             name: "details.accordion",
             values: "one disclosure row",
-            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] is its own step, the open carve, not the engaged state: card radius, full inset, mauve at --cn-step-tint into base (1.08:1), mauve title. The engaged --wash would drop body text in the fold under 7:1.",
+            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] is its own step, the open carve, not the engaged state: card radius, full inset, mauve at --cn-step-tint over whatever holds it (1.08:1 on a panel), so it never turns lighter than the mantle page, mauve title. The engaged --wash would drop body text in the fold under 7:1.",
           },
           {
             name: "[name]",

@@ -8,8 +8,8 @@
      import { init } from "catppuccin-neu/js";
      init();               // wires everything under document
 
-   Or wire one widget at a time with tabs(), menu(), slider(), tooltips()
-   and toast(). */
+   Or wire one widget at a time with tabs(), menu(), listbox(), slider(),
+   tooltips() and toast(). */
 
 const ENABLED = (el) => !el.disabled && el.getAttribute("aria-disabled") !== "true";
 
@@ -146,6 +146,119 @@ export function menu(trigger) {
   };
 }
 
+/* Listbox: a [role="listbox"] of [role="option"] rows. Focus stays on
+   the listbox, or on the combobox input that drives it, and
+   aria-activedescendant names the active row, which also carries
+   data-active so the CSS can light it. Up, Down, Home and End move it;
+   Enter, or Space on a listbox, selects it (aria-selected, toggled under
+   aria-multiselectable) and fires "cn-select" on the listbox with the
+   option in event.detail. Pass { combobox } with an input[role="combobox"]
+   to drive a popover listbox from it: ArrowDown or ArrowUp opens it, the
+   input's own typing opens it, and Escape, Tab, a pick or a press outside
+   closes it; a pick writes the option's text into the input. Filtering as
+   the reader types is the consumer's. */
+let optionIds = 0;
+export function listbox(list, { combobox = null } = {}) {
+  const host = combobox ?? list;
+  const options = () => [...list.querySelectorAll('[role="option"]')].filter((o) => !o.hidden && o.getAttribute("aria-disabled") !== "true");
+  const active = () => list.querySelector('[role="option"][data-active]');
+  const activate = (opt, keyboard) => {
+    list.querySelectorAll("[data-active]").forEach((o) => o.removeAttribute("data-active"));
+    list.toggleAttribute("data-cn-keyboard", !!(opt && keyboard));
+    if (!opt) { host.removeAttribute("aria-activedescendant"); return; }
+    if (!opt.id) opt.id = `cn-option-${++optionIds}`;
+    opt.setAttribute("data-active", "");
+    host.setAttribute("aria-activedescendant", opt.id);
+    if (keyboard) opt.scrollIntoView({ block: "nearest" });
+  };
+  const isOpen = () => !combobox || !list.hidden;
+  const away = (e) => { if (!list.contains(e.target) && e.target !== combobox) close(); };
+  const open = () => {
+    if (!combobox || isOpen()) return;
+    list.hidden = false;
+    combobox.setAttribute("aria-expanded", "true");
+    document.addEventListener("pointerdown", away, true);
+  };
+  const close = () => {
+    if (!combobox) return;
+    list.hidden = true;
+    combobox.setAttribute("aria-expanded", "false");
+    activate(null);
+    document.removeEventListener("pointerdown", away, true);
+  };
+  const select = (opt) => {
+    if (list.getAttribute("aria-multiselectable") === "true") {
+      opt.setAttribute("aria-selected", opt.getAttribute("aria-selected") === "true" ? "false" : "true");
+    } else {
+      list.querySelectorAll('[role="option"]').forEach((o) => o.setAttribute("aria-selected", o === opt ? "true" : "false"));
+    }
+    list.dispatchEvent(new CustomEvent("cn-select", { bubbles: true, detail: opt }));
+    if (combobox) { combobox.value = opt.textContent.trim(); close(); }
+  };
+  const onKey = (e) => {
+    const pool = options();
+    if (!pool.length) return;
+    if (!isOpen()) {
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      e.preventDefault();
+      open();
+      const chosen = pool.find((o) => o.getAttribute("aria-selected") === "true");
+      activate(chosen ?? (e.key === "ArrowUp" ? pool.at(-1) : pool[0]), true);
+      return;
+    }
+    const at = pool.indexOf(active());
+    let to;
+    switch (e.key) {
+      case "ArrowDown": to = at < 0 ? 0 : Math.min(at + 1, pool.length - 1); break;
+      case "ArrowUp": to = at < 0 ? pool.length - 1 : Math.max(at - 1, 0); break;
+      /* In a text field Home and End move the caret. */
+      case "Home": if (combobox) return; to = 0; break;
+      case "End": if (combobox) return; to = pool.length - 1; break;
+      case "Enter": if (at >= 0) { e.preventDefault(); select(pool[at]); } return;
+      case " ": if (!combobox && at >= 0) { e.preventDefault(); select(pool[at]); } return;
+      case "Escape": if (combobox) { e.preventDefault(); close(); } return;
+      case "Tab": close(); return;
+      default: return;
+    }
+    e.preventDefault();
+    activate(pool[to], true);
+  };
+  const pick = (e) => e.target.closest?.('[role="option"]');
+  const onMove = (e) => { const opt = pick(e); if (opt && options().includes(opt)) activate(opt, false); };
+  const onClick = (e) => { const opt = pick(e); if (opt && options().includes(opt)) select(opt); };
+  /* A press on a row would move focus off the combobox input. */
+  const keepFocus = (e) => { if (combobox) e.preventDefault(); };
+  const onFocus = () => {
+    if (combobox || active()) return;
+    const pool = options();
+    activate(pool.find((o) => o.getAttribute("aria-selected") === "true") ?? pool[0], false);
+  };
+  const onInput = () => open();
+  const onInputClick = () => (isOpen() ? close() : open());
+  if (combobox) {
+    list.hidden = true;
+    combobox.setAttribute("aria-expanded", "false");
+    combobox.addEventListener("input", onInput);
+    combobox.addEventListener("click", onInputClick);
+  } else {
+    list.addEventListener("focus", onFocus);
+  }
+  host.addEventListener("keydown", onKey);
+  list.addEventListener("pointermove", onMove);
+  list.addEventListener("pointerdown", keepFocus);
+  list.addEventListener("click", onClick);
+  return () => {
+    document.removeEventListener("pointerdown", away, true);
+    combobox?.removeEventListener("input", onInput);
+    combobox?.removeEventListener("click", onInputClick);
+    list.removeEventListener("focus", onFocus);
+    host.removeEventListener("keydown", onKey);
+    list.removeEventListener("pointermove", onMove);
+    list.removeEventListener("pointerdown", keepFocus);
+    list.removeEventListener("click", onClick);
+  };
+}
+
 /* Slider: keeps --value, the fill's stop, in step with an
    input[type="range"].slider. */
 export function slider(input) {
@@ -273,13 +386,22 @@ export function toast(stack, { title, body = "", timeout = 7000, closeLabel = "D
   return { el, dismiss };
 }
 
-/* Wires every widget under root: tablists, menu buttons, sliders, and the
-   tooltip Escape. Returns one cleanup for all of them. */
+/* Wires every widget under root: tablists, menu buttons, listboxes and
+   the comboboxes that drive them, sliders, and the tooltip Escape. Returns one cleanup for all of them. */
 export function init(root = document) {
   const off = [];
   root.querySelectorAll('[role="tablist"]').forEach((el) => off.push(tabs(el)));
   root.querySelectorAll('[aria-haspopup="menu"][aria-controls]').forEach((el) => off.push(menu(el)));
   root.querySelectorAll('input[type="range"].slider').forEach((el) => off.push(slider(el)));
+  /* A combobox drives the listbox it names; any other listbox drives itself. */
+  const driven = new Set();
+  root.querySelectorAll('[role="combobox"][aria-controls]').forEach((el) => {
+    const list = document.getElementById(el.getAttribute("aria-controls"));
+    if (list?.getAttribute("role") !== "listbox") return;
+    driven.add(list);
+    off.push(listbox(list, { combobox: el }));
+  });
+  root.querySelectorAll('[role="listbox"]').forEach((el) => { if (!driven.has(el)) off.push(listbox(el)); });
   off.push(tooltips(root.ownerDocument ?? root));
   return () => off.forEach((f) => f());
 }

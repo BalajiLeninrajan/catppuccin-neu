@@ -43,7 +43,7 @@ export default function BannerPage() {
         <code class="cn-code-inline">--cn-fg-body</code>, so a sentence stays
         text-colored like every other sentence, 8.7:1 on a danger tint. A
         status tone also swaps in its ladder and its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
-        The tint needs the edge to hold its shape on the base ground.
+        The tint needs the edge to hold its shape on a dark ground.
       </p>
 
       <p class="cn-copy">

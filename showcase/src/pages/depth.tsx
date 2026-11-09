@@ -4,12 +4,12 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 /* One model, lowest first. Height is distance from the ground; the light
    is above and to the top left. */
 const HEIGHTS = [
-  { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. A well also takes the darker sunken fill.", tokens: "--neu-inset or --neu-inset-soft, transparent, --cn-surface-sunken or --cn-surface-band", who: "Fields, wells, tabs, the switch plate, stepper pills, skeletons, engaged states, the disabled primary." },
-  { height: "The ground", draws: "Nothing.", tokens: "--cn-surface-page", who: "The page. Every other height is measured from it." },
-  { height: "Resting on it", draws: "The page color, the plain hairline, the lit top edge, a dark foot of contact edge and near shadow on the bottom and right, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Standing on a plate", draws: "The page color and lit top edge over a hard offset, the plate's side in the shadow ink.", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate." },
-  { height: "Resting higher", draws: "The page color, the brighter hairline, a hard dark foot 6px deep and 4px wide on the bottom and right, past the 4px plate, and a longer cast.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong", who: "The one lead panel. Its deeper foot and its larger band title carry the rank, since a longer cast barely shows on a dark page." },
-  { height: "Lifted off it", draws: "The plate's side grows to 6px and the card tips 1.2deg.", tokens: "--cn-plate-tilt, a 6px plate, over --neu-raised, rotate(1.2deg)", who: "The one tilted panel, holding prose: never a table, a form or ruled rows. Upright under prefers-contrast: more, on the same plate." },
+  { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. A well also takes the sunken fill, crust 70% into mantle, darker than the page and a panel.", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
+  { height: "The ground", draws: "Mantle, and nothing else.", tokens: "--cn-surface-page", who: "The page, the topbar, stat bands. Every other height is measured from it." },
+  { height: "Resting on it", draws: "The base fill, one step above the page, the plain hairline, the lit top edge, a dark foot of contact edge and near shadow on the bottom and right, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
+  { height: "Standing on a plate", draws: "The base fill and lit top edge over a hard offset, the plate's side in the shadow ink.", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate." },
+  { height: "Resting higher", draws: "The base fill, the brighter hairline, a hard dark foot 6px deep and 4px wide on the bottom and right, past the 4px plate, a longer cast, a taller header band and more padding.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong, --lead-band-h, --lead-pad", who: "The one lead panel. Its deeper foot, its larger band title and its room carry the rank, since a longer cast barely shows on a dark page." },
+  { height: "Lifted off it", draws: "The base fill; the plate's side grows to 6px and the card tips 1.2deg.", tokens: "--cn-plate-tilt, a 6px plate, over --neu-raised, rotate(1.2deg)", who: "The one tilted panel, holding prose: never a table, a form or ruled rows. Upright under prefers-contrast: more, on the same plate." },
   { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
 
@@ -55,8 +55,8 @@ interface CubeProps {
   style?: string;
 }
 
-/* Every cube takes the raised fill, which is the page color; only the
-   shadow utility differs. */
+/* A raised cube takes the raised fill, base; a carved one takes the page
+   ground. Only the shadow utility differs. */
 function Cube({ cls, bg = "cn-bg-raised", label, size = 96, style = "" }: CubeProps) {
   return (
     <div style="display:grid;gap:12px;justify-items:center">
@@ -121,13 +121,14 @@ export default function DepthPage() {
         bevel. No component
         composes its own{" "}
         <code class="cn-code-inline">box-shadow</code>; it picks one of the tokens
-        on this page. Neumorphic depth only reads when a surface sits close to the
-        page color, so raised and plated surfaces take{" "}
-        <code class="cn-code-inline">--cn-surface-raised</code>, which is{" "}
-        <code class="cn-code-inline">--base</code> itself. A raised surface
-        lifts by its contact edge, its cast, its lit top edge and its
-        hairline, never by a lighter fill. Only overlays, which float free of
-        the page, take a lighter step.
+        on this page. The page is{" "}
+        <code class="cn-code-inline">--cn-surface-page</code>, mantle, and
+        raised and plated surfaces take{" "}
+        <code class="cn-code-inline">--cn-surface-raised</code>, base, one fill
+        step above it, close enough that the shadows still read. A raised
+        surface lifts by that step, its contact edge, its cast, its lit top
+        edge and its hairline, never by a fill lighter than base. Only
+        overlays, which float free of the page, take a lighter step.
       </p>
 
       <Demo title="One specimen per height, on the page" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-lead · panel is-tilted · cn-bg-overlay cn-pop">
@@ -142,7 +143,7 @@ export default function DepthPage() {
             <Height name="Below the ground" cls=".well">
               <div class="well cn-meta" style={SPEC_BOX}>Search invoices</div>
             </Height>
-            <Height name="The ground" cls="--base">
+            <Height name="The ground" cls="--cn-surface-page">
               <div class="cn-meta" style={SPEC_BOX}>Invoice #1042</div>
             </Height>
             <Height name="Resting on it" cls=".panel">
@@ -187,7 +188,7 @@ export default function DepthPage() {
         A raised surface also carries{" "}
         <code class="cn-code-inline">--cn-lit-edge</code>, a 1px line of
         surface-2 at 45% inside its top rim where the light catches it, 1.5:1
-        on the page. It is the only light-side cue on a raised surface, and
+        on the base fill. It is the only light-side cue on a raised surface, and
         the last layer of{" "}
         <code class="cn-code-inline">--neu-raised</code> and the default{" "}
         <code class="cn-code-inline">--hard-extra</code> of every plated recipe:
@@ -218,7 +219,7 @@ export default function DepthPage() {
 
       <Demo
         title="Four of the five neu shadows"
-        classes="cn-bg-raised cn-r-card cn-raised | cn-raised-soft | cn-bg-base cn-inset | cn-inset-soft"
+        classes="cn-bg-raised cn-r-card cn-raised | cn-raised-soft | cn-bg-page cn-inset | cn-inset-soft"
         row
       >
         <Cube cls="cn-raised" />
@@ -228,7 +229,7 @@ export default function DepthPage() {
             cn-raised-soft
           </code>
         </div>
-        <Cube cls="cn-inset" bg="cn-bg-base" />
+        <Cube cls="cn-inset" bg="cn-bg-page" />
         <div style="display:grid;gap:12px;justify-items:center">
           <span style="display:flex;gap:10px;align-items:center">
             <input class="checkbox" type="checkbox" aria-label="inset-soft specimen" />
@@ -254,22 +255,25 @@ export default function DepthPage() {
       </p>
 
       <p class="cn-copy">
-        A shadow has to be darker than the darkest surface it falls on, and
-        crust sits only 1.1:1 under base. So the shadows use crust taken
-        halfway to black, <code class="cn-code-inline">rgb(8 8 14)</code>:{" "}
+        A shadow has to be darker than the darkest surface it falls on. A
+        panel's shadow falls on the mantle page, and crust sits only 1.07:1
+        under mantle. So the shadows use crust taken halfway to black,{" "}
+        <code class="cn-code-inline">rgb(8 8 14)</code>:{" "}
         <code class="cn-code-inline">--neu-shade</code> at .72 for the cast,{" "}
         <code class="cn-code-inline">--neu-contact</code>, the full ink at
-        1.22:1 on the page, for a 2px edge where the surface meets the
+        1.14:1 on the page, for a 2px edge where the surface meets the
         ground, <code class="cn-code-inline">--neu-near</code> at .8 for a
         3px 4px 6px shadow that lays a 4 to 6px dark foot along the
         bottom and right edges, and <code class="cn-code-inline">--neu-dark</code> at
-        .8 for a carve's dark wall, because a well's wall falls on the page.
+        .8 for a carve's dark wall, because a well's wall falls on whatever
+        holds it.
         The raised token has four layers: contact, near shadow, cast and the
         lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
         the one lead panel, spends its extra darkness on the bottom and
         right only: a 4px 6px contact in the full ink, a 6px 12px 14px near
-        shadow and an 18px 28px 48px cast. Even black is only 1.28:1 under
-        base, so a longer cast barely shows; the deeper foot does the work,
+        shadow and an 18px 28px 48px cast. Even black is only 1.2:1 on the
+        page, so a longer cast barely shows; the fill step separates the
+        panel and the deeper foot ranks it,
         6px of full ink under the lead's bottom edge where a plain panel
         has 2px, past a button's 4px plate and as deep as the tilted
         panel's 6px one on the bottom, 2px narrower on the right. Compact density drops the
@@ -352,7 +356,7 @@ export default function DepthPage() {
 
       <Demo title="Promoted shadows" classes="cn-pop | cn-cast | cn-mark-drop">
         <div
-          class="cn-bg-base cn-cast cn-r-control"
+          class="cn-bg-page cn-cast cn-r-control"
           style="height:54px;display:flex;align-items:center;gap:14px;padding:0 18px"
         >
           <span class="cn-label">Dashboard</span>
@@ -498,7 +502,7 @@ export default function DepthPage() {
 
       <CodeBlock
         title="Composing depth"
-        code={`<!-- A raised card: the page color, lifted by its shadow -->
+        code={`<!-- A raised card: the base fill, lifted by its shadow -->
 <div class="cn-bg-raised cn-r-card cn-raised">…</div>
 
 <!-- A hard-offset control with the half-slide press -->
@@ -575,7 +579,7 @@ export default function DepthPage() {
           {
             name: "--cn-lit-edge",
             values: "inset 0 1px, surface-2 at 45%",
-            notes: "The lit top rim, 1.5:1 on the page. Part of --neu-raised, --neu-lifted and the default --hard-extra on plated recipes.",
+            notes: "The lit top rim, 1.5:1 on the base fill. Part of --neu-raised, --neu-lifted and the default --hard-extra on plated recipes.",
           },
           {
             name: "--hard-extra",
@@ -587,7 +591,7 @@ export default function DepthPage() {
             name: "--plate",
             values: "any token or color-mix",
             default: "var(--neu-ink)",
-            notes: "Contract prop read by the whole hard family. Unset, the plate is the shadow ink, crust halfway to black, 1.22:1 under the page where crust is 1.14:1.",
+            notes: "Contract prop read by the whole hard family. Unset, the plate is the shadow ink, crust halfway to black, 1.22:1 under base, where crust is 1.14:1, and 1.14:1 on the page.",
           },
           {
             name: "--hard-offset",

@@ -2,8 +2,8 @@
    Every docs page composes these four pieces. Pages put pure system markup
    (cn-* utilities + recipes) inside <Demo>; the kit owns all sc- chrome.
 
-   <Demo> renders children directly on the page's --base ground, with no
-   well or mantle stage, so neumorphic depth reads correctly.             */
+   <Demo> renders children directly on the page ground, mantle, with no
+   well or panel stage, so neumorphic depth reads as it does in an app.             */
 
 import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
@@ -125,7 +125,7 @@ export function Doc({ title, lede, children }: DocProps) {
 }
 
 /**
- * Demo: a captioned specimen stage. Children sit directly on --base.
+ * Demo: a captioned specimen stage. Children sit directly on the page ground.
  * props: {
  *   title?: string,     // .cn-name caption above the stage: the ui role, 14px at 600 in --cn-fg
  *   classes?: string,   // class string shown in a copyable code line below

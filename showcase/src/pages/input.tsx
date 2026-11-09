@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
+import { listbox } from "../../../js/index.js";
 
 const FIELD_SNIPPET = `<div class="field">
   <label for="ws-name">Workspace name</label>
@@ -27,6 +29,58 @@ function MagnifierIcon() {
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-3.9-3.9" />
     </svg>
+  );
+}
+
+const TEAMS = ["Payments", "Analytics", "Messaging", "Storage", "Identity", "Support"];
+
+/* A combobox and a standalone listbox, both wired by listbox() from the
+   behavior module. The combobox list is a .popover under the field; the
+   standalone list sits in a .well carve. */
+function Pickers() {
+  const combo = useRef<HTMLInputElement>(null);
+  const comboList = useRef<HTMLDivElement>(null);
+  const list = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const offs = [listbox(list.current!)];
+    if (combo.current && comboList.current) offs.push(listbox(comboList.current, { combobox: combo.current }));
+    return () => offs.forEach((off) => off());
+  }, []);
+  return (
+    <div class="sc-grid" style="width:100%">
+      <div class="field" style="position:relative">
+        <label for="demo-combo">Owning team</label>
+        <input
+          ref={combo}
+          id="demo-combo"
+          type="text"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="demo-combo-list"
+          placeholder="Pick a team"
+        />
+        <div
+          ref={comboList}
+          id="demo-combo-list"
+          class="popover listbox"
+          role="listbox"
+          aria-label="Teams"
+          hidden
+          style="top:100%;inset-inline-start:0;margin-top:var(--space-2)"
+        >
+          {TEAMS.map((t) => <div key={t} role="option" aria-selected="false">{t}</div>)}
+        </div>
+      </div>
+      <div class="cn-stack cn-gap-8">
+        <span class="cn-label" id="demo-list-label">Notify teams</span>
+        <div ref={list} class="listbox well" role="listbox" tabindex={0} aria-labelledby="demo-list-label" aria-multiselectable="true">
+          {TEAMS.slice(0, 4).map((t, i) => (
+            <div key={t} role="option" aria-selected={i === 1 ? "true" : "false"} aria-disabled={i === 3 ? "true" : undefined}>{t}</div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -74,8 +128,8 @@ export default function InputPage() {
         A carve is darkness only. The field's wall falls from the top left and
         its bottom and right walls fade into the ground with no light lip,
         because a bright line there reads as a bevel. At rest a field has a
-        quiet even surface-1 hairline, 1.8:1 on the page, the same on all four
-        sides, so its bounds show without a lip. The hairline paints over the
+        quiet even surface-1 hairline, 1.9:1 on the page and 1.8:1 on a
+        panel, the same on all four sides, so its bounds show without a lip. The hairline paints over the
         carve, so the dark wall never dims its top and left and leaves the
         bottom and right brighter. Once the reader reaches for it
         the bounds reach 3:1, as a full ring on hover and the focus ring on
@@ -86,7 +140,7 @@ export default function InputPage() {
 
       <Demo title="On the page and on a panel" classes="--cn-field-ring · --cn-field-hover-ring">
         <div class="sc-grid" style="width:100%">
-          <input class="input" type="text" placeholder="On base" aria-label="Field on base" />
+          <input class="input" type="text" placeholder="On the page" aria-label="Field on the page" />
           <div class="panel panel-body">
             <input class="input" type="text" placeholder="On a panel" aria-label="Field on a panel" />
           </div>
@@ -136,6 +190,46 @@ export default function InputPage() {
           checkmark. An option under keyboard focus also draws the 2px
           focus ring, inset 2px, the same indicator as a menu row.
           Elsewhere the OS picker stays.
+        </p>
+      </Demo>
+
+      <Demo title="Combobox and listbox" classes='input[role="combobox"] · listbox popover · listbox well'>
+        <Pickers />
+        <p class="cn-copy">
+          A combobox is a text field with{" "}
+          <code class="cn-code-inline">role="combobox"</code>: the field
+          carve and every field state, with the select's chevron. It opens a{" "}
+          <code class="cn-code-inline">.listbox</code> on a{" "}
+          <code class="cn-code-inline">.popover</code>. A standalone listbox
+          sits in a <code class="cn-code-inline">.well</code> carve. Rows are
+          menu rows: <code class="cn-code-inline">--hover</code> under the
+          pointer and on the active row, and{" "}
+          <code class="cn-code-inline">--wash</code> with a mauve check on a
+          selected one. Under the keyboard the active row draws the focus
+          ring inset 2px. Focus stays on the field or the list, and{" "}
+          <code class="cn-code-inline">aria-activedescendant</code> names the
+          active row; <code class="cn-code-inline">listbox()</code> in the{" "}
+          <a href="/behavior">behavior module</a> keeps it in step.
+        </p>
+      </Demo>
+
+      <Demo title="Date and file" classes='input[type="date"] · input[type="file"]'>
+        <div class="sc-grid" style="width:100%">
+          <div class="field">
+            <label for="demo-due">Due date</label>
+            <input id="demo-due" type="date" value="2026-10-12" />
+          </div>
+          <div class="field">
+            <label for="demo-file">Purchase order</label>
+            <input id="demo-file" type="file" />
+          </div>
+        </div>
+        <p class="cn-copy">
+          A date field is a field: the carve and its states apply as they
+          are, and the picker glyph takes the overlay-1 icon color. A file
+          field holds a small secondary-shaped button inside the carve, on a
+          3px ink plate, and the field's hover, focus, disabled and invalid
+          states cover the whole field.
         </p>
       </Demo>
 
@@ -244,8 +338,8 @@ export default function InputPage() {
         <p class="cn-copy">
           Use the native attribute. The carve nearly fills in to the soft
           inset, hover draws no ring, and the text and label drop to{" "}
-          <code class="cn-code-inline">--cn-fg-disabled</code> (overlay-1, 4.4:1 on the
-          page and on a panel). There is
+          <code class="cn-code-inline">--cn-fg-disabled</code> (overlay-1, 4.4:1 on
+          a panel and 4.8:1 on the page). There is
           no opacity on top. The browser only blocks input.
         </p>
       </Demo>
@@ -331,12 +425,12 @@ export default function InputPage() {
             name: "--cn-field-hover-ring",
             values: "box-shadow",
             default: "inset 0 0 0 1px var(--control-edge)",
-            notes: "Swapped in for --cn-field-ring on hover, not on a disabled field: overlay-1, 4.4:1 on base and raised, 3.5:1 on an overlay. A validation ring and a read-only rule keep their own shadow.",
+            notes: "Swapped in for --cn-field-ring on hover, not on a disabled field: overlay-1, 4.4:1 on a panel, 4.8:1 on the page, 3.5:1 on an overlay. A validation ring and a read-only rule keep their own shadow.",
           },
           {
             name: "::placeholder",
             values: "--cn-fg-placeholder",
-            notes: "overlay-2: 5.8:1 on base and raised, 4.6:1 on an overlay. subtext-0 under prefers-contrast: more. --cn-fg-disabled on a disabled field.",
+            notes: "overlay-2: 5.8:1 on a panel, 6.2:1 on the page, 4.6:1 on an overlay. subtext-0 under prefers-contrast: more. --cn-fg-disabled on a disabled field.",
           },
           {
             name: ".field small",
