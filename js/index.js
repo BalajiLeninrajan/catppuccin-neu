@@ -1,8 +1,9 @@
-/* catppuccin-neu behavior: optional, framework-free.
+/* catppuccin-neu behavior: framework-free.
 
-   The CSS styles tabs, menus, tooltips, sliders and toasts from ARIA state.
-   This module keeps that state and the keyboard model in step, so an app
-   that does not bring its own widgets gets the WAI-ARIA patterns for free.
+   The CSS styles tabs, menus, tooltips, sliders and toasts from ARIA state
+   and needs no script to look right. Tabs, menus, listboxes and comboboxes
+   are still required to have a keyboard model: init() from this module, or
+   the app's own widget library. Slider fill and toasts are optional.
    Every function returns a cleanup that removes what it added.
 
      import { init } from "catppuccin-neu/js";

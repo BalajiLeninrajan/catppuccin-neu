@@ -87,7 +87,9 @@ Tailwind names. With v4, import the package first:
 @import "tailwindcss";
 ```
 
-Optional behavior, if you don't bring your own widgets:
+The CSS needs no script to look right, but tabs, menus, listboxes and
+comboboxes are required to have a keyboard model. Use `init()`, or your
+own widget library:
 
 ```js
 import { init, toast } from "catppuccin-neu/js";
@@ -98,7 +100,7 @@ init(); // tabs, menu buttons, listboxes and comboboxes, sliders and the tooltip
 
 - Recipe classes are unprefixed. `.btn`, `.panel`, `.input` and `.data-table` collide with any other CSS that uses those names.
 - Dark only. There is no light palette.
-- The CSS needs no JavaScript. Overlays use `<dialog>`, `showModal()` and `close()`. The optional `catppuccin-neu/js` module adds the keyboard model for tabs, menus and listboxes, the tooltip Escape, slider fill and toasts; copy buttons still need your own listener.
+- The CSS needs no script to look right, and overlays use `<dialog>`, `showModal()` and `close()`. Tabs, menus, listboxes and comboboxes are still required to have a keyboard model: `init()` from `catppuccin-neu/js`, or your own widget library. The same module has the tooltip Escape and, as optional extras, slider fill and toasts. Copy buttons need your own listener.
 - Depth reads correctly only on the ground it was tuned for: a mantle page with panels and plated controls on base. Keep your page on `--cn-surface-page`.
 - The sizes and tracking assume IBM Plex Sans and JetBrains Mono. The fallback stacks stay readable but look different.
 

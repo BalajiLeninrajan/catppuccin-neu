@@ -21,7 +21,7 @@ export default function LayoutPage() {
         Three primitives place children: a row, a stack and a wrapping cluster.
       </p>
 
-      <Demo title="Row, stack, cluster" classes="cn-row · cn-stack · cn-cluster">
+      <Demo title="Row, stack, cluster" why="The three primitives, and how a utility beats a recipe" classes="cn-row · cn-stack · cn-cluster">
         <div class="cn-stack cn-gap-16" style="width:min(520px,100%)">
           <div class="cn-row cn-between">
             <span class="cn-name">A row, space between</span>
@@ -55,7 +55,7 @@ export default function LayoutPage() {
 
       <CodeBlock title="A utility over a recipe" code={COMPOSE} />
 
-      <Demo title="Column grids" classes="cn-grid-2 / cn-grid-3 / cn-grid-4">
+      <Demo title="Column grids" why="Where the grids collapse" classes="cn-grid-2 / cn-grid-3 / cn-grid-4">
         <div class="cn-grid-3" style="width:100%">
           <div class="panel panel-body"><span class="cn-label">One</span></div>
           <div class="panel panel-body"><span class="cn-label">Two</span></div>
@@ -70,7 +70,7 @@ export default function LayoutPage() {
         widens a column.
       </p>
 
-      <Demo title="Grids inside a container" classes="cn-container > cn-grid-3">
+      <Demo title="Grids inside a container" why="How grids and folds answer a container" classes="cn-container > cn-grid-3">
         <div class="cn-container" style="width:min(420px,100%)">
           <div class="cn-grid-3">
             <div class="panel panel-body"><span class="cn-label">One</span></div>
@@ -96,7 +96,7 @@ export default function LayoutPage() {
         chrome and the table's row mode still follow the viewport.
       </p>
 
-      <Demo title="A four-stat grid in a 380px container" classes="cn-container > panel > stat-grid">
+      <Demo title="A four-stat grid in a 380px container" why="What the container changed here" classes="cn-container > panel > stat-grid">
         <div class="cn-container" style="width:min(380px,100%)">
           <section class="panel" aria-labelledby="lo-pane">
             <div class="panel-header">
@@ -151,7 +151,7 @@ export default function LayoutPage() {
         step answers the column's width.
       </p>
 
-      <Demo title="7 and 5, 8 and 4, three 4s" classes="cn-grid-12 > cn-span-7 + cn-span-5">
+      <Demo title="7 and 5, 8 and 4, three 4s" why="How the twelve-column grid spans and folds" classes="cn-grid-12 > cn-span-7 + cn-span-5">
         <div class="cn-stack cn-gap-24" style="width:100%">
           <div class="cn-grid-12">
             <div class="panel panel-body cn-span-7"><span class="cn-label">cn-span-7</span></div>
@@ -207,7 +207,7 @@ export default function LayoutPage() {
         <a href="/examples/empty-project">empty project</a> does.
       </p>
 
-      <Demo title="A view in reading order, regions 48px apart" classes="cn-stack cn-gap-48 · stat-grid is-ruled · cn-grid-12 · panel is-lead">
+      <Demo title="A view in reading order, regions 48px apart" why="The gaps, the three-panel limit and the reading order" classes="cn-stack cn-gap-48 · stat-grid is-ruled · cn-grid-12 · panel is-lead">
         <div class="cn-stack cn-gap-48" style="width:100%">
           <div class="cn-split">
             <div class="cn-stack cn-gap-4">
@@ -280,7 +280,7 @@ export default function LayoutPage() {
         actions.
       </p>
 
-      <Demo title="A header that wraps its actions" classes="cn-split">
+      <Demo title="A header that wraps its actions" why="Split, measure and centering" classes="cn-split">
         <div class="cn-split" style="width:100%">
           <div class="cn-stack cn-gap-4">
             <span class="cn-title">Northwind workspace</span>
@@ -302,7 +302,7 @@ export default function LayoutPage() {
         margin utility; every other horizontal space comes from a gap.
       </p>
 
-      <Demo title="A centered reading column and a centered box" classes="cn-measure · cn-fit cn-mx-auto">
+      <Demo title="A centered reading column and a centered box" why="The side layout" classes="cn-measure · cn-fit cn-mx-auto">
         <div class="cn-stack cn-gap-16" style="width:100%">
           <p class="cn-copy cn-measure cn-mb-0">
             Invoices close at the end of each billing period. Anything issued

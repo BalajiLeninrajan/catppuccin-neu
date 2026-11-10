@@ -27,7 +27,7 @@ export default function SegmentedPage() {
         a row of buttons or a group of labels wrapping visually hidden radios.
       </p>
 
-      <Demo title="Button form" classes='segmented › button[aria-pressed="true"]'>
+      <Demo title="Button form" why="Markup and the selected state" classes='segmented › button[aria-pressed="true"]'>
         <div class="segmented" role="group" aria-label="Billing period">
           {PERIODS.map((p) => (
             <button
@@ -48,7 +48,7 @@ export default function SegmentedPage() {
         <code class="cn-code-inline">aria-pressed="true"</code> on a button, or{" "}
         <code class="cn-code-inline">.active</code> on a label. The selected option sits pressed in on the mauve wash,
         inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides. The wash is mauve 20% into
-        base, 1.52:1, and the rim holds 3.5:1 on it, so the choice outweighs the raised options beside it.
+        base and the rim clears the non-text floor on it, so the choice outweighs the raised options beside it.
       </p>
 
       <p class="cn-copy">
@@ -57,7 +57,7 @@ export default function SegmentedPage() {
         hook.
       </p>
 
-      <Demo title="Radio form" classes="segmented › label.active > input.cn-sr-only">
+      <Demo title="Radio form" why="How the radio form submits and takes focus" classes="segmented › label.active > input.cn-sr-only">
         <div class="segmented">
           {PERIODS.map((p) => (
             <label key={p.id} class={period === p.id ? "active" : ""}>
@@ -81,7 +81,7 @@ export default function SegmentedPage() {
         When the hidden input takes keyboard focus, the recipe draws the focus outline, <code class="cn-code-inline">--cn-focus</code>, around the whole label.
       </p>
 
-      <Demo title="Stacked" classes="segmented is-stacked">
+      <Demo title="Stacked" why="When to stack" classes="segmented is-stacked">
         <div class="segmented is-stacked" style="width: min(420px, 100%)">
           {PLANS.map((p) => (
             <label key={p.id} class={plan === p.id ? "active" : ""}>
@@ -133,7 +133,7 @@ export default function SegmentedPage() {
         rows={[
           { name: ".segmented", notes: "Equal-width column grid, 8px gap. Styles every direct child, buttons or labels." },
           { name: ".segmented > *", notes: "Rests on --cn-surface-raised with a hairline, the plate and the lit top edge. Hover warms the border to mauve at --cn-step-edge." },
-          { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
+          { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', contrast: "Wash 1.52:1 on base · rim 3.5:1 on the wash", notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
           { name: "svg inside an option", notes: "16px, sized by the recipe." },
           { name: ".is-stacked", notes: "Vertical list, 12px gap, taller rows, 18px <b>. For described options." },
           { name: "<b> / <small>", notes: "Option title (sans 600 14px) and a quiet hint line at the 14px meta role in --cn-fg-muted inside each option." },

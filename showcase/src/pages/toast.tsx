@@ -170,7 +170,7 @@ export default function ToastPage() {
         the pile.
       </p>
 
-      <Demo title="Spawner, auto-dismisses after 7s" classes="toast-stack toast">
+      <Demo title="Spawner, auto-dismisses after 7s" why="The stack, the live region, the pile and the swipe" classes="toast-stack toast">
         <ToastSpawner />
       </Demo>
 
@@ -227,7 +227,7 @@ export default function ToastPage() {
         the only way out.
       </p>
 
-      <Demo title="At rest, one item outside its stack" row>
+      <Demo title="At rest, one item outside its stack" why="What needs script" row>
         <div class="toast" role="status">
           <div>
             <b>Event created</b>

@@ -82,7 +82,7 @@ export default function ChipPage() {
         <span class="chip">Updated 4m ago</span>
       </Demo>
 
-      <Demo title="With glyph" classes="chip" row>
+      <Demo title="With glyph" why="Glyphs and the accessible name" classes="chip" row>
         <span class="chip">
           <ClockGlyph />
           Updated 4m ago
@@ -106,7 +106,7 @@ export default function ChipPage() {
         <code class="cn-code-inline">role="img"</code>.
       </p>
 
-      <Demo title="Links and buttons" classes="a.chip · button.chip" row>
+      <Demo title="Links and buttons" why="Why a clickable chip stands on a plate" classes="a.chip · button.chip" row>
         <a class="chip" href="#" onClick={(e) => e.preventDefault()}>
           v2.4.1 release notes
         </a>
@@ -142,7 +142,7 @@ export default function ChipPage() {
         </span>
       </Demo>
 
-      <Demo title="Status tags: the glyph comes from CSS" classes="tag cn-tone-danger · -warning · -success · -info > word" row>
+      <Demo title="Status tags: the glyph comes from CSS" why="Where the status glyph comes from" classes="tag cn-tone-danger · -warning · -success · -info > word" row>
         <span class="tag cn-tone-danger">Overdue</span>
         <span class="tag cn-tone-success">Paid</span>
         <span class="tag cn-tone-warning">Due soon</span>
@@ -179,7 +179,7 @@ export default function ChipPage() {
         })}
       </Demo>
 
-      <Demo title="Palette tags: a glyph on every tone" classes="tag cn-tone-{tone} > svg + word" row>
+      <Demo title="Palette tags: a glyph on every tone" why="Why the word states the status" classes="tag cn-tone-{tone} > svg + word" row>
         {TONES.map((tone) => {
           const Glyph = TONE_GLYPH[tone];
           return (
@@ -193,7 +193,7 @@ export default function ChipPage() {
 
       <p class="cn-copy">
         A tone never carries meaning alone. Red, peach and pink sit close in
-        lightness (red and peach are 1.3:1 apart), so the word in the tag
+        lightness, so the word in the tag
         states the status: "Overdue", not a red dot. A danger or warning tag
         also leads with a glyph, because those are the two tones a reader must
         not miss. The palette tones, <code class="cn-code-inline">.cn-tone-red</code>{" "}
@@ -204,7 +204,7 @@ export default function ChipPage() {
         the name.
       </p>
 
-      <Demo title="Marks" classes='mark  (set --accent from the record)' row>
+      <Demo title="Marks" why="What a mark is for" classes='mark  (set --accent from the record)' row>
         {TEAMS.map((team) => (
           <span class="sc-row" key={team.name}>
             <span class="mark" style={accentStyle(team.accent)} aria-hidden="true">

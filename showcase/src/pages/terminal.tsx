@@ -24,7 +24,7 @@ export default function TerminalPage() {
       title="Terminal"
       lede="A carved log surface in mono. It shares its radius, fill and type with the code block and the command."
     >
-      <Demo title="Log surface with caret" classes="terminal / terminal .caret">
+      <Demo title="Log surface with caret" why="How the log scrolls and colors" classes="terminal / terminal .caret">
         <div class="terminal" style="width:min(560px,100%);height:230px">
           <pre class="scroll-well" tabIndex={0} role="region" aria-label="Deploy log">
             {LOG}
@@ -42,7 +42,7 @@ export default function TerminalPage() {
         horizontal scroll.
       </p>
 
-      <Demo title="Accent-keyed caret" classes="terminal  (caret reads --accent)">
+      <Demo title="Accent-keyed caret" why="How to key the caret" classes="terminal  (caret reads --accent)">
         <div
           class="terminal"
           style={`${accentStyle(PAYMENTS.accent)};width:min(560px,100%)`}
@@ -61,7 +61,7 @@ export default function TerminalPage() {
         accent, here Payments' teal. The blink stops under reduced motion.
       </p>
 
-      <Demo title="Inside a panel" classes="panel > terminal">
+      <Demo title="Inside a panel" why="When to put a terminal in a panel" classes="panel > terminal">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Deploy log</h2>

@@ -48,7 +48,7 @@ export default function StatPage() {
         </div>
       </Demo>
 
-      <Demo title="Three across" classes='stat-grid style="--stat-cols: 3"'>
+      <Demo title="Three across" why="Columns and where they fold" classes='stat-grid style="--stat-cols: 3"'>
         <div class="stat-grid" style="width:100%;--stat-cols:3">
           <div class="stat">
             <span>Invoices sent</span>
@@ -74,7 +74,7 @@ export default function StatPage() {
         reader scrolls for, so the grid never drops to one.
       </p>
 
-      <Demo title="Ruled, on the page ground" classes="stat-grid is-ruled > stat">
+      <Demo title="Ruled, on the page ground" why="Why figures on the ground take a rule" classes="stat-grid is-ruled > stat">
         <section class="stat-grid is-ruled" style="width:100%" aria-label="Key figures">
           <div class="stat">
             <span>Collected this month</span>
@@ -103,13 +103,13 @@ export default function StatPage() {
         A row of key figures often sits straight on the page, under the title
         and before any panel. <code class="cn-code-inline">.is-ruled</code>{" "}
         hangs each stat from a 2px <code class="cn-code-inline">--cn-stat-rule</code>,
-        equal to <code class="cn-code-inline">--edge</code>, 1.92:1 on the mantle page, on its start side,
+        equal to <code class="cn-code-inline">--edge</code>, on its start side,
         with 16px between the rule and the label, so the row reads as one
         band without a panel around it. The rule follows the writing
         direction. Inside a panel, use the plain grid.
       </p>
 
-      <Demo title="Large stat" row classes="stat is-lg  (reads --accent)">
+      <Demo title="Large stat" why="When the large stat takes an accent" row classes="stat is-lg  (reads --accent)">
         <div class="stat is-lg">
           <span>Monthly revenue</span>
           <strong>$42,180</strong>
@@ -130,7 +130,7 @@ export default function StatPage() {
         columns of numbers line up.
       </p>
 
-      <Demo title="Inline rows" classes="cn-divide > stat is-inline">
+      <Demo title="Inline rows" why="How inline rows stack" classes="cn-divide > stat is-inline">
         <div class="cn-divide" style="width:min(420px,100%)">
           <div class="stat is-inline">
             <span>Plan</span>
@@ -159,7 +159,7 @@ export default function StatPage() {
         needs a frame.
       </p>
 
-      <Demo title="A summary total" classes="cn-divide > stat is-inline · stat is-inline is-total">
+      <Demo title="A summary total" why="Where the total goes" classes="cn-divide > stat is-inline · stat is-inline is-total">
         <div style="width:min(320px,100%)">
           <div class="cn-divide">
             <div class="stat is-inline">
@@ -212,7 +212,8 @@ export default function StatPage() {
           {
             name: ".stat-grid.is-ruled",
             values: "stats on the page ground",
-            notes: "Each stat hangs from a 2px --cn-stat-rule (equal to --edge, 1.92:1 on the page; surface-2 under prefers-contrast: more) on its inline-start side, 16px in, with 4px block padding. For a figures band outside any panel.",
+            contrast: "Rule 1.92:1 on the page",
+            notes: "Each stat hangs from a 2px --cn-stat-rule (equal to --edge; surface-2 under prefers-contrast: more) on its inline-start side, 16px in, with 4px block padding. For a figures band outside any panel.",
           },
           {
             name: ".stat.is-inline",

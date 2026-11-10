@@ -6,9 +6,9 @@
    ground, the invoice table as the lead panel, then the chart and the one
    tilted aside on the page grid, the chart first. The whole view runs at
    cozy density, the SPEC's density for a desktop data tool. The aside
-   holds prose, a heading in the name role and a link; the ruled figures
-   live in the upright panel stacked under it, so the two columns end
-   near the same line.                                                    */
+   holds prose, a heading in the name role and a link; the supporting
+   figures sit on the ground under it, ruled, with no panel of their own,
+   so the two columns end near the same line.                             */
 
 import { useState } from "preact/hooks";
 import type { JSX } from "preact";
@@ -163,7 +163,7 @@ function InvoiceTable() {
                       {s.label}
                     </span>
                   </td>
-                  <td class="is-num is-trail" data-label="Amount">{money(inv.amount)}</td>
+                  <td class="is-num is-trail" data-label="Amount"><strong>{money(inv.amount)}</strong></td>
                 </tr>
               );
             })}
@@ -286,12 +286,13 @@ export default function DashboardExample() {
             </a>
           </div>
         </aside>
-        <section class="panel" aria-labelledby="dash-refunds">
-          <div class="panel-header">
-            <h2 id="dash-refunds">Payments this month</h2>
-          </div>
-          <div class="panel-body cn-stack cn-gap-16">
-            <div class="stat-grid" style="--stat-cols:2">
+        {/* Supporting figures sit on the ground, not in a third panel, so
+            the row reads in three levels: the chart panel, the tilted
+            aside, then these. The heading takes the name role, the size
+            of a cozy band title. */}
+        <section class="cn-stack cn-gap-16" aria-labelledby="dash-refunds">
+          <h2 id="dash-refunds" class="cn-name cn-m-0">Payments this month</h2>
+            <div class="stat-grid is-ruled" style="--stat-cols:2">
               <div class="stat">
                 <span>Refunded</span>
                 <strong>$1,120</strong>
@@ -317,7 +318,6 @@ export default function DashboardExample() {
                 <b>1 of {INVOICES.length}</b>
               </div>
             </div>
-          </div>
         </section>
         </div>
       </div>

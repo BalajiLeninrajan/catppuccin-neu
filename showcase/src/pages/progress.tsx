@@ -16,7 +16,7 @@ export default function ProgressPage() {
       title="Progress"
       lede="A borderless inset track with a fill in the --accent ramp. The fill inherits the track's radius, so nothing needs overflow clipping."
     >
-      <Demo title="Live tracks" classes="progress-track > span">
+      <Demo title="Live tracks" why="What you set and how the fill moves" classes="progress-track > span">
         <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:18px">
           {values.map((v, i) => (
             <div key={LABELS[i]}>
@@ -44,7 +44,7 @@ export default function ProgressPage() {
         value above it.
       </p>
 
-      <Demo title="The scale" classes="progress-track">
+      <Demo title="The scale" why="Where the fill color comes from" classes="progress-track">
         <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:14px">
           {[8, 25, 50, 75, 100].map((v) => (
             <div class="progress-track" key={v}>
@@ -60,7 +60,7 @@ export default function ProgressPage() {
         fill is a data mark.
       </p>
 
-      <Demo title="Large" classes="progress-track is-lg">
+      <Demo title="Large" why="When to use the large track" classes="progress-track is-lg">
         <div style="width:min(460px,100%)">
           <div class="progress-track is-lg">
             <span style="width:58%" />
@@ -73,7 +73,7 @@ export default function ProgressPage() {
         one bar a page is about: a quota, an upload, a plan limit.
       </p>
 
-      <Demo title="Custom fill · --progress-fill" classes="progress-track">
+      <Demo title="Custom fill · --progress-fill" why="How to re-key the fill" classes="progress-track">
         <div class="cn-stack cn-gap-16" style="width:min(460px,100%)">
           <div class="cn-stack cn-gap-8">
             <div class="stat is-inline">

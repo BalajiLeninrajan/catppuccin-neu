@@ -130,7 +130,7 @@ export default function ColorsPage() {
         Mocha tokens below and never a raw hex value.
       </p>
 
-      <Demo title="Grounds & surfaces">
+      <Demo title="Grounds & surfaces" why="Tokens, never raw hexes">
         <div class="sc-grid">
           {GROUNDS.map((t) => (
             <Swatch key={t.name} {...t} />
@@ -146,7 +146,7 @@ export default function ColorsPage() {
         </div>
       </Demo>
 
-      <Demo title="Hues">
+      <Demo title="Hues" why="The two contract properties">
         <div class="sc-grid">
           {HUES.map((t) => (
             <Swatch key={t.name} {...t} />
@@ -170,7 +170,7 @@ export default function ColorsPage() {
         project needs its own color.
       </p>
 
-      <Demo title="Hue jobs">
+      <Demo title="Hue jobs" why="Why each hue has one job">
         <div style="width:100%">
           <table class="data-table">
             <thead>
@@ -222,7 +222,7 @@ export default function ColorsPage() {
           { name: "--cn-fg-body", values: "subtext-1", notes: "Running text: body, .cn-copy, .cn-prose. text under prefers-contrast." },
           { name: "--cn-fg-muted", values: "subtext-0", notes: "Meta, help, table heads. subtext-1 under prefers-contrast." },
           { name: "--cn-fg-placeholder", values: "overlay-2", notes: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
-          { name: "--cn-fg-faint", values: "overlay-1", notes: "Decorative icons. Icon buttons rest in --cn-fg-muted. overlay-2 under prefers-contrast." },
+          { name: "--cn-fg-faint", values: "overlay-1", contrast: "4.4:1 on base", notes: "Decorative icons. Icon buttons rest in --cn-fg-muted. overlay-2 under prefers-contrast." },
           { name: "--cn-fg-disabled", values: "overlay-1", notes: "Disabled text, 4.4:1 on base. --control-edge, the unchecked edge and slider thumb edge, is overlay-1 too. Both move to overlay-2 under prefers-contrast." },
           { name: "--cn-fg-on-accent", values: "crust", notes: "Text and glyphs on a solid accent fill: 9.2:1 on mauve." },
           { name: "--cn-interactive", values: "mauve", notes: "Links, the primary, checked controls." },
@@ -235,7 +235,7 @@ export default function ColorsPage() {
         ]}
       />
 
-      <Demo title="Text by role" classes="cn-fg · cn-fg-soft · cn-fg-body · cn-fg-muted · cn-fg-placeholder">
+      <Demo title="Text by role" why="Role utilities and prefers-contrast" classes="cn-fg · cn-fg-soft · cn-fg-body · cn-fg-muted · cn-fg-placeholder">
         {["fg", "fg-soft", "fg-body", "fg-muted", "fg-placeholder"].map((role) => (
           <p key={role} class={`cn-copy cn-${role}`} style="margin:0">
             <code class="cn-code-inline">cn-{role}</code> · Invoice #1042 paid by
@@ -248,7 +248,7 @@ export default function ColorsPage() {
         The <code class="cn-code-inline">.cn-fg-*</code> utilities follow{" "}
         <code class="cn-code-inline">prefers-contrast</code>; the{" "}
         <code class="cn-code-inline">.cn-text-*</code> palette utilities below do
-        not. <code class="cn-code-inline">.cn-fg-faint</code> is 4.4:1 on base,
+        not. <code class="cn-code-inline">.cn-fg-faint</code> sits
         under the text floor, so the demo leaves it out. Use it for icons and
         text a reader can do without.{" "}
         <code class="cn-code-inline">.cn-tone-danger</code>,{" "}
@@ -295,7 +295,7 @@ export default function ColorsPage() {
       <Props
         title="Ladder stops"
         rows={[
-          { name: "--cn-{role}-tint", values: "role 4% into transparent", default: "--tint", notes: "The banner ground and the invalid-field well." },
+          { name: "--cn-{role}-tint", values: "role 6% into transparent", default: "--tint", notes: "The status banner ground, at --cn-step-status-tint. An invalid field's well stays at 4%." },
           { name: "--cn-{role}-wash", values: "role 12% into transparent", default: "--tone-wash", notes: "The tag ground and the icon-button hover. The danger ghost and the danger menu item read --cn-danger-wash directly." },
           { name: "--cn-{role}-edge", values: "role 40% into transparent", default: "--tone-edge", notes: "The icon-button hover edge." },
           { name: "--cn-{role}-border", values: "role 25% into surface-0", default: "--tone-border", notes: "The banner edge and .cn-edge-tone." },
@@ -367,7 +367,7 @@ export default function ColorsPage() {
         sits beside peach and away from blue, its cool pair.
       </p>
 
-      <Demo title="Six accents, one per team, and a seventh team on an identity hue" classes='style="--accent:#94e2d5"  (from the record)' row>
+      <Demo title="Six accents, one per team, and a seventh team on an identity hue" why="What --accent is for" classes='style="--accent:#94e2d5"  (from the record)' row>
         {[...TEAMS, { name: "Billing", accent: "sapphire" as const }].map((team) => (
           <div
             key={team.name}
@@ -447,7 +447,7 @@ export default function ColorsPage() {
         every status tone also carries a word and a shape.
       </p>
 
-      <Demo title="Series and ramps" classes="--cn-series-1..6 · --cn-ramp-1..5 · --cn-diverge-1..5" row>
+      <Demo title="Series and ramps" why="How the series and ramps were picked" classes="--cn-series-1..6 · --cn-ramp-1..5 · --cn-diverge-1..5" row>
         {SERIES.map((name, i) => (
           <div key={name} class="cn-stack cn-gap-8" style="justify-items:center">
             <div class="cn-r-mark" style={`width:48px;height:32px;background:var(--cn-series-${i + 1})`} />
@@ -555,7 +555,8 @@ export default function ColorsPage() {
       <Props
         title="The steps"
         rows={[
-          { name: "--cn-step-tint", values: "4%", notes: "A field or banner in its tone (--tint), the open accordion row." },
+          { name: "--cn-step-tint", values: "4%", notes: "A field in its tone, an untoned --tint, the open accordion row." },
+          { name: "--cn-step-status-tint", values: "6%", notes: "The four status tints, so a toned banner or .cn-tint shows its tone before its glyph and body text on it stays 8.0:1 or better on a panel." },
           { name: "--cn-step-row", values: "12%", notes: "Table and ranked row hovers: 1.27:1 for mauve on base, past the 1.24:1 hover and the open carve's 1.08:1, and 1.20:1 under a selected row." },
           { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
           { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.24:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
@@ -612,19 +613,20 @@ export default function ColorsPage() {
       <p class="cn-copy">
         Three of the mix tokens are states.{" "}
         <code class="cn-code-inline">--hover</code> is the ghost hover:
-        surface-1 at 40% over whatever sits under it, 1.24:1 on base and 1.15:1
-        on an overlay, so a menu row still lights. Ghost buttons, menu rows,
+        surface-1 at 40% over whatever sits under it, so a menu row on an
+        overlay still lights. Ghost buttons, menu rows,
         page targets and sidebar links take it on hover.{" "}
         <code class="cn-code-inline">--wash</code> is the engaged state: mauve
         at <code class="cn-code-inline">--cn-step-engaged</code> (20%) into base,
-        1.52:1, a step past the hover, so the fill alone tells a chosen option
+        a step past the hover, so the fill alone tells a chosen option
         from a hovered one. An engaged state also wears{" "}
         <code class="cn-code-inline">--engaged-edge</code>, a mauve rim at{" "}
-        <code class="cn-code-inline">--cn-step-vivid</code> (70%) that holds
-        3.5:1 on its own wash, and the full inset.
+        <code class="cn-code-inline">--cn-step-vivid</code> (70%) that clears
+        the non-text floor on its own wash, and the full inset. The token
+        comments below carry each ratio.
       </p>
 
-      <Demo title="Hover and engaged" classes="background: var(--hover) · cn-engaged (--wash, --engaged-edge, --neu-inset)" row>
+      <Demo title="Hover and engaged" why="The hover and engaged mixes" classes="background: var(--hover) · cn-engaged (--wash, --engaged-edge, --neu-inset)" row>
         <div class="cn-r-control cn-px-16 cn-py-12 cn-ui cn-fg" style="background:var(--hover);border:1px solid transparent">--hover</div>
         <div class="cn-r-control cn-px-16 cn-py-12 cn-ui cn-fg cn-edge cn-engaged">.cn-engaged</div>
       </Demo>
@@ -644,11 +646,13 @@ export default function ColorsPage() {
       <p class="cn-copy">
         The neutral ramp maps one to one onto{" "}
         <code class="cn-code-inline">.cn-text-*</code> utilities, brightest to
-        faintest. Readable text stops at overlay-2, the placeholder color,
-        5.8:1 on base. Meta sits a stop above it on subtext-0, and labels
-        a stop above that on subtext-1. overlay-1, 4.4:1 on base, is for
+        faintest. Readable text stops at overlay-2, the placeholder color.
+        Meta sits a stop above it on subtext-0, and labels
+        a stop above that on subtext-1. overlay-1 is for
         decorative icons, a hovered field's ring, control edges
-        and disabled text, because it falls under 4.5:1. No recipe reads
+        and disabled text, because it falls under the text floor. The{" "}
+        <a href="/accessibility">Accessibility</a> page has each role's
+        ratio. No recipe reads
         overlay-0 by default; it is the panel hairline under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code>. Palette hues get the same treatment, like{" "}
         <code class="cn-code-inline">.cn-text-mauve</code>, plus{" "}
@@ -656,7 +660,7 @@ export default function ColorsPage() {
         <code class="cn-code-inline">.cn-text-tone</code> for the contract properties.
       </p>
 
-      <Demo title="Readable text ramp" classes="cn-text-text … cn-text-overlay-2">
+      <Demo title="Readable text ramp" why="Where readable text stops" classes="cn-text-text … cn-text-overlay-2">
         {RAMP.map((step) => (
           <p key={step} class={`cn-copy cn-text-${step}`} style="margin:0">
             <code class="cn-code-inline">cn-text-{step}</code> · Monthly report ready,
@@ -679,7 +683,7 @@ export default function ColorsPage() {
       </p>
 
       <Demo
-        title="Edges"
+        title="Edges" why="Which surfaces take a hairline"
         classes="cn-edge / cn-edge-soft / cn-edge-line / cn-edge-mauve / cn-edge-tone / cn-edge-dashed"
         row
       >
@@ -718,7 +722,7 @@ export default function ColorsPage() {
         <code class="cn-code-inline">--tone</code>.
       </p>
       <Demo
-        title="Grounds & fills"
+        title="Grounds & fills" why="How the fill utilities map to the ladder"
         classes="cn-bg-page / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well / cn-bg-hover / cn-bg-base / cn-bg-mantle / cn-bg-crust / cn-tint"
         row
       >
@@ -749,7 +753,7 @@ export default function ColorsPage() {
           { name: ".cn-bg-base", values: "var(--base)", notes: "Raw base, the same color as the raised fill." },
           { name: ".cn-bg-mantle", values: "var(--mantle)", notes: "Raw mantle." },
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill." },
-          { name: ".cn-tint", values: "tone 4% into transparent", notes: "Semantic wash; pair with .cn-tone-*. Every tinted surface uses this one strength." },
+          { name: ".cn-tint", values: "tone 4% into transparent, 6% on a status tone", notes: "Semantic wash; pair with .cn-tone-*. A palette tone tints at --cn-step-tint and a status tone at --cn-step-status-tint." },
         ]}
       />
     </Doc>

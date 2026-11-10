@@ -23,6 +23,60 @@
   flex: 1;
 }
 
+/* "On this page": hidden until the window has room for a second column. */
+.sc-toc { display: none; }
+
+/* From 1280px a page with a list drops the centering. The measure starts
+   --space-7 from the sidebar and the list takes the strip the centering
+   left empty. It sticks under the top padding and scrolls on its own
+   when it is taller than the window. */
+@media (min-width: 1280px) {
+  .sc-content.has-toc {
+    display: grid;
+    grid-template-columns: minmax(0, 860px) 220px;
+    grid-template-rows: 1fr auto;
+    column-gap: var(--space-6);
+    padding-inline: var(--space-7) var(--space-5);
+  }
+
+  .sc-content.has-toc > :is(.sc-measure, .page-footer) {
+    grid-column: 1;
+    width: auto;
+    margin: 0;
+  }
+
+  .sc-content.has-toc > .sc-toc {
+    grid-area: 1 / 2;
+    align-self: start;
+    position: sticky;
+    top: var(--space-7);
+    max-height: calc(100vh - 2 * var(--space-7));
+    margin-top: var(--space-7);
+    overflow-y: auto;
+    scrollbar-color: var(--surface-2) transparent;
+    display: grid;
+    gap: var(--space-1);
+    padding-inline-start: var(--space-4);
+    border-inline-start: 1px solid var(--edge-soft);
+  }
+}
+
+.sc-toc .cn-microlabel { margin: 0 0 var(--space-2); }
+
+.sc-toc a {
+  padding-block: var(--space-1);
+  text-decoration: none;
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+/* Demo titles sit a step in from the h2 they follow. */
+.sc-toc a.is-demo { padding-inline-start: var(--space-3); }
+.sc-toc a:hover { color: var(--cn-fg); }
+.sc-toc a[aria-current] { color: var(--cn-interactive); }
+
+/* A jump from the list lands with air above the target. */
+.sc-doc :is(h2, .sc-demo) { scroll-margin-top: var(--space-5); }
+
 /* ── doc kit ── */
 
 .sc-doc {
@@ -67,6 +121,22 @@
   gap: var(--space-4);
   justify-items: start;
 }
+
+/* A row demo is as wide as its specimens or its copy line, whichever is
+   longer, so a single button does not sit in an 860px frame. Stages that
+   hold a table, a panel or a grid are not rows and keep the column. */
+.sc-demo-fit {
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
+}
+
+/* The fold under a demo: the package accordion as shipped, pulled up to
+   the copy line so the two read as one block, and held to the prose
+   measure. */
+.sc-why { max-width: var(--cn-measure); }
+.sc-doc > .sc-demo + .sc-why { margin-top: calc(var(--space-2) - var(--space-6)); }
+.sc-why .cn-copy + .cn-copy { margin-top: var(--space-4); }
 
 /* Specimens in a row start at the inline start, like the text above and
    below them, and wrap onto more rows. */

@@ -88,7 +88,7 @@ function SubscriptionsTable() {
                   {r.status}
                 </span>
               </td>
-              <td class="is-num is-trail" data-label="Amount">{money(r.amount)}</td>
+              <td class="is-num is-trail" data-label="Amount"><strong>{money(r.amount)}</strong></td>
               <td data-label="Renews">{r.renews}</td>
             </tr>
           );
@@ -104,7 +104,11 @@ export default function TablePage() {
       title="Table"
       lede="An opt-in class on a plain <table>. The recipe scopes all table styling, so bare tables elsewhere stay untouched."
     >
-      <Demo title="Sortable, selectable" classes='data-table · th[aria-sort] > button · tr[aria-selected="true"] · .is-num'>
+      <Demo
+        title="Sortable, selectable"
+        classes='data-table · th[aria-sort] > button · tr[aria-selected="true"] · .is-num'
+        why="Sorting, selection, cell weights and numeric columns"
+      >
         <div style="width:100%">
           <SubscriptionsTable />
         </div>
@@ -119,9 +123,9 @@ export default function TablePage() {
         the engaged wash with a deeper press. Hovering a row presses it in, a
         dark top edge drawn as a gradient on each cell so the row has no
         seams, with no lit edge below, on mauve at{" "}
-        <code class="cn-code-inline">--cn-step-row</code> (12%): 1.27:1 on the
-        page, past the 1.24:1 hover and the open accordion's 1.08:1, and
-        1.20:1 under a selected row.
+        <code class="cn-code-inline">--cn-step-row</code> (12%), a step past
+        the ghost hover and the open accordion and a step under a selected
+        row.
       </p>
 
       <p class="cn-copy">
@@ -129,8 +133,11 @@ export default function TablePage() {
         <code class="cn-code-inline">&lt;strong&gt;</code> is the primary line at 600,{" "}
         <code class="cn-code-inline">&lt;small&gt;</code> the secondary under it. Each
         is a block, so the cell needs no <code class="cn-code-inline">&lt;br&gt;</code>. Other cells
-        are 500 at <code class="cn-code-inline">--cell-font-size</code>, 14px by
-        default and 13px compact. Status goes in a{" "}
+        are 400 at <code class="cn-code-inline">--cell-font-size</code>, 14px by
+        default and 13px compact. Wrap a key figure, such as an amount, in{" "}
+        <code class="cn-code-inline">&lt;strong&gt;</code> and it takes 600 in{" "}
+        <code class="cn-code-inline">--cn-fg</code>, so the number a reader
+        scans for stands two weight steps over the cells around it. Status goes in a{" "}
         <code class="cn-code-inline">.tag</code> whose word states it, such as
         "Past due". Past due and trial-ending tags are danger and warning, so
         they lead with a glyph; the column gives every tag one, so the words
@@ -163,7 +170,11 @@ export default function TablePage() {
         the table above switch.
       </p>
 
-      <Demo title="Opting out: a scrolling table" classes="table-scroll > data-table.is-sticky-head">
+      <Demo
+        title="Opting out: a scrolling table"
+        classes="table-scroll > data-table.is-sticky-head"
+        why="When a table should scroll instead of stacking"
+      >
         <div class="panel" style="width:100%">
           <div class="table-scroll" style="max-height:240px" tabIndex={0} role="region" aria-label="Events">
             <table class="data-table is-sticky-head">
@@ -181,7 +192,7 @@ export default function TablePage() {
                     <td><code class="cn-code-inline">{time}</code></td>
                     <td><code class="cn-code-inline">{event}</code></td>
                     <td>{subject}</td>
-                    <td class="is-num">{amount}</td>
+                    <td class="is-num">{amount === "·" ? amount : <strong>{amount}</strong>}</td>
                   </tr>
                 ))}
               </tbody>
@@ -203,7 +214,11 @@ export default function TablePage() {
         inset shadow, because a collapsed border would scroll away.
       </p>
 
-      <Demo title="Inline edit: a field in a cell" classes='table-scroll > data-table > td > input[aria-labelledby]'>
+      <Demo
+        title="Inline edit: a field in a cell"
+        classes='table-scroll > data-table > td > input[aria-labelledby]'
+        why="How a cell field gets its name and its bounds"
+      >
         <div class="panel" style="width:min(560px,100%)">
           <div class="table-scroll">
             <table class="data-table">
@@ -242,7 +257,7 @@ export default function TablePage() {
         shows where it is. Hover and focus ring it like any field.
       </p>
 
-      <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child">
+      <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child" why="What the mark's number and color mean">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Top teams</h2>
@@ -271,12 +286,13 @@ export default function TablePage() {
       <Props
         title="Table classes"
         rows={[
-          { name: ".data-table", values: "on <table>", notes: "Scopes all table styling. Sans tabular body at 500 and --cell-font-size (14px, 13px compact), a --cn-surface-band header over an --edge rule (1.85:1 on a panel), surface-0 rules between rows (1.3:1). Cell padding is --cell-pad." },
+          { name: ".data-table", values: "on <table>", contrast: "Header rule 1.85:1 on a panel · row rules 1.3:1", notes: "Scopes all table styling. Sans tabular body at 400 and --cell-font-size (14px, 13px compact), a --cn-surface-band header over an --edge rule, surface-0 rules between rows. Cell padding is --cell-pad." },
+          { name: "td strong", values: "a key figure", notes: "An amount or another figure a reader scans for: 600 in --cn-fg, two weight steps over the 400 cells." },
           { name: ".is-num", values: "on th and td", notes: "Right-aligns a numeric column. On a sortable header the button reverses, so the label meets the right edge and the chevron sits on its inner side." },
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
-          { name: "tbody tr:hover", values: "state", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (12%) into base, 1.27:1 on a panel with --cn-fg-soft at 7.3:1, a step under a selected row." },
+          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.27:1 on a panel, past the 1.24:1 hover and the open accordion's 1.08:1, 1.20:1 under a selected row · cell text 7.3:1 on it", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (12%) into base, a step under a selected row." },
           { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest it takes --cn-field-ring over the soft carve, like any field. Name it with aria-labelledby pointing at the column header and the row's name cell." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },

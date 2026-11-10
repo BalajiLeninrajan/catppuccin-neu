@@ -12,7 +12,7 @@ export default function EmptyStatePage() {
         compact), so an empty list or panel body keeps its height.
       </p>
 
-      <Demo title="Glyph, title, description, action" classes="empty-state">
+      <Demo title="Glyph, title, description, action" why="What the recipe styles" classes="empty-state">
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
@@ -35,7 +35,7 @@ export default function EmptyStatePage() {
         else joins the 8px stack.
       </p>
 
-      <Demo title="With a dashed action" classes="empty-state">
+      <Demo title="With a dashed action" why="Which action button to use" classes="empty-state">
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="9" cy="8" r="3.5" />

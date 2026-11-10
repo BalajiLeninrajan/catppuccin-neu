@@ -9,7 +9,7 @@ export default function AvatarPage() {
       title="Avatar"
       lede="An initials round keyed by --accent. The tint, the hairline border and the initials all come from that one property."
     >
-      <Demo title="People, each in their own accent" classes="avatar  (set --accent from the record)" row>
+      <Demo title="People, each in their own accent" why="Where an avatar's accent comes from" classes="avatar  (set --accent from the record)" row>
         {PEOPLE.map((p) => (
           <span key={p.initials} class="avatar" style={accentStyle(p.accent)} role="img" aria-label={p.name} data-tip={p.name}>
             {p.initials}
@@ -34,7 +34,7 @@ export default function AvatarPage() {
         </span>
       </Demo>
 
-      <Demo title="Stack" classes="avatar-stack > .avatar · --ring-ground: var(--cn-surface-page)">
+      <Demo title="Stack" why="The stack ring and the accessible name" classes="avatar-stack > .avatar · --ring-ground: var(--cn-surface-page)">
         <div class="avatar-stack" style="--ring-ground:var(--cn-surface-page)">
           {PEOPLE.slice(0, 4).map((p) => (
             <span key={p.initials} class="avatar" style={accentStyle(p.accent)} role="img" aria-label={p.name} data-tip={p.name}>

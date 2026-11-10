@@ -83,11 +83,11 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--cn-surface-page", "mantle", "the ground", "The body, the app shell, the topbar, stat bands."],
   ["--cn-surface-raised", "base", "1.07:1 on the page", "Panels, plated controls, chips, the selected tab. A fill step above the page, never lighter than base, and they lift by their edges and shadow too."],
   ["--cn-surface-overlay", "surface-0 90% into base", "1.27:1 (1.36:1 on the page)", "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link."],
-  ["--cn-surface-sunken", "crust 70% into mantle", "1.12:1 under base (1.05:1 under the page)", "Wells, the mono wells, stepper pills, skeletons: below the ground wherever they sit."],
+  ["--cn-surface-sunken", "crust 70% into mantle", "1.12:1 under base (1.05:1 under the page)", "Wells, the mono wells, stepper pills, skeletons, the switch plate: below the ground wherever they sit."],
   ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
   ["--hover", "surface-1 40% over the ground", "1.24:1 (1.15:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
-  ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's outline; the fill step shows its bounds. overlay-0 under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
+  ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's top and left; the right and bottom border sides are --neu-ink, 1.22:1 under the fill, and the fill step shows its bounds. overlay-0 on all four sides under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
 ];
 
@@ -181,7 +181,7 @@ export default function AccessibilityPage() {
         Text reads a semantic role, not a palette name.
       </p>
 
-      <Demo title="Semantic roles on a panel and an overlay">
+      <Demo title="Semantic roles on a panel and an overlay" why="How the text roles were set, and why a tone never works alone">
         <div style="width:100%">
           <Table
             head={["Swatch", "Role", "Palette", "WCAG, a panel · overlay", "APCA Lc, a panel · overlay", "Use"]}
@@ -199,17 +199,17 @@ export default function AccessibilityPage() {
 
       <p class="cn-copy">
         Labels are{" "}
-        <code class="cn-code-inline">--cn-fg-soft</code>, subtext-1, 9.3:1 on
-        a panel. Meta, help and table heads are{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0, 7.4:1 on
-        a panel and 5.8:1 in an overlay. Readable text stops at{" "}
+        <code class="cn-code-inline">--cn-fg-soft</code>, subtext-1. Meta,
+        help and table heads are{" "}
+        <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0.
+        Readable text stops at{" "}
         <code class="cn-code-inline">--cn-fg-placeholder</code>, overlay-2,
-        5.8:1 on a panel and 4.6:1 in an overlay, which only placeholders
-        use. The two roles under it are for icons and disabled states.
-        Running text in <code class="cn-code-inline">--cn-fg-body</code> is
-        subtext-1, 9.3:1 on a panel and 7.3:1 in a dialog, so it stays above
-        7:1 on every ground. The page is mantle, darker than a panel, so text
-        there reads higher: subtext-1 is 9.9:1 and overlay-2 6.2:1.
+        which only placeholders use. The two roles under it are for icons
+        and disabled states. Running text in{" "}
+        <code class="cn-code-inline">--cn-fg-body</code> is subtext-1 and
+        stays above its floor on every ground. The page is mantle, darker
+        than a panel, so text there reads a little higher than the table's
+        panel column.
       </p>
 
       <p class="cn-copy">
@@ -268,11 +268,11 @@ export default function AccessibilityPage() {
         the only way to find the control. A button is identified by its
         label, so its resting hairline is decoration and sits under 3:1 by
         design. A field is identified by the label above it and by its
-        carve, so its resting edge is a quiet even surface-1 hairline, 1.8:1
-        on a panel and 1.9:1 on the page, not a 3:1 ring: a carve is darkness only, and a light lip
-        on its far walls reads as a bevel. Its state still shows at 3:1. Hover closes a full 1px{" "}
-        <code class="cn-code-inline">--control-edge</code> ring, 4.4:1 on a
-        panel, 4.8:1 on the page and 3.5:1 in a dialog, and focus draws the 2px
+        carve, so its resting edge is a quiet even hairline, surface-2 at
+        85%, not a 3:1 ring: a brighter ring at rest read as an outlined
+        box, and a light lip on a carve's far walls reads as a bevel. Its
+        state still shows at 3:1. Hover closes a full 1px{" "}
+        <code class="cn-code-inline">--control-edge</code> ring and focus draws the 2px
         focus ring. So a field is findable the moment a reader reaches for
         it. Give every field a visible label. Checkboxes, radios and switches
         carry a full edge at rest, because the box is the whole control and
@@ -281,11 +281,10 @@ export default function AccessibilityPage() {
         unchecked box inside a panel or a dialog still clears 3:1. Under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> the edge
         and disabled text move to overlay-2, and a resting field closes into
-        a full overlay-2 ring: 5.8:1 on a panel, 6.2:1 on the page and 4.6:1
-        on an overlay.
+        a full overlay-2 ring. The table has each edge's ratio.
       </p>
 
-      <Demo title="Edges that identify a control">
+      <Demo title="Edges that identify a control" why="Which edges need 3:1 and which do not">
         <div style="width:100%">
           <Table
             head={["Swatch", "Edge", "Palette", "Ratio", "Against"]}
@@ -306,18 +305,14 @@ export default function AccessibilityPage() {
         step above it, so text on a panel reads a little lower than on the
         page; every ratio here is quoted on the panel, the lower of the two.
         Only the overlay fill sits lighter than base, and a lighter overlay
-        would drop the placeholder role under 4.5:1, so the ladder stops at
-        1.27:1. A hovered field's ring is overlay-1: 4.4:1 in a panel and
-        3.5:1 on the overlay. Placeholders are{" "}
-        <code class="cn-code-inline">--cn-fg-placeholder</code>: 5.8:1 in a
-        panel and 4.6:1 on an overlay. A raised surface shows its bounds by
-        the fill step, and its 1.85:1 hairline and 1px lit top edge at 1.5:1
-        cut its outline. An engaged state is a wash at 1.52:1, a step past
-        the hover's 1.24:1, and it also wears a mauve rim that holds 3.5:1 on
-        that wash.
+        would drop the placeholder role under its floor, so the ladder stops
+        there. A raised surface shows its bounds by the fill step, and its
+        hairline and 1px lit top edge cut its outline. An engaged state is
+        a wash a step past the hover, and it also wears a mauve rim that
+        clears 3:1 on that wash. The table has each ratio.
       </p>
 
-      <Demo title="Fills and lines">
+      <Demo title="Fills and lines" why="How a surface shows its bounds">
         <div style="width:100%">
           <Table
             head={["Swatch", "Token", "Mix", "Ratio", "Use"]}
@@ -340,7 +335,7 @@ export default function AccessibilityPage() {
         the underline.
       </p>
 
-      <Demo title="A link in running text">
+      <Demo title="A link in running text" why="Why links are underlined">
         <p class="cn-copy" style="margin:0">
           The March invoice is ready. <a href="#" onClick={(e) => e.preventDefault()}>Download the PDF</a> or
           forward it to your finance team.
@@ -385,7 +380,7 @@ export default function AccessibilityPage() {
         element. Offer it as a toggle; this one sets it for the whole site.
       </p>
 
-      <Demo title="More contrast, without the OS setting" classes='html[data-contrast="more"]'>
+      <Demo title="More contrast, without the OS setting" why="Why the contrast step also has a toggle" classes='html[data-contrast="more"]'>
         <ContrastToggle />
       </Demo>
 
@@ -428,12 +423,13 @@ export default function AccessibilityPage() {
 
       <h2 class="cn-title">Per component</h2>
       <p class="cn-copy">
-        CSS cannot add names, roles or focus handling. These are yours. The
-        optional <a href="/behavior">behavior module</a> handles the keyboard
-        model for tabs, menus, sliders, tooltips and toasts.
+        CSS cannot add names, roles or focus handling. These are yours.
+        Tabs, menus, listboxes and comboboxes are required to have a
+        keyboard model: <code class="cn-code-inline">init()</code> from the{" "}
+        <a href="/behavior">behavior module</a>, or your own widget library.
       </p>
 
-      <Demo title="What your markup does">
+      <Demo title="What your markup does" why="What CSS cannot do for you">
         <div style="width:100%">
           <Table head={["Component", "What you do"]} rows={COMPONENTS.map(([c, d]) => [c, d])} />
         </div>
@@ -463,7 +459,7 @@ export default function AccessibilityPage() {
           { name: "--cn-fg-placeholder", values: "4.5:1", notes: "On the page, raised, overlay, recessed and sunken fills." },
           { name: "status roles, links", values: "4.5:1", notes: "On the page, raised and overlay fills, and each status role on its own tint." },
           { name: "field hover ring, control edge, focus ring, engaged rim", values: "3:1", notes: "On the page, raised and overlay fills. The control edge covers the slider thumb. The rim also on --wash." },
-          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet surface-1 hairline at 1.8:1 on a panel, below 3:1 by design." },
+          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet hairline, surface-2 at 85%, 2.1:1 on a panel, below 3:1 by design." },
           { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.8, 2.4, 1.4:1 · 1.5, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill, so the depth ladder holds its order. --edge-strong must stay above --edge on every ground. Not WCAG obligations." },
           { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer falls from the top left and is darker than the page, a panel and a well, so no carve draws a light lip or glow." },
           { name: "--cn-fg-on-accent", values: "4.5:1", notes: "On the primary and its hover." },
@@ -522,7 +518,7 @@ export default function AccessibilityPage() {
         with a screen reader. Names, roles and states come from your markup.
       </p>
 
-      <Demo title="Criteria the package touches">
+      <Demo title="Criteria the package touches" why="How to read this table">
         <div style="width:100%">
           <Table
             head={["Criterion", "Level", "What the package does", "How it is checked"]}

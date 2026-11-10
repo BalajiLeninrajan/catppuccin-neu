@@ -87,7 +87,7 @@ export default function DrawerPage() {
         <code class="cn-code-inline">showModal()</code>.
       </p>
 
-      <Demo title="Live demo" classes="dialog.drawer">
+      <Demo title="Live demo" why="Markup, layout and motion" classes="dialog.drawer">
         <DrawerDemo />
       </Demo>
 

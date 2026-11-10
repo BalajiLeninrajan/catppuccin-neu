@@ -13,10 +13,17 @@
 /* ── Surfaces ───────────────────────────────────────────────────────────── */
 
 /* Panel: the primary content container. Raised: the base fill a step
-   above the mantle page, the --edge hairline and the raised shadow. */
+   above the mantle page, the --edge hairline on the top and left, and the
+   raised shadow. The right and bottom border sides are --neu-ink, so on
+   the side away from the light the fill meets the ink directly, 1.22:1,
+   and the border joins the 2px contact as a 3px foot: the side of a
+   block, the plate's logic at panel scale. Darkness only; the top and
+   left stay the quiet hairline. */
 .panel {
   min-width: 0;
   border: 1px solid var(--edge);
+  border-right-color: var(--neu-ink);
+  border-bottom-color: var(--neu-ink);
   border-radius: var(--cn-radius-panel);
   background: var(--cn-surface-raised);
   box-shadow: var(--neu-raised);
@@ -37,9 +44,19 @@
    (see the panel-header rule below). It outranks its neighbors by height
    and by its title, not by an ornament. */
 .panel.is-lead {
-  border-color: var(--edge-strong);
+  border-color: var(--edge-strong) var(--neu-ink) var(--neu-ink) var(--edge-strong);
   box-shadow: var(--neu-lifted);
 }
+/* More contrast keeps the full outline, overlay-0 on a panel and
+   overlay-1 on the lead, so every side holds the 3:1 boundary. */
+@media (prefers-contrast: more) {
+  .panel { border-color: var(--edge); }
+  .panel.is-lead { border-color: var(--edge-strong); }
+}
+/* :where() holds the toggle to the weight of the media-query rules, so a
+   border color composed onto a panel wins the same way in both modes. */
+:where(:root[data-contrast="more"]) .panel { border-color: var(--edge); }
+:where(:root[data-contrast="more"]) .panel.is-lead { border-color: var(--edge-strong); }
 
 /* The one rotated hero card. A 6px plate rides over the neu raise so
    the hero still answers the top-left light instead of floating as a flat
@@ -409,13 +426,20 @@ a:active > .accent-card {
   box-shadow: var(--cn-plate-hover), var(--hard-extra);
 }
 
-/* Ghost: chrome-free until hovered. Toggled or current, it wears the
-   engaged state: pressed in on the mauve wash inside the engaged rim. */
+/* Ghost: no fill and no plate. At rest it has the --edge-soft hairline,
+   1.22:1 on a panel, so "Discard" beside "Save changes" reads as a control
+   and not a bold label; hover steps the edge up to --edge. In the topbar
+   nav and as an icon button it stays edge-free, so a nav row or an icon
+   toolbar is not a row of boxes. :where() keeps the rule as light as
+   .btn-ghost, so hover, engaged and dashed still win. Toggled or current,
+   it wears the engaged state: pressed in on the mauve wash inside the
+   engaged rim. */
 .btn-ghost {
   color: var(--cn-fg-body);
   border: 1px solid transparent;
   background: transparent;
 }
+.btn-ghost:where(:not(.is-icon, .topbar nav *)) { border-color: var(--edge-soft); }
 /* An engaged ghost keeps its wash and rim under the pointer. */
 .btn-ghost:hover:not(:disabled, [aria-disabled="true"], [aria-pressed="true"], [aria-current], [aria-expanded="true"]) {
   color: var(--cn-fg);
@@ -527,8 +551,8 @@ a:active > .accent-card {
    background stays transparent so the parent ground shows through and only
    the dark inner wall defines the field. A sunken fill was tried and
    dropped: at 1x it flattened the carve into a dark box. At rest it has
-   a quiet even surface-1 hairline, 1.8:1 on a panel, the same on all
-   four sides, so its bounds show without a lip. The ring is listed first,
+   a quiet even hairline, surface-2 at 85%, 2.1:1 on a panel, the same on
+   all four sides, so its bounds show without a lip. The ring is listed first,
    so it paints over the carve: under it, the dark wall dimmed the top and
    left and left the bottom and right brighter. Hover closes a 3:1 ring
    around it and focus draws the focus ring.
@@ -568,8 +592,19 @@ a:active > .accent-card {
 :is(.input, .field :is(input, select, textarea)):focus { outline: 2px solid var(--cn-focus); outline-offset: 3px; }
 /* Hover closes the ring, so a field shows 3:1 bounds under the pointer.
    It swaps the ring token rather than the shadow, so a validation ring,
-   a disabled field and a read-only rule keep their own shadow. */
-:is(.input, .field :is(input, select, textarea)):hover:not(:disabled) { --cn-field-ring: var(--cn-field-hover-ring); }
+   a disabled field and a read-only rule keep their own shadow. A focused
+   field skips the swap and keeps its resting hairline, so the focus ring
+   is the only bright ring around it. */
+:is(.input, .field :is(input, select, textarea)):hover:not(:disabled, :focus) { --cn-field-ring: var(--cn-field-hover-ring); }
+/* iOS Safari zooms the page when a focused field's text is under 16px, so
+   touch fields set 16px. A literal 1rem, not the body role, because
+   compact density steps body to 15px. The 46px coarse control height
+   holds it. The table-cell selector outranks the cell's own size. */
+@media (pointer: coarse) {
+  .input,
+  .field input, .field select, .field textarea,
+  .data-table td .input { font-size: 1rem; }
+}
 /* Helper or message line inside a field. */
 .field small {
   display: block;
@@ -610,7 +645,7 @@ a:active > .accent-card {
    to the disabled color, 4.4:1, with no opacity on top. */
 :is(.input, .field :is(input, select, textarea)):disabled {
   color: var(--cn-fg-disabled);
-  box-shadow: var(--cn-field-ring), var(--neu-inset-soft);
+  box-shadow: var(--cn-carve-ring), var(--neu-inset-soft);
   cursor: not-allowed;
 }
 :is(.input, .field :is(input, textarea)):disabled::placeholder { color: var(--cn-fg-disabled); }
@@ -1085,7 +1120,9 @@ a:active > .accent-card {
 
 /* Switch: an abstract light switch. A carved wall plate holds a raised
    rocker paddle; flipping slides the paddle across, flips its tilt, and
-   lights it mauve with a soft glow. */
+   lights it mauve with a soft glow. The plate takes the sunken fill,
+   1.12:1 under a panel, so the base paddle stands a fill step above its
+   track. The paddle is never lightened. */
 .switch {
   appearance: none;
   margin: 0;
@@ -1094,7 +1131,7 @@ a:active > .accent-card {
   flex: 0 0 auto;
   position: relative;
   border-radius: var(--cn-radius-control);
-  background: transparent;
+  background: var(--cn-surface-sunken);
   /* The inset ring is the plate's 3:1 edge. */
   box-shadow: var(--neu-inset), var(--cn-switch-ring);
   cursor: pointer;
@@ -1138,10 +1175,11 @@ a:active > .accent-card {
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
 /* A disabled switch is off at the wall: the paddle lies flat with no tilt
-   and no raise, and plate and paddle drop to the soft --edge, so it never
-   reads as an off switch you could flip. Disabled boxes take --edge too. */
+   and no raise, plate and paddle drop to the soft --edge, and the plate
+   loses its sunken fill, so it never reads as an off switch you could
+   flip. Disabled boxes take --edge too. */
 .switch:disabled::after { transform: none; box-shadow: none; border-color: var(--edge); }
-.switch:disabled { box-shadow: var(--neu-inset-soft), var(--cn-disabled-ring); }
+.switch:disabled { background: transparent; box-shadow: var(--neu-inset-soft), var(--cn-disabled-ring); }
 :is(.checkbox, .radio):disabled { border-color: var(--edge); }
 
 /* ── Accordion: a disclosure row ────────────────────────────────────────────
@@ -1182,7 +1220,8 @@ a:active > .accent-card {
   justify-content: space-between;
   gap: var(--space-4);
   color: var(--cn-fg);
-  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
+  /* The question sets at the answer's size and leads it by weight and ink. */
+  font: var(--cn-type-name-weight) var(--cn-type-body-size)/var(--cn-type-name-leading) var(--sans);
   cursor: pointer;
   transition: color var(--t-fast);
 }
@@ -1555,9 +1594,12 @@ a:hover:not(:active) > .accent-card {
   padding: var(--cell-pad);
   color: var(--cn-fg-soft);
   border-bottom: 1px solid var(--surface-0);
-  font: var(--cn-type-label-weight) var(--cell-font-size) var(--sans);
+  font: var(--cn-type-body-weight) var(--cell-font-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
+/* A key figure in a cell, such as an amount: wrap it in strong. It takes
+   the name voice, 600 in --cn-fg, two weight steps over the 400 cells. */
+.data-table td strong { color: var(--cn-fg); font-weight: var(--cn-type-ui-weight); }
 .data-table tbody tr:last-child td { border-bottom: 0; }
 /* Numeric columns: put .is-num on the th and each td. Figures align on
    the right edge so digits of the same place stack, and a sortable
@@ -2257,8 +2299,8 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
    <div role="tabpanel" id="p1" aria-labelledby="t1">…</div>
    The tabs sit in a shallow carve and the selected one rises out of it on
    the raised fill, the reverse of the segmented control, whose choice
-   presses in. The carve takes the resting field's quiet even hairline,
-   --cn-field-ring, so its bounds show on the page and on a panel. Arrow keys move
+   presses in. The carve takes the quiet even surface-1 hairline,
+   --cn-carve-ring, so its bounds show on the page and on a panel. Arrow keys move
    between tabs (a consumer listener; roving tabindex, the selected tab is
    the only one in the tab order).        */
 .tabs {
@@ -2269,7 +2311,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   gap: var(--space-1);
   overflow-x: auto;
   border-radius: var(--cn-radius-card);
-  box-shadow: var(--cn-field-ring), var(--neu-inset-soft);
+  box-shadow: var(--cn-carve-ring), var(--neu-inset-soft);
   scrollbar-width: none;
 }
 .tabs > [role="tab"] {

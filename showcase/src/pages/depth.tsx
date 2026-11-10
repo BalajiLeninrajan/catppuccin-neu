@@ -4,11 +4,11 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 /* One model, lowest first. Height is distance from the ground; the light
    is above and to the top left. */
 const HEIGHTS = [
-  { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. A well also takes the sunken fill, crust 70% into mantle, darker than the page and a panel.", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
+  { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. Wells, stepper pills, skeletons and the switch plate also take the sunken fill, crust 70% into mantle, darker than the page and a panel.", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
   { height: "The ground", draws: "Mantle, and nothing else.", tokens: "--cn-surface-page", who: "The page, the topbar, stat bands. Every other height is measured from it." },
-  { height: "Resting on it", draws: "The base fill, one step above the page, the plain hairline, the lit top edge, a dark foot of contact edge and near shadow on the bottom and right, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
+  { height: "Resting on it", draws: "The base fill, one step above the page, the plain hairline on the top and left, the lit top edge, ink border sides on the right and bottom that join a dark foot of contact edge and near shadow, a soft cast.", tokens: "--cn-surface-raised, --edge, --neu-ink, --neu-raised, or --neu-raised-soft with --cn-lit-edge", who: "Panels, static chips, the selected tab. A panel inside a panel takes --neu-raised-soft with the lit edge." },
   { height: "Standing on a plate", draws: "The base fill and lit top edge over a hard offset, the plate's side in the shadow ink.", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate." },
-  { height: "Resting higher", draws: "The base fill, the brighter hairline, a hard dark foot 6px deep and 4px wide on the bottom and right, past the 4px plate, a longer cast, a taller header band and more padding.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong, --lead-band-h, --lead-pad", who: "The one lead panel. Its deeper foot, its larger band title and its room carry the rank, since a longer cast barely shows on a dark page." },
+  { height: "Resting higher", draws: "The base fill, the brighter hairline on the top and left, a hard dark foot on the bottom and right, 7px deep and 5px wide with its ink border sides, past the 4px plate, a longer cast, a taller header band and more padding.", tokens: "--cn-surface-raised, --neu-lifted, --edge-strong, --lead-band-h, --lead-pad", who: "The one lead panel. Its deeper foot, its larger band title and its room carry the rank, since a longer cast barely shows on a dark page." },
   { height: "Lifted off it", draws: "The base fill; the plate's side grows to 6px and the card tips 1.2deg.", tokens: "--cn-plate-tilt, a 6px plate, over --neu-raised, rotate(1.2deg)", who: "The one tilted panel, holding prose: never a table, a form or ruled rows. Upright under prefers-contrast: more, on the same plate." },
   { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
@@ -78,12 +78,7 @@ export default function DepthPage() {
       lede="Every elevation is one of a small set of shadows, lit from one light at the top left. Height above the page separates surfaces; a hairline only cuts their edge."
     >
       <h2 class="cn-title">One model</h2>
-      <p class="cn-copy">
-        Every depth on the page is a height above or below the ground, under
-        the one light.
-      </p>
-
-      <Demo title="Heights, lowest first">
+      <Demo title="Heights, lowest first" why="One light, and why no component writes its own shadow">
         <div style="width:100%">
           <table class="data-table">
             <thead>
@@ -109,8 +104,9 @@ export default function DepthPage() {
       </Demo>
 
       <p class="cn-copy">
-        Pick the height for a new surface and its fill and shadow follow from
-        the row.
+        Every depth on the page is a height above or below the ground, under
+        the one light. Pick the height for a new surface and its fill and
+        shadow follow from the row.
       </p>
 
       <p class="cn-copy">
@@ -131,7 +127,7 @@ export default function DepthPage() {
         overlays, which float free of the page, take a lighter step.
       </p>
 
-      <Demo title="One specimen per height, on the page" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-lead · panel is-tilted · cn-bg-overlay cn-pop">
+      <Demo title="One specimen per height, on the page" why="Hairlines, the lit edge and the fixed light" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-lead · panel is-tilted · cn-bg-overlay cn-pop">
         {/* Two groups in the heights table's order: at or below the ground
             and a plain panel resting on it, then the plate, the lead, the
             tilt and the float, so rows break at the story's seam. The first
@@ -171,13 +167,18 @@ export default function DepthPage() {
         A raised or floating surface keeps a hairline,{" "}
         <code class="cn-code-inline">--edge</code> or{" "}
         <code class="cn-code-inline">--edge-strong</code>. It is the
-        surface's cut edge, not a border standing in for depth. Carved
-        surfaces have no lip. A resting field and the tabs carve take{" "}
+        surface's cut edge, not a border standing in for depth. A panel
+        draws it on its top and left only; its right and bottom border
+        sides are <code class="cn-code-inline">--neu-ink</code> and belong
+        to the foot. Carved surfaces have no lip. A resting field takes{" "}
         <code class="cn-code-inline">--cn-field-ring</code>, a quiet even
-        surface-1 hairline at 1.8:1, the same on all four sides. A well's{" "}
+        hairline of surface-2 at 85%. The tabs carve and a disabled field
+        take the quieter{" "}
+        <code class="cn-code-inline">--cn-carve-ring</code>, surface-1. Both
+        are the same on all four sides. A well's{" "}
         <code class="cn-code-inline">--cn-well-ring</code> paints nothing,
         since the sunken fill already sets it apart.{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> closes both
+        <code class="cn-code-inline">prefers-contrast: more</code> closes all three
         into a full even ring, and a hovered field closes its ring in{" "}
         <code class="cn-code-inline">--control-edge</code>. An engaged state is
         carved too, with an{" "}
@@ -187,8 +188,7 @@ export default function DepthPage() {
       <p class="cn-copy">
         A raised surface also carries{" "}
         <code class="cn-code-inline">--cn-lit-edge</code>, a 1px line of
-        surface-2 at 45% inside its top rim where the light catches it, 1.5:1
-        on the base fill. It is the only light-side cue on a raised surface, and
+        surface-2 at 45% inside its top rim where the light catches it. It is the only light-side cue on a raised surface, and
         the last layer of{" "}
         <code class="cn-code-inline">--neu-raised</code> and the default{" "}
         <code class="cn-code-inline">--hard-extra</code> of every plated recipe:
@@ -220,6 +220,7 @@ export default function DepthPage() {
       <Demo
         title="Four of the five neu shadows"
         classes="cn-bg-raised cn-r-card cn-raised | cn-raised-soft | cn-bg-page cn-inset | cn-inset-soft"
+        why="How the shadow ink and each layer were chosen"
         row
       >
         <Cube cls="cn-raised" />
@@ -256,12 +257,12 @@ export default function DepthPage() {
 
       <p class="cn-copy">
         A shadow has to be darker than the darkest surface it falls on. A
-        panel's shadow falls on the mantle page, and crust sits only 1.07:1
-        under mantle. So the shadows use crust taken halfway to black,{" "}
+        panel's shadow falls on the mantle page, and crust is barely darker
+        than mantle. So the shadows use crust taken halfway to black,{" "}
         <code class="cn-code-inline">rgb(8 8 14)</code>:{" "}
         <code class="cn-code-inline">--neu-shade</code> at .72 for the cast,{" "}
-        <code class="cn-code-inline">--neu-contact</code>, the full ink at
-        1.14:1 on the page, for a 2px edge where the surface meets the
+        <code class="cn-code-inline">--neu-contact</code>, the full ink,
+        for a 2px edge where the surface meets the
         ground, <code class="cn-code-inline">--neu-near</code> at .8 for a
         3px 4px 6px shadow that lays a 4 to 6px dark foot along the
         bottom and right edges, and <code class="cn-code-inline">--neu-dark</code> at
@@ -271,15 +272,16 @@ export default function DepthPage() {
         lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
         the one lead panel, spends its extra darkness on the bottom and
         right only: a 4px 6px contact in the full ink, a 6px 12px 14px near
-        shadow and an 18px 28px 48px cast. Even black is only 1.2:1 on the
+        shadow and an 18px 28px 48px cast. Even black is close to the
         page, so a longer cast barely shows; the fill step separates the
-        panel and the deeper foot ranks it,
-        6px of full ink under the lead's bottom edge where a plain panel
-        has 2px, past a button's 4px plate and as deep as the tilted
-        panel's 6px one on the bottom, 2px narrower on the right. Compact density drops the
+        panel and the deeper foot ranks it. A panel's right and bottom
+        border sides are the same ink, so they add 1px to the contact:
+        7px of full ink under the lead's bottom edge where a plain panel
+        has 3px, past a button's 4px plate. The table below has the ink's
+        ratios. Compact density drops the
         plate to 2px and the plain contact to 1px, so a plain panel stays
-        under a plated control. Nothing darkens its top and left, because a dark line all
-        round reads as a heavier outline, not as height. The soft raise
+        under a plated control. Nothing darkens or brightens a panel's top and left, because a dark line all
+        round reads as a heavier outline, not as height, and a bright one as a bevel. The soft raise
         keeps contact and a short cast, so every raise answers the light
         the same way: no raise draws a top-left highlight outside its edge.
         A carve's wall is one layer,{" "}
@@ -327,7 +329,7 @@ export default function DepthPage() {
         </div>
       </Demo>
 
-      <Demo title="A panel inside a panel" classes="panel > panel  (the inner one takes --neu-raised-soft and the lit edge)">
+      <Demo title="A panel inside a panel" why="Why the inner panel takes the soft raise" classes="panel > panel  (the inner one takes --neu-raised-soft and the lit edge)">
         <div class="panel" style="max-width:520px;width:100%">
           <header class="panel-header">
             <h2>Billing</h2>
@@ -354,7 +356,7 @@ export default function DepthPage() {
         <a href="/layout">Layout</a> page has the rule.
       </p>
 
-      <Demo title="Promoted shadows" classes="cn-pop | cn-cast | cn-mark-drop">
+      <Demo title="Promoted shadows" classes="cn-pop | cn-cast | cn-mark-drop" why="What each promoted shadow is for">
         <div
           class="cn-bg-page cn-cast cn-r-control"
           style="height:54px;display:flex;align-items:center;gap:14px;padding:0 18px"
@@ -397,6 +399,7 @@ export default function DepthPage() {
       <Demo
         title="The hard offset family"
         classes="cn-hard-sm | cn-hard | cn-hard-lg"
+        why="How the plate is drawn and re-keyed"
         row
       >
         <Cube cls="cn-hard-sm cn-edge" label="cn-hard-sm" />
@@ -428,6 +431,7 @@ export default function DepthPage() {
       <Demo
         title="Press these"
         classes="cn-pressable | cn-hard cn-pressable-slide | cn-engaged"
+        why="Two presses and the engaged state"
         row
       >
         <button
@@ -460,8 +464,8 @@ export default function DepthPage() {
         2px to meet it. <code class="cn-code-inline">cn-engaged</code> is the
         engaged state, for a chosen or toggled option: pressed in on the mauve wash, inside an{" "}
         <code class="cn-code-inline">--engaged-edge</code> rim. The wash is
-        mauve 20% into base, 1.52:1, a step past the 1.24:1 ghost hover, and
-        the rim holds 3.5:1 on it, so a chosen option outweighs the raised
+        mauve 20% into base, a step past the ghost hover, and
+        the rim clears the non-text floor on it, so a chosen option outweighs the raised
         ones beside it. The rim colors a border, so give
         the element one, here <code class="cn-code-inline">cn-edge</code>.
       </p>
@@ -469,6 +473,7 @@ export default function DepthPage() {
       <Demo
         title="Radius roles"
         classes="cn-r-panel / cn-r-card / cn-r-control / cn-r-mark / cn-r-chip / cn-r-pill / cn-r-round"
+        why="Radii are named by role"
         row
       >
         {[
@@ -579,7 +584,8 @@ export default function DepthPage() {
           {
             name: "--cn-lit-edge",
             values: "inset 0 1px, surface-2 at 45%",
-            notes: "The lit top rim, 1.5:1 on the base fill. Part of --neu-raised, --neu-lifted and the default --hard-extra on plated recipes.",
+            contrast: "1.5:1 on the base fill",
+            notes: "The lit top rim. Part of --neu-raised, --neu-lifted and the default --hard-extra on plated recipes.",
           },
           {
             name: "--hard-extra",
@@ -591,7 +597,8 @@ export default function DepthPage() {
             name: "--plate",
             values: "any token or color-mix",
             default: "var(--neu-ink)",
-            notes: "Contract prop read by the whole hard family. Unset, the plate is the shadow ink, crust halfway to black, 1.22:1 under base, where crust is 1.14:1, and 1.14:1 on the page.",
+            contrast: "Ink 1.22:1 under base, 1.14:1 under the page · crust 1.14:1 under base, 1.07:1 under the page",
+            notes: "Contract prop read by the whole hard family. Unset, the plate is the shadow ink, crust halfway to black, which is also a panel's contact edge and its right and bottom border sides.",
           },
           {
             name: "--hard-offset",
@@ -612,6 +619,7 @@ export default function DepthPage() {
           {
             name: ".cn-engaged",
             values: "inset, the mauve wash, the --engaged-edge rim, 1px sink",
+            contrast: "Wash 1.52:1 on base, past the 1.24:1 hover · rim 3.5:1 on the wash",
             notes: "The engaged state, for a chosen or toggled option. It sets border-color, so compose it on an element with a border. Under forced colors the rim draws in Highlight.",
           },
         ]}

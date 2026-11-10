@@ -2,12 +2,12 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 
 /* The surface ladder, from the page up and then down into the carves. */
 const LADDER = [
-  { token: "--cn-surface-page", util: "cn-bg-page", mix: "mantle", use: "The ground: the body, the app shell, the topbar, stat bands." },
-  { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "base · 1.07:1 on the page", use: "Panels, the tilted panel, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
-  { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base · 1.27:1 on base", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
-  { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "crust 50% into mantle · 1.04:1 under the page", use: "The sidebar." },
-  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", use: "Table heads." },
-  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 70% into mantle · 1.05:1 under the page, 1.12:1 under base", use: "Wells, the mono wells, stepper pills, skeletons." },
+  { token: "--cn-surface-page", util: "cn-bg-page", mix: "mantle", contrast: "", use: "The ground: the body, the app shell, the topbar, stat bands." },
+  { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "base", contrast: "1.07:1 on the page", use: "Panels, the tilted panel, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
+  { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base", contrast: "1.27:1 on base", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
+  { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "crust 50% into mantle", contrast: "1.04:1 under the page", use: "The sidebar." },
+  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", contrast: "", use: "Table heads." },
+  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 70% into mantle", contrast: "1.05:1 under the page, 1.12:1 under base", use: "Wells, the mono wells, stepper pills, skeletons, the switch plate." },
 ];
 
 const ACTIVITY = [
@@ -25,14 +25,14 @@ export default function SurfacesPage() {
   return (
     <Doc
       title="Surfaces"
-      lede="A ladder of six fills, and two containers built on it. The raised panel lifts content off the mantle page on base, one fill step up, with its edges and shadow. The inset well presses it in, below the page, with no border."
+      lede="A ladder of six fills, and two containers built on it. The raised panel lifts content off the mantle page. The inset well presses it in."
     >
       <h2 class="cn-title">The surface ladder</h2>
-      <p class="cn-copy">
-        Recipes read these six fills, never a raw ground.
-      </p>
-
-      <Demo title="Six fills" classes="cn-bg-page / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well">
+      <Demo
+        title="Six fills"
+        classes="cn-bg-page / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well"
+        why="Why nothing raised is lighter than base"
+      >
         {/* A fixed 176px track fits the longest token, so the six swatches
             sit at an even pitch and still wrap on a narrow screen. */}
         <div style="width:100%;display:grid;grid-template-columns:repeat(auto-fill,176px);gap:var(--space-4)">
@@ -50,6 +50,7 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
+        Recipes read these six fills, never a raw ground.
         The page is mantle. Panels and plated controls sit on base, one fill
         step above it, and lift by that step, their contact edge, their
         cast, their lit top edge and their hairline. Nothing raised is
@@ -59,16 +60,17 @@ export default function SurfacesPage() {
       </p>
 
       <p class="cn-copy">
-        The overlay stops at 1.27:1 because a lighter step would drop the
-        placeholder role under 4.5:1. Body text stays above 7:1 and
-        placeholders above 4.5:1 on it. A hovered field rings in overlay-1,
-        so its bounds clear 3:1 everywhere: 4.8:1 on the page, 4.4:1 in a
-        panel and 3.5:1 on the overlay.
+        The overlay stops where it does because a lighter step would drop
+        the placeholder role under the text floor. Body text and
+        placeholders hold their floors on it, and a hovered field rings in
+        overlay-1, which clears the non-text floor on the page, in a panel
+        and on the overlay. The table below has each step's ratio, and
+        the <a href="/input">input</a> page has the ring's.
       </p>
 
       <Props
         title="Surface tokens"
-        rows={LADDER.map((l) => ({ name: l.token, values: l.mix, default: l.util ? `.${l.util}` : undefined, notes: l.use }))}
+        rows={LADDER.map((l) => ({ name: l.token, values: l.mix, default: l.util ? `.${l.util}` : undefined, contrast: l.contrast || undefined, notes: l.use }))}
       />
 
       <p class="cn-copy">
@@ -80,7 +82,11 @@ export default function SurfacesPage() {
       </p>
 
       <h2 class="cn-title">Panel</h2>
-      <Demo title="Panel with header, body and footer" classes="panel / panel-header / panel-body / panel-footer">
+      <Demo
+        title="Panel with header, body and footer"
+        classes="panel / panel-header / panel-body / panel-footer"
+        why="How a panel is built, and how many a region holds"
+      >
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Billing settings</h2>
@@ -102,7 +108,12 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         The panel fills with <code class="cn-code-inline">--cn-surface-raised</code>{" "}
-        under <code class="cn-code-inline">--neu-raised</code> and a hairline. The
+        under <code class="cn-code-inline">--neu-raised</code>. Its top and left
+        border sides are the <code class="cn-code-inline">--edge</code> hairline.
+        Its right and bottom sides are <code class="cn-code-inline">--neu-ink</code>,
+        so on the side away from the light the fill meets the ink with no
+        lighter line between them, and the border joins the 2px contact edge
+        as a 3px foot. Nothing on the top or left is brightened. The
         header and footer are bands on the panel's own fill, each parted from
         the body by an <code class="cn-code-inline">--edge-soft</code> divider. A
         darker header would sink below the surface it titles, so the title's
@@ -128,7 +139,11 @@ export default function SurfacesPage() {
         and not a texture.
       </p>
 
-      <Demo title="Header with an action cluster" classes="panel-header > h2 + .band-actions">
+      <Demo
+        title="Header with an action cluster"
+        classes="panel-header > h2 + .band-actions"
+        why="What happens when the actions outgrow the band"
+      >
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Invoices</h2>
@@ -151,7 +166,7 @@ export default function SurfacesPage() {
         title, and the cluster wraps inside itself. Nothing hides.
       </p>
 
-      <Demo title="Tilted panel" classes="panel is-tilted">
+      <Demo title="Tilted panel" classes="panel is-tilted" why="Where the tilted panel belongs and where it flattens">
         <div class="panel is-tilted" style="width:min(420px,90%);margin:12px">
           <div class="panel-body">
             <p class="cn-value-lg" style="margin:0">4,218 invoices</p>
@@ -184,12 +199,13 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.panel.is-lead</code> marks the panel a
         view is about, such as the invoice table on a billing dashboard. It
-        takes the base fill like every panel, inside the brighter{" "}
+        takes the base fill like every panel, with the brighter{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
-        surface-2 at 2.5:1 against a panel's 1.85:1, and stands on{" "}
+        surface-2, on its top and left, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
-        the bottom and right, 6px deep where a button's plate is 4px and a
-        plain panel's contact 2px, and a longer cast. It keeps the plain lit edge and draws no outline all
+        the bottom and right, 7px deep and 5px wide with its ink border
+        sides, where a button's plate is 4px and a plain panel's foot 3px,
+        and a longer cast. It keeps the plain lit edge and draws no outline all
         round, because neither a bright line nor a heavier outline reads as
         height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
@@ -205,7 +221,7 @@ export default function SurfacesPage() {
         The tilted aside comments on the data; the lead panel holds it.
       </p>
 
-      <Demo title="A lead panel beside a raised one" classes="panel is-lead">
+      <Demo title="A lead panel beside a raised one" classes="panel is-lead" why="How the lead panel outranks its neighbors">
         <div class="cn-grid-12" style="width:100%">
           <section class="panel is-lead cn-span-8" aria-labelledby="sf-lead">
             <div class="panel-header">
@@ -248,7 +264,7 @@ export default function SurfacesPage() {
         </div>
       </Demo>
 
-      <Demo title="Scrolling well" classes="well scroll-well">
+      <Demo title="Scrolling well" classes="well scroll-well" why="The scroll cue, and why a well has no border">
         <div
           class="well scroll-well cn-px-16 cn-py-8"
           style="width:min(560px,100%);max-height:180px;overflow:auto"
@@ -290,7 +306,8 @@ export default function SurfacesPage() {
           {
             name: ".panel",
             values: "raised container",
-            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow, cast and the lit top edge) and an --edge hairline. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
+            contrast: "Fill 1.07:1 on the page · --edge 1.85:1 on the fill · fill against the ink sides 1.22:1",
+            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow, cast and the lit top edge), an --edge hairline on the top and left and --neu-ink border sides on the right and bottom, a 3px foot with the contact. All four sides return to the hairline under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",
@@ -315,7 +332,8 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-lead",
             values: "one per view",
-            notes: "The panel the view is about. The base fill inside the --edge-strong hairline, on --neu-lifted with its deeper foot on the bottom and right and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
+            contrast: "--edge-strong 2.5:1 on the fill",
+            notes: "The panel the view is about. The base fill with the --edge-strong hairline on the top and left and --neu-ink border sides on the right and bottom, on --neu-lifted with its deeper foot, 7px deep and 5px wide, and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
           },
           {
             name: ".panel.is-shell",

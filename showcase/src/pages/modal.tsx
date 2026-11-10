@@ -73,7 +73,7 @@ export default function ModalPage() {
         <code class="cn-code-inline">&lt;dialog&gt;</code>.
       </p>
 
-      <Demo title="Live demo" classes="dialog.modal">
+      <Demo title="Live demo" why="What the dialog element gives you" classes="dialog.modal">
         <ModalDemo trigger="Invite a teammate" triggerClass="btn btn-primary" title="Invite a teammate" action="Send invite">
           <p class="cn-copy" style="margin:0">
             They get access to every dashboard in this workspace. You can change
@@ -103,7 +103,7 @@ export default function ModalPage() {
         click should close it.
       </p>
 
-      <Demo title="Wide" classes="dialog.modal.is-wide">
+      <Demo title="Wide" why="When to go wide" classes="dialog.modal.is-wide">
         <ModalDemo trigger="Review members" triggerClass="btn btn-secondary" title="Review members" action="Save roles" wide>
           <table class="data-table">
             <thead>

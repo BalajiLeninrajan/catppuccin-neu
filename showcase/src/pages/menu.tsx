@@ -225,7 +225,11 @@ export default function MenuPage() {
         <code class="cn-code-inline">role="menu"</code>.
       </p>
 
-      <Demo title="Anatomy, pinned open" classes='btn btn-ghost[aria-expanded="true"] · popover menu[role="menu"]'>
+      <Demo
+        title="Anatomy, pinned open"
+        classes='btn btn-ghost[aria-expanded="true"] · popover menu[role="menu"]'
+        why="Markup, size and surface"
+      >
         <PinnedDemo />
       </Demo>
 
@@ -237,7 +241,11 @@ export default function MenuPage() {
         with the popover motion.
       </p>
 
-      <Demo title="Menu button, click or press ArrowDown" classes='btn btn-ghost[aria-haspopup="menu"] · popover menu[hidden]'>
+      <Demo
+        title="Menu button, click or press ArrowDown"
+        classes='btn btn-ghost[aria-haspopup="menu"] · popover menu[hidden]'
+        why="The trigger's engaged state and how the menu opens"
+      >
         <MenuDemo />
       </Demo>
 
@@ -282,6 +290,10 @@ export default function MenuPage() {
 
       <h2 class="cn-title">Accessibility</h2>
       <p class="cn-copy">
+        The CSS needs no script to look right, but a menu is required to
+        have a keyboard model: <code class="cn-code-inline">menu()</code>{" "}
+        from <code class="cn-code-inline">catppuccin-neu/js</code>, or your
+        own widget library.
         Give the trigger <code class="cn-code-inline">aria-haspopup="menu"</code>,{" "}
         <code class="cn-code-inline">aria-expanded</code> and{" "}
         <code class="cn-code-inline">aria-controls</code>, and label the menu
@@ -333,8 +345,8 @@ export default function MenuPage() {
       />
 
       <p class="cn-copy">
-        Or call <code class="cn-code-inline">menu(trigger)</code> from the
-        optional <a href="/behavior">behavior module</a>,{" "}
+        Or call <code class="cn-code-inline">menu(trigger)</code> from the{" "}
+        <a href="/behavior">behavior module</a>,{" "}
         <code class="cn-code-inline">catppuccin-neu/js</code>. It reads{" "}
         <code class="cn-code-inline">aria-controls</code> to find the menu and
         wires all of the above: opening, the arrow keys, Escape and Tab, the
@@ -346,7 +358,7 @@ export default function MenuPage() {
       <Props
         title="Contract"
         rows={[
-          { name: ".popover.menu", values: '[role="menu"]', notes: "Width auto, min 200px, max min(320px, 100vw - 32px), 4px padding. The popover fill, hairline, shadow and motion." },
+          { name: ".popover.menu", values: '[role="menu"]', notes: "Width auto, min 200px, max min(320px, 100vw - 32px), 4px padding. The popover fill, hairline, shadow and motion. Required to have a keyboard model: menu() from catppuccin-neu/js or your own." },
           { name: '.menu > [role^="menuitem"]', values: "button or a", notes: "--control-h-sm row, 12px inline padding, the control radius, 500 14px in --cn-fg-soft. Hover and :focus-visible share --hover and --cn-fg; :focus-visible adds the 2px --cn-focus ring at a -2px offset." },
           { name: "> svg", values: "leading glyph", notes: "16px in --cn-fg-faint, aria-hidden. Once any row has one, iconless rows and group labels indent 36px, to the icon column's text edge." },
           { name: "> kbd", values: "trailing shortcut", notes: "Pushed to the end, mono 500 13px in --cn-fg-muted. Mirror it in aria-keyshortcuts." },

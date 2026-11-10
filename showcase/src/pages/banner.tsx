@@ -23,7 +23,11 @@ export default function BannerPage() {
         band.
       </p>
 
-      <Demo title="Status tones: the glyph comes from CSS" classes="banner cn-tone-danger · -warning · -success · -info > text">
+      <Demo
+        title="Status tones: the glyph comes from CSS"
+        classes="banner cn-tone-danger · -warning · -success · -info > text"
+        why="How one tone class sets the tint, the edge and the glyph"
+      >
         <div class="banner cn-tone-danger" role="alert">
           Payment failed. Update the card on file to keep this workspace active.
         </div>
@@ -41,8 +45,10 @@ export default function BannerPage() {
       <p class="cn-copy">
         The message itself is{" "}
         <code class="cn-code-inline">--cn-fg-body</code>, so a sentence stays
-        text-colored like every other sentence, 8.7:1 on a danger tint. A
-        status tone also swaps in its ladder and its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
+        text-colored like every other sentence. A
+        status tone also swaps in its ladder and its glyph. A status tint
+        is its role at 6%, a step past the 4% a palette tone gets, so the
+        band shows its tone before its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
         The tint needs the edge to hold its shape on a dark ground.
       </p>
 
@@ -68,7 +74,11 @@ export default function BannerPage() {
         })}
       </Demo>
 
-      <Demo title="Without a glyph, on a quiet tone" classes="banner cn-tone-{blue, green, peach, mauve} > text">
+      <Demo
+        title="Without a glyph, on a quiet tone"
+        classes="banner cn-tone-{blue, green, peach, mauve} > text"
+        why="Why the words state the status, and when a glyph is needed"
+      >
         <div class="banner cn-tone-blue">
           A newer version of this report is available. Open it from the
           report list.
@@ -98,8 +108,9 @@ export default function BannerPage() {
           {
             name: ".banner",
             values: "div (or a status/alert region)",
+            contrast: "Status tint 1.10:1 (red) to 1.16:1 (yellow) on a panel · body text on it 8.0:1 or better on a panel, 6.2:1 on an overlay",
             notes:
-              "Tint band: --cn-fg-body text at the ui size, 14px at 400, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). The tint is the tone at 4% and the edge the tone 25% into surface-0, or the status ladder's stops. Its words state the status.",
+              "Tint band: --cn-fg-body text at the ui size, 14px at 400, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). A palette tone's tint is the tone at 4%, --cn-step-tint, and its edge the tone 25% into surface-0. A status tone takes its ladder's stops, with the tint at 6%, --cn-step-status-tint. Its words state the status.",
           },
           {
             name: ".banner svg",

@@ -14,13 +14,13 @@ export default function TypographyPage() {
         <code class="cn-code-inline">-tracking</code>, and one class that reads them.
       </p>
 
-      <Demo title="cn-display · 700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.03em · balance" classes="cn-display">
+      <Demo title="cn-display · 700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.02em · balance" classes="cn-display" why="How a role is built">
         <h1 class="cn-display">
           Every team, <em>one dashboard</em>
         </h1>
       </Demo>
 
-      <Demo title="cn-display is-sm · 700 · clamp(30px, 14.72px + 2.94vw, 40px)/1.08 · -0.03em" classes="cn-display is-sm">
+      <Demo title="cn-display is-sm · 700 · clamp(30px, 14.72px + 2.94vw, 40px)/1.08 · -0.02em" classes="cn-display is-sm" why="How the display sizes scale, and what em does">
         <h1 class="cn-display is-sm">
           Invoices, <em>settled</em>
         </h1>
@@ -38,7 +38,7 @@ export default function TypographyPage() {
         <em>em</em> is plain emphasis: italic, in the surrounding color.
       </p>
 
-      <Demo title="cn-heading · 700 · 28px/1.25 · -0.025em · balance" classes="cn-heading">
+      <Demo title="cn-heading · 700 · 28px/1.25 · -0.02em · balance" why="When to use the heading" classes="cn-heading">
         <h2 class="cn-heading">Quarterly billing summary</h2>
       </Demo>
 
@@ -78,7 +78,7 @@ export default function TypographyPage() {
         <span class="cn-label">Billing period</span>
       </Demo>
 
-      <Demo title="cn-microlabel · 500 · 12px/1.25 · +0.08em · uppercase · subtext-0" classes="cn-microlabel">
+      <Demo title="cn-microlabel · 500 · 12px/1.25 · +0.08em · uppercase · subtext-0" why="What a microlabel may label" classes="cn-microlabel">
         <span class="cn-microlabel">Last synced 2 min ago</span>
       </Demo>
 
@@ -94,7 +94,7 @@ export default function TypographyPage() {
         <span class="cn-value">1,284</span>
       </Demo>
 
-      <Demo title="cn-value-lg · 600 · 32px · -0.025em · colored by --accent" classes="cn-value-lg">
+      <Demo title="cn-value-lg · 600 · 32px · -0.025em · colored by --accent" why="Where the large value gets its color" classes="cn-value-lg">
         <div class="sc-row">
           <span class="cn-value-lg">$42,180</span>
           <span class="cn-value-lg" style={accentStyle(PAYMENTS.accent)}>
@@ -128,15 +128,17 @@ export default function TypographyPage() {
         The weights are 400, 500, 600 and 700. 700 is for the display and
         the heading, and the wordmark reads the display weight. The title is 600, so a panel title never outweighs the
         page heading. Names, titles and buttons (<code class="cn-code-inline">.btn</code>) are 600.
-        Chrome, the label and the microlabel, is 500, and meta is 400, so the
-        two 13px roles read apart by weight, leading and ink: the label is
-        subtext-1 and meta subtext-0. 600 marks
+        Chrome, the label and the microlabel, is 500, and meta is 400. The
+        label is 13px at 500 in subtext-1 and meta is 14px at 400 in
+        subtext-0, so they differ by size, weight and ink. 600 marks
         what a reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
         heading and value-lg, so a stat value outweighs the panel title above
         it. At 520px both step down: the value to 18px and the band title to
-        16px. Tracking tightens with size: 0 through 18px, -0.01em
-        at 20px, -0.02em at 24px, -0.025em at 28 and 32px, and -0.03em at
-        display sizes. Numeric roles keep{" "}
+        16px. Tracking is 0 through 18px, -0.01em at 20px and -0.02em from
+        24px up: the value, the heading and both display sizes. value-lg
+        alone is -0.025em, since it sets figures. Words at 700 stop at
+        -0.02em, because at -0.03em Plex Sans closes "tt" and "ng" until
+        they touch. Numeric roles keep{" "}
         <code class="cn-code-inline">tabular-nums</code> on the sans face, so figures align in
         columns without mono. Only the microlabel is uppercase.
       </p>
@@ -195,7 +197,7 @@ export default function TypographyPage() {
         the section titles on this site.
       </p>
 
-      <Demo title="h1 · h2 · h3 · h4, no classes" classes="h1 → display-sm · h2 → heading · h3 → title · h4 → name">
+      <Demo title="h1 · h2 · h3 · h4, no classes" why="What a bare heading takes" classes="h1 → display-sm · h2 → heading · h3 → title · h4 → name">
         <div class="cn-stack cn-gap-12">
           <h1 class="cn-m-0">Invoices, settled</h1>
           <h2 class="cn-m-0">Quarterly billing summary</h2>
@@ -217,11 +219,11 @@ export default function TypographyPage() {
         stays two characters.
       </p>
 
-      <Demo title="cn-code · 500 · 13px/1.6 · mono" classes="cn-code">
+      <Demo title="cn-code · 500 · 13px/1.6 · mono" why="Where mono is used" classes="cn-code">
         <code class="cn-code">pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.1</code>
       </Demo>
 
-      <Demo title="cn-code-inline · mono · .92em · 500 · subtext-1" classes="cn-code-inline">
+      <Demo title="cn-code-inline · mono · .92em · 500 · subtext-1" why="Why inline code has no chip" classes="cn-code-inline">
         <p class="cn-copy" style="margin:0">
           Set <code class="cn-code-inline">data-density="compact"</code> on the
           wrapper, or run <code class="cn-code-inline">pnpm sync ./public</code>{" "}
@@ -247,8 +249,8 @@ export default function TypographyPage() {
       <Props
         title="Role reference"
         rows={[
-          { name: ".cn-display", values: "sans", default: "700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.03em", notes: "Hero headline; balanced. .is-sm is the page-title size. .display-title is the same type." },
-          { name: ".cn-heading", values: "sans", default: "700 · 28px/1.25 · -0.025em", notes: "Top-level sections of a long page; balanced. Tailwind text-heading." },
+          { name: ".cn-display", values: "sans", default: "700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.02em", notes: "Hero headline; balanced. .is-sm is the page-title size. .display-title is the same type." },
+          { name: ".cn-heading", values: "sans", default: "700 · 28px/1.25 · -0.02em", notes: "Top-level sections of a long page; balanced. Tailwind text-heading." },
           { name: ".cn-title", values: "sans", default: "600 · 20px/1.3 · -0.01em", notes: "Section and card headings. A bare h3 takes it, and so does a header band's h2 or h3 at --band-title-size." },
           { name: ".cn-name", values: "sans", default: "600 · 14px/1.25 · text", notes: "The ui role in --cn-fg. Its tokens alias the ui tokens; proper names are set apart by full-strength color." },
           { name: ".cn-lede", values: "sans", default: "400 · 18px/1.6 · subtext-1", notes: "Intro paragraph; max-width --cn-measure (68ch). 20px in .page-main.is-reading. .lede is the recipe form." },

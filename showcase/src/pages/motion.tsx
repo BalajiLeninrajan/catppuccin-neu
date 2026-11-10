@@ -170,7 +170,7 @@ export default function MotionPage() {
   return (
     <Doc
       title="Motion"
-      lede="Two curves, a spring, five durations and six keyframes, plus a reduced-motion block that ships with the tokens. Motion is small and mechanical. The only overshoot is the spring, on things coming back."
+      lede="Two curves, a spring, five durations and six keyframes, with a reduced-motion block in the tokens. Motion is small and mechanical, and only the spring overshoots."
     >
       <h2 class="cn-label">Motion tokens</h2>
 
@@ -179,7 +179,7 @@ export default function MotionPage() {
         one of five durations.
       </p>
 
-      <Demo title="Curves and durations" classes="--ease-out · --ease-in · --ease-spring · --t-*">
+      <Demo title="Curves and durations" why="Which curve and duration to pick" classes="--ease-out · --ease-in · --ease-spring · --t-*">
         <CurvesDemo />
       </Demo>
 
@@ -219,7 +219,7 @@ export default function MotionPage() {
 
       <CodeBlock title="The tokens (tokens.css)" code={tokensSnippet} />
 
-      <Demo title="Page entrance" classes=".page-enter">
+      <Demo title="Page entrance" why="How the stagger works" classes=".page-enter">
         <PageEnterDemo />
       </Demo>
 
@@ -233,7 +233,7 @@ export default function MotionPage() {
         drawers, toasts).
       </p>
 
-      <Demo title="Loops" classes="spin · pulse · blink · breathe" row>
+      <Demo title="Loops" why="The six keyframes" classes="spin · pulse · blink · breathe" row>
         <span class="chip">
           <span class="spinner" aria-hidden="true"></span>
           Syncing
@@ -414,7 +414,7 @@ export default function MotionPage() {
         .
       </p>
 
-      <Demo title="A live list" classes="cn-arrive">
+      <Demo title="A live list" why="How data changes move" classes="cn-arrive">
         <ArriveDemo />
       </Demo>
 

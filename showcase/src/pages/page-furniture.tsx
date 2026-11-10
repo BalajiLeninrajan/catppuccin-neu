@@ -44,7 +44,7 @@ export default function PageFurniturePage() {
         The furniture recipes never style bare elements.
       </p>
 
-      <Demo title="Page header" classes="cn-display · lede">
+      <Demo title="Page header" why="What goes on which element" classes="cn-display · lede">
         <header>
           <h1 class="cn-display">
             Revenue, <em>last 90 days</em>
@@ -79,7 +79,7 @@ export default function PageFurniturePage() {
 
       <CodeBlock title="Header markup" code={headerSnippet} />
 
-      <Demo title="Topbar" classes=".topbar">
+      <Demo title="Topbar" why="How the topbar is laid out" classes=".topbar">
         <header class="topbar">
           <span class="cn-title">Ledger</span>
           <nav class="nav-secondary" aria-label="Primary">
@@ -119,7 +119,7 @@ export default function PageFurniturePage() {
         the bar drops the blur and fills with the opaque page ground, mantle.
       </p>
 
-      <Demo title="Split topbar with a wordmark" classes="topbar is-split · wordmark > mark">
+      <Demo title="Split topbar with a wordmark" why="When to split the topbar" classes="topbar is-split · wordmark > mark">
         <header class="topbar is-split">
           <a class="wordmark" href="#" onClick={(e) => e.preventDefault()}>
             <span class="mark" aria-hidden="true">L</span>Ledg<em>er</em>
@@ -144,7 +144,7 @@ export default function PageFurniturePage() {
         20px hero size.
       </p>
 
-      <Demo title="Footer" classes=".page-footer · .wordmark.is-sm">
+      <Demo title="Footer" why="What the footer holds" classes=".page-footer · .wordmark.is-sm">
         <footer class="page-footer">
           <span class="wordmark is-sm">
             <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="6" /></svg>
@@ -235,7 +235,7 @@ export default function PageFurniturePage() {
 </div>`}
       />
 
-      <Demo title="Live dot" classes=".live-dot" row>
+      <Demo title="Live dot" why="The live dot is decoration" classes=".live-dot" row>
         <span class="live-dot" aria-hidden="true"></span>
         <span class="cn-meta sc-row">
           <span class="live-dot" aria-hidden="true"></span> 12 teammates online
@@ -259,7 +259,7 @@ export default function PageFurniturePage() {
           {
             name: ".cn-display / .display-title",
             values: "h1",
-            notes: "700, clamp(36px, 5.44px + 5.88vw, 56px)/1.08, -0.03em, balanced. em turns mauve. Margin zeroed. .display-title is an alias.",
+            notes: "700, clamp(36px, 5.44px + 5.88vw, 56px)/1.08, -0.02em, balanced. em turns mauve. Margin zeroed. .display-title is an alias.",
           },
           {
             name: ".cn-display.is-sm",
@@ -279,7 +279,7 @@ export default function PageFurniturePage() {
           {
             name: ".wordmark",
             values: "text · > .mark · .is-lg · .is-sm",
-            notes: "700 18px, -0.03em, em in mauve. A .mark before the name is the brand tile (28px, 34 in is-lg, 20 in is-sm). is-lg is 20px; is-sm is the 14px footer brand.",
+            notes: "700 18px, -0.02em, em in mauve. A .mark before the name is the brand tile (28px, 34 in is-lg, 20 in is-sm). is-lg is 20px; is-sm is the 14px footer brand.",
           },
           {
             name: ".page-main",

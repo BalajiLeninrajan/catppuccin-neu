@@ -300,8 +300,9 @@ const ON_OVERLAY = ["--cn-surface-overlay"];
 /* [foreground, grounds, floor, what the SPEC promises, mode]. A name that
    starts with @ is the color of a one-layer shadow token: @field-ring reads
    --cn-field-ring. A row with a mode runs in that mode only. The --edge,
-   --edge-strong and lit-edge rows are design floors that keep the depth
-   ladder in order, not WCAG obligations. */
+   --edge-strong, lit-edge, resting field-ring and carve-ring rows are
+   design floors that keep the depth ladder in order, not WCAG
+   obligations. */
 const PAIRS = [
   ["--cn-fg", TEXT_GROUNDS, 7, "headings and values"],
   ["--cn-fg-soft", TEXT_GROUNDS, 7, "ledes and cells"],
@@ -310,6 +311,9 @@ const PAIRS = [
   ["--cn-fg-placeholder", TEXT_GROUNDS, 4.5, "placeholders"],
   ["@field-hover-ring", GROUNDS, 3, "a hovered field's ring (1.4.11)"],
   ["@field-ring", GROUNDS, 3, "a resting field's ring under prefers-contrast", "prefers-contrast"],
+  ["@field-ring", ON_PAGE, 2, "a resting field's hairline (design floor)"],
+  ["@field-ring", ON_OVERLAY, 1.6, "a resting field's hairline (design floor)"],
+  ["@carve-ring", ON_PAGE, 1.7, "the tabs carve and disabled field hairline (design floor)"],
   ["--edge", ON_PAGE, 1.8, "the raised hairline (design floor)"],
   ["--edge", ON_OVERLAY, 1.5, "the raised hairline (design floor)"],
   ["--edge-strong", ON_PAGE, 2.4, "the lead and overlay hairline (design floor)"],

@@ -73,7 +73,7 @@ export default function CodeblockPage() {
         </div>
       </Demo>
 
-      <Demo title="With a copy control" classes="codeblock > btn is-icon · .is-copied">
+      <Demo title="With a copy control" why="How to wire the copy control" classes="codeblock > btn is-icon · .is-copied">
         <CopyableBlock />
       </Demo>
 
@@ -98,7 +98,7 @@ export default function CodeblockPage() {
 });`}
       />
 
-      <Demo title="Numbered lines" classes="codeblock is-numbered">
+      <Demo title="Numbered lines" why="Markup for numbered lines" classes="codeblock is-numbered">
         <div class="codeblock is-numbered" style="width:min(560px,100%)">
           <pre>
             <span>$ pnpm install</span>
@@ -114,7 +114,7 @@ export default function CodeblockPage() {
         own element inside the <code class="cn-code-inline">pre</code>.
       </p>
 
-      <Demo title="Syntax colors" classes="codeblock + .tok-*">
+      <Demo title="Syntax colors" why="Why ligatures are off" classes="codeblock + .tok-*">
         <div class="codeblock" style="width:min(560px,100%)">
           <pre><span class="tok-keyword">const</span> <span class="tok-fn">total</span> = seats * <span class="tok-number">12</span>;{"\n"}<span class="tok-keyword">if</span> (total &gt; <span class="tok-number">40</span>) notify(<span class="tok-string">"#billing"</span>); <span class="tok-comment">// monthly</span></pre>
         </div>
@@ -128,7 +128,7 @@ export default function CodeblockPage() {
         copies as typed.
       </p>
 
-      <Demo title="No ligatures" classes="font-variant-ligatures: none">
+      <Demo title="No ligatures" why="Where the token spans come from" classes="font-variant-ligatures: none">
         <div class="codeblock" style="width:min(560px,100%)">
           <pre><span class="tok-keyword">const</span> <span class="tok-fn">due</span> = (inv) =&gt; inv.days &gt;= <span class="tok-number">30</span> &amp;&amp; inv.status !== <span class="tok-string">"paid"</span>;</pre>
         </div>
@@ -140,7 +140,7 @@ export default function CodeblockPage() {
         (shiki, prism, or your build); the system only supplies the palette.
       </p>
 
-      <Demo title="Long lines wrap" classes="codeblock > pre">
+      <Demo title="Long lines wrap" why="How long lines break" classes="codeblock > pre">
         <div class="codeblock" style="width:min(560px,100%)">
           <pre>{WRAP_SNIPPET}</pre>
         </div>
@@ -154,7 +154,7 @@ export default function CodeblockPage() {
       </p>
 
       <Demo
-        title="Scrolling"
+        title="Scrolling" why="How to cap and scroll a block"
         classes="codeblock scroll-well  (max-height + overflow-y)"
       >
         <div

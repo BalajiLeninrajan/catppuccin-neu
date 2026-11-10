@@ -65,7 +65,7 @@ export default function SliderPage() {
         <code class="cn-code-inline">input type="range"</code>.
       </p>
 
-      <Demo title="With a label and an output" classes='input[type="range"].slider[style="--value: …"] + output'>
+      <Demo title="With a label and an output" why="How the track and thumb are built" classes='input[type="range"].slider[style="--value: …"] + output'>
         <SliderRow
           id="slider-terms"
           label="Payment terms"
@@ -91,14 +91,13 @@ export default function SliderPage() {
         progress track's carve: 7px, crust, on the soft inset. The thumb is a
         20px raised round on <code class="cn-code-inline">--cn-surface-raised</code>{" "}
         with the soft raise and the lit top edge, inside a 1px{" "}
-        <code class="cn-code-inline">--control-edge</code>: overlay-1, 4.8:1
-        on the page, 4.4:1 on a raised fill and 3.5:1 on an overlay, so the
-        thumb clears 3:1 wherever the slider sits. On hover its edge warms to{" "}
+        <code class="cn-code-inline">--control-edge</code>, overlay-1, so the
+        thumb clears the non-text floor wherever the slider sits. On hover its edge warms to{" "}
         <code class="cn-code-inline">--engaged-edge</code>, and held it shrinks
         to .92 and springs back on release.
       </p>
 
-      <Demo title="Disabled" classes="slider:disabled">
+      <Demo title="Disabled" why="Why the fill needs --value" classes="slider:disabled">
         <SliderRow
           id="slider-seats"
           label="Seats on the plan"
@@ -169,7 +168,7 @@ export default function SliderPage() {
         rows={[
           { name: ".slider", values: 'input[type="range"]', notes: "Full width, 24px tall, no native chrome." },
           { name: "track", values: "::-webkit-slider-runnable-track / ::-moz-range-track", notes: "7px, pill radius, crust under --neu-inset-soft. Filled with --cn-interactive up to --value." },
-          { name: "thumb", values: "::-webkit-slider-thumb / ::-moz-range-thumb", notes: "20px round, 1px --control-edge border (overlay-1; overlay-2 under prefers-contrast), --cn-surface-raised, --neu-raised-soft and --cn-lit-edge. Hover edge --engaged-edge; held, scale .92 on the press timing, back on the spring." },
+          { name: "thumb", values: "::-webkit-slider-thumb / ::-moz-range-thumb", contrast: "Edge 4.8:1 on the page, 4.4:1 on a raised fill, 3.5:1 on an overlay", notes: "20px round, 1px --control-edge border (overlay-1; overlay-2 under prefers-contrast), --cn-surface-raised, --neu-raised-soft and --cn-lit-edge. Hover edge --engaged-edge; held, scale .92 on the press timing, back on the spring." },
           { name: "--value", values: "0% to 100%", default: "0%", notes: "Where the fill stops outside Firefox. Set it from an input listener, or with slider() from catppuccin-neu/js." },
           { name: ":disabled", values: "on the input", notes: "--disabled-opacity (.6) and a not-allowed cursor." },
         ]}

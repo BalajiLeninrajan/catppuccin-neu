@@ -19,7 +19,7 @@ export default function PaginationPage() {
         <Pager current={page} total={12} label="Invoice pages" onPage={setPage} />
       </Demo>
 
-      <Demo title="First page of three" classes='pagination > [aria-disabled="true"]' row>
+      <Demo title="First page of three" why="Targets, the current page and the ends" classes='pagination > [aria-disabled="true"]' row>
         <Pager current={short} total={3} label="Member pages" onPage={setShort} />
       </Demo>
 
@@ -39,7 +39,7 @@ export default function PaginationPage() {
 
       <h2 class="cn-title">Breadcrumbs</h2>
 
-      <Demo title="Path to the current page" classes='nav.breadcrumbs > ol > li · [aria-current="page"]' row>
+      <Demo title="Path to the current page" why="How crumbs are styled" classes='nav.breadcrumbs > ol > li · [aria-current="page"]' row>
         <nav class="breadcrumbs" aria-label="Breadcrumb">
           <ol>
             <li><a href="#" onClick={noNav}>Northwind Ops</a></li>

@@ -14,7 +14,7 @@ export default function ProsePage() {
         bare elements, and only inside itself.
       </p>
 
-      <Demo title="A help article" classes="cn-prose">
+      <Demo title="A help article" why="Where .cn-prose belongs and what it styles" classes="cn-prose">
         <article class="cn-prose">
           <h2>Sending invoices on a schedule</h2>
           <p>
@@ -93,7 +93,7 @@ export default function ProsePage() {
         there. This site has one: reload the page and press Tab.
       </p>
 
-      <Demo title="As it looks while focused" classes="cn-skip-link" row>
+      <Demo title="As it looks while focused" why="How the skip link behaves" classes="cn-skip-link" row>
         <a
           class="cn-skip-link"
           href="#main"

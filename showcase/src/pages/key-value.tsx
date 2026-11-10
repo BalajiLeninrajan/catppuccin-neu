@@ -16,7 +16,7 @@ export default function KeyValuePage() {
       title="Key-value list"
       lede="A dl grid for the details of one record. Keys sit in a column as wide as the longest key; values take the rest."
     >
-      <Demo title="In a panel" classes="dl.kv">
+      <Demo title="In a panel" why="When to use .kv, and when a stat row" classes="dl.kv">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Workspace details</h2>

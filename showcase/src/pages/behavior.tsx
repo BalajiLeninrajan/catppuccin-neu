@@ -151,14 +151,18 @@ export default function BehaviorPage() {
   return (
     <Doc
       title="Behavior"
-      lede="An optional module, catppuccin-neu/js, that keeps ARIA state and the keyboard model in step for tabs, menus, listboxes, sliders, tooltips and toasts. The CSS never needs it to look right."
+      lede="The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model: init() from catppuccin-neu/js, or your own widget library."
     >
       <p class="cn-copy">
         The tabs, menu, slider and toast below run on the module, not on
         Preact.
       </p>
 
-      <Demo title="The module, live" classes='import { tabs, menu, slider, toast } from "catppuccin-neu/js"'>
+      <Demo
+        title="The module, live"
+        classes='import { tabs, menu, slider, toast } from "catppuccin-neu/js"'
+        why="What to try, and what the module does that CSS cannot"
+      >
         <LiveDemo />
       </Demo>
 
@@ -177,7 +181,9 @@ export default function BehaviorPage() {
         engaged state. CSS cannot set that state or answer the arrow keys.
         The module does, following the WAI-ARIA patterns, with no framework
         and no dependencies. Every function returns a cleanup that removes
-        what it added. An app with its own widget library skips it; the
+        what it added. Slider fill and toasts are optional. An app with
+        its own widget library brings its own keyboard model and skips the
+        module; the
         showcase's other demos are Preact and do their own wiring.
       </p>
 

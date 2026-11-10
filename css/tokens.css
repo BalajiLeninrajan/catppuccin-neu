@@ -56,20 +56,22 @@
   /* Status ladders: named stops per status role. Tags, banners, invalid
      fields and the icon-button hover read the stop for their job through
      --tint, --tone-wash, --tone-edge and --tone-border, so one hue's stop
-     can be tuned without moving the shared mix steps. */
-  --cn-danger-tint: color-mix(in srgb, var(--cn-danger) var(--cn-step-tint), transparent);
+     can be tuned without moving the shared mix steps. The four tints read
+     --cn-step-status-tint, 6%, so a banner's tone shows before its glyph:
+     1.10 to 1.16:1 against a panel, where 4% gave 1.07 to 1.10:1. */
+  --cn-danger-tint: color-mix(in srgb, var(--cn-danger) var(--cn-step-status-tint), transparent);
   --cn-danger-wash: color-mix(in srgb, var(--cn-danger) var(--cn-step-wash), transparent);
   --cn-danger-edge: color-mix(in srgb, var(--cn-danger) var(--cn-step-edge), transparent);
   --cn-danger-border: color-mix(in srgb, var(--cn-danger) var(--cn-step-plate), var(--surface-0));
-  --cn-warning-tint: color-mix(in srgb, var(--cn-warning) var(--cn-step-tint), transparent);
+  --cn-warning-tint: color-mix(in srgb, var(--cn-warning) var(--cn-step-status-tint), transparent);
   --cn-warning-wash: color-mix(in srgb, var(--cn-warning) var(--cn-step-wash), transparent);
   --cn-warning-edge: color-mix(in srgb, var(--cn-warning) var(--cn-step-edge), transparent);
   --cn-warning-border: color-mix(in srgb, var(--cn-warning) var(--cn-step-plate), var(--surface-0));
-  --cn-success-tint: color-mix(in srgb, var(--cn-success) var(--cn-step-tint), transparent);
+  --cn-success-tint: color-mix(in srgb, var(--cn-success) var(--cn-step-status-tint), transparent);
   --cn-success-wash: color-mix(in srgb, var(--cn-success) var(--cn-step-wash), transparent);
   --cn-success-edge: color-mix(in srgb, var(--cn-success) var(--cn-step-edge), transparent);
   --cn-success-border: color-mix(in srgb, var(--cn-success) var(--cn-step-plate), var(--surface-0));
-  --cn-info-tint: color-mix(in srgb, var(--cn-info) var(--cn-step-tint), transparent);
+  --cn-info-tint: color-mix(in srgb, var(--cn-info) var(--cn-step-status-tint), transparent);
   --cn-info-wash: color-mix(in srgb, var(--cn-info) var(--cn-step-wash), transparent);
   --cn-info-edge: color-mix(in srgb, var(--cn-info) var(--cn-step-edge), transparent);
   --cn-info-border: color-mix(in srgb, var(--cn-info) var(--cn-step-plate), var(--surface-0));
@@ -121,11 +123,12 @@
   --cn-surface-band: color-mix(in srgb, var(--crust) 30%, transparent);      /* table heads: one step under whatever holds them */
   /* Wells are below the ground wherever they sit: crust 70% into mantle is
      darker than the mantle page (1.05:1) and than a base panel (1.12:1). */
-  --cn-surface-sunken: color-mix(in srgb, var(--crust) 70%, var(--mantle));   /* wells, the mono wells, stepper pills, skeletons */
+  --cn-surface-sunken: color-mix(in srgb, var(--crust) 70%, var(--mantle));   /* wells, the mono wells, the switch plate, stepper pills, skeletons */
 
   /* Mix steps. Every tint of a hue into a ground or into transparent uses
      one of these, so a wash means the same strength everywhere. */
-  --cn-step-tint: 4%;     /* a field or banner in its tone, the open carve */
+  --cn-step-tint: 4%;     /* a field in its tone, an untoned --tint, the open carve */
+  --cn-step-status-tint: 6%; /* the four status tints, so a toned banner or .cn-tint: body text stays 8.0:1 or better on a panel */
   --cn-step-row: 12%;     /* the row hover: 1.27:1 for mauve on base, past the 1.24:1 hover, under the 1.52:1 selected row */
   --cn-step-wash: 12%;    /* tone hover washes, the accent tint: 1.27:1 for mauve on base */
   --cn-step-engaged: 20%; /* the engaged wash: 1.52:1, a step past the 1.24:1 hover */
@@ -138,9 +141,10 @@
   /* Type roles. Separate atoms so Tailwind's fontSize tuple can read them.
      Sizes are rem, so the reader's browser font size scales every role;
      the comments give the px at the 16px default. Four weights: 400, 500,
-     600, 700. Tracking tightens with size: 0 through 18px, -.01em at 20,
-     -.02em at 24, -.025em at 28 and 32, -.03em at display sizes, and
-     .08em on the uppercase micro voice. */
+     600, 700. Tracking: 0 through 18px, -.01em at 20, -.02em from 24 up
+     (value, heading, display), -.025em on value-lg, which sets figures,
+     and .08em on the uppercase micro voice. Words at 700 stop at -.02em:
+     at -.03em Plex Sans closes "tt" and "ng" until they touch. */
   --cn-type-micro-size: .75rem;    /* 12px, the uppercase voice of the label size */
   --cn-type-micro-weight: 500;
   --cn-type-micro-leading: 1.25;
@@ -181,7 +185,7 @@
   --cn-type-heading-size: 1.75rem; /* 28px */
   --cn-type-heading-weight: 700;
   --cn-type-heading-leading: 1.25;
-  --cn-type-heading-tracking: -.025em;
+  --cn-type-heading-tracking: -.02em;
 
   --cn-type-title-size: 1.25rem;   /* 20px */
   --cn-type-title-weight: 600;
@@ -209,7 +213,7 @@
   --cn-type-display-sm-size: clamp(1.875rem, .92rem + 2.94vw, 2.5rem);
   --cn-type-display-weight: 700;
   --cn-type-display-leading: 1.08;
-  --cn-type-display-tracking: -.03em;
+  --cn-type-display-tracking: -.02em;
 
   /* Spacing: 4, 8, 12, 16, 24, 32 inside components; 48 and 64 for
      section rhythm between them. */
@@ -244,8 +248,10 @@
      down.
      The 2px contact stays under the lead's 4px 6px foot and the plate at
      default (4px) and cozy (3px) density. Compact density drops the plate
-     to 2px, so it drops the contact to 1px and a plain panel still reads
-     lower than both. */
+     to 2px, so it drops the contact to 1px. The panel's ink border side
+     adds 1px, so a plain panel shows 3px of ink at default and cozy and
+     2px at compact, equal to the cozy and compact plates. It reads apart
+     from a plate by its near shadow and cast. */
   --neu-shade: rgb(8 8 14 / .72);
   --neu-contact: var(--neu-ink);
   --neu-near: rgb(8 8 14 / .8);
@@ -321,18 +327,23 @@
      of dimming. */
   --disabled-opacity: .6;
   /* A carved field at rest is its dark wall plus a quiet even hairline:
-     surface-1 on all four sides, 1.9:1 on the page, 1.8:1 on a panel
-     and 1.4:1 on an overlay. It is the same on every side and never brightens the bottom
-     or right, so it reads as a cut edge, not a lip. prefers-contrast closes
-     it into a full overlay-2 ring. Hover draws a full 1px --control-edge
+     surface-2 at 85% on all four sides, 2.2:1 on the page, 2.1:1 on a panel
+     and 1.7:1 on an overlay. It is the same on every side and never brightens the bottom
+     or right, so it reads as a cut edge, not a lip. It stops under 3:1 on
+     purpose: an overlay-0 ring at rest read as an outlined box, and the
+     label and the carve already identify a resting field. prefers-contrast
+     closes it into a full overlay-2 ring. Hover draws a full 1px --control-edge
      ring, 4.8:1 on the page, 4.4:1 on a panel and 3.5:1 on an overlay, and
      focus draws the focus ring, so a field shows 3:1 bounds as soon as it
-     is in use. Every field paints the ring over its carve, table cells
-     included, and the tabs carve shares it. Wells and
+     is in use. Every live field paints the ring over its carve, table cells
+     included. The tabs carve and a disabled field are not inputs waiting
+     for text, so they take --cn-carve-ring, the quieter solid surface-1:
+     1.9:1 on the page, 1.8:1 on a panel and 1.4:1 on an overlay. Wells and
      the mono wells take --cn-well-ring, which paints nothing until
      prefers-contrast closes it into a surface-2 ring, because their sunken
      fill already separates them. */
-  --cn-field-ring: inset 0 0 0 1px var(--surface-1);
+  --cn-field-ring: inset 0 0 0 1px color-mix(in srgb, var(--surface-2) 85%, transparent);
+  --cn-carve-ring: inset 0 0 0 1px var(--surface-1);
   --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
   --cn-well-ring: inset 0 0 0 1px transparent;
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
@@ -520,7 +531,9 @@
 /* Compact density. */
 [data-density="compact"] {
   --hard-offset: 2px;
-  /* The contact stays under the 2px plate. */
+  /* The contact stays under the 2px plate. The panel's ink border side
+     adds 1px, so the panel's ink equals the plate and reads apart by its
+     near shadow and cast. */
   --neu-raised: 1px 1px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
   --control-h: 1.75rem;   /* 28px */
   --control-h-sm: max(24px, 1.625rem); /* 26px, never under the 24px target floor */
@@ -678,6 +691,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --cn-stat-rule: var(--surface-2);
     --control-edge: var(--overlay-2);
     --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
+    --cn-carve-ring: inset 0 0 0 1px var(--overlay-2);
     --cn-well-ring: inset 0 0 0 1px var(--surface-2);
     --neu-dark: rgb(8 8 14 / .88);
     --neu-shade: rgb(8 8 14 / .86);
@@ -700,6 +714,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
   --cn-stat-rule: var(--surface-2);
   --control-edge: var(--overlay-2);
   --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
+  --cn-carve-ring: inset 0 0 0 1px var(--overlay-2);
   --cn-well-ring: inset 0 0 0 1px var(--surface-2);
   --neu-dark: rgb(8 8 14 / .88);
   --neu-shade: rgb(8 8 14 / .86);

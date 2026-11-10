@@ -59,7 +59,7 @@ export default function IntroductionPage() {
         right gives their height.
       </p>
 
-      <Demo title="First look" row classes="btn btn-primary">
+      <Demo title="First look" why="What you are looking at" row classes="btn btn-primary">
         <button type="button" class="btn btn-primary">New invoice</button>
         <button type="button" class="btn btn-secondary">Export</button>
         <span class="chip"><span class="live-dot" aria-hidden="true" /> 3 online</span>
@@ -140,10 +140,11 @@ export default function IntroductionPage() {
         <CodeBlock title="Import the CSS" code={IMPORT_CODE} />
         <CodeBlock title="Fonts (index.html)" code={FONTS_CODE} />
         <p class="cn-copy">
-          Script is optional. The CSS reads ARIA state and looks right without
-          it. For the keyboard model of tabs, menus, sliders, tooltips and
-          toasts, <code class="cn-code-inline">import {"{ init }"} from "catppuccin-neu/js"</code>{" "}
-          and call it once. The <a href="/behavior">Behavior</a> page covers it.
+          The CSS reads ARIA state and needs no script to look right. Tabs,
+          menus, listboxes and comboboxes are still required to have a
+          keyboard model: <code class="cn-code-inline">import {"{ init }"} from "catppuccin-neu/js"</code>{" "}
+          and call it once, or use your own widget library. Slider fill and
+          toasts are optional. The <a href="/behavior">Behavior</a> page covers it.
         </p>
       </section>
 

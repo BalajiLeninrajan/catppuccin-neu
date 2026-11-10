@@ -39,11 +39,12 @@ export default function ButtonPage() {
       title="Button"
       lede="One base class and four variants. Primary and secondary rest on a plate and half-slide onto it when pressed. Ghost and icon buttons sink into a soft inset."
     >
-      <p class="cn-copy">
-        Compose the base class with a variant: <code class="cn-code-inline">class="btn btn-primary"</code>.
-      </p>
-
-      <Demo title="Primary, live and disabled" classes="btn btn-primary · btn btn-primary[disabled]" row>
+      <Demo
+        title="Primary, live and disabled"
+        classes="btn btn-primary · btn btn-primary[disabled]"
+        why="How the primary is built and why it sinks when disabled"
+        row
+      >
         <button class="btn btn-primary">Create invoice</button>
         <button class="btn btn-primary" disabled>
           Create invoice
@@ -51,6 +52,7 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
+        Compose the base class with a variant: <code class="cn-code-inline">class="btn btn-primary"</code>.
         Labels are always sans. Heights come from the density knobs, so every
         variant shrinks together under cozy or compact density.
       </p>
@@ -68,7 +70,7 @@ export default function ButtonPage() {
         second primary beside the live one, and a pressed-in, unlit button never outshines a live secondary. A busy primary keeps its fill. Every other variant dims and keeps its rest shadow.
       </p>
 
-      <Demo title="Secondary" classes="btn btn-secondary" row>
+      <Demo title="Secondary" classes="btn btn-secondary" why="What the secondary rests on" row>
         <button class="btn btn-secondary">Export report</button>
         <button class="btn btn-secondary" disabled>
           Export report
@@ -78,18 +80,34 @@ export default function ButtonPage() {
       <p class="cn-copy">
         The secondary rests on the base fill, a step above the mantle page,
         with a hairline, the lit top edge and the ink plate. Hover warms the border toward mauve and lifts
-        the fill to the overlay step. The resting hairline is decoration: the
-        label identifies the button, so the edge does not need 3:1.
+        the plate a pixel deeper. The resting hairline is decoration: the
+        label identifies the button, so the edge is not held to the non-text
+        contrast floor.
       </p>
 
-      <Demo title="Ghost" classes="btn btn-ghost" row>
+      <Demo title="Ghost" classes="btn btn-ghost" why="Why a ghost keeps a hairline at rest" row>
         <button class="btn btn-ghost">Dismiss</button>
         <button class="btn btn-ghost" disabled>
           Dismiss
         </button>
       </Demo>
 
-      <Demo title="Ghost toggles" classes="btn btn-ghost is-sm  [aria-pressed]" row>
+      <p class="cn-copy">
+        A ghost has no fill and no plate. It rests on an{" "}
+        <code class="cn-code-inline">--edge-soft</code> hairline, so "Dismiss"
+        beside a plated button reads as a control and not as a bold label.
+        Hover adds <code class="cn-code-inline">--hover</code> and steps the
+        hairline up to <code class="cn-code-inline">--edge</code>. In a topbar
+        nav and as an icon button it keeps no hairline at rest, so a nav row
+        or an icon toolbar is not a row of boxes.
+      </p>
+
+      <Demo
+        title="Ghost toggles"
+        classes="btn btn-ghost is-sm  [aria-pressed]"
+        why="How a toggled ghost differs from a hovered one"
+        row
+      >
         <button class="btn btn-ghost is-sm" aria-pressed={muted} onClick={() => setMuted(!muted)}>
           Mute thread
         </button>
@@ -102,10 +120,7 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        A small ghost button is the toolbar toggle. It has no chrome at rest.
-        On hover it takes <code class="cn-code-inline">--hover</code> and an{" "}
-        <code class="cn-code-inline">--edge</code> hairline, so its bounds show
-        before the click. With{" "}
+        A small ghost button is the toolbar toggle. With{" "}
         <code class="cn-code-inline">aria-pressed="true"</code>, <code class="cn-code-inline">aria-current</code> or{" "}
         <code class="cn-code-inline">aria-expanded="true"</code> (a trigger whose{" "}
         <a href="/menu">menu</a> is open) it takes the engaged state: pressed in on the
@@ -115,7 +130,7 @@ export default function ButtonPage() {
         a toggled button never makes it look untoggled.
       </p>
 
-      <Demo title="Danger ghost" classes="btn btn-ghost is-danger" row>
+      <Demo title="Danger ghost" classes="btn btn-ghost is-danger" why="When to use the danger ghost" row>
         <button class="btn btn-ghost is-danger">
           <TrashIcon />
           Delete workspace
@@ -128,7 +143,7 @@ export default function ButtonPage() {
         for a destructive action in a toolbar, a menu or a dialog footer. It is not a second primary.
       </p>
 
-      <Demo title="Busy" classes='btn btn-primary [aria-busy="true"]' row>
+      <Demo title="Busy" classes='btn btn-primary [aria-busy="true"]' why="What busy changes and what it keeps" row>
         <button
           class="btn btn-primary"
           aria-busy={busy === "save" ? "true" : undefined}
@@ -155,7 +170,12 @@ export default function ButtonPage() {
         drop focus mid-action. Click either button to see it.
       </p>
 
-      <Demo title="Unavailable with a reason" classes='btn [aria-disabled="true"] [data-tip]' row>
+      <Demo
+        title="Unavailable with a reason"
+        classes='btn [aria-disabled="true"] [data-tip]'
+        why="aria-disabled or disabled"
+        row
+      >
         <button
           class="btn btn-primary"
           aria-disabled="true"
@@ -192,7 +212,7 @@ export default function ButtonPage() {
         <button class="btn-text">View all members</button>
       </Demo>
 
-      <Demo title="Icon" classes="btn is-icon" row>
+      <Demo title="Icon" classes="btn is-icon" why="Glyph color, tone and the label an icon needs" row>
         <button class="btn is-icon" aria-label="Settings">
           <GearIcon />
         </button>
@@ -222,7 +242,7 @@ export default function ButtonPage() {
         <button class="btn btn-primary is-lg">Large</button>
       </Demo>
 
-      <Demo title="Icon sizes" classes="btn is-icon · btn is-icon is-lg" row>
+      <Demo title="Icon sizes" classes="btn is-icon · btn is-icon is-lg" why="What each size is for" row>
         <button class="btn is-icon" aria-label="Settings"><GearIcon /></button>
         <button class="btn is-icon is-lg" aria-label="Settings"><GearIcon /></button>
       </Demo>
@@ -235,7 +255,7 @@ export default function ButtonPage() {
         button. Never size it by hand.
       </p>
 
-      <Demo title="Dashed" classes="btn btn-ghost is-dashed">
+      <Demo title="Dashed" classes="btn btn-ghost is-dashed" why="Dashed means an open slot">
         <button class="btn btn-ghost is-dashed" style="width: 100%">
           + Add team member
         </button>
@@ -261,6 +281,7 @@ export default function ButtonPage() {
       <Demo
         title="Composed on a custom element"
         classes="cn-hard cn-pressable-slide cn-edge cn-r-control cn-bg-raised"
+        why="How the half-slide moves and where to use it"
         row
       >
         <button
@@ -301,19 +322,19 @@ export default function ButtonPage() {
         title="Variants and knobs"
         rows={[
           { name: ".btn", values: "base class", notes: "Height --control-h, 16px inline padding, the control radius (8px), sans 600 14px. Compose with one variant." },
-          { name: ".btn-primary", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the soft carve, --neu-inset-soft with --cn-well-ring, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1, 5.0:1 on that fill), no plate, ramp, grain, gloss or dimming. One per view." },
-          { name: ".btn-secondary", notes: "--cn-surface-raised fill (base, a step above the page), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong, 4.1:1 on base, and deepens the plate 1px to --cn-plate-hover. The fill stays base, since nothing raised is lighter than base. The default for clickables." },
-          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', notes: "Transparent until hovered, then --hover and an --edge hairline. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base, 1.52:1, past the 1.24:1 hover), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
+          { name: ".btn-primary", contrast: "Disabled label 5.0:1 on the sunken fill", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the soft carve, --neu-inset-soft with --cn-well-ring, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1), no plate, ramp, grain, gloss or dimming. One per view." },
+          { name: ".btn-secondary", contrast: "Hover border 4.1:1 on base", notes: "--cn-surface-raised fill (base, a step above the page), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong and deepens the plate 1px to --cn-plate-hover. The fill stays base, since nothing raised is lighter than base. The default for clickables." },
+          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', contrast: "Resting hairline 1.22:1 on a panel, 1.24:1 on the page · hover fill 1.24:1 · engaged wash 1.52:1", notes: "No fill and no plate. Rests on an --edge-soft hairline (surface-1 at 38%), except in a topbar nav and as an icon button. Hover adds --hover and steps the hairline to --edge. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },
-          { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted (subtext-0, 7.4:1 on base) and tints toward --tone on hover. Needs aria-label." },
+          { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", contrast: "Resting glyph 7.4:1 on base", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted (subtext-0) and tints toward --tone on hover. Needs aria-label." },
           { name: ".btn-text", notes: "Inline mauve text button at 13px 600 with no padding, so it sits flush with the content edge; pink on hover. Held, it moves 1px." },
           { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 13px type, or the hero action at --control-h + 12px with the body size, 16px. One .is-lg per view." },
           { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },
           { name: ":disabled", notes: "--disabled-opacity (.6) and a not-allowed cursor. Keeps the variant's rest shadow. The primary sinks instead of dimming. Drops focus." },
           { name: '[aria-disabled="true"]', values: "on .btn", notes: "Looks the same as :disabled, sunken primary included, but stays focusable, so a [data-tip] can say why. No hover lift or press. Your handler ignores the click." },
           { name: '[aria-busy="true"]', values: "on .btn", notes: "Hides the label and keeps the width, turns a 16px spinner (14px in small), stops clicks, stays focusable. Pair with aria-disabled." },
-          { name: "--disabled-opacity", default: ".6", notes: "Keeps a disabled ghost label, --cn-fg-body at .6, at 4.2:1 on base. The primary does not read it; it sinks. .7 under prefers-contrast: more." },
+          { name: "--disabled-opacity", default: ".6", contrast: "Disabled ghost label 4.2:1 on base", notes: "Dims a disabled label, --cn-fg-body at .6 on a ghost. The primary does not read it; it sinks. .7 under prefers-contrast: more." },
           { name: "--grain", default: ".22", notes: "Grain strength on the primary and every other solid accent fill. 0 turns it off." },
           { name: "--plate", default: "var(--neu-ink)", notes: "The plate's color, read by the secondary button, segmented options and .cn-hard." },
           { name: "--hard-extra", default: "var(--cn-lit-edge)", notes: "Layers drawn over the plate. The secondary keeps the lit top edge; the primary replaces it with its gloss." },

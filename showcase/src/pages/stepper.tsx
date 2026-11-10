@@ -15,7 +15,7 @@ export default function StepperPage() {
         The recipe styles every direct child of <code class="cn-code-inline">.stepper</code> as a borderless inset pill.
       </p>
 
-      <Demo title="The three states" classes="stepper › .is-done / [aria-current='step'] / (rest)" row>
+      <Demo title="The three states" why="How to mark each phase" classes="stepper › .is-done / [aria-current='step'] / (rest)" row>
         <div class="stepper">
           <span class="is-done">Done</span>
           <span aria-current="step">Current</span>
@@ -29,7 +29,7 @@ export default function StepperPage() {
         Everything else reads as upcoming.
       </p>
 
-      <Demo title="Click a phase to move the flow" classes="stepper">
+      <Demo title="Click a phase to move the flow" why="When phases become buttons" classes="stepper">
         <div class="stepper">
           {PHASES.map((label, i) => (
             <button
@@ -51,7 +51,7 @@ export default function StepperPage() {
         read-only track; make them buttons when finished phases should be revisitable, as above.
       </p>
 
-      <Demo title="Start and end of a flow" classes="stepper">
+      <Demo title="Start and end of a flow" why="The last step" classes="stepper">
         <div class="stepper">
           <span aria-current="step">Details</span>
           <span>Members</span>

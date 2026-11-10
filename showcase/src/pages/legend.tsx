@@ -22,7 +22,7 @@ export default function LegendPage() {
       title="Legend"
       lede="A chart key: one swatch and one label per series. The swatch takes the item's --series, so the key and the chart read the same property."
     >
-      <Demo title="A key under a stacked bar" classes="legend > legend-item[style=--series] · legend-item.is-hatched">
+      <Demo title="A key under a stacked bar" why="How a legend keys to its chart" classes="legend > legend-item[style=--series] · legend-item.is-hatched">
         <div class="cn-stack cn-gap-12" style="width:min(520px,100%)">
           <div
             style="display:flex;height:12px;gap:2px"

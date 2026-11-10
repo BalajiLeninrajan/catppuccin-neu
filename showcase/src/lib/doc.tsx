@@ -3,9 +3,17 @@
    (cn-* utilities + recipes) inside <Demo>; the kit owns all sc- chrome.
 
    <Demo> renders children directly on the page ground, mantle, with no
-   well or panel stage, so neumorphic depth reads as it does in an app.             */
+   well or panel stage, so neumorphic depth reads as it does in an app.
 
-import type { ComponentChildren } from "preact";
+   Demos lead and prose folds. <Doc> collects every p.cn-copy that sits
+   right before or right after a <Demo> and renders the run in a closed
+   package .accordion under that demo, titled by the demo's `why` prop.
+   A paragraph that must stay open goes under an h2 with no demo next to
+   it, or takes a second class. Contrast ratios go in a Props row's
+   `contrast` field, not in prose.                                          */
+
+import { toChildArray } from "preact";
+import type { ComponentChildren, VNode } from "preact";
 import { useState } from "preact/hooks";
 import posthog from "posthog-js";
 
@@ -112,6 +120,36 @@ export interface DocProps {
   children?: ComponentChildren;
 }
 
+type Child = ReturnType<typeof toChildArray>[number];
+
+const isNode = (c: Child): c is VNode => typeof c === "object" && c !== null;
+const isDemo = (c: Child) => isNode(c) && c.type === Demo;
+const isCopy = (c: Child) => isNode(c) && c.type === "p" && (c.props as { class?: string }).class === "cn-copy";
+
+/* Moves each run of p.cn-copy beside a Demo into a Why fold under it. A
+   run between two demos belongs to the one above it. */
+function foldProse(children: ComponentChildren) {
+  const kids = toChildArray(children);
+  const out: Child[] = [];
+  let i = 0;
+  while (i < kids.length) {
+    const lead: Child[] = [];
+    let j = i;
+    while (j < kids.length && isCopy(kids[j])) lead.push(kids[j++]);
+    if (lead.length && j < kids.length && isDemo(kids[j])) i = j;
+    else lead.length = 0;
+
+    const kid = kids[i++];
+    out.push(kid);
+    if (!isDemo(kid)) continue;
+
+    const run = lead;
+    while (i < kids.length && isCopy(kids[i])) run.push(kids[i++]);
+    if (run.length) out.push(<Why title={(kid as VNode<DemoProps>).props.why}>{run}</Why>);
+  }
+  return out;
+}
+
 export function Doc({ title, lede, children }: DocProps) {
   return (
     <article class="sc-doc page-enter">
@@ -119,8 +157,29 @@ export function Doc({ title, lede, children }: DocProps) {
         <h1 class="cn-display is-sm">{title}</h1>
         {lede ? <p class="cn-lede">{lede}</p> : null}
       </header>
-      {children}
+      {foldProse(children)}
     </article>
+  );
+}
+
+/**
+ * Why: the closed fold under a Demo, the package's own details.accordion.
+ * Doc builds it from the prose beside a Demo; a page can also place one.
+ * props: { title?: string, children }
+ */
+export interface WhyProps {
+  title?: string;
+  children?: ComponentChildren;
+}
+
+export function Why({ title, children }: WhyProps) {
+  return (
+    <details class="accordion sc-why">
+      <summary>{title ?? "Why"}</summary>
+      <div class="fold">
+        <div>{children}</div>
+      </div>
+    </details>
   );
 }
 
@@ -129,7 +188,8 @@ export function Doc({ title, lede, children }: DocProps) {
  * props: {
  *   title?: string,     // .cn-name caption above the stage: the ui role, 14px at 600 in --cn-fg
  *   classes?: string,   // class string shown in a copyable code line below
- *   row?: boolean,      // lay children out as a wrapping flex row from the inline start
+ *   row?: boolean,      // lay children out as a wrapping flex row from the inline start; the stage shrinks to them
+ *   why?: string,       // summary of the fold Doc builds from the prose beside this demo
  *   children,
  * }
  */
@@ -137,12 +197,13 @@ export interface DemoProps {
   title?: string;
   classes?: string;
   row?: boolean;
+  why?: string;
   children?: ComponentChildren;
 }
 
 export function Demo({ title, classes, row, children }: DemoProps) {
   return (
-    <figure class="sc-demo">
+    <figure class={`sc-demo${row ? " sc-demo-fit" : ""}`}>
       {title ? <figcaption class="cn-name">{title}</figcaption> : null}
       <div class={`sc-demo-stage${row ? " sc-demo-row" : ""}`}>{children}</div>
       {classes ? <CopyLine text={classes} /> : null}
@@ -154,14 +215,16 @@ export function Demo({ title, classes, row, children }: DemoProps) {
  * Props: a variants/knobs documentation table (renders .data-table).
  * props: {
  *   title?: string,
- *   rows: Array<{ name: string, values?: string, default?: string, notes?: string }>,
+ *   rows: Array<{ name: string, values?: string, default?: string, contrast?: string, notes?: string }>,
  * }
  * `name` is the class / custom property / attribute being documented.
+ * `contrast` holds measured ratios; the column shows when any row has one.
  */
 export interface PropsRow {
   name: string;
   values?: string;
   default?: string;
+  contrast?: string;
   notes?: string;
 }
 
@@ -171,6 +234,7 @@ export interface PropsProps {
 }
 
 export function Props({ title, rows }: PropsProps) {
+  const hasContrast = rows.some((r) => r.contrast);
   return (
     <section class="sc-props">
       {title ? <h2 class="cn-label">{title}</h2> : null}
@@ -181,6 +245,7 @@ export function Props({ title, rows }: PropsProps) {
               <th>Name</th>
               <th>Values</th>
               <th>Default</th>
+              {hasContrast ? <th>Contrast</th> : null}
               <th>Notes</th>
             </tr>
           </thead>
@@ -194,6 +259,7 @@ export function Props({ title, rows }: PropsProps) {
                 </td>
                 <td data-label="Values">{r.values ?? "·"}</td>
                 <td data-label="Default">{r.default ?? "·"}</td>
+                {hasContrast ? <td data-label="Contrast">{r.contrast ?? "·"}</td> : null}
                 <td data-label="Notes">{r.notes ?? ""}</td>
               </tr>
             ))}

@@ -93,7 +93,7 @@ export default function PopoverPage() {
         inside it.
       </p>
 
-      <Demo title="Anchored, click to open" classes="popover">
+      <Demo title="Anchored, click to open" why="Anchoring, corners and the exit" classes="popover">
         <AnchoredDemo />
       </Demo>
 
@@ -119,7 +119,7 @@ export default function PopoverPage() {
         <AnatomyDemo />
       </Demo>
 
-      <Demo title="Tooltip" classes="[data-tip] + aria-describedby · btn.is-icon[data-tip] + aria-label" row>
+      <Demo title="Tooltip" why="data-tip, the accessible name and Escape" classes="[data-tip] + aria-describedby · btn.is-icon[data-tip] + aria-label" row>
         <button
           type="button"
           class="btn btn-secondary"
@@ -179,7 +179,7 @@ export default function PopoverPage() {
         when the pointer or focus leaves. This site runs it, so hover a
         tooltip above and press Escape. A touch screen has no hover, so a
         tooltip is never the only place a fact lives.{" "}
-        <code class="cn-code-inline">tooltips()</code> in the optional{" "}
+        <code class="cn-code-inline">tooltips()</code> in the{" "}
         <a href="/behavior">behavior module</a> installs the same listener.
       </p>
 

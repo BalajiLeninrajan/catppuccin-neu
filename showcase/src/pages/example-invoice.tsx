@@ -170,7 +170,7 @@ export default function InvoiceExample() {
                 </td>
                 <td class="is-num" data-label="Qty">{l.qty}</td>
                 <td class="is-num" data-label="Unit price">{money(l.unit)}</td>
-                <td class="is-num" data-label="Amount">{money(l.qty * l.unit)}</td>
+                <td class="is-num" data-label="Amount"><strong>{money(l.qty * l.unit)}</strong></td>
               </tr>
             ))}
           </tbody>

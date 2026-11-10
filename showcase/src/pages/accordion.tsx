@@ -51,7 +51,7 @@ export default function AccordionPage() {
       title="Accordion"
       lede="Stacked disclosure rows on native details and summary. No JS."
     >
-      <Demo title="Accordion" classes="details.accordion > summary + .fold">
+      <Demo title="Accordion" classes="details.accordion > summary + .fold" why="What the native element gives you">
         <div style="width:min(640px,100%)">
           {ITEMS.map(([title, body, open]) => (
             <details class="accordion" key={title} open={open}>
@@ -76,6 +76,7 @@ export default function AccordionPage() {
       <Demo
         title="Trailing meta, stacked in a panel"
         classes="panel accordion-stack · summary > b + .cn-meta"
+        why="How the title, the meta and the stack fit together"
       >
         <div class="panel accordion-stack" style="width:min(640px,100%)">
           {REVIEWS.map(([title, meta, body, open]) => (
@@ -105,7 +106,11 @@ export default function AccordionPage() {
         line.
       </p>
 
-      <Demo title="Exclusive group, details sharing a name" classes='details.accordion[name="billing-cycle"]'>
+      <Demo
+        title="Exclusive group, details sharing a name"
+        classes='details.accordion[name="billing-cycle"]'
+        why="How a shared name makes the group exclusive"
+      >
         <div style="width:min(640px,100%)">
           {CYCLES.map(([title, body, open]) => (
             <details class="accordion" name="billing-cycle" key={title} open={open}>
@@ -144,7 +149,8 @@ export default function AccordionPage() {
           {
             name: "details.accordion",
             values: "one disclosure row",
-            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] is its own step, the open carve, not the engaged state: card radius, full inset, mauve at --cn-step-tint over whatever holds it (1.08:1 on a panel), so it never turns lighter than the mantle page, mauve title. The engaged --wash would drop body text in the fold under 7:1.",
+            contrast: "Open tint 1.08:1 on a panel",
+            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] is its own step, the open carve, not the engaged state: card radius, full inset, mauve at --cn-step-tint (4%) over whatever holds it, so it never turns lighter than the mantle page, mauve title. The engaged --wash would drop body text in the fold under its floor.",
           },
           {
             name: "[name]",
@@ -154,7 +160,7 @@ export default function AccordionPage() {
           {
             name: "summary",
             values: "title, or b + .cn-meta",
-            notes: "48px min-height row with a chevron. The native marker is hidden. Its focus ring draws inside the row.",
+            notes: "48px min-height row with a chevron. The question sets at the body size, 16px (15px compact), at 600 in --cn-fg, so it matches the answer in size and leads it by weight and ink. The native marker is hidden. Its focus ring draws inside the row.",
           },
           {
             name: ".fold",

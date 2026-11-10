@@ -93,7 +93,11 @@ export default function TabsPage() {
         <a href="/segmented">segmented control</a>.
       </p>
 
-      <Demo title="Tabs with panels" classes='tabs[role="tablist"] > [role="tab"][aria-selected="true"]'>
+      <Demo
+        title="Tabs with panels"
+        classes='tabs[role="tablist"] > [role="tab"][aria-selected="true"]'
+        why="Why the selected tab rises, and the keys it answers"
+      >
         <TabsDemo name="views" />
       </Demo>
 
@@ -105,13 +109,14 @@ export default function TabsPage() {
         the lit top edge and the{" "}
         <code class="cn-code-inline">--engaged-edge</code> mauve rim. The
         raised fill is base: a step above the carve on the mantle page, and
-        the same as the carve inside a panel, so the rim, 4.7:1 on base, is
+        the same as the carve inside a panel, so the rim is
         what marks the choice. The carve under them is{" "}
         <code class="cn-code-inline">--neu-inset-soft</code>, a dark wall from
         the top left with no light lip, and{" "}
-        <code class="cn-code-inline">--cn-field-ring</code>, the resting
-        field's quiet even surface-1 hairline, 1.9:1 on the page and 1.8:1
-        on a panel, so the carve's bounds show on both. It closes into an overlay-2
+        <code class="cn-code-inline">--cn-carve-ring</code>, a quiet even
+        surface-1 hairline a step under a resting field's, since a tablist
+        is not an input waiting for text. The carve's bounds show on the
+        page and on a panel. It closes into an overlay-2
         ring under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code>.
       </p>
@@ -122,13 +127,13 @@ export default function TabsPage() {
         tab, and the disabled tab is skipped.
       </p>
 
-      <Demo title="Every state" classes="[aria-selected] · > svg · :disabled" row>
+      <Demo title="Every state" classes="[aria-selected] · > svg · :disabled" why="Colors, sizes and overflow" row>
         <StatesDemo />
       </Demo>
 
       <p class="cn-copy">
         Unselected tabs are <code class="cn-code-inline">--cn-fg-muted</code>{" "}
-        (subtext-0, 7.4:1) and turn <code class="cn-code-inline">--cn-fg</code> on hover. An
+        (subtext-0) and turn <code class="cn-code-inline">--cn-fg</code> on hover. An
         svg leads at 16px. A disabled tab drops to{" "}
         <code class="cn-code-inline">--disabled-opacity</code>. Tabs are{" "}
         <code class="cn-code-inline">--control-h-sm</code> tall, so they shrink
@@ -139,7 +144,10 @@ export default function TabsPage() {
 
       <h2 class="cn-title">Accessibility</h2>
       <p class="cn-copy">
-        The recipe styles the roles; the behavior is yours. Give the carve{" "}
+        The CSS needs no script to look right, but tabs are required to
+        have a keyboard model: <code class="cn-code-inline">tabs()</code>{" "}
+        from <code class="cn-code-inline">catppuccin-neu/js</code>, or your
+        own widget library. Give the carve{" "}
         <code class="cn-code-inline">role="tablist"</code> and an{" "}
         <code class="cn-code-inline">aria-label</code>. Each tab is a{" "}
         <code class="cn-code-inline">button</code> with{" "}
@@ -188,7 +196,7 @@ export default function TabsPage() {
 
       <p class="cn-copy">
         To skip writing this, call <code class="cn-code-inline">tabs(tablist)</code>{" "}
-        from the optional <a href="/behavior">behavior module</a>,{" "}
+        from the <a href="/behavior">behavior module</a>,{" "}
         <code class="cn-code-inline">catppuccin-neu/js</code>. It keeps the roving
         tabindex, the arrow keys mirrored in right-to-left text, and each
         panel's <code class="cn-code-inline">hidden</code> in step, and fires{" "}
@@ -199,9 +207,9 @@ export default function TabsPage() {
       <Props
         title="Contract"
         rows={[
-          { name: ".tabs", values: '[role="tablist"]', notes: "Inline flex row, 4px padding and gap, the control radius plus 4px. --neu-inset-soft and --cn-field-ring, an even surface-1 hairline. Scrolls sideways with no scrollbar when it overflows." },
-          { name: '.tabs > [role="tab"]', values: "button", notes: "--control-h-sm tall, 16px inline padding, the ui role (600 14px) in --cn-fg-muted, a transparent border. Hover turns the label --cn-fg." },
-          { name: '[aria-selected="true"]', values: "on a tab", notes: "Rises out of the carve: --cn-surface-raised fill, the --engaged-edge rim, --neu-raised-soft and --cn-lit-edge, label in --cn-fg. A tab is a view, so it rises; a segmented choice is a setting, so it presses in. With tabs() wired, the fill is one .tabs::before pill that slides to the selected tab over --t-fast on the ease-out." },
+          { name: ".tabs", values: '[role="tablist"]', contrast: "Carve hairline 1.8:1 on a panel, 1.9:1 on the page", notes: "Inline flex row, 4px padding and gap, the control radius plus 4px. --neu-inset-soft and --cn-carve-ring, an even surface-1 hairline. Scrolls sideways with no scrollbar when it overflows. Required to have a keyboard model: tabs() from catppuccin-neu/js or your own." },
+          { name: '.tabs > [role="tab"]', values: "button", contrast: "Resting label 7.4:1 on base", notes: "--control-h-sm tall, 16px inline padding, the ui role (600 14px) in --cn-fg-muted, a transparent border. Hover turns the label --cn-fg." },
+          { name: '[aria-selected="true"]', values: "on a tab", contrast: "Rim 4.7:1 on base", notes: "Rises out of the carve: --cn-surface-raised fill, the --engaged-edge rim, --neu-raised-soft and --cn-lit-edge, label in --cn-fg. A tab is a view, so it rises; a segmented choice is a setting, so it presses in. With tabs() wired, the fill is one .tabs::before pill that slides to the selected tab over --t-fast on the ease-out." },
           { name: '[role="tab"] > svg', values: "one leading glyph", notes: "16px, aria-hidden. The label stays the name." },
           { name: ":disabled", values: "on a tab", notes: "--disabled-opacity (.6) and a not-allowed cursor. Skip it in the arrow-key order." },
           { name: '[role="tabpanel"]', values: "consumer markup", notes: "No recipe. Toggle hidden on the panels that are not selected." },
