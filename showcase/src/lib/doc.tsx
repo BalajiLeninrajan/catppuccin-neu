@@ -2,26 +2,37 @@
    Every docs page composes these four pieces. Pages put pure system markup
    (cn-* utilities + recipes) inside <Demo>; the kit owns all sc- chrome.
 
-   <Demo> renders children directly on the page's --base ground, with no
-   well or mantle stage, so neumorphic depth reads correctly.             */
+   <Demo> renders children directly on the page ground, mantle, with no
+   well or panel stage, so neumorphic depth reads as it does in an app.
 
-import type { ComponentChildren } from "preact";
+   Demos lead and prose folds. <Doc> collects every p.cn-copy that sits
+   right before or right after a <Demo> and renders the run in a closed
+   package .accordion under that demo, titled by the demo's `why` prop.
+   A paragraph that must stay open goes under an h2 with no demo next to
+   it, or takes a second class. Contrast ratios go in a Props row's
+   `contrast` field, not in prose.                                          */
+
+import { toChildArray } from "preact";
+import type { ComponentChildren, VNode } from "preact";
 import { useState } from "preact/hooks";
 import posthog from "posthog-js";
 
-/* Semantic tones, in the order of the .cn-tone-* setters. */
-export const TONES = ["red", "green", "peach", "yellow", "blue", "mauve"] as const;
+/* The palette tones in a row order where no two warm hues sit side by
+   side: peach and yellow are split by blue, red and peach by green. */
+export const TONES = ["red", "green", "peach", "blue", "yellow", "mauve"] as const;
 
 export type Tone = (typeof TONES)[number];
 
-/* Accent hexes by name. */
+/* Accent hexes by name, in the data-series order (--cn-series-1..6). */
 export const ACCENT = {
-  mauve: "#cba6f7",
   teal: "#94e2d5",
   yellow: "#f9e2af",
   blue: "#89b4fa",
   peach: "#fab387",
   pink: "#f5c2e7",
+  mauve: "#cba6f7",
+  /* An identity hue, never a series: for a record beyond the six. */
+  sapphire: "#74c7ec",
 } as const;
 
 export type AccentName = keyof typeof ACCENT;
@@ -88,13 +99,12 @@ function CopyLine({ text, block }: CopyLineProps) {
   return (
     <button
       type="button"
-      class={`cn-code cn-edge-dashed cn-r-chip sc-snippet${block ? " sc-snippet-block" : ""}${copied ? " is-copied" : ""}`}
+      class={`cn-code sc-snippet${block ? " sc-snippet-block" : ""}${copied ? " is-copied" : ""}`}
       onClick={copy}
-      title="Copy"
     >
       {block ? <pre>{text}</pre> : <span>{text}</span>}
-      <span class="cn-microlabel sc-snippet-hint" aria-live="polite">
-        {copied ? "copied" : "copy"}
+      <span class="btn-text sc-snippet-hint" aria-live="polite">
+        {copied ? "Copied" : "Copy"}
       </span>
     </button>
   );
@@ -110,6 +120,36 @@ export interface DocProps {
   children?: ComponentChildren;
 }
 
+type Child = ReturnType<typeof toChildArray>[number];
+
+const isNode = (c: Child): c is VNode => typeof c === "object" && c !== null;
+const isDemo = (c: Child) => isNode(c) && c.type === Demo;
+const isCopy = (c: Child) => isNode(c) && c.type === "p" && (c.props as { class?: string }).class === "cn-copy";
+
+/* Moves each run of p.cn-copy beside a Demo into a Why fold under it. A
+   run between two demos belongs to the one above it. */
+function foldProse(children: ComponentChildren) {
+  const kids = toChildArray(children);
+  const out: Child[] = [];
+  let i = 0;
+  while (i < kids.length) {
+    const lead: Child[] = [];
+    let j = i;
+    while (j < kids.length && isCopy(kids[j])) lead.push(kids[j++]);
+    if (lead.length && j < kids.length && isDemo(kids[j])) i = j;
+    else lead.length = 0;
+
+    const kid = kids[i++];
+    out.push(kid);
+    if (!isDemo(kid)) continue;
+
+    const run = lead;
+    while (i < kids.length && isCopy(kids[i])) run.push(kids[i++]);
+    if (run.length) out.push(<Why title={(kid as VNode<DemoProps>).props.why}>{run}</Why>);
+  }
+  return out;
+}
+
 export function Doc({ title, lede, children }: DocProps) {
   return (
     <article class="sc-doc page-enter">
@@ -117,17 +157,40 @@ export function Doc({ title, lede, children }: DocProps) {
         <h1 class="cn-display is-sm">{title}</h1>
         {lede ? <p class="cn-lede">{lede}</p> : null}
       </header>
-      {children}
+      {foldProse(children)}
     </article>
   );
 }
 
 /**
- * Demo: a captioned specimen stage. Children sit directly on --base.
+ * Why: the closed fold under a Demo, the package's own details.accordion.
+ * Doc builds it from the prose beside a Demo; a page can also place one.
+ * props: { title?: string, children }
+ */
+export interface WhyProps {
+  title?: string;
+  children?: ComponentChildren;
+}
+
+export function Why({ title, children }: WhyProps) {
+  return (
+    <details class="accordion sc-why">
+      <summary>{title ?? "Why"}</summary>
+      <div class="fold">
+        <div>{children}</div>
+      </div>
+    </details>
+  );
+}
+
+/**
+ * Demo: a captioned specimen stage. Children sit directly on the page ground.
  * props: {
- *   title?: string,     // .cn-label caption above the stage
+ *   title?: string,     // caption above the stage: the label role, 14px at 500 in --cn-fg-muted, so 600 stays with headings and controls
  *   classes?: string,   // class string shown in a copyable code line below
- *   row?: boolean,      // lay children out as a centered wrapping flex row
+ *   row?: boolean,      // lay children out as a wrapping flex row from the inline start; the stage shrinks to them
+ *   why?: string,       // summary of the fold Doc builds from the prose beside this demo
+ *   lead?: boolean,     // the first demo on a page, once per page; same frame as the rest, it leads by position
  *   children,
  * }
  */
@@ -135,13 +198,15 @@ export interface DemoProps {
   title?: string;
   classes?: string;
   row?: boolean;
+  why?: string;
+  lead?: boolean;
   children?: ComponentChildren;
 }
 
-export function Demo({ title, classes, row, children }: DemoProps) {
+export function Demo({ title, classes, row, lead, children }: DemoProps) {
   return (
-    <figure class="sc-demo">
-      {title ? <figcaption class="cn-label">{title}</figcaption> : null}
+    <figure class={`sc-demo${row ? " sc-demo-fit" : ""}${lead ? " is-lead" : ""}`}>
+      {title ? <figcaption class="cn-label cn-fg-muted">{title}</figcaption> : null}
       <div class={`sc-demo-stage${row ? " sc-demo-row" : ""}`}>{children}</div>
       {classes ? <CopyLine text={classes} /> : null}
     </figure>
@@ -152,14 +217,17 @@ export function Demo({ title, classes, row, children }: DemoProps) {
  * Props: a variants/knobs documentation table (renders .data-table).
  * props: {
  *   title?: string,
- *   rows: Array<{ name: string, values?: string, default?: string, notes?: string }>,
+ *   rows: Array<{ name: string, values?: string, default?: string, contrast?: string, notes?: string }>,
  * }
  * `name` is the class / custom property / attribute being documented.
+ * `contrast` holds measured ratios. The Values, Default and Contrast
+ * columns each show only when some row fills them, so no column is all "·".
  */
 export interface PropsRow {
   name: string;
   values?: string;
   default?: string;
+  contrast?: string;
   notes?: string;
 }
 
@@ -169,6 +237,9 @@ export interface PropsProps {
 }
 
 export function Props({ title, rows }: PropsProps) {
+  const hasValues = rows.some((r) => r.values);
+  const hasDefault = rows.some((r) => r.default);
+  const hasContrast = rows.some((r) => r.contrast);
   return (
     <section class="sc-props">
       {title ? <h2 class="cn-label">{title}</h2> : null}
@@ -177,8 +248,9 @@ export function Props({ title, rows }: PropsProps) {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Values</th>
-              <th>Default</th>
+              {hasValues ? <th>Values</th> : null}
+              {hasDefault ? <th>Default</th> : null}
+              {hasContrast ? <th>Contrast</th> : null}
               <th>Notes</th>
             </tr>
           </thead>
@@ -186,10 +258,13 @@ export function Props({ title, rows }: PropsProps) {
             {rows.map((r) => (
               <tr key={r.name}>
                 <td data-label="Name" class="cell-name">
-                  <code class="cn-code">{r.name}</code>
+                  {/* One token never breaks at its hyphens; a selector with
+                      spaces may wrap between its parts. */}
+                  <code class={`cn-code-inline${/\s/.test(r.name) ? "" : " cn-nowrap"}`}>{r.name}</code>
                 </td>
-                <td data-label="Values">{r.values ?? "·"}</td>
-                <td data-label="Default">{r.default ?? "·"}</td>
+                {hasValues ? <td data-label="Values">{r.values ?? "·"}</td> : null}
+                {hasDefault ? <td data-label="Default">{r.default ?? "·"}</td> : null}
+                {hasContrast ? <td data-label="Contrast">{r.contrast ?? "·"}</td> : null}
                 <td data-label="Notes">{r.notes ?? ""}</td>
               </tr>
             ))}

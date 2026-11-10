@@ -6,9 +6,14 @@ export default function AccentCardPage() {
   return (
     <Doc
       title="Accent card"
-      lede="A card on a plate in its accent. The plate is the only place the accent shows. The border, the name and the numbers stay neutral."
+      lede="A card on a plate in its accent. The border, the name and the numbers stay neutral, and the accent shows on the plate and on data marks."
     >
-      <Demo title="Teams, each in its own accent" classes="accent-card  (set --accent from the record)">
+      <p class="cn-copy">
+        The plate is the accent mixed 70% into surface-0,{" "}
+        <code class="cn-code-inline">--cn-step-vivid</code>.
+      </p>
+
+      <Demo lead title="Teams, each in its own accent" why="Where the plate color comes from and where to store the accent" classes="accent-card  (set --accent from the record)">
         <div class="sc-grid" style="width:100%">
           {TEAMS.map((team) => (
             <div class="accent-card" style={accentStyle(team.accent)} key={team.name}>
@@ -20,13 +25,19 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
+        The plates sit
+        well apart from the page, so
+        the plate reads as the card's color and not as a shadow.
+      </p>
+
+      <p class="cn-copy">
         The accent belongs to the team, not to its place in the grid. Store it
         on the record, or derive it from a stable id, and read it wherever the
         team appears. Payments is teal here, in the table's ranked rows and on
         the density page. Sorting or filtering the grid never recolors a card.
       </p>
 
-      <Demo title="Linked card" classes="a > .accent-card">
+      <Demo title="Linked card" why="How a linked card presses" classes="a > .accent-card">
         <a
           href="#"
           style="display:block;width:min(340px,100%)"
@@ -40,13 +51,13 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        Wrap the card in a plain <code class="cn-code">&lt;a&gt;</code>. Hover
+        Wrap the card in a plain <code class="cn-code-inline">&lt;a&gt;</code>. Hover
         lifts the card 1px off its plate and the plate grows 1px. Active
         half-slides it onto the plate, the same press as every button. The
         wrapper is the link, never the card itself.
       </p>
 
-      <Demo title="With a stat and a progress bar" classes="accent-card > .stat.is-lg + .progress-track">
+      <Demo title="With a stat and a progress bar" why="Why the value inside a card is not accent-colored" classes="accent-card > .stat.is-lg + .progress-track">
         <div class="accent-card" style={`${accentStyle(PAYMENTS.accent)};width:min(340px,100%)`}>
           <div class="stat is-lg" style="padding:0">
             <span>{PAYMENTS.name} revenue</span>
@@ -61,7 +72,9 @@ export default function AccentCardPage() {
       <p class="cn-copy">
         Inside the card the hero value is text-colored, so the accent is not
         repeated on the plate and the number. A data mark such as the
-        progress fill keeps the accent. Controls inside the card rest on their
+        progress fill keeps the accent, and so do an avatar and a
+        <code class="cn-code-inline">.mark</code>, which identify the record
+        the way the plate does. Controls inside the card rest on their
         own plate, not the card's.
       </p>
 
@@ -78,8 +91,9 @@ export default function AccentCardPage() {
           {
             name: ".accent-card",
             values: "recipe",
+            contrast: "Plate on the page: 4.9:1 (blue) to 7.5:1 (yellow)",
             notes:
-              "Base fill, --edge hairline, and the hard offset in --plate (accent 50% into surface-0). No other shadow.",
+              "--cn-surface-raised fill, --edge hairline, card radius, 12px 16px padding, and the hard offset in --plate (accent at --cn-step-vivid, 70%, into surface-0, so six accents stay apart) under the lit top edge. No neu shadow.",
           },
           {
             name: "a > .accent-card",

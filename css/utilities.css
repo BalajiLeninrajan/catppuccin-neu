@@ -12,13 +12,13 @@
 /* Floats above the surface: overlays only, never neu. */
 .cn-pop         { box-shadow: var(--shadow-pop); }
 /* Topbar cast plus its lit hairline. */
-.cn-cast        { box-shadow: var(--shadow-cast), inset 0 1px color-mix(in srgb, var(--surface-1) 30%, transparent); }
+.cn-cast        { box-shadow: var(--shadow-cast), var(--cn-lit-edge); }
 /* Solid-mark mini-drop. */
 .cn-mark-drop   { box-shadow: var(--shadow-mark); }
 /* The hard offset: a solid plate. Any clickable control may take it. */
-.cn-hard        { box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust))); }
-.cn-hard-lg     { box-shadow: 10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust))); }  /* tilted hero card */
-.cn-hard-sm     { box-shadow: 3px 3px 0 var(--plate, var(--hard-offset-color, var(--crust))); }    /* fixed small offset */
+.cn-hard        { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
+.cn-hard-lg     { box-shadow: var(--cn-plate-lg); }  /* fixed large offset */
+.cn-hard-sm     { box-shadow: var(--cn-plate-sm); }  /* fixed small offset */
 .cn-flat        { box-shadow: none; }
 
 /* ── Interaction ────────────────────────────────────────────────────────── */
@@ -28,20 +28,26 @@
   transition: transform var(--t-fast) var(--ease-spring), background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast) var(--ease-spring);
 }
 /* Down is crisp on the fast-out; up comes back on the spring. */
-.cn-pressable:active:not(:disabled),
-.cn-pressable-slide:active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
+.cn-pressable:active:not(:disabled, [aria-disabled="true"]),
+.cn-pressable-slide:active:not(:disabled, [aria-disabled="true"]) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
 
 /* The soft-control press: lift on hover, sink to an inset when held. */
-.cn-pressable:hover:not(:disabled)  { transform: translateY(-1px); }
-.cn-pressable:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
+.cn-pressable:hover:not(:disabled, [aria-disabled="true"])  { transform: translateY(-1px); }
+.cn-pressable:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
 /* The half-slide, only combined with .cn-hard. The control
    slides halfway onto its own offset shadow, which shrinks to meet it. */
-.cn-pressable-slide:hover:not(:disabled)  { transform: translate(-1px, -1px); }
-.cn-pressable-slide:active:not(:disabled) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--hard-offset-color, var(--crust))); }
+.cn-pressable-slide:hover:not(:disabled, [aria-disabled="true"])  { transform: translate(-1px, -1px); }
+.cn-pressable-slide:active:not(:disabled, [aria-disabled="true"]) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: var(--cn-plate-half), var(--cn-lit-edge); }
+/* A touch screen keeps :hover after a tap, so the lift would stick. Only
+   the press runs there. */
+@media (hover: none) {
+  .cn-pressable:hover:not(:active), .cn-pressable-slide:hover:not(:active) { transform: none; }
+}
 
-/* (.cn-engaged, the selected or toggled state, is declared after the border
-   utilities so its border-color beats a composed .cn-edge-*.)              */
+/* (.cn-engaged, the engaged state for a chosen or toggled option, is
+   declared after the border utilities so its border-color beats a
+   composed .cn-edge-*.)                                                    */
 
 /* ── Type roles ─────────────────────────────────────────────────────────────
    No bare font-family utility exists: pick the role, not the face. Each
@@ -50,17 +56,22 @@
    Numbers keep tabular-nums on the sans face. Uppercase is scarce: only
    the microlabel shouts, and it labels a fact, never a section.            */
 
+/* The label is 14px at 500 in --cn-fg-soft and meta is 14px at 400 in
+   --cn-fg-muted, so the two share a size and differ by weight and ink. */
 .cn-label {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   letter-spacing: var(--cn-type-label-tracking);
-  color: var(--overlay-2);
+  color: var(--cn-fg-soft);
 }
-/* The one exception to the 12px floor. Caps buy legibility at 10px. */
+/* The label size in the uppercase voice: 12px, tracked .08em. */
 .cn-microlabel {
   font: var(--cn-type-micro-weight) var(--cn-type-micro-size)/var(--cn-type-micro-leading) var(--sans);
   letter-spacing: var(--cn-type-micro-tracking);
   text-transform: uppercase;
-  color: var(--overlay-2);
+  /* --cn-microlabel-ink lets a recipe lift the label, as the sidebar does
+     for the group that holds the current page; a color set in the recipes
+     layer would lose to this one. */
+  color: var(--cn-microlabel-ink, var(--cn-fg-muted));
 }
 .cn-ui {
   font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
@@ -79,35 +90,26 @@
 }
 /* On an accent card the plate carries the accent, so the value is text.
    :where keeps this under the color utilities below. */
-:where(.accent-card) .cn-value-lg { color: var(--text); }
+:where(.accent-card) .cn-value-lg { color: var(--cn-fg); }
 .cn-meta {
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
   letter-spacing: var(--cn-type-meta-tracking);
   font-variant-numeric: tabular-nums;
-  color: var(--overlay-2);
-}
-/* deprecated, removed in 0.5.0: .cn-eyebrow. A kicker above a display
-   title usually restates the lede; drop it. */
-.cn-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font: var(--cn-type-micro-weight) var(--cn-type-label-size)/var(--cn-type-micro-leading) var(--sans);
-  letter-spacing: var(--cn-type-micro-tracking);
-  text-transform: uppercase;
-  color: var(--mauve);
+  color: var(--cn-fg-muted);
 }
 /* Code, CLI strings, machine literals. */
 .cn-code {
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
   letter-spacing: var(--cn-type-code-tracking);
   font-variant-numeric: tabular-nums;
+  font-variant-ligatures: none;
 }
 /* Quiet inline code in prose: mono at the text ink, no chip. It scales
    with the surrounding copy. */
 .cn-code-inline {
-  color: var(--text);
+  color: var(--cn-fg-soft);
   font-family: var(--mono);
+  font-variant-ligatures: none;
   font-size: .92em;
   font-weight: var(--cn-type-code-weight);
 }
@@ -115,7 +117,7 @@
 .cn-code-meta {
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/1 var(--mono);
   font-variant-numeric: tabular-nums;
-  color: var(--overlay-2);
+  color: var(--cn-fg-muted);
 }
 .cn-tabular { font-variant-numeric: tabular-nums; }
 .cn-nowrap { white-space: nowrap; }
@@ -129,17 +131,18 @@
 
 /* The hero headline, margin zeroed. .display-title is an alias; .is-sm is
    the page-title size. */
-.cn-display, .display-title,
-/* deprecated, removed in 0.5.0 */
-.cn-display-sm {
+.cn-display, .display-title {
   font: var(--cn-type-display-weight) var(--cn-type-display-size)/var(--cn-type-display-leading) var(--sans);
   letter-spacing: var(--cn-type-display-tracking);
   text-wrap: balance;
   margin: 0;
 }
-:is(.cn-display, .display-title).is-sm,
-/* deprecated, removed in 0.5.0 */
-.cn-display-sm { font-size: var(--cn-type-display-sm-size); }
+:is(.cn-display, .display-title).is-sm { font-size: var(--cn-type-display-sm-size); }
+.cn-heading {
+  font: var(--cn-type-heading-weight) var(--cn-type-heading-size)/var(--cn-type-heading-leading) var(--sans);
+  letter-spacing: var(--cn-type-heading-tracking);
+  text-wrap: balance;
+}
 .cn-title {
   font: var(--cn-type-title-weight) var(--cn-type-title-size)/var(--cn-type-title-leading) var(--sans);
   letter-spacing: var(--cn-type-title-tracking);
@@ -148,21 +151,30 @@
 .cn-name {
   font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
   letter-spacing: var(--cn-type-name-tracking);
-  color: var(--text);
+  color: var(--cn-fg);
 }
 .cn-lede {
   font: var(--cn-type-lede-weight) var(--cn-type-lede-size)/var(--cn-type-lede-leading) var(--sans);
   letter-spacing: var(--cn-type-lede-tracking);
-  color: var(--subtext-1);
-  max-width: 690px;
+  color: var(--cn-fg-soft);
+  max-width: var(--cn-measure);
 }
 .cn-copy {
   font: var(--cn-type-body-weight) var(--cn-type-body-size)/var(--cn-type-body-leading) var(--sans);
   letter-spacing: var(--cn-type-body-tracking);
-  color: var(--subtext-0);
+  color: var(--cn-fg-body);
 }
 
 /* ── Color ──────────────────────────────────────────────────────────────── */
+
+/* Text by role. These follow prefers-contrast; the palette names below
+   do not. */
+.cn-fg          { color: var(--cn-fg); }
+.cn-fg-soft     { color: var(--cn-fg-soft); }
+.cn-fg-body     { color: var(--cn-fg-body); }
+.cn-fg-muted    { color: var(--cn-fg-muted); }
+.cn-fg-placeholder { color: var(--cn-fg-placeholder); }
+.cn-fg-faint    { color: var(--cn-fg-faint); }
 
 /* Text ramp + palette */
 .cn-text-text      { color: var(--text); }
@@ -184,17 +196,31 @@
 .cn-text-tone      { color: var(--tone); }
 
 /* Backgrounds */
+.cn-bg-page   { background: var(--cn-surface-page); }
 .cn-bg-base   { background: var(--base); }
 .cn-bg-mantle { background: var(--mantle); }
 .cn-bg-crust  { background: var(--crust); }
-.cn-bg-well   { background: color-mix(in srgb, var(--crust) 38%, var(--mantle)); }
-.cn-bg-head   { background: color-mix(in srgb, var(--crust) 30%, var(--mantle)); }
+.cn-bg-well   { background: var(--cn-surface-sunken); }
+.cn-bg-head   { background: var(--cn-surface-band); }
+.cn-bg-raised  { background: var(--cn-surface-raised); }
+.cn-bg-overlay { background: var(--cn-surface-overlay); }
+.cn-bg-recessed { background: var(--cn-surface-recessed); }
+.cn-bg-hover   { background: var(--hover); }
 .cn-tint      { background: var(--tint); }
 .cn-tint-accent {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--mantle)), var(--mantle) 48%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) var(--cn-step-wash), var(--mantle)), var(--mantle) 48%);
 }
 
-/* Tone setters set --tone only; pair with .cn-tint / .cn-text-tone / recipes. */
+/* Tone setters set --tone. The four status setters also bring their glyph
+   and their ladder stops; put them on the tagged element itself. */
+.cn-tone-danger  { --tone: var(--cn-danger); --cn-glyph: var(--cn-glyph-danger);
+  --tint: var(--cn-danger-tint); --tone-wash: var(--cn-danger-wash); --tone-edge: var(--cn-danger-edge); --tone-border: var(--cn-danger-border); }
+.cn-tone-warning { --tone: var(--cn-warning); --cn-glyph: var(--cn-glyph-warning);
+  --tint: var(--cn-warning-tint); --tone-wash: var(--cn-warning-wash); --tone-edge: var(--cn-warning-edge); --tone-border: var(--cn-warning-border); }
+.cn-tone-success { --tone: var(--cn-success); --cn-glyph: var(--cn-glyph-success);
+  --tint: var(--cn-success-tint); --tone-wash: var(--cn-success-wash); --tone-edge: var(--cn-success-edge); --tone-border: var(--cn-success-border); }
+.cn-tone-info    { --tone: var(--cn-info); --cn-glyph: var(--cn-glyph-info);
+  --tint: var(--cn-info-tint); --tone-wash: var(--cn-info-wash); --tone-edge: var(--cn-info-edge); --tone-border: var(--cn-info-border); }
 .cn-tone-red    { --tone: var(--red); }
 .cn-tone-green  { --tone: var(--green); }
 .cn-tone-peach  { --tone: var(--peach); }
@@ -209,18 +235,18 @@
 .cn-edge        { border: 1px solid var(--edge); }
 .cn-edge-soft   { border: 1px solid var(--edge-soft); }  /* inner separators */
 .cn-edge-line   { border: 1px solid var(--surface-0); }  /* row separators, footer rules */
-.cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) 30%, transparent); }
-.cn-edge-tone   { border: 1px solid color-mix(in srgb, var(--tone) 25%, var(--surface-0)); }
-.cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--surface-0)); }
-.cn-edge-dashed { border: 1px dashed var(--surface-1); }  /* the only dashed border */
+.cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) var(--cn-step-plate), transparent); }
+.cn-edge-tone   { border: 1px solid var(--tone-border); }
+.cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) var(--cn-step-plate), var(--surface-0)); }
+.cn-edge-dashed { border: 1px dashed var(--surface-1); }  /* an open slot, and nothing else */
 
-/* The selected or toggled state: pressed in, mauve-keyed, borderless. The inset
-   depth and tint define it. Declared after the edge utilities so the cleared
-   border-color wins over a composed base edge. */
+/* The engaged state, for a chosen or toggled option: pressed in, on the mauve wash, inside a
+   mauve rim, so the chosen option outweighs the raised ones around it.
+   Declared after the edge utilities so the rim wins over a composed edge. */
 .cn-engaged {
   transform: translateY(1px);
   box-shadow: var(--neu-inset);
-  border-color: transparent;
+  border-color: var(--engaged-edge);
   background: var(--wash);
 }
 
@@ -236,7 +262,8 @@
 
 /* ── Structure ──────────────────────────────────────────────────────────── */
 
-/* Left color spine: the accent identity cue. */
+/* Left spine: marks position (the current row, the selected item), not
+   identity, so it paints in the interactive color. */
 .cn-spine { position: relative; }
 .cn-spine::before {
   content: "";
@@ -244,11 +271,8 @@
   inset: var(--space-3) auto var(--space-3) 0;
   width: 4px;
   border-radius: 0 var(--cn-radius-chip) var(--cn-radius-chip) 0;
-  background: var(--accent);
+  background: var(--cn-interactive);
 }
-
-/* (.cn-scrim moved to recipes.css with the overlays it backs: its exit
-   un-blur lives in the recipes layer and must not be beaten from here.) */
 
 /* Screen-reader only: clipped, not hidden. */
 .cn-sr-only {
@@ -265,16 +289,28 @@
 
 .cn-hidden { display: none !important; }
 
-/* ── Layout: three primitives and one spacing scale ───────────────────────
-   Every gap, padding and margin reads --space-1..6: 4, 8, 12, 16, 24, 32.
-   The utilities are named by pixel value, and no other value exists.
+/* ── Layout: primitives and one spacing scale ─────────────────────────────
+   Every gap, padding and margin reads --space-1..8: 4, 8, 12, 16, 24, 32
+   inside components, 48 and 64 for section rhythm. The utilities are named
+   by pixel value, and no other value exists.
    A row is a centered flex line, a stack is a grid column, a cluster wraps.
-   Modifiers only ever add: cn-row cn-between cn-gap-12.
-   The -22 and -28 names are deprecated aliases of -24 and -32.             */
+   A split pushes two groups apart, a measure centers a readable column,
+   and a sidebar layout keeps a fixed side beside fluid content.
+   Modifiers only ever add: cn-row cn-between cn-gap-12.                    */
 
 .cn-row     { display: flex; align-items: center; gap: var(--space-2); }
 .cn-stack   { display: grid; gap: var(--space-3); }
 .cn-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+/* Split: two groups at opposite ends that wrap onto two lines when they
+   no longer fit, the first group taking the slack. It sits above the
+   modifiers so .cn-top and .cn-baseline can realign it. */
+.cn-split { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-4); }
+.cn-split > :first-child { flex: 1 1 auto; min-width: 0; }
+/* A lede stacked under the title in the first group does not widen the
+   group, so the split wraps on the title's width, not on the length of
+   the copy. It needs the title before it: a lede alone would leave the
+   group no width, and the split would squeeze it and never wrap. */
+.cn-split > :first-child > :is(h1, h2, .cn-display, .display-title, .cn-heading, .cn-title) ~ .cn-lede { contain: inline-size; }
 .cn-between { justify-content: space-between; }
 .cn-center  { justify-content: center; }
 .cn-end     { justify-content: flex-end; }
@@ -288,58 +324,97 @@
 .cn-fit     { width: fit-content; }
 .cn-block   { display: block; }
 .cn-auto-l  { margin-left: auto; }
+.cn-mx-auto { margin-inline: auto; }
 
-/* Column grids collapse on the system's own breakpoints. */
-.cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
-.cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
-.cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+/* Measure: a centered column at the prose measure, --cn-measure. */
+.cn-measure { max-inline-size: var(--cn-measure); margin-inline: auto; }
+/* Sidebar layout: the first child holds --side-w (16rem), the second takes
+   the rest, and they stack once the content would drop under 60% of the
+   row. No breakpoint, so it works in any container. */
+.cn-with-side { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+.cn-with-side > :first-child { flex: 1 1 var(--side-w, 16rem); }
+.cn-with-side > :last-child { flex: 999 1 0; min-inline-size: 60%; }
+
+/* Column grids collapse on the system's own breakpoints. Every grid reads
+   --cn-grid-gap, the 24px between panels in a region; a grid of smaller
+   items composes .cn-gap-16. */
+.cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
+.cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
+.cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 @media (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
+/* The page grid: twelve columns 24px apart. A child spans with
+   .cn-span-3/4/5/6/7/8/9/12. Children keep their content height, so a
+   short panel beside a tall one never stretches into an empty tail. At
+   1060px every split becomes halves and a 9 takes the row; at 760px every
+   span takes the row. */
+.cn-grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; gap: var(--cn-grid-gap); }
+.cn-span-3 { grid-column: span 3; }
+.cn-span-4 { grid-column: span 4; }
+.cn-span-5 { grid-column: span 5; }
+.cn-span-6 { grid-column: span 6; }
+.cn-span-7 { grid-column: span 7; }
+.cn-span-8 { grid-column: span 8; }
+.cn-span-9 { grid-column: span 9; }
+.cn-span-12 { grid-column: 1 / -1; }
+/* One row per .cn-grid-12. Splits go to halves, and a 9 and an odd last
+   child take the row: three 4s fold to two and one, and a 3 after a 9
+   takes the row because the 9 already took the one above it. A 6 or 12
+   never shares a row with splits, so the :has() guard only keeps the
+   odd-child rule off grids that break the contract. */
+@media (max-width: 1060px) {
+  .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
+  .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),
+  .cn-grid-12 > .cn-span-9 + .cn-span-3 { grid-column: 1 / -1; }
+  .cn-grid-12 > .cn-span-9 { grid-column: 1 / -1; }
+}
+@container (max-width: 1060px) {
+  .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
+  .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),
+  .cn-grid-12 > .cn-span-9 + .cn-span-3 { grid-column: 1 / -1; }
+  .cn-grid-12 > .cn-span-9 { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
+@container (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
+/* Inside a .cn-container the grids answer the container's width instead,
+   so a grid in a sidebar or a narrow pane folds on its own. */
+.cn-container { container-type: inline-size; }
+@container (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
 
 .cn-gap-4  { gap: var(--space-1); }
 .cn-gap-8  { gap: var(--space-2); }
 .cn-gap-12 { gap: var(--space-3); }
 .cn-gap-16 { gap: var(--space-4); }
-.cn-gap-24,
-/* deprecated, removed in 0.5.0 */
-.cn-gap-22 { gap: var(--space-5); }
-.cn-gap-32,
-/* deprecated, removed in 0.5.0 */
-.cn-gap-28 { gap: var(--space-6); }
+.cn-gap-24 { gap: var(--space-5); }
+.cn-gap-32 { gap: var(--space-6); }
+/* Section rhythm: between panels and page regions, not inside them. */
+.cn-gap-48 { gap: var(--space-7); }
+.cn-gap-64 { gap: var(--space-8); }
 
 .cn-p-0  { padding: 0; }
 .cn-p-4  { padding: var(--space-1); }
 .cn-p-8  { padding: var(--space-2); }
 .cn-p-12 { padding: var(--space-3); }
 .cn-p-16 { padding: var(--space-4); }
-.cn-p-24,
-/* deprecated, removed in 0.5.0 */
-.cn-p-22 { padding: var(--space-5); }
-.cn-p-32,
-/* deprecated, removed in 0.5.0 */
-.cn-p-28 { padding: var(--space-6); }
+.cn-p-24 { padding: var(--space-5); }
+.cn-p-32 { padding: var(--space-6); }
 
 .cn-px-0  { padding-inline: 0; }
 .cn-px-8  { padding-inline: var(--space-2); }
 .cn-px-12 { padding-inline: var(--space-3); }
 .cn-px-16 { padding-inline: var(--space-4); }
-.cn-px-24,
-/* deprecated, removed in 0.5.0 */
-.cn-px-22 { padding-inline: var(--space-5); }
-.cn-px-32,
-/* deprecated, removed in 0.5.0 */
-.cn-px-28 { padding-inline: var(--space-6); }
+.cn-px-24 { padding-inline: var(--space-5); }
+.cn-px-32 { padding-inline: var(--space-6); }
 
 .cn-py-0  { padding-block: 0; }
 .cn-py-8  { padding-block: var(--space-2); }
 .cn-py-12 { padding-block: var(--space-3); }
 .cn-py-16 { padding-block: var(--space-4); }
-.cn-py-24,
-/* deprecated, removed in 0.5.0 */
-.cn-py-22 { padding-block: var(--space-5); }
-.cn-py-32,
-/* deprecated, removed in 0.5.0 */
-.cn-py-28 { padding-block: var(--space-6); }
+.cn-py-24 { padding-block: var(--space-5); }
+.cn-py-32 { padding-block: var(--space-6); }
+.cn-py-48 { padding-block: var(--space-7); }
+.cn-py-64 { padding-block: var(--space-8); }
 
 .cn-m-0  { margin: 0; }
 
@@ -348,29 +423,28 @@
 .cn-mt-8  { margin-top: var(--space-2); }
 .cn-mt-12 { margin-top: var(--space-3); }
 .cn-mt-16 { margin-top: var(--space-4); }
-.cn-mt-24,
-/* deprecated, removed in 0.5.0 */
-.cn-mt-22 { margin-top: var(--space-5); }
-.cn-mt-32,
-/* deprecated, removed in 0.5.0 */
-.cn-mt-28 { margin-top: var(--space-6); }
+.cn-mt-24 { margin-top: var(--space-5); }
+.cn-mt-32 { margin-top: var(--space-6); }
+.cn-mt-48 { margin-top: var(--space-7); }
+.cn-mt-64 { margin-top: var(--space-8); }
 
 .cn-mb-0  { margin-bottom: 0; }
 .cn-mb-4  { margin-bottom: var(--space-1); }
 .cn-mb-8  { margin-bottom: var(--space-2); }
 .cn-mb-12 { margin-bottom: var(--space-3); }
 .cn-mb-16 { margin-bottom: var(--space-4); }
-.cn-mb-24,
-/* deprecated, removed in 0.5.0 */
-.cn-mb-22 { margin-bottom: var(--space-5); }
-.cn-mb-32,
-/* deprecated, removed in 0.5.0 */
-.cn-mb-28 { margin-bottom: var(--space-6); }
+.cn-mb-24 { margin-bottom: var(--space-5); }
+.cn-mb-32 { margin-bottom: var(--space-6); }
+.cn-mb-48 { margin-bottom: var(--space-7); }
+.cn-mb-64 { margin-bottom: var(--space-8); }
 
 /* Rows separated by the line hairline, last one bare: Tailwind's divide-y. */
 .cn-divide > * + * { border-top: 1px solid var(--surface-0); }
 /* Lists as layout, not lists. */
-.cn-list-none { margin: 0; padding: 0; list-style: none; }
+/* The reset is zero-specificity, so a spacing utility on the same list
+   still applies whatever the order. */
+.cn-list-none { list-style: none; }
+:where(.cn-list-none) { margin: 0; padding: 0; }
 /* A wide thing scrolls inside its own box, never the page. */
 .cn-scroll-x { overflow-x: auto; scrollbar-color: var(--surface-2) transparent; }
 /* Pins to the top of its scroll container: table headers, pane toolbars. */

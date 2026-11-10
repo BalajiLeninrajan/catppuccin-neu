@@ -8,37 +8,78 @@
    and may be adopted elsewhere sparingly in a consumer layer. Inset surfaces
    are borderless: depth defines them; hairlines stay on raised surfaces
    and tinted semantic surfaces only.
-   Requires tokens.css. Layer: cn.recipes.
-   Deprecated names sit in selector lists after a "deprecated, removed in
-   0.5.0" comment; rg for that string to find every alias.                  */
+   Requires tokens.css. Layer: cn.recipes.                                  */
 
 /* ── Surfaces ───────────────────────────────────────────────────────────── */
 
-/* Panel: the primary content container. Raised. */
+/* Panel: the primary content container. Raised: the base fill a step
+   above the mantle page, the --edge hairline on all four sides, and the
+   raised shadow, whose 1px contact is the panel's foot. */
 .panel {
   min-width: 0;
   border: 1px solid var(--edge);
   border-radius: var(--cn-radius-panel);
-  background: var(--base);
+  background: var(--cn-surface-raised);
   box-shadow: var(--neu-raised);
 }
+/* A panel inside a panel rests on its parent: the soft raise and the lit
+   edge, no long cast. Its fill matches its parent's, so the lit edge and
+   the hairline show where it ends. */
+.panel .panel { box-shadow: var(--neu-raised-soft), var(--cn-lit-edge); }
+/* The lead panel: the one a view is about, one per view. It takes the
+   base fill like every panel and stands higher by darkness on the side
+   away from the light: --neu-lifted's foot on the bottom and right is
+   the last step of the foot ladder in SPEC Depth (panel 1px, plate 4px,
+   lead 8px), over a deeper near shadow and a longer cast. The
+   lead is a resting panel with a deeper foot, not a height of its own.
+   The --edge-strong hairline is its one
+   step in line strength; it keeps the lit edge and adds no bright rim
+   or dark outline, since neither reads as
+   height. Its band title takes --lead-title-size at the heading weight
+   (see the panel-header rule below). It outranks its neighbors by height
+   and by its title, not by an ornament. */
+.panel.is-lead {
+  border-color: var(--edge-strong);
+  box-shadow: var(--neu-lifted);
+}
+/* More contrast keeps the full outline, overlay-0 on a panel and
+   overlay-1 on the lead, so every side holds the 3:1 boundary. */
+@media (prefers-contrast: more) {
+  .panel { border-color: var(--edge); }
+  .panel.is-lead { border-color: var(--edge-strong); }
+}
+/* :where() holds the toggle to the weight of the media-query rules, so a
+   border color composed onto a panel wins the same way in both modes. */
+:where(:root[data-contrast="more"]) .panel { border-color: var(--edge); }
+:where(:root[data-contrast="more"]) .panel.is-lead { border-color: var(--edge-strong); }
 
-/* The one rotated hero card. The hard offset rides over the neu raise so
-   the hero still answers the top-left light instead of floating as a flat
-   sticker. Flattened at ≤1060px. */
+/* The one rotated hero card. It stands on the same plate as a clickable,
+   --cn-plate, which replaces the raised shadow: the hard block and the
+   lit top edge answer the top-left light, with no soft cast under them.
+   The plate is the 4px step of the foot ladder in SPEC Depth, well under
+   the lead's, so the aside does not outshout the data panel beside it. At
+   ≤1060px it flattens to a plain resting panel on --neu-raised. It is the
+   aside, so its prose sets one step down at 15px, the compact body size
+   (.9375rem): rotated text at 14px rendered soft at 1x, and 15px keeps it
+   crisp while the data panel beside it stays the louder block. The size
+   rides on the body token because .cn-copy is a utility and outranks any
+   recipe rule. */
 .panel.is-tilted {
+  --cn-type-body-size: .9375rem;
+  font-size: .9375rem;
+  /* Content height, so a grid row never stretches the card into an empty
+     tail. */
+  align-self: start;
   transform: rotate(1.2deg);
-  box-shadow: 10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust))), var(--neu-raised);
+  box-shadow: var(--cn-plate), var(--cn-lit-edge);
 }
 
 /* Bands: the panel header and footer, and the modal and drawer headers.
-   Heights and padding come from the density knobs. A filled band follows
-   the parent radius minus the 1px border so its fill never pokes past the
-   corners; never fix this with overflow: hidden, which clips anchored
-   popovers and hard-offset shadows. */
-.panel-header, .panel-footer, .modal > header, .drawer > header,
-/* deprecated, removed in 0.5.0 */
-.panel-heading {
+   Heights and padding come from the density knobs. A filled child at a
+   panel edge, such as a table head, follows the parent radius minus the
+   1px border so its fill never pokes past the corners; never fix this with
+   overflow: hidden, which clips anchored popovers and hard-offset shadows. */
+.panel-header, .panel-footer, .modal > header, .drawer > header {
   min-height: var(--band-h);
   padding: var(--band-pad);
   display: flex;
@@ -46,30 +87,51 @@
   justify-content: space-between;
   gap: var(--space-4);
 }
-/* Headers anchor with a fill; the footer sits on the panel's own ground,
-   separated by the divider alone. */
-.panel-header, .modal > header, .drawer > header,
-/* deprecated, removed in 0.5.0 */
-.panel-heading {
-  background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
-  border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
-  border-radius: calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px) 0 0;
+/* Header and footer sit on the panel's own fill and part from the body by
+   a divider. A darker band would sink the header below the surface it
+   titles; the title's weight does the anchoring. */
+.panel-header, .modal > header, .drawer > header {
+  border-bottom: 1px solid var(--edge-soft);
 }
-/* The drawer has square corners. */
-.drawer > header { border-radius: 0; }
 .panel-footer {
-  border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+  border-top: 1px solid var(--edge-soft);
 }
-.panel-header h2,
-/* deprecated, removed in 0.5.0 */
-.panel-heading h2 { min-width: 0; margin: 0; font-size: var(--band-title-size); }
+:is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) {
+  min-width: 0;
+  margin: 0;
+  font: var(--cn-type-title-weight) var(--band-title-size)/var(--cn-type-title-leading) var(--sans);
+  letter-spacing: var(--cn-type-title-tracking);
+}
+/* The lead panel's band title is a step larger and at the heading weight,
+   so its rank reads from the title as well as the edges. --lead-title-size
+   is the heading size at default and cozy density, and the title size at
+   compact and at 655px and under, where display-sm drops under 34px. */
+.panel.is-lead > .panel-header :is(h2, h3) {
+  font-size: var(--lead-title-size);
+  font-weight: var(--cn-type-heading-weight);
+  letter-spacing: var(--cn-type-heading-tracking);
+}
+/* The lead also ranks by room: its header band is --lead-band-h tall and
+   its header, body and footer pad --lead-pad, a step past a plain panel's
+   at every density. */
+.panel.is-lead > .panel-header { min-height: var(--lead-band-h); }
+.panel.is-lead > :is(.panel-header, .panel-footer) { padding-inline: var(--lead-pad); }
+.panel.is-lead > .panel-body { padding: var(--lead-pad); }
+/* A table that fills the lead panel, directly or through a scroll wrapper
+   or a tab panel, insets its outer columns to the same --lead-pad, so its
+   first and last columns line up with the band title and the body above
+   and below. Row mode at 760px keeps its own padding. */
+@media (min-width: 761px) {
+  :is(.panel.is-lead > .data-table, .panel.is-lead > :is(.table-scroll, [role="tabpanel"]) > .data-table, .panel.is-lead > [role="tabpanel"] > .table-scroll > .data-table) :is(th, td):first-child { padding-inline-start: var(--lead-pad); }
+  :is(.panel.is-lead > .data-table, .panel.is-lead > :is(.table-scroll, [role="tabpanel"]) > .data-table, .panel.is-lead > [role="tabpanel"] > .table-scroll > .data-table) :is(th, td):last-child { padding-inline-end: var(--lead-pad); }
+}
 /* A band holding a .band-actions cluster wraps when the actions outgrow
    the row; the cluster holds to the right and wraps inside itself. Other
    bands stay on one line. */
-:is(.panel-header, .modal > header, .drawer > header, .panel-heading):has(> .band-actions) { flex-wrap: wrap; row-gap: var(--space-2); }
+:is(.panel-header, .modal > header, .drawer > header):has(> .band-actions) { flex-wrap: wrap; row-gap: var(--space-2); }
 .band-actions {
   min-width: 0;
-  margin-left: auto;
+  margin-inline-start: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -84,27 +146,32 @@
 .table-scroll { overflow-x: auto; scrollbar-color: var(--surface-2) transparent; }
 /* A table filling the top of a panel: the header band respects the corners,
    through a scroll wrapper too. */
-.panel > :is(.data-table, .table-neu):first-child th:first-child,
-.panel > .table-scroll:first-child > :is(.data-table, .table-neu) th:first-child { border-top-left-radius: calc(var(--cn-radius-panel) - 1px); }
-.panel > :is(.data-table, .table-neu):first-child th:last-child,
-.panel > .table-scroll:first-child > :is(.data-table, .table-neu) th:last-child  { border-top-right-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > .data-table:first-child th:first-child,
+.panel > .table-scroll:first-child > .data-table th:first-child { border-top-left-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > .data-table:first-child th:last-child,
+.panel > .table-scroll:first-child > .data-table th:last-child  { border-top-right-radius: calc(var(--cn-radius-panel) - 1px); }
 /* …and the bottom mirror: a table (or ranked row) ending a panel keeps its
    last filled band inside the rounded corners (hover fills live on the cells
    so the radius can clip them; never overflow: hidden). */
-.panel > :is(.data-table, .table-neu):last-child tbody tr:last-child td:first-child,
-.panel > .table-scroll:last-child > :is(.data-table, .table-neu) tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--cn-radius-panel) - 1px); }
-.panel > :is(.data-table, .table-neu):last-child tbody tr:last-child td:last-child,
-.panel > .table-scroll:last-child > :is(.data-table, .table-neu) tbody tr:last-child td:last-child { border-bottom-right-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > .data-table:last-child tbody tr:last-child td:first-child,
+.panel > .table-scroll:last-child > .data-table tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > .data-table:last-child tbody tr:last-child td:last-child,
+.panel > .table-scroll:last-child > .data-table tbody tr:last-child td:last-child { border-bottom-right-radius: calc(var(--cn-radius-panel) - 1px); }
+.panel > .ranked-row:first-child { border-radius: calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px) 0 0; }
 .panel > .ranked-row:last-child { border-radius: 0 0 calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px); }
+.panel > .ranked-row:only-child { border-radius: calc(var(--cn-radius-panel) - 1px); }
 
 /* Well: an inset container for grouped controls or scrolling content.
-   Borderless: the inset depth defines the surface. */
-/* Carved from the parent surface: transparent ground, depth alone. Compose
-   cn-bg-well when an explicit darker fill is wanted. */
+   Borderless: the carve, one dark wall from the top left, and the sunken
+   fill define it. A shadow alone tops out near 1.2:1 on the mantle page, so
+   a transparent well read as an outlined panel; the darker fill puts it
+   below the ground. --cn-well-ring is a quiet even dark ring, listed
+   before the carve so it paints over the dark wall and stays the same on
+   all four sides. */
 .well {
   border-radius: var(--cn-radius-card);
-  background: transparent;
-  box-shadow: var(--neu-inset);
+  background: var(--cn-surface-sunken);
+  box-shadow: var(--cn-well-ring), var(--neu-inset);
 }
 /* A scrolling well hints at its overflow: the bottom edge of the well
    dissolves via a mask, so content visibly runs past the fold. */
@@ -116,11 +183,13 @@
    carve, one recess fill, one radius and the code type role. Borderless. */
 .terminal, .codeblock, .command {
   border-radius: var(--cn-radius-card);
-  background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
-  box-shadow: var(--neu-inset);
-  color: var(--subtext-1);
+  background: var(--cn-surface-sunken);
+  box-shadow: var(--cn-well-ring), var(--neu-inset);
+  color: var(--cn-fg-soft);
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
   font-variant-numeric: tabular-nums;
+  /* => stays two characters, so code reads and copies as typed. */
+  font-variant-ligatures: none;
   scrollbar-color: var(--surface-1) transparent;
 }
 
@@ -138,13 +207,14 @@
 .terminal .caret {
   width: 6px; height: 14px;
   display: inline-block;
-  margin-left: var(--space-1);
+  margin-inline-start: var(--space-1);
   vertical-align: -2px;
   background: var(--accent);
   animation: blink .75s steps(2) infinite;
 }
 
-/* Sticky top bar: translucent base, blurred, hairline + soft cast shadow. */
+/* Sticky top bar: the page ground, translucent and blurred, with a
+   hairline and a soft cast. It sits on the page, not above it. */
 .topbar {
   min-height: calc(var(--band-h) + var(--space-1));
   /* Same gutter as .page-main, so the brand lines up with the column edge. */
@@ -156,11 +226,11 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-5);
-  background: color-mix(in srgb, var(--base) 91%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 45%, transparent);
+  background: color-mix(in srgb, var(--cn-surface-page) 91%, transparent);
+  border-bottom: 1px solid var(--edge-soft);
   backdrop-filter: blur(14px);
   box-shadow: var(--shadow-cast),
-              inset 0 1px color-mix(in srgb, var(--surface-1) 30%, transparent);
+              var(--cn-lit-edge);
 }
 /* The cast exists once something is under the bar. Where scroll-driven
    animation is supported it fades in over the first 60px; elsewhere the bar
@@ -175,59 +245,61 @@
 .topbar.is-split { grid-template-columns: 1fr auto; }
 /* An app strip rather than a page bar. */
 .topbar.is-compact { min-height: min(52px, var(--band-h)); padding: var(--space-2) var(--space-3); gap: var(--space-3); }
+/* Focus not obscured (WCAG 2.4.11): a page with a topbar stops every
+   scroll, by focus, by fragment link or by scrollIntoView(), the bar's
+   height plus 12px short of the top, so the bar never covers the target
+   or its focus ring. A bar taller than its min-height needs the
+   consumer's own value. */
+:root:has(.topbar) { scroll-padding-top: calc(var(--band-h) + var(--space-1) + var(--space-3)); }
+:root:has(.topbar.is-compact) { scroll-padding-top: calc(min(52px, var(--band-h)) + var(--space-3)); }
 
 /* Wordmark: the identity in the topbar corner. em takes the mauve upright
    treatment. A .mark before the name is the brand tile. is-lg is the hero
    size; is-sm is the footer brand: a glyph, the name, an optional note. */
-.wordmark,
-/* deprecated, removed in 0.5.0 */
-.footer-brand {
+.wordmark {
   display: inline-flex;
   align-items: center;
   font: var(--cn-type-display-weight) var(--cn-type-lede-size)/1 var(--sans);
   letter-spacing: var(--cn-type-display-tracking);
-  color: var(--text);
+  color: var(--cn-fg);
   text-decoration: none;
 }
 /* The gap lives on the mark, not the row: the name and its em are separate
    flex items and must stay flush. */
-.wordmark > :is(.mark, .mark-solid) { width: 28px; height: 28px; margin-right: var(--space-2); font-size: var(--cn-type-ui-size); }
+.wordmark > .mark { width: 28px; height: 28px; margin-inline-end: var(--space-2); font-size: var(--cn-type-ui-size); }
 .wordmark.is-lg { font-size: var(--cn-type-title-size); }
-.wordmark.is-lg > :is(.mark, .mark-solid) { width: 34px; height: 34px; margin-right: var(--space-3); font-size: var(--cn-type-body-size); }
-.wordmark.is-sm,
-/* deprecated, removed in 0.5.0 */
-.footer-brand { font-size: var(--cn-type-name-size); font-weight: var(--cn-type-name-weight); }
-.wordmark.is-sm > :is(.mark, .mark-solid) { width: 20px; height: 20px; margin-right: var(--space-2); font-size: var(--cn-type-micro-size); }
-.wordmark.is-sm > svg,
-/* deprecated, removed in 0.5.0 */
-.footer-brand > svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: var(--space-2); color: var(--mauve); }
-.wordmark.is-sm b,
-/* deprecated, removed in 0.5.0 */
-.footer-brand :is(b, em) { color: var(--mauve); font-style: normal; }
+.wordmark.is-lg > .mark { width: 34px; height: 34px; margin-inline-end: var(--space-3); font-size: var(--cn-type-body-size); }
+.wordmark.is-sm { font-size: var(--cn-type-ui-size); font-weight: var(--cn-type-name-weight); }
+.wordmark.is-sm > .mark { width: 20px; height: 20px; margin-inline-end: var(--space-2); font-size: var(--cn-type-micro-size); }
+.wordmark.is-sm > svg { width: 16px; height: 16px; flex: 0 0 auto; margin-inline-end: var(--space-2); color: var(--cn-interactive); }
+.wordmark.is-sm b { color: var(--cn-interactive); font-style: normal; }
 /* The suffix is its own flex item, so the word space comes from a margin. */
-.wordmark.is-sm > b { margin-left: .25em; }
-.wordmark.is-sm > span,
-/* deprecated, removed in 0.5.0 */
-.footer-brand > span { margin-left: var(--space-2); color: var(--overlay-2); font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/1 var(--sans); letter-spacing: normal; }
+.wordmark.is-sm > b { margin-inline-start: .25em; }
+.wordmark.is-sm > span { margin-inline-start: var(--space-2); color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/1 var(--sans); letter-spacing: normal; }
 
 /* Empty state */
 .empty-state {
   min-height: var(--empty-h);
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: var(--space-2);
-  color: var(--overlay-2);
+  color: var(--cn-fg-muted);
   text-align: center;
 }
-.empty-state strong { color: var(--text); font-size: var(--cn-type-body-size); }
+.empty-state strong { color: var(--cn-fg); font-size: var(--cn-type-body-size); }
 .empty-state span { font-size: var(--cn-type-meta-size); }
 /* Fills the pane or drawer it sits in instead of holding the --empty-h floor. */
 .empty-state.is-fill { height: 100%; min-height: 0; padding: var(--space-4); gap: var(--space-1); }
-/* A glyph sits in a carved plate, the same inset as an input. */
+/* The action stands off the copy: 16px on top of the 8px gap is 24px, so
+   the button reads as the next step and not as a third line of text. A
+   filled pane is small, so it adds 8px to its 4px gap. */
+.empty-state > :is(.btn, .btn-text) { margin-top: var(--space-4); }
+.empty-state.is-fill > :is(.btn, .btn-text) { margin-top: var(--space-2); }
+/* A glyph sits in a round carve on the soft inset, the empty-state carve. */
 .empty-state > svg {
   width: 56px;
   height: 56px;
   padding: var(--space-4);
   margin-bottom: var(--space-1);
-  color: var(--overlay-1);
+  color: var(--cn-fg-faint);
   border-radius: 50%;
   box-shadow: var(--neu-inset-soft);
 }
@@ -236,9 +308,7 @@
    Compose: class="btn btn-primary". All labels sans; heights from the
    density knobs. Modifiers: is-sm, is-lg, is-icon, and is-dashed on ghost. */
 
-.btn,
-/* deprecated, removed in 0.5.0 */
-.btn-flat, .btn-icon, .btn-dashed {
+.btn {
   /* Neutral base so a variant-less .btn never shows UA button chrome.
      text-decoration covers anchor buttons. */
   color: inherit;
@@ -260,42 +330,37 @@
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast), --cn-fill var(--t-fast);
 }
 /* Down is crisp on the fast-out; up comes back on the spring. */
-.btn:active:not(:disabled),
-/* deprecated, removed in 0.5.0 */
-:is(.btn-flat, .btn-icon, .btn-dashed):active:not(:disabled) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
-/* Disabled dims and keeps the variant's rest shadow. */
-.btn:disabled,
-/* deprecated, removed in 0.5.0 */
-:is(.btn-flat, .btn-icon, .btn-dashed):disabled { opacity: var(--disabled-opacity); cursor: not-allowed; }
+.btn:active:not(:disabled, [aria-disabled="true"]) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
+/* Disabled dims. A plate says "press me", so no disabled button keeps
+   one: the secondary drops to a flat sunken slab and the primary sinks
+   (both below). aria-disabled="true"
+   looks the same but stays focusable, so a [data-tip] on it can say why
+   the action is unavailable. The consumer ignores its clicks. */
+.btn:is(:disabled, [aria-disabled="true"]) { opacity: var(--disabled-opacity); cursor: not-allowed; }
 /* Sizes. Small is the toolbar height; large is the one hero action. */
-.btn.is-sm,
-/* deprecated, removed in 0.5.0 */
-.btn-flat { min-height: var(--control-h-sm); padding: 0 var(--space-3); font-size: var(--cn-type-label-size); }
+.btn.is-sm { min-height: var(--control-h-sm); padding: 0 var(--space-3); font-size: var(--cn-type-label-size); }
 .btn.is-lg { min-height: calc(var(--control-h) + var(--space-3)); padding: 0 var(--space-5); gap: var(--space-3); font-size: var(--cn-type-body-size); }
 /* An icon inside a button is sized by the button, never by hand. */
-.btn > svg,
-/* deprecated, removed in 0.5.0 */
-:is(.btn-flat, .btn-icon, .btn-dashed) > svg { width: 16px; height: 16px; flex: 0 0 auto; }
-.btn.is-sm > svg,
-/* deprecated, removed in 0.5.0 */
-.btn-flat > svg { width: 14px; height: 14px; }
+.btn > svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.btn.is-sm > svg { width: 14px; height: 14px; }
 .btn.is-lg > svg { width: 18px; height: 18px; }
 
 /* ── Hard-offset press ──────────────────────────────────────────────────────
    One rule for every control that rests on a plate: hover lifts 1px, held
    half-slides onto the plate, which shrinks to meet it. --hard-extra holds
    shadow layers a recipe draws over the plate (the primary gloss). The
-   .cn-pressable-slide utility draws the same press. */
+   .cn-pressable-slide utility draws the same press, and a link or button
+   chip repeats it after its own recipe. */
 :is(.btn-primary, .btn-secondary, .segmented > *, .accent-card) {
-  --hard-extra: 0 0 transparent;
-  box-shadow: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust))), var(--hard-extra);
+  --hard-extra: var(--cn-lit-edge);
+  box-shadow: var(--cn-plate), var(--hard-extra);
 }
-:is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:disabled),
+:is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:disabled, [aria-disabled="true"]),
 a:hover > .accent-card { transform: translate(-1px, -1px); }
-:is(.btn-primary, .btn-secondary, .segmented > *):active:not(:disabled),
+:is(.btn-primary, .btn-secondary, .segmented > *):active:not(:disabled, [aria-disabled="true"]),
 a:active > .accent-card {
   transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: calc(var(--hard-offset) / 2) calc(var(--hard-offset) / 2) 0 var(--plate, var(--hard-offset-color, var(--crust))), var(--hard-extra);
+  box-shadow: var(--cn-plate-half), var(--hard-extra);
   transition-timing-function: var(--ease-out);
   transition-duration: var(--t-press);
 }
@@ -304,27 +369,47 @@ a:active > .accent-card {
    surface. The gloss is a white rim on top and a crust shade underneath.
    The ramp runs under the border, so the border stays transparent. */
 .btn-primary {
-  --cn-fill: var(--mauve);
-  --plate: color-mix(in srgb, var(--mauve) 25%, var(--surface-0));
-  --hard-extra: inset 0 1px rgb(255 255 255 / .3), inset 0 -2px color-mix(in srgb, var(--crust) 22%, transparent);
-  color: var(--crust);
+  --cn-fill: var(--cn-interactive);
+  --plate: color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), var(--surface-0));
+  --hard-extra: var(--cn-primary-rim);
+  color: var(--cn-fg-on-accent);
   border: 1px solid transparent;
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
   background-origin: border-box;
 }
-.btn-primary:hover:not(:disabled) { --cn-fill: var(--pink); }
+.btn-primary:hover:not(:disabled, [aria-disabled="true"]) { --cn-fill: var(--cn-interactive-hover); }
+/* Disabled primary goes flat and sinks: no plate, ramp, grain or gloss,
+   no edge, just the sunken fill under the soft carve and the well ring,
+   the quiet even dark hairline painted over the carve, like an empty
+   slot pressed into the page. The carve is --neu-inset-soft,
+   the depth of a disabled field, so it stays shallower than any press and
+   never reads as a held or engaged button. A disabled secondary is a flat
+   sunken slab with no carve and no ring, so the two never share a silhouette. The border stays 1px
+   and transparent so the size holds. Darkness only, no lip. The disabled
+   text color, and no dimming: a dimmed plate reads as a second primary
+   beside the live one. A busy primary keeps its fill. */
+.btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
+  --cn-fill: var(--cn-surface-sunken);
+  --hard-extra: none;
+  color: var(--cn-fg-disabled);
+  border: 1px solid transparent;
+  background-image: none;
+  box-shadow: var(--cn-well-ring), var(--neu-inset-soft);
+  opacity: 1;
+}
+.btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"])::before { opacity: 0; }
 
 /* ── Fill grain ─────────────────────────────────────────────────────────────
    Solid accent fills carry film grain in a layer under their content. It
    is densest at the bottom right, away from the light, and gone before the
    top left. --grain sets the strength. The switch paddle is already a
    pseudo-element, so it takes the ramp without grain. */
-:is(.btn-primary, .checkbox:checked, .mark, .progress-track span) {
+:is(.btn-primary, .checkbox:is(:checked, :indeterminate), .mark, .progress-track span) {
   position: relative;
   isolation: isolate;
 }
-:is(.btn-primary, .checkbox:checked, .mark, .progress-track span)::before {
+:is(.btn-primary, .checkbox:is(:checked, :indeterminate), .mark, .progress-track span)::before {
   content: "";
   position: absolute;
   inset: -1px;
@@ -338,102 +423,105 @@ a:active > .accent-card {
 }
 .progress-track span::before { inset: 0; }
 
-/* Secondary: base fill on the crust plate, the default for clickables. */
+/* Secondary: base fill on the ink plate, the default for clickables.
+   Hover keeps the base fill, since nothing raised is lighter than base.
+   The border warms toward mauve and the plate deepens 1px under the lift. */
 .btn-secondary {
-  color: var(--text);
+  color: var(--cn-fg);
   border: 1px solid var(--edge);
-  background: var(--base);
+  background: var(--cn-surface-raised);
 }
-.btn-secondary:hover:not(:disabled) { border-color: color-mix(in srgb, var(--mauve) 50%, var(--surface-1)); }
+.btn-secondary:hover:not(:disabled, [aria-disabled="true"]) {
+  border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-strong), var(--surface-1));
+}
+.btn-secondary:hover:not(:active, :disabled, [aria-disabled="true"]) {
+  box-shadow: var(--cn-plate-hover), var(--hard-extra);
+}
+/* Disabled, the plate, the lit edge and the outline go and the fill drops
+   to the sunken fill: a flat dark slab, darker than the panel under it,
+   with no carve and no ring. The border stays 1px and transparent so the
+   size holds. A resting ghost is an outline with no fill and the disabled
+   primary is the only carved one, so the three never share a silhouette.
+   A busy secondary keeps its plate, since the action is running. */
+.btn-secondary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
+  border-color: transparent;
+  background: var(--cn-surface-sunken);
+  box-shadow: none;
+}
 
-/* Ghost: chrome-free until hovered. Toggled or current, it wears the
-   engaged state: pressed in on the mauve wash, borderless. */
-.btn-ghost,
-/* deprecated, removed in 0.5.0 */
-.btn-flat, .btn-dashed {
-  color: var(--subtext-0);
+/* Ghost: no fill and no plate. At rest it has the --edge-soft hairline,
+   1.22:1 on a panel, so "Discard" beside "Save changes" reads as a control
+   and not a bold label; hover steps the edge up to --edge. In the topbar
+   nav and as an icon button it stays edge-free, so a nav row or an icon
+   toolbar is not a row of boxes. :where() keeps the rule as light as
+   .btn-ghost, so hover, engaged and dashed still win. Toggled or current,
+   it wears the engaged state: pressed in on the mauve wash inside the
+   engaged rim. */
+.btn-ghost {
+  color: var(--cn-fg-body);
   border: 1px solid transparent;
   background: transparent;
 }
-.btn-ghost:hover:not(:disabled),
-/* deprecated, removed in 0.5.0 */
-.btn-flat:hover:not(:disabled) {
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface-0) 40%, transparent);
+.btn-ghost:where(:not(.is-icon, .topbar nav *)) { border-color: var(--edge-soft); }
+/* An engaged ghost keeps its wash and rim under the pointer. */
+.btn-ghost:hover:not(:disabled, [aria-disabled="true"], [aria-pressed="true"], [aria-current], [aria-expanded="true"]) {
+  color: var(--cn-fg);
+  border-color: var(--edge);
+  background: var(--hover);
 }
-.btn-ghost:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
+.btn-ghost:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 /* Danger ghost: a destructive action in a toolbar or menu. */
 /* Three classes, so it beats the icon button's overlay-1 rest color. */
-.btn.btn-ghost.is-danger { --tone: var(--red); color: var(--red); }
-.btn-ghost.is-danger:hover:not(:disabled) { color: var(--red); background: color-mix(in srgb, var(--red) 9%, transparent); }
-.btn-ghost:is([aria-pressed="true"], [aria-current]),
-/* deprecated, removed in 0.5.0 */
-.btn-flat:is([aria-pressed="true"], [aria-current], .active) {
+.btn.btn-ghost.is-danger { --tone: var(--cn-danger); color: var(--cn-danger); }
+.btn-ghost.is-danger:hover:not(:disabled, [aria-disabled="true"]) { color: var(--cn-danger); background: var(--cn-danger-wash); }
+.btn-ghost:is([aria-pressed="true"], [aria-current], [aria-expanded="true"]) {
   transform: translateY(1px);
-  color: var(--text);
+  color: var(--cn-fg);
+  border-color: var(--engaged-edge);
   background: var(--wash);
   box-shadow: var(--neu-inset);
 }
 
-/* Dashed ghost: the only dashed border in the system. An open slot of a
-   control (drop zones, placeholder rows, optional extras). */
-.btn-ghost.is-dashed,
-/* deprecated, removed in 0.5.0 */
-.btn-dashed {
+/* Dashed ghost: an open slot (drop zones, placeholder rows, optional
+   extras). Dashed means an open slot and nothing else. */
+.btn-ghost.is-dashed {
   border: 1px dashed var(--surface-1);
   border-radius: var(--cn-radius-card);
   background: color-mix(in srgb, var(--surface-0) 16%, transparent);
 }
-.btn-ghost.is-dashed:hover:not(:disabled),
-/* deprecated, removed in 0.5.0 */
-.btn-dashed:hover:not(:disabled) {
-  color: var(--mauve);
-  border-color: var(--mauve);
-  background: color-mix(in srgb, var(--mauve) 7%, transparent);
+.btn-ghost.is-dashed:hover:not(:disabled, [aria-disabled="true"]) {
+  color: var(--cn-interactive);
+  border-color: var(--cn-interactive);
+  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-wash), transparent);
 }
-/* deprecated, removed in 0.5.0 */
-.btn-dashed { display: flex; min-height: calc(var(--control-h) + var(--space-4)); font-weight: var(--cn-type-ui-weight); }
-/* deprecated, removed in 0.5.0 */
-.btn-dashed:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
 /* Icon button: a square at the small height, flat until hovered, then
-   tinted toward its --tone. */
-.btn.is-icon,
-/* deprecated, removed in 0.5.0 */
-.btn-icon {
+   tinted toward its --tone. A plated icon button, btn-secondary is-icon,
+   keeps the secondary's ink, hover and plate press, for an icon that sits
+   beside plated buttons. */
+.btn.is-icon {
   width: var(--control-h-sm);
   height: var(--control-h-sm);
   min-height: var(--control-h-sm);
   padding: 0;
-  color: var(--overlay-1);
+  color: var(--cn-fg-muted);
 }
-.btn.is-icon:hover:not(:disabled),
-/* deprecated, removed in 0.5.0 */
-.btn-icon:hover:not(:disabled) {
+.btn-secondary.is-icon { color: var(--cn-fg); }
+.btn.is-icon:not(.btn-secondary):hover:not(:disabled, [aria-disabled="true"]) {
   color: var(--tone);
-  border-color: color-mix(in srgb, var(--tone) 38%, transparent);
-  background: color-mix(in srgb, var(--tone) 9%, transparent);
+  border-color: var(--tone-edge);
+  background: var(--tone-wash);
 }
-.btn.is-icon:active:not(:disabled),
-/* deprecated, removed in 0.5.0 */
-.btn-icon:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
-.btn.is-icon.is-lg,
-/* deprecated, removed in 0.5.0 */
-.btn-icon.is-lg { width: var(--control-h); height: var(--control-h); min-height: var(--control-h); }
-.btn.is-icon.is-lg > svg,
-/* deprecated, removed in 0.5.0 */
-.btn-icon.is-lg > svg { width: 20px; height: 20px; }
-/* deprecated, removed in 0.5.0 */
-.btn-icon { display: grid; place-items: center; }
-/* deprecated, removed in 0.5.0 */
-.btn-icon.is-sm { width: 28px; height: 28px; min-height: 28px; }
-/* deprecated, removed in 0.5.0 */
-.btn-icon.is-sm > svg { width: 14px; height: 14px; }
+.btn.is-icon:not(.btn-secondary):active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
+.btn.is-icon.is-lg { width: var(--control-h); height: var(--control-h); min-height: var(--control-h); }
+.btn.is-icon.is-lg > svg { width: 20px; height: 20px; }
 
-/* Inline text button: mauve, sans, no chrome. */
+/* Inline text button: mauve, sans, no chrome. No padding, so a button
+   and an anchor both sit flush with the content edge of the row above. */
 .btn-text {
+  padding: 0;
   text-decoration: none;
-  color: var(--mauve);
+  color: var(--cn-interactive);
   border: 0;
   border-radius: var(--cn-radius-control); /* the focus ring traces this */
   background: transparent;
@@ -441,37 +529,71 @@ a:active > .accent-card {
   cursor: pointer;
   transition: color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.btn-text:hover:not(:disabled) { color: var(--pink); }
-.btn-text:active:not(:disabled) { transform: translateY(1px); }
+.btn-text:hover:not(:disabled, [aria-disabled="true"]) { color: var(--cn-interactive-hover); }
+.btn-text:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); }
 .btn-text > svg { width: 13px; height: 13px; flex: 0 0 auto; vertical-align: -2px; }
+
+/* Busy: aria-busy="true" while the action runs. The label goes clear so
+   the button keeps its width, a spinner turns in its place, and clicks
+   stop. The button stays focusable and keeps its name, so a screen reader
+   still knows what is running. Pair it with aria-disabled, not disabled,
+   which would drop focus mid-action. */
+.btn[aria-busy="true"] {
+  position: relative;
+  color: transparent;
+  cursor: progress;
+  pointer-events: none;
+}
+.btn[aria-busy="true"] > svg { visibility: hidden; }
+.btn[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border: 2px solid var(--btn-busy-ring, var(--edge));
+  border-top-color: var(--btn-busy-ink, var(--cn-fg));
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+.btn-primary[aria-busy="true"] { --btn-busy-ink: var(--cn-fg-on-accent); --btn-busy-ring: color-mix(in srgb, var(--cn-fg-on-accent) 25%, transparent); }
+.btn.is-sm[aria-busy="true"]::after { width: 14px; height: 14px; }
 
 /* ── Inputs ─────────────────────────────────────────────────────────────── */
 
 .field label {
   display: block;
   margin: 0 0 var(--space-2) 1px;
-  color: var(--overlay-2);
+  color: var(--cn-fg-soft);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   letter-spacing: var(--cn-type-label-tracking);
 }
 
 /* Borderless inset well, carved from whatever surface it sits on: the
    background stays transparent so the parent ground shows through and only
-   the inner shadow defines the field. Sans face; numbers stay tabular.
-   A plain list, not :is(), so .input-lg (0,1,0) can still override it. */
+   the dark inner wall defines the field. A sunken fill was tried and
+   dropped: at 1x it flattened the carve into a dark box. At rest it has
+   a quiet even hairline, surface-2 at 85%, 2.1:1 on a panel, the same on
+   all four sides, so its bounds show without a lip. The ring is listed first,
+   so it paints over the carve: under it, the dark wall dimmed the top and
+   left and left the bottom and right brighter. Hover closes a 3:1 ring
+   around it and focus draws the focus ring.
+   Sans face; numbers stay tabular. A plain list, not :is(), so the hero
+   variant below can override it. */
 .input,
 .field input, .field select, .field textarea {
   width: 100%;
   height: var(--control-h);
   padding: 0 var(--space-4);
-  color: var(--text);
+  color: var(--cn-fg);
   border: 0;
   border-radius: var(--cn-radius-card);
   background: transparent;
-  box-shadow: var(--neu-inset);
+  box-shadow: var(--cn-field-ring), var(--neu-inset);
   font-family: var(--sans);
   font-size: var(--cn-type-ui-size);
-  font-weight: var(--cn-type-meta-weight);
+  font-weight: var(--cn-type-label-weight);
   letter-spacing: normal;
   text-transform: none;
   font-variant-numeric: tabular-nums;
@@ -483,56 +605,143 @@ a:active > .accent-card {
   padding: var(--space-3) var(--space-4);
   resize: vertical;
 }
-/* overlay-1, not overlay-0: inside the carve the top-left of the well is
-   darker than base, so overlay-0 falls under 3:1 there. */
-:is(.input, .field :is(input, textarea))::placeholder { color: var(--overlay-1); }
-/* The ring layers over the inset and is the focus indicator, so the global
-   :focus-visible outline goes transparent (text fields match it on pointer
-   focus too). */
-:is(.input, .field :is(input, select, textarea)):focus { box-shadow: var(--neu-inset), 0 0 0 2px var(--mauve); }
-:is(.input, .field :is(input, select, textarea)):focus-visible { outline: 2px solid transparent; }
-/* Helper or message line inside a field. Tints with the state. */
+/* --cn-fg-placeholder, overlay-2 and the text floor: 5.8:1 on a panel,
+   6.2:1 on the page and 4.6:1 in a dialog, so a placeholder clears 4.5:1
+   wherever forms sit. The value is --cn-fg, so the two never read alike. */
+:is(.input, .field :is(input, textarea))::placeholder { color: var(--cn-fg-placeholder); }
+/* Fields take the global ring on pointer focus too, since typing follows
+   either way. The ring is the one focus shape: 2px of --cn-focus standing
+   3px off the edge, where the engaged rim is 1px on the edge. */
+:is(.input, .field :is(input, select, textarea)):focus { outline: 2px solid var(--cn-focus); outline-offset: 3px; }
+/* Hover closes the ring, so a field shows 3:1 bounds under the pointer.
+   It swaps the ring token rather than the shadow, so a validation ring,
+   a disabled field and a read-only rule keep their own shadow. A focused
+   field skips the swap and keeps its resting hairline, so the focus ring
+   is the only bright ring around it. */
+:is(.input, .field :is(input, select, textarea)):hover:not(:disabled, :focus) { --cn-field-ring: var(--cn-field-hover-ring); }
+/* iOS Safari zooms the page when a focused field's text is under 16px, so
+   touch fields set 16px. A literal 1rem, not the body role, because
+   compact density steps body to 15px. The 46px coarse control height
+   holds it. The table-cell selector outranks the cell's own size. */
+@media (pointer: coarse) {
+  .input,
+  .field input, .field select, .field textarea,
+  .data-table td .input { font-size: 1rem; }
+}
+/* Helper or message line inside a field. */
 .field small {
   display: block;
   margin: var(--space-1) 1px 0;
-  color: var(--overlay-2);
+  color: var(--cn-fg-muted);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 /* Validation keys on aria-invalid="true" (error) or .is-warning. The state
-   sets --tone and washes the well in its 4% tint; the carve and the focus
-   ring stay. */
-.field:has([aria-invalid="true"]), .input[aria-invalid="true"],
-/* deprecated, removed in 0.5.0 */
-.field.is-error, .input.is-error { --tone: var(--red); }
-.field.is-warning, .input.is-warning { --tone: var(--peach); }
+   sets --tone, washes the well in its 4% tint, and draws a full ring in
+   the tone, so the field itself changes. The message is a
+   sentence, so it moves up to body text and only its leading glyph takes
+   the tone, as on a banner. The label keeps its color. The carve and the
+   focus ring stay. */
+.field:has([aria-invalid="true"]), .input[aria-invalid="true"] { --tone: var(--cn-danger); }
+.field.is-warning, .input.is-warning { --tone: var(--cn-warning); }
 :is(.field:has([aria-invalid="true"]), .field.is-warning) :is(input, select, textarea),
-.input:is([aria-invalid="true"], .is-warning),
-/* deprecated, removed in 0.5.0 */
-.field.is-error :is(input, select, textarea), .input.is-error {
-  background: var(--tint);
+.input:is([aria-invalid="true"], .is-warning) {
+  /* background-color, not the shorthand, so an invalid select keeps its
+     chevron. */
+  background-color: var(--tint);
+  box-shadow: var(--cn-validation-ring), var(--neu-inset);
 }
-:is(.field:has([aria-invalid="true"]), .field.is-warning) :is(label, small),
-/* deprecated, removed in 0.5.0 */
-.field.is-error :is(label, small) { color: var(--tone); }
+:is(.field:has([aria-invalid="true"]), .field.is-warning) small { color: var(--cn-fg-body); }
+.field:has([aria-invalid="true"]) { --cn-glyph: var(--cn-glyph-danger); }
+.field.is-warning { --cn-glyph: var(--cn-glyph-warning); }
+:is(.field:has([aria-invalid="true"]), .field.is-warning) small::before {
+  content: "";
+  display: inline-block;
+  inline-size: 12px;
+  block-size: 12px;
+  margin-inline-end: var(--space-1);
+  vertical-align: -1px;
+  background: var(--tone);
+  mask: var(--cn-glyph) center / contain no-repeat;
+}
 
-/* Disabled fields flatten: the carve nearly fills in, text dims, no caret. */
+/* Disabled fields flatten: the carve nearly fills in and the text drops
+   to the disabled color, 4.4:1, with no opacity on top. */
 :is(.input, .field :is(input, select, textarea)):disabled {
-  color: var(--overlay-0);
-  opacity: var(--disabled-opacity);
-  box-shadow: var(--neu-inset-soft);
+  color: var(--cn-fg-disabled);
+  box-shadow: var(--cn-carve-ring), var(--neu-inset-soft);
   cursor: not-allowed;
 }
+:is(.input, .field :is(input, textarea)):disabled::placeholder { color: var(--cn-fg-disabled); }
+/* Read-only: the value can be selected and copied, not changed. It reads
+   as printed text: no carve, no fill, a rule underneath, so an
+   editable field is the only thing that looks cut in. Focus still rings it. */
+:is(.input, .field :is(input, textarea))[readonly] {
+  color: var(--cn-fg-soft);
+  background: transparent;
+  box-shadow: var(--cn-readonly-rule);
+  border-radius: 0;
+  cursor: default;
+}
+/* The ring follows border-radius, so a focused read-only field takes the
+   control radius back and rings like every other field. */
+:is(.input, .field :is(input, textarea))[readonly]:focus { border-radius: var(--cn-radius-control); }
+.field:has(:disabled) label { color: var(--cn-fg-disabled); }
 /* Selects read as dropdowns: a chevron glyph (overlay-1, a palette hex, as
    data URIs can't read custom properties) sits in the trailing padding. */
 :is(select.input, .field select) {
   appearance: none;
-  padding-right: calc(var(--space-6) + var(--space-2));
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  padding-inline-end: calc(var(--space-6) + var(--space-2));
+  background-image: var(--cn-chevron-image);
   background-repeat: no-repeat;
   background-position: right var(--space-3) center;
   background-size: 15px;
   cursor: pointer;
 }
+/* A combobox is a text field that opens a listbox: the field carve and
+   its states, with the select's chevron in the trailing padding. */
+:is(.input, .field input)[role="combobox"] {
+  padding-inline-end: calc(var(--space-6) + var(--space-2));
+  background-image: var(--cn-chevron-image);
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: 15px;
+}
+/* Date fields keep the field carve and every field state as they are;
+   the picker glyph takes the overlay-1 icon color. */
+:is(.input, .field input):is([type="date"], [type="datetime-local"], [type="month"], [type="week"])::-webkit-calendar-picker-indicator {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  background: var(--cn-calendar-image) center / contain no-repeat;
+  cursor: pointer;
+}
+/* A file field: the field carve holds a small secondary-shaped button,
+   the raised fill, the --edge hairline, the lit edge and a 3px ink plate,
+   inset evenly from the carve's edge. The field's hover, focus, disabled
+   and invalid states apply to the whole field. */
+:is(.input, .field input)[type="file"] {
+  padding-block: calc((var(--control-h) - var(--control-h-sm)) / 2);
+  padding-inline-start: calc((var(--control-h) - var(--control-h-sm)) / 2);
+  color: var(--cn-fg-soft);
+  line-height: var(--control-h-sm);
+  cursor: pointer;
+}
+:is(.input, .field input)[type="file"]::file-selector-button {
+  height: var(--control-h-sm);
+  margin-inline-end: var(--space-3);
+  padding: 0 var(--space-3);
+  color: var(--cn-fg);
+  border: 1px solid var(--edge);
+  border-radius: var(--cn-radius-control);
+  background: var(--cn-surface-raised);
+  box-shadow: var(--cn-plate-sm), var(--cn-lit-edge);
+  font: var(--cn-type-ui-weight) var(--cn-type-label-size)/1 var(--sans);
+  cursor: pointer;
+  transition: border-color var(--t-fast), translate var(--t-press) var(--ease-out), box-shadow var(--t-press) var(--ease-out);
+}
+:is(.input, .field input)[type="file"]:hover:not(:disabled)::file-selector-button { border-color: var(--control-edge); }
+:is(.input, .field input)[type="file"]:active:not(:disabled)::file-selector-button { translate: 1px 1px; box-shadow: var(--cn-plate-half), var(--cn-lit-edge); }
+:is(.input, .field input)[type="file"]:disabled::file-selector-button { color: var(--cn-fg-disabled); border-color: var(--edge-soft); box-shadow: none; cursor: not-allowed; }
 
 /* Where the browser supports customizable selects (Chrome 135+), the OS
    option list becomes a system popover. Elsewhere the native picker stays. */
@@ -546,9 +755,9 @@ a:active > .accent-card {
   :is(select.input, .field select)::picker(select) {
     margin-top: var(--space-1);
     padding: var(--space-1);
-    border: 1px solid var(--surface-1);
+    border: 1px solid var(--edge-strong);
     border-radius: var(--cn-radius-card);
-    background: var(--base);
+    background: var(--cn-surface-overlay);
     box-shadow: var(--shadow-pop);
     opacity: 1;
     transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out), display var(--t-fast) allow-discrete, overlay var(--t-fast) allow-discrete;
@@ -559,17 +768,20 @@ a:active > .accent-card {
   :is(select.input, .field select) option {
     padding: var(--space-2) var(--space-3);
     border-radius: var(--cn-radius-control);
-    color: var(--subtext-1);
+    color: var(--cn-fg-soft);
     background: transparent;
-    font: var(--cn-type-meta-weight) var(--cn-type-ui-size) var(--sans);
+    font: var(--cn-type-label-weight) var(--cn-type-ui-size) var(--sans);
   }
+  /* Hover lights an option the way it lights a menu row; the checked
+     option wears the engaged wash, so it outranks the hovered one. */
   :is(select.input, .field select) option:is(:hover, :focus-visible) {
-    color: var(--text);
-    background: var(--wash);
+    color: var(--cn-fg);
+    background: var(--hover);
     outline: 2px solid transparent;
   }
-  :is(select.input, .field select) option:checked { color: var(--mauve); font-weight: var(--cn-type-name-weight); }
-  :is(select.input, .field select) option::checkmark { color: var(--mauve); }
+  :is(select.input, .field select) option:focus-visible { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
+  :is(select.input, .field select) option:checked { color: var(--cn-interactive); background: var(--wash); font-weight: var(--cn-type-name-weight); }
+  :is(select.input, .field select) option::checkmark { color: var(--cn-interactive); }
 }
 
 /* Tooltip: a popover-styled bubble from a data-tip attribute. Use this, not
@@ -577,6 +789,9 @@ a:active > .accent-card {
 [data-tip] { position: relative; }
 [data-tip]::after {
   content: attr(data-tip);
+  /* Empty alt text keeps the tip out of the element's accessible name.
+     Carry the same words in aria-describedby or aria-label. */
+  content: attr(data-tip) / "";
   position: absolute;
   bottom: calc(100% + var(--space-2));
   left: 50%;
@@ -585,28 +800,38 @@ a:active > .accent-card {
   width: max-content;
   max-width: 240px;
   padding: var(--space-2) var(--space-3);
-  color: var(--subtext-1);
-  border: 1px solid var(--surface-1);
+  color: var(--cn-fg-soft);
+  border: 1px solid var(--edge-strong);
   border-radius: var(--cn-radius-control);
-  background: var(--base);
+  background: var(--cn-surface-overlay);
   box-shadow: var(--shadow-pop);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
   letter-spacing: normal;
   text-transform: none;
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
-  /* Rests 2px low; rises into place. */
+  /* Rests 2px low; rises into place. Hidden, it takes no pointer, since
+     visibility drops hit testing. On leave it lingers for --t-slow before
+     fading, so the pointer can cross the gap onto the bubble, which is part
+     of the element and keeps it hovered (WCAG 1.4.13, hoverable). */
   translate: -50% 2px;
-  transition: opacity var(--t-fast) var(--ease-out), translate var(--t-fast) var(--ease-out), visibility var(--t-fast);
+  transition: opacity var(--t-fast) var(--ease-out) var(--t-slow), translate var(--t-fast) var(--ease-out) var(--t-slow), visibility 0s var(--ease-out) calc(var(--t-slow) + var(--t-fast));
 }
 /* A tooltip waits .4s (slow + press) so a pointer crossing a toolbar
-   doesn't fire a row of them. It leaves at once. */
-[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: calc(var(--t-slow) + var(--t-press)); }
+   doesn't fire a row of them. It also shows while a control inside the
+   wrapper has keyboard focus. */
+[data-tip]:is(:hover, :focus-visible, :has(:focus-visible))::after { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: calc(var(--t-slow) + var(--t-press)); }
+/* Escape and dismissal hide it at once. */
+/* Escape dismisses it (WCAG 1.4.13). The SPEC listener sets
+   data-tip-dismissed on Escape and clears it when the pointer or focus
+   leaves. A touch screen has no hover, so a tip is never the only place
+   a fact lives. */
+[data-tip][data-tip-dismissed]::after { opacity: 0; visibility: hidden; transition-delay: 0s; }
 
-/* Hero variant: the one oversized input on a page. */
-.input-lg {
-  height: 58px;
+/* Hero variant: the one oversized input on a page. Compounded with the
+   base selectors, so it also wins inside a .field. */
+:is(.input, .field input).input-lg {
+  height: calc(var(--control-h) + var(--space-3));
   padding: 0 var(--space-4);
   border-radius: var(--cn-radius-card);
   font-size: var(--cn-type-lede-size);
@@ -620,14 +845,14 @@ a:active > .accent-card {
   left: var(--space-4);
   width: 18px;
   height: 18px;
-  color: var(--overlay-1);
+  color: var(--cn-fg-faint);
   transform: translateY(-50%);
   pointer-events: none;
 }
-.input-icon .input, .input-icon input { padding-left: calc(var(--space-6) + var(--space-3)); }
+.input-icon .input, .input-icon input { padding-inline-start: calc(var(--space-6) + var(--space-3)); }
 
 /* ── Segmented / preset control ─────────────────────────────────────────────
-   Options rest on the plate and take the hard-offset press; selected, they
+   Options rest on the plate and take the hard-offset press; chosen, they
    press in (engaged). Height tracks the density knob (46+12 = 58px).       */
 
 .segmented {
@@ -642,32 +867,45 @@ a:active > .accent-card {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--subtext-0);
-  border: 1px solid color-mix(in srgb, var(--surface-2) 36%, transparent);
+  color: var(--cn-fg-body);
+  border: 1px solid var(--edge);
   border-radius: var(--cn-radius-control);
-  background: var(--base);
-  text-align: left;
+  background: var(--cn-surface-raised);
+  text-align: start;
   cursor: pointer;
   transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
-.segmented > *:hover { border-color: color-mix(in srgb, var(--mauve) 34%, var(--surface-1)); }
-/* Selected: the engaged treatment: pressed in, mauve-keyed, borderless. */
+.segmented > *:hover { border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-edge), var(--surface-1)); }
+/* A disabled option matches the disabled secondary: dimmed, no plate, no
+   outline, the flat sunken fill. A chosen option that is disabled keeps
+   the engaged carve below and only dims. */
+.segmented > :is(:disabled, [aria-disabled="true"]) {
+  opacity: var(--disabled-opacity);
+  border-color: transparent;
+  background: var(--cn-surface-sunken);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+/* Chosen: the engaged state, pressed in on the wash, in a mauve rim. */
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]),
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]):hover,
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]):active {
   transform: translateY(1px);
-  color: var(--text);
-  border-color: transparent;
+  color: var(--cn-fg);
+  border-color: var(--engaged-edge);
   background: var(--wash);
   box-shadow: var(--neu-inset);
 }
 .segmented b { font-family: var(--sans); font-size: var(--cn-type-name-size); font-weight: var(--cn-type-name-weight); }
-.segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) b { color: var(--mauve); }
+.segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) b { color: var(--cn-interactive); }
 .segmented > * > svg { width: 16px; height: 16px; flex: 0 0 auto; }
-.segmented small { color: var(--overlay-2); font-size: var(--cn-type-meta-size); }
+.segmented small { color: var(--cn-fg-muted); font-size: var(--cn-type-meta-size); }
+/* On the chosen option's wash the hint steps to --cn-fg-soft, 5.68:1,
+   since --cn-fg-muted is 4.52:1 there. */
+.segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) small { color: var(--cn-fg-soft); }
 .segmented label:has(input:focus-visible) {
-  outline: 2px solid var(--mauve);
+  outline: 2px solid var(--cn-focus);
   outline-offset: 3px;
 }
 
@@ -691,30 +929,28 @@ a:active > .accent-card {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--overlay-2);
+  color: var(--cn-fg-muted);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--crust) 38%, var(--mantle));
+  background: var(--cn-surface-sunken);
   box-shadow: var(--neu-inset-soft);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 .stepper > .active,
 .stepper > [aria-current="step"] {
-  color: var(--mauve);
-  background: color-mix(in srgb, var(--mauve) 8%, transparent);
+  color: var(--cn-interactive);
+  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-wash), transparent);
 }
-.stepper > .is-done { color: var(--green); }
+.stepper > .is-done { color: var(--cn-success); }
 
 /* ── Marks, chips, banners ──────────────────────────────────────────────── */
 
 /* Solid accent square: step numbers, ranks, logo tile. Hard highlight edge. */
-.mark,
-/* deprecated, removed in 0.5.0 */
-.mark-solid {
+.mark {
   width: 28px; height: 28px;
   display: inline-grid; place-items: center;
   flex: 0 0 auto;
-  color: var(--crust);
-  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  color: var(--cn-fg-on-accent);
+  border: 1px solid color-mix(in srgb, currentColor var(--cn-step-wash), transparent);
   border-radius: var(--cn-radius-control);
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
@@ -724,52 +960,114 @@ a:active > .accent-card {
   font-variant-numeric: tabular-nums;
 }
 
-/* Outlined pill: version tags, status, stat chips. */
+/* Outlined pill: version tags, status, stat chips. A static chip is a
+   flat label: the base fill and the --edge outline, no shadow, so nothing
+   about it says press. A chip that is a link or a button is a clickable,
+   so it stands on the ink plate under the lit edge, with the shared
+   press. On a chip, raise and plate mean clickable. */
 .chip {
   padding: var(--chip-pad);
   display: inline-flex; align-items: center; gap: var(--space-2);
-  color: var(--overlay-2);
-  border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
+  color: var(--cn-fg-muted);
+  border: 1px solid var(--edge);
   border-radius: 999px;
-  background: var(--base);
-  box-shadow: var(--neu-raised-soft);
+  background: var(--cn-surface-raised);
+  box-shadow: none;
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .chip > svg { width: 14px; height: 14px; flex: 0 0 auto; }
+:is(a, button).chip { text-decoration: none; cursor: pointer; transition: color var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast) var(--ease-spring), transform var(--t-fast) var(--ease-spring); }
+:is(a, button).chip { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
+:is(a, button).chip:hover { color: var(--cn-fg); border-color: var(--control-edge); transform: translate(-1px, -1px); }
+:is(a, button).chip:active {
+  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
+  box-shadow: var(--cn-plate-half), var(--cn-lit-edge);
+  transition-timing-function: var(--ease-out);
+  transition-duration: var(--t-press);
+}
+/* A disabled link or button chip matches the disabled secondary: dimmed,
+   no plate, lit edge or outline, the flat sunken fill, no lift and no
+   press. */
+:is(a, button).chip:is(:disabled, [aria-disabled="true"]) {
+  opacity: var(--disabled-opacity);
+  color: var(--cn-fg-muted);
+  border-color: transparent;
+  background: var(--cn-surface-sunken);
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
 /* Icon-only at any width: the glyph is the chip. Keep an accessible name on
    the element (aria-label, or the label text still in the markup). */
 .chip.is-glyph { padding: var(--space-2); font-size: 0; }
 .chip.is-glyph > svg { width: 16px; height: 16px; }
 
-/* Tinted status tag: pass a semantic color via --tone (.cn-tone-*). The
-   tint keeps its hairline edge. */
-.tag,
-/* deprecated, removed in 0.5.0 */
-.chip-tone {
+/* Status tag: pass a semantic color via --tone (.cn-tone-*). A shallow
+   carve in --tone-wash, no outline: the soft carve is darkness only, so
+   the tag sits just under the surface like a banner, with no lip. The
+   border stays transparent so forced colors still draws one. Tone text on
+   the wash is 5.7:1 (red) to 9.4:1 (yellow) on the page. The wash stays
+   at --cn-step-wash: at --cn-step-engaged, red text on a tag in a popover
+   falls to 3.7:1, under the 4.5:1 a label needs. */
+/* A tone never carries meaning alone: the tag's word states the status.
+   Danger and warning also lead with a glyph; other tones may. */
+.tag {
   padding: var(--space-1);
   display: inline-flex; align-items: center; gap: var(--space-1);
   color: var(--tone);
-  border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
+  border: 1px solid transparent;
   border-radius: var(--cn-radius-chip);
-  background: var(--tint);
+  background: var(--tone-wash);
+  box-shadow: var(--neu-inset-soft);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
+.tag > svg { width: 12px; height: 12px; flex: 0 0 auto; }
+/* Solid tag: the one urgent status in a view, such as Overdue. The tone
+   fills the tag and the word and glyph take --cn-fg-on-accent: crust is
+   8.1:1 on red and 8.9:1 on blue, the two lowest. It is a status mark, not
+   a control, so it has no plate, gloss, grain, carve or raise, and it
+   keeps the tag's size and chip radius. Mauve never fills a tag. */
+.tag.is-solid { color: var(--cn-fg-on-accent); background: var(--tone); box-shadow: none; }
+/* Quiet tag: a row's default or in-progress state, such as Pending. No
+   tone, no fill and no carve: a plain --cn-fg-muted label, 7.4:1 on a
+   panel. It keeps the tag's padding, transparent border and 12px svg, so
+   the word lines up with the filled tags in its column, and a status
+   column holds two fills, the wash and the one solid. It draws no glyph;
+   it may bring an svg. */
+.tag.is-quiet { color: var(--cn-fg-muted); background: transparent; box-shadow: none; }
 
 /* Inline banner: semantic tint band, no card chrome. The tint keeps its
-   hairline edge. */
+   hairline edge. The message is body text at the ui size, 14px at 400 on
+   the meta leading, since it is a sentence; the tone stays on the glyph,
+   the edge and the tint, so a sentence never sets in an accent. */
 .banner {
   padding: var(--space-3) var(--space-4);
   display: flex; align-items: center; gap: var(--space-2);
-  color: var(--tone);
-  border: 1px solid color-mix(in srgb, var(--tone) 25%, var(--surface-0));
+  color: var(--cn-fg-body);
+  border: 1px solid var(--tone-border);
   border-radius: var(--cn-radius-card);
   background: var(--tint);
   box-shadow: var(--neu-inset-soft);
-  font-size: var(--cn-type-meta-size);
+  font-size: var(--cn-type-ui-size);
   line-height: var(--cn-type-meta-leading);
 }
+.banner > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--tone); }
+/* Status glyph: a .cn-tone-danger, -warning, -success or -info tag or
+   banner with no svg of its own draws the matching --cn-glyph-* first,
+   in its tone. Bring an svg to use a different shape. */
+:is(.tag, .banner):is(.cn-tone-danger, .cn-tone-warning, .cn-tone-success, .cn-tone-info):not(:has(> svg))::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: 12px;
+  block-size: 12px;
+  background: var(--tone);
+  mask: var(--cn-glyph) center / contain no-repeat;
+}
+.banner:is(.cn-tone-danger, .cn-tone-warning, .cn-tone-success, .cn-tone-info):not(:has(> svg))::before { inline-size: 16px; block-size: 16px; }
+/* On a solid tag the glyph takes the label's ink, not the fill's. */
+.tag.is-solid:not(:has(> svg))::before { background: currentColor; }
 
 /* ── Selection controls ─────────────────────────────────────────────────── */
 
@@ -778,16 +1076,23 @@ a:active > .accent-card {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--subtext-1);
-  font: var(--cn-type-meta-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
+  color: var(--cn-fg-soft);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
   cursor: pointer;
 }
-.choice:has(:disabled) { opacity: var(--disabled-opacity); cursor: not-allowed; }
+.choice:has(:disabled) { color: var(--cn-fg-disabled); cursor: not-allowed; }
+/* The control dims itself, so a disabled switch never matches an off one
+   at a glance, inside a .choice or alone. */
+:is(.checkbox, .radio, .switch):disabled { opacity: var(--disabled-opacity); }
+/* A choice in error: aria-invalid on the control, or on a fieldset of
+   them, edges each box in the danger tone. */
+:is(.checkbox, .radio):is([aria-invalid="true"], [aria-invalid="true"] *):not(:checked) { border-color: var(--cn-danger); }
 
 /* Checkbox: an edged well that fills mauve when checked. At 20px the carve
    alone is invisible, so small selection controls keep a hairline. */
 .checkbox {
   appearance: none;
+  margin: 0;
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
@@ -799,34 +1104,51 @@ a:active > .accent-card {
   cursor: pointer;
   transition: background var(--t-fast), box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.checkbox:hover:not(:disabled):not(:checked) { border-color: var(--overlay-1); }
+.checkbox:hover:not(:disabled, [aria-disabled="true"]):not(:checked) { border-color: var(--engaged-edge); }
 /* The box itself presses, like every other control: held, it sinks to the
    full carve. The check then lands on the spring and overshoots a hair. */
-.checkbox:active:not(:disabled),
-.radio:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset); }
+.checkbox:active:not(:disabled, [aria-disabled="true"]),
+.radio:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset); }
 .checkbox::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--crust);
+  background: var(--cn-fg-on-accent);
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / 13px no-repeat;
   opacity: 0;
   transform: scale(.4) rotate(-8deg);
   transition: opacity var(--t-fast), transform var(--t-base) var(--ease-spring);
 }
 .checkbox:checked {
-  --cn-fill: var(--mauve);
+  --cn-fill: var(--cn-interactive);
   border-color: transparent;
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
   background-origin: border-box;
-  box-shadow: var(--neu-inset-soft), inset 0 1px rgb(255 255 255 / .16);
+  box-shadow: var(--neu-inset-soft), var(--cn-gloss-inset);
 }
 .checkbox:checked::after { opacity: 1; transform: none; }
+/* Indeterminate, for a parent row whose children are partly checked: the
+   same fill with a dash. Set it from script (el.indeterminate = true) and
+   keep aria-checked="mixed" on a custom control. */
+.checkbox:indeterminate {
+  --cn-fill: var(--cn-interactive);
+  border-color: transparent;
+  background-color: var(--cn-fill);
+  background-image: var(--cn-fill-ramp);
+  background-origin: border-box;
+  box-shadow: var(--neu-inset-soft), var(--cn-gloss-inset);
+}
+.checkbox:indeterminate::after {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");
+  opacity: 1;
+  transform: none;
+}
 
 /* Radio: same edged well, round, a mauve dot pressed into the center. */
 .radio {
   appearance: none;
+  margin: 0;
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
@@ -839,12 +1161,12 @@ a:active > .accent-card {
   cursor: pointer;
   transition: box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.radio:hover:not(:disabled):not(:checked) { border-color: var(--overlay-1); }
+.radio:hover:not(:disabled, [aria-disabled="true"]):not(:checked) { border-color: var(--engaged-edge); }
 /* Deliberate asymmetry with the checkbox: the checkbox signals with its
    mauve fill and stays on the soft inset; the radio only gets a dot, so it
    leans on the full carve instead. */
 .radio:checked {
-  border-color: color-mix(in srgb, var(--mauve) 55%, var(--surface-1));
+  border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-strong), var(--surface-1));
   box-shadow: var(--neu-inset);
 }
 .radio::after {
@@ -852,9 +1174,9 @@ a:active > .accent-card {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--mauve);
-  /* Halo ring: the .live-dot composite (0 0 0 Npx currentColor-mix). */
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mauve) 13%, transparent);
+  background: var(--cn-interactive);
+  /* Halo ring at --cn-step-wash, the same composite as the .live-dot. */
+  box-shadow: var(--cn-halo-ring);
   opacity: 0;
   transform: scale(.5);
   transition: opacity var(--t-fast), transform var(--t-fast) var(--ease-out);
@@ -863,17 +1185,20 @@ a:active > .accent-card {
 
 /* Switch: an abstract light switch. A carved wall plate holds a raised
    rocker paddle; flipping slides the paddle across, flips its tilt, and
-   lights it mauve with a soft glow. */
+   lights it mauve with a soft glow. The plate takes the sunken fill,
+   1.14:1 under a panel, so the base paddle stands a fill step above its
+   track. The paddle is never lightened. */
 .switch {
   appearance: none;
+  margin: 0;
   width: 50px;
   height: 28px;
   flex: 0 0 auto;
   position: relative;
   border-radius: var(--cn-radius-control);
-  background: transparent;
+  background: var(--cn-surface-sunken);
   /* The inset ring is the plate's 3:1 edge. */
-  box-shadow: var(--neu-inset), inset 0 0 0 1px var(--control-edge);
+  box-shadow: var(--neu-inset), var(--cn-switch-ring);
   cursor: pointer;
   transition: box-shadow var(--t-base) var(--ease-out);
 }
@@ -884,59 +1209,74 @@ a:active > .accent-card {
   left: 3px;
   width: 21px;
   height: 22px;
-  border: 1px solid color-mix(in srgb, var(--surface-2) 42%, transparent);
+  /* The off paddle's 3:1 edge, so off reads apart from disabled. */
+  border: 1px solid var(--control-edge);
   border-radius: var(--cn-radius-chip);
-  background: var(--base);
+  background: var(--cn-surface-raised);
   box-shadow: var(--neu-raised-soft);
   transform: perspective(120px) rotateY(16deg);
   /* The paddle travels on the spring, so it lands at 23px with a bounce. */
   transition: translate var(--t-base) var(--ease-spring), transform var(--t-base) var(--ease-out), background var(--t-base), box-shadow var(--t-base) var(--ease-out), border-color var(--t-base);
 }
 .switch:checked::after {
-  --cn-fill: var(--mauve);
+  --cn-fill: var(--cn-interactive);
   translate: 23px 0;
-  border-color: var(--mauve);
+  border-color: var(--cn-interactive);
   background-color: var(--cn-fill);
-  background-image: var(--cn-fill-ramp);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--mauve) 18%, transparent),
-              inset 0 1px rgb(255 255 255 / .16);
+  /* On carries a mark as well as color and position: a 2x8 crust bar, the
+     "I" of a wall switch. */
+  background-image: linear-gradient(var(--cn-fg-on-accent), var(--cn-fg-on-accent)), var(--cn-fill-ramp);
+  background-size: 2px 8px, auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: var(--cn-switch-glow), var(--cn-gloss-inset);
   transform: perspective(120px) rotateY(-16deg);
 }
-.switch:active:not(:disabled)::after { transform: perspective(120px) rotateY(0deg) scale(.96); }
+.switch:active:not(:disabled, [aria-disabled="true"])::after { transform: perspective(120px) rotateY(0deg) scale(.96); }
 /* Held while on, the glow blooms for the frame the paddle is pressed. */
-.switch:checked:active:not(:disabled)::after {
-  box-shadow: 0 0 12px color-mix(in srgb, var(--mauve) 28%, transparent),
-              inset 0 1px rgb(255 255 255 / .16);
+.switch:checked:active:not(:disabled, [aria-disabled="true"])::after {
+  box-shadow: var(--cn-switch-glow-held), var(--cn-gloss-inset);
 }
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
+/* A disabled switch is off at the wall: the paddle lies flat with no tilt
+   and no raise, plate and paddle drop to the soft --edge, and the plate
+   loses its sunken fill, so it never reads as an off switch you could
+   flip. Disabled boxes take --edge too. */
+.switch:disabled::after { transform: none; box-shadow: none; border-color: var(--edge); }
+.switch:disabled { background: transparent; box-shadow: var(--neu-inset-soft), var(--cn-disabled-ring); }
+:is(.checkbox, .radio):disabled { border-color: var(--edge); }
 
-/* ── Accordion: label + checkbox disclosure ─────────────────────────────────
-   Native details cannot animate its close outside Chromium, so the fold
-   rides grid-template-rows 0fr → 1fr, which transitions everywhere. Markup:
-     <div class="accordion">
-       <label><input type="checkbox">Title</label>
+/* ── Accordion: a disclosure row ────────────────────────────────────────────
+   Use details. It is a real disclosure to assistive tech, takes Enter and
+   Space natively, and name="…" makes an exclusive group with no script:
+     <details class="accordion" name="faq">
+       <summary><b>Title</b></summary>
        <div class="fold"><div>…body…</div></div>
-     </div>
-   Use radios sharing a name for an exclusive-open group; a radio cannot
-   uncheck itself, so a group that must close fully adds the closable
-   listener from SPEC (arm on press, uncheck on the click that follows).
-   Space toggles the focused input; the whole label is the hit target.
-   The sink and the fold animate together, no sequencing. */
+     </details>
+   The fold rides grid-template-rows 0fr → 1fr, which transitions in every
+   browser; where ::details-content is missing, the close is instant.
+   The older label form still works: a label holding a hidden checkbox or
+   radio, a div.accordion, and the same fold. It needs the SPEC listeners
+   for Enter and for closing a radio. The sink and the fold animate
+   together, no sequencing. */
 .accordion {
-  border-bottom: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+  border-bottom: 1px solid var(--edge-soft);
   transition: box-shadow var(--t-base) var(--ease-out), border-color var(--t-base), border-radius var(--t-base);
 }
-/* Open is the engaged treatment: the full carve and the mauve wash, the
-   same state a toggled flat button wears. */
-.accordion:is(:has(> label > input:checked), .is-open, [data-open]) {
+/* Open is its own step, the open carve: the full carve, a mauve tint at
+   --cn-step-tint over whatever holds it and a mauve title. It is not the
+   engaged state. The engaged --wash would drop body text in the fold to
+   5.7:1, under the 7:1 body floor, so the open row stays near its own
+   ground, and on the mantle page it never turns lighter than the page. */
+.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) {
   border-radius: var(--cn-radius-card);
   border-bottom-color: transparent;
-  background: color-mix(in srgb, var(--mauve) 4%, var(--base));
+  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-tint), transparent);
   box-shadow: var(--neu-inset);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open]) > label { color: var(--mauve); }
-.accordion > label {
+.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) > :is(label, summary) { color: var(--cn-interactive); }
+.accordion > :is(label, summary) {
   min-height: 48px;
   padding: var(--space-3);
   position: relative;
@@ -944,13 +1284,14 @@ a:active > .accent-card {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  color: var(--text);
-  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
+  color: var(--cn-fg);
+  /* The question sets at the answer's size and leads it by weight and ink. */
+  font: var(--cn-type-name-weight) var(--cn-type-body-size)/var(--cn-type-name-leading) var(--sans);
   cursor: pointer;
   transition: color var(--t-fast);
 }
-.accordion > label:hover { color: var(--mauve); }
-.accordion > label::after {
+.accordion > :is(label, summary):hover { color: var(--cn-interactive); }
+.accordion > :is(label, summary)::after {
   content: "";
   width: 15px;
   height: 15px;
@@ -958,10 +1299,10 @@ a:active > .accent-card {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
   transition: transform var(--t-base) var(--ease-out);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open]) > label::after { transform: rotate(180deg); }
+.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) > :is(label, summary)::after { transform: rotate(180deg); }
 /* The input stays keyboard-reachable but visually silent; its focus ring
    draws on the label. */
-.accordion > label > input {
+.accordion > :is(label, summary) > input {
   appearance: none;
   position: absolute;
   inset: 0;
@@ -969,11 +1310,21 @@ a:active > .accent-card {
   opacity: 0;
   cursor: pointer;
 }
-.accordion > label:has(input:focus-visible) {
-  outline: 2px solid var(--mauve);
+.accordion > summary:focus-visible,
+.accordion > :is(label, summary):has(input:focus-visible) {
+  outline: 2px solid var(--cn-focus);
   outline-offset: -2px;
   border-radius: var(--cn-radius-card);
 }
+/* details.accordion: the native disclosure. The summary is the row, its
+   marker goes, and Enter and Space work with no script. name="…" on a
+   group makes it exclusive and still lets the open one close. The
+   content box stays rendered through the close (content-visibility flips
+   at the end), so the fold below animates both ways. */
+details.accordion > summary { list-style: none; }
+details.accordion > summary::-webkit-details-marker { display: none; }
+details.accordion::details-content { transition: content-visibility var(--t-slow) allow-discrete; }
+
 /* The fold: a grid row that opens from 0fr to 1fr. The inner wrapper must
    be a single element with min-height 0 so the row can fully collapse. */
 .accordion .fold {
@@ -981,7 +1332,7 @@ a:active > .accent-card {
   grid-template-rows: 0fr;
   transition: grid-template-rows var(--t-slow) var(--ease-out);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open]) .fold {
+.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) .fold {
   grid-template-rows: 1fr;
 }
 .accordion .fold > * {
@@ -993,7 +1344,7 @@ a:active > .accent-card {
   visibility: hidden;
   transition: visibility var(--t-slow);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open]) .fold > * { visibility: visible; }
+.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) .fold > * { visibility: visible; }
 /* Bottom spacing lives on the content's margin: padding would floor the
    collapsed wrapper at its own height, margins clip away with the fold. */
 .accordion .fold > * > :last-child { margin-bottom: var(--space-4); }
@@ -1002,14 +1353,14 @@ a:active > .accent-card {
    bold title variant, <p> the regular-weight one.
      <label><input type="checkbox"><b>Title</b>
        <span class="cn-meta">meta</span></label>                             */
-.accordion > label > :is(b, p) { margin: 0 auto 0 0; }
-.accordion > label > p { font-weight: var(--cn-type-body-weight); }
+.accordion > :is(label, summary) > :is(b, p) { margin: 0 auto 0 0; }
+.accordion > :is(label, summary) > p { font-weight: var(--cn-type-body-weight); }
 
 /* Accordion stack: a group filling a panel. The panel supplies the frame,
    the stack the breathing room; the closed last row's divider yields to the
    panel edge (an open row is already borderless). */
 .accordion-stack { padding: var(--space-3) var(--space-4); }
-.accordion-stack > .accordion:last-child:not(:has(input:checked)) {
+.accordion-stack > .accordion:last-child:not(:has(input:checked), [open]) {
   border-bottom-color: transparent;
 }
 
@@ -1018,11 +1369,33 @@ a:active > .accent-card {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
-  border: 2px solid color-mix(in srgb, var(--surface-2) 45%, transparent);
+  border: 2px solid var(--edge);
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
+
+/* Skeleton: a carved placeholder where content is loading. It takes the
+   well carve, the sunken fill under --neu-inset, darkness only with no
+   ring, so a loading block reads below the ground on a panel (1.14:1) and
+   on the page (1.07:1). It breathes on the breathe keyframe between full
+   and .7 opacity, so at its faintest it still sits a step under a panel
+   (1.10:1), past the 1.08:1 table head. Size it to the content it stands
+   in for; .is-text is one line of body copy, .is-round an avatar. Mark the
+   loading region aria-busy="true" so assistive tech waits for it, and
+   keep skeletons aria-hidden. */
+.skeleton {
+  display: block;
+  min-height: var(--space-4);
+  border-radius: var(--cn-radius-control);
+  background: var(--cn-surface-sunken);
+  box-shadow: var(--neu-inset);
+  animation: breathe 1.6s var(--ease-in) infinite alternate;
+}
+.skeleton.is-text { height: 1em; min-height: 0; border-radius: var(--cn-radius-chip); }
+.skeleton.is-text + .skeleton.is-text { margin-top: var(--space-2); }
+.skeleton.is-text:last-child:not(:only-child) { width: 62%; }
+.skeleton.is-round { width: 32px; height: 32px; border-radius: 50%; }
 
 /* ── Avatar: initials or an image on an accent-tinted round ────────────── */
 
@@ -1034,9 +1407,9 @@ a:active > .accent-card {
   place-items: center;
   overflow: hidden;
   color: var(--accent);
-  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--surface-0));
+  border: 1px solid color-mix(in srgb, var(--accent) var(--cn-step-edge), var(--surface-0));
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) 14%, var(--mantle));
+  background: color-mix(in srgb, var(--accent) var(--cn-step-wash), var(--mantle));
   box-shadow: var(--neu-raised-soft);
   font: var(--cn-type-name-weight) var(--cn-type-label-size)/1 var(--sans);
   user-select: none;
@@ -1047,8 +1420,8 @@ a:active > .accent-card {
 .avatar-stack { display: inline-flex; }
 /* The ring matches the surface behind the stack; set --ring-ground when the
    stack sits on a panel or mantle band. */
-.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), 0 0 0 2px var(--ring-ground, var(--base)); }
-.avatar-stack .avatar + .avatar { margin-left: calc(-1 * var(--space-2)); }
+.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), var(--cn-ground-ring); }
+.avatar-stack .avatar + .avatar { margin-inline-start: calc(-1 * var(--space-2)); }
 
 /* ── Code block: a carved snippet well ──────────────────────────────────── */
 
@@ -1060,9 +1433,7 @@ a:active > .accent-card {
 .codeblock pre { margin: 0; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
 /* Copy control: an icon button in the corner. Wire it with the one-line
    listener documented on the code block page; copying is consumer JS. */
-.codeblock > .btn.is-icon,
-/* deprecated, removed in 0.5.0 */
-.codeblock > .btn-icon {
+.codeblock > .btn.is-icon {
   position: absolute;
   top: var(--space-2);
   right: var(--space-2);
@@ -1070,16 +1441,14 @@ a:active > .accent-card {
   height: 26px;
   min-height: 26px;
 }
-.codeblock:has(> .btn.is-icon),
-/* deprecated, removed in 0.5.0 */
-.codeblock:has(> .btn-icon) { padding-right: calc(var(--space-6) + var(--space-3)); }
+.codeblock:has(> .btn.is-icon) { padding-inline-end: calc(var(--space-6) + var(--space-3)); }
 
 /* Numbered lines: wrap each line in its own element (span or code) inside
    the pre. CSS counters draw the gutter; no JS. */
 .codeblock.is-numbered pre { counter-reset: line; }
 .codeblock.is-numbered pre > * {
   display: block;
-  padding-left: calc(3ch + var(--space-3));
+  padding-inline-start: calc(3ch + var(--space-3));
   position: relative;
   counter-increment: line;
 }
@@ -1088,8 +1457,8 @@ a:active > .accent-card {
   position: absolute;
   left: 0;
   width: 3ch;
-  color: var(--overlay-0);
-  text-align: right;
+  color: var(--cn-fg-placeholder);
+  text-align: end;
   user-select: none;
 }
 
@@ -1099,7 +1468,7 @@ a:active > .accent-card {
 .codeblock .tok-string  { color: var(--green); }
 .codeblock .tok-number  { color: var(--peach); }
 .codeblock .tok-fn      { color: var(--mauve); }
-.codeblock .tok-comment { color: var(--overlay-2); font-style: italic; }
+.codeblock .tok-comment { color: var(--cn-fg-muted); font-style: italic; }
 
 /* ── Command: a copyable command line ───────────────────────────────────────
    A recess well holding one command in mono, a prompt glyph, and a
@@ -1126,13 +1495,13 @@ a:active > .accent-card {
   min-width: 0;
   flex: 1 1 auto;
   display: flex; align-items: center;
-  color: var(--text);
+  color: var(--cn-fg);
   font-size: var(--cn-type-ui-size);
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;
 }
-.command-prompt { margin-right: var(--space-2); color: var(--mauve); user-select: none; }
+.command-prompt { margin-inline-end: var(--space-2); color: var(--cn-interactive); user-select: none; }
 /* A long statement wraps instead of scrolling: the text becomes a block so
    whitespace inside it (a tokenizer's spans) stays inline. */
 .command.is-wrap .command-text { display: block; white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
@@ -1142,38 +1511,39 @@ a:active > .accent-card {
 /* The control is sized to the well, not the density: 8 + 34 + 8 is the 50px
    well at every density, so a dense app's small icon buttons never leave the
    glyph floating in a bar built for a 34px one. */
-.command .command-copy { flex: 0 0 auto; width: 34px; height: 34px; min-height: 34px; --tone: var(--mauve); }
+.command .command-copy { flex: 0 0 auto; width: 34px; height: 34px; min-height: 34px; --tone: var(--cn-interactive); }
 .command .command-copy > svg { width: 16px; height: 16px; }
 .command .done-glyph { display: none; }
-.command.is-copied .command-copy { --tone: var(--green); color: var(--green); }
+.command.is-copied .command-copy,
+.codeblock > .btn.is-icon.is-copied { --tone: var(--cn-success); color: var(--cn-success); }
 .command.is-copied .copy-glyph { display: none; }
 .command.is-copied .done-glyph { display: block; }
 
 /* ── Accent cards keyed by --accent ─────────────────────────────────────── */
 
 /* A card on a plate in its accent, mixed toward surface-0 the way the
-   primary button mixes its plate. The plate is the only depth cue and the
-   only place the accent shows; the border and text stay neutral. Data marks
-   inside (a progress fill) keep the accent. */
+   primary button mixes its plate. The plate is the only depth cue. The
+   border and text stay neutral, the hero value included, so the accent
+   shows only on the plate and on data marks inside (a progress fill). */
 .accent-card {
-  --plate: color-mix(in srgb, var(--accent) 50%, var(--surface-0));
+  --plate: color-mix(in srgb, var(--accent) var(--cn-step-vivid), var(--surface-0));
   min-width: 0;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--edge);
   border-radius: var(--cn-radius-card);
-  background: var(--base);
+  background: var(--cn-surface-raised);
   transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
 }
 /* Controls inside the card rest on their own plate, not the card's. */
 :where(.accent-card > *) { --plate: initial; }
-.accent-card :is(.stat.is-lg, .metric.is-hero) strong { color: var(--text); }
+.accent-card .stat.is-lg strong { color: var(--cn-fg); }
 /* Cards wrapped in a link take the hard-offset press; on hover the plate
    also grows a pixel so the lift reads.
    The wrapper takes the card's radius so its focus ring traces the card, not
    the bare-link 4px. */
 a:has(> .accent-card) { border-radius: var(--cn-radius-card); color: inherit; text-decoration: none; }
 a:hover:not(:active) > .accent-card {
-  box-shadow: calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate), var(--hard-extra);
+  box-shadow: var(--cn-plate-hover), var(--hard-extra);
 }
 
 /* ── Data display ───────────────────────────────────────────────────────── */
@@ -1182,57 +1552,91 @@ a:hover:not(:active) > .accent-card {
      <div class="stat"><span>Label</span><strong>48</strong></div>
    .is-lg is the hero value in the accent. .is-inline is a baseline row,
    label left and value (b or strong) right; stack rows in a .cn-divide. */
-.stat,
-/* deprecated, removed in 0.5.0 */
-.metric { min-width: 0; padding: var(--space-3); display: flex; flex-direction: column; gap: var(--space-2); }
-.stat span,
-/* deprecated, removed in 0.5.0 */
-.metric span {
-  color: var(--overlay-2);
-  font: var(--cn-type-label-weight) var(--cn-type-label-size) var(--sans);
+.stat { min-width: 0; padding: var(--space-3); display: flex; flex-direction: column; gap: var(--space-2); }
+.stat > span {
+  color: var(--cn-fg-muted);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
-.stat strong,
-/* deprecated, removed in 0.5.0 */
-.metric strong { font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans); letter-spacing: var(--cn-type-value-tracking); font-variant-numeric: tabular-nums; }
-.stat.is-lg strong,
-/* deprecated, removed in 0.5.0 */
-.metric.is-hero strong { font-size: var(--cn-type-value-lg-size); color: var(--accent); }
-/* deprecated, removed in 0.5.0 */
-/* Value over label; the DOM stays label-first for reading order. */
-.metric.is-value-first { flex-direction: column-reverse; gap: var(--space-1); }
+/* The stacked label takes the micro role, 12px uppercase at 500 in
+   --cn-fg-muted, so it reads as a caption over the figure and not as a
+   second note. The inline row keeps the 14px label above. */
+.stat:not(.is-inline) > span {
+  font: var(--cn-type-micro-weight) var(--cn-type-micro-size)/var(--cn-type-micro-leading) var(--sans);
+  letter-spacing: var(--cn-type-micro-tracking);
+  text-transform: uppercase;
+}
+/* The note under the value is 14px at 500 in the label's ink, so a stat
+   reads micro, 24, 14: one small size plus micro, both at 500. Write it
+   as a bare p; a .cn-meta on it would drop it to 400, a third voice. */
+.stat > p {
+  margin: 0;
+  color: var(--cn-fg-muted);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
+}
+.stat strong { font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans); letter-spacing: var(--cn-type-value-tracking); font-variant-numeric: tabular-nums; }
+.stat.is-lg strong { font-size: var(--cn-type-value-lg-size); color: var(--accent); }
+/* A row of stats: four across, two across at 760px and below. It never
+   drops to one, because a phone column of single figures wastes the
+   height a reader scrolls for. --stat-cols sets the wide count. */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--stat-cols, 4), minmax(0, 1fr));
+  gap: var(--space-4);
+}
+/* On the page ground, each stat hangs from a rule on its start side, so the
+   row reads as one band without a panel around it. The rule is
+   --cn-stat-rule, equal to --edge, so at twice the width it holds its
+   weight beside a panel's hairline without stepping past the hairline
+   ladder. Under prefers-contrast it sits between --edge-soft and --edge. */
+.stat-grid.is-ruled > .stat { padding-block: var(--space-1); padding-inline: var(--space-4) 0; border-inline-start: 2px solid var(--cn-stat-rule); }
+/* Inside a panel body the body pad already insets the stats, so they take
+   no padding of their own and line up with the header title and the
+   inline rows at every width. This beats the 520px .stat padding. */
+.panel-body .stat-grid:not(.is-ruled) > .stat { padding: 0; }
 
-.stat.is-inline,
-/* deprecated, removed in 0.5.0 */
-.stat-row {
+.stat.is-inline {
   padding: 0;
   flex-direction: row;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-3);
-  color: var(--overlay-2);
-  font: var(--cn-type-label-weight) var(--cn-type-label-size) var(--sans);
+  color: var(--cn-fg-muted);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
-.stat.is-inline :is(b, strong),
-/* deprecated, removed in 0.5.0 */
-.stat-row b {
-  color: var(--subtext-1);
+/* The label drops to 400 under the value's 500, so key and value differ
+   by weight and ink, as a table's cells and its name do. */
+.stat.is-inline > span { font-weight: var(--cn-type-meta-weight); }
+.stat.is-inline :is(b, strong) {
+  color: var(--cn-fg);
   font: inherit;
   letter-spacing: normal;
   font-variant-numeric: tabular-nums;
 }
 .cn-divide > .stat.is-inline { padding-block: var(--space-2); }
-/* deprecated, removed in 0.5.0 */
-.stat-strip { display: flex; flex-direction: column; }
-/* deprecated, removed in 0.5.0 */
-.stat-strip > * { padding: var(--space-2) 0; }
-/* deprecated, removed in 0.5.0 */
-.stat-strip > * + * { border-top: 1px solid var(--edge-soft); }
+/* A summary total: the row a list of inline stats adds up to. It follows
+   the .cn-divide list rather than sitting in it. The label is the name role
+   and the value the value role, both in --cn-fg, under an --edge rule,
+   1.85:1 on a panel against the 1.3:1 row hairlines, with 12px of air, so
+   the total outweighs the rows above it. */
+.stat.is-inline.is-total {
+  margin-block-start: var(--space-3);
+  padding-block-start: var(--space-3);
+  color: var(--cn-fg);
+  border-top: 1px solid var(--edge);
+  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
+}
+.stat.is-inline.is-total > span { color: var(--cn-fg); font: inherit; }
+.stat.is-inline.is-total :is(b, strong) {
+  color: var(--cn-fg);
+  font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans);
+  letter-spacing: var(--cn-type-value-tracking);
+}
 
 /* Progress: borderless inset track, accent fill. The fill inherits
    the track radius, so no overflow clipping is needed. Re-key the fill per
    instance via --progress-fill (any token color or token gradient):
-   <div class="progress-track" style="--progress-fill: var(--green)">.       */
+   <div class="progress-track" style="--progress-fill: var(--cn-success)">.       */
 .progress-track {
   height: 7px;
   border-radius: 999px;
@@ -1256,36 +1660,65 @@ a:hover:not(:active) > .accent-card {
 }
 
 /* Table: opt-in class on <table>; scopes all table styling. Sans tabular
-   body, mantle header, hover presses the row in. Give each data cell a
+   body, a band header (--cn-surface-band) over an --edge rule, 1.85:1 on
+   a panel against the surface-0 row rules' 1.3:1, so the head parts from
+   the rows by more than its text color. Hover presses the row in. Give each data cell a
    data-label attribute: it becomes the row label at 760px and below. Inside
-   .table-scroll the table stays a table and scrolls sideways instead.
-   deprecated, removed in 0.5.0: .table-neu, in the :is() lists below. */
-.data-table,
-/* deprecated, removed in 0.5.0 */
-.table-neu { width: 100%; border-collapse: collapse; }
-:is(.data-table, .table-neu) th {
+   .table-scroll the table stays a table and scrolls sideways instead. */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
   padding: var(--cell-pad);
-  color: var(--overlay-2);
-  border-bottom: 1px solid var(--surface-0);
-  background: color-mix(in srgb, var(--crust) 30%, var(--mantle));
-  text-align: left;
-  font: var(--cn-type-label-weight) var(--cn-type-label-size) var(--sans);
+  color: var(--cn-fg-muted);
+  border-bottom: 1px solid var(--edge);
+  background: var(--cn-surface-band);
+  text-align: start;
+  font: var(--cn-type-label-weight) var(--cell-font-size)/var(--cn-type-label-leading) var(--sans);
 }
-:is(.data-table, .table-neu) td {
+.data-table td {
   padding: var(--cell-pad);
-  color: var(--subtext-1);
+  color: var(--cn-fg-soft);
   border-bottom: 1px solid var(--surface-0);
-  font: var(--cn-type-meta-weight) var(--cell-font-size) var(--sans);
+  font: var(--cn-type-body-weight) var(--cell-font-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
-:is(.data-table, .table-neu) tbody tr:last-child td { border-bottom: 0; }
-/* Emphasized name cell: full-strength primary line, quiet secondary line. */
-:is(.data-table, .table-neu) .cell-name strong { color: var(--text); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
-:is(.data-table, .table-neu) .cell-name small  { color: var(--overlay-2); font: var(--cn-type-meta-weight) var(--cn-type-meta-size) var(--sans); }
+/* A key figure in a cell, such as an amount: wrap it in strong. It is 500
+   in --cn-fg, one weight step and one ink stop over the 400 cells, so the
+   .cell-name is the row's one 600. */
+.data-table td strong { color: var(--cn-fg); font-weight: var(--cn-type-label-weight); }
+.data-table tbody tr:last-child td { border-bottom: 0; }
+/* Numeric columns: put .is-num on the th and each td. Figures align on
+   the right edge so digits of the same place stack, and a sortable
+   header's button sits against that edge too. */
+.data-table :is(th, td).is-num { text-align: end; }
+.data-table th.is-num[aria-sort] > button { flex-direction: row-reverse; }
+/* Inline edit: an .input in a table cell. It has no label above it, so it
+   takes its name from the column header through aria-labelledby. It
+   takes --cn-field-ring over the soft carve, like any resting field.
+   :where() keeps the selector as light as .input, so hover, focus,
+   validation, disabled and read-only still win. */
+:where(.data-table td) .input {
+  height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  border-radius: var(--cn-radius-control);
+  box-shadow: var(--cn-field-ring), var(--neu-inset-soft);
+  font-size: var(--cell-font-size);
+}
+/* Emphasized name cell: full-strength primary line, quiet secondary line.
+   Each line is a block, so the cell stacks them without a <br>. The td
+   stays a table cell. */
+.data-table .cell-name :is(strong, small) { display: block; }
+.data-table .cell-name strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
+/* The meta line follows the cell size: 14px at default and cozy, 13px at
+   compact. Weight and ink keep it apart from the name above it. */
+/* A tag, a chip or a small button in a cell follows the cell size, so a
+   compact row holds 13px throughout and no tag is larger than the cell
+   text beside it. At default and cozy the two sizes are equal. */
+.data-table td :is(.tag, .chip:not(.is-glyph), .btn.is-sm, .btn-text) { font-size: var(--cell-font-size); }
+.data-table .cell-name small  { color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cell-font-size) var(--sans); }
 
 /* Sortable header: a button inside th[aria-sort]. The chevron shows the
    direction and hides while the column is unsorted. */
-:is(.data-table, .table-neu) th[aria-sort] > button {
+.data-table th[aria-sort] > button {
   margin: 0;
   padding: 0;
   display: inline-flex;
@@ -1299,9 +1732,9 @@ a:hover:not(:active) > .accent-card {
   cursor: pointer;
   transition: color var(--t-fast);
 }
-:is(.data-table, .table-neu) th[aria-sort] > button:hover { color: var(--text); }
-:is(.data-table, .table-neu) th[aria-sort] > button:focus-visible { outline-offset: 2px; }
-:is(.data-table, .table-neu) th[aria-sort] > button::after {
+.data-table th[aria-sort] > button:hover { color: var(--cn-fg); }
+.data-table th[aria-sort] > button:focus-visible { outline-offset: 2px; }
+.data-table th[aria-sort] > button::after {
   content: "";
   width: 12px;
   height: 12px;
@@ -1310,9 +1743,9 @@ a:hover:not(:active) > .accent-card {
   opacity: 0;
   transition: opacity var(--t-fast), transform var(--t-base) var(--ease-out);
 }
-:is(.data-table, .table-neu) th:is([aria-sort="ascending"], [aria-sort="descending"]) { color: var(--text); }
-:is(.data-table, .table-neu) th:is([aria-sort="ascending"], [aria-sort="descending"]) > button::after { opacity: 1; }
-:is(.data-table, .table-neu) th[aria-sort="ascending"] > button::after { transform: rotate(180deg); }
+.data-table th:is([aria-sort="ascending"], [aria-sort="descending"]) { color: var(--cn-fg); }
+.data-table th:is([aria-sort="ascending"], [aria-sort="descending"]) > button::after { opacity: 1; }
+.data-table th[aria-sort="ascending"] > button::after { transform: rotate(180deg); }
 
 /* Sticky header: pins to the top of the nearest scroll container. The rule
    is an inset shadow, because a collapsed border scrolls away with the body. */
@@ -1321,31 +1754,47 @@ a:hover:not(:active) > .accent-card {
   top: 0;
   z-index: 1;
   border-bottom: 0;
-  box-shadow: inset 0 -1px var(--surface-0);
+  box-shadow: var(--cn-sticky-rule);
+}
+/* Focus not obscured (WCAG 2.4.11): a row, or a control in one, that
+   scrolls into view stops a control height plus 4px short of the top, clear
+   of the pinned head at every density. */
+.data-table.is-sticky-head tbody :is(tr, a, button, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-top: calc(var(--control-h) + var(--space-1));
 }
 
-/* The row press: a dark top edge and a lit bottom edge drawn as a vertical
-   gradient on every cell. Each cell paints the same gradient at the same
-   height, so the row reads as one strip with no seams. The edge colors are
-   registered so they fade in with the fill. */
+/* The row press: a dark top edge drawn as a vertical gradient on every
+   cell, and no lit edge, since a press is darkness only like any carve.
+   Each cell paints the same gradient at the same height, so the row reads
+   as one strip with no seams. The edge color is registered so it fades in
+   with the fill. */
 @property --press-top    { syntax: "<color>"; inherits: false; initial-value: transparent; }
-@property --press-bottom { syntax: "<color>"; inherits: false; initial-value: transparent; }
-:is(.data-table, .table-neu) td, .ranked-row {
-  background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px, transparent calc(100% - 4px), var(--press-bottom, transparent));
-  transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out), --press-bottom var(--t-fast) var(--ease-out);
+.data-table td, .ranked-row {
+  background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px);
+  transition: color var(--t-fast), background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out);
 }
-:is(.data-table, .table-neu) tbody tr:hover td, .ranked-row:hover {
+.data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
-  --press-bottom: rgb(69 71 90 / .3);
-  background-color: color-mix(in srgb, var(--mauve) 6%, var(--base));
+  /* The ink steps with the fill, like every --hover user and the selected
+     row: --cn-fg is 8.2:1 on the hovered row, up from --cn-fg-soft at
+     6.7:1, so the hover does not rest on a 1.39:1 wash alone. */
+  color: var(--cn-fg);
+  /* Its own step, 1.39:1 on a panel: level with the 1.40:1 hover, past the
+     open carve's 1.08:1, and 1.18:1 under a selected row's wash. */
+  background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
 }
 /* Selected row: the engaged treatment, the wash with the full press. */
 .data-table tbody tr[aria-selected="true"] td {
   --press-top: rgb(17 17 27 / .66);
-  --press-bottom: rgb(69 71 90 / .3);
-  color: var(--text);
+  color: var(--cn-fg);
   background-color: var(--wash);
 }
+/* The selection also reads without the fill. The row's first data cell
+   takes the name weight, as a selected listbox option does, and the name
+   cell's meta line steps from --cn-fg-muted, 4.52:1 on the wash, to
+   --cn-fg-soft, 5.68:1. No stripe or mark on the row edge. */
+.data-table tbody tr[aria-selected="true"] > :is(td:first-child:not(.cell-select), td.cell-select + td) { font-weight: var(--cn-type-name-weight); }
+.data-table tbody tr[aria-selected="true"] td small { color: var(--cn-fg-soft); }
 
 /* Ranked row: ordered list line: rank mark, name, trailing value. */
 .ranked-row {
@@ -1353,18 +1802,93 @@ a:hover:not(:active) > .accent-card {
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  color: var(--subtext-1);
+  color: var(--cn-fg-soft);
   border-bottom: 1px solid var(--surface-0);
-  font: var(--cn-type-meta-weight) var(--cn-type-ui-size) var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .ranked-row:last-child { border-bottom: 0; }
-.ranked-row strong { color: var(--text); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
-.ranked-row b { margin-left: auto; color: var(--text); font-weight: var(--cn-type-value-weight); }
+.ranked-row strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
+.ranked-row b { margin-inline-start: auto; color: var(--cn-fg); font-weight: var(--cn-type-value-weight); }
+/* The rank mark is a small key, not a block: at 22px a list of pastel
+   marks reads as color-coded ranks instead of competing tiles. */
+.ranked-row .mark { width: 22px; height: 22px; font-size: var(--cn-type-label-size); }
 
-/* Legend: a chart key. Each item's swatch takes its --tone; the label is
-   sentence case at the meta size.
-     <ul class="legend"><li class="legend-item cn-tone-blue">Reads</li></ul> */
+/* Bar chart: horizontal bars with a label column, values beside the bars.
+     <div class="bar-chart">
+       <span>Jun</span>
+       <div class="bar-group">
+         <div class="bar" style="--value: 62%; --series: var(--cn-series-1)">$62.4k</div>
+       </div>
+     </div>
+   --value is the bar's share of the track; the label beside it keeps the
+   number readable, so color is never the only key. --series colors the
+   bar and falls back to the record's --accent. A bar eases to a new value
+   like progress does. */
+.bar-chart {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+}
+.bar-chart > :not(.bar-group) { color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans); }
+.bar-group { min-width: 0; display: grid; gap: var(--space-1); }
+.bar {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--cn-fg-soft);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+.bar::before {
+  content: "";
+  flex: 0 0 auto;
+  inline-size: calc(var(--value, 0%) * .8);
+  /* 12px sits inside the 21px meta line, so the row height does not move. */
+  block-size: 12px;
+  border-radius: var(--cn-radius-chip);
+  /* The bar is a solid fill, so it takes the ramp lit from the top left,
+     without grain, like the switch paddle. The flat fill stays where
+     relative color is missing; see the @supports rule after .is-hatched. */
+  --cn-fill: var(--series, var(--accent));
+  background: var(--cn-fill);
+  transition: inline-size calc(var(--t-slow) * 2) var(--ease-out);
+}
+
+/* Sparkline: one measure over time, drawn as a line beside its value.
+     <span class="sparkline" style="--series: var(--cn-series-1)">
+       <svg viewBox="0 0 96 24" aria-hidden="true"><polyline points="…"/><circle cx="96" cy="6" r="2.5"/></svg>
+       <span>$74.5k</span>
+     </span>
+   The line is a 2px stroke in --series (or --accent) with round caps and
+   joins; an optional circle marks the latest point. The value sits beside
+   it as text, so the mark is never keyed by color alone. The svg keeps a
+   fixed 96x24 box, and the stroke does not scale with it. */
+.sparkline {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--cn-fg-soft);
+  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+.sparkline > svg { width: 96px; height: 24px; flex: 0 0 auto; overflow: visible; }
+.sparkline > svg :is(polyline, path) {
+  fill: none;
+  stroke: var(--series, var(--accent));
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.sparkline > svg circle { fill: var(--series, var(--accent)); }
+
+/* Legend: a chart key. Each item's swatch takes its --series, or the
+   record's --accent; the label is sentence case at the meta size.
+     <ul class="legend"><li class="legend-item" style="--series: var(--cn-series-5)">Reads</li></ul> */
 .legend {
   margin: 0;
   padding: 0;
@@ -1379,7 +1903,7 @@ a:hover:not(:active) > .accent-card {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--subtext-0);
+  color: var(--cn-fg-body);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 .legend-item::before {
@@ -1388,7 +1912,19 @@ a:hover:not(:active) > .accent-card {
   height: 10px;
   flex: 0 0 auto;
   border-radius: var(--cn-radius-chip);
-  background: var(--tone);
+  background: var(--series, var(--accent));
+}
+/* Hatched: a second key besides hue for a series that must stand apart
+   without color. The bar and its legend swatch carry the same stripes. */
+:is(.bar, .legend-item).is-hatched::before {
+  --cn-hatch: repeating-linear-gradient(135deg, color-mix(in srgb, var(--base) 45%, transparent) 0 2px, transparent 2px 5px);
+  background-image: var(--cn-hatch);
+}
+/* Without relative color the ramp is invalid, so the flat fill stays. The
+   stripes ride over the ramp on a hatched bar. */
+@supports (color: oklch(from red l c h)) {
+  .bar::before { background-image: var(--cn-fill-ramp); }
+  .bar.is-hatched::before { background-image: var(--cn-hatch), var(--cn-fill-ramp); }
 }
 
 /* Key-value list: a dl with the keys in a column that fits them.
@@ -1398,18 +1934,28 @@ a:hover:not(:active) > .accent-card {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   gap: var(--space-2) var(--space-4);
-  font: var(--cn-type-meta-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
 }
-.kv dt { color: var(--overlay-2); font-weight: var(--cn-type-label-weight); font-size: var(--cn-type-label-size); line-height: inherit; }
+.kv dt { color: var(--cn-fg-muted); font-weight: var(--cn-type-meta-weight); font-size: inherit; line-height: inherit; }
 .kv dd {
   min-width: 0;
   margin: 0;
-  color: var(--text);
+  color: var(--cn-fg);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 
 /* ── Overlays: all float on --shadow-pop, never neu ────────────────────── */
+
+/* A resting field on the overlay fill takes the overlay ring, overlay-0 at
+   75%: 2.09:1 there, where the page ring is only 1.7:1. The token carries
+   its own prefers-contrast value, so the overlay-2 ring still wins. A
+   hovered field sets --cn-field-ring on itself and is not affected. A
+   panel or a well inside an overlay is base or crust, not the overlay
+   fill, so it takes the page ring back: overlay-0 there is about 2.6:1
+   over crust and reads as an outlined box. */
+:is(.popover, .modal, .drawer) { --cn-field-ring: var(--cn-field-ring-overlay); }
+:is(.popover, .modal, .drawer) :is(.panel, .well) { --cn-field-ring: var(--cn-field-ring-page); }
 
 /* Popover / menu: anchored to a relative parent. No overflow clipping:
    filled first/last children follow the parent radius instead. */
@@ -1417,17 +1963,17 @@ a:hover:not(:active) > .accent-card {
   position: absolute;
   z-index: 80;
   width: min(390px, calc(100vw - var(--space-6)));
-  border: 1px solid var(--surface-1);
+  border: 1px solid var(--edge-strong);
   border-radius: var(--cn-radius-card);
-  background: var(--base);
+  background: var(--cn-surface-overlay);
   box-shadow: var(--shadow-pop);
 }
 /* Child bands follow the parent: the card radius minus the 1px border. */
 .popover > :first-child { border-top-left-radius: calc(var(--cn-radius-card) - 1px); border-top-right-radius: calc(var(--cn-radius-card) - 1px); }
 .popover > :last-child  { border-bottom-left-radius: calc(var(--cn-radius-card) - 1px); border-bottom-right-radius: calc(var(--cn-radius-card) - 1px); }
 
-/* Popover bands keep their own compact padding; compose cn-bg-head on a
-   header for the fill. The footer is divider only, per the footer rule. */
+/* Popover bands keep their own compact padding and sit on the popover's
+   fill behind a divider, like every band. */
 .popover > header {
   display: flex;
   align-items: center;
@@ -1440,7 +1986,7 @@ a:hover:not(:active) > .accent-card {
   justify-content: flex-end;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
-  border-top: 1px solid color-mix(in srgb, var(--surface-1) 40%, transparent);
+  border-top: 1px solid var(--edge-soft);
 }
 
 /* Modal: <dialog class="modal">, centered in the viewport. */
@@ -1453,9 +1999,9 @@ a:hover:not(:active) > .accent-card {
   max-height: calc(100dvh - 2 * var(--space-5));
   margin: auto;
   overflow: auto;
-  border: 1px solid var(--surface-1);
+  border: 1px solid var(--edge-strong);
   border-radius: var(--cn-radius-panel);
-  background: var(--base);
+  background: var(--cn-surface-overlay);
   box-shadow: var(--shadow-pop);
 }
 /* A wide modal for a table or a two-column form. */
@@ -1470,15 +2016,15 @@ a:hover:not(:active) > .accent-card {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  border-left: 1px solid var(--surface-1);
-  background: var(--base);
+  border-inline-start: 1px solid var(--edge-strong);
+  background: var(--cn-surface-overlay);
   box-shadow: var(--shadow-pop);
 }
 
 /* Toast: a stack of title and description cards. `.toast-stack` is the fixed viewport; toasts append
    at its bottom. Each `.toast` is a row: a content column (`b` title over a
    span/p description) plus trailing controls (.btn-text and/or .btn.is-icon).
-   Neutral surface-1 border. The toast carries no accent color. */
+   Neutral --edge-strong (surface-2) border. The toast carries no accent color. */
 .toast-stack {
   position: fixed;
   right: var(--space-5);
@@ -1542,11 +2088,13 @@ a:hover:not(:active) > .accent-card {
   padding: var(--space-3) var(--space-4);
   display: flex;
   align-items: flex-start;
+  /* Vertical scroll stays native; a sideways drag is the swipe to dismiss. */
+  touch-action: pan-y;
   gap: var(--space-3);
-  color: var(--text);
-  border: 1px solid var(--surface-1);
+  color: var(--cn-fg);
+  border: 1px solid var(--edge-strong);
   border-radius: var(--cn-radius-card);
-  background: var(--base);
+  background: var(--cn-surface-overlay);
   box-shadow: var(--shadow-pop);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
@@ -1555,13 +2103,13 @@ a:hover:not(:active) > .accent-card {
 .toast > :first-child { flex: 1; min-width: 0; }
 .toast b {
   display: block;
-  color: var(--text);
+  color: var(--cn-fg);
   font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
 }
 .toast span,
 .toast p {
   margin: 0;
-  color: var(--subtext-0);
+  color: var(--cn-fg-body);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 
@@ -1625,96 +2173,56 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   dialog:is(.modal, .drawer)[open]::backdrop { opacity: 0; }
 }
 
-/* deprecated, removed in 0.5.0: div modals and drawers inside a .cn-scrim,
-   opened and closed with [hidden]. The scrim lives here, not in utilities,
-   so the utilities layer cannot beat its exit un-blur. */
-.cn-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  background: color-mix(in srgb, var(--crust) 80%, transparent);
-  backdrop-filter: blur(2px);
-  transition: opacity var(--t-base) var(--ease-out), backdrop-filter var(--t-base), visibility var(--t-base);
-}
-/* deprecated, removed in 0.5.0 */
-.modal { transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), visibility var(--t-base); }
-/* deprecated, removed in 0.5.0 */
-.drawer { transition: transform var(--t-slow) var(--ease-out), visibility var(--t-slow); }
-/* deprecated, removed in 0.5.0 */
-.cn-scrim[hidden] { display: block; visibility: hidden; opacity: 0; backdrop-filter: blur(0); pointer-events: none; }
-/* deprecated, removed in 0.5.0 */
-.modal[hidden]    { display: block; visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); pointer-events: none; }
-/* deprecated, removed in 0.5.0 */
-.drawer[hidden]   { display: flex; visibility: hidden; transform: translateX(calc(100% + 40px)); pointer-events: none; }
-/* deprecated, removed in 0.5.0 */
-.cn-scrim[hidden] .modal  { visibility: hidden; opacity: 0; transform: translateY(8px) scale(.98); }
-/* deprecated, removed in 0.5.0 */
-.cn-scrim[hidden] .drawer { visibility: hidden; transform: translateX(calc(100% + 40px)); }
-/* deprecated, removed in 0.5.0 */
-:is(.cn-scrim, .modal, .drawer)[hidden],
-.cn-scrim[hidden] :is(.modal, .drawer) { transition-timing-function: var(--ease-in); transition-duration: var(--t-exit); }
-/* deprecated, removed in 0.5.0 */
-@starting-style {
-  .cn-scrim:not([hidden]) { opacity: 0; backdrop-filter: blur(0); }
-  .modal:not([hidden])    { opacity: 0; transform: translateY(8px) scale(.98); }
-  .cn-scrim:not([hidden]) .modal  { opacity: 0; transform: translateY(8px) scale(.98); }
-  .drawer:not([hidden])   { transform: translateX(calc(100% + 40px)); }
-  .cn-scrim:not([hidden]) .drawer { transform: translateX(calc(100% + 40px)); }
+/* Reduced motion: overlays fade in place. tokens.css keeps their
+   transitions at --t-fast; these drop the travel and the scale. */
+@media (prefers-reduced-motion: reduce) {
+  .popover[hidden] { transform: none; }
+  .toast[hidden] { translate: 0 0; }
+  dialog.modal { transform: none; }
+  dialog.drawer { transform: none; opacity: 0; transition: opacity var(--t-fast) var(--ease-out), overlay var(--t-fast) allow-discrete, display var(--t-fast) allow-discrete; }
+  dialog.drawer[open] { opacity: 1; }
+  @starting-style {
+    .popover:not([hidden]) { transform: none; }
+    .toast:not([hidden]) { translate: 0 0; }
+    dialog.modal[open] { transform: none; }
+    dialog.drawer[open] { transform: none; opacity: 0; }
+  }
+  [data-tip]::after { translate: -50% 0; }
 }
 
 /* ── Page furniture ─────────────────────────────────────────────────────────
    Recipes never style bare element selectors (the tokens reset aside).   */
 
-/* deprecated, removed in 0.5.0: .eyebrow. A kicker above a display title
-   usually restates the lede; drop it. */
-.eyebrow {
-  display: flex; align-items: center; gap: var(--space-2);
-  margin-bottom: var(--space-3);
-  color: var(--mauve);
-  font: var(--cn-type-micro-weight) var(--cn-type-label-size)/var(--cn-type-micro-leading) var(--sans);
-  letter-spacing: var(--cn-type-micro-tracking);
-  text-transform: uppercase;
-}
 /* .display-title lives with .cn-display in utilities. */
-.lede { max-width: 690px; margin: var(--space-5) 0; color: var(--subtext-1); font-family: var(--sans); font-size: var(--cn-type-lede-size); line-height: var(--cn-type-lede-leading); }
+.lede { max-width: var(--cn-measure); margin: var(--space-5) 0; color: var(--cn-fg-soft); font-family: var(--sans); font-size: var(--cn-type-lede-size); line-height: var(--cn-type-lede-leading); }
 
 /* The page column. --page-width re-keys it per page (a reading column,
    a narrow form) and the footer follows it. */
 .page-main {
-  width: min(var(--page-width, 1440px), 100% - 2 * var(--page-gutter));
+  width: min(var(--page-width, var(--cn-width-page)), 100% - 2 * var(--page-gutter));
   min-width: 0;
   margin: 0 auto;
   position: relative;
   padding: var(--page-pad) 0;
 }
-.page-main.is-narrow  { --page-width: 860px; }
-.page-main.is-reading { --page-width: 740px; }
+.page-main.is-narrow  { --page-width: var(--cn-width-narrow); }
+/* A reading column sets the lede at 20px over the 16px body. */
+.page-main.is-reading {
+  --page-width: var(--cn-width-reading);
+  --cn-type-lede-size: 1.25rem;
+}
 
-.page-footer,
-/* deprecated, removed in 0.5.0 */
-.footer-neu {
-  width: min(var(--page-width, 1440px), 100% - 2 * var(--page-gutter));
+.page-footer {
+  width: min(var(--page-width, var(--cn-width-page)), 100% - 2 * var(--page-gutter));
   min-height: 72px;
   margin: 0 auto;
   padding: var(--space-3) 0;
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
-  color: var(--overlay-2);
+  color: var(--cn-fg-muted);
   border-top: 1px solid var(--surface-0);
 }
-.page-footer > span,
-/* deprecated, removed in 0.5.0 */
-.footer-neu span { font: var(--cn-type-name-weight) var(--cn-type-label-size) var(--sans); }
-.page-footer p,
-/* deprecated, removed in 0.5.0 */
-.footer-neu p { margin: 0; font: var(--cn-type-meta-weight) var(--cn-type-meta-size) var(--sans); }
-/* deprecated, removed in 0.5.0 */
-/* .footer-brand is .wordmark.is-sm (see Wordmark); these keep its old
-   flex gap and beat the .footer-neu span rule above. */
-.footer-brand { display: flex; gap: var(--space-2); line-height: normal; }
-/* deprecated, removed in 0.5.0 */
-.footer-brand > svg { margin-right: 0; }
-/* deprecated, removed in 0.5.0 */
-.footer-brand > span { margin-left: var(--space-1); font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/1 var(--sans); }
+.page-footer > span { font: var(--cn-type-name-weight) var(--cn-type-label-size) var(--sans); }
+.page-footer p { margin: 0; font: var(--cn-type-meta-weight) var(--cn-type-meta-size) var(--sans); }
 
 /* Deck: hash-routed views, no JS. Direct children are the views: the
    :target one shows, the first is the default, and a deep link into a
@@ -1739,19 +2247,25 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
     box-shadow: var(--neu-raised);
   }
 }
+/* More contrast: rotated text renders soft, so the tilt stands upright and
+   keeps its plate. */
+@media (prefers-contrast: more) {
+  .panel.is-tilted { transform: none; }
+}
+:root[data-contrast="more"] .panel.is-tilted { transform: none; }
 
 /* 760: tablet and phone: tighter chrome, tables become label and value rows. */
 @media (max-width: 760px) {
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .topbar { min-height: min(60px, calc(var(--band-h) + var(--space-1))); padding: var(--space-2) var(--page-gutter); }
+  :root:has(.topbar) { scroll-padding-top: calc(min(60px, calc(var(--band-h) + var(--space-1))) + var(--space-3)); }
   /* The center nav scrolls sideways inside the bar. */
   .topbar nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
   /* A split bar's actions wrap onto more rows, right-aligned, so none
      hides. */
   .topbar.is-split { grid-template-columns: auto minmax(0, 1fr); }
   .topbar.is-split > :last-child { min-width: 0; max-width: 100%; justify-self: end; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-2); }
-  .page-footer,
-  /* deprecated, removed in 0.5.0 */
-  .footer-neu { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
+  .page-footer { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
 
   .lede { font-size: var(--cn-type-body-size); }
   .panel-footer { flex-wrap: wrap; }
@@ -1763,54 +2277,74 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   /* Table → rows of label and value, split by hairlines. The header row
      drops; each td[data-label] draws its label. A cell without one (the
      name) spans the row. The press moves from the cells to the row. */
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) { display: block; }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) thead { display: none; }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) :is(tbody, tr, td) { display: block; }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tr {
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) { display: block; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) thead { display: none; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) :is(tbody, tr, td) { display: block; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr {
     padding: var(--cell-pad);
     border-bottom: 1px solid var(--surface-0);
-    background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px, transparent calc(100% - 4px), var(--press-bottom, transparent));
-    transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out), --press-bottom var(--t-fast) var(--ease-out);
+    background-image: linear-gradient(180deg, var(--press-top, transparent), transparent 5px);
+    transition: background-color var(--t-fast), --press-top var(--t-fast) var(--ease-out);
   }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:last-child { border-bottom: 0; }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td {
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:last-child { border-bottom: 0; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td {
     min-width: 0;
     padding: var(--space-1) 0;
     border: 0;
     border-radius: 0;
     background: none;
   }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
-    --press-bottom: rgb(69 71 90 / .3);
-    background-color: color-mix(in srgb, var(--mauve) 6%, var(--base));
+    /* The same 1.39:1 row hover as the desktop table. */
+    background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
     --press-top: rgb(17 17 27 / .66);
-    --press-bottom: rgb(69 71 90 / .3);
     background-color: var(--wash);
   }
   /* The label sits in a fixed left column; the value flows as one inline
      run in the rest of the row, so mixed text and code keep their order. */
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td[data-label] {
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td[data-label] {
     --label-w: 7.5rem;
     display: flow-root;
-    padding-left: calc(var(--label-w) + var(--space-3));
+    padding-inline-start: calc(var(--label-w) + var(--space-3));
     text-align: start;
   }
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td[data-label]::before {
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td[data-label]::before {
     content: attr(data-label);
     float: left;
     width: var(--label-w);
-    margin-left: calc(-1 * (var(--label-w) + var(--space-3)));
-    color: var(--overlay-2);
+    margin-inline-start: calc(-1 * (var(--label-w) + var(--space-3)));
+    color: var(--cn-fg-muted);
     font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-body-leading) var(--sans);
   }
   /* A row-select checkbox rides at the end of the row instead of taking a
      labeled line. */
-  :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])) td.cell-select { float: right; padding: 0; margin-left: var(--space-3); }
-  .panel > :is(.data-table, .table-neu):is(:not(.table-scroll > *), :has(td[data-label])):last-child tbody tr:last-child {
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td.cell-select { float: right; padding: 0; margin-inline-start: var(--space-3); }
+  /* Trailing cells (td.is-trail) leave the label stack and ride beside the
+     name, so a figure such as the amount sits on the title line. The row
+     becomes a grid: the name and the stack on the left, the last trailing
+     cell on the title line and the one before it under it, and a
+     row-select checkbox at the far end of the title line. */
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: baseline;
+  }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td { grid-column: 1 / -1; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.cell-name { grid-column: 1; grid-row: 1 / span 2; align-self: start; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.is-trail {
+    grid-column: 2;
+    grid-row: 1;
+    padding-inline-start: var(--space-3);
+    text-align: end;
+  }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.is-trail:has(~ td.is-trail) { grid-row: 2; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td.is-trail::before { content: none; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.cell-select { grid-column: 3; grid-row: 1; float: none; align-self: start; }
+  .panel > .data-table:is(:not(.table-scroll > *), :has(td[data-label])):last-child tbody tr:last-child {
     border-radius: 0 0 calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px);
   }
 }
@@ -1818,22 +2352,493 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 /* 520: small phone: horizontal rows stack, oversized numerals step down. */
 @media (max-width: 520px) {
   .segmented { grid-auto-flow: row; }
-  .stat,
-  /* deprecated, removed in 0.5.0 */
-  .metric { padding-inline: var(--space-2); }
-  .stat strong,
-  /* deprecated, removed in 0.5.0 */
-  .metric strong { font-size: var(--cn-type-lede-size); }
-  .stat.is-lg strong,
-  /* deprecated, removed in 0.5.0 */
-  .metric.is-hero strong { font-size: var(--cn-type-value-size); }
+  .stat { padding-inline: var(--space-2); }
+  .stat strong { font-size: var(--cn-type-lede-size); }
+  .stat.is-lg strong { font-size: var(--cn-type-value-size); }
+  /* The band title steps down with the stat value, so the value still
+     outweighs the title above it. Compact titles are already smaller. */
+  :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
+  .panel.is-lead > .panel-header :is(h2, h3) { font-size: min(var(--lead-title-size), var(--cn-type-body-size)); }
   .accordion-stack { padding: var(--space-2) var(--space-3); }
   /* Label meta wraps under the title; the chevron stays on the title line. */
-  .accordion > label:has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
-  .accordion > label > .cn-meta { order: 1; flex-basis: 100%; }
+  .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
+  .accordion > :is(label, summary) > .cn-meta { order: 1; flex-basis: 100%; }
   /* Key-value pairs stack: key over value. */
   .kv { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
   .kv dd + dt { margin-top: var(--space-2); }
+}
+
+/* The same component folds answer a .cn-container's width, so a stat row,
+   segmented control, accordion or key-value list in a narrow pane folds on
+   its own. Page chrome (topbar, sidebar, footer, the table's row mode)
+   stays on the viewport. */
+@container (max-width: 760px) {
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel-footer { flex-wrap: wrap; }
+}
+@container (max-width: 520px) {
+  .segmented { grid-auto-flow: row; }
+  .stat { padding-inline: var(--space-2); }
+  .stat strong { font-size: var(--cn-type-lede-size); }
+  .stat.is-lg strong { font-size: var(--cn-type-value-size); }
+  :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
+  .panel.is-lead > .panel-header :is(h2, h3) { font-size: min(var(--lead-title-size), var(--cn-type-body-size)); }
+  .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
+  .accordion > :is(label, summary) > .cn-meta { order: 1; flex-basis: 100%; }
+  .kv { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
+  .kv dd + dt { margin-top: var(--space-2); }
+}
+
+/* Reduced transparency: blurred chrome goes opaque and the scrim stops
+   blurring what is under it. */
+@media (prefers-reduced-transparency: reduce) {
+  .topbar { background: var(--cn-surface-page); backdrop-filter: none; }
+  .sidebar { backdrop-filter: none; }
+  @media (max-width: 1060px) { .sidebar { background: var(--cn-surface-recessed); } }
+  dialog:is(.modal, .drawer)::backdrop { backdrop-filter: none; background: color-mix(in srgb, var(--crust) 88%, transparent); }
+}
+
+/* Touch screens keep :hover after a tap, so a lift would stick. Only the
+   press runs there, and a chosen segmented option keeps its 1px press. */
+@media (hover: none) {
+  :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:active, .active, [aria-pressed="true"], [aria-checked="true"]),
+  :is(a, button).chip:hover:not(:active),
+  a:hover:not(:active) > .accent-card { transform: none; }
+  a:hover:not(:active) > .accent-card,
+  .btn-secondary:hover:not(:active) { box-shadow: var(--cn-plate), var(--hard-extra); }
+}
+
+/* ── Tabs: views of one panel ────────────────────────────────────────────────
+   <div class="tabs" role="tablist" aria-label="Invoice views">
+     <button role="tab" aria-selected="true" aria-controls="p1" id="t1">Open</button> …
+   </div>
+   <div role="tabpanel" id="p1" aria-labelledby="t1">…</div>
+   The tabs sit in a shallow carve and the selected one rises out of it on
+   the raised fill, the reverse of the segmented control, whose choice
+   presses in. The carve takes the quiet even surface-1 hairline,
+   --cn-carve-ring, so its bounds show on the page and on a panel. Arrow keys move
+   between tabs (a consumer listener; roving tabindex, the selected tab is
+   the only one in the tab order).        */
+.tabs {
+  position: relative;
+  max-width: 100%;
+  padding: var(--space-1);
+  display: inline-flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  border-radius: var(--cn-radius-card);
+  box-shadow: var(--cn-carve-ring), var(--neu-inset-soft);
+  scrollbar-width: none;
+}
+.tabs > [role="tab"] {
+  min-height: var(--control-h-sm);
+  padding: 0 var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+  color: var(--cn-fg-muted);
+  border: 1px solid transparent;
+  border-radius: var(--cn-radius-control);
+  background: transparent;
+  font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast);
+}
+.tabs > [role="tab"]:hover { color: var(--cn-fg); }
+.tabs > [role="tab"][aria-selected="true"] {
+  color: var(--cn-fg);
+  border-color: var(--engaged-edge);
+  background: var(--cn-surface-raised);
+  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
+}
+/* With tabs() wired, the selected tab's raised fill moves as one pill.
+   tabs() measures the selected tab into --cn-tab-x and --cn-tab-w and sets
+   data-cn-indicator; the pill slides over --t-fast on the ease-out, since
+   a moved selection answers the pointer, and lands at once under reduced
+   motion. Without the script each tab draws its own fill, as above. */
+.tabs[data-cn-indicator] { isolation: isolate; }
+.tabs[data-cn-indicator]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: var(--space-1);
+  bottom: var(--space-1);
+  left: 0;
+  width: var(--cn-tab-w, 0);
+  translate: var(--cn-tab-x, 0) 0;
+  border: 1px solid var(--engaged-edge);
+  border-radius: var(--cn-radius-control);
+  background: var(--cn-surface-raised);
+  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
+  pointer-events: none;
+  transition: translate var(--t-fast) var(--ease-out), width var(--t-fast) var(--ease-out);
+}
+.tabs[data-cn-indicator] > [role="tab"][aria-selected="true"] { border-color: transparent; background: transparent; box-shadow: none; }
+.tabs > [role="tab"] > svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.tabs > [role="tab"]:disabled { opacity: var(--disabled-opacity); cursor: not-allowed; }
+
+/* ── Menu: a list of actions in a popover ──────────────────────────────────
+   <div class="popover menu" role="menu"><button role="menuitem">Rename</button>
+     <hr role="separator"><button role="menuitem" class="is-danger">Delete</button></div>
+   Items are 14px rows at 500. Hover and keyboard focus share --hover, so
+   the pointer and the arrow keys light the same row; keyboard focus adds
+   the inset ring. A trailing kbd is the shortcut. menu() in
+   catppuccin-neu/js wires the arrow keys, Home, End and Escape and returns
+   focus to the trigger on close.                                         */
+.menu { width: auto; min-width: 200px; max-width: min(320px, 100vw - 2 * var(--space-4)); padding: var(--space-1); }
+.menu [role^="menuitem"] {
+  width: 100%;
+  min-height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--cn-fg-soft);
+  border: 0;
+  border-radius: var(--cn-radius-control);
+  background: transparent;
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.menu [role^="menuitem"]:is(:hover, :focus-visible) { color: var(--cn-fg); background: var(--hover); }
+/* Keyboard focus keeps the ring, inset so the row's neighbors don't
+   clip it; the pointer hover is --hover alone. */
+.menu [role^="menuitem"]:focus-visible { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
+.menu [role^="menuitem"] > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--cn-fg-faint); }
+.menu [role^="menuitem"] > kbd { margin-inline-start: auto; color: var(--cn-fg-muted); font: var(--cn-type-code-weight) var(--cn-type-code-size)/1 var(--mono); }
+.menu [role^="menuitem"][aria-checked="true"]::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  margin-inline-start: auto;
+  flex: 0 0 auto;
+  background: var(--cn-interactive);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.menu > .is-danger { color: var(--cn-danger); }
+.menu > .is-danger:is(:hover, :focus-visible) { color: var(--cn-danger); background: var(--cn-danger-wash); }
+.menu [role^="menuitem"]:is(:disabled, [aria-disabled="true"]) { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
+.menu > [role="separator"] { margin: var(--space-1) 0; border: 0; border-top: 1px solid var(--edge-soft); }
+.menu > .cn-microlabel { padding: var(--space-2) var(--space-3) var(--space-1); }
+/* Once any row leads with an icon, rows without one and the group labels
+   start at the icon column's text edge, so every label lines up. */
+.menu:has(> [role^="menuitem"] > svg) > [role^="menuitem"]:not(:has(> svg)),
+.menu:has(> [role^="menuitem"] > svg) > .cn-microlabel { padding-inline-start: calc(var(--space-3) + var(--space-4) + var(--space-2)); }
+
+/* ── Listbox: a list of options to pick from ───────────────────────────────
+   <div class="listbox well" role="listbox" tabindex="0" aria-label="Team">
+     <div role="option" aria-selected="true">Payments</div> …</div>
+   Standalone it sits in a carve (compose .well); under a combobox it sits
+   on a .popover. Rows are the menu's: 14px at 500, --hover under the
+   pointer and on the active row, the one aria-activedescendant names
+   (listbox() in catppuccin-neu/js marks it data-active). The selected row
+   wears --wash with a mauve check, so it outranks the hovered one. Under
+   the keyboard the active row draws the focus ring inset 2px, and the
+   listbox hands its own ring to that row. */
+.listbox {
+  max-height: min(320px, 50vh);
+  padding: var(--space-1);
+  display: grid;
+  align-content: start;
+  overflow-y: auto;
+  scrollbar-color: var(--surface-2) transparent;
+}
+.popover.listbox { width: auto; min-width: 200px; }
+.listbox [role="option"] {
+  min-height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--cn-fg-soft);
+  border-radius: var(--cn-radius-control);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  cursor: pointer;
+}
+.listbox [role="option"]:is(:hover, [data-active]) { color: var(--cn-fg); background: var(--hover); }
+.listbox [role="option"][aria-selected="true"] { color: var(--cn-fg); background: var(--wash); font-weight: var(--cn-type-name-weight); }
+.listbox [role="option"][aria-selected="true"]::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  margin-inline-start: auto;
+  flex: 0 0 auto;
+  background: var(--cn-interactive);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.listbox [role="option"][aria-disabled="true"] { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
+.listbox:focus-visible:has([data-active]) { outline-color: transparent; }
+:is(.listbox:focus-visible, .listbox[data-cn-keyboard]) [role="option"][data-active] { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
+
+/* ── Slider: a range input ──────────────────────────────────────────────────
+   <input type="range" class="slider" style="--value: 40%">
+   A 7px carved track like the progress track, a raised round thumb with
+   the lit edge, and a flat --cn-interactive fill up to the thumb. Firefox fills
+   it natively; elsewhere the consumer keeps --value in step with the
+   input (one input listener). Pair it with a visible label and an
+   output for the value.                                                */
+.slider {
+  --slider-track: 7px;
+  --slider-thumb: 20px;
+  width: 100%;
+  height: 24px;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.slider::-webkit-slider-runnable-track {
+  height: var(--slider-track);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cn-interactive) var(--value, 0%), var(--crust) 0);
+  box-shadow: var(--neu-inset-soft);
+}
+.slider::-moz-range-track { height: 7px; border-radius: 999px; background: var(--crust); box-shadow: var(--neu-inset-soft); }
+.slider::-moz-range-progress { height: 7px; border-radius: 999px; background: var(--cn-interactive); }
+.slider::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  margin-top: calc((var(--slider-track) - var(--slider-thumb)) / 2);
+  appearance: none;
+  border: 1px solid var(--control-edge);
+  border-radius: 50%;
+  background: var(--cn-surface-raised);
+  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
+  transition: border-color var(--t-fast), scale var(--t-fast) var(--ease-spring);
+}
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--control-edge);
+  border-radius: 50%;
+  background: var(--cn-surface-raised);
+  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
+  transition: border-color var(--t-fast), scale var(--t-fast) var(--ease-spring);
+}
+.slider:hover::-webkit-slider-thumb { border-color: var(--engaged-edge); }
+.slider:hover::-moz-range-thumb { border-color: var(--engaged-edge); }
+.slider:active::-webkit-slider-thumb { scale: .92; transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
+.slider:active::-moz-range-thumb { scale: .92; transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
+.slider:disabled { opacity: var(--disabled-opacity); cursor: not-allowed; }
+/* Inside a .field the field's carve rules would take the range input;
+   the slider keeps its own track. */
+.field .slider { height: 24px; padding: 0; border-radius: 0; background: transparent; box-shadow: none; }
+
+/* ── Pagination and breadcrumbs: position in a sequence ────────────────────
+   <nav class="pagination" aria-label="Pages"><a href="?p=1">1</a>
+     <a href="?p=2" aria-current="page">2</a><span>…</span>…</nav>
+   <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li>
+     <li><a href="/billing" aria-current="page">Billing</a></li></ol></nav>
+   Pages are square ghost targets with tabular figures at 500; the current
+   one is the engaged state at 600. Crumbs run at 14px and 500 with a faint
+   chevron between them; the current crumb is text-colored at 600, the
+   same weight step a sidebar link takes.                               */
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+.pagination > :is(a, button, span) {
+  min-width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  padding: 0 var(--space-2);
+  display: inline-grid;
+  place-items: center;
+  color: var(--cn-fg-body);
+  border: 1px solid transparent;
+  border-radius: var(--cn-radius-control);
+  background: transparent;
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
+}
+.pagination > :is(a, button) { cursor: pointer; }
+.pagination > span { color: var(--cn-fg-muted); }
+.pagination > :is(a, button):hover { color: var(--cn-fg); background: var(--hover); }
+.pagination > [aria-current="page"] {
+  transform: translateY(1px);
+  color: var(--cn-fg);
+  border-color: var(--engaged-edge);
+  background: var(--wash);
+  box-shadow: var(--neu-inset);
+  font-weight: var(--cn-type-ui-weight);
+}
+.pagination > :is(a, button) > svg { width: 16px; height: 16px; }
+.pagination > :is(a, button):is(:disabled, [aria-disabled="true"]) { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
+.breadcrumbs ol { margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); list-style: none; }
+.breadcrumbs li { margin: 0; display: inline-flex; align-items: center; gap: var(--space-2); color: var(--cn-fg-muted); font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans); }
+.breadcrumbs li + li::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: var(--cn-fg-faint);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.breadcrumbs:dir(rtl) li + li::before { scale: -1 1; }
+.breadcrumbs a { color: var(--cn-fg-body); }
+.breadcrumbs a:hover { color: var(--cn-fg); }
+.breadcrumbs [aria-current="page"] { color: var(--cn-fg); font-weight: var(--cn-type-name-weight); }
+
+/* ── Prose: long-form content ───────────────────────────────────────────────
+   .cn-prose sets an article from bare elements: the body role at the
+   measure, 16px between blocks, headings in the heading, title and name
+   roles with more room above than below, quiet inline code, and a quote
+   on an inline-start rule. It is the one recipe that styles bare
+   elements, and only inside itself.                                    */
+.cn-prose { max-inline-size: var(--cn-measure); color: var(--cn-fg-body); font: var(--cn-type-body-weight) var(--cn-type-body-size)/var(--cn-type-body-leading) var(--sans); }
+.cn-prose > * { margin-block: 0; }
+.cn-prose > * + * { margin-block-start: var(--space-4); }
+.cn-prose > h2 { margin-block-start: var(--space-7); color: var(--cn-fg); font: var(--cn-type-heading-weight) var(--cn-type-heading-size)/var(--cn-type-heading-leading) var(--sans); letter-spacing: var(--cn-type-heading-tracking); text-wrap: balance; }
+.cn-prose > h3 { margin-block-start: var(--space-6); color: var(--cn-fg); font: var(--cn-type-title-weight) var(--cn-type-title-size)/var(--cn-type-title-leading) var(--sans); letter-spacing: var(--cn-type-title-tracking); }
+.cn-prose > h4 { margin-block-start: var(--space-5); color: var(--cn-fg); font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans); }
+.cn-prose > :is(h2, h3, h4) + * { margin-block-start: var(--space-3); }
+.cn-prose > :first-child { margin-block-start: 0; }
+.cn-prose :not(pre) > code { color: var(--cn-fg-soft); font-family: var(--mono); font-size: .92em; font-variant-ligatures: none; }
+.cn-prose > blockquote { margin-inline: 0; padding-inline-start: var(--space-4); color: var(--cn-fg-soft); border-inline-start: 2px solid var(--edge-strong); }
+.cn-prose > hr { margin-block: var(--space-6); border: 0; border-top: 1px solid var(--edge-soft); }
+.cn-prose strong { color: var(--cn-fg); font-weight: var(--cn-type-name-weight); }
+
+/* ── Skip link: the first focusable element on a page ──────────────────────
+   <a class="cn-skip-link" href="#main">Skip to content</a>
+   Hidden until it takes keyboard focus, then it floats over the topbar's
+   corner on the overlay fill.                                          */
+.cn-skip-link {
+  position: fixed;
+  top: var(--space-3);
+  inset-inline-start: var(--space-3);
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  color: var(--cn-fg);
+  border: 1px solid var(--edge-strong);
+  border-radius: var(--cn-radius-control);
+  background: var(--cn-surface-overlay);
+  box-shadow: var(--shadow-pop);
+  font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  text-decoration: none;
+  translate: 0 calc(-100% - var(--space-5));
+  transition: translate var(--t-fast) var(--ease-out);
+}
+.cn-skip-link:focus-visible { translate: 0 0; }
+
+/* ── Sidebar: an app's side navigation ──────────────────────────────────────
+   <div class="app-shell has-sidebar">
+     <aside class="sidebar">
+       <div class="sidebar-head">…wordmark… <button class="btn btn-ghost is-sm sidebar-toggle" aria-expanded="false" aria-controls="nav">Menu</button></div>
+       <nav class="sidebar-body sidebar-nav" id="nav" aria-label="Sections">
+         <div><p class="cn-microlabel">Group</p><a href="…" aria-current="page">Page</a>…</div>
+       </nav>
+     </aside>
+     <main>…</main>
+   </div>
+   The sidebar sits one step below the mantle page, on crust 80% into
+   mantle, behind an --edge rule (1.92:1 on the page), and scrolls on its
+   own. The current link is a position: the
+   spine and 600, no press. At 1060px and below it folds into
+   a sticky bar; the consumer toggles .is-open and aria-expanded.          */
+.app-shell.has-sidebar { flex-direction: row; }
+.app-shell.has-sidebar > :not(.sidebar) { flex: 1 1 0; min-width: 0; }
+.sidebar {
+  width: var(--sidebar-w, 264px);
+  height: 100vh;
+  height: 100dvh;
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  border-inline-end: 1px solid var(--edge);
+  background: var(--cn-surface-recessed);
+}
+.sidebar-head {
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.sidebar-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 var(--space-3) var(--space-6);
+  scrollbar-color: var(--surface-2) transparent;
+}
+.sidebar-toggle { display: none; }
+.sidebar-nav { display: grid; gap: var(--space-5); align-content: start; }
+.sidebar-nav > * { display: grid; gap: var(--space-1); }
+.sidebar-nav .cn-microlabel { margin: 0 0 var(--space-2); padding: 0 var(--space-3); }
+.sidebar-nav a {
+  padding: var(--space-2) var(--space-3);
+  color: var(--cn-fg-muted);
+  border: 1px solid transparent;
+  border-radius: var(--cn-radius-control);
+  /* 500 at the ui size in the muted ink, so the links sit under the
+     content; hover takes --cn-fg and the current page --cn-fg at 600. */
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  text-decoration: none;
+  transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
+}
+.sidebar-nav a:hover { color: var(--cn-fg); background: var(--hover); }
+/* The current page is a position, not a press: 600 in --cn-fg and the
+   spine, a 4px --cn-interactive bar on the start edge, inset 8px so it
+   fits the row. No wash, rim or carve, so the nav never reads as a column
+   of pressed buttons. The rank is an ink step: the other links rest in
+   --cn-fg-muted, and the group that holds the current page lifts its
+   microlabel to --cn-fg, so the open section shows before the link does.
+   The lift goes through --cn-microlabel-ink: .cn-microlabel sets its
+   color in the utilities layer, which beats any color set here. */
+.sidebar-nav > :has(a[aria-current="page"]) { --cn-microlabel-ink: var(--cn-fg); }
+.sidebar-nav a[aria-current="page"] {
+  position: relative;
+  color: var(--cn-fg);
+  font-weight: var(--cn-type-name-weight);
+}
+.sidebar-nav a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-2);
+  inset-inline-start: 0;
+  width: 4px;
+  border-start-end-radius: var(--cn-radius-chip);
+  border-end-end-radius: var(--cn-radius-chip);
+  background: var(--cn-interactive);
+}
+@media (max-width: 1060px) {
+  .app-shell.has-sidebar { flex-direction: column; }
+  .sidebar {
+    width: auto;
+    height: auto;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--edge);
+    background: color-mix(in srgb, var(--cn-surface-recessed) 88%, transparent);
+    backdrop-filter: blur(14px);
+  }
+  .sidebar-head { padding: var(--space-3) var(--page-gutter); }
+  /* Focus not obscured (WCAG 2.4.11): the folded bar is sticky, so the
+     page stops every scroll the bar's closed height plus 12px short of
+     the top, as it does under a topbar. */
+  :root:has(.sidebar) { scroll-padding-top: calc(var(--control-h-sm) + 3 * var(--space-3) + 1px); }
+  .sidebar-toggle { display: inline-flex; }
+  /* The body opens the way an overlay does: it fades and settles 4px over
+     --t-base on the ease-out, and leaves on the ease-in over --t-exit.
+     Opacity and translate only, so no box that holds text changes height. */
+  .sidebar-body {
+    display: none;
+    max-height: min(60vh, 480px);
+    padding: 0 var(--page-gutter) var(--space-5);
+    opacity: 0;
+    translate: 0 -4px;
+    transition: opacity var(--t-exit) var(--ease-in), translate var(--t-exit) var(--ease-in), display var(--t-exit) allow-discrete;
+  }
+  .sidebar.is-open .sidebar-body {
+    display: grid;
+    opacity: 1;
+    translate: none;
+    transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), display var(--t-base) allow-discrete;
+  }
+  @starting-style { .sidebar.is-open .sidebar-body { opacity: 0; translate: 0 -4px; } }
 }
 
 /* ── App shell and live dot ─────────────────────────────────────────────── */
@@ -1855,7 +2860,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 
 .live-dot {
   width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
-  color: var(--green); background: currentColor;
-  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 13%, transparent);
-  animation: pulse 1.5s ease-in-out infinite;
+  color: var(--cn-success); background: currentColor;
+  box-shadow: var(--cn-live-halo);
+  animation: pulse 1.5s var(--ease-out) infinite;
 }

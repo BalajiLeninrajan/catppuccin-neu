@@ -36,6 +36,9 @@
   --color-subtext-1: var(--subtext-1);
   --color-text: var(--text);
   --color-rosewater: var(--rosewater);
+  --color-flamingo: var(--flamingo);
+  --color-maroon: var(--maroon);
+  --color-sapphire: var(--sapphire);
   --color-pink: var(--pink);
   --color-mauve: var(--mauve);
   --color-red: var(--red);
@@ -46,7 +49,46 @@
   --color-sky: var(--sky);
   --color-blue: var(--blue);
   --color-lavender: var(--lavender);
+  /* Semantic roles: text-fg-muted, ring-focus, bg-danger and the rest.
+     They follow prefers-contrast. */
+  --color-fg: var(--cn-fg);
+  --color-fg-soft: var(--cn-fg-soft);
+  --color-fg-body: var(--cn-fg-body);
+  --color-fg-muted: var(--cn-fg-muted);
+  --color-fg-placeholder: var(--cn-fg-placeholder);
+  --color-fg-faint: var(--cn-fg-faint);
+  --color-fg-disabled: var(--cn-fg-disabled);
+  --color-interactive: var(--cn-interactive);
+  --color-interactive-hover: var(--cn-interactive-hover);
+  --color-focus: var(--cn-focus);
+  --color-danger: var(--cn-danger);
+  --color-warning: var(--cn-warning);
+  --color-success: var(--cn-success);
+  --color-info: var(--cn-info);
   /* Contract properties */
+  --color-series-1: var(--cn-series-1);
+  --color-series-2: var(--cn-series-2);
+  --color-series-3: var(--cn-series-3);
+  --color-series-4: var(--cn-series-4);
+  --color-series-5: var(--cn-series-5);
+  --color-series-6: var(--cn-series-6);
+  --color-ramp-1: var(--cn-ramp-1);
+  --color-ramp-2: var(--cn-ramp-2);
+  --color-ramp-3: var(--cn-ramp-3);
+  --color-ramp-4: var(--cn-ramp-4);
+  --color-ramp-5: var(--cn-ramp-5);
+  --color-diverge-1: var(--cn-diverge-1);
+  --color-diverge-2: var(--cn-diverge-2);
+  --color-diverge-3: var(--cn-diverge-3);
+  --color-diverge-4: var(--cn-diverge-4);
+  --color-diverge-5: var(--cn-diverge-5);
+  --color-surface-page: var(--cn-surface-page);
+  --color-surface-recessed: var(--cn-surface-recessed);
+  --color-hover: var(--hover);
+  --color-surface-raised: var(--cn-surface-raised);
+  --color-surface-overlay: var(--cn-surface-overlay);
+  --color-surface-band: var(--cn-surface-band);
+  --color-surface-sunken: var(--cn-surface-sunken);
   --color-accent: var(--accent);
   --color-tone: var(--tone);
   /* Mix tokens: border-edge, border-edge-soft, bg-tint, bg-wash, border-control-edge */
@@ -62,7 +104,8 @@
   --ease-spring: cubic-bezier(.3, 1.4, .4, 1);
 
   /* Tailwind's default numeric scale already holds --space-1..6:
-     1 = 4px, 2 = 8px, 3 = 12px, 4 = 16px, 6 = 24px, 8 = 32px. Only the
+     1 = 4px, 2 = 8px, 3 = 12px, 4 = 16px, 6 = 24px, 8 = 32px, and
+     --space-7..8 are 12 = 48px and 16 = 64px. Only the
      named density and layout knobs are added: h-control, h-band,
      px-gutter and the rest. */
   --spacing-control: var(--control-h);
@@ -70,8 +113,6 @@
   --spacing-band: var(--band-h);
   --spacing-gutter: var(--page-gutter);
   --spacing-page-pad: var(--page-pad);
-  /* deprecated, removed in 0.5.0: use control */
-  --spacing-input: var(--control-h);
 
   /* Type roles: text-microlabel, text-label, text-meta and the rest.
      Each reads its --cn-type-<role>-* tokens. */
@@ -103,6 +144,10 @@
   --text-lede--line-height: var(--cn-type-lede-leading);
   --text-lede--letter-spacing: var(--cn-type-lede-tracking);
   --text-lede--font-weight: var(--cn-type-lede-weight);
+  --text-heading: var(--cn-type-heading-size);
+  --text-heading--line-height: var(--cn-type-heading-leading);
+  --text-heading--letter-spacing: var(--cn-type-heading-tracking);
+  --text-heading--font-weight: var(--cn-type-heading-weight);
   --text-title: var(--cn-type-title-size);
   --text-title--line-height: var(--cn-type-title-leading);
   --text-title--letter-spacing: var(--cn-type-title-tracking);
@@ -127,14 +172,9 @@
   --text-display-sm--line-height: var(--cn-type-display-leading);
   --text-display-sm--letter-spacing: var(--cn-type-display-tracking);
   --text-display-sm--font-weight: var(--cn-type-display-weight);
-  /* deprecated, removed in 0.5.0: use text-microlabel */
-  --text-micro: var(--cn-type-micro-size);
-  --text-micro--line-height: var(--cn-type-micro-leading);
-  --text-micro--letter-spacing: var(--cn-type-micro-tracking);
-  --text-micro--font-weight: var(--cn-type-micro-weight);
 
   /* Faces: the token stacks */
-  --font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "IBM Plex Sans", "IBM Plex Sans Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "JetBrainsMono Nerd Font", "JetBrainsMono Nerd Font Mono",
                ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
@@ -145,16 +185,17 @@
   --radius-mark: var(--cn-radius-control);
   --radius-chip: var(--cn-radius-chip);
 
-  /* Depth: the four neu tokens, the floats and the hard offsets */
+  /* Depth: the five neu tokens, the floats and the hard offsets */
   --shadow-neu-raised: var(--neu-raised);
+  --shadow-neu-lifted: var(--neu-lifted);
   --shadow-neu-raised-soft: var(--neu-raised-soft);
   --shadow-neu-inset: var(--neu-inset);
   --shadow-neu-inset-soft: var(--neu-inset-soft);
   --shadow-pop: 0 24px 70px rgb(17 17 27 / .78);
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);
-  --shadow-hard: var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--hard-offset-color, var(--crust)));
-  --shadow-hard-lg: 10px 10px 0 var(--plate, var(--hard-offset-color, var(--crust)));
-  --shadow-hard-sm: 3px 3px 0 var(--plate, var(--hard-offset-color, var(--crust)));
+  --shadow-hard: calc(var(--hard-offset) * .25) calc(var(--hard-offset) * .25) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .5) calc(var(--hard-offset) * .5) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) * .75) calc(var(--hard-offset) * .75) 0 var(--plate, var(--neu-ink)), var(--hard-offset) var(--hard-offset) 0 var(--plate, var(--neu-ink));
+  --shadow-hard-lg: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink)), 4px 4px 0 var(--plate, var(--neu-ink)), 5px 5px 0 var(--plate, var(--neu-ink)), 6px 6px 0 var(--plate, var(--neu-ink)), 7px 7px 0 var(--plate, var(--neu-ink)), 8px 8px 0 var(--plate, var(--neu-ink)), 9px 9px 0 var(--plate, var(--neu-ink)), 10px 10px 0 var(--plate, var(--neu-ink));
+  --shadow-hard-sm: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink));
   --shadow-mark: 2px 2px 5px var(--neu-dark-soft), inset 0 1px rgb(255 255 255 / .1);
 }
 

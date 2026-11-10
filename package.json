@@ -1,6 +1,6 @@
 {
   "name": "catppuccin-neu",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BalajiLeninrajan/catppuccin-neu.git"
@@ -11,6 +11,7 @@
   "license": "MIT",
   "files": [
     "css",
+    "js",
     "tailwind",
     "scripts",
     "SPEC.md",
@@ -20,6 +21,14 @@
   ],
   "exports": {
     ".": "./css/index.css",
+    "./js": {
+      "types": "./js/index.d.ts",
+      "default": "./js/index.js"
+    },
+    "./js/auto": {
+      "types": "./js/auto.d.ts",
+      "default": "./js/auto.js"
+    },
     "./css/*": "./css/*",
     "./tailwind/*": "./tailwind/*",
     "./scripts/*": "./scripts/*"

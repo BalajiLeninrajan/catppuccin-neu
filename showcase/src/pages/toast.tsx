@@ -15,6 +15,46 @@ interface ToastItem {
   leaving: boolean;
 }
 
+/* Swipe to dismiss, the same rule as toast() in catppuccin-neu/js: a toast
+   follows a sideways drag toward the end edge and goes past 80px or on a
+   quick flick; short of that it springs back. Drag state lives on the
+   element, so a re-render mid-drag keeps it. */
+const drags = new WeakMap<HTMLElement, { id: number; x0: number; t0: number; dx: number; end: number }>();
+
+function swipe(onDismiss: () => void) {
+  return {
+    onPointerDown(e: PointerEvent) {
+      const el = e.currentTarget as HTMLElement;
+      if (e.button !== 0 || (e.target as Element).closest("button, a, input")) return;
+      const end = getComputedStyle(el).direction === "rtl" ? -1 : 1;
+      drags.set(el, { id: e.pointerId, x0: e.clientX, t0: e.timeStamp, dx: 0, end });
+      el.setPointerCapture(e.pointerId);
+      el.style.transition = "none";
+    },
+    onPointerMove(e: PointerEvent) {
+      const el = e.currentTarget as HTMLElement;
+      const d = drags.get(el);
+      if (!d || d.id !== e.pointerId) return;
+      d.dx = Math.max(0, (e.clientX - d.x0) * d.end);
+      el.style.translate = `${d.dx * d.end}px 0`;
+      el.style.opacity = String(Math.max(0, 1 - d.dx / 240));
+    },
+    onPointerUp: release,
+    onPointerCancel: release,
+  };
+  function release(e: PointerEvent) {
+    const el = e.currentTarget as HTMLElement;
+    const d = drags.get(el);
+    if (!d || d.id !== e.pointerId) return;
+    drags.delete(el);
+    el.style.transition = "";
+    const flick = d.dx / Math.max(1, e.timeStamp - d.t0) > 0.6;
+    if (d.dx > 80 || (flick && d.dx > 24)) return onDismiss();
+    el.style.translate = "";
+    el.style.opacity = "";
+  }
+}
+
 function ToastSpawner() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
@@ -86,33 +126,34 @@ function ToastSpawner() {
       <button type="button" class="btn btn-primary" onClick={spawn}>
         Spawn a toast
       </button>
-      {toasts.length > 0 && (
-        <div
-          class="toast-stack"
-          aria-live="polite"
-          onMouseEnter={pause}
-          onMouseLeave={resume}
-          onFocusIn={pause}
-          onFocusOut={resume}
-        >
-          {toasts.map((t) => (
-            <div key={t.id} class="toast" hidden={t.leaving} role="status">
-              <div>
-                <b>{t.title}</b>
-                <span>{t.desc}</span>
-              </div>
-              <button
-                type="button"
-                class="btn is-icon"
-                aria-label="Dismiss"
-                onClick={() => dismiss(t.id)}
-              >
-                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
-              </button>
+      {/* Always mounted: a live region must exist before content lands in it. */}
+      <div
+        class="toast-stack"
+        role="region"
+        aria-live="polite"
+        aria-label="Notifications"
+        onMouseEnter={pause}
+        onMouseLeave={resume}
+        onFocusIn={pause}
+        onFocusOut={resume}
+      >
+        {toasts.map((t) => (
+          <div key={t.id} class="toast" hidden={t.leaving} role="status" {...swipe(() => dismiss(t.id))}>
+            <div>
+              <b>{t.title}</b>
+              <span>{t.desc}</span>
             </div>
-          ))}
-        </div>
-      )}
+            <button
+              type="button"
+              class="btn is-icon"
+              aria-label="Dismiss"
+              onClick={() => dismiss(t.id)}
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            </button>
+          </div>
+        ))}
+      </div>
     </>
   );
 }
@@ -124,14 +165,32 @@ export default function ToastPage() {
       lede="A transient confirmation in a fixed corner stack. The recipe is the look and the motion; the behavior is yours."
     >
       <p class="cn-copy">
-        Two classes. <code class="cn-code">.toast-stack</code> is the viewport, fixed to
-        the bottom-right corner; mark it <code class="cn-code">aria-live="polite"</code>{" "}
-        so arrivals are announced, and append new toasts at the bottom.{" "}
-        <code class="cn-code">.toast</code> is one item: a content column with a{" "}
-        <code class="cn-code">b</code> title over a span or p description, then trailing
-        controls: a <code class="cn-code">.btn-text</code> action, a{" "}
-        <code class="cn-code">.btn.is-icon</code> close, or both. The border is the neutral
-        surface-1 hairline; the toast carries no accent color.
+        A <code class="cn-code-inline">.toast-stack</code> holds{" "}
+        <code class="cn-code-inline">.toast</code> items; spawn a few to see
+        the pile.
+      </p>
+
+      <Demo lead title="Spawner, auto-dismisses after 7s" why="The stack, the live region, the pile and the swipe" classes="toast-stack toast">
+        <ToastSpawner />
+      </Demo>
+
+      <p class="cn-copy">
+        <code class="cn-code-inline">.toast-stack</code> is the viewport, fixed to
+        the bottom-right corner. Append new toasts at the bottom.{" "}
+        <code class="cn-code-inline">.toast</code> is one item: a content column with a{" "}
+        <code class="cn-code-inline">b</code> title over a span or p description, then trailing
+        controls: a <code class="cn-code-inline">.btn-text</code> action, a{" "}
+        <code class="cn-code-inline">.btn.is-icon</code> close, or both. The border is{" "}
+        <code class="cn-code-inline">--edge-strong</code>, the neutral surface-2 overlay hairline; the toast
+        carries no accent color.
+      </p>
+
+      <p class="cn-copy">
+        Give the stack <code class="cn-code-inline">role="region"</code>,{" "}
+        <code class="cn-code-inline">aria-live="polite"</code> and an{" "}
+        <code class="cn-code-inline">aria-label</code> such as "Notifications". The
+        live region announces each arrival, and the label lets a screen
+        reader jump to the stack by name. The demo's stack carries all three.
       </p>
 
       <p class="cn-copy">
@@ -142,25 +201,40 @@ export default function ToastPage() {
       </p>
 
       <p class="cn-copy">
+        Dismissing a toast from the middle needs no extra rule. Collapsed,
+        depth counts visible toasts only, so the pile re-steps on its
+        translate and scale. Fanned, the leaving toast collapses its height
+        and margin as it fades, so the toasts above it ride down instead of
+        jumping.
+      </p>
+
+      <p class="cn-copy">
         Toasts fade in and slide 16px from the right edge. The exit animates only if
-        the toast stays mounted and <code class="cn-code">hidden</code> is toggled;
+        the toast stays mounted and <code class="cn-code-inline">hidden</code> is toggled;
         unmount it after the transition. Unmounting directly gets the entrance only.
         Auto-dismiss after a few seconds and keep a manual dismiss for anything a
         reader might want to keep.
       </p>
 
-      <Demo title="Spawner, auto-dismisses after 7s" classes="toast-stack toast">
-        <ToastSpawner />
-      </Demo>
+      <p class="cn-copy">
+        A toast can also be swiped away. Drag it toward the end edge, right
+        in a left-to-right page, and it follows the pointer and fades. Past
+        80px, or on a quick flick, it dismisses; short of that it springs
+        back. The recipe sets <code class="cn-code-inline">touch-action: pan-y</code>,
+        so a vertical drag still scrolls the page and only a sideways one
+        moves the toast. Buttons and links inside the toast never start a
+        swipe. The close button stays, because a swipe is a shortcut, not
+        the only way out.
+      </p>
 
-      <Demo title="At rest, one item outside its stack" row>
+      <Demo title="At rest, one item outside its stack" why="What needs script" row>
         <div class="toast" role="status">
           <div>
             <b>Event created</b>
             <span>Sunday, December 3 at 9:00 AM</span>
           </div>
           <button type="button" class="btn is-icon" aria-label="Dismiss">
-            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
           </button>
         </div>
         <div class="toast" role="status">
@@ -173,13 +247,31 @@ export default function ToastPage() {
       </Demo>
 
       <p class="cn-copy">
-        The package ships no JavaScript, by design. Spawning, timers,
-        dismissal, the pile cap, and pause on hover are consumer code in
-        whatever framework you use. This page runs the Preact reference
-        below: per-toast timers that manual dismissal cancels, hover or focus
-        on the stack pausing every timer and resuming the remainder, a cap of
-        five live toasts, and the hidden-then-unmount exit.
+        The CSS draws the toast and the pile; spawning, timers and dismissal
+        need script. The optional <a href="/behavior">behavior module</a> has{" "}
+        <code class="cn-code-inline">toast(stack, {"{ title, body, timeout }"})</code>,
+        which appends a toast with a dismiss button, pauses its timeout while
+        the pointer or focus is in the stack, dismisses on a swipe toward the
+        end edge, exits through{" "}
+        <code class="cn-code-inline">[hidden]</code> and then removes the node. In a
+        framework, write the same logic in its terms. This page runs the
+        Preact reference below: per-toast timers that manual dismissal
+        cancels, hover or focus on the stack pausing every timer and resuming
+        the remainder, a cap of five live toasts, the same swipe, and the
+        hidden-then-unmount exit.
       </p>
+
+      <CodeBlock
+        title="Without a framework"
+        code={`import { toast } from "catppuccin-neu/js";
+
+const stack = document.querySelector(".toast-stack");
+const { dismiss } = toast(stack, {
+  title: "Invoice sent",
+  body: "Northwind will get it in a minute.",
+  timeout: 7000, // 0 keeps it until dismissed
+});`}
+      />
 
       <CodeBlock
         title="Reference behavior (Preact, condensed)"
@@ -224,7 +316,7 @@ function resume() {
             values: "the viewport",
             default: "·",
             notes:
-              "Fixed 24px from the right and bottom, z-index 90, column flex aligned to the end, 8px gap, min(380px, 100vw - 48px) wide. Mark it aria-live=\"polite\"; append at the bottom.",
+              "Fixed 24px from the right and bottom, z-index 90, column flex aligned to the end, 8px gap, min(380px, 100vw - 48px) wide. Mark it role=\"region\" aria-live=\"polite\" with an aria-label; append at the bottom.",
           },
           {
             name: "stack states",
@@ -238,14 +330,14 @@ function resume() {
             values: "one stack item",
             default: "·",
             notes:
-              "Flex row on base with the neutral surface-1 border (no accent); floats on --shadow-pop; the card radius (12px).",
+              "Flex row on --cn-surface-overlay with the --edge-strong border (surface-2, no accent); floats on --shadow-pop; the card radius (12px). The meta role.",
           },
           {
             name: "b + span/p",
             values: "title and description",
             default: "·",
             notes:
-              "The content column. b is the block title; the span or p after it is the muted description.",
+              "The content column. b is the block title in the name role; the span or p after it is the description in --cn-fg-body.",
           },
           {
             name: ".btn-text / .btn.is-icon",
@@ -266,13 +358,13 @@ function resume() {
 
       <CodeBlock
         title="Markup"
-        code={`<div class="toast-stack" aria-live="polite">
+        code={`<div class="toast-stack" role="region" aria-live="polite" aria-label="Notifications">
   <div class="toast" role="status">
     <div>
       <b>Event created</b>
       <span>Sunday, December 3 at 9:00 AM</span>
     </div>
-    <button class="btn is-icon" aria-label="Dismiss"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg></button>
+    <button class="btn is-icon" aria-label="Dismiss"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
   </div>
 
   <!-- dismissing: toggle hidden to play the exit, then remove -->

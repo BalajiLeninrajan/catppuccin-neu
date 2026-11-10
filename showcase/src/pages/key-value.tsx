@@ -16,7 +16,7 @@ export default function KeyValuePage() {
       title="Key-value list"
       lede="A dl grid for the details of one record. Keys sit in a column as wide as the longest key; values take the rest."
     >
-      <Demo title="In a panel" classes="dl.kv">
+      <Demo lead title="In a panel" why="When to use .kv, and when a stat row" classes="dl.kv">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Workspace details</h2>
@@ -35,25 +35,25 @@ export default function KeyValuePage() {
       </Demo>
 
       <p class="cn-copy">
-        Use <code class="cn-code">.kv</code> when the reader looks up one
+        Use <code class="cn-code-inline">.kv</code> when the reader looks up one
         value at a time: a record's settings, a deploy's metadata, an
-        invoice's header. Keys are labels in overlay-2. Values are text with
-        tabular numerals, and a long value wraps inside its column. At 520px
+        invoice's header. Keys are 400 in subtext-0. Values are 500 in the text
+        color with tabular numerals, so a pair differs by weight and ink, and a long value wraps inside its column. At 520px
         and below each key sits over its value.
       </p>
 
       <p class="cn-copy">
         For label and value pairs that compare down a list, such as a plan
-        summary, use <code class="cn-code">.stat.is-inline</code> rows
+        summary, use <code class="cn-code-inline">.stat.is-inline</code> rows
         instead, which put the value at the far right.
       </p>
 
       <Props
         title="Contract"
         rows={[
-          { name: ".kv", values: "dl", notes: "Grid: max-content keys, minmax(0, 1fr) values, 8px by 16px gap, 13px text." },
-          { name: "dt", values: "key", notes: "600 12px in overlay-2." },
-          { name: "dd", values: "value", notes: "Text color, tabular numerals, wraps anywhere." },
+          { name: ".kv", values: "dl", notes: "Grid: max-content keys, minmax(0, 1fr) values, 8px by 16px gap, 14px text." },
+          { name: "dt", values: "key", contrast: "7.4:1 on a panel", notes: "The meta weight, 400, at the list's 14px, in --cn-fg-muted (subtext-0)." },
+          { name: "dd", values: "value", contrast: "11.3:1 on a panel", notes: "500 in the text color, a weight step and two ink stops over the key, as in a .stat.is-inline row. Tabular numerals, wraps anywhere." },
           { name: "at 520px", values: "responsive", notes: "One column: key over value, 8px between pairs." },
         ]}
       />
