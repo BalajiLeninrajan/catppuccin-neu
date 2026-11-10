@@ -83,10 +83,10 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--cn-surface-page", "mantle", "the ground", "The body, the app shell, the topbar, stat bands."],
   ["--cn-surface-raised", "base", "1.07:1 on the page", "Panels, plated controls, chips, the selected tab. A fill step above the page, never lighter than base, and they lift by their edges and shadow too."],
   ["--cn-surface-overlay", "surface-0 90% into base", "1.27:1 (1.36:1 on the page)", "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link."],
-  ["--cn-surface-sunken", "crust 70% into mantle", "1.12:1 under base (1.05:1 under the page)", "Wells, the mono wells, stepper pills, skeletons, the switch plate: below the ground wherever they sit."],
+  ["--cn-surface-sunken", "crust", "1.14:1 under base (1.07:1 under the page)", "Wells, the mono wells, stepper pills, skeletons, the switch plate: below the ground wherever they sit."],
   ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
-  ["--hover", "surface-1 40% over the ground", "1.24:1 (1.15:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
+  ["--hover", "surface-1 50% over the ground", "1.31:1 (1.19:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
   ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's top and left; the right and bottom border sides are --neu-ink, 1.22:1 under the fill, and the fill step shows its bounds. overlay-0 on all four sides under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
 ];
@@ -112,6 +112,22 @@ const COMPONENTS: Array<[string, string]> = [
   ["Status tag or banner", "Write the status as a word. A tone never carries meaning alone. A status tone draws its glyph from CSS; a red or yellow palette tone needs an aria-hidden svg first."],
 ];
 
+/* What a screen reader should speak for each widget, from its roles and
+   states. Expected, not observed: nobody has run the pass yet. */
+const ANNOUNCE: Array<[string, string, string]> = [
+  ["Tabs", "Focus on a tab", 'Its name, "tab", "selected" and its position, such as "2 of 3". The first tab reached also speaks the tablist\'s aria-label. A disabled tab is skipped and never spoken.'],
+  ["Tabs", "Tab into the panel", 'The panel\'s name, taken from its tab through aria-labelledby, and "tab panel".'],
+  ["Menu", "Focus on the trigger", 'Its name, "menu button" and "collapsed".'],
+  ["Menu", "Opening it", '"Expanded" or "menu", then the first item: its name, "menu item" and its position, such as "1 of 4". A menuitemcheckbox adds "checked" or "not checked", and speaks the new state when toggled.'],
+  ["Menu", "Escape", 'Focus returns, so the trigger speaks again with "collapsed".'],
+  ["Listbox", "Focus, then each arrow key", 'The aria-label and "list box", then the active option: its name, "selected" when aria-selected is true, and its position. Focus never leaves the listbox.'],
+  ["Combobox", "Focus on the input", 'Its label, "combo box", "collapsed" and its value.'],
+  ["Combobox", "ArrowDown, then a pick", '"Expanded", then the active option\'s name and position. After the pick, "collapsed" and the new value.'],
+  ["Toast", "A toast lands", 'Its title and body, once, after the current sentence. Focus does not move. Its button speaks "Dismiss" and "button". A dismissal is silent.'],
+  ["Dialog", "showModal()", 'The dialog\'s name, from aria-labelledby, and "dialog", then the control that takes focus. The page behind cannot be reached.'],
+  ["Dialog", "Closing it", "Focus returns to the control that opened it, which speaks again."],
+];
+
 /* WCAG 2.2 criteria the package touches. "How it is checked" is honest
    about what runs: lint, axe on the docs, a documented rule, the JS
    module, or a person. */
@@ -123,9 +139,9 @@ const WCAG: Array<[string, string, string, string]> = [
   ["1.4.11 Non-text contrast", "AA", "A resting field is identified by its label and its carve, so it needs no 3:1 edge; hover rings it at 4.4:1 and focus at 11.3:1. The control edge, the slider thumb, the focus ring and the engaged rim hold 3:1 on every ground.", "Lint computes it from the tokens."],
   ["1.4.12 Text spacing", "AA", "The tightest roles lead at 1.25, and controls set a minimum height, not a fixed one, so a spacing override grows the box instead of clipping it.", "The browser check applies the 1.4.12 override on every docs page and fails on any box that clips its text."],
   ["1.4.13 Content on hover or focus", "AA", "Escape dismisses a tooltip, and it stays while the pointer is on its control or the bubble, or focus is inside it. On leave it lingers for --t-slow, so the pointer can cross onto the bubble.", "JS module: tooltips(), or the listener on the Popover page."],
-  ["2.1.1 Keyboard", "A", "Buttons, fields, details, dialog and range inputs work from the keyboard natively. Tabs and menus need the arrow-key model.", "JS module: tabs(), menu() and init(). axe checks that every docs scroller takes focus."],
+  ["2.1.1 Keyboard", "A", "Buttons, fields, details, dialog and range inputs work from the keyboard natively. Tabs and menus need the arrow-key model.", "JS module: one import of catppuccin-neu/js/auto, or tabs(), menu() and init(). axe checks that every docs scroller takes focus."],
   ["2.4.7 Focus visible", "AA", "Every focusable element draws a 2px --cn-focus ring, text, 3px off its edge. No recipe removes it.", "Lint fails on outline: none and computes the ring's contrast."],
-  ["2.4.11 Focus not obscured (minimum)", "AA", "Not handled. A sticky topbar or folded sidebar can cover a focused element as the page scrolls.", "Manual. Set scroll-padding-top to the bar's height."],
+  ["2.4.11 Focus not obscured (minimum)", "AA", "A page that holds a .topbar gets scroll-padding-top on the root: the bar's minimum height plus 12px, 80px by default, 72px at 760px and below, 64px for a compact bar. Rows and controls under a sticky table head take a scroll-margin-top of a control height plus 4px. The folded sidebar bar at 1060px and below sets the same padding from its closed height. Focus, fragment links and scrollIntoView() stop clear of all three. A topbar that wraps taller than its minimum is not covered.", "Documented rule. For a taller bar, set scroll-padding-top on html to the bar's height plus the 5px focus ring."],
   ["2.5.8 Target size (minimum)", "AA", "The smallest control is the compact small control, max(24px, 1.625rem): 26px at the default size and never under 24px. A 20px checkbox, radio or the switch counts once wrapped in .choice, which makes the label row the target.", "Documented rule. Wrap choices in .choice. axe checks target size on every docs page."],
   ["2.5.5 Target size (enhanced)", "AAA", "Under pointer: coarse every control is 44px or taller at every density.", "Documented rule."],
   ["2.3.3 Animation from interactions", "AAA", "Under reduced motion presses, slides and the page entrance land at once and overlays fade in place. Spinners keep a slow turn.", "The browser check reloads every docs page under reduced motion and fails on any transition or animation longer than 1ms, overlay fades and spinners excepted."],
@@ -425,13 +441,30 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         CSS cannot add names, roles or focus handling. These are yours.
         Tabs, menus, listboxes and comboboxes are required to have a
-        keyboard model: <code class="cn-code-inline">init()</code> from the{" "}
+        keyboard model: one import of{" "}
+        <code class="cn-code-inline">catppuccin-neu/js/auto</code> from the{" "}
         <a href="/behavior">behavior module</a>, or your own widget library.
       </p>
 
       <Demo title="What your markup does" why="What CSS cannot do for you">
         <div style="width:100%">
           <Table head={["Component", "What you do"]} rows={COMPONENTS.map(([c, d]) => [c, d])} />
+        </div>
+      </Demo>
+
+      <h2 class="cn-title">Expected announcements</h2>
+      <p class="cn-copy">
+        What a screen reader should speak for each widget when the markup
+        follows the table above. These follow from the roles and states.
+        Nobody has confirmed them with a screen reader yet, and readers
+        differ in wording and order. A pass with NVDA in Firefox and
+        VoiceOver in Safari on tabs, menu and combobox is still owed. When
+        someone runs it, the reader, browser, version and date go here.
+      </p>
+
+      <Demo title="What a reader should speak" why="Expected, not yet confirmed with a screen reader">
+        <div style="width:100%">
+          <Table head={["Widget", "When", "Expected speech"]} rows={ANNOUNCE.map(([w, when, says]) => [w, when, says])} />
         </div>
       </Demo>
 
@@ -493,7 +526,12 @@ export default function AccessibilityPage() {
         panel. It also captures the Depth page and the dashboard and invoice
         examples at 1x and fails when more than 0.1% of the pixels differ
         from the committed baselines, so a depth cue cannot drift without a
-        deliberate baseline update. axe covers the WCAG 2.5.8 target size. Any
+        deliberate baseline update. Before the pages it checks motion from
+        the animations the browser is running: the entrance children of the
+        dashboard example and of the Modal page must stagger 0 to 200ms in
+        40ms steps over --t-slow, and a
+        modal and a toast must enter over --t-base and leave over --t-exit.
+        axe covers the WCAG 2.5.8 target size. Any
         violation fails the run. Text that axe cannot measure, such as a link
         partly below the fold or text over a gradient, is listed as needing
         review and does not fail it.

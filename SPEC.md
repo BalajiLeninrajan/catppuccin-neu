@@ -21,7 +21,7 @@ how each rule got here.
 - **One tilted panel per page**, holding a summary or an aside in prose, not the page's main data and not ruled rows: rotated rules drift against the text on them at 1x. Its heading takes the name role, no larger than the panel titles beside it, and its prose sets at 15px, the compact body size, on the body leading: rotated 14px text renders soft at 1x, and 15px stays under the 16px body, so the tilt does the lifting and the data panel beside it stays the louder block.
 - **`color-mix` is `in srgb`.** `in oklab` is allowed only for data-visualization ramps. `oklch(from …)` is allowed only in `--cn-fill-ramp`, where it moves lightness and chroma, never hue.
 - **Fonts.** Every page links IBM Plex Sans (`IBM+Plex+Sans:ital,wght@0,400..700;1,400..700`) and JetBrains Mono (100..800) from Google Fonts. The package ships no font files.
-- **Ornament budget.** A view holds one tilted panel, one primary and at most one `.is-lg`. Each ornament kind has one job: grain only on solid accent fills; blur only on the topbar, the folded sidebar and the scrim; plates only under clickables, accent cards and the one tilted panel. The ramp and grain always travel together on a solid accent fill, so they count as one kind, the fill; the switch paddle and chart bars take the ramp without grain. A solid accent fill may carry its gloss, and the plate, the rocker and the tilt each add one physical part; every other element holds one kind. The composites this allows are listed under [Special cases](#special-cases). `.is-lg` here means a hero control: a large button or `.input-lg`; a large stat or avatar does not count, and neither does `.btn.is-icon.is-lg`, which only reaches `--control-h`. The tilt never sits on a panel with a table or a form.
+- **Ornament budget.** A view holds one tilted panel, one primary and at most one `.is-lg`. Each ornament kind has one job: grain only on solid accent fills; blur only on the topbar, the folded sidebar and the scrim; plates only under clickables, accent cards and the one tilted panel. The ramp and grain always travel together on a solid accent fill, so they count as one kind, the fill; the switch paddle and chart bars take the ramp without grain. A solid accent fill takes its gloss, a data or status mark takes none, and the plate, the rocker and the tilt each add one physical part; every other element holds one kind. The composites this allows are listed under [Special cases](#special-cases). `.is-lg` here means a hero control: a large button or `.input-lg`; a large stat or avatar does not count, and neither does `.btn.is-icon.is-lg`, which only reaches `--control-h`. The tilt never sits on a panel with a table or a form.
 
 ### Special cases
 
@@ -30,20 +30,14 @@ the rules allow, in one place.
 
 | Rule | Case | Why |
 | --- | --- | --- |
-| A class may name a slot inside one fixed pattern | `.command-copy`, `.copy-glyph` and `.done-glyph` in the command | the copy button and its two glyph states |
-| | `.sidebar-toggle` in the sidebar head | the fold control |
-| | `td.cell-select` in a table row | the row-select checkbox cell |
+| A class may name a slot inside one fixed pattern | `.command-copy`, `.copy-glyph` and `.done-glyph` in the command; `.sidebar-toggle` in the sidebar head; `td.cell-select` in a table row | the copy button and its two glyph states, the fold control, and the row-select checkbox cell |
 | Text takes the accent only when it is itself the mark | the hero value, `.cn-value-lg` and `.stat.is-lg`, in `--accent` | the figure is the mark; inside an `.accent-card` it is text-colored, since the card already carries the accent, and it goes text-colored (`.cn-fg` on its `strong`) when the view's mauve primary sits in the same band, so mauve stays on the primary |
 | | avatar initials in `--accent` | the initials are the avatar's mark |
 | | a status `.tag` in its tone | a two-word label that works as a mark |
 | | the `em` in `.cn-display`, `.display-title` and `.wordmark`, mauve and upright | the one accented word is the title's mark; a view with a mauve hero value drops it, so the view keeps one mauve text mark |
 | | not a banner's message or a field's help text | sentences stay `--cn-fg-body`; the tone goes on the glyph |
-| A solid accent fill may carry its gloss; plate, rocker and tilt add one part each | the primary: plate, fill and gloss | |
-| | the checked or indeterminate checkbox: fill and gloss | |
-| | `.mark`: fill and gloss | |
-| | the on switch: rocker, ramp, gloss and glow | the glow belongs to the rocker, as its on state |
-| | the tilted panel: tilt and plate | the tilt and the plate are one physical part each |
-| | the progress fill: the fill alone | a data mark, so it takes no gloss or plate |
+| A solid accent fill takes its gloss; a data or status mark takes none; plate, rocker and tilt add one part each | fill and gloss: the checked or indeterminate checkbox and `.mark`. Plus the plate: the primary. Plus the rocker: the on switch, with its ramp and glow. Fill alone: the progress fill, chart bars and `.tag.is-solid`. Tilt and plate, no accent fill: the tilted panel | the glow belongs to the rocker, as its on state. A progress fill and a bar are data marks and the solid tag is a status mark, so none of them takes a gloss, grain, plate or raise, and the solid tag never reads as a button |
+| A solid status tag marks one urgent status per view | `.tag.is-solid` on Overdue, in a status tone and never in mauve | every other status keeps the washed tag, so the solid one outranks them by lightness as well as hue; mauve stays the only primary |
 | A mark with a word and a glyph may sit beside its hue family | status tags and banners | a "Due soon" warning may sit above an "Overdue" danger |
 
 ### Cascade
@@ -70,7 +64,7 @@ utilities layer lands on top.
 - Bundled apps install the git tag (`github:BalajiLeninrajan/catppuccin-neu#v0.4.1`) and import `catppuccin-neu/css/index.css`.
 - Zero-build pages with a `package.json` run `catppuccin-neu-sync <dir>` in a pre-build hook and ignore the copies in git.
 - Pages with no `package.json` link `https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css`. Pin a full tag. Link `index.css`, not the three files, so the layers survive.
-- The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model: `init()` from `catppuccin-neu/js`, or the consumer's own widget library. The package is CSS first, so the script is an import and never loads by default. See [Behavior](#behavior).
+- The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model. A stylesheet cannot run script, so the script never loads by default and the opt-in is one line. Bundled apps add `import "catppuccin-neu/js/auto"`. Pages with no `package.json` put `<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>` beside the stylesheet link, pinned to the same tag. Either wires every widget in the document and the ones added later. `init()` from `catppuccin-neu/js` does the same on the app's own schedule, and the consumer's own widget library replaces both. See [Behavior](#behavior).
 - Nobody commits copies of the CSS. Tags never move once pushed.
 
 The docs deploy as the `catppuccin-neu` Cloudflare Worker at
@@ -96,10 +90,13 @@ release; a single-prefix rename is a 0.6 decision.
 The surface and shadow tokens are frozen for 0.5.0: `--edge`,
 `--edge-strong`, `--cn-lit-edge`, the `--neu-*` shadows, `--cn-plate` and
 the `--cn-surface-*` ladder. Their values are the ones below, and the
-CHANGELOG lists them. A later change to any of them needs its own
-CHANGELOG line. The mantle page ground, the 70% `--edge` and the deeper
-sunken and recessed steps are such changes; the CHANGELOG records each
-one.
+CHANGELOG lists them. The values lock at the 0.5.0 tag, and the
+CHANGELOG's "Changed after the freeze" list records every move before
+it. `pnpm lint` holds a snapshot of each token's resolved value and fails
+when one differs, so a change edits the snapshot and adds its own
+CHANGELOG line in the same commit. The mantle page ground, the 70%
+`--edge`, the crust sunken fill, the 80% recessed step and the lead's
+6px 8px foot are such changes.
 
 ### Palette and faces
 
@@ -116,12 +113,12 @@ Every hue has a job, so none is a free decoration:
 
 | Hue | Job |
 | --- | --- |
-| mauve | interaction: links, the primary, checked and engaged states; series 3; and two text marks, the `em` in a display title or wordmark and the hero value through `--accent`. Outside the page chrome's wordmark, a view holds at most one of these mauve text marks, so a view with a mauve hero value sets its title without the `em`. Data marks such as a series 3 bar or swatch don't count |
-| pink | the interactive hover; series 6 |
+| mauve | interaction: links, the primary, checked and engaged states; series 6, the last slot; and two text marks, the `em` in a display title or wordmark and the hero value through `--accent`. Outside the page chrome's wordmark, a view holds at most one of these mauve text marks, so a view with a mauve hero value sets its title without the `em`. Data marks such as a series 6 bar or swatch don't count |
+| pink | the interactive hover; series 5 |
 | red | danger |
 | yellow | warning; series 2 |
 | green | success |
-| blue | info; series 5 |
+| blue | info; series 3 |
 | teal | series 1 |
 | peach | series 4 |
 | rosewater, flamingo, maroon, sky, sapphire, lavender | record identity only: an `--accent` for a team, project or person beyond the six series, never status or interaction |
@@ -185,9 +182,9 @@ page: crust is the darker step.
 
 | Token | Value | Holds |
 | --- | --- | --- |
-| `--cn-surface-sunken` | crust 70% into mantle, 1.05:1 under the page and 1.12:1 under base | wells, the mono wells, the switch plate, stepper pills, skeletons, the disabled primary |
+| `--cn-surface-sunken` | crust, 1.07:1 under the page and 1.14:1 under base | wells, the mono wells, the switch plate, stepper pills, skeletons, the disabled primary |
 | `--cn-surface-band` | crust 30% over transparent, one step under its parent, 1.05:1 under base | table heads |
-| `--cn-surface-recessed` | crust 50% into mantle, 1.04:1 under the page | the sidebar |
+| `--cn-surface-recessed` | crust 80% into mantle, 1.05:1 under the page and 1.13:1 under base | the sidebar |
 | `--cn-surface-page` | mantle | the page ground: the body, the app shell, the topbar, stat bands, transparent carves on the page |
 | `--cn-surface-raised` | base, 1.07:1 on the page | panels, the lead panel, the tilted panel, secondary buttons, segmented options, chips, accent cards, the selected tab, the switch paddle |
 | `--cn-surface-overlay` | surface-0 90% into base, 1.27:1 on base and 1.36:1 on the page | popovers, dialogs, drawers, toasts, tooltips |
@@ -195,14 +192,16 @@ page: crust is the darker step.
 Body text stays above 7:1 and placeholders above 4.5:1 on the overlay. A
 lighter overlay would drop the placeholder role under 4.5:1, so the ladder
 stops at 1.27:1.
-`--hover` is surface-1 40% over transparent: 1.24:1 on base, 1.26:1 on the
-page and 1.15:1 on an overlay, so a menu row still lights. Bands never take
+`--hover` is surface-1 50% over transparent: 1.31:1 on base, 1.34:1 on the
+page and 1.19:1 on an overlay, so a menu row still lights. It is a wash
+over the ground, never a lighter raised fill. Bands never take
 a darker fill than the surface they title; panel, modal and drawer headers
 sit on their parent's fill behind a divider.
 
 Elevation, low to high: carved (`--neu-inset`, transparent or sunken), page, raised
-(the base fill, `--edge` and `--neu-raised`), plated (the hard offset), lead
-(`--edge-strong`, `--neu-lifted` and more room), tilted (one per page), overlay (overlay fill and
+(the base fill, `--edge` and `--neu-raised`; the lead is a raised panel
+with a deeper foot, `--edge-strong`, `--neu-lifted` and more room), plated
+(the hard offset; the tilted panel, one per page, is a 6px plate), overlay (overlay fill and
 `--shadow-pop`). A cast shadow barely registers on a dark page, since even
 black is only 1.2:1 on mantle, so the base fill does the separating and
 height rides on a dark foot along the bottom and right edges: the 2px
@@ -211,8 +210,8 @@ cast fades. The lit top edge and `--edge` cut the panel's outline, at 1.5:1
 and 1.85:1 on base; with the fill step doing the separating, the hairline
 stays quiet so a panel never reads as an outlined box. The lead keeps the
 same lit edge, takes `--edge-strong` (2.5:1) on its top and left and stands
-on a hard foot past the 4px plate: a 6px by 4px contact plus its 1px
-`--neu-ink` border sides, 7px deep and 5px wide, so it ranks by darkness
+on a hard foot past the 4px plate: an 8px by 6px contact plus its 1px
+`--neu-ink` border sides, 9px deep and 7px wide, so it ranks by darkness
 on the side away from the light, not by a brighter line or a line all
 round. It also ranks by room: its header band is `--lead-band-h` tall, its
 header, body and footer pad `--lead-pad`, and its band title steps up to
@@ -222,7 +221,7 @@ header, body and footer pad `--lead-pad`, and its band title steps up to
 
 Every tint of a hue uses one step, so a wash means one strength
 everywhere: `--cn-step-tint` 4%, `--cn-step-status-tint` 6% (the four status tints), `--cn-step-wash` 12%, `--cn-step-engaged` 20% (the engaged wash), `--cn-step-fill`
-14%, `--cn-step-row` 12% (the row hover), `--cn-step-plate` 25%, `--cn-step-edge` 40%, `--cn-step-strong` 50%, `--cn-step-vivid` 70% (accent plates, the engaged rim).
+14%, `--cn-step-row` 13% (the row hover), `--cn-step-plate` 25%, `--cn-step-edge` 40%, `--cn-step-strong` 50%, `--cn-step-vivid` 70% (accent plates, the engaged rim).
 The switch glow reads `--cn-step-fill`, and `--cn-step-plate` while held.
 
 Status ladders name the stops of each status role:
@@ -293,6 +292,11 @@ the lede size (18px) and the band title to the body size (16px). Chrome (label, 
 belongs to names, controls and titles. 700 belongs to the
 heading, display and the wordmark; the title is 600, so a panel title never
 outweighs the page heading.
+A band or a row holds two small sizes at most, and one 600. A stat is 13,
+24, 13: the label, the value, and a note in the label's voice, so 14px
+stays out of a stat band. A table row is 14px in its cells with 13px only
+on the head and on a tag; the `.cell-name` is the row's one 600, and a key
+figure in a `strong` is 500 in `--cn-fg`, marked by ink and alignment.
 The face is IBM Plex Sans because it has a voice of its own: the angled
 terminals, the squared curves of `a`, `g` and `t` and the engineered
 figures read as a tool, not a default, and sit well beside JetBrains Mono.
@@ -319,7 +323,7 @@ Light comes from the top left. Every elevation is one of five neu tokens:
 
 ```css
 --neu-raised:      2px 2px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
---neu-lifted:      4px 6px 0 var(--neu-contact), 6px 12px 14px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
+--neu-lifted:      6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
 --neu-inset:       inset 3px 3px 8px var(--neu-dark);
 --neu-inset-soft:  inset 2px 2px 5px rgb(8 8 14 / .5);
@@ -342,25 +346,27 @@ from the bottom right and none lighter than the page, a panel or a well. The rai
 carries four cues: contact, near shadow, cast and the lit top edge
 (surface-2 at 45%, 1.5:1 on base), which alone marks the light side.
 `--neu-lifted` is the lead panel's: the same lit edge over a deeper foot,
-spent on the bottom and right only. The contact is 4px 6px in the full
-ink, a hard foot 6px deep and 4px wide: past the 4px plate at default
-density, so the lead never reads lower than a button. It is as deep as
-the tilted panel's 6px plate on the bottom and 2px narrower on the right;
-the aside stays its own thing by its rotation. Plain panels
+spent on the bottom and right only. The lead is a resting panel, not a
+height of its own; the foot is its rank. The contact is 6px 8px in the
+full ink, a hard foot 8px deep and 6px wide: past the 4px plate at
+default density, so the lead never reads lower than a button. It is 2px
+deeper than the tilted panel's 6px plate on the bottom and as wide on
+the right; the aside stays its own thing by its rotation. Plain panels
 keep a 2px contact, under the lead's foot and the plate's 4px (3px
-cozy), so the lead's contact is three times a plain panel's on the bottom
-edge. Compact density drops the plate to 2px, so it
+cozy), so the lead's contact is four times a plain panel's on the bottom
+edge and three times on the right. The foot's contrast is capped near
+1.14:1 on the page, so only its area can grow. Compact density drops the plate to 2px, so it
 drops the plain contact to 1px. With its ink border side a plain panel
 shows 3px of ink at default and cozy density and 2px at compact, which
 equals the cozy and compact plates. The two still read apart: a plate is
 a hard block with no cast under a control, and a panel's ink runs into
 its near shadow and cast. The lead stays past both at every density. The near shadow is
-6px 12px 14px and the cast 18px 28px 48px.
+8px 14px 16px and the cast 18px 28px 48px.
 A panel's own border joins the foot. Its right and bottom sides are
 `--neu-ink`, not the hairline, so on the side away from the light the
 fill meets the ink directly at 1.22:1, the darkest step the palette
 allows, with no lighter line between them. The border adds 1px to the
-contact: 3px of ink on a plain panel, 7px deep and 5px wide on the lead.
+contact: 3px of ink on a plain panel, 9px deep and 7px wide on the lead.
 The top and left sides keep the hairline, `--edge` or `--edge-strong`,
 unchanged. This is darkness only: nothing on the top or left is
 brightened, so the lead ranks by height, not by a heavier outline, and
@@ -369,11 +375,13 @@ no rim brighter than `--edge-strong` is added. Under
 to the hairline, overlay-0 or overlay-1, so the 3:1 boundary holds on
 every side.
 Checked at 1x on `/examples/dashboard`: a plain panel's fill ends on 3px
-of full ink on its right and bottom, then the foot; the lead shows 7px
-of full ink under its bottom edge and 5px on its right, then a longer
+of full ink on its right and bottom, then the foot; the lead shows 9px
+of full ink under its bottom edge and 7px on its right, then a longer
 falloff, so it reads as standing clearly higher than the chart panel
-below it, and the tilted aside still reads apart by its rotation and
-plate. The quiet top and left hairline against the dark right and bottom
+below it. The band joins the panel's edge with no gap, so it reads as
+the side of a block and not as a detached bar. The tilted aside still
+reads apart by its rotation and its plate, which carries no soft shadow.
+The quiet top and left hairline against the dark right and bottom
 reads as a block lit from the top left, not as a bevel, because the
 hairline is no brighter than before and the dark sides run into the
 shadow.
@@ -387,17 +395,22 @@ base, so a float reads at 1x), `--shadow-cast` (the topbar) and
 panel rests on its parent and takes `--neu-raised-soft` with the lit edge.
 
 One model covers every depth on the page. The light is above and to the
-top left; height is distance from the ground.
+top left; height is distance from the ground. There are five heights.
+The lead panel and the tilted panel are variants of two of them, not
+heights of their own.
 
 | Height | What draws it | Who |
 | --- | --- | --- |
-| below the ground | a carve: one dark wall from the top left, nothing on the bottom and right walls; wells, the mono wells, stepper pills, skeletons and the switch plate also take the sunken fill, crust 70% into mantle, darker than the page and a panel | fields, selects, textareas, wells, the mono wells, skeletons, tabs, the switch plate, stepper pills, the disabled primary |
-| the ground | mantle, and nothing else | the page, the topbar, stat bands |
-| resting on it | the base fill a step above the page, the `--edge` hairline on the top and left, the lit top edge, `--neu-ink` border sides on the right and bottom that join a dark foot of contact edge and near shadow, a soft cast | panels, static chips, the selected tab |
-| standing on a plate | the base fill and lit edge over a hard offset, which replaces the cast. The plate's side is `--neu-ink`, except where the block itself carries the item's color: the one primary (mauve 25% into surface-0) and accent cards (the accent 70% into surface-0) | clickables, link and button chips, accent cards |
-| resting higher | the base fill, the `--edge-strong` hairline on the top and left, the lit top edge, a hard foot on the bottom and right, 7px deep and 5px wide with its `--neu-ink` border sides, past the 4px plate, a longer cast (`--neu-lifted`), a taller header band and wider padding | the one lead panel |
-| lifted off it | the base fill; the plate's side grows to 6px and the card tips 1.2deg | the one tilted panel |
+| below the ground | a carve: one dark wall from the top left, nothing on the bottom and right walls; wells, the mono wells, stepper pills, skeletons and the switch plate also take the sunken fill, crust, darker than the page and a panel | fields, selects, textareas, wells, the mono wells, skeletons, tabs, the switch plate, stepper pills, the disabled primary |
+| the ground | mantle, and nothing else. A static chip is a flat label on it: the base fill and the `--edge` outline, no shadow | the page, the topbar, stat bands, static chips |
+| resting on it | the base fill a step above the page, the `--edge` hairline on the top and left, the lit top edge, `--neu-ink` border sides on the right and bottom that join a dark foot of contact edge and near shadow, a soft cast. The lead panel is the same height with a deeper foot: `--neu-lifted`, 9px deep and 7px wide with its border sides, past the 4px plate, under the `--edge-strong` hairline, a taller header band and wider padding | panels, the selected tab, the one lead panel |
+| standing on a plate | the base fill and lit edge over a hard offset, which replaces the cast. The plate's side is `--neu-ink`, except where the block itself carries the item's color: the one primary (mauve 25% into surface-0) and accent cards (the accent 70% into surface-0). The tilted panel is a plate at 6px, `--cn-plate-tilt`, tipped 1.2deg with its text, and takes no raised shadow | clickables, link and button chips, accent cards, the one tilted panel |
 | floating | the overlay fill, no contact, the two-layer pop shadow | popovers, menus, dialogs, toasts |
+
+So a shadow says one of two things. A soft foot and cast mean a panel
+resting on the page. A hard plate means a clickable, or the one tilted
+aside. No static label is raised: a chip on a span is flat. The avatar
+is the one small static thing on the soft raise.
 
 A hairline stays on raised and floating surfaces: `--edge` on panels and
 controls, `--edge-strong` on the lead panel and overlays. A panel draws
@@ -405,8 +418,10 @@ it on the top and left only; its right and bottom border sides are
 `--neu-ink` and belong to the foot. It is the
 surface's cut edge, not a border standing in for depth; carved surfaces
 have none. The fill step shows a panel's bounds on the page; the hairline
-and the lit edge cut them, so every panel and static chip keeps both, a
-nested panel included, where the fill matches its parent's. The one exception is `.panel.is-shell`, which gives up its frame
+and the lit edge cut them, so every panel keeps both, a nested panel
+included, where the fill matches its parent's. A static chip keeps the
+fill step and the `--edge` outline all round (1.92:1 on the page, 1.85:1
+on a panel) and drops the lit edge with its shadow. The one exception is `.panel.is-shell`, which gives up its frame
 at 760px and becomes the page.
 
 ### Contract properties
@@ -438,8 +453,8 @@ the lit edge at 1.4:1 and 1.3:1, in both contrast modes.
 - `--edge`: surface-2 at 70%, 1.85:1 on base, 1.92:1 on the page and 1.6:1 on an overlay. The raised-surface hairline, also the cut edge of plated controls and the ghost hover. A panel stands a fill step above the mantle page, so the hairline only cuts its outline; it dropped from 85% because a brighter line makes a panel read as an outlined box at 1x. `prefers-contrast: more` lifts it to overlay-0, 3.4:1 on base, 3.6:1 on the page and 2.6:1 on an overlay, so a panel shows a 3:1 boundary for the readers who ask for one.
 - `--edge-soft`: surface-1 at 38%. Inner separators.
 - `--tint`: the tone at `--cn-step-tint`, 4%; a status `.cn-tone-*` swaps in its ladder's tint at `--cn-step-status-tint`, 6%. Declared with the `--tone-*` stops on `.cn-tint`, `.tag`, `.banner`, `.input`, field controls, `.btn.is-icon` and `.cn-edge-tone`, so each reads its own `--tone`.
-- `--wash`: `--cn-interactive` at `--cn-step-engaged` (20%) into base, 1.52:1 on base and 1.63:1 on the page. The engaged state, a step past the 1.24:1 hover so the fill tells them apart as well as the rim.
-- `--hover`: surface-1 at 40% over whatever is under it, 1.24:1 on base, 1.26:1 on the page and 1.15:1 on an overlay. The ghost, menu, pagination and sidebar hover.
+- `--wash`: `--cn-interactive` at `--cn-step-engaged` (20%) into base, 1.52:1 on base and 1.63:1 on the page. The engaged state, a step past the 1.31:1 hover so the fill tells them apart as well as the rim.
+- `--hover`: surface-1 at 50% over whatever is under it, 1.31:1 on base, 1.34:1 on the page and 1.19:1 on an overlay, with `--cn-fg` on it at 8.6:1, 9.0:1 and 7.5:1. The ghost, menu, pagination and sidebar hover. It rose from 40%, 1.24:1, which washed out on a dim screen.
 - `--engaged-edge`: `--cn-interactive` at `--cn-step-vivid` (70%), 4.7:1 on base and 3.5:1 on its own wash, so the rim clears the 3:1 floor for the state it marks. The rim of every engaged state, so a chosen option outweighs the raised ones beside it. The selected tab wears it too.
 - `--edge-strong`: solid surface-2, 2.5:1 on base, 2.6:1 on the page and 1.9:1 on an overlay, so it outranks `--edge` on every ground. The lead panel, overlay, drawer and blockquote hairline. `prefers-contrast: more` lifts it to overlay-1, 4.4:1 on base and 3.5:1 on an overlay, above the overlay-0 `--edge`.
 - `--cn-stat-rule`: `var(--edge)`, surface-2 at 70%, 1.92:1 on the page, where the stat band sits: the 2px rule of `.stat-grid.is-ruled`. It is equal to `--edge`, so at twice the width it carries the band without stepping past the hairline ladder. `prefers-contrast: more` lifts it to surface-2, 2.6:1 on the page, between the surface-1 `--edge-soft` and the overlay-0 `--edge`.
@@ -453,16 +468,23 @@ the lit edge at 1.4:1 and 1.3:1, in both contrast modes.
 
 ### Data series
 
-`--cn-series-1..6` are teal, yellow, mauve, peach, blue and pink: the six
-accents, alternating cool and warm so neighbors never share a hue family.
-Series 1 is teal, not mauve, so the first and usually biggest series never
-reads as the interactive color. Series 5 and 6 are blue and pink 70% into
+`--cn-series-1..6` are teal, yellow, blue, peach, pink and mauve: the six
+accents. Mauve is the last slot, so a chart of up to five series holds no
+bar in the interactive color, and a mauve bar appears only when a chart
+needs all six. The first four alternate cool and warm. Peach and pink,
+series 4 and 5, are the one pair of warm neighbors, the cost of keeping
+teal first and mauve last; they sit a lightness step apart, 9.3:1 and
+5.6:1 on base. Series 3 and 5 are blue and pink 70% into
 base in oklab (4.3:1 and 5.6:1), a lightness step under the rest, because
 full-strength blue collapses into mauve for a protan reader and pink into
 teal for a deutan one. Under a full-severity simulation (Machado 2009)
-every adjacent pair stays above dE 6 in OKLab, the closest being series 5
-and 6 at 6.2 for a protan reader, and series 1 and 5, teal and blue, sit
-at dE 25 or more. A chart takes them in order. `.is-hatched` on a `.bar` or `.legend-item` adds stripes, a
+every adjacent pair stays above dE 6 in OKLab. The closest is series 1
+and 2, teal and yellow, at 6.6 for a protan reader. The pairs the reorder
+made neighbors hold more: blue and peach 22.3, peach and pink 14.7, pink
+and mauve 10.5, each the lowest of the protan, deutan and tritan figures.
+Series 1 and 3, teal and blue, sit at dE 25 or more. Series 3 and 5, blue
+and pink, are not neighbors but sit at 6.2 for a protan reader, so hatch
+one when a chart sets them side by side. A chart takes them in order. `.is-hatched` on a `.bar` or `.legend-item` adds stripes, a
 second key for any series that must stand apart without color. A `.bar`
 or `.legend-item` reads `--series`, falling back to `--accent`, so a
 record with an identity leaves `--series` unset and keeps its own
@@ -478,7 +500,8 @@ Mocha's accents sit within 1.8:1 of each other in lightness, so hue does
 the separating. Pairs from one hue family never sit side by side, as
 neighboring series, adjacent tags or the two ends of a scale: the warm
 family red, maroon, peach, pink, flamingo and yellow, and the cool pairs sky and
-teal, mauve and lavender, blue and sapphire. A reader with a red-green
+teal, mauve and lavender, blue and sapphire. Series 4 and 5 are the one
+allowed pair, as above. A reader with a red-green
 deficiency loses the warm family first, which is why every status tone
 also carries a word and a shape. A mark that carries a word and a glyph
 may sit beside its own hue family, because the word and the glyph tell
@@ -628,8 +651,8 @@ what each piece may wear. The rules below give the reasons.
 
 - The page column is `.page-main` at `--page-width`, with `--page-gutter` inline and `--page-pad` above and below.
 - Regions of a view (a header, a stat band, a row of panels, a table) are `--space-7` (48px) apart. Panels inside a region are `--cn-grid-gap`, `--space-5` (24px), apart. Content inside a panel is `--body-pad`: use `.panel-body`, not fixed padding utilities, so it follows density.
-- A region holds at most three raised panels. More items go in one panel, a ruled grid on the ground, or a table, so raised stays a rank and not a texture. Supporting figures beside a data panel go on the ground, a section heading over a `.stat-grid.is-ruled` and `.cn-divide` rows, not in a panel of their own, so the row reads in three levels: the data panel, the tilted aside, the figures on the ground.
-- Lay a region's panels on `.cn-grid-12`, one row per grid: a 7 and 5, an 8 and 4, or three 4s. Start a new grid for the next row. Equal-column sets may use `.cn-grid-2/3/4`. Pair panels of similar height in a row, or stack a second short panel in the shorter column with `.cn-stack`, rather than stretching a panel into an empty tail. Every grid reads `--cn-grid-gap`; a grid of small items, not panels, composes `.cn-gap-16`.
+- A region holds at most three raised panels. More items go in one panel, a ruled grid on the ground, or a table, so raised stays a rank and not a texture. Supporting figures beside a data panel go on the ground under a section heading, not in a panel of their own, so the row reads in three levels: the data panel, the tilted aside, the figures on the ground. The ground figures take one form per section, a `.stat-grid.is-ruled` or `.stat.is-inline` rows in a `.cn-divide`, never both, so a column holds one containment style under its aside.
+- Lay a region's panels on `.cn-grid-12`, one row per grid: a 7 and 5, an 8 and 4, or three 4s. Start a new grid for the next row. Equal-column sets may use `.cn-grid-2/3/4`. Pair panels of similar height in a row, or stack a second short panel in the shorter column with `.cn-stack`, rather than stretching a panel into an empty tail. A ground-level stack beside a panel may bottom-align: stretch the stack, not a panel, with `align-self: stretch` and `align-content: space-between`, so its first child stays at the top and its last row ends on the panel's bottom line. Every grid reads `--cn-grid-gap`; a grid of small items, not panels, composes `.cn-gap-16`.
 - A view reads in this order: the title and its one primary, the figures, the lead panel, then the rest. The tilted aside never comes before the data it comments on. Two kinds of view move the primary: a form puts it in the footer after the fields it submits, and a first-run screen puts it in the lead panel next to the setup it starts.
 
 ### Icons
@@ -762,15 +785,15 @@ properties only and never style bare elements.
 ### Surfaces
 
 - `.panel`: the main container. A 1px border, `--edge` on the top and left and `--neu-ink` on the right and bottom, where it joins the 2px contact as a 3px ink foot, panel radius, the raised fill (base, a step above the mantle page), `--neu-raised`, no padding. Under `prefers-contrast: more` or `data-contrast="more"` all four border sides are `--edge`.
-- `.panel.is-tilted`: rotated 1.2deg, a 6px hard offset (`--cn-plate-tilt`) over `--neu-raised`, short enough that the aside never outweighs the data panel beside it, `align-self: start` so a grid row never stretches it into an empty tail. Flat at 1060px and below, and upright under `prefers-contrast: more` or `data-contrast="more"`. It holds prose with a heading in the name role: no table, form or ruled rows. Its prose, `.cn-copy` and `.cn-prose` included, sets at 15px (.9375rem, the compact body size) on the body leading: the panel sets `--cn-type-body-size` to 15px for its subtree, since rotated 14px text renders soft at 1x.
+- `.panel.is-tilted`: rotated 1.2deg, a 6px hard offset (`--cn-plate-tilt`) under the lit edge, with no raised shadow since the plate replaces the cast, short enough that the aside never outweighs the data panel beside it, `align-self: start` so a grid row never stretches it into an empty tail. Flat at 1060px and below, and upright under `prefers-contrast: more` or `data-contrast="more"`. It holds prose with a heading in the name role: no table, form or ruled rows. Its prose, `.cn-copy` and `.cn-prose` included, sets at 15px (.9375rem, the compact body size) on the body leading: the panel sets `--cn-type-body-size` to 15px for its subtree, since rotated 14px text renders soft at 1x.
 - `.panel-header`, `.panel-footer`: bands `--band-h` tall with `--band-pad`. Both sit on the panel's fill. The header has a bottom divider and the footer a top one. A band holding `.band-actions` wraps; the cluster is right-aligned and wraps inside itself. Other bands stay on one line. An `h2` in a header takes `--band-title-size`; in the lead panel it takes `--lead-title-size` at the heading weight and tracking. At 520px both step down to the body size.
 - `.panel-body`: the content band, `--body-pad`.
-- `.panel.is-lead`: the panel a view is about, at most one per view. The base fill with the `--edge-strong` hairline on its top and left and `--neu-ink` border sides on its right and bottom, on `--neu-lifted`, whose full-ink contact on the bottom and right is 6px deep and 4px wide, 7px and 5px with the border, past the 4px plate and as deep as the tilted panel's 6px plate on the bottom, 2px narrower on the right, a header band `--lead-band-h` tall (72px, 60px cozy, 48px compact), `--lead-pad` (32px, 24px cozy, 16px compact) on its header and footer inline, around its body and on the outer columns of a table that fills it, directly or through a `.table-scroll` or a tab panel (above 760px), and a band title at `--lead-title-size` (the heading size, 28px, or the title size at 655px and under) at 700, so it outranks its neighbors by height, by its title and by its room, not by an ornament. Its one step in line strength is the hairline ladder, `--edge-strong` over `--edge`, with no bright rim, lip or dark outline on top. The deeper foot carries the rank, because a longer cast barely shows on a dark page.
+- `.panel.is-lead`: the panel a view is about, at most one per view. The base fill with the `--edge-strong` hairline on its top and left and `--neu-ink` border sides on its right and bottom, on `--neu-lifted`, whose full-ink contact on the bottom and right is 8px deep and 6px wide, 9px and 7px with the border, past the 4px plate, 2px deeper than the tilted panel's 6px plate on the bottom and as wide on the right, a header band `--lead-band-h` tall (72px, 60px cozy, 48px compact), `--lead-pad` (32px, 24px cozy, 16px compact) on its header and footer inline, around its body and on the outer columns of a table that fills it, directly or through a `.table-scroll` or a tab panel (above 760px), and a band title at `--lead-title-size` (the heading size, 28px, or the title size at 655px and under) at 700, so it outranks its neighbors by height, by its title and by its room, not by an ornament. Its one step in line strength is the hairline ladder, `--edge-strong` over `--edge`, with no bright rim, lip or dark outline on top. The deeper foot carries the rank, because a longer cast barely shows on a dark page.
 - `.panel.is-shell`: drops its chrome at 760px so a phone page runs edge to edge.
 - Band corner rule: a filled first or last child of a rounded surface takes the parent radius minus 1px on its outer corners. This covers popover children, and tables or ranked rows at a panel's edge, through `.table-scroll` too. Never fix corner bleed with `overflow: hidden`; it clips popovers and plates.
-- `.well`: card radius, the sunken fill, `--neu-inset` and `--cn-well-ring`. The fill, crust 70% into mantle, puts it below the ground on the page and in a panel; without it the carve read as an outlined panel at 1x. `.well.scroll-well` fades its bottom 34px with a mask.
+- `.well`: card radius, the sunken fill, `--neu-inset` and `--cn-well-ring`. The fill, crust, puts it below the ground on the page and in a panel; without it the carve read as an outlined panel at 1x. `.well.scroll-well` fades its bottom 34px with a mask.
 - `.terminal`, `.codeblock`, `.command`: the mono wells. Card radius, the sunken fill, `--neu-inset` and `--cn-well-ring`, the code role in `--cn-fg-soft`, no border, no ligatures.
-- `.empty-state`: a centered column at least `--empty-h` tall, subtext-0 (`--cn-fg-muted`). An `svg` first child sits on a 56px carved round. `.is-fill` fills its pane instead.
+- `.empty-state`: a centered column at least `--empty-h` tall, subtext-0 (`--cn-fg-muted`). An `svg` first child sits on a 56px carved round. Children stack 8px apart, and a `.btn` or `.btn-text` action adds `--space-4` above itself, so it stands 24px under the copy. `.is-fill` fills its pane instead, with a 4px gap and 12px above the action.
 
 ### Buttons
 
@@ -786,7 +809,7 @@ the density knobs.
 - `.btn-ghost.is-danger`: red text, a red wash at `--cn-step-wash` on hover.
 - `.btn.is-icon`: a `--control-h-sm` square, its glyph in subtext-0 (`--cn-fg-muted`, 7.4:1), because the icon is the control's only visible label. Hover tints toward `--tone`, info blue unless a `.cn-tone-*` on it or an ancestor sets one. `.is-icon.is-lg` is a `--control-h` square with a 20px svg. `.btn-secondary.is-icon` is a plated icon button for an icon beside plated buttons: it keeps the secondary's `--cn-fg` glyph, hover and plate press instead of the tone tint.
 - `.btn-text`: inline mauve text at 13px 600 with no padding, so a button and an anchor sit flush with the content edge, pink on hover. Held, it moves 1px. Svg 13px. It is a standalone action in a row, footer or toast. A link inside running prose is a plain `a`, which takes the global link style at the prose size.
-- Disabled: `--disabled-opacity`, the variant's rest shadow, `not-allowed`. The primary instead goes flat and sinks. It drops the plate, ramp, grain, gloss and edge, keeps a transparent 1px border so the size holds, and takes the sunken fill under the soft carve, `--neu-inset-soft` with `--cn-well-ring`, the depth of a disabled field, so it reads as an empty slot pressed into the page beside the secondary's outline and plate, and stays shallower than any press, so it never reads as held. Darkness only, no lip and no dashed edge, since dashed marks an open slot; `prefers-contrast: more` closes the well ring into surface-2. `--cn-fg-disabled` text, 5.0:1 on the sunken fill, at full opacity, so it never reads as a second primary or outshines a live secondary. A busy primary keeps its fill. `aria-disabled="true"` looks the same, skips hover and press, and stays focusable, so a `[data-tip]` on it can say why the action is unavailable. The consumer ignores its clicks.
+- Disabled: `--disabled-opacity` and `not-allowed`. No disabled button or button chip keeps a plate, since a plate says the block can be pressed. The secondary drops its plate and lit edge and its outline falls to `--edge-soft`, a flat dimmed outline on the base fill like the disabled file button; a busy secondary keeps its plate. The primary instead goes flat and sinks. It drops the plate, ramp, grain, gloss and edge, keeps a transparent 1px border so the size holds, and takes the sunken fill under the soft carve, `--neu-inset-soft` with `--cn-well-ring`, the depth of a disabled field, so it reads as an empty slot pressed into the page beside the disabled secondary's flat outline, and stays shallower than any press, so it never reads as held. Darkness only, no lip and no dashed edge, since dashed marks an open slot; `prefers-contrast: more` closes the well ring into surface-2. `--cn-fg-disabled` text, 5.1:1 on the sunken fill, at full opacity, so it never reads as a second primary or outshines a live secondary. A busy primary keeps its fill. `aria-disabled="true"` looks the same, skips hover and press, and stays focusable, so a `[data-tip]` on it can say why the action is unavailable. The consumer ignores its clicks.
 - Busy: `aria-busy="true"` clears the label so the width holds, hides any svg, and turns a 16px spinner (14px on `.is-sm`) in the label's place: `--cn-fg` ink on a surface-2 ring, crust on the primary. The spinner reads `--btn-busy-ink` and `--btn-busy-ring`, so a variant can re-key it. Clicks stop and focus stays. Use it with `aria-disabled`, not `disabled`, which would drop focus mid-action.
 
 ### Inputs
@@ -843,14 +866,15 @@ document.addEventListener("focusout", undismiss, true);
 
 ### Segmented and stepper
 
-- `.segmented`: equal columns, gap 8. Options are `--control-h` plus 12px, control radius, raised fill, and rest on the `--neu-ink` plate with the shared press. The chosen option (`.active`, `aria-pressed="true"` or `aria-checked="true"`) is the engaged state with a mauve `b` label. `.is-stacked` makes rows `--control-h` plus 24px with lede-size (18px) labels.
+- `.segmented`: equal columns, gap 8. Options are `--control-h` plus 12px, control radius, raised fill, and rest on the `--neu-ink` plate with the shared press. The chosen option (`.active`, `aria-pressed="true"` or `aria-checked="true"`) is the engaged state with a mauve `b` label. A `:disabled` or `aria-disabled="true"` option matches the disabled secondary: `--disabled-opacity`, no plate, an `--edge-soft` outline, `not-allowed`, no hover or press; a chosen one keeps the engaged carve and dims. `.is-stacked` makes rows `--control-h` plus 24px with lede-size (18px) labels.
 - `.stepper`: inset pills (999px, well fill, `--neu-inset-soft`, label role, subtext-0 (`--cn-fg-muted`) text). `.active` or `aria-current="step"` is mauve on a mauve wash at `--cn-step-wash`. `.is-done` is green.
 
 ### Marks, chips, tags, banners
 
 - `.mark`: a 28px square in the accent ramp under grain, a `--cn-fg-on-accent` (crust) glyph, a border of the glyph color at `--cn-step-fill`, control radius, `--shadow-mark`, 13px at 600.
-- `.chip`: an outlined pill, `--chip-pad`, raised fill, `--neu-raised-soft` with the lit edge, label role in subtext-0 (`--cn-fg-muted`), svg 14px. A static chip rests on the page. A chip that is an `a` or `button` is a clickable, so it stands on a plate: the hard offset in `--plate` under the lit edge, with the shared hover lift and half-slide press. On hover it also turns `--cn-fg` with a `--control-edge` border. `.chip.is-glyph` is icon-only; keep an accessible name.
-- `.tag`: a status tag in `--tone`. 4px padding, chip radius, label role, a 12px svg. A shallow carve in `--tone-wash`, no outline: `--neu-inset-soft`, darkness only with no lip, inside a transparent border that forced colors draws. The wash is 1.23:1 (red) to 1.37:1 (yellow) on a panel, and tone text on it 5.7:1 (red) to 9.4:1 (yellow); on the page the text reads higher, 6.2:1 to 10.2:1. The wash stays at `--cn-step-wash` (12%), not `--cn-step-engaged`: at 20%, red text on a tag over the overlay ground falls to 3.9:1, under the 4.5:1 a label needs.
+- `.chip`: an outlined pill, `--chip-pad`, raised fill, the `--edge` outline, no shadow, label role in subtext-0 (`--cn-fg-muted`), svg 14px. A static chip is a flat label, so nothing about it says press: raise and plate mean clickable. A chip that is an `a` or `button` is a clickable, so it stands on a plate: the hard offset in `--plate` under the lit edge, with the shared hover lift and half-slide press. On hover it also turns `--cn-fg` with a `--control-edge` border. Disabled or `aria-disabled="true"`, it matches the disabled secondary: `--disabled-opacity`, no plate or lit edge, an `--edge-soft` outline, `not-allowed`, no lift and no press. `.chip.is-glyph` is icon-only; keep an accessible name.
+- `.tag`: a status tag in `--tone`. 4px padding, chip radius, label role, a 12px svg. A shallow carve in `--tone-wash`, no outline: `--neu-inset-soft`, darkness only with no lip, inside a transparent border that forced colors draws. The wash is 1.23:1 (red) to 1.37:1 (yellow) on a panel, and tone text on it 5.7:1 (red) to 9.4:1 (yellow); on the page the text reads higher, 6.2:1 to 10.2:1. The wash stays at `--cn-step-wash` (12%), not `--cn-step-engaged`: at 20%, red text on a tag over the overlay ground falls to 3.9:1, under the 4.5:1 a label needs. A tag marks a state that differs. A row's default or in-progress state, such as Pending, is plain meta text in `--cn-fg-muted`, with a glyph if it helps and no wash or carve, so a column of tags never out-shouts the one that matters.
+- `.tag.is-solid`: the one urgent status in a view, such as Overdue. The tone fills the tag, 7.1:1 (red) to 12.9:1 (yellow) on a panel, and the word and glyph take `--cn-fg-on-accent`: crust is 8.1:1 on red, 8.9:1 on blue, 12.6:1 on green and 14.8:1 on yellow. It keeps the tag's padding, radius and label role and drops the carve. It is a status mark, not a control: no plate, gloss, grain or raise, so it never reads as a button, and it takes a status tone, never mauve. One status per view is solid; the rest keep the wash, so danger outranks info by lightness as well as hue.
 - `.banner`: a tinted band. 12px 16px padding, card radius, `--tint`, a `--tone-border` edge, `--neu-inset-soft`, the ui size, 14px, at 400 on the meta leading. A status banner's tint is 6%, `--cn-step-status-tint`: 1.10:1 (red) to 1.16:1 (yellow) on a panel, with the message at 8.0:1 or better. The message is `--cn-fg-body`, so the text stays text-colored; the 16px glyph, the edge and the tint carry the tone.
 - Every tag and banner holds a word that states the status ("Past due", not a colored dot).
 - A `.cn-tone-danger`, `-warning`, `-success` or `-info` tag or banner with no svg child draws its glyph first: `--cn-glyph-danger` (a crossed circle), `-warning` (a triangle with a bang), `-success` (a checked circle) or `-info` (a circle with an i), masked in the tone at 12px (16px on a banner). Bring an svg to use another shape. Palette tones draw none and may bring one. In forced colors the glyph paints `CanvasText`.
@@ -860,7 +884,7 @@ document.addEventListener("focusout", undismiss, true);
 - `.choice`: a label row, `<label class="choice"><input>Text</label>`, gap 8, 14px. When its input is disabled the label text takes `--cn-fg-disabled`; the control dims itself.
 - `.checkbox`: 20px, chip radius, `--control-edge` border, `--neu-inset-soft`. Hover edge `--engaged-edge`. Checked is the mauve ramp under grain, a transparent border and a crust tick that lands on the spring from `scale(.4) rotate(-8deg)`. `:indeterminate` takes the same fill with a crust dash; set it from script and use it for a parent whose children are partly checked.
 - `.radio`: the same well, round. Checked deepens to `--neu-inset` with a 9px mauve dot and a 3px halo.
-- `.switch`: 50x28, control radius, the sunken fill under `--neu-inset` with a 1px `--control-edge` ring. The plate is a filled carve, 1.12:1 under a panel and 1.05:1 under the page, so the base paddle stands a fill step above its track; neither paddle nor plate is ever lightened. The 21x22 paddle tilts 16deg at rest, with a 1px `--control-edge` edge, 5.0:1 against the plate around it, so off reads apart from disabled. Checked, it slides 23px on the spring, tilts the other way, takes the mauve ramp with a 2x8 crust bar at its center, the "I" of a wall switch, so on reads by a mark as well as color and position, and glows at 6px. Held, it flattens; held while on, the glow blooms to 12px. Disabled, the paddle lies flat with no tilt and no raise, paddle and plate drop to the soft `--edge`, and the plate loses its sunken fill, so it never reads as an off switch. Disabled checkboxes and radios take `--edge` too. Every disabled checkbox, radio and switch dims to `--disabled-opacity` itself.
+- `.switch`: 50x28, control radius, the sunken fill under `--neu-inset` with a 1px `--control-edge` ring. The plate is a filled carve, 1.14:1 under a panel and 1.07:1 under the page, so the base paddle stands a fill step above its track; neither paddle nor plate is ever lightened. The 21x22 paddle tilts 16deg at rest, with a 1px `--control-edge` edge, 5.1:1 against the plate around it, so off reads apart from disabled. Checked, it slides 23px on the spring, tilts the other way, takes the mauve ramp with a 2x8 crust bar at its center, the "I" of a wall switch, so on reads by a mark as well as color and position, and glows at 6px. Held, it flattens; held while on, the glow blooms to 12px. Disabled, the paddle lies flat with no tilt and no raise, paddle and plate drop to the soft `--edge`, and the plate loses its sunken fill, so it never reads as an off switch. Disabled checkboxes and radios take `--edge` too. Every disabled checkbox, radio and switch dims to `--disabled-opacity` itself.
 - Error: `aria-invalid="true"` on a checkbox or radio, or on a `fieldset` holding them, edges each unchecked box in `--cn-danger`. Put the message in the field's `small` and point `aria-describedby` at it.
 - Held checkbox and radio sink 1px onto the full inset.
 
@@ -913,7 +937,7 @@ focused input.
 - `.avatar`: 32px round, accent at `--cn-step-fill` into mantle, an accent edge at `--cn-step-edge`, `--neu-raised-soft`, 13px at 600. `.is-lg` is 44px.
 - `.avatar-stack`: overlaps by 8px and rings each avatar with `--ring-ground`.
 - `.spinner`: a 16px ring with an accent top edge on `spin` at .8s.
-- `.skeleton`: a carved placeholder for loading content. Control radius, the well carve: the sunken fill (1.12:1 under a panel, 1.05:1 under the page) and `--neu-inset`, darkness only with no ring. At least 16px tall, breathing to .7 opacity on `breathe` over 1.6s, so at its faintest it still sits 1.09:1 under a panel, past the 1.05:1 table head. Skeletons are `aria-hidden` inside an `aria-busy` region, so this is visibility, not a WCAG floor. `.is-text` is a 1em line with the chip radius; lines stack 8px apart and the last of several is 62% wide. `.is-round` is a 32px circle for an avatar. Give the loading region `aria-busy="true"` and the skeletons `aria-hidden="true"`.
+- `.skeleton`: a carved placeholder for loading content. Control radius, the well carve: the sunken fill (1.14:1 under a panel, 1.07:1 under the page) and `--neu-inset`, darkness only with no ring. At least 16px tall, breathing to .7 opacity on `breathe` over 1.6s, so at its faintest it still sits 1.10:1 under a panel, past the 1.05:1 table head. Skeletons are `aria-hidden` inside an `aria-busy` region, so this is visibility, not a WCAG floor. `.is-text` is a 1em line with the chip radius; lines stack 8px apart and the last of several is 62% wide. `.is-round` is a 32px circle for an avatar. Give the loading region `aria-busy="true"` and the skeletons `aria-hidden="true"`.
 
 ### Code
 
@@ -934,14 +958,14 @@ press, and on hover the plate grows 1px.
 
 ### Data display
 
-- `.stat`: a label `span` over a value `strong` in the value role. `.is-lg` uses value-lg in the accent. `.is-inline` is a baseline row, label left and value (`b` or `strong`) right; stack rows in `.cn-divide`. `.is-inline.is-total` is the row the others add up to, placed after the `.cn-divide` list rather than inside it: the label in the name role and the value in the value role, both `--cn-fg`, under an `--edge` rule (1.85:1 on a panel against the 1.3:1 row hairlines) with 12px above and below the rule, so the total outweighs the rows over it. It stays text-colored; only the hero value takes the accent.
+- `.stat`: a label `span` over a value `strong` in the value role, with an optional note in a bare `p` under it. The label and the note share one voice, the label role in `--cn-fg-muted`, so a stat reads 13, 24, 13 and holds one small size; a `.cn-meta` on the note would bring 14px back. `.is-lg` uses value-lg in the accent. `.is-inline` is a baseline row, label left and value (`b` or `strong`) right; stack rows in `.cn-divide`. `.is-inline.is-total` is the row the others add up to, placed after the `.cn-divide` list rather than inside it: the label in the name role and the value in the value role, both `--cn-fg`, under an `--edge` rule (1.85:1 on a panel against the 1.3:1 row hairlines) with 12px above and below the rule, so the total outweighs the rows over it. It stays text-colored; only the hero value takes the accent.
 - `.stat-grid.is-ruled`: for stats on the page ground. Each stat hangs from a 2px rule on its start side, 16px in, so the row reads as one band without a panel. The rule is `--cn-stat-rule`, equal to `--edge`, 1.92:1 on the mantle page, so at twice the width it holds its weight beside a panel's hairline without stepping past the hairline ladder. Under `prefers-contrast: more` it lifts to surface-2 (2.6:1 on the page), between `--edge-soft` (surface-1) and `--edge` (overlay-0).
 - `.stat-grid`: a grid of stats, `--stat-cols` across (4 by default) and two across at 760px and below. It never drops to one column. In a `.panel-body` an unruled grid's stats take no padding of their own, so they line up with the header title and the inline rows at every width.
 - `.progress-track`: 7px, 999px, crust, `--neu-inset-soft`. The `span` fill is the accent ramp under grain; `--progress-fill` replaces the ramp. It eases its width over twice `--t-slow`. `.is-lg` is 12px.
-- `.data-table`: the class scopes all table styling. Header cells: `--cell-pad`, head fill, label role, subtext-0 (`--cn-fg-muted`), over a 1px `--edge` rule, 1.85:1 on a panel and 1.9:1 on the head fill. The body rows part on surface-0, 1.3:1, so the head rule outranks them; the head fill alone is 1.05:1, one step under the panel. Body cells: `--cell-pad`, 400 at `--cell-font-size`, subtext-1, tabular, so a cell differs from a meta line by ink and from a name by two weight steps. A `strong` in a cell, such as an amount, is 600 in `--cn-fg`. `.cell-name` holds a 600 name over a meta line at `--cell-font-size`, 400 in `--cn-fg-muted`. Its `strong` and `small` are blocks, so the cell stacks them without a `<br>`. `.is-num` on a `th` and its `td`s right-aligns a numeric column; a sortable header keeps its label flush right and moves the chevron to its left.
-- Row hover presses the row: mauve at `--cn-step-row` (12%) into base, 1.27:1 on a panel with `--cn-fg-soft` at 7.3:1, past the 1.24:1 hover and the open carve's 1.08:1, and 1.20:1 under a selected row's 1.52:1 wash, plus a vertical gradient on each cell, dark at the top 5px and nothing at the bottom, since a press is a carve and has no light side. The edge color is registered with `@property` so it fades in. `tr[aria-selected="true"]` takes `--wash` and a deeper press.
+- `.data-table`: the class scopes all table styling. Header cells: `--cell-pad`, head fill, label role, subtext-0 (`--cn-fg-muted`), over a 1px `--edge` rule, 1.85:1 on a panel and 1.9:1 on the head fill. The body rows part on surface-0, 1.3:1, so the head rule outranks them; the head fill alone is 1.05:1, one step under the panel. Body cells: `--cell-pad`, 400 at `--cell-font-size`, subtext-1, tabular, so a cell differs from a meta line by ink and from a name by two weight steps. A `strong` in a cell, such as an amount, is 500 in `--cn-fg`, marked by ink and right alignment, so the name cell is the row's one 600 and weight still marks what matters; a total keeps 600. `.cell-name` holds a 600 name over a meta line at `--cell-font-size`, 400 in `--cn-fg-muted`. Its `strong` and `small` are blocks, so the cell stacks them without a `<br>`. `.is-num` on a `th` and its `td`s right-aligns a numeric column; a sortable header keeps its label flush right and moves the chevron to its left.
+- Row hover presses the row: mauve at `--cn-step-row` (13%) into base, 1.30:1 on a panel with `--cn-fg-soft` at 7.1:1 and `--cn-fg-muted` at 5.7:1, level with the 1.31:1 hover, past the open carve's 1.08:1, and 1.17:1 under a selected row's 1.52:1 wash, plus a vertical gradient on each cell, dark at the top 5px and nothing at the bottom, since a press is a carve and has no light side. The edge color is registered with `@property` so it fades in. `tr[aria-selected="true"]` takes `--wash` and a deeper press.
 - `th[aria-sort] > button`: a reset button with a chevron. The chevron hides while unsorted and flips for ascending.
-- `.data-table.is-sticky-head`: header cells stick to the nearest scroll container, with the `--edge` rule drawn as an inset shadow, `--cn-sticky-rule`. Give the `.table-scroll` wrapper a `max-height` so it scrolls vertically and the header can pin.
+- `.data-table.is-sticky-head`: header cells stick to the nearest scroll container, with the `--edge` rule drawn as an inset shadow, `--cn-sticky-rule`. Give the `.table-scroll` wrapper a `max-height` so it scrolls vertically and the header can pin. Body rows and the links, buttons, fields and `[tabindex]` elements in them take a `scroll-margin-top` of `--control-h` plus 4px, 50px by default against a 40px head, so a control that takes focus stops below the pinned head (WCAG 2.4.11).
 - `.table-scroll`: scrolls a wide table sideways inside its wrapper. A table in it with no `td[data-label]` stays a table on phones.
 - An `.input` in a cell is the inline edit; see Inputs.
 - `td.cell-select`: a row-select checkbox cell. In phone mode it floats to the row's end.
@@ -974,12 +998,12 @@ Overlay motion:
 ### Page
 
 - `.page-main`: the page column, `min(var(--page-width, 1440px), 100% - 2 * var(--page-gutter))`, centered, `--page-pad` above and below. `.is-narrow` is 860px. `.is-reading` is 740px and sets the lede at 20px.
-- `.topbar`: sticky, `--band-h` plus 4px, `--page-gutter` inline, the page ground at 91% with a 14px blur, a hairline and `--shadow-cast`. A three-column grid. Where `animation-timeline: scroll()` works, the cast fades in over the first 60px of scroll. `.topbar nav` is a row of ghost buttons. `.is-split` is two regions, brand left and actions right. `.is-compact` is a 52px app strip, `--band-h` (44px) at compact density.
+- `.topbar`: sticky, `--band-h` plus 4px, `--page-gutter` inline, the page ground at 91% with a 14px blur, a hairline and `--shadow-cast`. A three-column grid. Where `animation-timeline: scroll()` works, the cast fades in over the first 60px of scroll. `.topbar nav` is a row of ghost buttons. `.is-split` is two regions, brand left and actions right. `.is-compact` is a 52px app strip, `--band-h` (44px) at compact density. A page that holds a topbar gets `scroll-padding-top` on `:root` through `:root:has(.topbar)`: the bar's minimum height plus 12px, which is 80px by default, 72px at 760px and below, and 64px for `.is-compact`. Focus, a fragment link and `scrollIntoView()` all stop that far short of the top, so the bar never covers a focused element or its ring (WCAG 2.4.11). A bar that grows past its minimum height needs the consumer's own `scroll-padding-top`.
 - `.wordmark`: the name in the lede size (18px) at the display weight (700) with display tracking, because it is the brand, not a heading; `em` is the mauve half. A `.mark` before it is the brand tile (28px). `.is-lg` is 20px with a 34px tile. `.is-sm` is the footer brand at 14px: a 16px mauve glyph, the name, a mauve `b` suffix set .25em off the name, and an optional subtext-0 (`--cn-fg-muted`) note in a `span`.
 - `.page-footer`: same width as the column, at least 72px, a surface-0 top rule, subtext-0 (`--cn-fg-muted`) text.
 - `.display-title`: an alias of `.cn-display`. Both set `margin: 0`. `.lede`: the lede role, max `--cn-measure` (68ch), 24px above and below.
 - `.app-shell`: a column at least the viewport tall; its `main` absorbs the slack so the footer sits at the bottom. `.is-fixed` makes the shell exactly the viewport and turns off the root's `scrollbar-gutter`.
-- `.app-shell.has-sidebar` lays a `.sidebar` beside the content. The sidebar is `--sidebar-w` (264px) wide, the full viewport tall, sticky, on the recessed fill, a step under the mantle page, with an `--edge-soft` rule, and scrolls on its own. `.sidebar-head` holds the wordmark and a `.sidebar-toggle`; `.sidebar-body` scrolls. `.sidebar-nav` stacks groups 24px apart, each a `.cn-microlabel` over links at the ui size and 500; hover is the ghost wash and `aria-current="page"` is a position, not a press: 600 in `--cn-fg` with a spine, the 4px `--cn-interactive` bar of `.cn-spine` on the start edge, inset 8px to fit the row. No wash, rim or carve. At 1060px and below the sidebar is a sticky blurred bar, the toggle shows, and the body opens under `.is-open`: it fades in and settles 4px over `--t-base` on the ease-out and leaves on the ease-in over `--t-exit`, and lands at once under reduced motion. The breakpoint crossing itself does not animate. The consumer sets `.is-open` and `aria-expanded`.
+- `.app-shell.has-sidebar` lays a `.sidebar` beside the content. The sidebar is `--sidebar-w` (264px) wide, the full viewport tall, sticky, on the recessed fill, a step under the mantle page, with an `--edge-soft` rule, and scrolls on its own. `.sidebar-head` holds the wordmark and a `.sidebar-toggle`; `.sidebar-body` scrolls. `.sidebar-nav` stacks groups 24px apart, each a `.cn-microlabel` over links at the ui size and 500 in `--cn-fg-muted`; hover is `--cn-fg` on the ghost wash and `aria-current="page"` is a position, not a press: 600 in `--cn-fg` with a spine, the 4px `--cn-interactive` bar of `.cn-spine` on the start edge, inset 8px to fit the row. No wash, rim or carve: the rank is the ink step from muted to `--cn-fg`, and the group that holds the current page lifts its microlabel to `--cn-fg` too, so the open section shows first. At 1060px and below the sidebar is a sticky blurred bar, the toggle shows, and the body opens under `.is-open`. The folded bar sets `scroll-padding-top` on `:root` through `:root:has(.sidebar)`, its closed height plus 12px, so focus and fragment links stop clear of it (WCAG 2.4.11). The body opens like an overlay: it fades in and settles 4px over `--t-base` on the ease-out and leaves on the ease-in over `--t-exit`, and lands at once under reduced motion. The breakpoint crossing itself does not animate. The consumer sets `.is-open` and `aria-expanded`.
 - `.deck`: hash-routed views. The `:target` child shows, the first child is the default, and a deep link shows the view that contains it.
 - `.live-dot`: a 7px green dot with a 4px halo at `--cn-step-fill`, pulsing every 1.5s on the ease-out.
 
@@ -1005,9 +1029,15 @@ Recipes use logical properties (`padding-inline-start`, `margin-inline-end`, `bo
 The CSS reads ARIA state and never needs script to look right. What it
 cannot do is keep that state and the keyboard model in step. Tabs, menus,
 listboxes and comboboxes are required to have a keyboard model: either
-`init()` from `catppuccin-neu/js`, a framework-free module that follows
-the WAI-ARIA patterns, or the consumer's own widget library. The package
-is CSS first, so the module is an import and never loads by default.
+`catppuccin-neu/js`, a framework-free module that follows the WAI-ARIA
+patterns, or the consumer's own widget library. A stylesheet cannot run
+script, so the module never loads by default, and the opt-in is one line:
+`import "catppuccin-neu/js/auto"`, or a `<script type="module">` tag
+pointing at `js/auto.js`. `auto.js` wires every widget in the document
+once the DOM is parsed, then watches the document, wires each widget
+added later once, and removes the listeners of one that leaves. An app
+that wants to choose the moment or keep the cleanup calls `init()`
+instead; load one or the other for the same markup, not both.
 Slider fill and toasts are optional. Each function returns a cleanup.
 
 - `tabs(tablist)`: Left, Right, Home and End move focus and select (selection follows focus), mirrored in RTL. Only the selected tab is in the tab order. Each tab's `aria-controls` panel shows only while it is selected. Fires `cn-select`. On a `.tabs` carve it measures the selected tab into `--cn-tab-x` and `--cn-tab-w`, sets `data-cn-indicator` so the pill slides, and follows resizes.
@@ -1016,10 +1046,27 @@ Slider fill and toasts are optional. Each function returns a cleanup.
 - `listbox(list, { combobox })`: a `[role="listbox"]` of `[role="option"]` rows. Focus stays on the listbox, or on the combobox input that drives it, and `aria-activedescendant` names the active row, which also gets `data-active`. Up, Down, Home and End move it; Enter, or Space on a listbox, selects it (`aria-selected`, toggled under `aria-multiselectable`) and fires `cn-select`. With `combobox`, an `input[role="combobox"]`, ArrowDown, ArrowUp or typing opens the list; Escape, Tab, a pick or a press outside closes it, and a pick writes the option's text into the input. Filtering is the consumer's.
 - `tooltips()`: Escape hides a showing `[data-tip]` until the pointer or focus leaves it (WCAG 1.4.13).
 - `toast(stack, { title, body, timeout })`: appends a `.toast` with a dismiss button. The timeout runs only while neither the pointer nor focus is in the stack, and a toast appended under the pointer waits. A drag toward the end edge follows the pointer and dismisses past 80px or on a flick; short of that the toast springs back. The exit runs through `[hidden]`, then the node is removed.
-- `init(root)`: wires every `[role="tablist"]`, menu button, `[role="listbox"]`, `[role="combobox"]` with `aria-controls` and `.slider` under `root`, plus `tooltips()`.
+- `init(root)`: wires every `[role="tablist"]`, menu button, `[role="listbox"]`, `[role="combobox"]` with `aria-controls` and `.slider` under `root`, plus `tooltips()`. It wires what is in the page when it runs.
+- `catppuccin-neu/js/auto`: no exports. The same wiring for the whole document, run on `DOMContentLoaded` and again, once per frame at most, when nodes are added or removed. A menu trigger waits until the popup it names is in the page.
 
 Disabled items are skipped everywhere. Focus return, outside-press and
 Escape behave the same in every widget.
+
+### Expected announcements
+
+What a screen reader should speak for each widget, given the markup the
+recipes document. These follow from the roles and states; nobody has yet
+confirmed them with a screen reader, and readers differ in wording and
+order. A human pass with NVDA and Firefox and with VoiceOver and Safari
+on tabs, menu and combobox is still owed, and its reader, browser,
+version and date go on the docs' Accessibility page.
+
+- Tabs. Focus on a tab speaks its name, "tab", "selected" and its position, such as "2 of 3"; the first tab reached also speaks the tablist's `aria-label`. An arrow key moves focus and selection together, so the next tab speaks the same four things. A disabled tab is skipped and never spoken. Tab into the panel speaks the panel's name, taken from its tab through `aria-labelledby`, and "tab panel".
+- Menu. The trigger speaks its name, "menu button" and "collapsed". Opening it speaks "expanded" or "menu", then the first item: its name, "menu item" and its position, such as "1 of 4". A `menuitemcheckbox` speaks "checked" or "not checked", and the new state when toggled. A disabled item is skipped. Escape returns focus, so the trigger speaks again with "collapsed".
+- Listbox. Focus speaks the `aria-label`, "list box", then the active option: its name, "selected" when `aria-selected="true"`, and its position. Each arrow key speaks the newly active option the same way, though focus never leaves the listbox.
+- Combobox. The input speaks its label, "combo box", "collapsed" and its value. ArrowDown speaks "expanded", then the active option's name and position. A pick writes the option's text into the input, which speaks "collapsed" and the new value.
+- Toast. The stack is a polite live region, so a new toast's title and body are spoken once, after the current sentence, and focus does not move. Its button speaks the `closeLabel`, "Dismiss" by default, and "button". A dismissal is silent.
+- Dialog. `showModal()` speaks the dialog's name, from `aria-labelledby`, and "dialog", then the control that takes focus. The page behind is inert and is not reachable. Closing returns focus to the control that opened it, which speaks again.
 
 ## Responsive
 
@@ -1073,12 +1120,16 @@ and titles. Specimens sit on the page ground, mantle, as they would in an app. C
 glyph, never a text character. Docs pages come from the kit in
 `src/lib/doc.tsx`. Each page leads with its demo. `Doc` folds every
 `p.cn-copy` that sits right before or after a `Demo` into a closed
-`details.accordion` under that demo, titled by the demo's `why` prop, and
-measured contrast ratios go in the `contrast` field of a `Props` row, which
+`details.accordion` under that demo, titled by the demo's `why` prop. The
+docs set that summary in the label role, 13px at 500 in `--cn-fg-muted`, so
+it sits under the 14px demo title; hovered or open it is mauve, as in the
+package. Measured contrast ratios go in the `contrast` field of a `Props` row, which
 adds a Contrast column to that table. A row demo shrinks to its content.
 From 1280px a page with three or more h2 and demo titles starts 48px from
 the sidebar and lists them in a sticky "On this page" nav on the right;
-below that width, and on the examples, the column stays centered. Run it with
+below that width, and on the examples, the column stays centered. The docs
+column is 860px and the examples column 1040px. After each route change the
+sidebar scrolls its current link into view. Run it with
 `pnpm --dir showcase install && pnpm --dir showcase dev`; `pnpm --dir
 showcase build` must pass.
 
@@ -1096,3 +1147,13 @@ and fails when a capture changes size or more than 0.1% of its pixels
 differ from the committed baseline in `showcase/visual-baselines/`
 (pixelmatch, threshold .1). The baselines depend on the system Chromium
 and fonts; `--update-shots` rewrites them after a deliberate change.
+A still capture cannot see motion, so the run starts with a motion check
+in the default modes. It reads `getAnimations()`, not frames, which
+flake. Each `.page-enter` child must run `enter` over `--t-slow` after
+its step of the stagger: 0, 40, 80 and 120ms for the four children of
+`/examples/dashboard`, and on through 160ms to the shared 200ms for the
+children of the `/modal` docs page, which has more than six. An observer
+installed before the page's script reads them in the task that renders
+them. A modal on `/modal` and a toast on `/toast` are opened and
+closed, and every transition they run must last `--t-base` on entry and
+`--t-exit` on close. `--motion` runs that check alone.

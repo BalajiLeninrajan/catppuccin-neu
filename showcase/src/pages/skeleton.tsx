@@ -112,7 +112,7 @@ export default function SkeletonPage() {
           {
             name: ".skeleton",
             values: "block",
-            notes: "16px min-height, the control radius, the well carve: the --cn-surface-sunken fill, 1.12:1 under a panel and 1.05:1 under the page, under --neu-inset, darkness only with no ring. Breathes to .7 opacity over 1.6s, so at its faintest it still sits 1.09:1 under a panel.",
+            notes: "16px min-height, the control radius, the well carve: the --cn-surface-sunken fill, 1.14:1 under a panel and 1.07:1 under the page, under --neu-inset, darkness only with no ring. Breathes to .7 opacity over 1.6s, so at its faintest it still sits 1.10:1 under a panel.",
           },
           {
             name: ".skeleton.is-text",

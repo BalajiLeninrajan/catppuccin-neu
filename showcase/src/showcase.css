@@ -23,6 +23,12 @@
   flex: 1;
 }
 
+/* The examples are app pages, not docs, so their column is 1040px: at a
+   1400px window that leaves 48px each side of it beside the sidebar. */
+.sc-content.is-wide > :is(.sc-measure, .page-footer) {
+  width: min(1040px, calc(100% - 2 * var(--space-5)));
+}
+
 /* "On this page": hidden until the window has room for a second column. */
 .sc-toc { display: none; }
 
@@ -131,10 +137,15 @@
   justify-self: start;
 }
 
-/* The fold under a demo: the package accordion as shipped, pulled up to
-   the copy line so the two read as one block, and held to the prose
-   measure. */
+/* The fold under a demo: the package accordion, pulled up to the copy
+   line so the two read as one block, and held to the prose measure. Its
+   summary is the one docs change: the label role, 13px at 500 in the
+   muted ink, so the fold sits under the 14px demo title instead of over
+   it. Hovered or open it keeps the package's mauve, which this unlayered
+   rule would otherwise beat. */
 .sc-why { max-width: var(--cn-measure); }
+details.sc-why > summary { font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-name-leading) var(--sans); }
+details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
 .sc-doc > .sc-demo + .sc-why { margin-top: calc(var(--space-2) - var(--space-6)); }
 .sc-why .cn-copy + .cn-copy { margin-top: var(--space-4); }
 

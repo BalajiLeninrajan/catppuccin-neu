@@ -36,6 +36,13 @@ From the CDN, for a page with no `package.json`:
 Pin a full tag. `@main` and `@v0.4` float and re-cache every 12 hours. Link
 `index.css`, not the three files, so the layer wrappers survive.
 
+Tabs, menus, listboxes and comboboxes need a keyboard model, and a
+stylesheet cannot run script. Add the one tag that wires them:
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>
+```
+
 For a page with a `package.json` but no bundler, copy the CSS in a
 pre-build hook and ignore the copies in git:
 
@@ -88,19 +95,26 @@ Tailwind names. With v4, import the package first:
 ```
 
 The CSS needs no script to look right, but tabs, menus, listboxes and
-comboboxes are required to have a keyboard model. Use `init()`, or your
-own widget library:
+comboboxes are required to have a keyboard model. One import wires every
+widget in the document and the ones added later:
+
+```js
+import "catppuccin-neu/js/auto";
+```
+
+Call `init()` yourself to choose the moment or keep the cleanup, or use
+your own widget library:
 
 ```js
 import { init, toast } from "catppuccin-neu/js";
-init(); // tabs, menu buttons, listboxes and comboboxes, sliders and the tooltip Escape
+const cleanup = init(); // tabs, menu buttons, listboxes and comboboxes, sliders and the tooltip Escape
 ```
 
 ## Caveats
 
 - Recipe classes are unprefixed. `.btn`, `.panel`, `.input` and `.data-table` collide with any other CSS that uses those names.
 - Dark only. There is no light palette.
-- The CSS needs no script to look right, and overlays use `<dialog>`, `showModal()` and `close()`. Tabs, menus, listboxes and comboboxes are still required to have a keyboard model: `init()` from `catppuccin-neu/js`, or your own widget library. The same module has the tooltip Escape and, as optional extras, slider fill and toasts. Copy buttons need your own listener.
+- The CSS needs no script to look right, and overlays use `<dialog>`, `showModal()` and `close()`. Tabs, menus, listboxes and comboboxes are still required to have a keyboard model: `catppuccin-neu/js/auto`, `init()` from `catppuccin-neu/js`, or your own widget library. The same module has the tooltip Escape and, as optional extras, slider fill and toasts. Copy buttons need your own listener.
 - Depth reads correctly only on the ground it was tuned for: a mantle page with panels and plated controls on base. Keep your page on `--cn-surface-page`.
 - The sizes and tracking assume IBM Plex Sans and JetBrains Mono. The fallback stacks stay readable but look different.
 

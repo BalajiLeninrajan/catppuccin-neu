@@ -124,8 +124,9 @@ export default function ChipPage() {
         A chip that is an <code class="cn-code-inline">a</code> or a{" "}
         <code class="cn-code-inline">button</code> is a
         clickable, so it stands on the ink plate under the lit top edge,
-        like every clickable, and a static chip on a span rests on the page
-        on the soft raise. The plate is what tells the two apart at rest. On
+        like every clickable. A static chip on a span is a flat outlined
+        label with no shadow, so nothing about it says press. Raise and
+        plate mean clickable, and the plate tells the two apart at rest. On
         hover a clickable chip lifts 1px, its label turns{" "}
         <code class="cn-code-inline">--cn-fg</code> and its border takes{" "}
         <code class="cn-code-inline">--control-edge</code>. Held, it slides
@@ -158,6 +159,25 @@ export default function ChipPage() {
         through a mask in its tone. The markup above holds only the word. The
         glyph is a background, so a screen reader never hears it. Bring an svg
         to use a different shape; the CSS glyph steps aside.
+      </p>
+
+      <Demo title="Solid tag: the one urgent status" why="When a tag takes the solid fill" classes="tag cn-tone-danger is-solid" row>
+        <span class="tag cn-tone-danger is-solid">Overdue</span>
+        <span class="tag cn-tone-warning">Due soon</span>
+        <span class="tag cn-tone-success">Paid</span>
+        <span class="cn-meta">Pending</span>
+      </Demo>
+
+      <p class="cn-copy">
+        Mocha's accents share one lightness, so washed tags differ by hue
+        alone. <code class="cn-code-inline">.is-solid</code> fills the tag
+        with its tone and sets the word and glyph in crust, 8.1:1 on red, so
+        the one urgent status in a view outranks the rest by lightness too.
+        It is a status mark, not a control: no plate, no gloss and no raise,
+        and it never takes mauve. Keep it to one status per view. A row's
+        default or in-progress state, such as Pending, is plain meta text
+        with no tag, so a column of tags never out-shouts the one that
+        matters.
       </p>
 
       <Demo title="Status tag with its own svg" classes="tag cn-tone-success > svg + word" row>
@@ -228,12 +248,12 @@ export default function ChipPage() {
           {
             name: ".chip",
             values: "span, a, or button",
-            notes: "Outlined pill on --cn-surface-raised with raised-soft depth and the lit edge when static. No wrapping; keep labels short.",
+            notes: "Outlined pill on --cn-surface-raised with the --edge outline. Flat when static: no shadow and no lit edge. No wrapping; keep labels short.",
           },
           {
             name: ":is(a, button).chip",
-            values: ":hover · :active",
-            notes: "Stands on the hard offset in --plate under --cn-lit-edge. Hover: lifts 1px, --cn-fg label and a --control-edge border. Held: the half-slide onto the plate in --t-press, back on the spring.",
+            values: ":hover · :active · :disabled · [aria-disabled]",
+            notes: "Stands on the hard offset in --plate under --cn-lit-edge. Hover: lifts 1px, --cn-fg label and a --control-edge border. Held: the half-slide onto the plate in --t-press, back on the spring. Disabled: --disabled-opacity, no plate or lit edge, an --edge-soft outline, no lift or press.",
           },
           {
             name: ".chip svg",
@@ -249,6 +269,12 @@ export default function ChipPage() {
             name: ".tag",
             values: "span",
             notes: "Status tag: 4px padding, the chip radius, label role. A shallow carve in --tone-wash with no outline: --neu-inset-soft, darkness only, no lip. The wash mixes from --tone, or the status ladder under a status .cn-tone-*. Tone text on it is 5.7:1 (red) to 9.4:1 (yellow) on a panel, and higher on the page. Always holds a word that states the status.",
+          },
+          {
+            name: ".tag.is-solid",
+            values: "modifier",
+            contrast: "Crust on the fill 8.1:1 (red) to 14.8:1 (yellow)",
+            notes: "The one urgent status in a view. The tone fills the tag and the word and glyph take --cn-fg-on-accent. No carve, plate, gloss, grain or raise, so it reads as a mark and not a button. A status tone only, never mauve.",
           },
           {
             name: ".tag svg",

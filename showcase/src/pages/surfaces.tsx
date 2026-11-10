@@ -5,9 +5,9 @@ const LADDER = [
   { token: "--cn-surface-page", util: "cn-bg-page", mix: "mantle", contrast: "", use: "The ground: the body, the app shell, the topbar, stat bands." },
   { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "base", contrast: "1.07:1 on the page", use: "Panels, the tilted panel, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
   { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base", contrast: "1.27:1 on base", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
-  { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "crust 50% into mantle", contrast: "1.04:1 under the page", use: "The sidebar." },
+  { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "crust 80% into mantle", contrast: "1.05:1 under the page, 1.13:1 under base", use: "The sidebar." },
   { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", contrast: "", use: "Table heads." },
-  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust 70% into mantle", contrast: "1.05:1 under the page, 1.12:1 under base", use: "Wells, the mono wells, stepper pills, skeletons, the switch plate." },
+  { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust", contrast: "1.07:1 under the page, 1.14:1 under base", use: "Wells, the mono wells, stepper pills, skeletons, the switch plate." },
 ];
 
 const ACTIVITY = [
@@ -177,8 +177,9 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         <code class="cn-code-inline">.is-tilted</code> is the one rotated surface: a
-        1.2° turn with a 6px plate over the neu raise, so the card still
-        answers the top-left light. Use it once per view at most, for a
+        1.2° turn on a 6px plate under the lit top edge. The plate replaces
+        the raised shadow, as it does under a button, so the card answers
+        the top-left light with a hard block and no soft cast. Use it once per view at most, for a
         summary or an aside in prose, never for the page's main data, and
         never on a panel holding a table, a form or ruled rows, because
         rotated rules drift against the text on them. Its heading takes the
@@ -203,9 +204,10 @@ export default function SurfacesPage() {
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
         surface-2, on its top and left, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
-        the bottom and right, 7px deep and 5px wide with its ink border
+        the bottom and right, 9px deep and 7px wide with its ink border
         sides, where a button's plate is 4px and a plain panel's foot 3px,
-        and a longer cast. It keeps the plain lit edge and draws no outline all
+        and a longer cast. It is a resting panel with a deeper foot, not a
+        height of its own. It keeps the plain lit edge and draws no outline all
         round, because neither a bright line nor a heavier outline reads as
         height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
@@ -292,7 +294,8 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         The well takes the{" "}
         <code class="cn-code-inline">--cn-surface-sunken</code> fill the code
-        wells and stepper pills use, so it sits below the ground and never
+        wells and stepper pills use, crust, the darkest Mocha stop: 1.07:1
+        under the page and 1.14:1 under a panel. So it sits below the ground and never
         reads as an outlined panel. The carve finishes it with one dark wall
         from the top left and no border or light lip.{" "}
         <code class="cn-code-inline">--cn-well-ring</code> paints nothing until{" "}
@@ -327,13 +330,13 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-tilted",
             values: "one per view",
-            notes: "rotate(1.2deg) and a 6px plate, --cn-plate-tilt, over neu-raised, align-self: start so a grid row never stretches it. A summary or an aside in prose at 15px, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
+            notes: "rotate(1.2deg) and a 6px plate, --cn-plate-tilt, under the lit edge with no raised shadow, align-self: start so a grid row never stretches it. A summary or an aside in prose at 15px, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
           },
           {
             name: ".panel.is-lead",
             values: "one per view",
             contrast: "--edge-strong 2.5:1 on the fill",
-            notes: "The panel the view is about. The base fill with the --edge-strong hairline on the top and left and --neu-ink border sides on the right and bottom, on --neu-lifted with its deeper foot, 7px deep and 5px wide, and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
+            notes: "The panel the view is about. The base fill with the --edge-strong hairline on the top and left and --neu-ink border sides on the right and bottom, on --neu-lifted with its deeper foot, 9px deep and 7px wide, and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
           },
           {
             name: ".panel.is-shell",

@@ -35,9 +35,11 @@
 /* The lead panel: the one a view is about, one per view. It takes the
    base fill like every panel and stands higher by darkness on the side
    away from the light: --neu-lifted's foot on the bottom and right is
-   deeper than a plain panel's, a 4px 6px full-ink contact, past the 4px
-   plate and as deep as the tilted panel's 6px one on the bottom, 2px
-   narrower on the right, over a deeper near shadow and a longer cast. The --edge-strong hairline is its one
+   deeper than a plain panel's, a 6px 8px full-ink contact, past the 4px
+   plate, 2px deeper than the tilted panel's 6px one on the bottom and as
+   wide on the right, over a deeper near shadow and a longer cast. The
+   lead is a resting panel with a deeper foot, not a height of its own.
+   The --edge-strong hairline is its one
    step in line strength; it keeps the plain lit edge and draws no outline
    all round, since neither a bright line nor a heavier outline reads as
    height. Its band title takes --lead-title-size at the heading weight
@@ -58,10 +60,12 @@
 :where(:root[data-contrast="more"]) .panel { border-color: var(--edge); }
 :where(:root[data-contrast="more"]) .panel.is-lead { border-color: var(--edge-strong); }
 
-/* The one rotated hero card. A 6px plate rides over the neu raise so
-   the hero still answers the top-left light instead of floating as a flat
-   sticker. The plate stays at 6px, two past a button's, so the aside does
-   not outshout the data panel beside it. Flattened at ≤1060px. It is the
+/* The one rotated hero card. It stands on a plate like a clickable, so
+   the 6px plate replaces the raised shadow: the hard block and the lit
+   top edge answer the top-left light, with no soft cast under them. The
+   plate stays at 6px, two past a button's, so the aside does not outshout
+   the data panel beside it. At ≤1060px it flattens to a plain resting
+   panel on --neu-raised. It is the
    aside, so its prose sets one step down at 15px, the compact body size
    (.9375rem): rotated text at 14px rendered soft at 1x, and 15px keeps it
    crisp while the data panel beside it stays the louder block. The size
@@ -74,7 +78,7 @@
      tail. */
   align-self: start;
   transform: rotate(1.2deg);
-  box-shadow: var(--cn-plate-tilt), var(--neu-raised);
+  box-shadow: var(--cn-plate-tilt), var(--cn-lit-edge);
 }
 
 /* Bands: the panel header and footer, and the modal and drawer headers.
@@ -247,6 +251,13 @@
 .topbar.is-split { grid-template-columns: 1fr auto; }
 /* An app strip rather than a page bar. */
 .topbar.is-compact { min-height: min(52px, var(--band-h)); padding: var(--space-2) var(--space-3); gap: var(--space-3); }
+/* Focus not obscured (WCAG 2.4.11): a page with a topbar stops every
+   scroll, by focus, by fragment link or by scrollIntoView(), the bar's
+   height plus 12px short of the top, so the bar never covers the target
+   or its focus ring. A bar taller than its min-height needs the
+   consumer's own value. */
+:root:has(.topbar) { scroll-padding-top: calc(var(--band-h) + var(--space-1) + var(--space-3)); }
+:root:has(.topbar.is-compact) { scroll-padding-top: calc(min(52px, var(--band-h)) + var(--space-3)); }
 
 /* Wordmark: the identity in the topbar corner. em takes the mauve upright
    treatment. A .mark before the name is the brand tile. is-lg is the hero
@@ -283,6 +294,11 @@
 .empty-state span { font-size: var(--cn-type-meta-size); }
 /* Fills the pane or drawer it sits in instead of holding the --empty-h floor. */
 .empty-state.is-fill { height: 100%; min-height: 0; padding: var(--space-4); gap: var(--space-1); }
+/* The action stands off the copy: 16px on top of the 8px gap is 24px, so
+   the button reads as the next step and not as a third line of text. A
+   filled pane is small, so it adds 8px to its 4px gap. */
+.empty-state > :is(.btn, .btn-text) { margin-top: var(--space-4); }
+.empty-state.is-fill > :is(.btn, .btn-text) { margin-top: var(--space-2); }
 /* A glyph sits in a round carve on the soft inset, the empty-state carve. */
 .empty-state > svg {
   width: 56px;
@@ -321,8 +337,9 @@
 }
 /* Down is crisp on the fast-out; up comes back on the spring. */
 .btn:active:not(:disabled, [aria-disabled="true"]) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
-/* Disabled dims and keeps the variant's rest shadow; the primary goes flat
-   instead (below). aria-disabled="true"
+/* Disabled dims. A plate says "press me", so no disabled button keeps
+   one: the secondary drops to a flat outline and the primary sinks
+   (both below). aria-disabled="true"
    looks the same but stays focusable, so a [data-tip] on it can say why
    the action is unavailable. The consumer ignores its clicks. */
 .btn:is(:disabled, [aria-disabled="true"]) { opacity: var(--disabled-opacity); cursor: not-allowed; }
@@ -372,8 +389,8 @@ a:active > .accent-card {
    no edge, just the sunken fill under the soft carve and the well ring,
    like an empty slot pressed into the page. The carve is --neu-inset-soft,
    the depth of a disabled field, so it stays shallower than any press and
-   never reads as a held or engaged button. A secondary keeps its outline
-   and plate, so the two never share a silhouette. The border stays 1px
+   never reads as a held or engaged button. A disabled secondary is a flat
+   outline on the base fill, so the two never share a silhouette. The border stays 1px
    and transparent so the size holds. Darkness only, no lip. The disabled
    text color, and no dimming: a dimmed plate reads as a second primary
    beside the live one. A busy primary keeps its fill. */
@@ -424,6 +441,14 @@ a:active > .accent-card {
 }
 .btn-secondary:hover:not(:active, :disabled, [aria-disabled="true"]) {
   box-shadow: var(--cn-plate-hover), var(--hard-extra);
+}
+/* Disabled, the plate and the lit edge go and the outline drops to
+   --edge-soft, like the disabled file button: a flat dimmed outline that
+   no longer looks live beside an enabled one. A busy secondary keeps its
+   plate, since the action is running. */
+.btn-secondary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
+  border-color: var(--edge-soft);
+  box-shadow: none;
 }
 
 /* Ghost: no fill and no plate. At rest it has the --edge-soft hairline,
@@ -854,6 +879,15 @@ a:active > .accent-card {
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
 .segmented > *:hover { border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-edge), var(--surface-1)); }
+/* A disabled option matches the disabled secondary: dimmed, no plate, an
+   --edge-soft outline. A chosen option that is disabled keeps the engaged
+   carve below and only dims. */
+.segmented > :is(:disabled, [aria-disabled="true"]) {
+  opacity: var(--disabled-opacity);
+  border-color: var(--edge-soft);
+  box-shadow: none;
+  cursor: not-allowed;
+}
 /* Chosen: the engaged state, pressed in on the wash, in a mauve rim. */
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]),
 .segmented > :is(.active, [aria-pressed="true"], [aria-checked="true"]):hover,
@@ -924,9 +958,11 @@ a:active > .accent-card {
   font-variant-numeric: tabular-nums;
 }
 
-/* Outlined pill: version tags, status, stat chips. A static chip rests on
-   the page on the soft raise. A chip that is a link or a button is a
-   clickable, so it stands on the ink plate with the shared press. */
+/* Outlined pill: version tags, status, stat chips. A static chip is a
+   flat label: the base fill and the --edge outline, no shadow, so nothing
+   about it says press. A chip that is a link or a button is a clickable,
+   so it stands on the ink plate under the lit edge, with the shared
+   press. Raise and plate mean clickable. */
 .chip {
   padding: var(--chip-pad);
   display: inline-flex; align-items: center; gap: var(--space-2);
@@ -934,7 +970,7 @@ a:active > .accent-card {
   border: 1px solid var(--edge);
   border-radius: 999px;
   background: var(--cn-surface-raised);
-  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
+  box-shadow: none;
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -948,6 +984,16 @@ a:active > .accent-card {
   box-shadow: var(--cn-plate-half), var(--cn-lit-edge);
   transition-timing-function: var(--ease-out);
   transition-duration: var(--t-press);
+}
+/* A disabled link or button chip matches the disabled secondary: dimmed,
+   no plate or lit edge, an --edge-soft outline, no lift and no press. */
+:is(a, button).chip:is(:disabled, [aria-disabled="true"]) {
+  opacity: var(--disabled-opacity);
+  color: var(--cn-fg-muted);
+  border-color: var(--edge-soft);
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
 }
 /* Icon-only at any width: the glyph is the chip. Keep an accessible name on
    the element (aria-label, or the label text still in the markup). */
@@ -974,6 +1020,12 @@ a:active > .accent-card {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 .tag > svg { width: 12px; height: 12px; flex: 0 0 auto; }
+/* Solid tag: the one urgent status in a view, such as Overdue. The tone
+   fills the tag and the word and glyph take --cn-fg-on-accent: crust is
+   8.1:1 on red and 8.9:1 on blue, the two lowest. It is a status mark, not
+   a control, so it has no plate, gloss, grain, carve or raise, and it
+   keeps the tag's size and chip radius. Mauve never fills a tag. */
+.tag.is-solid { color: var(--cn-fg-on-accent); background: var(--tone); box-shadow: none; }
 
 /* Inline banner: semantic tint band, no card chrome. The tint keeps its
    hairline edge. The message is body text at the ui size, 14px at 400 on
@@ -1003,6 +1055,8 @@ a:active > .accent-card {
   mask: var(--cn-glyph) center / contain no-repeat;
 }
 .banner:is(.cn-tone-danger, .cn-tone-warning, .cn-tone-success, .cn-tone-info):not(:has(> svg))::before { inline-size: 16px; block-size: 16px; }
+/* On a solid tag the glyph takes the label's ink, not the fill's. */
+.tag.is-solid:not(:has(> svg))::before { background: currentColor; }
 
 /* ── Selection controls ─────────────────────────────────────────────────── */
 
@@ -1121,7 +1175,7 @@ a:active > .accent-card {
 /* Switch: an abstract light switch. A carved wall plate holds a raised
    rocker paddle; flipping slides the paddle across, flips its tilt, and
    lights it mauve with a soft glow. The plate takes the sunken fill,
-   1.12:1 under a panel, so the base paddle stands a fill step above its
+   1.14:1 under a panel, so the base paddle stands a fill step above its
    track. The paddle is never lightened. */
 .switch {
   appearance: none;
@@ -1312,10 +1366,10 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
 
 /* Skeleton: a carved placeholder where content is loading. It takes the
    well carve, the sunken fill under --neu-inset, darkness only with no
-   ring, so a loading block reads below the ground on a panel (1.12:1) and
-   on the page (1.05:1). It breathes on the breathe keyframe between full
+   ring, so a loading block reads below the ground on a panel (1.14:1) and
+   on the page (1.07:1). It breathes on the breathe keyframe between full
    and .7 opacity, so at its faintest it still sits a step under a panel
-   (1.09:1), past the 1.05:1 table head. Size it to the content it stands
+   (1.10:1), past the 1.05:1 table head. Size it to the content it stands
    in for; .is-text is one line of body copy, .is-round an avatar. Mark the
    loading region aria-busy="true" so assistive tech waits for it, and
    keep skeletons aria-hidden. */
@@ -1492,6 +1546,14 @@ a:hover:not(:active) > .accent-card {
   color: var(--cn-fg-muted);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
+/* The note under the value shares the label's voice, so a stat holds one
+   small size: 13 label, 24 value, 13 note. Write it as a bare p; a
+   .cn-meta on it would bring 14px back. */
+.stat > p {
+  margin: 0;
+  color: var(--cn-fg-muted);
+  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
+}
 .stat strong { font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans); letter-spacing: var(--cn-type-value-tracking); font-variant-numeric: tabular-nums; }
 .stat.is-lg strong { font-size: var(--cn-type-value-lg-size); color: var(--accent); }
 /* A row of stats: four across, two across at 760px and below. It never
@@ -1597,9 +1659,10 @@ a:hover:not(:active) > .accent-card {
   font: var(--cn-type-body-weight) var(--cell-font-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
-/* A key figure in a cell, such as an amount: wrap it in strong. It takes
-   the name voice, 600 in --cn-fg, two weight steps over the 400 cells. */
-.data-table td strong { color: var(--cn-fg); font-weight: var(--cn-type-ui-weight); }
+/* A key figure in a cell, such as an amount: wrap it in strong. It is 500
+   in --cn-fg, one weight step and one ink stop over the 400 cells, so the
+   .cell-name is the row's one 600. */
+.data-table td strong { color: var(--cn-fg); font-weight: var(--cn-type-label-weight); }
 .data-table tbody tr:last-child td { border-bottom: 0; }
 /* Numeric columns: put .is-num on the th and each td. Figures align on
    the right edge so digits of the same place stack, and a sortable
@@ -1667,6 +1730,12 @@ a:hover:not(:active) > .accent-card {
   border-bottom: 0;
   box-shadow: var(--cn-sticky-rule);
 }
+/* Focus not obscured (WCAG 2.4.11): a row, or a control in one, that
+   scrolls into view stops a control height plus 4px short of the top, clear
+   of the pinned head at every density. */
+.data-table.is-sticky-head tbody :is(tr, a, button, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-top: calc(var(--control-h) + var(--space-1));
+}
 
 /* The row press: a dark top edge drawn as a vertical gradient on every
    cell, and no lit edge, since a press is darkness only like any carve.
@@ -1680,8 +1749,8 @@ a:hover:not(:active) > .accent-card {
 }
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
-  /* Its own step, 1.27:1 on a panel: past the 1.24:1 hover and the open
-     carve's 1.08:1, and 1.20:1 under a selected row's wash. */
+  /* Its own step, 1.30:1 on a panel: level with the 1.31:1 hover, past the
+     open carve's 1.08:1, and 1.17:1 under a selected row's wash. */
   background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
 }
 /* Selected row: the engaged treatment, the wash with the full press. */
@@ -2142,6 +2211,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 @media (max-width: 760px) {
   .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .topbar { min-height: min(60px, calc(var(--band-h) + var(--space-1))); padding: var(--space-2) var(--page-gutter); }
+  :root:has(.topbar) { scroll-padding-top: calc(min(60px, calc(var(--band-h) + var(--space-1))) + var(--space-3)); }
   /* The center nav scrolls sideways inside the bar. */
   .topbar nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
   /* A split bar's actions wrap onto more rows, right-aligned, so none
@@ -2180,7 +2250,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
-    /* The same 1.27:1 row hover as the desktop table. */
+    /* The same 1.30:1 row hover as the desktop table. */
     background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
@@ -2613,7 +2683,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
      </aside>
      <main>…</main>
    </div>
-   The sidebar sits one step below the mantle page, on crust 50% into
+   The sidebar sits one step below the mantle page, on crust 80% into
    mantle, and scrolls on its own. The current link is a position: the
    spine and 600, no press. At 1060px and below it folds into
    a sticky bar; the consumer toggles .is-open and aria-expanded.          */
@@ -2652,11 +2722,11 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 .sidebar-nav .cn-microlabel { margin: 0 0 var(--space-2); padding: 0 var(--space-3); }
 .sidebar-nav a {
   padding: var(--space-2) var(--space-3);
-  color: var(--cn-fg-body);
+  color: var(--cn-fg-muted);
   border: 1px solid transparent;
   border-radius: var(--cn-radius-control);
-  /* 500 at the ui size, so the links sit under the content; the current
-     page takes 600. */
+  /* 500 at the ui size in the muted ink, so the links sit under the
+     content; hover takes --cn-fg and the current page --cn-fg at 600. */
   font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
   text-decoration: none;
   transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
@@ -2665,7 +2735,12 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 /* The current page is a position, not a press: 600 in --cn-fg and the
    spine, a 4px --cn-interactive bar on the start edge, inset 8px so it
    fits the row. No wash, rim or carve, so the nav never reads as a column
-   of pressed buttons. */
+   of pressed buttons. The rank is an ink step: the other links rest in
+   --cn-fg-muted, and the group that holds the current page lifts its
+   microlabel to --cn-fg, so the open section shows before the link does.
+   The lift goes through --cn-microlabel-ink: .cn-microlabel sets its
+   color in the utilities layer, which beats any color set here. */
+.sidebar-nav > :has(a[aria-current="page"]) { --cn-microlabel-ink: var(--cn-fg); }
 .sidebar-nav a[aria-current="page"] {
   position: relative;
   color: var(--cn-fg);
@@ -2692,6 +2767,10 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
     backdrop-filter: blur(14px);
   }
   .sidebar-head { padding: var(--space-3) var(--page-gutter); }
+  /* Focus not obscured (WCAG 2.4.11): the folded bar is sticky, so the
+     page stops every scroll the bar's closed height plus 12px short of
+     the top, as it does under a topbar. */
+  :root:has(.sidebar) { scroll-padding-top: calc(var(--control-h-sm) + 3 * var(--space-3) + 1px); }
   .sidebar-toggle { display: inline-flex; }
   /* The body opens the way an overlay does: it fades and settles 4px over
      --t-base on the ease-out, and leaves on the ease-in over --t-exit.

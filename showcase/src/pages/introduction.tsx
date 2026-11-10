@@ -5,7 +5,9 @@ const LAYER_CODE = `@layer cn.tokens, cn.recipes, cn.utilities;
 @import "./recipes.css" layer(cn.recipes);
 @import "./utilities.css" layer(cn.utilities);`;
 
-const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css">`;
+const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css">
+<!-- the keyboard model for tabs, menus, listboxes and comboboxes -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>`;
 
 const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.1`;
 
@@ -126,7 +128,10 @@ export default function IntroductionPage() {
           Pin a full tag. <code class="cn-code-inline">@main</code> and truncated
           ranges float and re-cache every 12 hours. Link{" "}
           <code class="cn-code-inline">index.css</code> rather than the three files,
-          so the relative imports keep their layer wrappers.
+          so the relative imports keep their layer wrappers. A stylesheet
+          cannot run script, so the second tag loads the keyboard model:
+          it wires every tablist, menu button, listbox, combobox and slider
+          on the page, and the ones added later.
         </p>
         <CodeBlock title="CDN (no build)" code={CDN_CODE} />
         <p class="cn-copy">
@@ -142,8 +147,8 @@ export default function IntroductionPage() {
         <p class="cn-copy">
           The CSS reads ARIA state and needs no script to look right. Tabs,
           menus, listboxes and comboboxes are still required to have a
-          keyboard model: <code class="cn-code-inline">import {"{ init }"} from "catppuccin-neu/js"</code>{" "}
-          and call it once, or use your own widget library. Slider fill and
+          keyboard model: add <code class="cn-code-inline">import "catppuccin-neu/js/auto"</code>{" "}
+          to your entry file, or use your own widget library. Slider fill and
           toasts are optional. The <a href="/behavior">Behavior</a> page covers it.
         </p>
       </section>

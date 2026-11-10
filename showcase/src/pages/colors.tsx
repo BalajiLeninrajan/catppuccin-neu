@@ -2,7 +2,7 @@ import { Doc, Demo, Props, CodeBlock, TONES, TEAMS, ACCENT, accentStyle } from "
 
 /* Data series in chart order, the sequential ramp for one measure, and the
    diverging ramp for a measure with a meaningful zero. */
-const SERIES = ["teal", "yellow", "mauve", "peach", "blue 70%", "pink 70%"];
+const SERIES = ["teal", "yellow", "blue 70%", "peach", "pink 70%", "mauve"];
 const RAMP_STOPS = [20, 40, 60, 80, 100];
 const DIVERGE_STOPS = ["red", "red 50%", "zero", "blue 50%", "blue"];
 
@@ -42,10 +42,10 @@ import { TONE_GLYPH, NEEDS_GLYPH } from "../lib/glyphs";
 /* The full Mocha set, grouped by role. name → token, hex, one-line role note. */
 const GROUNDS = [
   { name: "crust", hex: "#11111b", note: "Deepest ground: scrims, the default plate, the progress track, text on accent fills." },
-  { name: "mantle", hex: "#181825", note: "The page ground, --cn-surface-page. Crust mixes into it for the sunken and recessed surfaces." },
+  { name: "mantle", hex: "#181825", note: "The page ground, --cn-surface-page. Crust mixes into it for the recessed surface." },
   { name: "base", hex: "#1e1e2e", note: "The raised fill, --cn-surface-raised: panels and plated controls, one step above the page." },
   { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
-  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 40%, dashed open slots and the resting ring of a table-cell field." },
+  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 50%, dashed open slots and the resting ring of a table-cell field." },
   { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 70%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
 ];
 
@@ -61,8 +61,8 @@ const NEUTRAL_TEXT = [
 const HUES = [
   { name: "rosewater", hex: "#f5e0dc", note: "Record identity only, beyond the six series." },
   { name: "flamingo", hex: "#f2cdcd", note: "Record identity only, beyond the six series." },
-  { name: "pink", hex: "#f5c2e7", note: "The hover of links and the primary. 70% into base, the sixth data series." },
-  { name: "mauve", hex: "#cba6f7", note: "The interactive color: links, the primary, checked and engaged states. The third data series." },
+  { name: "pink", hex: "#f5c2e7", note: "The hover of links and the primary. 70% into base, the fifth data series." },
+  { name: "mauve", hex: "#cba6f7", note: "The interactive color: links, the primary, checked and engaged states. The sixth and last data series." },
   { name: "red", hex: "#f38ba8", note: "Danger and destructive actions, --cn-danger." },
   { name: "maroon", hex: "#eba0ac", note: "Record identity only, beyond the six series." },
   { name: "peach", hex: "#fab387", note: "The fourth data series." },
@@ -71,18 +71,18 @@ const HUES = [
   { name: "teal", hex: "#94e2d5", note: "The first data series." },
   { name: "sky", hex: "#89dceb", note: "Record identity only, beyond the six series." },
   { name: "sapphire", hex: "#74c7ec", note: "Record identity only, beyond the six series." },
-  { name: "blue", hex: "#89b4fa", note: "Informational status, --cn-info. 70% into base, the fifth data series." },
+  { name: "blue", hex: "#89b4fa", note: "Informational status, --cn-info. 70% into base, the third data series." },
   { name: "lavender", hex: "#b4befe", note: "Record identity only, beyond the six series." },
 ];
 
 /* Every hue's one job, from the SPEC's palette table. */
 const HUE_JOBS: Array<[string[], string]> = [
-  [["mauve"], "Interaction: links, the primary, checked and engaged states. Series 3."],
-  [["pink"], "The interactive hover. Series 6."],
+  [["mauve"], "Interaction: links, the primary, checked and engaged states. Series 6, the last slot."],
+  [["pink"], "The interactive hover. Series 5."],
   [["red"], "Danger."],
   [["yellow"], "Warning. Series 2."],
   [["green"], "Success."],
-  [["blue"], "Info. Series 5."],
+  [["blue"], "Info. Series 3."],
   [["teal"], "Series 1."],
   [["peach"], "Series 4."],
   [["rosewater", "flamingo", "maroon", "sky", "sapphire", "lavender"], "Record identity only: an --accent for a team, project or person beyond the six series. Never status or interaction."],
@@ -360,8 +360,8 @@ export default function ColorsPage() {
         Store the accent on the record, or derive it from a stable id, and
         set it inline wherever the record renders. It never comes from list
         position, so sorting or filtering never recolors an item. The six
-        accents are the six data series below: teal, yellow, mauve, peach,
-        blue and pink. A seventh record takes one of the six identity hues
+        accents are the six data series below: teal, yellow, blue, peach,
+        pink and mauve. A seventh record takes one of the six identity hues
         (rosewater, flamingo, maroon, sky, sapphire or lavender), which
         never mean status or interaction. Here Billing takes sapphire, which
         sits beside peach and away from blue, its cool pair.
@@ -400,16 +400,20 @@ export default function ColorsPage() {
       <p class="cn-copy">
         A chart takes <code class="cn-code-inline">--cn-series-1</code> to{" "}
         <code class="cn-code-inline">--cn-series-6</code> in order: teal,
-        yellow, mauve, peach, blue and pink. These are the six accents,
-        alternating cool and warm so neighbors never share a hue family.
-        Series 1 is teal, not mauve, so the biggest bar in a chart never
-        reads as the interactive color. Series 5 and 6 are blue and pink 70%
+        yellow, blue, peach, pink and mauve. These are the six accents.
+        Mauve is the last slot, so a chart of up to five series holds no bar
+        in the interactive color. The first four alternate cool and warm;
+        peach and pink are the one pair of warm neighbors, a lightness step
+        apart. Series 3 and 5 are blue and pink 70%
         into base in oklab, 4.3:1 and 5.6:1 on base, a lightness step under
         the rest. At full strength blue collapses into mauve for a protan
         reader and pink into teal for a deutan one. Under a full-severity
         simulation (Machado 2009) every adjacent pair stays above dE 6 in
-        OKLab, the closest being series 5 and 6 at 6.2 for a protan reader,
-        and series 1 and 5, teal and blue, sit at dE 25 or more. A record with an identity
+        OKLab, the closest being series 1 and 2, teal and yellow, at 6.6 for
+        a protan reader. Blue and peach hold 22.3, peach and pink 14.7, and
+        pink and mauve 10.5 at their lowest. Series 3 and 5, blue and pink,
+        are not neighbors but sit at 6.2 for a protan reader, so hatch one
+        when a chart sets them side by side. A record with an identity
         keeps its own <code class="cn-code-inline">--accent</code> instead, so
         Payments is teal in every chart, whatever position it plots in.
       </p>
@@ -442,7 +446,8 @@ export default function ColorsPage() {
         does the separating. Two hues from one family never sit side by side,
         as neighboring series, adjacent tags or the two ends of a scale. The
         warm family is red, maroon, peach, pink, flamingo and yellow. The cool pairs
-        are sky and teal, mauve and lavender, and blue and sapphire. A reader
+        are sky and teal, mauve and lavender, and blue and sapphire. Series 4
+        and 5, peach and pink, are the one allowed pair. A reader
         with a red-green deficiency loses the warm family first, which is why
         every status tone also carries a word and a shape.
       </p>
@@ -534,10 +539,10 @@ export default function ColorsPage() {
         rows={[
           { name: "--cn-series-1", values: "teal", notes: "The first series, off mauve so a bar never reads as interactive. Tailwind series-1." },
           { name: "--cn-series-2", values: "yellow", notes: "Tailwind series-2." },
-          { name: "--cn-series-3", values: "mauve", notes: "Tailwind series-3." },
+          { name: "--cn-series-3", values: "blue 70% into base, oklab", notes: "4.3:1 on base. Tailwind series-3." },
           { name: "--cn-series-4", values: "peach", notes: "Tailwind series-4." },
-          { name: "--cn-series-5", values: "blue 70% into base, oklab", notes: "4.3:1 on base. Tailwind series-5." },
-          { name: "--cn-series-6", values: "pink 70% into base, oklab", notes: "5.6:1 on base. Tailwind series-6." },
+          { name: "--cn-series-5", values: "pink 70% into base, oklab", notes: "5.6:1 on base. Tailwind series-5." },
+          { name: "--cn-series-6", values: "mauve", notes: "The last slot, so a chart of up to five series holds no bar in the interactive color. Tailwind series-6." },
           { name: "--cn-ramp-1..5", values: "mauve into surface-0, oklab, 20 to 100%", notes: "One measure, low to high. --cn-ramp-5 is mauve itself. Tailwind ramp-1 to ramp-5." },
           { name: "--cn-diverge-1..5", values: "red, red 50% into surface-1, surface-1, blue 50% into surface-1, blue, oklab", notes: "A measure with a meaningful zero. --cn-diverge-3 is the zero. Tailwind diverge-1 to diverge-5." },
         ]}
@@ -557,9 +562,9 @@ export default function ColorsPage() {
         rows={[
           { name: "--cn-step-tint", values: "4%", notes: "A field in its tone, an untoned --tint, the open accordion row." },
           { name: "--cn-step-status-tint", values: "6%", notes: "The four status tints, so a toned banner or .cn-tint shows its tone before its glyph and body text on it stays 8.0:1 or better on a panel." },
-          { name: "--cn-step-row", values: "12%", notes: "Table and ranked row hovers: 1.27:1 for mauve on base, past the 1.24:1 hover and the open carve's 1.08:1, and 1.20:1 under a selected row." },
+          { name: "--cn-step-row", values: "13%", notes: "Table and ranked row hovers: 1.30:1 for mauve on base, level with the 1.31:1 hover, past the open carve's 1.08:1, and 1.17:1 under a selected row." },
           { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
-          { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.24:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
+          { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.31:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
           { name: "--cn-step-fill", values: "14%", notes: "Avatar grounds, the radio and live-dot halos, the .mark border and the switch glow." },
           { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge, .cn-edge-mauve, .cn-edge-accent and the switch glow while held." },
           { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the avatar edge, the icon-button hover edge, the segmented hover." },
@@ -599,7 +604,7 @@ export default function ColorsPage() {
 --edge-strong: var(--surface-2);                                   /* lead panel and overlay hairline: 2.5:1 */
 --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
 --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its wash */
---hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay */
+--hover:     color-mix(in srgb, var(--surface-1) 50%, transparent);  /* the hover wash: 1.31:1 on base, 1.19:1 on overlay */
 --cn-well-ring: inset 0 0 0 1px transparent; /* wells and mono wells: a surface-2 ring under prefers-contrast only */
 
 /* The tone stops are declared on each tinted recipe, so they read that
@@ -613,7 +618,7 @@ export default function ColorsPage() {
       <p class="cn-copy">
         Three of the mix tokens are states.{" "}
         <code class="cn-code-inline">--hover</code> is the ghost hover:
-        surface-1 at 40% over whatever sits under it, so a menu row on an
+        surface-1 at 50% over whatever sits under it, so a menu row on an
         overlay still lights. Ghost buttons, menu rows,
         page targets and sidebar links take it on hover.{" "}
         <code class="cn-code-inline">--wash</code> is the engaged state: mauve
@@ -746,10 +751,10 @@ export default function ColorsPage() {
           { name: ".cn-bg-page", values: "var(--cn-surface-page)", notes: "mantle. The page ground." },
           { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", notes: "base, 1.07:1 on the page. The panel fill; a panel lifts by that step and by its edges and shadow." },
           { name: ".cn-bg-overlay", values: "var(--cn-surface-overlay)", notes: "surface-0 90% into base, 1.27:1 on base. The popover, dialog and toast fill." },
-          { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "crust 50% into mantle, a step under the page. The sidebar fill." },
-          { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 40% over the ground, 1.24:1 on base. The ghost hover as a fill." },
+          { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "crust 80% into mantle, 1.05:1 under the page. The sidebar fill." },
+          { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 50% over the ground, 1.31:1 on base. The ghost hover as a fill." },
           { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 30% over transparent, one step under its parent. Table heads." },
-          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust 70% into mantle, under the page and a panel. The well and skeleton fill; .well already carries it." },
+          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust, 1.07:1 under the page and 1.14:1 under a panel. The well and skeleton fill; .well already carries it." },
           { name: ".cn-bg-base", values: "var(--base)", notes: "Raw base, the same color as the raised fill." },
           { name: ".cn-bg-mantle", values: "var(--mantle)", notes: "Raw mantle." },
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill." },

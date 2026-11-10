@@ -2,6 +2,12 @@ import { useEffect, useRef } from "preact/hooks";
 import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 import { tabs, menu, slider, toast } from "../../../js/index.js";
 
+const autoSnippet = `// with a bundler: one line in your entry file
+import "catppuccin-neu/js/auto";
+
+<!-- with no build: one tag beside the stylesheet link, on the same version -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>`;
+
 const importSnippet = `import { init } from "catppuccin-neu/js";
 
 const cleanup = init();  // every tablist, menu button, listbox, combobox and slider, plus tooltips
@@ -151,7 +157,7 @@ export default function BehaviorPage() {
   return (
     <Doc
       title="Behavior"
-      lede="The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model: init() from catppuccin-neu/js, or your own widget library."
+      lede="The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model: one import of catppuccin-neu/js/auto, or your own widget library."
     >
       <p class="cn-copy">
         The tabs, menu, slider and toast below run on the module, not on
@@ -187,7 +193,21 @@ export default function BehaviorPage() {
         showcase's other demos are Preact and do their own wiring.
       </p>
 
-      <CodeBlock title="Wire everything" code={importSnippet} />
+      <CodeBlock title="One line" code={autoSnippet} />
+
+      <p class="cn-copy">
+        A stylesheet cannot run script, so the keyboard model is opt-in, and
+        the opt-in is one line.{" "}
+        <code class="cn-code-inline">catppuccin-neu/js/auto</code> has no
+        exports. It wires every widget in the document once the DOM is
+        parsed, then watches the document: a widget that renders later is
+        wired when it lands, each element once, and one that leaves has its
+        listeners removed. Call <code class="cn-code-inline">init()</code>{" "}
+        instead when you want to choose the moment or keep the cleanup, and
+        load one or the other for the same markup, not both.
+      </p>
+
+      <CodeBlock title="Wire everything yourself" code={importSnippet} />
 
       <p class="cn-copy">
         <code class="cn-code-inline">init(root)</code> finds every{" "}
@@ -200,8 +220,10 @@ export default function BehaviorPage() {
         <code class="cn-code-inline">input[type="range"].slider</code> under{" "}
         <code class="cn-code-inline">root</code>, which defaults to the document,
         and installs <code class="cn-code-inline">tooltips()</code>. It wires what
-        is in the page when it runs. Call it again, or wire the new widget
-        directly, for markup that renders later.
+        is in the page when it runs. For markup that renders later, wire
+        the new widget directly, or load{" "}
+        <code class="cn-code-inline">catppuccin-neu/js/auto</code>, which
+        watches for it.
       </p>
 
       <Props
@@ -243,6 +265,11 @@ export default function BehaviorPage() {
             values: "Document or element",
             default: "document",
             notes: "All of the above under root. Returns one cleanup.",
+          },
+          {
+            name: 'import "catppuccin-neu/js/auto"',
+            values: "no exports",
+            notes: "The same wiring for the whole document, run once the DOM is parsed and again, once per frame at most, when nodes are added or removed. A menu trigger waits until the popup it names is in the page.",
           },
         ]}
       />

@@ -32,6 +32,9 @@ export default function SettingsExample() {
           How Northwind Ops invoices its customers and pays for its own plan.
           Changes apply to the next invoice, not to ones already sent.
         </p>
+        {/* When the page was last saved is the page's state, so it sits in
+            the header and the form footer holds only its two actions. */}
+        <p class="cn-meta cn-m-0">Last saved Sep 24 by Nadia Rahman</p>
       </header>
 
       <form class="cn-stack cn-gap-24" onSubmit={noNav} noValidate>
@@ -149,8 +152,7 @@ export default function SettingsExample() {
           </div>
         </section>
 
-        <footer class="panel-footer cn-px-0">
-          <span class="cn-meta">Last saved Sep 24 by Nadia Rahman</span>
+        <footer class="panel-footer cn-px-0 cn-end">
           <div class="cn-row">
             <button type="button" class="btn btn-ghost">Discard</button>
             <button type="submit" class="btn btn-primary">Save changes</button>

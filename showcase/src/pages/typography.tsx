@@ -131,7 +131,10 @@ export default function TypographyPage() {
         Chrome, the label and the microlabel, is 500, and meta is 400. The
         label is 13px at 500 in subtext-1 and meta is 14px at 400 in
         subtext-0, so they differ by size, weight and ink. 600 marks
-        what a reader acts on. The large steps run 20, 24, 28 and 32px: title, value,
+        what a reader acts on. A band or a row holds two small sizes at most
+        and one 600: a stat is a 13px label, a 24px value and a 13px note,
+        and a table row is 14px cells under a 13px head, with the name its
+        one 600 and a key figure at 500 in the text color. The large steps run 20, 24, 28 and 32px: title, value,
         heading and value-lg, so a stat value outweighs the panel title above
         it. At 520px both step down: the value to 18px and the band title to
         16px. Tracking is 0 through 18px, -0.01em at 20px and -0.02em from

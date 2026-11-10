@@ -26,6 +26,13 @@ function Sidebar() {
   /* Close the folded nav whenever the route changes. */
   useEffect(() => setOpen(false), [path]);
 
+  /* Keep the current link in view: a deep link or the pager can land on a
+     page whose link sits below the sidebar's fold. "nearest" does nothing
+     when the link already shows. */
+  useEffect(() => {
+    document.querySelector('#sc-nav a[aria-current="page"]')?.scrollIntoView({ block: "nearest" });
+  }, [path]);
+
   return (
     <aside class={`sidebar${open ? " is-open" : ""}`}>
       <div class="sidebar-head">
@@ -179,14 +186,16 @@ function NotFound() {
 }
 
 /* The content column. A page with three or more targets gets the "On this
-   page" list in a right column from 1280px up; the rest stay centered. */
+   page" list in a right column from 1280px up; the rest stay centered.
+   The examples take the wide column, 1040px against the docs' 860px. */
 function Content({ children }: { children: ComponentChildren }) {
   const { path } = useLocation();
   const { items, current } = useToc(path);
   const toc = items.length > 2;
+  const wide = path.startsWith("/examples/");
 
   return (
-    <div class={`sc-content${toc ? " has-toc" : ""}`}>
+    <div class={`sc-content${toc ? " has-toc" : ""}${wide ? " is-wide" : ""}`}>
       {children}
       {toc ? (
         <nav class="sc-toc" aria-label="On this page">

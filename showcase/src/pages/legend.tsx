@@ -68,7 +68,8 @@ export default function LegendPage() {
         <code class="cn-code-inline">--series</code> inline to{" "}
         <code class="cn-code-inline">--cn-series-1</code>,{" "}
         <code class="cn-code-inline">-2</code> and on, in order. The order
-        alternates cool and warm, so neighbors never share a hue family. For series
+        runs teal, yellow, blue, peach, pink and mauve, so mauve, the
+        interactive color, shows only in a chart of six. For series
         that are items with an identity, such as teams, key the swatch by the
         item's own accent instead: leave{" "}
         <code class="cn-code-inline">--series</code> unset and the swatch takes{" "}

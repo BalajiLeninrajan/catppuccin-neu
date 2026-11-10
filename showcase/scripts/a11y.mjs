@@ -4,6 +4,7 @@
    pnpm test:a11y --no-build    reuse the existing dist
    pnpm test:a11y --review      also list what axe could not decide
    pnpm test:a11y --update-shots  rewrite the visual baselines
+   pnpm test:a11y --motion      only the motion check
 
    For every path in src/nav.ts it runs axe-core at 1400x900 with the
    wcag2a, wcag2aa, wcag21aa and wcag22aa tags. It then applies the WCAG
@@ -32,6 +33,13 @@
    states: no parent holds more than three raised panels as direct
    children, outside the docs' demo stages, and an example view holds at
    most one primary, one tilted panel and one lead panel.
+
+   Before the routes it checks motion in the default modes, from
+   getAnimations() and not from frames: the .page-enter children of
+   /examples/dashboard and of the /modal docs page stagger 0 to 200ms in
+   40ms steps over --t-slow, and a modal and a toast enter over --t-base
+   and leave over --t-exit.
+   --motion runs that check alone.
 
    Uses the system Chromium; puppeteer-core never downloads a browser.
    Exits 1 on any violation that ALLOW does not list.                       */
@@ -326,10 +334,113 @@ function focusRing(page) {
   });
 }
 
+/* Motion in the default modes, read from the animations the browser is
+   running, never from frames. The .page-enter children of the dashboard
+   example, which has four, and of the Modal docs page, which has more
+   than six, must stagger 0, 40, 80, 120, 160 and then 200ms over
+   --t-slow. A modal and a toast must enter over --t-base and leave over
+   --t-exit. An observer installed
+   before the page's own script reads the entrance in the task that renders
+   it, so a slow machine cannot miss it. Returns a list of problems. */
+async function motion(browser, url) {
+  const out = [];
+  const page = await browser.newPage();
+  await page.setViewport(DESKTOP);
+  try {
+    await page.evaluateOnNewDocument(() => {
+      new MutationObserver((_, mo) => {
+        const host = document.querySelector(".page-enter");
+        if (!host) return;
+        mo.disconnect();
+        window.__cnEnter = [...host.children].map((c) => {
+          const a = c.getAnimations().find((x) => x.animationName === "enter");
+          return a ? { delay: a.effect.getTiming().delay, duration: a.effect.getTiming().duration } : null;
+        });
+      }).observe(document, { childList: true, subtree: true });
+    });
+    const token = (name) =>
+      page.evaluate((n) => {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+        return v.endsWith("ms") ? parseFloat(v) : parseFloat(v) * 1000;
+      }, name);
+    const near = (a, b) => Math.abs(a - b) < 0.5;
+
+    /* Every .page-enter child the route rendered, against the stagger. */
+    const STAGGER = [0, 40, 80, 120, 160, 200];
+    const entrance = async (route, atLeast) => {
+      await page.waitForFunction(() => window.__cnEnter, { timeout: 10000 });
+      const enter = await page.evaluate(() => window.__cnEnter);
+      if (enter.length < atLeast) out.push(`${route}: .page-enter has ${enter.length} children, and the check needs ${atLeast}`);
+      enter.forEach((a, i) => {
+        const want = STAGGER[Math.min(i, STAGGER.length - 1)];
+        if (!a) out.push(`${route}: .page-enter child ${i + 1} runs no enter animation`);
+        else if (!near(a.delay, want) || !near(a.duration, slow))
+          out.push(`${route}: .page-enter child ${i + 1} enters after ${a.delay}ms over ${a.duration}ms, not ${want}ms over --t-slow (${slow}ms)`);
+      });
+    };
+
+    await page.goto(url + "/examples/dashboard", { waitUntil: "load" });
+    await page.waitForSelector("main h1", { timeout: 10000 });
+    const [slow, base, exit] = [await token("--t-slow"), await token("--t-base"), await token("--t-exit")];
+    await entrance("/examples/dashboard", 4);
+
+    /* Opens and closes one overlay and returns its transitions at each
+       end: [property, duration] pairs read as the state changes. */
+    const read = (el) => el.getAnimations().filter((a) => a.transitionProperty).map((a) => [a.transitionProperty, a.effect.getTiming().duration]);
+    const check = (route, what, when, list, want, name) => {
+      if (!list.length) out.push(`${route}: ${what} runs no transition on ${when}`);
+      for (const [prop, ms] of list) if (!near(ms, want)) out.push(`${route}: ${what} ${when} moves ${prop} over ${ms}ms, not ${name} (${want}ms)`);
+    };
+
+    /* A docs page has more than six children, so it reaches the last step. */
+    await open(page, url + "/modal");
+    await entrance("/modal", STAGGER.length);
+    const modal = await page.evaluate(`(async () => {
+      const read = ${read};
+      const dialog = document.querySelector("main dialog.modal");
+      dialog.previousElementSibling.click();
+      const entry = read(dialog);
+      await Promise.all(dialog.getAnimations().map((a) => a.finished.catch(() => {})));
+      dialog.querySelector("footer .btn-ghost").click();
+      return { entry, leave: read(dialog) };
+    })()`);
+    check("/modal", "the modal", "entry", modal.entry, base, "--t-base");
+    check("/modal", "the modal", "close", modal.leave, exit, "--t-exit");
+
+    await open(page, url + "/toast");
+    const toast = await page.evaluate(`(async () => {
+      const read = ${read};
+      const stack = document.querySelector("main .toast-stack");
+      /* Preact renders after the click, so wait for the change itself. */
+      const changed = (options) => new Promise((resolve) => {
+        new MutationObserver((_, mo) => { mo.disconnect(); resolve(); }).observe(stack, options);
+        setTimeout(resolve, 2000);
+      });
+      const landed = changed({ childList: true });
+      stack.previousElementSibling.click();
+      await landed;
+      const el = stack.querySelector(".toast");
+      if (!el) return { entry: [], leave: [] };
+      const entry = read(el);
+      await Promise.all(el.getAnimations().map((a) => a.finished.catch(() => {})));
+      const left = changed({ attributes: true, subtree: true, attributeFilter: ["hidden"] });
+      el.querySelector("button").click();
+      await left;
+      return { entry, leave: read(el) };
+    })()`);
+    check("/toast", "the toast", "entry", toast.entry, base, "--t-base");
+    check("/toast", "the toast", "close", toast.leave, exit, "--t-exit");
+  } finally {
+    await page.close();
+  }
+  return out;
+}
+
 async function main() {
   const skipBuild = process.argv.includes("--no-build");
   const showReview = process.argv.includes("--review");
   const updateShots = process.argv.includes("--update-shots");
+  const onlyMotion = process.argv.includes("--motion");
   if (!skipBuild || !existsSync(join(root, "dist/index.html"))) {
     console.log("Building the showcase...");
     execFileSync("pnpm", ["build"], { cwd: root, stdio: "inherit" });
@@ -350,8 +461,13 @@ async function main() {
   let skipped = 0;
   const review = new Map();
   try {
+    const moved = await motion(browser, url);
+    failures += moved.length;
+    console.log(`${moved.length ? "FAIL" : "ok  "} motion`);
+    for (const m of moved) console.log(`  ${m}`);
+
     const page = await browser.newPage();
-    for (const route of routes()) {
+    for (const route of onlyMotion ? [] : routes()) {
       const lines = [];
       const notes = [];
 
@@ -471,7 +587,8 @@ async function main() {
     console.log(`\n${failures} problem(s) across ${count} routes${note}.`);
     process.exit(1);
   }
-  console.log(`\nAll ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion, fit 700px (200% zoom) without clipping, fit 390px and 320px, keep the composition budget${note}, and ${updateShots ? "wrote new visual baselines" : "match the visual baselines"} for ${VISUAL.join(", ")}.`);
+  if (onlyMotion) return;
+  console.log(`\nThe page entrance, the modal and the toast run on their duration tokens. All ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion, fit 700px (200% zoom) without clipping, fit 390px and 320px, keep the composition budget${note}, and ${updateShots ? "wrote new visual baselines" : "match the visual baselines"} for ${VISUAL.join(", ")}.`);
   console.log(`Forced-colors screenshots for review: ${shots}`);
 }
 

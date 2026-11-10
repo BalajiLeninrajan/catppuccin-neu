@@ -123,9 +123,9 @@ export default function TablePage() {
         the engaged wash with a deeper press. Hovering a row presses it in, a
         dark top edge drawn as a gradient on each cell so the row has no
         seams, with no lit edge below, on mauve at{" "}
-        <code class="cn-code-inline">--cn-step-row</code> (12%), a step past
-        the ghost hover and the open accordion and a step under a selected
-        row.
+        <code class="cn-code-inline">--cn-step-row</code> (13%), level with
+        the ghost hover, a step past the open accordion and a step under a
+        selected row.
       </p>
 
       <p class="cn-copy">
@@ -135,9 +135,10 @@ export default function TablePage() {
         is a block, so the cell needs no <code class="cn-code-inline">&lt;br&gt;</code>. Other cells
         are 400 at <code class="cn-code-inline">--cell-font-size</code>, 14px by
         default and 13px compact. Wrap a key figure, such as an amount, in{" "}
-        <code class="cn-code-inline">&lt;strong&gt;</code> and it takes 600 in{" "}
+        <code class="cn-code-inline">&lt;strong&gt;</code> and it takes 500 in{" "}
         <code class="cn-code-inline">--cn-fg</code>, so the number a reader
-        scans for stands two weight steps over the cells around it. Status goes in a{" "}
+        scans for is marked by ink and right alignment and the name stays
+        the row's one 600. Status goes in a{" "}
         <code class="cn-code-inline">.tag</code> whose word states it, such as
         "Past due". Past due and trial-ending tags are danger and warning, so
         they lead with a glyph; the column gives every tag one, so the words
@@ -287,12 +288,12 @@ export default function TablePage() {
         title="Table classes"
         rows={[
           { name: ".data-table", values: "on <table>", contrast: "Header rule 1.85:1 on a panel · row rules 1.3:1", notes: "Scopes all table styling. Sans tabular body at 400 and --cell-font-size (14px, 13px compact), a --cn-surface-band header over an --edge rule, surface-0 rules between rows. Cell padding is --cell-pad." },
-          { name: "td strong", values: "a key figure", notes: "An amount or another figure a reader scans for: 600 in --cn-fg, two weight steps over the 400 cells." },
+          { name: "td strong", values: "a key figure", notes: "An amount or another figure a reader scans for: 500 in --cn-fg, one weight step and one ink stop over the 400 cells. The .cell-name is the row's one 600." },
           { name: ".is-num", values: "on th and td", notes: "Right-aligns a numeric column. On a sortable header the button reverses, so the label meets the right edge and the chevron sits on its inner side." },
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
-          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.27:1 on a panel, past the 1.24:1 hover and the open accordion's 1.08:1, 1.20:1 under a selected row · cell text 7.3:1 on it", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (12%) into base, a step under a selected row." },
+          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.30:1 on a panel, level with the 1.31:1 hover, past the open accordion's 1.08:1, 1.17:1 under a selected row · cell text 7.1:1 on it", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (13%) into base, a step under a selected row." },
           { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest it takes --cn-field-ring over the soft carve, like any field. Name it with aria-labelledby pointing at the column header and the row's name cell." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },

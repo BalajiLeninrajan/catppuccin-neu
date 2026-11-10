@@ -9,6 +9,11 @@
      import { init } from "catppuccin-neu/js";
      init();               // wires everything under document
 
+   Or load ./auto.js, which calls the same wiring once the DOM is parsed
+   and again for widgets added later:
+
+     <script type="module" src=".../js/auto.js"></script>
+
    Or wire one widget at a time with tabs(), menu(), listbox(), slider(),
    tooltips() and toast(). */
 

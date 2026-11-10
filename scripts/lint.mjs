@@ -487,6 +487,95 @@ for (const [file, checks] of Object.entries(CHECKS)) {
   }
 }
 
+/* ── Frozen tokens ───────────────────────────────────────────────────────────
+   The surface, hairline, shadow and plate tokens are frozen for 0.5.0. This
+   snapshot holds each one's resolved value: its first declaration in
+   tokens.css with every var() that has no fallback expanded down to the
+   hex, so a palette or shadow-ink edit trips it too. A value that differs
+   fails, and so does a new --neu-*, --cn-plate* or --cn-surface-* token
+   the snapshot does not list. To move a frozen token on purpose, change
+   the snapshot in the same commit and add a line under "Changed after the
+   freeze" in CHANGELOG.md. FROZEN_MORE and FROZEN_COMPACT hold the frozen
+   names that :root[data-contrast="more"] and [data-density="compact"]
+   re-declare. */
+const FROZEN_INK = "rgb(8 8 14)";
+const FROZEN_LIT = "inset 0 1px color-mix(in srgb, #585b70 45%, transparent)";
+const frozenPlate = (offsets) => offsets.map((o) => `${o} ${o} 0 var(--plate, ${FROZEN_INK})`).join(", ");
+const frozenSteps = (n) => frozenPlate(Array.from({ length: n }, (_, i) => `${i + 1}px`));
+const FROZEN = {
+  "--edge": "color-mix(in srgb, #585b70 70%, transparent)",
+  "--edge-strong": "#585b70",
+  "--cn-lit-edge": FROZEN_LIT,
+  "--cn-surface-page": "#181825",
+  "--cn-surface-raised": "#1e1e2e",
+  "--cn-surface-overlay": "color-mix(in srgb, #313244 90%, #1e1e2e)",
+  "--cn-surface-recessed": "color-mix(in srgb, #11111b 80%, #181825)",
+  "--cn-surface-band": "color-mix(in srgb, #11111b 30%, transparent)",
+  "--cn-surface-sunken": "#11111b",
+  "--neu-ink": FROZEN_INK,
+  "--neu-dark": "rgb(8 8 14 / .8)",
+  "--neu-dark-soft": "rgb(17 17 27 / .30)",
+  "--neu-shade": "rgb(8 8 14 / .72)",
+  "--neu-contact": FROZEN_INK,
+  "--neu-near": "rgb(8 8 14 / .8)",
+  "--neu-raised": `2px 2px 0 ${FROZEN_INK}, 3px 4px 6px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72), ${FROZEN_LIT}`,
+  "--neu-lifted": `6px 8px 0 ${FROZEN_INK}, 8px 14px 16px rgb(8 8 14 / .8), 18px 28px 48px rgb(8 8 14 / .72), ${FROZEN_LIT}`,
+  "--neu-raised-soft": `1px 1px 0 ${FROZEN_INK}, 3px 4px 9px rgb(8 8 14 / .5)`,
+  "--neu-inset": "inset 3px 3px 8px rgb(8 8 14 / .8)",
+  "--neu-inset-soft": "inset 2px 2px 5px rgb(8 8 14 / .5)",
+  "--cn-plate": frozenPlate(["calc(4px * .25)", "calc(4px * .5)", "calc(4px * .75)", "4px"]),
+  "--cn-plate-half": frozenPlate(["calc(4px * .125)", "calc(4px * .25)", "calc(4px * .375)", "calc(4px / 2)"]),
+  "--cn-plate-hover": frozenPlate(["calc((4px + 1px) * .25)", "calc((4px + 1px) * .5)", "calc((4px + 1px) * .75)", "calc(4px + 1px)"]),
+  "--cn-plate-lg": frozenSteps(10),
+  "--cn-plate-sm": frozenSteps(3),
+  "--cn-plate-tilt": frozenSteps(6),
+};
+const FROZEN_MORE = {
+  "--edge": "#6c7086",
+  "--edge-strong": "#7f849c",
+  "--neu-dark": "rgb(8 8 14 / .88)",
+  "--neu-shade": "rgb(8 8 14 / .86)",
+  "--neu-near": "rgb(8 8 14 / .9)",
+};
+const FROZEN_COMPACT = {
+  "--neu-raised": `1px 1px 0 ${FROZEN_INK}, 3px 4px 6px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72), ${FROZEN_LIT}`,
+};
+async function frozenTokens() {
+  const css = stripComments(await readFile(join(root, "css/tokens.css"), "utf8"));
+  const first = new Map(), at = new Map();
+  for (const m of css.matchAll(/(--[\w-]+)\s*:([^;{}]*);/g)) if (!first.has(m[1])) { first.set(m[1], m[2]); at.set(m[1], m.index); }
+  const resolve = (v, map, depth = 0) => {
+    const flat = v.replace(/\s+/g, " ").trim();
+    return depth > 20 ? flat : flat.replace(/var\(\s*(--[\w-]+)\s*\)/g, (all, n) => (map.has(n) ? resolve(map.get(n), map, depth + 1) : all));
+  };
+  const out = [];
+  const hold = (label, snapshot, map, names, line) => {
+    for (const name of names) {
+      const want = snapshot[name], got = map.has(name) ? resolve(map.get(name), map) : null;
+      if (got === null) out.push({ line, message: `${label}${name} is frozen but no longer declared` });
+      else if (want === undefined) out.push({ line: lineOf(css, at.get(name)), message: `${label}${name} is not in the frozen snapshot; it resolves to ${got}` });
+      else if (got !== want) out.push({ line: lineOf(css, at.get(name)), message: `${label}${name} is frozen at ${want} but resolves to ${got}; a deliberate change updates the snapshot in scripts/lint.mjs and adds a "Changed after the freeze" line to CHANGELOG.md` });
+    }
+  };
+  const family = [...first.keys()].filter((n) => /^--(?:neu-|cn-plate|cn-surface-)/.test(n));
+  hold("", FROZEN, first, new Set([...Object.keys(FROZEN), ...family]), 1);
+  for (const [label, snapshot, re] of [
+    ['data-contrast="more": ', FROZEN_MORE, /(?:^|\n):root\[data-contrast="more"\]\s*\{([^}]*)\}/],
+    ['data-density="compact": ', FROZEN_COMPACT, /(?:^|\n)\[data-density="compact"\]\s*\{([^}]*)\}/],
+  ]) {
+    const block = css.match(re);
+    if (!block) { out.push({ line: 1, message: `${label}no block to check the frozen tokens in` }); continue; }
+    const own = customProps(block[1]);
+    const names = new Set([...Object.keys(snapshot), ...[...own.keys()].filter((n) => n in FROZEN)]);
+    hold(label, snapshot, new Map([...first, ...own]), names, lineOf(css, block.index + 1));
+  }
+  return out;
+}
+for (const { line, message } of await frozenTokens()) {
+  console.error(`css/tokens.css:${line}: frozenTokens: ${message}`);
+  failures++;
+}
+
 if (failures) {
   console.error(`catppuccin-neu lint: ${failures} problem${failures === 1 ? "" : "s"}`);
   process.exit(1);

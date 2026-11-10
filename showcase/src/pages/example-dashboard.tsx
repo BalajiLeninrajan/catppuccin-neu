@@ -7,26 +7,38 @@
    tilted aside on the page grid, the chart first. The whole view runs at
    cozy density, the SPEC's density for a desktop data tool. The aside
    holds prose, a heading in the name role and a link; the supporting
-   figures sit on the ground under it, ruled, with no panel of their own,
-   so the two columns end near the same line.                             */
+   figures sit on the ground under it as one list of divided rows, with no
+   panel of their own, pinned to the bottom of the column so its last row
+   ends on the chart footer's line.                                       */
 
 import { useState } from "preact/hooks";
 import type { JSX } from "preact";
 import { tabsKeydown } from "../lib/roving";
 import { Pager } from "../lib/pager";
-import { DangerGlyph, WarningGlyph, SuccessGlyph, PendingGlyph } from "../lib/glyphs";
+import { DangerGlyph, WarningGlyph, SuccessGlyph } from "../lib/glyphs";
 
 type Status = "paid" | "pending" | "due" | "overdue";
 
+/* The pending clock outside a tag, so it sizes itself: 13px, .cn-icon-sm,
+   in the meta ink of the word beside it. */
+const PendingClock = () => (
+  <svg class="cn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </svg>
+);
+
 const STATUS: Record<Status, { label: string; tone: string; Glyph: () => JSX.Element }> = {
   paid: { label: "Paid", tone: "cn-tone-success", Glyph: SuccessGlyph },
-  /* Blue, a cool tone, so a pending tag never sits beside the yellow
-     due-soon tag in another warm hue. Due soon may sit above Overdue:
-     status tags carry a word and a glyph, so the SPEC exempts them from
-     the warm-family adjacency rule. */
-  pending: { label: "Pending", tone: "cn-tone-info", Glyph: PendingGlyph },
+  /* Pending is the row's in-progress state, so it is plain meta text with
+     a clock, not a tag: a column of toned tags would out-shout the one
+     Overdue. It has no tone. */
+  pending: { label: "Pending", tone: "", Glyph: PendingClock },
+  /* Due soon may sit above Overdue: status tags carry a word and a glyph,
+     so the SPEC exempts them from the warm-family adjacency rule. */
   due: { label: "Due soon", tone: "cn-tone-warning", Glyph: WarningGlyph },
-  overdue: { label: "Overdue", tone: "cn-tone-danger", Glyph: DangerGlyph },
+  /* Overdue is the view's one urgent status, so it takes the solid tag. */
+  overdue: { label: "Overdue", tone: "cn-tone-danger is-solid", Glyph: DangerGlyph },
 };
 
 interface Invoice {
@@ -158,10 +170,17 @@ function InvoiceTable() {
                   <td data-label="Issued">{inv.issued}</td>
                   <td data-label="Due">{inv.due}</td>
                   <td class="is-trail" data-label="Status">
-                    <span class={`tag ${s.tone}`}>
-                      <s.Glyph />
-                      {s.label}
-                    </span>
+                    {inv.status === "pending" ? (
+                      <span class="cn-meta cn-row cn-gap-4">
+                        <s.Glyph />
+                        {s.label}
+                      </span>
+                    ) : (
+                      <span class={`tag ${s.tone}`}>
+                        <s.Glyph />
+                        {s.label}
+                      </span>
+                    )}
                   </td>
                   <td class="is-num is-trail" data-label="Amount"><strong>{money(inv.amount)}</strong></td>
                 </tr>
@@ -186,8 +205,9 @@ export default function DashboardExample() {
       {/* The title and its primary share one line in a split, and the lede
           sits under them, so the button never stands alone below the copy.
           The title has no mauve em: the primary beside it is the top
-          band's one mauve mark, so the hero stat below is text-colored too;
-          the Wallet series bar is a data mark. */}
+          band's one mauve mark, so the hero stat below is text-colored too.
+          The chart's three series are teal, yellow and blue: mauve is the
+          sixth series, so no bar shares the primary's color. */}
       <header class="cn-stack cn-gap-24">
         <div class="cn-split">
           <h1 class="cn-display is-sm">
@@ -209,26 +229,27 @@ export default function DashboardExample() {
         <div class="stat is-lg">
           <span>Collected this month</span>
           <strong class="cn-fg">$126,940</strong>
-          <p class="cn-meta cn-m-0">+8.2% on August</p>
+          <p>+8.2% on August</p>
         </div>
         <div class="stat">
           <span>Outstanding</span>
           <strong>{whole(total(OPEN))}</strong>
-          <p class="cn-meta cn-m-0">{OPEN.length} open invoices</p>
+          <p>{OPEN.length} open invoices</p>
         </div>
         {/* The one figure that needs action carries the danger signal; the
-            other three stay neutral. */}
+            other three stay neutral. Overdue is the view's one urgent
+            status, so its tag is the solid one here and in the table. */}
         <div class="stat cn-tone-danger">
           <span>Past due</span>
           <strong>{whole(total(LATE))}</strong>
-          <p class="cn-meta cn-m-0">
-            <span class="tag cn-tone-danger">{LATE.length} overdue</span>
+          <p>
+            <span class="tag cn-tone-danger is-solid">{LATE.length} overdue</span>
           </p>
         </div>
         <div class="stat">
           <span>Average days to pay</span>
           <strong>18</strong>
-          <p class="cn-meta cn-m-0">3 days faster than Q2</p>
+          <p>3 days faster than Q2</p>
         </div>
       </section>
 
@@ -272,7 +293,10 @@ export default function DashboardExample() {
             <strong class="cn-name">${COLLECTED_TOTAL.toFixed(1)}k</strong>
           </div>
         </section>
-        <div class="cn-stack cn-gap-24 cn-span-5">
+        {/* The stack stretches to the chart panel's height and parts its
+            two children, so the aside stays at the top and the figures end
+            on the chart footer's line. No panel stretches. */}
+        <div class="cn-stack cn-gap-24 cn-span-5" style="align-self:stretch;align-content:space-between">
         <aside class="panel is-tilted" aria-labelledby="dash-summary">
           <div class="panel-body cn-stack cn-gap-12">
             <h2 id="dash-summary" class="cn-name cn-m-0">Where September stands</h2>
@@ -289,22 +313,19 @@ export default function DashboardExample() {
         {/* Supporting figures sit on the ground, not in a third panel, so
             the row reads in three levels: the chart panel, the tilted
             aside, then these. The heading takes the name role, the size
-            of a cozy band title. */}
-        <section class="cn-stack cn-gap-16" aria-labelledby="dash-refunds">
+            of a cozy band title. The figures take one form, divided rows:
+            the ruled stat grid stays unique to the top band. */}
+        <section class="cn-stack cn-gap-8" aria-labelledby="dash-refunds">
           <h2 id="dash-refunds" class="cn-name cn-m-0">Payments this month</h2>
-            <div class="stat-grid is-ruled" style="--stat-cols:2">
-              <div class="stat">
-                <span>Refunded</span>
-                <strong>$1,120</strong>
-                <p class="cn-meta cn-m-0">4 refunds</p>
-              </div>
-              <div class="stat">
-                <span>Failed</span>
-                <strong>3</strong>
-                <p class="cn-meta cn-m-0">$2,340 to retry</p>
-              </div>
-            </div>
             <div class="cn-divide">
+              <div class="stat is-inline">
+                <span>Refunded in 4 payments</span>
+                <b>$1,120</b>
+              </div>
+              <div class="stat is-inline">
+                <span>Failed, $2,340 to retry</span>
+                <b>3</b>
+              </div>
               <div class="stat is-inline">
                 <span>Paid in full</span>
                 <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>

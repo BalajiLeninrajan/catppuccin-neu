@@ -25,6 +25,10 @@
       "types": "./js/index.d.ts",
       "default": "./js/index.js"
     },
+    "./js/auto": {
+      "types": "./js/auto.d.ts",
+      "default": "./js/auto.js"
+    },
     "./css/*": "./css/*",
     "./tailwind/*": "./tailwind/*",
     "./scripts/*": "./scripts/*"

@@ -214,7 +214,13 @@ export default function MotionPage() {
         <code class="cn-code-inline">--t-press</code> and come back on the spring.
         Overlays leave on the ease-in over <code class="cn-code-inline">--t-exit</code>.
         Every transition names a duration token, and every transform or
-        shadow transition names a curve.
+        shadow transition names a curve.{" "}
+        <code class="cn-code-inline">pnpm --dir showcase test:a11y</code> reads
+        the animations the browser is running and fails when a page
+        entrance leaves its 40ms stagger over{" "}
+        <code class="cn-code-inline">--t-slow</code>, or when a modal or a toast
+        enters off <code class="cn-code-inline">--t-base</code> or leaves off{" "}
+        <code class="cn-code-inline">--t-exit</code>.
       </p>
 
       <CodeBlock title="The tokens (tokens.css)" code={tokensSnippet} />

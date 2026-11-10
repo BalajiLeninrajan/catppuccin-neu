@@ -32,7 +32,8 @@ export default function EmptyStatePage() {
         title sits in a 56px round carve on the soft inset.{" "}
         <code class="cn-code-inline">strong</code> is the title,{" "}
         <code class="cn-code-inline">span</code> the supporting line, and anything
-        else joins the 8px stack.
+        else joins the 8px stack. A button adds 16px above itself, so the action
+        stands 24px under the copy.
       </p>
 
       <Demo title="With a dashed action" why="Which action button to use" classes="empty-state">
@@ -86,7 +87,7 @@ export default function EmptyStatePage() {
             name: "action",
             values: ".btn-secondary / .btn-ghost.is-dashed / .btn-primary",
             notes:
-              "Optional. One action only; it joins the stack below the copy.",
+              "Optional. One action only, a .btn or .btn-text. It adds 16px above itself, so it stands 24px under the copy; 12px in .is-fill.",
           },
         ]}
       />

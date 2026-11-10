@@ -68,7 +68,10 @@
   font: var(--cn-type-micro-weight) var(--cn-type-micro-size)/var(--cn-type-micro-leading) var(--sans);
   letter-spacing: var(--cn-type-micro-tracking);
   text-transform: uppercase;
-  color: var(--cn-fg-muted);
+  /* --cn-microlabel-ink lets a recipe lift the label, as the sidebar does
+     for the group that holds the current page; a color set in the recipes
+     layer would lose to this one. */
+  color: var(--cn-microlabel-ink, var(--cn-fg-muted));
 }
 .cn-ui {
   font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);

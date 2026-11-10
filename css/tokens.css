@@ -81,20 +81,21 @@
           ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* Data series, in order. A chart's first series is teal, then yellow,
-     mauve, peach, blue and pink: the six accents, alternating cool and warm
-     so neighbors never share a hue family. Series 1 is not mauve, so the
-     biggest bar in a chart never reads as the interactive color. A record
-     that has an identity keeps its own --accent instead. --cn-ramp-1..5 is
-     a sequential ramp for one measure, mauve mixed into surface-0 in
-     oklab. */
+     blue, peach, pink and mauve: the six accents. Mauve is the last slot,
+     so a chart of up to five series holds no bar in the interactive color.
+     The first four alternate cool and warm; peach and pink are the one
+     pair of warm neighbors, a lightness step apart. A record that has an
+     identity keeps its own --accent instead.
+     --cn-ramp-1..5 is a sequential ramp for one measure, mauve mixed into
+     surface-0 in oklab. */
   --cn-series-1: var(--teal);
   --cn-series-2: var(--yellow);
-  --cn-series-3: var(--mauve);
+  /* 3 and 5 sit a lightness step down, so a reader who loses hue still
+     tells blue from mauve and pink from teal. */
+  --cn-series-3: color-mix(in oklab, var(--blue) 70%, var(--base));
   --cn-series-4: var(--peach);
-  /* 5 and 6 sit a lightness step down, so a reader who loses hue still
-     tells them from 1 and 3. */
-  --cn-series-5: color-mix(in oklab, var(--blue) 70%, var(--base));
-  --cn-series-6: color-mix(in oklab, var(--pink) 70%, var(--base));
+  --cn-series-5: color-mix(in oklab, var(--pink) 70%, var(--base));
+  --cn-series-6: var(--mauve);
   --cn-ramp-1: color-mix(in oklab, var(--mauve) 20%, var(--surface-0));
   --cn-ramp-2: color-mix(in oklab, var(--mauve) 40%, var(--surface-0));
   --cn-ramp-3: color-mix(in oklab, var(--mauve) 60%, var(--surface-0));
@@ -119,19 +120,20 @@
   /* Body text stays above 7:1, labels above 5.5:1 and placeholders above
      4.5:1 on the overlay too. A lighter overlay drops the placeholder role
      under 4.5:1, so the ladder stops here. */
-  --cn-surface-recessed: color-mix(in srgb, var(--crust) 50%, var(--mantle)); /* the sidebar, app chrome a step under the page */
+  --cn-surface-recessed: color-mix(in srgb, var(--crust) 80%, var(--mantle)); /* the sidebar, app chrome a step under the page: 1.05:1 on the page */
   --cn-surface-band: color-mix(in srgb, var(--crust) 30%, transparent);      /* table heads: one step under whatever holds them */
-  /* Wells are below the ground wherever they sit: crust 70% into mantle is
-     darker than the mantle page (1.05:1) and than a base panel (1.12:1). */
-  --cn-surface-sunken: color-mix(in srgb, var(--crust) 70%, var(--mantle));   /* wells, the mono wells, the switch plate, stepper pills, skeletons */
+  /* Wells are below the ground wherever they sit: crust, the darkest Mocha
+     stop, is darker than the mantle page (1.07:1) and than a base panel
+     (1.14:1). The ladder's dark end stops here; only shadow ink is darker. */
+  --cn-surface-sunken: var(--crust);                                          /* wells, the mono wells, the switch plate, stepper pills, skeletons: 1.07:1 on the page */
 
   /* Mix steps. Every tint of a hue into a ground or into transparent uses
      one of these, so a wash means the same strength everywhere. */
   --cn-step-tint: 4%;     /* a field in its tone, an untoned --tint, the open carve */
   --cn-step-status-tint: 6%; /* the four status tints, so a toned banner or .cn-tint: body text stays 8.0:1 or better on a panel */
-  --cn-step-row: 12%;     /* the row hover: 1.27:1 for mauve on base, past the 1.24:1 hover, under the 1.52:1 selected row */
+  --cn-step-row: 13%;     /* the row hover: 1.30:1 for mauve on base, level with the 1.31:1 hover, under the 1.52:1 selected row */
   --cn-step-wash: 12%;    /* tone hover washes, the accent tint: 1.27:1 for mauve on base */
-  --cn-step-engaged: 20%; /* the engaged wash: 1.52:1, a step past the 1.24:1 hover */
+  --cn-step-engaged: 20%; /* the engaged wash: 1.52:1, a step past the 1.31:1 hover */
   --cn-step-fill: 14%;    /* avatar grounds, halos, the mark border */
   --cn-step-plate: 25%;   /* the primary plate, banner edges, the mauve and accent edges */
   --cn-step-edge: 40%;    /* hue hairlines */
@@ -246,7 +248,7 @@
      page, so the shadow cannot carry height alone: the base fill a step
      above the page does the separating and the foot says which side is
      down.
-     The 2px contact stays under the lead's 4px 6px foot and the plate at
+     The 2px contact stays under the lead's 6px 8px foot and the plate at
      default (4px) and cozy (3px) density. Compact density drops the plate
      to 2px, so it drops the contact to 1px. The panel's ink border side
      adds 1px, so a plain panel shows 3px of ink at default and cozy and
@@ -259,11 +261,12 @@
   /* The lead panel stands higher by darkness on its bottom and right only,
      never by a line all round or a brighter one: a deeper full-ink contact,
      a deeper near shadow and a longer cast. It keeps the plain lit edge.
-     The 4px 6px contact is a hard foot 6px deep and 4px wide, past the 4px
-     plate, so at 1x the lead stands a clear step over a plain panel's 2px
-     and never reads lower than a button. It is as deep as the tilted
-     panel's 6px plate on the bottom and 2px narrower on the right. */
-  --neu-lifted: 4px 6px 0 var(--neu-contact), 6px 12px 14px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
+     The 6px 8px contact is a hard foot 8px deep and 6px wide, four times a
+     plain panel's 2px on the bottom and three times on the right, past the
+     4px plate, so at 1x the lead never reads lower than a button. It is
+     2px deeper than the tilted panel's 6px plate on the bottom and as wide
+     on the right. */
+  --neu-lifted: 6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
   --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
@@ -321,7 +324,7 @@
   --cn-stat-rule: var(--edge); /* the .stat-grid.is-ruled rule, equal to --edge: 1.92:1 on the page at twice the width */
   --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
   --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its own wash */
-  --hover:     color-mix(in srgb, var(--surface-1) 40%, transparent);  /* the hover wash: 1.24:1 on base, 1.15:1 on overlay, so a menu row still lights */
+  --hover:     color-mix(in srgb, var(--surface-1) 50%, transparent);  /* the hover wash: 1.31:1 on base, 1.19:1 on overlay, so a menu row still lights */
   --control-edge: var(--overlay-1);  /* unchecked control edges, the off paddle, the slider thumb: 4.4:1 on base */
   /* .6 keeps a disabled ghost label at 4.2:1. The primary goes flat instead
      of dimming. */

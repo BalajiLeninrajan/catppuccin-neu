@@ -79,22 +79,22 @@ export default function StatPage() {
           <div class="stat">
             <span>Collected this month</span>
             <strong>$126,940</strong>
-            <p class="cn-meta cn-m-0">+8.2% on August</p>
+            <p>+8.2% on August</p>
           </div>
           <div class="stat">
             <span>Outstanding</span>
             <strong>$13,422</strong>
-            <p class="cn-meta cn-m-0">11 open invoices</p>
+            <p>11 open invoices</p>
           </div>
           <div class="stat">
             <span>Past due</span>
             <strong>$5,806</strong>
-            <p class="cn-meta cn-m-0">3 invoices</p>
+            <p>3 invoices</p>
           </div>
           <div class="stat">
             <span>Average days to pay</span>
             <strong>18</strong>
-            <p class="cn-meta cn-m-0">3 faster than Q2</p>
+            <p>3 faster than Q2</p>
           </div>
         </section>
       </Demo>
@@ -106,7 +106,11 @@ export default function StatPage() {
         equal to <code class="cn-code-inline">--edge</code>, on its start side,
         with 16px between the rule and the label, so the row reads as one
         band without a panel around it. The rule follows the writing
-        direction. Inside a panel, use the plain grid.
+        direction. Inside a panel, use the plain grid. A note under the
+        value goes in a bare <code class="cn-code-inline">&lt;p&gt;</code>. It
+        takes the label's voice, 13px at 500 in{" "}
+        <code class="cn-code-inline">--cn-fg-muted</code>, so a stat reads 13,
+        24, 13 and a band of them holds one small size.
       </p>
 
       <Demo title="Large stat" why="When the large stat takes an accent" row classes="stat is-lg  (reads --accent)">
@@ -196,6 +200,11 @@ export default function StatPage() {
             name: ".stat",
             values: "tile",
             notes: "A 13px label <span> at 500 in --cn-fg-muted over a 24px tabular <strong>. No chrome of its own. Steps down to 18px at 520px.",
+          },
+          {
+            name: ".stat > p",
+            values: "optional note",
+            notes: "A line under the value in the label's voice: 13px at 500 in --cn-fg-muted, no margin. Leave .cn-meta off it, so the stat keeps one small size.",
           },
           {
             name: ".stat.is-lg",

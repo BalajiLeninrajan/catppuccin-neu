@@ -27,10 +27,10 @@ export type Tone = (typeof TONES)[number];
 export const ACCENT = {
   teal: "#94e2d5",
   yellow: "#f9e2af",
-  mauve: "#cba6f7",
-  peach: "#fab387",
   blue: "#89b4fa",
+  peach: "#fab387",
   pink: "#f5c2e7",
+  mauve: "#cba6f7",
   /* An identity hue, never a series: for a record beyond the six. */
   sapphire: "#74c7ec",
 } as const;

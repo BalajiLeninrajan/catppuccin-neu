@@ -306,7 +306,7 @@ export default function SelectionPage() {
           {
             name: ".switch",
             values: 'input[type="checkbox"]',
-            contrast: "Plate fill 1.12:1 under a panel, 1.05:1 under the page · edges 4.4:1 on a panel",
+            contrast: "Plate fill 1.14:1 under a panel, 1.07:1 under the page · edges 4.4:1 on a panel",
             notes:
               "50 by 28px plate, 8px radius, the --cn-surface-sunken fill under --neu-inset and a 1px --control-edge inset ring. The 21 by 22px paddle rests on --cn-surface-raised with its own 1px --control-edge, tilted 16deg. Checked, it slides 23px on the spring, flips its tilt, takes the mauve ramp with a 2 by 8px crust bar at its center and glows 6px at --cn-step-fill; held while on, 12px at --cn-step-plate.",
           },

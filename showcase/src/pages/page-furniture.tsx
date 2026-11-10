@@ -188,13 +188,14 @@ export default function PageFurniturePage() {
         site's navigation is one. The sidebar is{" "}
         <code class="cn-code-inline">--sidebar-w</code> (264px) wide, full
         height, sticky, on <code class="cn-code-inline">--cn-surface-recessed</code>,{" "}
-        crust 50% into mantle, a step under the page, with an <code class="cn-code-inline">--edge-soft</code> rule, and
+        crust 80% into mantle, a step under the page, with an <code class="cn-code-inline">--edge-soft</code> rule, and
         scrolls on its own. <code class="cn-code-inline">.sidebar-head</code>{" "}
         holds the wordmark and a <code class="cn-code-inline">.sidebar-toggle</code>;{" "}
         <code class="cn-code-inline">.sidebar-nav</code> stacks groups 24px
-        apart, each a microlabel over links at the ui size and 500, so the
-        links sit under the content they lead to. Hover is the ghost hover
-        and <code class="cn-code-inline">aria-current="page"</code> is a
+        apart, each a microlabel over links at the ui size and 500 in
+        --cn-fg-muted, so the links sit under the content they lead to. Hover
+        is --cn-fg on the ghost hover, the group that holds the current page
+        lifts its microlabel to --cn-fg, and <code class="cn-code-inline">aria-current="page"</code> is a
         position, not a press: 600 in --cn-fg with a 4px mauve spine on its
         start edge, so the nav never reads as a column of pressed buttons.
         The rule sits on the
