@@ -175,7 +175,12 @@ export default function TablePage() {
         direction and hides while the column is unsorted. The button gets the
         focus ring, and screen readers announce the sort from the attribute.
         A selected row takes <code class="cn-code-inline">aria-selected="true"</code>:
-        the engaged wash with a deeper press. Hovering a row presses it in, a
+        the engaged wash with a deeper press. Its first data cell takes the
+        name weight and the name cell's second line steps to{" "}
+        <code class="cn-code-inline">--cn-fg-soft</code>, 5.68:1 on the wash.
+        A selectable row needs a checkbox in a{" "}
+        <code class="cn-code-inline">td.cell-select</code>, so the selection
+        never rests on the fill alone. Hovering a row presses it in, a
         dark top edge drawn as a gradient on each cell so the row has no
         seams, with no lit edge below, on mauve at{" "}
         <code class="cn-code-inline">--cn-step-row</code> (16%), level with
@@ -374,7 +379,7 @@ export default function TablePage() {
           { name: ".is-num", values: "on th and td", notes: "Right-aligns a numeric column. On a sortable header the button reverses, so the label meets the right edge and the chevron sits on its inner side." },
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
-          { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
+          { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press, the name weight on the first data cell and --cn-fg-soft on the name cell's second line. Required: a checkbox in a td.cell-select on every selectable row." },
           { name: "tbody tr:hover", values: "state", contrast: "Fill 1.39:1 on a panel, level with the 1.40:1 hover, past the open accordion's 1.08:1, 1.18:1 under a selected row's 1.63:1 wash · cell text steps to --cn-fg, 8.2:1 on it · text with its own color stays, soft at 6.7:1 and muted at 5.3:1, over the 4.5:1 a hovered row holds; the 7:1 and 5.5:1 floors are for text at rest", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (16%) into base, a step under a selected row. Cell text steps from --cn-fg-soft to --cn-fg, so the hover is a fill and an ink change, with no outline or edge." },
           { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest it takes --cn-field-ring over the soft carve, like any field. Name it with aria-labelledby pointing at the column header and the row's name cell." },
           { name: '.data-table[aria-busy="true"]', values: "loading", notes: "No style of its own. Keep the head and the row count, and put a .skeleton.is-text with aria-hidden in each cell, sized to its column. The loaded rows take .cn-arrive." },
@@ -392,13 +397,16 @@ export default function TablePage() {
         code={`<table class="data-table">
   <thead>
     <tr>
+      <th scope="col"><span class="cn-sr-only">Select</span></th>
       <th scope="col" aria-sort="ascending"><button type="button">Customer</button></th>
       <th scope="col">Status</th>
       <th scope="col" class="is-num" aria-sort="none"><button type="button">Amount</button></th>
     </tr>
   </thead>
   <tbody>
+    <!-- a selectable row always carries its checkbox -->
     <tr aria-selected="true">
+      <td class="cell-select"><input type="checkbox" class="checkbox" checked aria-label="Select Maya Okafor"></td>
       <td class="cell-name">
         <strong>Maya Okafor</strong>
         <small>maya@example.com</small>
@@ -407,6 +415,7 @@ export default function TablePage() {
       <td class="is-num" data-label="Amount">$1,240.00</td>
     </tr>
     <tr>
+      <td class="cell-select"><input type="checkbox" class="checkbox" aria-label="Select Theo Lindqvist"></td>
       <td class="cell-name"><strong>Theo Lindqvist</strong><small>theo@example.com</small></td>
       <!-- danger and warning tags lead with a glyph -->
       <td data-label="Status">

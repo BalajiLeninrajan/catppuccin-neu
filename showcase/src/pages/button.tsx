@@ -67,7 +67,7 @@ export default function ButtonPage() {
       <p class="cn-copy">
         A disabled primary, through <code class="cn-code-inline">disabled</code> or{" "}
         <code class="cn-code-inline">aria-disabled="true"</code>, goes flat and sinks. It loses the plate, ramp,
-        grain and gloss, drops its edge and is carved into the darker sunken fill under the soft carve, the depth of a disabled field, like an empty slot in the page, at full opacity. The carve is shallower than any press, so it never reads as a held button. A disabled secondary drops its plate and keeps a soft outline on the base fill, so the two never share a silhouette. A dimmed plate reads as a
+        grain and gloss, drops its edge and is carved into the darker sunken fill under the soft carve, the depth of a disabled field, like an empty slot in the page, at full opacity. The carve is shallower than any press, so it never reads as a held button. A disabled secondary drops its plate and its outline and takes the same sunken fill flat, with no carve and no ring. Dimmed, the slab is 1.10:1 under a panel and 1.05:1 under the page, so on the page it is a faint shade and the dimmed label says disabled. A resting ghost is an outline with no fill, so the slab, the ghost and the carved primary never share a silhouette. A dimmed plate reads as a
         second primary beside the live one, and a pressed-in, unlit button never outshines a live secondary. A busy primary keeps its fill. Every other variant dims, and none keeps a plate.
       </p>
 
@@ -332,10 +332,10 @@ export default function ButtonPage() {
           { name: ".btn-text", notes: "Inline mauve text button at 14px 600 with no padding, so it sits flush with the content edge; pink on hover. Held, it moves 1px." },
           { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with the label size, 14px, or the hero action at --control-h + 12px with the body size, 16px. One .is-lg per view." },
           { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },
-          { name: ":disabled", notes: "--disabled-opacity (.7) and a not-allowed cursor. No plate: the secondary goes flat on an --edge-soft outline and the primary sinks instead of dimming. Drops focus." },
+          { name: ":disabled", notes: "--disabled-opacity (.7) and a not-allowed cursor. No plate: the secondary goes flat on the sunken fill with no outline and the primary sinks instead of dimming. Drops focus." },
           { name: '[aria-disabled="true"]', values: "on .btn", notes: "Looks the same as :disabled, sunken primary included, but stays focusable, so a [data-tip] can say why. No hover lift or press. Your handler ignores the click." },
           { name: '[aria-busy="true"]', values: "on .btn", notes: "Hides the label and keeps the width, turns a 16px spinner (14px in small), stops clicks, stays focusable. Pair with aria-disabled." },
-          { name: "--disabled-opacity", default: ".7", contrast: "Disabled ghost label 5.2:1 on base · disabled chip label 4.3:1", notes: "Dims a disabled label, --cn-fg-body at .7 on a ghost. The primary does not read it; it sinks. .8 under prefers-contrast: more." },
+          { name: "--disabled-opacity", default: ".7", contrast: "Disabled ghost label 5.2:1 on base · disabled chip label 4.8:1 on its sunken fill", notes: "Dims a disabled label, --cn-fg-body at .7 on a ghost. The primary does not read it; it sinks. .8 under prefers-contrast: more." },
           { name: "--grain", default: ".22", notes: "Grain strength on the primary and every other solid accent fill. 0 turns it off." },
           { name: "--plate", default: "var(--neu-ink)", notes: "The plate's color, read by the secondary button, segmented options and .cn-hard." },
           { name: "--hard-extra", default: "var(--cn-lit-edge)", notes: "Layers drawn over the plate. The secondary keeps the lit top edge; the primary replaces it with its gloss." },

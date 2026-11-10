@@ -323,7 +323,7 @@ export default function AccessibilityPage() {
         Only the overlay fill sits lighter than base, and a lighter overlay
         would drop the placeholder role under its floor, so the ladder stops
         there. A raised surface shows its bounds by the fill step, and its
-        hairline and 1px lit top edge cut its outline. An engaged state is
+        hairline cuts its outline. An engaged state is
         a wash a step past the hover, and it also wears a mauve rim that
         clears 3:1 on that wash. The table has each ratio.
       </p>

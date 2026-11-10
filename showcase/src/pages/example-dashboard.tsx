@@ -28,10 +28,12 @@ const PendingClock = () => (
 );
 
 const STATUS: Record<Status, { label: string; tone: string; Glyph: () => JSX.Element }> = {
-  paid: { label: "Paid", tone: "cn-tone-success", Glyph: SuccessGlyph },
-  /* Pending is the row's in-progress state, so it takes the quiet tag: a
-     plain muted label with no fill, so the column holds two fills, the
-     wash and the one solid. */
+  /* The column holds a solid tag, so its other statuses stay quiet. A
+     settled invoice needs no attention: Paid is the quiet tag with its
+     check glyph. */
+  paid: { label: "Paid", tone: "is-quiet", Glyph: SuccessGlyph },
+  /* Pending is the row's in-progress state, so it takes the quiet tag
+     too: a plain muted label with no fill. */
   pending: { label: "Pending", tone: "is-quiet", Glyph: PendingClock },
   /* Due soon may sit above Overdue: status tags carry a word and a glyph,
      so the SPEC exempts them from the warm-family adjacency rule. */

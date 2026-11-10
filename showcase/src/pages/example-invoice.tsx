@@ -6,9 +6,11 @@
    is the one past-due signal, so the header carries no status tag. The
    breadcrumbs, the header and the banner form one region, 24px apart.
    Regions sit 48px apart in reading order: that region, the line items as
-   the lead panel, then the facts and activity on the page grid. No
-   tilted panel: every panel here holds a table, a list or the record's
-   facts.                                                                */
+   the lead panel, then the facts and activity on the page grid. The lead
+   outranks the rest by having one raised sibling, not two: Details is the
+   one plain panel, and Activity sits on the ground as a name-size heading
+   over divided rows. No tilted panel: both panels hold a table or the
+   record's facts.                                                       */
 
 import { useEffect, useRef } from "preact/hooks";
 import { menu } from "../../../js/index.js";
@@ -237,23 +239,23 @@ export default function InvoiceExample() {
           </div>
         </section>
 
-        <section class="panel cn-span-5" aria-labelledby="inv-activity">
-          <div class="panel-header">
-            <h2 id="inv-activity">Activity</h2>
-          </div>
-          <div class="panel-body">
-            <ol class="cn-list-none cn-divide">
-              {ACTIVITY.slice(0, 3).map((a) => (
-                <li key={a.what + a.when} class="cn-row cn-between cn-top cn-gap-16 cn-py-12 cn-m-0">
-                  <span class="cn-stack cn-gap-4 cn-grow">
-                    <span class="cn-name">{a.what}</span>
-                    <span class="cn-meta">{a.who}</span>
-                  </span>
-                  <span class="cn-meta cn-nowrap">{a.when}</span>
-                </li>
-              ))}
-            </ol>
-            <button type="button" class="btn-text cn-mt-12">Show all {ACTIVITY.length}</button>
+        {/* On the ground, like the dashboard's "Payments this month": a
+            name-size heading over divided rows, no panel. */}
+        <section class="cn-stack cn-gap-8 cn-span-5" aria-labelledby="inv-activity">
+          <h2 id="inv-activity" class="cn-name cn-m-0">Activity</h2>
+          <ol class="cn-list-none cn-divide cn-m-0">
+            {ACTIVITY.slice(0, 3).map((a) => (
+              <li key={a.what + a.when} class="cn-row cn-between cn-top cn-gap-16 cn-py-12 cn-m-0">
+                <span class="cn-stack cn-gap-4 cn-grow">
+                  <span class="cn-name">{a.what}</span>
+                  <span class="cn-meta">{a.who}</span>
+                </span>
+                <span class="cn-meta cn-nowrap">{a.when}</span>
+              </li>
+            ))}
+          </ol>
+          <div>
+            <button type="button" class="btn-text">Show all {ACTIVITY.length}</button>
           </div>
         </section>
       </div>

@@ -108,9 +108,11 @@ export default function StatPage() {
         band without a panel around it. The rule follows the writing
         direction. Inside a panel, use the plain grid. A note under the
         value goes in a bare <code class="cn-code-inline">&lt;p&gt;</code>. It
-        takes the label's voice, 14px at 500 in{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code>, so a stat reads 14,
-        24, 14 and a band of them holds one small size.
+        is 14px at 500 in{" "}
+        <code class="cn-code-inline">--cn-fg-muted</code>, under a label in
+        the micro role, 12px uppercase at 500 in the same ink. A stat reads
+        micro, 24, 14, so the label is a caption and the note is the one
+        14px line.
       </p>
 
       <Demo title="Large stat" why="When the large stat takes an accent" row classes="stat is-lg  (reads --accent)">
@@ -202,12 +204,12 @@ export default function StatPage() {
           {
             name: ".stat",
             values: "tile",
-            notes: "A 14px label <span> at 500 in --cn-fg-muted over a 24px tabular <strong>. No chrome of its own. Steps down to 18px at 520px.",
+            notes: "A micro label <span>, 12px uppercase at 500 in --cn-fg-muted, over a 24px tabular <strong>. No chrome of its own. The value steps down to 18px at 520px.",
           },
           {
             name: ".stat > p",
             values: "optional note",
-            notes: "A line under the value in the label's voice: 14px at 500 in --cn-fg-muted, no margin. Leave .cn-meta off it, so the note keeps the label's weight.",
+            notes: "A line under the value: 14px at 500 in --cn-fg-muted, the label's weight and ink, no margin. Leave .cn-meta off it, so the note stays at 500.",
           },
           {
             name: ".stat.is-lg",

@@ -91,10 +91,12 @@
   --cn-series-1: var(--teal);
   --cn-series-2: var(--yellow);
   /* 3 and 5 sit a lightness step down, so a reader who loses hue still
-     tells blue from mauve and pink from teal. */
-  --cn-series-3: color-mix(in oklab, var(--blue) 70%, var(--base));
+     tells blue from mauve and pink from teal. The step is oklch lightness
+     times .795 with chroma and hue kept, so neither picks up the grey
+     cast a mix into base gives: about #5a83c5 and #ba8aad. */
+  --cn-series-3: oklch(from var(--blue) calc(l * .795) c h);   /* 4.3:1 on base */
   --cn-series-4: var(--peach);
-  --cn-series-5: color-mix(in oklab, var(--pink) 70%, var(--base));
+  --cn-series-5: oklch(from var(--pink) calc(l * .795) c h);   /* 5.7:1 on base */
   --cn-series-6: var(--mauve);
   --cn-ramp-1: color-mix(in oklab, var(--mauve) 20%, var(--surface-0));
   --cn-ramp-2: color-mix(in oklab, var(--mauve) 40%, var(--surface-0));
@@ -121,7 +123,7 @@
      4.5:1 on the overlay too. A lighter overlay drops the placeholder role
      under 4.5:1, so the ladder stops here. */
   --cn-surface-recessed: color-mix(in srgb, var(--crust) 80%, var(--mantle)); /* the sidebar, app chrome a step under the page: 1.05:1 on the page */
-  --cn-surface-band: color-mix(in srgb, var(--crust) 30%, transparent);      /* table heads: one step under whatever holds them */
+  --cn-surface-band: color-mix(in srgb, var(--crust) 50%, transparent);      /* table heads: one step under whatever holds them, 1.08:1 under base */
   /* Wells are below the ground wherever they sit: crust, the darkest Mocha
      stop, is darker than the mantle page (1.07:1) and than a base panel
      (1.14:1). The ladder's dark end stops here; only shadow ink is darker. */
@@ -242,8 +244,10 @@
      falls on the mantle page, and crust is only 1.07:1 under mantle, so the
      raised shadow is crust taken halfway to black (1.14:1 on the page):
      a 1px contact edge in the full ink where the surface meets the ground,
-     then a near shadow at .8 that lays a 4 to 6px dark foot along the
-     bottom and right edges, then the cast. Even black is only 1.2:1 on the
+     then a 4px 6px 10px near shadow at .8 that lays a 6 to 10px dark foot
+     along the bottom and right edges, then the cast. The ink cannot get
+     darker, so the near shadow is wide instead: the foot covers enough
+     area to show on a dim display. Even black is only 1.2:1 on the
      page, so the shadow cannot carry height alone: the base fill a step
      above the page does the separating and the foot says which side is
      down.
@@ -253,14 +257,17 @@
      2px plate at compact. A 2px contact would put the panel 1px under the
      plate, and at 1x the two read as one size. The panel's foot leans on
      its near shadow and cast, so it reads apart from a plate by kind and
-     by size. */
+     by size.
+     --neu-raised is darkness only. A plain panel has no lit top edge: its
+     fill step, its top and left hairline and its foot already say raised,
+     and the lit edge added no height. */
   --neu-shade: rgb(8 8 14 / .72);
   --neu-contact: var(--neu-ink);
   --neu-near: rgb(8 8 14 / .8);
-  --neu-raised: 1px 1px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+  --neu-raised: 1px 1px 0 var(--neu-contact), 4px 6px 10px var(--neu-near), 10px 12px 24px var(--neu-shade);
   /* The lead panel stands higher by darkness on its bottom and right only,
      never by a line all round or a brighter one: a deeper full-ink contact,
-     a deeper near shadow and a longer cast. It keeps the plain lit edge.
+     a deeper near shadow and a longer cast. It keeps the lit edge.
      The 6px 8px contact is the last step of the foot ladder in SPEC Depth:
      panel 2px, plate 4px, lead 9px with its ink border side. */
   --neu-lifted: 6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
@@ -273,9 +280,12 @@
   --neu-inset: inset 3px 3px 8px var(--neu-dark);
   --neu-inset-soft: inset 2px 2px 5px rgb(8 8 14 / .5);
 
-  /* The lit top edge: the top-left light catches a raised surface's top
-     rim, a 1px inner line of surface-2 at 45%, 1.5:1 on base, a quiet
-     line that marks the light side, never a bright rim. */
+  /* The lit top edge: a 1px inner line of surface-2 at 45%, 1.5:1 on
+     base, a quiet line that marks the light side, never a bright rim.
+     Plates, the lead panel, the selected tab and a panel inside a panel
+     wear it. A plain panel does not: --neu-raised has no lit edge. A
+     nested panel keeps it because its fill matches its parent's and the
+     line shows where it ends. */
   --cn-lit-edge: inset 0 1px color-mix(in srgb, var(--surface-2) 45%, transparent);
   --shadow-pop:  0 24px 70px rgb(8 8 14 / .8), 0 8px 24px rgb(8 8 14 / .45); /* popovers, modals, toasts */
   --shadow-cast: 0 5px 12px var(--neu-dark-soft);                 /* topbar cast */
@@ -324,7 +334,7 @@
   --hover:     color-mix(in srgb, var(--surface-1) 60%, transparent);  /* the hover wash: 1.40:1 on base, 1.23:1 on overlay, so a menu row still lights */
   --control-edge: var(--overlay-1);  /* unchecked control edges, the off paddle, the slider thumb: 4.4:1 on base */
   /* .7 keeps a disabled ghost label at 5.2:1 on base and a disabled chip
-     label, subtext-0, at 4.3:1. More contrast takes it to .8. The primary
+     label, subtext-0, at 4.8:1 on its sunken fill. More contrast takes it to .8. The primary
      goes flat instead of dimming. */
   --disabled-opacity: .7;
   /* A carved field at rest is its dark wall plus a quiet even hairline:
@@ -469,9 +479,8 @@
 
 /* The plates read the element's own --plate and the density's
    --hard-offset, so they are declared where they are drawn: rest, held
-   (half), the +1px link hover, the fixed 10px and 3px, and the tilted
-   panel's 6px, which stays short so the aside never outweighs the data
-   beside it. Each plate is a stack of the same ink at even steps out to
+   (half), the +1px link hover and the fixed 10px and 3px. The tilted
+   panel stands on the rest plate. Each plate is a stack of the same ink at even steps out to
    its offset, about 1px apart, so the top-right and bottom-left corners
    join into a solid side instead of leaving the notch of a single
    offset copy. Rest, half and hover each have four layers, so the press

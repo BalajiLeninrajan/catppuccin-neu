@@ -72,8 +72,7 @@ export default function IntroductionPage() {
         <h2 class="cn-title">The idea</h2>
         <p class="cn-copy">
           Raised panels sit on base, one fill step above the mantle page, and
-          lift off it on a contact edge, a cast shadow, a lit top edge and a
-          hairline; nothing raised is lighter than base. Inputs, wells and
+          lift off it on a contact edge, a cast shadow and a hairline; nothing raised is lighter than base. Inputs, wells and
           selected states press in with an inset. Clickable controls carry a
           flat hard-offset shadow and press with a half-slide onto it. Type is
           IBM Plex Sans everywhere, JetBrains Mono for code. Mauve is the one accent;

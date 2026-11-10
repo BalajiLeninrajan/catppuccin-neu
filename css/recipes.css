@@ -39,7 +39,7 @@
    lead 9px), over a deeper near shadow and a longer cast. The
    lead is a resting panel with a deeper foot, not a height of its own.
    The --edge-strong hairline is its one
-   step in line strength; it keeps the plain lit edge and draws no outline
+   step in line strength; it keeps the lit edge and draws no outline
    all round, since neither a bright line nor a heavier outline reads as
    height. Its band title takes --lead-title-size at the heading weight
    (see the panel-header rule below). It outranks its neighbors by height
@@ -338,7 +338,7 @@
 /* Down is crisp on the fast-out; up comes back on the spring. */
 .btn:active:not(:disabled, [aria-disabled="true"]) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
 /* Disabled dims. A plate says "press me", so no disabled button keeps
-   one: the secondary drops to a flat outline and the primary sinks
+   one: the secondary drops to a flat sunken slab and the primary sinks
    (both below). aria-disabled="true"
    looks the same but stays focusable, so a [data-tip] on it can say why
    the action is unavailable. The consumer ignores its clicks. */
@@ -391,7 +391,7 @@ a:active > .accent-card {
    slot pressed into the page. The carve is --neu-inset-soft,
    the depth of a disabled field, so it stays shallower than any press and
    never reads as a held or engaged button. A disabled secondary is a flat
-   outline on the base fill, so the two never share a silhouette. The border stays 1px
+   sunken slab with no carve and no ring, so the two never share a silhouette. The border stays 1px
    and transparent so the size holds. Darkness only, no lip. The disabled
    text color, and no dimming: a dimmed plate reads as a second primary
    beside the live one. A busy primary keeps its fill. */
@@ -443,12 +443,15 @@ a:active > .accent-card {
 .btn-secondary:hover:not(:active, :disabled, [aria-disabled="true"]) {
   box-shadow: var(--cn-plate-hover), var(--hard-extra);
 }
-/* Disabled, the plate and the lit edge go and the outline drops to
-   --edge-soft, like the disabled file button: a flat dimmed outline that
-   no longer looks live beside an enabled one. A busy secondary keeps its
-   plate, since the action is running. */
+/* Disabled, the plate, the lit edge and the outline go and the fill drops
+   to the sunken fill: a flat dark slab, darker than the panel under it,
+   with no carve and no ring. The border stays 1px and transparent so the
+   size holds. A resting ghost is an outline with no fill and the disabled
+   primary is the only carved one, so the three never share a silhouette.
+   A busy secondary keeps its plate, since the action is running. */
 .btn-secondary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
-  border-color: var(--edge-soft);
+  border-color: transparent;
+  background: var(--cn-surface-sunken);
   box-shadow: none;
 }
 
@@ -880,12 +883,13 @@ a:active > .accent-card {
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
 .segmented > *:hover { border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-edge), var(--surface-1)); }
-/* A disabled option matches the disabled secondary: dimmed, no plate, an
-   --edge-soft outline. A chosen option that is disabled keeps the engaged
-   carve below and only dims. */
+/* A disabled option matches the disabled secondary: dimmed, no plate, no
+   outline, the flat sunken fill. A chosen option that is disabled keeps
+   the engaged carve below and only dims. */
 .segmented > :is(:disabled, [aria-disabled="true"]) {
   opacity: var(--disabled-opacity);
-  border-color: var(--edge-soft);
+  border-color: transparent;
+  background: var(--cn-surface-sunken);
   box-shadow: none;
   cursor: not-allowed;
 }
@@ -903,6 +907,9 @@ a:active > .accent-card {
 .segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) b { color: var(--cn-interactive); }
 .segmented > * > svg { width: 16px; height: 16px; flex: 0 0 auto; }
 .segmented small { color: var(--cn-fg-muted); font-size: var(--cn-type-meta-size); }
+/* On the chosen option's wash the hint steps to --cn-fg-soft, 5.68:1,
+   since --cn-fg-muted is 4.52:1 there. */
+.segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) small { color: var(--cn-fg-soft); }
 .segmented label:has(input:focus-visible) {
   outline: 2px solid var(--cn-focus);
   outline-offset: 3px;
@@ -987,11 +994,13 @@ a:active > .accent-card {
   transition-duration: var(--t-press);
 }
 /* A disabled link or button chip matches the disabled secondary: dimmed,
-   no plate or lit edge, an --edge-soft outline, no lift and no press. */
+   no plate, lit edge or outline, the flat sunken fill, no lift and no
+   press. */
 :is(a, button).chip:is(:disabled, [aria-disabled="true"]) {
   opacity: var(--disabled-opacity);
   color: var(--cn-fg-muted);
-  border-color: var(--edge-soft);
+  border-color: transparent;
+  background: var(--cn-surface-sunken);
   box-shadow: none;
   transform: none;
   cursor: not-allowed;
@@ -1377,7 +1386,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
    ring, so a loading block reads below the ground on a panel (1.14:1) and
    on the page (1.07:1). It breathes on the breathe keyframe between full
    and .7 opacity, so at its faintest it still sits a step under a panel
-   (1.10:1), past the 1.05:1 table head. Size it to the content it stands
+   (1.10:1), past the 1.08:1 table head. Size it to the content it stands
    in for; .is-text is one line of body copy, .is-round an avatar. Mark the
    loading region aria-busy="true" so assistive tech waits for it, and
    keep skeletons aria-hidden. */
@@ -1554,9 +1563,17 @@ a:hover:not(:active) > .accent-card {
   color: var(--cn-fg-muted);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
-/* The note under the value shares the label's voice, so a stat holds one
-   small size at one weight: 14 label, 24 value, 14 note. Write it as a
-   bare p; a .cn-meta on it would drop it to 400, a second voice. */
+/* The stacked label takes the micro role, 12px uppercase at 500 in
+   --cn-fg-muted, so it reads as a caption over the figure and not as a
+   second note. The inline row keeps the 14px label above. */
+.stat:not(.is-inline) > span {
+  font: var(--cn-type-micro-weight) var(--cn-type-micro-size)/var(--cn-type-micro-leading) var(--sans);
+  letter-spacing: var(--cn-type-micro-tracking);
+  text-transform: uppercase;
+}
+/* The note under the value is 14px at 500 in the label's ink, so a stat
+   reads micro, 24, 14: one small size plus micro, both at 500. Write it
+   as a bare p; a .cn-meta on it would drop it to 400, a third voice. */
 .stat > p {
   margin: 0;
   color: var(--cn-fg-muted);
@@ -1778,6 +1795,12 @@ a:hover:not(:active) > .accent-card {
   color: var(--cn-fg);
   background-color: var(--wash);
 }
+/* The selection also reads without the fill. The row's first data cell
+   takes the name weight, as a selected listbox option does, and the name
+   cell's meta line steps from --cn-fg-muted, 4.52:1 on the wash, to
+   --cn-fg-soft, 5.68:1. No stripe or mark on the row edge. */
+.data-table tbody tr[aria-selected="true"] > :is(td:first-child:not(.cell-select), td.cell-select + td) { font-weight: var(--cn-type-name-weight); }
+.data-table tbody tr[aria-selected="true"] td small { color: var(--cn-fg-soft); }
 
 /* Ranked row: ordered list line: rank mark, name, trailing value. */
 .ranked-row {

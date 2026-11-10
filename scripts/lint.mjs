@@ -143,11 +143,13 @@ function blocks(css) {
   return out;
 }
 
-/* Uppercase is scarce: only .cn-microlabel sets it. */
+/* Uppercase is scarce: only .cn-microlabel and the stacked .stat label
+   set it. */
+const UPPERCASE_OK = new Set([".cn-microlabel", ".stat:not(.is-inline) > span"]);
 function uppercase(css) {
   return blocks(css)
-    .filter(({ body, preludes }) => /text-transform\s*:\s*uppercase/.test(body) && preludes.at(-1) !== ".cn-microlabel")
-    .map(({ at, preludes }) => ({ line: lineOf(css, at), message: `text-transform: uppercase on ${preludes.at(-1)}; only .cn-microlabel is uppercase` }));
+    .filter(({ body, preludes }) => /text-transform\s*:\s*uppercase/.test(body) && !UPPERCASE_OK.has(preludes.at(-1)))
+    .map(({ at, preludes }) => ({ line: lineOf(css, at), message: `text-transform: uppercase on ${preludes.at(-1)}; only .cn-microlabel and the stacked .stat label are uppercase` }));
 }
 
 /* Transitions: a transform or box-shadow transition names a --ease-*
@@ -217,8 +219,8 @@ async function specTypeTable() {
 }
 
 /* ── Contrast, computed from the tokens ─────────────────────────────────────
-   Resolves the :root custom properties (hexes, var() and color-mix in
-   srgb, including mixes into transparent), then checks every pairing the
+   Resolves the :root custom properties (hexes, var(), color-mix in
+   srgb, including mixes into transparent, and relative oklch), then checks every pairing the
    SPEC promises, in the default and the prefers-contrast: more tokens. It
    also checks each ratio written in a token comment against the computed
    value on base, so a comment can't drift from the color it describes. */
@@ -249,6 +251,29 @@ function splitTop(s) {
   parts.push(cur.trim());
   return parts;
 }
+/* sRGB 0..255 to oklch and back, for relative oklch(from ...) colors. */
+const toLinear = (v) => { v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; };
+const toGamma = (v) => 255 * Math.min(1, Math.max(0, v <= .0031308 ? v * 12.92 : 1.055 * v ** (1 / 2.4) - .055));
+function srgbToOklch(rgb) {
+  const [r, g, b] = rgb.slice(0, 3).map(toLinear);
+  const l = Math.cbrt(.4122214708 * r + .5363325363 * g + .0514459929 * b);
+  const m = Math.cbrt(.2119034982 * r + .6806995451 * g + .1073969566 * b);
+  const s = Math.cbrt(.0883024619 * r + .2817188376 * g + .6299787005 * b);
+  const A = 1.9779984951 * l - 2.428592205 * m + .4505937099 * s;
+  const B = .0259040371 * l + .7827717662 * m - .808675766 * s;
+  return { l: .2104542553 * l + .793617785 * m - .0040720468 * s, c: Math.hypot(A, B), h: Math.atan2(B, A) * 180 / Math.PI };
+}
+function oklchToSrgb({ l: L, c, h }) {
+  const A = c * Math.cos(h * Math.PI / 180), B = c * Math.sin(h * Math.PI / 180);
+  const l = (L + .3963377774 * A + .2158037573 * B) ** 3;
+  const m = (L - .1055613458 * A - .0638541728 * B) ** 3;
+  const s = (L - .0894841775 * A - 1.291485548 * B) ** 3;
+  return [
+    4.0767416621 * l - 3.3077115913 * m + .2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s,
+    -.0041960863 * l - .7034186147 * m + 1.707614701 * s,
+  ].map(toGamma);
+}
 function resolver(map) {
   const raw = (v, seen = new Set()) => {
     v = v.trim();
@@ -268,6 +293,31 @@ function resolver(map) {
     if (r === "transparent") return [0, 0, 0, 0];
     const rgb = r.match(/^rgb\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+)\s*)?\)$/);
     if (rgb) return [+rgb[1], +rgb[2], +rgb[3], rgb[4] == null ? 1 : +rgb[4]];
+    /* Relative oklch: oklch(from <color> L C H), where each channel is l,
+       c or h, a number, or calc() of one channel times or over a number. */
+    const rel = r.match(/^oklch\(\s*from\s+(.*)\)$/s);
+    if (rel) {
+      const parts = []; let depth = 0, cur = "";
+      for (const ch of rel[1]) {
+        if (ch === "(") depth++; if (ch === ")") depth--;
+        if (/\s/.test(ch) && !depth) { if (cur) parts.push(cur); cur = ""; } else cur += ch;
+      }
+      if (cur) parts.push(cur);
+      const src = parts.length === 4 && color(parts[0]);
+      if (!src) return null;
+      const from = srgbToOklch(src);
+      const chan = (expr) => {
+        if (expr in from) return from[expr];
+        if (/^-?[\d.]+$/.test(expr)) return +expr;
+        const c = expr.match(/^calc\(\s*([lch]|-?[\d.]+)\s*([*/])\s*([lch]|-?[\d.]+)\s*\)$/);
+        if (!c) return null;
+        const [x, y] = [c[1], c[3]].map((t) => (t in from ? from[t] : +t));
+        return c[2] === "*" ? x * y : x / y;
+      };
+      const [l, c, h] = parts.slice(1).map(chan);
+      if (l == null || c == null || h == null) return null;
+      return [...oklchToSrgb({ l, c, h }), src[3]];
+    }
     const mix = r.match(/^color-mix\(\s*in srgb\s*,(.*)\)$/s);
     if (!mix) return null;
     const [a, b] = splitTop(mix[1]).map((part) => {
@@ -309,7 +359,8 @@ const PAIRS = [
   ["--cn-fg-body", TEXT_GROUNDS, 7, "running text"],
   ["--cn-fg-muted", TEXT_GROUNDS, 5.5, "meta, help, table heads and the quiet tag"],
   ["--cn-fg-placeholder", TEXT_GROUNDS, 4.5, "placeholders"],
-  ["--cn-fg-muted", ["--wash"], 4.5, "muted text on the engaged wash: a chosen segmented hint, a selected row's meta"],
+  ["--cn-fg-muted", ["--wash"], 4.5, "muted text on the engaged wash, the floor that stops --cn-step-engaged at 23%"],
+  ["--cn-fg-soft", ["--wash"], 5.5, "soft text on the engaged wash: a chosen segmented hint, a selected row's meta"],
   ["--cn-interactive", ["--wash"], 4.5, "mauve text on the engaged wash"],
   ["@field-hover-ring", GROUNDS, 3, "a hovered field's ring (1.4.11)"],
   ["@field-ring", GROUNDS, 3, "a resting field's ring under prefers-contrast", "prefers-contrast"],
@@ -334,6 +385,10 @@ const PAIRS = [
   ["--cn-success", GROUNDS, 4.5, "success text"],
   ["--cn-info", GROUNDS, 4.5, "info text"],
   ["--cn-fg-on-accent", ["--cn-interactive", "--cn-interactive-hover"], 4.5, "text on the primary"],
+  /* The data series. A row fails when a series cannot be resolved, so the
+     stepped-down 3 and 5 always pass through the relative oklch resolver,
+     and their token comments hold the exact ratios on base. */
+  ...[1, 2, 3, 4, 5, 6].map((n) => [`--cn-series-${n}`, GROUNDS, 3, "a data series mark (1.4.11)"]),
 ];
 const TINTED = ["danger", "warning", "success", "info"];
 /* APCA 0.0.98G lightness contrast (Lc), as a magnitude. WCAG 2 flatters
@@ -553,7 +608,7 @@ const FROZEN = {
   "--cn-surface-raised": "#1e1e2e",
   "--cn-surface-overlay": "color-mix(in srgb, #313244 90%, #1e1e2e)",
   "--cn-surface-recessed": "color-mix(in srgb, #11111b 80%, #181825)",
-  "--cn-surface-band": "color-mix(in srgb, #11111b 30%, transparent)",
+  "--cn-surface-band": "color-mix(in srgb, #11111b 50%, transparent)",
   "--cn-surface-sunken": "#11111b",
   "--neu-ink": FROZEN_INK,
   "--neu-dark": "rgb(8 8 14 / .8)",
@@ -561,7 +616,7 @@ const FROZEN = {
   "--neu-shade": "rgb(8 8 14 / .72)",
   "--neu-contact": FROZEN_INK,
   "--neu-near": "rgb(8 8 14 / .8)",
-  "--neu-raised": `1px 1px 0 ${FROZEN_INK}, 3px 4px 6px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72), ${FROZEN_LIT}`,
+  "--neu-raised": `1px 1px 0 ${FROZEN_INK}, 4px 6px 10px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72)`,
   "--neu-lifted": `6px 8px 0 ${FROZEN_INK}, 8px 14px 16px rgb(8 8 14 / .8), 18px 28px 48px rgb(8 8 14 / .72), ${FROZEN_LIT}`,
   "--neu-raised-soft": `1px 1px 0 ${FROZEN_INK}, 3px 4px 9px rgb(8 8 14 / .5)`,
   "--neu-inset": "inset 3px 3px 8px rgb(8 8 14 / .8)",
@@ -580,7 +635,7 @@ const FROZEN_MORE = {
   "--neu-near": "rgb(8 8 14 / .9)",
 };
 const FROZEN_COMPACT = {
-  "--neu-raised": `1px 1px 0 ${FROZEN_INK}, 3px 4px 6px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72), ${FROZEN_LIT}`,
+  "--neu-raised": `1px 1px 0 ${FROZEN_INK}, 4px 6px 10px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72)`,
 };
 async function frozenTokens() {
   const css = stripComments(await readFile(join(root, "css/tokens.css"), "utf8"));
@@ -615,6 +670,41 @@ async function frozenTokens() {
 }
 for (const { line, message } of await frozenTokens()) {
   console.error(`css/tokens.css:${line}: frozenTokens: ${message}`);
+  failures++;
+}
+
+/* ── SPEC shadow list ────────────────────────────────────────────────────────
+   SPEC Verification names every shadow layer a recipe may use, in the
+   bullet that starts "a `box-shadow` or `--hard-extra`". Each name in that
+   sentence has to be declared in tokens.css or recipes.css, so a removed
+   token cannot stay listed. `--shadow-pop/cast/mark` expands on the
+   slashes, and a `-half` style suffix extends the last full name, which
+   is `--cn-plate`. The check stops at the end of the list sentence: the
+   contract properties named after it, such as --plate, are read with a
+   fallback and never declared. */
+async function specShadowList() {
+  const spec = await readFile(join(root, "SPEC.md"), "utf8");
+  const bullet = spec.match(/^- a `box-shadow` or `--hard-extra`.*$/m);
+  if (!bullet) return [{ line: 1, message: "no `box-shadow` or `--hard-extra` bullet under Verification to read the shadow tokens from" }];
+  const line = lineOf(spec, bullet.index);
+  const list = bullet[0].match(/Every layer has a name in `tokens\.css`:(.*?)\.(?:\s|$)/);
+  if (!list) return [{ line, message: "the shadow bullet has no \"Every layer has a name in `tokens.css`:\" list" }];
+  const names = [];
+  let base = null;
+  for (const [, item] of list[1].matchAll(/`([^`]+)`/g)) {
+    if (item.startsWith("--")) {
+      const [head, ...rest] = item.split("/");
+      names.push(head, ...rest.map((r) => head.replace(/[^-]+$/, r)));
+      base = head;
+    } else if (item.startsWith("-") && base) names.push(base + item);
+    else return [{ line, message: `\`${item}\` in the shadow list is not a token name or a suffix of one` }];
+  }
+  const css = (await Promise.all(["css/tokens.css", "css/recipes.css"].map((f) => readFile(join(root, f), "utf8")))).map(stripComments).join("\n");
+  const declared = new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
+  return names.filter((n) => !declared.has(n)).map((n) => ({ line, message: `${n} is in the shadow list but is not declared in css/tokens.css or css/recipes.css` }));
+}
+for (const { line, message } of await specShadowList()) {
+  console.error(`SPEC.md:${line}: specShadowList: ${message}`);
   failures++;
 }
 

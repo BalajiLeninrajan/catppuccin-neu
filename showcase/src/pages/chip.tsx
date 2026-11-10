@@ -257,7 +257,7 @@ export default function ChipPage() {
           {
             name: ":is(a, button).chip",
             values: ":hover · :active · :disabled · [aria-disabled]",
-            notes: "Stands on the hard offset in --plate under --cn-lit-edge. Hover: lifts 1px, --cn-fg label and a --control-edge border. Held: the half-slide onto the plate in --t-press, back on the spring. Disabled: --disabled-opacity, no plate or lit edge, an --edge-soft outline, no lift or press.",
+            notes: "Stands on the hard offset in --plate under --cn-lit-edge. Hover: lifts 1px, --cn-fg label and a --control-edge border. Held: the half-slide onto the plate in --t-press, back on the spring. Disabled: --disabled-opacity, no plate, lit edge or outline, the flat --cn-surface-sunken fill, no lift or press.",
           },
           {
             name: ".chip svg",

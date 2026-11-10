@@ -6,7 +6,7 @@ const LADDER = [
   { token: "--cn-surface-raised", util: "cn-bg-raised", mix: "base", contrast: "1.07:1 on the page", use: "Panels, the tilted panel, secondary buttons, segmented options, chips, accent cards, the selected tab, the slider thumb, the switch paddle." },
   { token: "--cn-surface-overlay", util: "cn-bg-overlay", mix: "surface-0 90% into base", contrast: "1.27:1 on base", use: "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link, the secondary hover." },
   { token: "--cn-surface-recessed", util: "cn-bg-recessed", mix: "crust 80% into mantle", contrast: "1.05:1 under the page, 1.13:1 under base", use: "The sidebar." },
-  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 30% over transparent, one step under its parent", contrast: "", use: "Table heads." },
+  { token: "--cn-surface-band", util: "cn-bg-head", mix: "crust 50% over transparent, one step under its parent", contrast: "1.08:1 under base", use: "Table heads." },
   { token: "--cn-surface-sunken", util: "cn-bg-well", mix: "crust", contrast: "1.07:1 under the page, 1.14:1 under base", use: "Wells, the mono wells, stepper pills, skeletons, the switch plate." },
 ];
 
@@ -54,7 +54,7 @@ export default function SurfacesPage() {
         Recipes read these six fills, never a raw ground.
         The page is mantle. Panels and plated controls sit on base, one fill
         step above it, and lift by that step, their contact edge, their
-        cast, their lit top edge and their hairline. Nothing raised is
+        cast and their hairline. Nothing raised is
         lighter than base: overlays float free of the page, so they alone
         take a lighter step. Wells, skeletons and the sidebar go the other
         way, darker than the page, with crust as the darker step.
@@ -133,8 +133,8 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         A panel inside a panel rests on its parent, not on the page, so it
-        takes <code class="cn-code-inline">--neu-raised-soft</code> and keeps
-        the lit edge. A region of
+        takes <code class="cn-code-inline">--neu-raised-soft</code> and adds
+        the lit edge, which a plain panel does not carry. A region of
         a view holds at most three raised panels. More items go in one panel,
         a ruled stat grid on the ground or a table, so raised stays a rank
         and not a texture.
@@ -208,7 +208,7 @@ export default function SurfacesPage() {
         the bottom and right, 9px deep and 7px wide with its ink border
         sides, where a button's plate is 4px and a plain panel's foot 2px,
         and a longer cast. It is a resting panel with a deeper foot, not a
-        height of its own. It keeps the plain lit edge and draws no outline all
+        height of its own. It keeps the lit edge and draws no outline all
         round, because neither a bright line nor a heavier outline reads as
         height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
@@ -314,7 +314,7 @@ export default function SurfacesPage() {
             name: ".panel",
             values: "raised container",
             contrast: "Fill 1.07:1 on the page · --edge 1.85:1 on the fill · fill against the ink sides 1.22:1",
-            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow, cast and the lit top edge), an --edge hairline on the top and left and --neu-ink border sides on the right and bottom, a 2px foot with the contact. All four sides return to the hairline under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
+            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow and cast, with no lit edge), an --edge hairline on the top and left and --neu-ink border sides on the right and bottom, a 2px foot with the contact. All four sides return to the hairline under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and adds the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",

@@ -143,7 +143,7 @@ export default function TypographyPage() {
         -0.02em, because at -0.03em Plex Sans closes "tt" and "ng" until
         they touch. Numeric roles keep{" "}
         <code class="cn-code-inline">tabular-nums</code> on the sans face, so figures align in
-        columns without mono. Only the microlabel is uppercase.
+        columns without mono. Only the microlabel and the stacked stat label are uppercase.
       </p>
 
       <p class="cn-copy">

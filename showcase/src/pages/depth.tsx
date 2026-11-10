@@ -133,7 +133,8 @@ export default function DepthPage() {
 
       <p class="cn-copy">
         The light source never moves. The dark shadow falls bottom right. A
-        raised surface marks its lit side with a 1px top edge. A carve is
+        plate, the lead panel and a nested panel mark the lit side with a
+        1px top edge; a plain panel has none. A carve is
         darkness only: one dark wall from the top left, and nothing on its
         bottom and right walls, because a light line there reads as a
         bevel. No component
@@ -202,17 +203,19 @@ export default function DepthPage() {
       </p>
 
       <p class="cn-copy">
-        A raised surface also carries{" "}
-        <code class="cn-code-inline">--cn-lit-edge</code>, a 1px line of
-        surface-2 at 45% inside its top rim where the light catches it. It is the only light-side cue on a raised surface, and
-        the last layer of{" "}
-        <code class="cn-code-inline">--neu-raised</code> and the default{" "}
+        <code class="cn-code-inline">--cn-lit-edge</code> is a 1px line of
+        surface-2 at 45% inside a top rim where the light catches it. A
+        plain panel does not carry it:{" "}
+        <code class="cn-code-inline">--neu-raised</code> is darkness only,
+        because the fill step, the hairline and the foot already say
+        raised. It is the default{" "}
         <code class="cn-code-inline">--hard-extra</code> of every plated recipe:
         the secondary button, segmented options and the accent card. The
-        primary replaces it with its own white rim. The lead panel keeps the
-        same lit edge: bright lines are never a depth cue, so{" "}
-        <code class="cn-code-inline">--neu-lifted</code> ranks it by darkness
-        instead.
+        primary replaces it with its own white rim. A panel inside a panel
+        adds it, since its fill matches its parent's. The lead panel keeps
+        it at the same strength: bright lines are never a depth cue, so{" "}
+        <code class="cn-code-inline">--neu-lifted</code> ranks the lead by
+        darkness instead.
       </p>
 
       <p class="cn-copy">
@@ -235,7 +238,7 @@ export default function DepthPage() {
 
       <Demo
         title="Four of the five neu shadows"
-        classes="cn-bg-raised cn-r-card cn-raised | cn-raised-soft | cn-bg-page cn-inset | cn-inset-soft"
+        classes="cn-bg-raised cn-r-card cn-raised | cn-raised-soft | well (cn-bg-well, --cn-well-ring, cn-inset) | cn-inset-soft"
         why="How the shadow ink and each layer were chosen"
         row
       >
@@ -246,7 +249,14 @@ export default function DepthPage() {
             cn-raised-soft
           </code>
         </div>
-        <Cube cls="cn-inset" bg="cn-bg-page" />
+        {/* The carve as it ships: a well, with the sunken fill and the
+            well ring over the dark wall. */}
+        <div style="display:grid;gap:12px;justify-items:center">
+          <div class="well cn-r-card" style="width:128px;height:128px" />
+          <code class="cn-code-meta">
+            cn-inset
+          </code>
+        </div>
         <div style="display:grid;gap:12px;justify-items:center">
           <span style="display:flex;gap:10px;align-items:center">
             <input class="checkbox" type="checkbox" aria-label="inset-soft specimen" />
@@ -269,7 +279,10 @@ export default function DepthPage() {
         soft ones, which is why the soft pair is shown on an avatar and a
         checkbox: on a 128px cube
         it is nearly the strong pair, and the specimen would argue against
-        the token it documents.
+        the token it documents. The strong carve is shown as a{" "}
+        <code class="cn-code-inline">.well</code>, on the sunken fill
+        inside the well ring, because the dark wall alone on the page
+        ground is too faint to judge.
       </p>
 
       <p class="cn-copy">
@@ -281,12 +294,12 @@ export default function DepthPage() {
         <code class="cn-code-inline">--neu-contact</code>, the full ink,
         for a 1px edge where the surface meets the
         ground, <code class="cn-code-inline">--neu-near</code> at .8 for a
-        3px 4px 6px shadow that lays a 4 to 6px dark foot along the
-        bottom and right edges, and <code class="cn-code-inline">--neu-dark</code> at
+        4px 6px 10px shadow that lays a 6 to 10px dark foot along the
+        bottom and right edges, wide because the ink cannot get darker, and <code class="cn-code-inline">--neu-dark</code> at
         .8 for a carve's dark wall, because a well's wall falls on whatever
         holds it.
         The raised token draws the foot as one shape, contact, near shadow
-        and cast, under the lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
+        and cast, with no lit edge. <code class="cn-code-inline">--neu-lifted</code>, for
         the one lead panel, spends its extra darkness on the bottom and
         right only: a 6px 8px contact in the full ink, an 8px 14px 16px near
         shadow and an 18px 28px 48px cast. Even black is close to the
@@ -318,13 +331,13 @@ export default function DepthPage() {
 --neu-near:    rgb(8 8 14 / .8);    /* the dark foot just past the contact */
 --neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
 
---neu-raised:      1px 1px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+--neu-raised:      1px 1px 0 var(--neu-contact), 4px 6px 10px var(--neu-near), 10px 12px 24px var(--neu-shade);
 --neu-lifted:      6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
 --neu-inset:       inset 3px 3px 8px var(--neu-dark);
 --neu-inset-soft:  inset 2px 2px 5px rgb(8 8 14 / .5);
 
-/* The lit top rim of a raised surface */
+/* The lit top rim of plates, the lead panel and nested panels */
 --cn-lit-edge: inset 0 1px color-mix(in srgb, var(--surface-2) 45%, transparent);
 
 /* Overlays: a long cast and a tighter one on the same base */
@@ -364,7 +377,7 @@ export default function DepthPage() {
       <p class="cn-copy">
         A panel inside a panel rests on its parent, so{" "}
         <code class="cn-code-inline">.panel .panel</code> swaps in{" "}
-        <code class="cn-code-inline">--neu-raised-soft</code> and keeps the
+        <code class="cn-code-inline">--neu-raised-soft</code> and adds the
         lit edge, which with the hairline shows where it ends on a fill that
         matches its parent's. The full cast
         would claim a height the inner panel does not have. Raised is a rank,
@@ -548,7 +561,7 @@ export default function DepthPage() {
           {
             name: ".cn-raised",
             values: "var(--neu-raised)",
-            notes: "Panels and cards, on --cn-surface-raised. The standard lift off the page: contact, near shadow, cast and the lit top edge.",
+            notes: "Panels and cards, on --cn-surface-raised. The standard lift off the page: contact, near shadow and cast, darkness only.",
           },
           {
             name: ".cn-raised-soft",
@@ -605,7 +618,7 @@ export default function DepthPage() {
             name: "--cn-lit-edge",
             values: "inset 0 1px, surface-2 at 45%",
             contrast: "1.5:1 on the base fill",
-            notes: "The lit top rim. Part of --neu-raised, --neu-lifted and the default --hard-extra on plated recipes.",
+            notes: "The lit top rim. Part of --neu-lifted and the default --hard-extra on plated recipes; a panel inside a panel and the selected tab add it. A plain panel has none.",
           },
           {
             name: "--hard-extra",
