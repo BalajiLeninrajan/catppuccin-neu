@@ -1,8 +1,123 @@
-/* ── docs-site chrome ────────────────────────────────────────────────────────
-   Unlayered, so it always wins over the cn.* layers. Prefix: sc-.
-   Chrome only. Specimens use system classes only. The chrome follows the
-   package's own rules: spacing from --space-*, motion from --t-* on a named
-   --ease-*, color from the --cn-* roles.                                   */
+/* Docs chrome. Unlayered, so it wins over the cn.* layers. Prefix: sc-. */
+
+/* ── sidebar ── */
+
+.sc-shell { flex-direction: row; }
+.sc-shell > :not(.sc-sidebar) { flex: 1 1 0; min-width: 0; }
+
+.sc-sidebar {
+  width: 264px;
+  height: 100vh;
+  height: 100dvh;
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  border-inline-end: 1px solid var(--edge);
+  background: var(--sc-recessed);
+  --sc-recessed: color-mix(in srgb, var(--crust) 80%, var(--mantle));
+}
+
+.sc-sidebar-head {
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sc-sidebar-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 var(--space-3) var(--space-6);
+  scrollbar-color: var(--surface-2) transparent;
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.sc-sidebar-toggle { display: none; }
+.sc-sidebar-body > * { display: grid; gap: var(--space-1); }
+.sc-sidebar-body .cn-microlabel { margin: 0 0 var(--space-2); padding: 0 var(--space-3); }
+
+.sc-sidebar-body a {
+  padding: var(--space-2) var(--space-3);
+  color: var(--cn-fg-muted);
+  border: 1px solid transparent;
+  border-radius: var(--cn-radius-control);
+  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  text-decoration: none;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+
+.sc-sidebar-body a:hover { color: var(--cn-fg); background: var(--hover); }
+.sc-sidebar-body > :has(a[aria-current="page"]) .cn-microlabel { color: var(--cn-fg); }
+
+.sc-sidebar-body a[aria-current="page"] {
+  position: relative;
+  color: var(--cn-fg);
+  font-weight: var(--cn-type-ui-weight);
+}
+
+.sc-sidebar-body a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--space-2);
+  inset-inline-start: 0;
+  width: 4px;
+  border-start-end-radius: var(--cn-radius-chip);
+  border-end-end-radius: var(--cn-radius-chip);
+  background: var(--cn-interactive);
+}
+
+@media (max-width: 1060px) {
+  .sc-shell { flex-direction: column; }
+
+  .sc-sidebar {
+    width: auto;
+    height: auto;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--edge);
+    background: color-mix(in srgb, var(--sc-recessed) 88%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .sc-sidebar-head { padding: var(--space-3) var(--page-gutter); }
+
+  /* Scrolls stop short of the folded bar, so it never covers focus. */
+  :root { scroll-padding-top: calc(var(--control-h-sm) + 3 * var(--space-3) + 1px); }
+
+  .sc-sidebar-toggle { display: inline-flex; }
+
+  .sc-sidebar-body {
+    display: none;
+    max-height: min(60vh, 480px);
+    padding: 0 var(--page-gutter) var(--space-5);
+    opacity: 0;
+    translate: 0 -4px;
+    transition: opacity var(--t-exit) var(--ease-in), translate var(--t-exit) var(--ease-in), display var(--t-exit) allow-discrete;
+  }
+
+  .sc-sidebar.is-open .sc-sidebar-body {
+    display: grid;
+    opacity: 1;
+    translate: none;
+    transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), display var(--t-base) allow-discrete;
+  }
+
+  @starting-style { .sc-sidebar.is-open .sc-sidebar-body { opacity: 0; translate: 0 -4px; } }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .sc-sidebar { background: var(--sc-recessed); backdrop-filter: none; }
+}
+
+@media (forced-colors: active) {
+  .sc-sidebar-body a[aria-current="page"]::before { forced-color-adjust: none; background: Highlight; }
+}
 
 /* ── content column ── */
 
@@ -19,79 +134,20 @@
 
 .sc-measure {
   margin: 0 auto;
-  padding: var(--space-7) 0 calc(var(--space-8) + var(--space-6));
+  padding: var(--space-7) 0 calc(var(--space-7) + var(--space-7));
   flex: 1;
 }
 
-/* The examples are app pages, not docs, so their column is 1040px: at a
-   1400px window that leaves 48px each side of it beside the sidebar. */
+/* The examples are app pages, so their column is wider. */
 .sc-content.is-wide > :is(.sc-measure, .page-footer) {
   width: min(1040px, calc(100% - 2 * var(--space-5)));
 }
-
-/* "On this page": hidden until the window has room for a second column. */
-.sc-toc { display: none; }
-
-/* From 1448px a page with a list drops the centering. That is the first
-   width where the measure keeps its 860px beside the list: 264 sidebar,
-   48 start pad, 860, 32 gap, 220 list, 24 end pad. Any narrower and the
-   list squeezes the docs tables. The measure starts --space-7 from the
-   sidebar and the list takes the strip the centering left empty. It
-   sticks under the top padding and scrolls on its own when it is taller
-   than the window. */
-@media (min-width: 1448px) {
-  .sc-content.has-toc {
-    display: grid;
-    grid-template-columns: minmax(0, 860px) 220px;
-    grid-template-rows: 1fr auto;
-    column-gap: var(--space-6);
-    padding-inline: var(--space-7) var(--space-5);
-  }
-
-  .sc-content.has-toc > :is(.sc-measure, .page-footer) {
-    grid-column: 1;
-    width: auto;
-    margin: 0;
-  }
-
-  .sc-content.has-toc > .sc-toc {
-    grid-area: 1 / 2;
-    align-self: start;
-    position: sticky;
-    top: var(--space-7);
-    max-height: calc(100vh - 2 * var(--space-7));
-    margin-top: var(--space-7);
-    overflow-y: auto;
-    scrollbar-color: var(--surface-2) transparent;
-    display: grid;
-    gap: var(--space-1);
-    padding-inline-start: var(--space-4);
-    border-inline-start: 1px solid var(--edge-soft);
-  }
-}
-
-.sc-toc .cn-microlabel { margin: 0 0 var(--space-2); }
-
-.sc-toc a {
-  padding-block: var(--space-1);
-  text-decoration: none;
-  transition: color var(--t-fast) var(--ease-out);
-}
-
-/* Demo titles sit a step in from the h2 they follow. */
-.sc-toc a.is-demo { padding-inline-start: var(--space-3); }
-.sc-toc a:hover { color: var(--cn-fg); }
-.sc-toc a[aria-current] { color: var(--cn-interactive); }
-
-/* A jump from the list lands with air above the target. */
-.sc-doc :is(h2, .sc-demo) { scroll-margin-top: var(--space-5); }
 
 /* ── doc kit ── */
 
 .sc-doc {
   display: grid;
-  /* minmax(0, 1fr): a wide code block scrolls inside its own box instead of
-     growing the track past the measure and dragging the page sideways */
+  /* minmax(0, 1fr): a wide code block scrolls in its own box, not the page. */
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
 }
@@ -101,8 +157,6 @@
   gap: var(--space-4);
 }
 
-/* Docs prose stops at the 68ch measure. Demo stages and tables keep the
-   full column. */
 .sc-doc .cn-copy { max-width: var(--cn-measure); }
 
 .sc-demo {
@@ -113,54 +167,26 @@
   gap: var(--space-3);
 }
 
-/* The stage is the page ground itself: mantle, no surface swap, so a
-   specimen sits on the ground it sits on in an app. A soft hairline
-   frames the demo area; depth reads against the page. The
-   system keeps dashes for open slots (.is-dashed / .cn-edge-dashed) and
-   nothing else, and the docs don't get to add more per page, which would
-   read as a wireframe. */
+.sc-demo > figcaption { color: var(--cn-fg-muted); }
+
+/* The stage is the page ground with a soft hairline frame. */
 .sc-demo-stage {
   padding: clamp(var(--space-5), 4vw, var(--space-6));
   border: 1px solid var(--edge-soft);
   border-radius: var(--cn-radius-panel);
   display: grid;
-  /* One column at the stage width, as on .sc-demo, so a wide specimen
-     such as .tabs scrolls inside it instead of widening the page. */
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
   justify-items: start;
 }
 
-/* The lead demo, the first on a page, takes the same frame and padding
-   as every other demo. It leads by position. */
-
-/* A row demo's stage is as wide as its specimens, so a single button
-   does not sit in an 860px frame. The caption, the copy line and the
-   fold keep the column, so the block has one right edge under the
-   stage. Stages that hold a table, a panel or a grid are not rows and
-   keep the column. */
+/* A row demo's stage is as wide as its specimens. */
 .sc-demo-fit > .sc-demo-stage {
   width: fit-content;
   max-width: 100%;
   justify-self: start;
 }
 
-/* The fold under a demo: the package accordion, pulled up to the copy
-   line so the two read as one block, and as wide as the column like the
-   copy line. Its prose stays at the 68ch measure through
-   .sc-doc .cn-copy. Its
-   summary is the one docs change: the label role, 14px at 500 in the
-   muted ink, the same voice as the demo caption, so a docs page keeps
-   600 for headings and controls. The chevron and its place under the
-   copy line tell the fold from the caption. Hovered or open it keeps the
-   package's mauve, which this unlayered rule would otherwise beat. */
-details.sc-why > summary { font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-name-leading) var(--sans); }
-details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
-.sc-doc > .sc-demo + .sc-why { margin-top: calc(var(--space-2) - var(--space-6)); }
-.sc-why .cn-copy + .cn-copy { margin-top: var(--space-4); }
-
-/* Specimens in a row start at the inline start, like the text above and
-   below them, and wrap onto more rows. */
 .sc-demo-row {
   display: flex;
   flex-wrap: wrap;
@@ -169,10 +195,7 @@ details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
   gap: var(--space-4);
 }
 
-/* Snippet line: a flat copy row under the stage with a top rule. The
-   system keeps dashes for open slots and disabled controls, so the row
-   draws none. Its "Copy" hint reads as the package's .btn-text: mauve at
-   rest, pink while the row is hovered, green once copied. */
+/* Snippet line: a flat copy row under the stage with a top rule. */
 .sc-snippet {
   appearance: none;
   background: transparent;
@@ -191,17 +214,14 @@ details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
 }
 
 .sc-snippet:hover {
-  border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), var(--surface-0));
+  border-color: color-mix(in srgb, var(--cn-interactive) 25%, var(--surface-0));
   color: var(--cn-fg);
 }
 
-.sc-snippet:hover .sc-snippet-hint {
-  color: var(--cn-interactive-hover);
-}
+.sc-snippet:hover .sc-snippet-hint { color: var(--cn-interactive-hover); }
 
 .sc-snippet pre {
   margin: 0;
-  /* Copy lines always wrap, so the page never scrolls sideways. */
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   font: inherit;
@@ -212,25 +232,18 @@ details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
   padding: var(--space-3) var(--space-4);
 }
 
-.sc-snippet-hint {
-  flex: none;
-}
-
-/* A one-line snippet wraps anywhere rather than push a 320px page sideways. */
 .sc-snippet > span:first-child {
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
 .sc-snippet .sc-snippet-hint {
+  flex: none;
   pointer-events: none;
 }
 
-.sc-snippet.is-copied .sc-snippet-hint {
-  color: var(--cn-success);
-}
+.sc-snippet.is-copied .sc-snippet-hint { color: var(--cn-success); }
 
-/* Props tables + code blocks. */
 .sc-props,
 .sc-codeblock {
   display: grid;
@@ -238,35 +251,27 @@ details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
   gap: var(--space-3);
 }
 
-/* Inside a flowed <section>, code blocks need their own space;
-   otherwise a block sits flush against the previous one and its title reads
-   as a caption of the box above it. */
+.sc-props-scroll { overflow-x: auto; }
+
+/* A code block inside a flowed <section> needs its own space. */
 .sc-doc section .sc-codeblock { margin-top: var(--space-5); }
 .sc-doc section .sc-codeblock:first-child { margin-top: 0; }
 .sc-doc section .sc-codeblock + p { margin-top: var(--space-5); }
 
-/* The grid gap owns ALL spacing between top-level blocks. UA margins on
-   direct children (p margin-bottom, h2 margin-bottom) otherwise stack onto
-   the gap unevenly. */
+/* The grid gap owns the spacing between top-level blocks. */
 .sc-doc > * { margin-block: 0; }
 
-/* Headings group with what follows: extra room above, hug below. */
+/* Headings group with what follows: more room above, less below. */
 .sc-doc > :is(h2, h3):not(.cn-label) { margin-top: var(--space-5); }
 .sc-doc > :is(h2, h3):not(.cn-label) + * { margin-top: calc(-1 * var(--space-4)); }
 .sc-doc > .cn-label { margin-top: var(--space-2); }
 .sc-doc > .cn-label + * { margin-top: calc(-1 * (var(--space-4) + var(--space-1))); }
 
-/* Prose runs together: title to lede, lede to first paragraph and
-   paragraph to paragraph are all 16px, so the 32px gap only opens before
-   a demo, a table or a section. */
+/* Prose runs 16px apart. */
 .sc-doc > .sc-doc-header + .cn-copy,
 .sc-doc > .cn-copy + .cn-copy { margin-top: calc(-1 * var(--space-4)); }
 
-.sc-props-scroll {
-  overflow-x: auto;
-}
-
-/* Generic layout helpers for page authors (inside <Demo> stages). */
+/* Layout helpers for demo stages. */
 .sc-row {
   display: flex;
   flex-wrap: wrap;
@@ -281,20 +286,14 @@ details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
   width: 100%;
 }
 
-/* ── narrow: the measure tightens on phones ── */
-
 @media (max-width: 760px) {
   .sc-measure,
   .sc-content .page-footer {
     width: calc(100% - 2 * var(--space-4));
   }
 
-  .sc-measure {
-    padding: var(--space-6) 0 var(--space-8);
-  }
+  .sc-measure { padding: var(--space-6) 0 calc(var(--space-7) + var(--space-4)); }
 }
 
-/* A single token in a table cell (.cn-nowrap) never breaks at its own
-   hyphens, except on a phone, where a long token would push the page
-   sideways at 320px. */
+/* On a phone a long token wraps so the page never scrolls sideways. */
 @media (max-width: 520px) { .sc-doc td code.cn-nowrap { white-space: normal; overflow-wrap: anywhere; } }

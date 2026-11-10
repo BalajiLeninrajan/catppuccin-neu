@@ -14,52 +14,13 @@ export default function BannerPage() {
   return (
     <Doc
       title="Banner"
-      lede="An inline message band with a semantic tint. It sits in the content flow wherever the message applies."
+      lede="An inline message band in a tone, placed in the flow where the message applies."
     >
       <p class="cn-copy">
-        The glyph, tint and edge derive from the{" "}
-        <code class="cn-code-inline">--tone</code> contract prop, so a single{" "}
-        <code class="cn-code-inline">.cn-tone-*</code> utility switches the whole
-        band.
+        One <code class="cn-code-inline">.cn-tone-*</code> utility sets <code class="cn-code-inline">--tone</code>, which drives the glyph color, the tint and the edge.
       </p>
 
-      <Demo
-        lead
-        title="Status tones: the glyph comes from CSS"
-        classes="banner cn-tone-danger · -warning · -success · -info > text"
-        why="How one tone class sets the tint, the edge and the glyph"
-      >
-        <div class="banner cn-tone-danger" role="alert">
-          Payment failed. Update the card on file to keep this workspace active.
-        </div>
-        <div class="banner cn-tone-warning">
-          Two teammates haven't accepted their invites yet.
-        </div>
-        <div class="banner cn-tone-success">
-          Invoice #1042 was sent and marked as paid.
-        </div>
-        <div class="banner cn-tone-info">
-          A newer version of this report is available.
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        The message itself is{" "}
-        <code class="cn-code-inline">--cn-fg-body</code>. A status tone also
-        swaps in its ladder and its glyph. The banner keeps a hairline
-        border in its tone.
-      </p>
-
-      <p class="cn-copy">
-        A banner with <code class="cn-code-inline">.cn-tone-danger</code>,{" "}
-        <code class="cn-code-inline">-warning</code>,{" "}
-        <code class="cn-code-inline">-success</code> or{" "}
-        <code class="cn-code-inline">-info</code> and no svg child draws the
-        matching 16px glyph from <code class="cn-code-inline">--cn-glyph-*</code>.
-        An svg child replaces the CSS glyph.
-      </p>
-
-      <Demo title="Palette tones with a leading glyph" classes="banner cn-tone-{tone} > svg + text">
+      <Demo title="Tones with a leading glyph" classes="banner cn-tone-{tone} > svg + text">
         {TONES.map((tone) => {
           const Glyph = TONE_GLYPH[tone];
           return (
@@ -74,7 +35,6 @@ export default function BannerPage() {
       <Demo
         title="Without a glyph, on a quiet tone"
         classes="banner cn-tone-{blue, green, peach, mauve} > text"
-        why="Why the words state the status, and when a glyph is needed"
       >
         <div class="banner cn-tone-blue">
           A newer version of this report is available. Open it from the
@@ -83,62 +43,27 @@ export default function BannerPage() {
       </Demo>
 
       <p class="cn-copy">
-        A tone never carries meaning alone. The words in the banner state the
-        status: "Payment failed", not a red band. The palette tones draw no
-        glyph, so a red or yellow banner brings an svg. Other palette tones
-        may drop it. The svg goes first. Stroke it with{" "}
-        <code class="cn-code-inline">currentColor</code> and mark it{" "}
-        <code class="cn-code-inline">aria-hidden="true"</code>. For messages
-        that arrive dynamically, put <code class="cn-code-inline">role="status"</code>{" "}
-        on the banner, or <code class="cn-code-inline">role="alert"</code> for the red
-        tone.
+        A tone never carries meaning alone, so the words state the status. A red or yellow banner brings an svg, first, with <code class="cn-code-inline">aria-hidden="true"</code>. For a message that arrives later, add <code class="cn-code-inline">role="status"</code>, or <code class="cn-code-inline">role="alert"</code> for an error.
       </p>
 
       <Props
-        title="Contract"
+        title="Classes and tokens"
         rows={[
-          {
-            name: ".banner",
-            values: "div (or a status/alert region)",
-            contrast: "Status tint 1.10:1 (red) to 1.16:1 (yellow) on a panel · body text on it 8.0:1 or better on a panel, 6.2:1 on an overlay",
-            notes:
-              "--cn-fg-body text at the ui size, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). A status tone takes its ladder's stops. Its words state the status.",
-          },
-          {
-            name: ".banner svg",
-            values: "one leading glyph",
-            notes:
-              "16px, first in the banner, color set to --tone, currentColor stroke, aria-hidden. Replaces the CSS glyph on a status tone. Needed on .cn-tone-red and -yellow, which draw none.",
-          },
-          {
-            name: ".banner::before",
-            values: "status glyph",
-            notes: "On .cn-tone-danger, -warning, -success or -info with no svg child: a 16px --cn-glyph-* mask in --tone.",
-          },
-          {
-            name: "--tone",
-            values: ".cn-tone-danger / -warning / -success / -info · .cn-tone-red / -green / -peach / -yellow / -blue / -mauve",
-            default: "var(--cn-info)",
-            notes: "One prop drives the glyph, tint and edge together. The message stays --cn-fg-body.",
-          },
+          { name: ".banner", values: "div", notes: "An inline message band in --tone." },
+          { name: ".banner svg", values: "one leading glyph", notes: "Takes the tone. aria-hidden." },
+          { name: "--tone", values: ".cn-tone-danger / -warning / -success / -info · .cn-tone-red / -green / -peach / -yellow / -blue / -mauve", default: "var(--cn-info)", notes: "Set it with a tone utility or inline." },
         ]}
       />
 
       <CodeBlock
         title="Markup"
-        code={`<!-- a status tone draws its glyph -->
-<div class="banner cn-tone-success" role="status">
+        code={`<div class="banner cn-tone-success" role="status">
   Invoice #1042 was sent and marked as paid.
 </div>
 
 <div class="banner cn-tone-danger" role="alert">
+  <svg aria-hidden="true"><!-- cross glyph --></svg>
   Payment failed. Update the card on file.
-</div>
-
-<!-- a palette tone brings its own; red and yellow must -->
-<div class="banner cn-tone-yellow">
-  <svg aria-hidden="true"><!-- warning glyph --></svg>
-  Two teammates haven't accepted their invites yet.
 </div>`}
       />
     </Doc>

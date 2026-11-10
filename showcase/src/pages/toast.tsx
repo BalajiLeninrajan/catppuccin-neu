@@ -15,46 +15,6 @@ interface ToastItem {
   leaving: boolean;
 }
 
-/* Swipe to dismiss, the same rule as toast() in catppuccin-neu/js: a toast
-   follows a sideways drag toward the end edge and goes past 80px or on a
-   quick flick; short of that it springs back. Drag state lives on the
-   element, so a re-render mid-drag keeps it. */
-const drags = new WeakMap<HTMLElement, { id: number; x0: number; t0: number; dx: number; end: number }>();
-
-function swipe(onDismiss: () => void) {
-  return {
-    onPointerDown(e: PointerEvent) {
-      const el = e.currentTarget as HTMLElement;
-      if (e.button !== 0 || (e.target as Element).closest("button, a, input")) return;
-      const end = getComputedStyle(el).direction === "rtl" ? -1 : 1;
-      drags.set(el, { id: e.pointerId, x0: e.clientX, t0: e.timeStamp, dx: 0, end });
-      el.setPointerCapture(e.pointerId);
-      el.style.transition = "none";
-    },
-    onPointerMove(e: PointerEvent) {
-      const el = e.currentTarget as HTMLElement;
-      const d = drags.get(el);
-      if (!d || d.id !== e.pointerId) return;
-      d.dx = Math.max(0, (e.clientX - d.x0) * d.end);
-      el.style.translate = `${d.dx * d.end}px 0`;
-      el.style.opacity = String(Math.max(0, 1 - d.dx / 240));
-    },
-    onPointerUp: release,
-    onPointerCancel: release,
-  };
-  function release(e: PointerEvent) {
-    const el = e.currentTarget as HTMLElement;
-    const d = drags.get(el);
-    if (!d || d.id !== e.pointerId) return;
-    drags.delete(el);
-    el.style.transition = "";
-    const flick = d.dx / Math.max(1, e.timeStamp - d.t0) > 0.6;
-    if (d.dx > 80 || (flick && d.dx > 24)) return onDismiss();
-    el.style.translate = "";
-    el.style.opacity = "";
-  }
-}
-
 function ToastSpawner() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
@@ -64,7 +24,7 @@ function ToastSpawner() {
   const leavingRef = useRef(new Set<number>());
 
   const DURATION = 7000;
-  const EXIT_MS = 280; // covers the fade and the fanned row collapse
+  const EXIT_MS = 280; // covers the exit
   const CAP = 5;
 
   function schedule(id: number, ms: number) {
@@ -108,7 +68,7 @@ function ToastSpawner() {
     }
   }
 
-  // The pile hides the fourth and older; cap the DOM at five live toasts.
+  // Cap the stack at five live toasts.
   useEffect(() => {
     const live = toasts.filter((t) => !t.leaving);
     if (live.length > CAP) dismiss(live[0].id);
@@ -138,7 +98,7 @@ function ToastSpawner() {
         onFocusOut={resume}
       >
         {toasts.map((t) => (
-          <div key={t.id} class="toast" hidden={t.leaving} role="status" {...swipe(() => dismiss(t.id))}>
+          <div key={t.id} class="toast" hidden={t.leaving} role="status">
             <div>
               <b>{t.title}</b>
               <span>{t.desc}</span>
@@ -162,55 +122,21 @@ export default function ToastPage() {
   return (
     <Doc
       title="Toast"
-      lede="A transient confirmation in a fixed corner stack. The recipe is the look and the motion; the behavior is yours."
+      lede="A short confirmation in a fixed corner stack. Spawning, timers and dismissal need your script."
     >
-      <p class="cn-copy">
-        A <code class="cn-code-inline">.toast-stack</code> holds{" "}
-        <code class="cn-code-inline">.toast</code> items; spawn a few to see
-        the pile.
-      </p>
-
-      <Demo lead title="Spawner, auto-dismisses after 7s" why="The stack, the live region, the pile and the swipe" classes="toast-stack toast">
+      <Demo title="Spawner, auto-dismisses after 7s" classes="toast-stack toast">
         <ToastSpawner />
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code-inline">.toast-stack</code> is the viewport, fixed to
-        the bottom-right corner. Append new toasts at the bottom.{" "}
-        <code class="cn-code-inline">.toast</code> is one item: a{" "}
-        <code class="cn-code-inline">b</code> title over a span or p description, then trailing
-        controls: a <code class="cn-code-inline">.btn-text</code> action, a{" "}
-        <code class="cn-code-inline">.btn.is-icon</code> close, or both. The toast
-        carries no accent color.
+        <code class="cn-code-inline">.toast-stack</code> is the fixed viewport. Give it <code class="cn-code-inline">role="region"</code>, <code class="cn-code-inline">aria-live="polite"</code> and an <code class="cn-code-inline">aria-label</code>, and append new toasts at the bottom.
       </p>
 
       <p class="cn-copy">
-        Give the stack <code class="cn-code-inline">role="region"</code>,{" "}
-        <code class="cn-code-inline">aria-live="polite"</code> and an{" "}
-        <code class="cn-code-inline">aria-label</code> such as "Notifications".
+        Set <code class="cn-code-inline">hidden</code> on a mounted toast to play its exit, then remove it. Pause the dismiss timer while the pointer or focus is in the stack.
       </p>
 
-      <p class="cn-copy">
-        The stack collapses: the newest toast sits on top, up to two older
-        ones peek behind it, and the fourth and older hide. Hover or keyboard
-        focus fans the stack out into a column.
-      </p>
-
-      <p class="cn-copy">
-        The exit animates only if the toast stays mounted and{" "}
-        <code class="cn-code-inline">hidden</code> is toggled. Unmount it after
-        the transition. Auto-dismiss after a few seconds and keep a manual
-        dismiss.
-      </p>
-
-      <p class="cn-copy">
-        A toast can also be swiped away. Drag it toward the end edge. Past
-        80px, or on a quick flick, it dismisses. Short of that it springs
-        back. A vertical drag still scrolls the page, and buttons and links
-        inside the toast never start a swipe.
-      </p>
-
-      <Demo title="At rest, one item outside its stack" why="What needs script" row>
+      <Demo title="At rest, one item outside its stack" row>
         <div class="toast" role="status">
           <div>
             <b>Event created</b>
@@ -229,109 +155,13 @@ export default function ToastPage() {
         </div>
       </Demo>
 
-      <p class="cn-copy">
-        The CSS draws the toast and the pile. Spawning, timers and dismissal
-        need script. The optional <a href="/behavior">behavior module</a> has{" "}
-        <code class="cn-code-inline">toast(stack, {"{ title, body, timeout }"})</code>,
-        which appends a toast with a dismiss button, pauses its timeout while
-        the pointer or focus is in the stack, dismisses on a swipe, exits
-        through <code class="cn-code-inline">[hidden]</code> and then removes
-        the node. In a framework, write the same logic in its terms. This
-        page runs the Preact reference below.
-      </p>
-
-      <CodeBlock
-        title="Without a framework"
-        code={`import { toast } from "catppuccin-neu/js";
-
-const stack = document.querySelector(".toast-stack");
-const { dismiss } = toast(stack, {
-  title: "Invoice sent",
-  body: "Northwind will get it in a minute.",
-  timeout: 7000, // 0 keeps it until dismissed
-});`}
-      />
-
-      <CodeBlock
-        title="Reference behavior (Preact, condensed)"
-        code={`const timers = useRef(new Map()); // id -> { handle, endsAt, remaining }
-
-function schedule(id, ms) {
-  const handle = setTimeout(() => dismiss(id), ms);
-  timers.current.set(id, { handle, endsAt: Date.now() + ms, remaining: ms });
-}
-
-function spawn(item) {
-  setToasts((t) => [...t, { ...item, leaving: false }]);
-  schedule(item.id, 7000);
-}
-
-function dismiss(id) {
-  if (leaving.current.has(id)) return;      // guard double dismissal
-  leaving.current.add(id);
-  clearTimeout(timers.current.get(id)?.handle);
-  timers.current.delete(id);
-  setToasts((t) => t.map((x) => (x.id === id ? { ...x, leaving: true } : x)));
-  setTimeout(() => remove(id), 280);        // covers fade + row collapse
-}
-
-// on the stack: onMouseEnter/onFocusIn -> pause, onMouseLeave/onFocusOut -> resume
-function pause() {
-  for (const t of timers.current.values()) {
-    clearTimeout(t.handle);
-    t.remaining = Math.max(0, t.endsAt - Date.now());
-  }
-}
-function resume() {
-  for (const [id, t] of timers.current) schedule(id, Math.max(t.remaining, 600));
-}`}
-      />
-
       <Props
-        title="Contract"
+        title="Classes"
         rows={[
-          {
-            name: ".toast-stack",
-            values: "the viewport",
-            default: "·",
-            notes:
-              "Fixed 24px from the right and bottom, z-index 90, column flex aligned to the end, 8px gap, min(380px, 100vw - 48px) wide. Mark it role=\"region\" aria-live=\"polite\" with an aria-label; append at the bottom.",
-          },
-          {
-            name: "stack states",
-            values: "collapsed / fanned",
-            default: "collapsed",
-            notes:
-              "Newest on top, two older peeking behind, older hidden. :hover or :focus-within on the stack fans the column out.",
-          },
-          {
-            name: ".toast",
-            values: "one stack item",
-            default: "·",
-            notes:
-              "Flex row on --cn-surface-overlay with the --edge-strong border, on --shadow-pop, at the card radius (12px).",
-          },
-          {
-            name: "b + span/p",
-            values: "title and description",
-            default: "·",
-            notes:
-              "b is the block title in the name role. The span or p after it is the description in --cn-fg-body.",
-          },
-          {
-            name: ".btn-text / .btn.is-icon",
-            values: "trailing controls",
-            default: "·",
-            notes:
-              "One action, an icon close with an aria-label, or both. They sit at the end of the row.",
-          },
-          {
-            name: "[hidden]",
-            values: "exit state",
-            default: "·",
-            notes:
-              "Toggle on a mounted toast to play the exit (--t-exit, .14s), then unmount.",
-          },
+          { name: ".toast-stack", values: "the viewport", notes: "Fixed to the bottom corner at the end edge." },
+          { name: ".toast", values: "one item", notes: "A b title over a span or p, then trailing controls." },
+          { name: ".btn-text / .btn.is-icon", values: "trailing controls", notes: "One action, a close with an aria-label, or both." },
+          { name: "[hidden]", values: "exit state", notes: "Plays the exit on a mounted toast." },
         ]}
       />
 

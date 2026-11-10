@@ -66,14 +66,9 @@ export default function ModalPage() {
   return (
     <Doc
       title="Modal"
-      lede="A centered dialog on the native <dialog> element. showModal() opens it in the top layer, traps focus and draws the scrim. Escape closes it."
+      lede="A centered dialog on the native <dialog> element, opened with showModal()."
     >
-      <p class="cn-copy">
-        Put <code class="cn-code-inline">.modal</code> on a{" "}
-        <code class="cn-code-inline">&lt;dialog&gt;</code>.
-      </p>
-
-      <Demo lead title="Live demo" why="What the dialog element gives you" classes="dialog.modal">
+      <Demo title="Live demo" classes="dialog.modal">
         <ModalDemo trigger="Invite a teammate" triggerClass="btn btn-primary" title="Invite a teammate" action="Send invite">
           <p class="cn-copy" style="margin:0">
             They get access to every dashboard in this workspace. You can change
@@ -95,13 +90,10 @@ export default function ModalPage() {
       </Demo>
 
       <p class="cn-copy">
-        The platform gives you the top layer, focus trapping, Escape, and{" "}
-        <code class="cn-code-inline">::backdrop</code>, which the recipe draws as the
-        blurred crust scrim. Add one listener if a backdrop click should
-        close it.
+        The platform gives the top layer, the focus trap, Escape and the scrim. Add one listener if a backdrop click should close it.
       </p>
 
-      <Demo title="Wide" why="When to go wide" classes="dialog.modal.is-wide">
+      <Demo title="Wide" classes="dialog.modal.is-wide">
         <ModalDemo trigger="Review members" triggerClass="btn btn-secondary" title="Review members" action="Save roles" wide>
           <table class="data-table">
             <thead>
@@ -126,50 +118,14 @@ export default function ModalPage() {
         </ModalDemo>
       </Demo>
 
-      <p class="cn-copy">
-        <code class="cn-code-inline">.is-wide</code> is 760px, for a table or a
-        two-column form. Both widths leave 16px of viewport on each side.
-      </p>
-
       <Props
-        title="Contract"
+        title="Classes"
         rows={[
-          {
-            name: "dialog.modal",
-            values: "showModal() / close()",
-            default: "·",
-            notes: "width min(520px, 100vw - 32px), max-height 100dvh - 48px, --cn-surface-overlay fill, the --edge-strong hairline, --shadow-pop. Radius is --cn-radius-panel.",
-          },
-          {
-            name: ".modal.is-wide",
-            values: "modifier",
-            default: "·",
-            notes: "width min(760px, 100vw - 32px).",
-          },
-          {
-            name: ".modal > header",
-            values: "title and close control",
-            default: "·",
-            notes: "The shared band: --band-h tall, --band-pad, on the dialog's overlay fill with an --edge-soft bottom divider.",
-          },
-          {
-            name: ".modal > footer.panel-footer",
-            values: "action row",
-            default: "·",
-            notes: "No fill; the divider separates it.",
-          },
-          {
-            name: "::backdrop",
-            values: "the scrim",
-            default: "·",
-            notes: "Crust at 80% with a 2px blur. Fades with the dialog. Under reduced transparency the blur goes and the crust deepens to 88%.",
-          },
-          {
-            name: "motion",
-            values: "--t-base in, --t-exit out",
-            default: "·",
-            notes: "Rides discrete display and overlay transitions. Where a browser lacks them, the dialog appears and disappears in place.",
-          },
+          { name: "dialog.modal", values: "showModal() / close()", notes: "520px wide at most." },
+          { name: ".modal.is-wide", values: "modifier", notes: "760px, for a table or a two-column form." },
+          { name: ".modal > header", values: "title and close control", notes: "The shared band." },
+          { name: ".modal > footer.panel-footer", values: "action row", notes: "No fill." },
+          { name: "::backdrop", values: "the scrim", notes: "Drawn by the recipe." },
         ]}
       />
 

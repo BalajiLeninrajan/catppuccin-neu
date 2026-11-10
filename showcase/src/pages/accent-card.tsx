@@ -6,14 +6,9 @@ export default function AccentCardPage() {
   return (
     <Doc
       title="Accent card"
-      lede="A card on a plate in its accent. The border, the name and the numbers stay neutral, and the accent shows on the plate and on data marks."
+      lede="A card on a plate in its accent."
     >
-      <p class="cn-copy">
-        The plate is the accent mixed 70% into surface-0,{" "}
-        <code class="cn-code-inline">--cn-step-vivid</code>.
-      </p>
-
-      <Demo lead title="Teams, each in its own accent" why="Where the plate color comes from and where to store the accent" classes="accent-card  (set --accent from the record)">
+      <Demo title="Teams, each in its own accent" classes="accent-card  (set --accent from the record)">
         <div class="sc-grid" style="width:100%">
           {TEAMS.map((team) => (
             <div class="accent-card" style={accentStyle(team.accent)} key={team.name}>
@@ -25,12 +20,10 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        The accent belongs to the team, not to its place in the grid. Store it
-        on the record, or derive it from a stable id, and read it wherever the
-        team appears. Sorting or filtering the grid never recolors a card.
+        Store the accent on the record, so sorting or filtering never recolors a card.
       </p>
 
-      <Demo title="Linked card" why="How a linked card presses" classes="a > .accent-card">
+      <Demo title="Linked card" classes="a > .accent-card">
         <a
           href="#"
           style="display:block;width:min(340px,100%)"
@@ -44,12 +37,10 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        Wrap the card in a plain <code class="cn-code-inline">&lt;a&gt;</code>. Hover
-        lifts the card 1px off its plate. Active half-slides it onto the
-        plate. The wrapper is the link, never the card itself.
+        Wrap the card in a plain <code class="cn-code-inline">&lt;a&gt;</code>. The wrapper is the link, never the card.
       </p>
 
-      <Demo title="With a stat and a progress bar" why="Why the value inside a card is not accent-colored" classes="accent-card > .stat.is-lg + .progress-track">
+      <Demo title="With a stat and a progress bar" classes="accent-card > .stat.is-lg + .progress-track">
         <div class="accent-card" style={`${accentStyle(PAYMENTS.accent)};width:min(340px,100%)`}>
           <div class="stat is-lg" style="padding:0">
             <span>{PAYMENTS.name} revenue</span>
@@ -61,39 +52,12 @@ export default function AccentCardPage() {
         </div>
       </Demo>
 
-      <p class="cn-copy">
-        Inside the card the hero value is text-colored. A progress fill, an
-        avatar and a <code class="cn-code-inline">.mark</code> keep the accent.
-        Controls inside the card rest on their own plate.
-      </p>
-
       <Props
-        title="Contract"
+        title="Classes and tokens"
         rows={[
-          {
-            name: "--accent",
-            values: "a hex from the record",
-            default: "var(--mauve)",
-            notes:
-              "Set inline from data. Read by the plate, .mark, .avatar, .cn-value-lg, the progress fill and the terminal caret.",
-          },
-          {
-            name: ".accent-card",
-            values: "recipe",
-            contrast: "Plate on the page: 4.9:1 (blue) to 7.5:1 (yellow)",
-            notes:
-              "--cn-surface-raised fill, --edge hairline, card radius, 12px 16px padding, and the hard offset in --plate, the accent at --cn-step-vivid into surface-0, under the lit top edge. No neu shadow.",
-          },
-          {
-            name: "a > .accent-card",
-            values: "hover / active",
-            notes: "Hover: translate(-1px, -1px) and the plate grows 1px. Active: the half-slide onto the plate.",
-          },
-          {
-            name: ".stat.is-lg / .cn-value-lg inside",
-            values: "text color",
-            notes: "The plate carries the accent, so the value does not.",
-          },
+          { name: "--accent", values: "a hex from the record", default: "var(--mauve)", notes: "Set inline from data. The plate and the data marks read it." },
+          { name: ".accent-card", notes: "Text inside stays neutral. A progress fill, an avatar and a .mark keep the accent." },
+          { name: "a > .accent-card", notes: "Lifts on hover, slides onto the plate when pressed." },
         ]}
       />
 

@@ -1,36 +1,11 @@
 import type { ComponentChildren } from "preact";
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
+import { Doc, Demo, Props } from "../lib/doc";
 
-/* One model, lowest first. Height is distance from the ground; the light
-   is above and to the top left. */
-const HEIGHTS = [
-  { height: "Below the ground", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken, --cn-well-ring", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
-  { height: "The ground", tokens: "--cn-surface-page", who: "The page, the topbar, stat bands, static chips. Every other height is measured from it." },
-  { height: "Raised, soft foot", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge, or --neu-lifted with --edge-strong", who: "Panels, the selected tab, the one lead panel. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Raised, hard plate", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra, --cn-plate with --cn-lit-edge under the tilted panel", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate. The one tilted panel, holding prose, upright under prefers-contrast: more on the same plate." },
-  { height: "Floating", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
-];
-
-/* The height specimens share one footprint so only the depth differs. */
 /* Three columns, or one under 520px. The min track is a third of the row
    over 520px and the full row under it, so auto-fit never lands on two. */
 const THREE_UP =
   "display:grid;gap:var(--cn-grid-gap);grid-template-columns:repeat(auto-fit,minmax(clamp(calc((100% - 2 * var(--cn-grid-gap)) / 3 - 1px),calc((520px - 100%) * 999),100%),1fr))";
 const SPEC_BOX = "width:100%;height:88px;display:grid;place-items:center;padding:12px;text-align:center";
-
-/* A tokens cell: each token is its own unbreakable code, joined by plain
-   words, so a line only breaks between tokens. */
-const JOINERS = /(, or |, | or | with | in | over )/;
-function Tokens({ text }: { text: string }) {
-  return (
-    <>
-      {text.split(JOINERS).map((part, i) =>
-        i % 2 ? part : /^--|\(/.test(part) ? <code class="cn-code-inline cn-nowrap" key={i}>{part}</code> : part,
-      )}
-    </>
-  );
-}
-
 
 function Height({ name, cls, note, children }: { name: string; cls: string; note: string; children?: ComponentChildren }) {
   return (
@@ -45,27 +20,12 @@ function Height({ name, cls, note, children }: { name: string; cls: string; note
   );
 }
 
-/* A depth specimen: a cube wearing one shadow utility. */
-interface CubeProps {
-  cls: string;
-  bg?: string;
-  label?: string;
-  size?: number;
-  style?: string;
-}
-
-/* A raised cube takes the raised fill, base; a carved one takes the page
-   ground. Only the shadow utility differs. */
-function Cube({ cls, bg = "cn-bg-raised", label, size = 128, style = "" }: CubeProps) {
+/* A cube on the panel fill, wearing one shadow utility. */
+function Cube({ cls, label, style = "" }: { cls: string; label?: string; style?: string }) {
   return (
     <div style="display:grid;gap:12px;justify-items:center">
-      <div
-        class={`${bg} cn-r-card ${cls}`}
-        style={`width:${size}px;height:${size}px;${style}`}
-      />
-      <code class="cn-code-meta">
-        {label ?? cls}
-      </code>
+      <div class={`cn-bg-base cn-r-card ${cls}`} style={`width:128px;height:128px;${style}`} />
+      <code class="cn-code-meta">{label ?? cls}</code>
     </div>
   );
 }
@@ -74,18 +34,9 @@ export default function DepthPage() {
   return (
     <Doc
       title="Depth"
-      lede="Every elevation is one of a small set of shadows, lit from one light at the top left. Height above the page separates surfaces; a hairline only cuts their edge."
+      lede="Every elevation is one of a small set of shadows, lit from one light at the top left."
     >
-      <h2 class="cn-title">One model</h2>
-      <Demo lead title="Four heights and the foot ladder, on the page" why="One light, and why no component writes its own shadow" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-tilted · panel is-lead · cn-bg-overlay cn-pop">
-        {/* Two groups. The first holds a carve, the ground and a plain
-            panel on its soft foot. The second holds the rest of the foot
-            ladder in order, the 4px plate, the tilt on the same plate
-            and the 8px lead,
-            then the float. The first holds three, so it keeps three
-            columns until its box is under 520px and then drops to one,
-            never leaving one specimen alone on a row. The second sits on
-            four columns and folds to two. */}
+      <Demo title="Four heights, on the page" classes="well · (the ground) · panel · cn-bg-base cn-edge cn-hard · panel is-tilted">
         <div class="cn-stack cn-gap-32" style="width:100%">
           <div style={THREE_UP}>
             <Height name="Below the ground" cls=".well" note="One dark wall from the top left, the sunken fill and a quiet even ring.">
@@ -98,115 +49,28 @@ export default function DepthPage() {
               <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
             </Height>
           </div>
-          <div class="cn-grid-4">
+          <div style={THREE_UP}>
             <Height name="Raised, hard plate" cls=".cn-hard" note="A 4px block of ink replaces the cast.">
-              <div class="cn-bg-raised cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
+              <div class="cn-bg-base cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
             </Height>
             <Height name="The same plate, tipped" cls=".is-tilted" note="The one tilted aside, turned 1.2deg with its text on the 4px plate.">
               <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
             </Height>
-            <Height name="The lead's 8px foot" cls=".is-lead" note="A resting panel on the deepest foot.">
-              <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
-            </Height>
-            <Height name="Floating" cls=".cn-pop" note="The overlay fill, no contact edge, the pop shadow.">
-              <div class="cn-bg-overlay cn-pop cn-r-card cn-meta" style={`${SPEC_BOX};border:1px solid var(--edge-strong)`}>Invoice sent</div>
+            <Height name="Floating" cls="--shadow-pop" note="The overlay fill, no contact edge, the pop shadow.">
+              <div class="cn-r-card cn-meta" style={`${SPEC_BOX};border:1px solid var(--edge-strong);background:var(--cn-surface-overlay);box-shadow:var(--shadow-pop)`}>Invoice sent</div>
             </Height>
           </div>
         </div>
       </Demo>
 
       <p class="cn-copy">
-        Every depth on the page is one of four heights: below the ground,
-        the ground, raised and floating, under the one light. A raised
-        surface stands on one of two feet. A soft foot means a panel
-        resting on the page. A hard plate means a clickable, an accent
-        card or the one tilted aside. The foot ladder sets how tall it
-        stands, counted in full ink under the bottom edge: panel 1px,
-        plate 4px, lead 8px. No static label is raised: a chip on a span is
-        a flat outlined label.
+        A soft foot means a panel resting on the page. A hard plate means
+        something you can click, an accent card or the one tilted aside.
       </p>
-
-      <p class="cn-copy">
-        The light source never moves. The dark shadow falls bottom right. A
-        plate, the lead panel and a nested panel mark the lit side with a
-        1px top edge. A plain panel has none. A carve is one dark wall from
-        the top left. No component composes its own{" "}
-        <code class="cn-code-inline">box-shadow</code>. It picks one of the
-        tokens on this page. The page is{" "}
-        <code class="cn-code-inline">--cn-surface-page</code>, and raised and
-        plated surfaces take{" "}
-        <code class="cn-code-inline">--cn-surface-raised</code>, one fill step
-        above it. Only overlays take a lighter step.
-      </p>
-
-      <Demo title="Heights, lowest first" why="Hairlines, the lit edge and the fixed light">
-        <div style="width:100%">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th scope="col">Height</th>
-                <th scope="col">Tokens</th>
-                <th scope="col">Who</th>
-              </tr>
-            </thead>
-            <tbody>
-              {HEIGHTS.map((h) => (
-                <tr key={h.height}>
-                  <td class="cell-name"><strong>{h.height}</strong></td>
-                  <td data-label="Tokens"><Tokens text={h.tokens} /></td>
-                  <td data-label="Who">{h.who}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        A raised or floating surface keeps a hairline,{" "}
-        <code class="cn-code-inline">--edge</code> or{" "}
-        <code class="cn-code-inline">--edge-strong</code>, on all four sides.
-        Carved surfaces have no lip. A resting field takes{" "}
-        <code class="cn-code-inline">--cn-field-ring</code>, and{" "}
-        <code class="cn-code-inline">--cn-field-ring-overlay</code> inside a
-        popover, modal or drawer. The tabs carve and a disabled field take
-        the quieter <code class="cn-code-inline">--cn-carve-ring</code>, and a
-        well takes <code class="cn-code-inline">--cn-well-ring</code>.{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> closes all three
-        into a full even ring. An engaged state is carved too, with an{" "}
-        <code class="cn-code-inline">--engaged-edge</code> rim.
-      </p>
-
-      <p class="cn-copy">
-        <code class="cn-code-inline">--cn-lit-edge</code> is a 1px line of
-        surface-2 at 45% inside a top rim. It is the default{" "}
-        <code class="cn-code-inline">--hard-extra</code> of every plated recipe:
-        the secondary button, segmented options and the accent card. The
-        primary replaces it with its own white rim. A panel inside a panel
-        and the lead panel carry it. A plain panel does not.
-      </p>
-
-      <p class="cn-copy">
-        The light is physical, not logical. Layout mirrors under{" "}
-        <code class="cn-code-inline">dir="rtl"</code>, and a plate still falls
-        down and to the right.
-      </p>
-
-      <Demo title='The same plates under dir="rtl"' classes='dir="rtl" · btn btn-secondary · panel'>
-        <div dir="rtl" class="cn-row cn-gap-24 cn-wrap">
-          <button type="button" class="btn btn-secondary">حفظ</button>
-          <div class="panel panel-body">
-            <span class="cn-meta">الفواتير المفتوحة: 12</span>
-          </div>
-        </div>
-      </Demo>
-
-      <h2 class="cn-title">The shadows</h2>
 
       <Demo
-        title="Four of the five neu shadows"
-        classes="cn-bg-raised cn-r-card cn-raised | cn-raised-soft | well (cn-bg-well, --cn-well-ring, cn-inset) | cn-inset-soft"
-        why="How the shadow ink and each layer were chosen"
+        title="The neu shadows"
+        classes="cn-bg-base cn-r-card cn-raised | cn-raised-soft | well (cn-bg-well, cn-inset) | --neu-inset-soft"
         row
       >
         <Cube cls="cn-raised" />
@@ -216,8 +80,6 @@ export default function DepthPage() {
             cn-raised-soft
           </code>
         </div>
-        {/* The carve as it ships: a well, with the sunken fill and the
-            well ring over the dark wall. */}
         <div style="display:grid;gap:12px;justify-items:center">
           <div class="well cn-r-card" style="width:128px;height:128px" />
           <code class="cn-code-meta">
@@ -232,71 +94,18 @@ export default function DepthPage() {
             </span>
           </span>
           <code class="cn-code-meta">
-            cn-inset-soft
+            --neu-inset-soft
           </code>
         </div>
       </Demo>
 
       <p class="cn-copy">
-        Two directions, two strengths. <code class="cn-code-inline">cn-raised</code>{" "}
-        lifts a surface off the page and <code class="cn-code-inline">cn-inset</code>{" "}
-        presses one into it. Each has a soft partner with smaller offset and
-        blur. Panels and cards take the regular shadows. Avatars, the
-        selected tab, nested panels and held states take the soft ones.
+        No component writes its own{" "}
+        <code class="cn-code-inline">box-shadow</code>. It picks a token from
+        the table below.
       </p>
 
-      <p class="cn-copy">
-        The shadows use crust taken halfway to black,{" "}
-        <code class="cn-code-inline">rgb(8 8 14)</code>, so they stay darker
-        than the mantle page. <code class="cn-code-inline">--neu-shade</code>{" "}
-        is the cast, <code class="cn-code-inline">--neu-contact</code> the 1px
-        edge where a surface meets the ground,{" "}
-        <code class="cn-code-inline">--neu-near</code> the dark foot along the
-        bottom and right edges, and <code class="cn-code-inline">--neu-dark</code>{" "}
-        a carve's wall. <code class="cn-code-inline">--neu-lifted</code>, for
-        the one lead panel, deepens the foot on the bottom and right only.{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> deepens the
-        cast, the carve and the near shadow, and stands the tilted panel
-        upright on its plate.
-      </p>
-
-      <CodeBlock
-        title="The neu tokens (tokens.css)"
-        code={`/* The shadow base: crust taken halfway to black */
---neu-shade:   rgb(8 8 14 / .72);   /* the cast */
---neu-ink:     rgb(8 8 14);         /* the default plate */
---neu-contact: var(--neu-ink);      /* the hard edge where a surface meets the ground */
---neu-near:    rgb(8 8 14 / .8);    /* the dark foot just past the contact */
---neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
-
---neu-raised:      1px 1px 0 var(--neu-contact), 4px 6px 10px var(--neu-near), 10px 12px 24px var(--neu-shade);
---neu-lifted:      6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
---neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
---neu-inset:       inset 3px 3px 8px var(--neu-dark);
---neu-inset-soft:  inset 2px 2px 5px rgb(8 8 14 / .5);
-
-/* The lit top rim of plates, the lead panel and nested panels */
---cn-lit-edge: inset 0 1px color-mix(in srgb, var(--surface-2) 45%, transparent);
-
-/* Overlays: a long cast and a tighter one on the same base */
---shadow-pop: 0 24px 70px rgb(8 8 14 / .8), 0 8px 24px rgb(8 8 14 / .45);`}
-      />
-
-      <Demo
-        title="Raised surface"
-        classes="cn-bg-raised cn-r-panel cn-raised"
-      >
-        <div
-          class="cn-bg-raised cn-r-panel cn-raised"
-          style="padding:24px;max-width:420px;display:grid;gap:8px"
-        >
-          <span class="cn-label">Team activity</span>
-          <span class="cn-value">1,284</span>
-          <span class="cn-meta">messages this week · 12 members</span>
-        </div>
-      </Demo>
-
-      <Demo title="A panel inside a panel" why="Why the inner panel takes the soft raise" classes="panel > panel  (the inner one takes --neu-raised-soft and the lit edge)">
+      <Demo title="A panel inside a panel" classes="panel > panel">
         <div class="panel" style="max-width:520px;width:100%">
           <header class="panel-header">
             <h2>Billing</h2>
@@ -313,128 +122,50 @@ export default function DepthPage() {
       </Demo>
 
       <p class="cn-copy">
-        A panel inside a panel rests on its parent, so{" "}
-        <code class="cn-code-inline">.panel .panel</code> swaps in{" "}
-        <code class="cn-code-inline">--neu-raised-soft</code> and adds the
-        lit edge. A region holds at most three raised panels. The{" "}
-        <a href="/layout">Layout</a> page has the rule.
+        The inner panel rests on its parent, so it takes{" "}
+        <code class="cn-code-inline">--neu-raised-soft</code> and a lit top
+        edge.
       </p>
 
-      <Demo title="Promoted shadows" classes="cn-pop | cn-cast | cn-mark-drop" why="What each promoted shadow is for">
-        <div
-          class="cn-bg-page cn-cast cn-r-control"
-          style="height:54px;display:flex;align-items:center;gap:14px;padding:0 18px"
-        >
-          <span class="cn-label">Dashboard</span>
-          <span class="cn-meta">Last synced 2 min ago</span>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:center">
-          <div
-            class="cn-bg-overlay cn-r-card cn-pop"
-            style="padding:16px 20px;display:grid;gap:6px;border:1px solid var(--edge-strong)"
-          >
-            <span class="cn-name">Invoice sent</span>
-            <span class="cn-meta">#2041 · acme.co · just now</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <span class="mark">B</span>
-            <span class="mark" style="--accent:#94e2d5">
-              7
-            </span>
-            <span class="cn-meta">mark · cn-mark-drop</span>
-          </div>
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code-inline">cn-pop</code> is the float for overlays:
-        popovers, modals, drawers, toasts. Pair it with{" "}
-        <code class="cn-code-inline">cn-bg-overlay</code> and an{" "}
-        <code class="cn-code-inline">--edge-strong</code> hairline. Never combine it with neu
-        shadows.{" "}
-        <code class="cn-code-inline">cn-cast</code> is the topbar's downward cast plus
-        its lit hairline. <code class="cn-code-inline">cn-mark-drop</code> is the
-        mini-drop under small solid marks. The{" "}
-        <code class="cn-code-inline">mark</code> recipe carries it already.
-      </p>
-
-      <Demo
-        title="The hard offset family"
-        classes="cn-hard-sm | cn-hard | cn-hard-lg"
-        why="How the plate is drawn and re-keyed"
-        row
-      >
-        <Cube cls="cn-hard-sm cn-edge" label="cn-hard-sm" />
+      <Demo title="The hard plate" classes='cn-hard · style="--plate:#cba6f7"' row>
         <Cube cls="cn-hard cn-edge" label="cn-hard" />
-        <Cube cls="cn-hard-lg cn-edge" label="cn-hard-lg" />
-        <Cube
-          cls="cn-hard cn-edge"
-          label="--plate"
-          style="--plate:#cba6f7"
-        />
+        <Cube cls="cn-hard cn-edge" label="--plate" style="--plate:#cba6f7" />
       </Demo>
 
-      <p class="cn-copy">
-        The hard offset is a solid, blur-free shadow. Any clickable control
-        may take it, and primary and secondary buttons have it by default. It
-        reads <code class="cn-code-inline">--plate</code>, the shadow ink by default, so a
-        control can re-key it inline.{" "}
-        <code class="cn-code-inline">cn-hard-lg</code> is a fixed 10px offset and{" "}
-        <code class="cn-code-inline">cn-hard-sm</code> a fixed 3px offset for small
-        pieces. The tilted panel stands on the clickable's plate,{" "}
-        <code class="cn-code-inline">--cn-plate</code>.
-      </p>
-
-      <Demo
-        title="Press these"
-        classes="cn-pressable | cn-hard cn-pressable-slide | cn-engaged"
-        why="Two presses and the engaged state"
-        row
-      >
+      <Demo title="Press these" classes="cn-pressable | cn-hard cn-pressable-slide | cn-engaged" row>
         <button
           type="button"
-          class="btn cn-bg-raised cn-text-text cn-edge cn-raised-soft cn-pressable"
+          class="btn cn-bg-base cn-text-text cn-edge cn-raised-soft cn-pressable"
         >
           Save changes
         </button>
         <button
           type="button"
-          class="btn cn-bg-raised cn-text-text cn-edge cn-hard cn-pressable-slide"
+          class="btn cn-bg-base cn-text-text cn-edge cn-hard cn-pressable-slide"
         >
           Export invoices
         </button>
         <button
           type="button"
-          class="btn cn-bg-raised cn-text-text cn-edge cn-engaged"
+          class="btn cn-bg-base cn-text-text cn-edge cn-engaged"
         >
           Notifications on
         </button>
       </Demo>
 
       <p class="cn-copy">
-        Two presses, one state. <code class="cn-code-inline">cn-pressable</code> is
-        the soft-control press. It lifts 1px on hover and sinks to{" "}
-        <code class="cn-code-inline">cn-inset-soft</code> while held.{" "}
-        <code class="cn-code-inline">cn-pressable-slide</code> is the half-slide,
-        legal only with <code class="cn-code-inline">cn-hard</code>. The control
-        slides halfway onto its own offset shadow, which shrinks from 4px to
-        2px to meet it. <code class="cn-code-inline">cn-engaged</code> is the
-        engaged state, for a chosen or toggled option: pressed in on the mauve wash, inside an{" "}
-        <code class="cn-code-inline">--engaged-edge</code> rim. The rim colors a border, so give
-        the element one, here <code class="cn-code-inline">cn-edge</code>.
+        <code class="cn-code-inline">cn-pressable-slide</code> needs{" "}
+        <code class="cn-code-inline">cn-hard</code>: the control slides
+        halfway onto its own plate.{" "}
+        <code class="cn-code-inline">cn-engaged</code> colors a border, so
+        give the element one.
       </p>
 
-      <Demo
-        title="Radius roles"
-        classes="cn-r-panel / cn-r-card / cn-r-control / cn-r-mark / cn-r-chip / cn-r-pill / cn-r-round"
-        why="Radii are named by role"
-        row
-      >
+      <Demo title="Radius roles" classes="cn-r-panel / cn-r-card / cn-r-control / cn-r-chip / cn-r-pill / cn-r-round" row>
         {[
           ["panel", "16px"],
           ["card", "12px"],
           ["control", "8px"],
-          ["mark", "8px"],
           ["chip", "4px"],
           ["pill", "999px"],
           ["round", "50%"],
@@ -452,138 +183,24 @@ export default function DepthPage() {
         ))}
       </Demo>
 
-      <p class="cn-copy">
-        Radii are role-named; no utility takes a numeric value.{" "}
-        <code class="cn-code-inline">cn-r-panel</code> reads{" "}
-        <code class="cn-code-inline">--cn-radius-panel</code>, which compact density
-        sets to the card radius.
-      </p>
-
-      <CodeBlock
-        title="Composing depth"
-        code={`<!-- A raised card: the base fill, lifted by its shadow -->
-<div class="cn-bg-raised cn-r-card cn-raised">…</div>
-
-<!-- A hard-offset control with the half-slide press -->
-<button class="btn cn-bg-raised cn-edge cn-hard cn-pressable-slide">
-  Export invoices
-</button>
-
-<!-- Re-key the offset per instance -->
-<button class="btn cn-bg-raised cn-edge cn-hard cn-pressable-slide"
-        style="--plate: #cba6f7">
-  Upgrade plan
-</button>`}
-      />
-
-      <details class="accordion">
-        <summary>Depth utilities</summary>
-        <div class="fold">
-          <div>
       <Props
+        title="Shadow tokens and utilities"
         rows={[
-          {
-            name: ".cn-raised",
-            values: "var(--neu-raised)",
-            notes: "Panels and cards, on --cn-surface-raised. The standard lift off the page: contact, near shadow and cast, darkness only.",
-          },
-          {
-            name: ".cn-raised-soft",
-            values: "var(--neu-raised-soft)",
-            notes: "Smaller offset and blur at reduced strength. Avatars, the selected tab, a panel inside a panel.",
-          },
-          {
-            name: ".cn-inset",
-            values: "var(--neu-inset)",
-            notes: "Wells and engaged states, pressed into the ground.",
-          },
-          {
-            name: ".cn-inset-soft",
-            values: "var(--neu-inset-soft)",
-            notes: "Inputs, held presses, disabled controls.",
-          },
-          {
-            name: ".cn-pop",
-            values: "var(--shadow-pop)",
-            notes: "Overlays only, on --cn-surface-overlay. A long cast and a tighter one. Never combined with neu shadows.",
-          },
-          {
-            name: ".cn-cast",
-            values: "var(--shadow-cast) + lit hairline",
-            notes: "The topbar's downward cast.",
-          },
-          {
-            name: ".cn-mark-drop",
-            values: "var(--shadow-mark)",
-            notes: "Mini-drop for small solid marks; .mark has it built in.",
-          },
-          {
-            name: ".cn-hard",
-            values: "--cn-plate: var(--plate) at 1/4, 1/2, 3/4 and all of --hard-offset",
-            notes: "Any clickable control may take it. The utility draws the plate only. The plated recipes add --hard-extra over it.",
-          },
-          {
-            name: ".cn-hard-lg",
-            values: "--cn-plate-lg: var(--plate) in 1px steps to 10px",
-            notes: "A fixed large offset.",
-          },
-          {
-            name: ".cn-hard-sm",
-            values: "--cn-plate-sm: var(--plate) in 1px steps to 3px",
-            notes: "A fixed small offset.",
-          },
-          {
-            name: ".cn-flat",
-            values: "box-shadow: none",
-            notes:
-              "Clears the shadow. Utilities sit in a later layer than recipes, so it also clears a recipe's shadow on the same element.",
-          },
-          {
-            name: "--cn-lit-edge",
-            values: "inset 0 1px, surface-2 at 45%",
-            contrast: "1.5:1 on the base fill",
-            notes: "The lit top rim. Part of --neu-lifted and the default --hard-extra on plated recipes. A panel inside a panel and the selected tab add it. A plain panel has none.",
-          },
-          {
-            name: "--hard-extra",
-            values: "shadow layers",
-            default: "var(--cn-lit-edge)",
-            notes: "Drawn over a recipe's plate. The primary sets its gloss here.",
-          },
-          {
-            name: "--plate",
-            values: "any token or color-mix",
-            default: "var(--neu-ink)",
-            contrast: "Ink 1.22:1 under base, 1.14:1 under the page · crust 1.14:1 under base, 1.07:1 under the page",
-            notes: "Contract prop read by the whole hard family. Unset, the plate is the shadow ink.",
-          },
-          {
-            name: "--hard-offset",
-            values: "length",
-            default: "4px",
-            notes: "3px at cozy density, 2px at compact. The press slides half the offset.",
-          },
-          {
-            name: ".cn-pressable",
-            values: "hover -1px · active +1px and inset-soft",
-            notes: "The soft-control press.",
-          },
-          {
-            name: ".cn-pressable-slide",
-            values: "hover -1,-1 · active half the offset, plate shrinks to match",
-            notes: "The half-slide. Legal only with .cn-hard.",
-          },
-          {
-            name: ".cn-engaged",
-            values: "inset, the mauve wash, the --engaged-edge rim, 1px sink",
-            contrast: "Wash 1.63:1 on base, past the 1.40:1 hover · rim 3.3:1 on the wash",
-            notes: "The engaged state, for a chosen or toggled option. It sets border-color, so compose it on an element with a border. Under forced colors the rim draws in Highlight.",
-          },
+          { name: "--neu-raised", values: ".cn-raised", notes: "Panels and cards: a contact edge, a dark foot and a cast." },
+          { name: "--neu-raised-soft", values: ".cn-raised-soft", notes: "Avatars and a panel inside a panel." },
+          { name: "--neu-inset", values: ".cn-inset", notes: "Wells and engaged states." },
+          { name: "--neu-inset-soft", notes: "Fields, held presses, stepper pills." },
+          { name: "--shadow-pop", notes: "Overlays only. Pair it with --cn-surface-overlay and an --edge-strong border." },
+          { name: "--edge / --edge-soft / --edge-strong", notes: "The hairline of a raised surface, an inner separator, the hairline of an overlay." },
+          { name: ".cn-hard", notes: "The hard plate, for anything you can click." },
+          { name: "--plate", values: "any color", default: "the shadow ink", notes: "The plate's color. Set it inline to re-key one control." },
+          { name: "--hard-offset", values: "length", default: "4px", notes: "The plate's distance. 2px at compact density." },
+          { name: ".cn-pressable", notes: "Lifts 1px on hover and sinks while held." },
+          { name: ".cn-pressable-slide", notes: "The half-slide press. Only with .cn-hard." },
+          { name: ".cn-engaged", notes: "A chosen or toggled option: pressed in on the mauve wash, inside a mauve rim." },
+          { name: ".cn-r-{panel,card,control,chip,pill,round}", notes: "Radii by role. Compact density sets the panel radius to the card's." },
         ]}
       />
-          </div>
-        </div>
-      </details>
     </Doc>
   );
 }

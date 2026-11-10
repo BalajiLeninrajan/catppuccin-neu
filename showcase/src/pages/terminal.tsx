@@ -22,9 +22,9 @@ export default function TerminalPage() {
   return (
     <Doc
       title="Terminal"
-      lede="A carved log surface in mono. It shares its radius, fill and type with the code block and the command."
+      lede="A carved log surface in mono."
     >
-      <Demo lead title="Log surface with caret" why="How the log scrolls and colors" classes="terminal / terminal .caret">
+      <Demo title="Log surface with caret" classes="terminal / terminal .caret">
         <div class="terminal" style="width:min(560px,100%);height:230px">
           <pre class="scroll-well" tabIndex={0} role="region" aria-label="Deploy log">
             {LOG}
@@ -34,13 +34,10 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        The <code class="cn-code-inline">&lt;pre&gt;</code> fills the surface,
-        wraps its text and scrolls down on overflow. Add{" "}
-        <code class="cn-code-inline">.scroll-well</code> so the scrollbar thumb
-        matches the dark ground.
+        Add <code class="cn-code-inline">.scroll-well</code> to the <code class="cn-code-inline">pre</code> so the scrollbar matches the dark ground.
       </p>
 
-      <Demo title="Accent-keyed caret" why="How to key the caret" classes="terminal  (caret reads --accent)">
+      <Demo title="Accent-keyed caret" classes="terminal  (caret reads --accent)">
         <div
           class="terminal"
           style={`${accentStyle(PAYMENTS.accent)};width:min(560px,100%)`}
@@ -53,62 +50,15 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        The blinking caret is a plain <code class="cn-code-inline">span.caret</code>{" "}
-        filled with <code class="cn-code-inline">var(--accent)</code>, mauve by
-        default. A terminal that belongs to one team takes that team's
-        accent. The blink stops under reduced motion.
-      </p>
-
-      <Demo title="Inside a panel" why="When to put a terminal in a panel" classes="panel > terminal">
-        <div class="panel" style="width:min(560px,100%)">
-          <div class="panel-header">
-            <h2>Deploy log</h2>
-            <span class="chip">
-              <span class="live-dot" aria-hidden="true" /> streaming
-            </span>
-          </div>
-          <div class="panel-body">
-            <div class="terminal" style="height:150px">
-              <pre class="scroll-well" tabIndex={0} role="region" aria-label="Streaming deploy log">
-                {LOG}
-                <span class="caret" />
-              </pre>
-            </div>
-          </div>
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        Put the terminal in a raised panel when the log is the point of the
-        page.
+        The caret takes <code class="cn-code-inline">--accent</code>, mauve by default.
       </p>
 
       <Props
-        title="Terminal classes"
+        title="Classes and tokens"
         rows={[
-          {
-            name: ".terminal",
-            values: "surface",
-            notes:
-              "The --cn-surface-sunken fill, --cn-well-ring over the full neu-inset, the card radius (12px), no border. Column flex. The pre stretches.",
-          },
-          {
-            name: ".terminal pre",
-            values: "content",
-            notes:
-              "Mono 500 13px/1.6 in --cn-fg-soft with ligatures off, --well-pad padding. Wraps; scrolls on overflow.",
-          },
-          {
-            name: ".terminal .caret",
-            values: "cursor",
-            default: "--accent: var(--mauve)",
-            notes: "6 by 14px block, accent fill, .75s step blink.",
-          },
-          {
-            name: ".scroll-well",
-            values: "on the pre",
-            notes: "Dark-well scrollbar-color when the log scrolls.",
-          },
+          { name: ".terminal", values: "surface", notes: "A carved well. The pre fills it, wraps and scrolls." },
+          { name: ".terminal .caret", values: "span", default: "--accent: var(--mauve)", notes: "A blinking block cursor." },
+          { name: ".scroll-well", values: "on the pre", notes: "The quiet scrollbar." },
         ]}
       />
 

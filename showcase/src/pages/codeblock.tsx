@@ -6,8 +6,6 @@ $ pnpm build
 dist/index.html   2.1 kB
 dist/assets/app.js  41.7 kB`;
 
-const WRAP_SNIPPET = `curl -s https://api.example.com/v1/workspaces/ws_8f2a91c4/exports?format=csv&range=2026-01..2026-06&include=invoices,seats,usage -H "Authorization: Bearer sk_live_51NxT..."`;
-
 const LONG_SNIPPET = `# deploy.log
 [10:41:02] build started
 [10:41:09] tsc: 0 errors
@@ -65,23 +63,20 @@ export default function CodeblockPage() {
   return (
     <Doc
       title="Code block"
-      lede="A carved well for snippets, in mono 500 13px on a 1.6 line height. It shares its radius, fill, carve and type with the terminal and the command."
+      lede="A carved well for snippets. It shares its fill and type with the terminal and the command."
     >
-      <Demo lead title="Code block" classes="codeblock > pre">
+      <Demo title="Code block" classes="codeblock > pre">
         <div class="codeblock" style="width:min(560px,100%)">
           <pre>{SHELL_SNIPPET}</pre>
         </div>
       </Demo>
 
-      <Demo title="With a copy control" why="How to wire the copy control" classes="codeblock > btn is-icon · .is-copied">
+      <Demo title="With a copy control" classes="codeblock > btn is-icon · .is-copied">
         <CopyableBlock />
       </Demo>
 
       <p class="cn-copy">
-        Put a <code class="cn-code-inline">.btn.is-icon</code> as a direct child. The
-        recipe pins it to the corner and pads the code clear of it. Copying is
-        one delegated listener. Hold <code class="cn-code-inline">.is-copied</code>{" "}
-        on the button for a moment after the copy and it turns green.
+        Put a <code class="cn-code-inline">.btn.is-icon</code> as a direct child. Hold <code class="cn-code-inline">.is-copied</code> on it for a moment after the copy.
       </p>
 
       <CodeBlock
@@ -97,7 +92,7 @@ export default function CodeblockPage() {
 });`}
       />
 
-      <Demo title="Numbered lines" why="Markup for numbered lines" classes="codeblock is-numbered">
+      <Demo title="Numbered lines" classes="codeblock is-numbered">
         <div class="codeblock is-numbered" style="width:min(560px,100%)">
           <pre>
             <span>$ pnpm install</span>
@@ -109,50 +104,21 @@ export default function CodeblockPage() {
       </Demo>
 
       <p class="cn-copy">
-        Add <code class="cn-code-inline">.is-numbered</code> and wrap each line in its
-        own element inside the <code class="cn-code-inline">pre</code>.
+        Add <code class="cn-code-inline">.is-numbered</code> and wrap each line in its own element inside the <code class="cn-code-inline">pre</code>.
       </p>
 
-      <Demo title="Syntax colors" why="Why ligatures are off" classes="codeblock + .tok-*">
+      <Demo title="Syntax colors" classes="codeblock + .tok-*">
         <div class="codeblock" style="width:min(560px,100%)">
           <pre><span class="tok-keyword">const</span> <span class="tok-fn">total</span> = seats * <span class="tok-number">12</span>;{"\n"}<span class="tok-keyword">if</span> (total &gt; <span class="tok-number">40</span>) notify(<span class="tok-string">"#billing"</span>); <span class="tok-comment">// monthly</span></pre>
         </div>
       </Demo>
 
       <p class="cn-copy">
-        Ligatures are off in every mono well and in{" "}
-        <code class="cn-code-inline">.cn-code</code>, so{" "}
-        <code class="cn-code-inline">=&gt;</code>, <code class="cn-code-inline">!=</code> and{" "}
-        <code class="cn-code-inline">&gt;=</code> stay two characters.
-      </p>
-
-      <Demo title="No ligatures" why="Where the token spans come from" classes="font-variant-ligatures: none">
-        <div class="codeblock" style="width:min(560px,100%)">
-          <pre><span class="tok-keyword">const</span> <span class="tok-fn">due</span> = (inv) =&gt; inv.days &gt;= <span class="tok-number">30</span> &amp;&amp; inv.status !== <span class="tok-string">"paid"</span>;</pre>
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        The five <code class="cn-code-inline">.tok-*</code> classes work in any code
-        block, numbered or not. Producing the spans is a tokenizer's job
-        (shiki, prism, or your build); the system only supplies the palette.
-      </p>
-
-      <Demo title="Long lines wrap" why="How long lines break" classes="codeblock > pre">
-        <div class="codeblock" style="width:min(560px,100%)">
-          <pre>{WRAP_SNIPPET}</pre>
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        The <code class="cn-code-inline">pre</code> sets{" "}
-        <code class="cn-code-inline">white-space: pre-wrap</code> and{" "}
-        <code class="cn-code-inline">overflow-wrap: anywhere</code>, so long commands
-        break at the well edge instead of forcing a horizontal scroll.
+        Producing the <code class="cn-code-inline">.tok-*</code> spans is a tokenizer's job. The system supplies the palette.
       </p>
 
       <Demo
-        title="Scrolling" why="How to cap and scroll a block"
+        title="Scrolling"
         classes="codeblock scroll-well  (max-height + overflow-y)"
       >
         <div
@@ -167,12 +133,7 @@ export default function CodeblockPage() {
       </Demo>
 
       <p class="cn-copy">
-        For long content, cap the well with a{" "}
-        <code class="cn-code-inline">max-height</code> and{" "}
-        <code class="cn-code-inline">overflow-y: auto</code>, and compose{" "}
-        <code class="cn-code-inline">.scroll-well</code> for the quiet scrollbar.
-        Give the scroller <code class="cn-code-inline">tabindex="0"</code>, a
-        region role and an aria-label, so a keyboard can scroll it.
+        Cap the well with a <code class="cn-code-inline">max-height</code> and <code class="cn-code-inline">overflow-y: auto</code>. Give the scroller <code class="cn-code-inline">tabindex="0"</code>, a region role and an <code class="cn-code-inline">aria-label</code>, so a keyboard can scroll it.
       </p>
 
       <CodeBlock
@@ -189,44 +150,13 @@ export default function CodeblockPage() {
       />
 
       <Props
-        title="Contract"
+        title="Classes"
         rows={[
-          {
-            name: ".codeblock",
-            notes:
-              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --cn-well-ring over --neu-inset. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
-          },
-          {
-            name: ".is-numbered",
-            values: "one element per line inside the pre",
-            notes: "A 3ch right-aligned gutter in --cn-fg-placeholder, so it scales with the font.",
-          },
-          {
-            name: ".tok-keyword / -string / -number / -fn / -comment",
-            values: "spans from your tokenizer",
-            notes: "blue / green / peach / mauve / --cn-fg-muted (subtext-0) italic.",
-          },
-          {
-            name: ".codeblock > .btn.is-icon",
-            values: "optional copy control",
-            notes:
-              "Pinned to the corner, 26px; the block pads right to clear it. Wire with the copy listener.",
-          },
-          {
-            name: ".codeblock > .btn.is-icon.is-copied",
-            values: "state on the copy control",
-            notes: "Turns the control green (--cn-success) while the consumer holds it.",
-          },
-          {
-            name: ".codeblock pre",
-            notes:
-              "Inherits the mono face, pre-wrap plus overflow-wrap: anywhere, zero margin.",
-          },
-          {
-            name: ".scroll-well",
-            notes:
-              "Composed for scrolling blocks. Pair with max-height and overflow-y: auto inline or in the consumer.",
-          },
+          { name: ".codeblock", values: "div > pre", notes: "A carved well in mono. Long lines wrap." },
+          { name: ".is-numbered", values: "one element per line inside the pre", notes: "A line number gutter." },
+          { name: ".tok-keyword / -string / -number / -fn / -comment", values: "spans from your tokenizer", notes: "Syntax colors." },
+          { name: ".codeblock > .btn.is-icon", values: "optional copy control", notes: "Pinned to the corner. .is-copied turns it green." },
+          { name: ".scroll-well", values: "on a capped block", notes: "The quiet scrollbar." },
         ]}
       />
     </Doc>

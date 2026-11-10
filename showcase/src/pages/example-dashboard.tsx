@@ -1,45 +1,17 @@
-/* ── Example: billing dashboard ────────────────────────────────────────────
-   A composed screen built only from package classes, no sc- chrome. It
-   follows the SPEC's Composition section: regions 48px apart, in reading
-   order. A split holds the title over its lede and the one primary, on the
-   title line, the key figures ruled on the page
-   ground, the invoice table as the lead panel, then the chart and the one
-   tilted aside on the page grid, 8 and 4, the chart first. The whole view runs at
-   cozy density, the SPEC's density for a desktop data tool. The aside
-   holds prose, a heading in the name role and a link; the supporting
-   figures sit on the ground under it as one list of divided rows, with no
-   panel of their own, one grid gap under the aside. The column packs to
-   the top, so any slack falls at its end.                                */
+/* Example: billing dashboard. A screen built only from package classes:
+   one primary, four stats, the invoice table and one tilted aside. */
 
 import { useState } from "preact/hooks";
 import type { JSX } from "preact";
-import { tabsKeydown } from "../lib/roving";
-import { Pager } from "../lib/pager";
-import { DangerGlyph, WarningGlyph, SuccessGlyph } from "../lib/glyphs";
+import { DangerGlyph, WarningGlyph, SuccessGlyph, PendingGlyph } from "../lib/glyphs";
 
 type Status = "paid" | "pending" | "due" | "overdue";
 
-/* The pending clock. The tag sizes it, 12px, in the word's ink. */
-const PendingClock = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 7v5l3 2" />
-  </svg>
-);
-
 const STATUS: Record<Status, { label: string; tone: string; Glyph: () => JSX.Element }> = {
-  /* The column holds a solid tag, so its other statuses stay quiet. A
-     settled invoice needs no attention: Paid is the quiet tag with its
-     check glyph. */
-  paid: { label: "Paid", tone: "is-quiet", Glyph: SuccessGlyph },
-  /* Pending is the row's in-progress state, so it takes the quiet tag
-     too: a plain muted label with no fill. */
-  pending: { label: "Pending", tone: "is-quiet", Glyph: PendingClock },
-  /* Due soon may sit above Overdue: status tags carry a word and a glyph,
-     so the SPEC exempts them from the warm-family adjacency rule. */
+  paid: { label: "Paid", tone: "cn-tone-green", Glyph: SuccessGlyph },
+  pending: { label: "Pending", tone: "", Glyph: PendingGlyph },
   due: { label: "Due soon", tone: "cn-tone-warning", Glyph: WarningGlyph },
-  /* Overdue is the view's one urgent status, so it takes the solid tag. */
-  overdue: { label: "Overdue", tone: "cn-tone-danger is-solid", Glyph: DangerGlyph },
+  overdue: { label: "Overdue", tone: "cn-tone-danger", Glyph: DangerGlyph },
 };
 
 interface Invoice {
@@ -62,11 +34,9 @@ const DAY = 864e5;
 const shortDate = (t: number) =>
   new Date(t).toLocaleDateString("en-US", { month: "short", day: "2-digit", timeZone: "UTC" });
 
-/* 42 invoices, one a day, newest first, on 14-day terms. Recent ones are
-   mostly open and older ones mostly paid; status follows from the due date,
-   so every tab and page is stable. One recent invoice is on 3-day terms
-   and unpaid, so the table's first page holds an Overdue row and the
-   view's one solid tag is on screen. */
+/* 42 invoices, one a day, newest first, on 14-day terms. Status follows
+   from the due date. One recent invoice is on 3-day terms and unpaid, so
+   the first page holds an Overdue row. */
 const SHORT_TERMS = 4;
 const INVOICES: Invoice[] = Array.from({ length: 42 }, (_, i) => {
   const issued = TODAY - i * DAY;
@@ -99,19 +69,6 @@ const VIEWS = [
 const PER_PAGE = 6;
 const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
-/* Collected by payment method over four months, in thousands of dollars. */
-const METHODS = ["Card", "Bank transfer", "Wallet"];
-const COLLECTED = [
-  { month: "Jun", values: [62.4, 38.1, 9.8] },
-  { month: "Jul", values: [70.2, 41.5, 12.6] },
-  { month: "Aug", values: [62.0, 43.1, 12.2] },
-  { month: "Sep", values: [74.5, 39.3, 13.1] },
-];
-/* The scale ends just above the largest value, 74.5, so the longest bar
-   reaches the end of its track. */
-const CHART_MAX = 75;
-const COLLECTED_TOTAL = COLLECTED.reduce((sum, row) => sum + row.values.reduce((a, b) => a + b, 0), 0);
-
 function InvoiceTable() {
   const [view, setView] = useState(0);
   const [page, setPage] = useState(1);
@@ -126,7 +83,7 @@ function InvoiceTable() {
   }
 
   return (
-    <section class="panel is-lead cn-morph" aria-labelledby="dash-invoices">
+    <section class="panel" aria-labelledby="dash-invoices">
       <div class="panel-header">
         <h2 id="dash-invoices">Invoices</h2>
         <div class="band-actions">
@@ -134,65 +91,61 @@ function InvoiceTable() {
         </div>
       </div>
       <div class="panel-body">
-        <div class="tabs" role="tablist" aria-label="Invoice status" onKeyDown={(e) => tabsKeydown(e, select)}>
+        <div class="segmented cn-fit" role="group" aria-label="Invoice status">
           {VIEWS.map((v, i) => (
-            <button
-              key={v.id}
-              type="button"
-              role="tab"
-              id={`dash-tab-${v.id}`}
-              aria-controls="dash-invoice-panel"
-              aria-selected={i === view ? "true" : "false"}
-              tabIndex={i === view ? 0 : -1}
-              onClick={() => select(i)}
-            >
+            <button key={v.id} type="button" aria-pressed={i === view ? "true" : "false"} onClick={() => select(i)}>
               {v.label}
             </button>
           ))}
         </div>
       </div>
-      <div role="tabpanel" id="dash-invoice-panel" aria-labelledby={`dash-tab-${VIEWS[view].id}`}>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th scope="col">Invoice</th>
-              <th scope="col">Team</th>
-              <th scope="col">Issued</th>
-              <th scope="col">Due</th>
-              <th scope="col">Status</th>
-              <th scope="col" class="is-num">Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {shown.map((inv) => {
-              const s = STATUS[inv.status];
-              return (
-                <tr key={inv.id}>
-                  <td class="cell-name">
-                    <strong>{inv.id}</strong>
-                    <small>{inv.customer}</small>
-                  </td>
-                  <td data-label="Team">{inv.team}</td>
-                  <td data-label="Issued">{inv.issued}</td>
-                  <td data-label="Due">{inv.due}</td>
-                  <td class="is-trail" data-label="Status">
-                    <span class={`tag ${s.tone}`}>
-                      <s.Glyph />
-                      {s.label}
-                    </span>
-                  </td>
-                  <td class="is-num is-trail" data-label="Amount"><strong>{money(inv.amount)}</strong></td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">Invoice</th>
+            <th scope="col">Team</th>
+            <th scope="col">Issued</th>
+            <th scope="col">Due</th>
+            <th scope="col">Status</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {shown.map((inv) => {
+            const s = STATUS[inv.status];
+            return (
+              <tr key={inv.id}>
+                <td class="cell-name">
+                  <strong>{inv.id}</strong>
+                  <small>{inv.customer}</small>
+                </td>
+                <td data-label="Team">{inv.team}</td>
+                <td data-label="Issued">{inv.issued}</td>
+                <td data-label="Due">{inv.due}</td>
+                <td data-label="Status">
+                  <span class={`tag ${s.tone}`}>
+                    <s.Glyph />
+                    {s.label}
+                  </span>
+                </td>
+                <td data-label="Amount" class="cn-tabular"><strong>{money(inv.amount)}</strong></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       <div class="panel-footer">
         <span class="cn-meta">
           {first} to {Math.min(page * PER_PAGE, rows.length)} of {rows.length}
         </span>
-        <Pager current={page} total={pages} label="Invoice pages" onPage={setPage} />
+        <div class="cn-row">
+          <button type="button" class="btn btn-ghost is-sm" disabled={page === 1} onClick={() => setPage(page - 1)}>
+            Previous
+          </button>
+          <button type="button" class="btn btn-ghost is-sm" disabled={page === pages} onClick={() => setPage(page + 1)}>
+            Next
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -200,39 +153,25 @@ function InvoiceTable() {
 
 export default function DashboardExample() {
   return (
-    <div class="cn-stack cn-gap-48 page-enter" data-density="cozy">
-      {/* The header is a split aligned to the top. Its first child is a
-          stack of the title and the lede, and the primary is its second
-          child. On a wide screen the primary sits on the title line. When
-          the row wraps on a phone the primary lands after the lede, not
-          between the title and the copy.
-          The title is the full display size, so the 28px lead band title
-          below never reads as a second headline. It has no mauve em: the
-          primary beside it is the top band's one mauve mark, so the hero
-          stat below is text-colored too.
-          The chart's three series are teal, yellow and blue: mauve is the
-          sixth series, so no bar shares the primary's color. */}
-      <header class="cn-split cn-top">
+    <div class="cn-stack cn-gap-32 page-enter">
+      {/* The primary comes after the title and lede, so it wraps below them on a phone. */}
+      <header class="cn-row cn-between cn-top cn-wrap cn-gap-24">
         <div class="cn-stack cn-gap-24">
-          <h1 class="cn-display">
-            Billing, September
-          </h1>
+          <h1 class="cn-display">Billing, September</h1>
           <p class="cn-lede cn-m-0">
             {INVOICES.length} invoices from the last six weeks, across 6 teams.
             Collections settle nightly at 02:00 UTC, so these figures are from
             this morning's run.
           </p>
         </div>
-        <button type="button" class="btn btn-primary cn-morph">New invoice</button>
+        <button type="button" class="btn btn-primary">New invoice</button>
       </header>
 
-      {/* The headline figure is a large stat in the value-lg role, so it
-          outranks the 28px lead band title below it. It is text-colored, not mauve: the
-          primary sits in the same top band, and mauve stays on the primary. */}
-      <section class="stat-grid is-ruled" aria-label="Key figures">
+      <section class="cn-grid-4" aria-label="Key figures">
+        {/* Text-colored, so mauve stays on the primary. */}
         <div class="stat is-lg">
           <span>Collected this month</span>
-          <strong class="cn-fg">$126,940</strong>
+          <strong class="cn-text-text">$126,940</strong>
           <p>+8.2% on August</p>
         </div>
         <div class="stat">
@@ -240,15 +179,14 @@ export default function DashboardExample() {
           <strong>{whole(total(OPEN))}</strong>
           <p>{OPEN.length} open invoices</p>
         </div>
-        {/* The one figure that needs action carries the danger signal; the
-            other three stay neutral. Its tag is the washed one: the solid
-            tag stays in the table's status column, out of the top band,
-            where a solid red would sit beside the mauve primary. */}
-        <div class="stat cn-tone-danger">
+        <div class="stat">
           <span>Past due</span>
           <strong>{whole(total(LATE))}</strong>
           <p>
-            <span class="tag cn-tone-danger">{LATE.length} overdue</span>
+            <span class="tag cn-tone-danger">
+              <DangerGlyph />
+              {LATE.length} overdue
+            </span>
           </p>
         </div>
         <div class="stat">
@@ -260,48 +198,7 @@ export default function DashboardExample() {
 
       <InvoiceTable />
 
-      <div class="cn-grid-12">
-        <section class="panel cn-span-8" aria-labelledby="dash-chart">
-          <div class="panel-header">
-            <h2 id="dash-chart">Collected by method</h2>
-            <span class="cn-meta">Last 4 months</span>
-          </div>
-          <figure class="panel-body cn-stack cn-gap-16 cn-m-0">
-            <figcaption class="cn-sr-only">Collected by payment method, in thousands of dollars</figcaption>
-            <ul class="legend">
-              {METHODS.map((m, i) => (
-                <li key={m} class="legend-item" style={`--series:var(--cn-series-${i + 1})`}>
-                  {m}
-                </li>
-              ))}
-            </ul>
-            <div class="bar-chart">
-              {COLLECTED.map((row) => [
-                <span key={`${row.month}-m`}>{row.month}</span>,
-                <div key={`${row.month}-b`} class="bar-group">
-                  {row.values.map((v, i) => (
-                    <div
-                      key={METHODS[i]}
-                      class="bar"
-                      style={`--value:${((v / CHART_MAX) * 100).toFixed(1)}%;--series:var(--cn-series-${i + 1})`}
-                    >
-                      ${v.toFixed(1)}k
-                      <span class="cn-sr-only"> {METHODS[i]}</span>
-                    </div>
-                  ))}
-                </div>,
-              ])}
-            </div>
-          </figure>
-          <div class="panel-footer">
-            <span class="cn-meta">Total, Jun to Sep</span>
-            <strong class="cn-name">${COLLECTED_TOTAL.toFixed(1)}k</strong>
-          </div>
-        </section>
-        {/* The stack packs to the top: the figures sit one grid gap under
-            the aside, and any slack falls at the end of the column. No
-            panel stretches. */}
-        <div class="cn-stack cn-gap-24 cn-span-4">
+      <div class="cn-grid-2">
         <aside class="panel is-tilted" aria-labelledby="dash-summary">
           <div class="panel-body cn-stack cn-gap-12">
             <h2 id="dash-summary" class="cn-name cn-m-0">Where September stands</h2>
@@ -315,38 +212,31 @@ export default function DashboardExample() {
             </a>
           </div>
         </aside>
-        {/* Supporting figures sit on the ground, not in a third panel, so
-            the row reads in three levels: the chart panel, the tilted
-            aside, then these. The heading takes the name role, 14px at 600:
-            the SPEC puts ground and tilted-aside headings there, under the
-            20px panel titles. The figures take one form, divided rows:
-            the ruled stat grid stays unique to the top band. */}
         <section class="cn-stack cn-gap-8" aria-labelledby="dash-refunds">
           <h2 id="dash-refunds" class="cn-name cn-m-0">Payments this month</h2>
-            <div class="cn-divide">
-              <div class="stat is-inline">
-                <span>Refunded in 4 payments</span>
-                <b>$1,120</b>
-              </div>
-              <div class="stat is-inline">
-                <span>Failed, $2,340 to retry</span>
-                <b>3</b>
-              </div>
-              <div class="stat is-inline">
-                <span>Paid in full</span>
-                <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>
-              </div>
-              <div class="stat is-inline">
-                <span>Partially paid</span>
-                <b>2 of {INVOICES.length}</b>
-              </div>
-              <div class="stat is-inline">
-                <span>Disputed</span>
-                <b>1 of {INVOICES.length}</b>
-              </div>
+          <div class="cn-divide">
+            <div class="stat is-inline">
+              <span>Refunded in 4 payments</span>
+              <b>$1,120</b>
             </div>
+            <div class="stat is-inline">
+              <span>Failed, $2,340 to retry</span>
+              <b>3</b>
+            </div>
+            <div class="stat is-inline">
+              <span>Paid in full</span>
+              <b>{INVOICES.filter((inv) => inv.status === "paid").length} of {INVOICES.length}</b>
+            </div>
+            <div class="stat is-inline">
+              <span>Partially paid</span>
+              <b>2 of {INVOICES.length}</b>
+            </div>
+            <div class="stat is-inline">
+              <span>Disputed</span>
+              <b>1 of {INVOICES.length}</b>
+            </div>
+          </div>
         </section>
-        </div>
       </div>
     </div>
   );

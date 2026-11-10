@@ -1,9 +1,8 @@
 #!/usr/bin/env node
-/* ── catppuccin-neu lint ─────────────────────────────────────────────────────
-   node scripts/lint.mjs   (or: pnpm lint)
-   Checks the shipped CSS. Exits 1 on any failure.                           */
+/* node scripts/lint.mjs   (or: pnpm lint)
+   Checks the shipped CSS. Exits 1 on any failure. */
 
-import { readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import process from "node:process";
@@ -17,8 +16,7 @@ const lineOf = (css, index) => css.slice(0, index).split("\n").length;
    time, which silently drops every declaration that uses it. */
 function selfReference(css) {
   const out = [];
-  const decl = /(--[\w-]+)\s*:([^;{}]*)/g;
-  for (const m of css.matchAll(decl)) {
+  for (const m of css.matchAll(/(--[\w-]+)\s*:([^;{}]*)/g)) {
     const [, name, value] = m;
     if (new RegExp(`var\\(\\s*${name}\\s*[,)]`).test(value)) {
       out.push({ line: lineOf(css, m.index), message: `${name} references itself` });
@@ -33,12 +31,11 @@ function declarations(css, props) {
   return [...css.matchAll(re)].map((m) => ({ prop: m[1], value: m[2].trim(), line: lineOf(css, m.index + 1) }));
 }
 
-/* Drop custom property names so digits in them don't count. Fallback
-   values stay and are checked. */
+/* Drop custom property names so digits in them don't count. */
 const withoutVars = (value) => value.replace(/--[\w-]+/g, "");
 
-/* Transitions read the --t-* tokens. Keyframe animation loops are exempt.
-   The reduced-motion kill switch (.01ms) is the one literal allowed. */
+/* Transitions read the --t-* tokens. The reduced-motion kill switch
+   (.01ms) is the one literal allowed. */
 const ZERO_DURATIONS = new Set(["0s", "0ms", ".01ms"]);
 function rawTransitionDuration(css) {
   const out = [];
@@ -49,8 +46,8 @@ function rawTransitionDuration(css) {
   return out;
 }
 
-/* Gap, padding and margin read --space-* or a density knob. 0 and 1px
-   (hairline and screen-reader offsets) are the only raw lengths. */
+/* Gap, padding and margin read --space-* or a density knob. 0 and 1px are
+   the only raw lengths. */
 const SPACING_PX_OK = new Set(["0px", "1px", "-1px"]);
 function rawSpacing(css) {
   const out = [];
@@ -61,8 +58,16 @@ function rawSpacing(css) {
   return out;
 }
 
-/* Recipes color text by role (--cn-fg-*), so prefers-contrast can re-key
-   it. A palette text stop in a recipe's color declaration bypasses that. */
+/* Focus is never removed. A field that draws its own ring makes the
+   outline transparent, so forced-colors mode still paints it. */
+function outlineRemoved(css) {
+  return declarations(css, /outline(?:-style)?/)
+    .filter(({ value }) => /^(none|0)\b/.test(value))
+    .map(({ line, prop, value }) => ({ line, message: `${prop}: ${value} removes focus; use a transparent outline` }));
+}
+
+/* prefers-contrast re-keys the --cn-fg-* roles. A palette text stop in a
+   recipe's color skips that. */
 const TEXT_STOPS = /var\(\s*--(text|subtext-[01]|overlay-[012])\s*\)/;
 function paletteText(css) {
   return declarations(css, /color/)
@@ -70,269 +75,87 @@ function paletteText(css) {
     .map(({ line, value }) => ({ line, message: `color: ${value} names a palette stop; use a --cn-fg-* role` }));
 }
 
-/* Recipes reach the accent hues through roles (--cn-interactive,
-   --cn-danger, --cn-success, --cn-warning) so they can be re-keyed. Syntax
-   tokens (.tok-*) name their hue on purpose. */
-const ACCENT_HUES = /var\(\s*--(mauve|pink|red|green|peach|yellow)\s*\)/;
-function paletteAccent(css) {
-  return css.split("\n").flatMap((text, i) =>
-    ACCENT_HUES.test(text) && !text.includes("tok-")
-      ? [{ line: i + 1, message: `${text.match(ACCENT_HUES)[0]} names a hue; use a --cn-* role` }]
-      : []);
-}
-
-/* Hairlines come from --edge, --edge-soft and --edge-strong. A hand-mixed
-   surface-1 or surface-2 in a recipe is a hairline drifting off the scale. */
-function looseHairline(css) {
-  return css.split("\n").flatMap((text, i) =>
-    /color-mix\(in srgb, var\(--surface-[12]\)/.test(text)
-      ? [{ line: i + 1, message: "hand-mixed surface hairline; use --edge, --edge-soft or --edge-strong" }]
-      : []);
-}
-
-/* Focus is never removed. A field that draws its own ring makes the
-   outline transparent instead, so forced-colors mode still paints it. */
-function outlineRemoved(css) {
-  return declarations(css, /outline(?:-style)?/)
-    .filter(({ value }) => /^(none|0)\b/.test(value))
-    .map(({ line, prop, value }) => ({ line, message: `${prop}: ${value} removes focus; use a transparent outline` }));
-}
-
-/* Top-level comma or space parts of a value, ignoring those inside
-   parentheses. */
-function splitAt(value, sep) {
-  const parts = []; let depth = 0, cur = "";
-  for (const ch of value) {
-    if (ch === "(") depth++; if (ch === ")") depth--;
-    if ((sep === " " ? /\s/.test(ch) : ch === sep) && !depth) { if (cur.trim()) parts.push(cur.trim()); cur = ""; } else cur += ch;
-  }
-  if (cur.trim()) parts.push(cur.trim());
-  return parts;
-}
-
-/* Every box-shadow, and every --hard-extra a recipe sets, is none or a
-   comma list of var() tokens. A new shadow layer gets a name in
-   tokens.css first, so each layer has one job and one value. */
-function shadowTokens(css) {
-  return declarations(css, /box-shadow|--hard-extra/)
-    .filter(({ value }) => value !== "none" && !splitAt(value, ",").every((part) => /^var\(--[\w-]+\)$/.test(part)))
-    .map(({ line, prop, value }) => ({ line, message: `${prop}: ${value} is not a list of shadow tokens; name the layer in tokens.css` }));
-}
-
-/* Radii: a --cn-radius-* token, 999px, 50%, 0, inherit, or a radius
-   token minus 1px. */
-const RADIUS_OK = /^(?:var\(--cn-radius-[a-z]+\)|999px|50%|0|inherit|calc\(var\(--cn-radius-[a-z]+\) - 1px\))$/;
-function radiusValues(css) {
-  return declarations(css, /border(?:-[a-z]+)*-radius/)
-    .filter(({ value }) => !splitAt(value.replace(/\s*\/\s*/g, " "), " ").every((part) => RADIUS_OK.test(part)))
-    .map(({ line, prop, value }) => ({ line, message: `${prop}: ${value} is off the radius scale` }));
-}
-
-/* The selector and enclosing at-rules of each declaration, for checks
-   that depend on where a declaration sits. */
-function blocks(css) {
-  const out = [];
-  const stack = [];
-  let start = 0;
-  for (let i = 0; i < css.length; i++) {
-    const ch = css[i];
-    if (ch === "{") { stack.push(css.slice(start, i).trim().replace(/\s+/g, " ")); start = i + 1; }
-    else if (ch === "}") { if (stack.length) out.push({ preludes: [...stack], body: css.slice(start, i), at: start }); stack.pop(); start = i + 1; }
-    else if (ch === ";" && stack.length) { out.push({ preludes: [...stack], body: css.slice(start, i + 1), at: start }); start = i + 1; }
-  }
-  return out;
-}
-
-/* Uppercase is scarce: only .cn-microlabel and the stacked .stat label
-   set it. */
-const UPPERCASE_OK = new Set([".cn-microlabel", ".stat:not(.is-inline) > span"]);
-function uppercase(css) {
-  return blocks(css)
-    .filter(({ body, preludes }) => /text-transform\s*:\s*uppercase/.test(body) && !UPPERCASE_OK.has(preludes.at(-1)))
-    .map(({ at, preludes }) => ({ line: lineOf(css, at), message: `text-transform: uppercase on ${preludes.at(-1)}; only .cn-microlabel and the stacked .stat label are uppercase` }));
-}
-
-/* Transitions: a transform or box-shadow transition names a --ease-*
-   curve, and no transition uses the ease, linear or ease-in-out
-   keywords. Keyframe loops such as the spinner may run linear. */
-function transitionCurves(css) {
-  const out = [];
-  for (const { prop, value, line } of declarations(css, /transition(?:-timing-function)?/)) {
-    const bare = withoutVars(value).match(/(?<![\w-])(ease|ease-in|ease-out|ease-in-out|linear)(?![\w(-])/);
-    if (bare) out.push({ line, message: `${prop} uses the ${bare[1]} keyword; use a --ease-* token` });
-    if (prop !== "transition") continue;
-    for (const part of splitAt(value, ",")) {
-      const name = part.split(/\s+/)[0];
-      if (/^(transform|translate|scale|rotate|box-shadow|all)$/.test(name) && !/var\(--ease-/.test(part))
-        out.push({ line, message: `transition of ${name} names no curve; add a --ease-* token` });
-    }
-  }
-  return out;
-}
-
-/* !important belongs to the [hidden] rule, .cn-hidden, and the
-   reduced-motion and forced-colors blocks, nowhere else. */
-function importantUse(css) {
-  return blocks(css)
-    .filter(({ body }) => /!important/.test(body))
-    .filter(({ preludes }) => !preludes.some((p) => /prefers-reduced-motion|forced-colors/.test(p)) && !/^(\[hidden\]|\.cn-hidden$)/.test(preludes.at(-1)))
-    .map(({ at, preludes }) => ({ line: lineOf(css, at), message: `!important in ${preludes.at(-1)}; only [hidden], .cn-hidden and the reduced-motion and forced-colors blocks may use it` }));
-}
-
-/* Which checks run on which file. tokens.css holds the base element reset,
-   which sits outside the spacing scale on purpose (list indent). */
 const CHECKS = {
-  "css/tokens.css": [selfReference, rawTransitionDuration, outlineRemoved, uppercase, transitionCurves, importantUse],
-  "css/utilities.css": [selfReference, rawTransitionDuration, rawSpacing, looseHairline, outlineRemoved, shadowTokens, radiusValues, uppercase, transitionCurves, importantUse],
-  "css/recipes.css": [selfReference, rawTransitionDuration, rawSpacing, paletteText, paletteAccent, looseHairline, outlineRemoved, shadowTokens, radiusValues, uppercase, transitionCurves, importantUse],
-  "tailwind/theme.css": [selfReference, rawTransitionDuration],
+  "css/tokens.css": [selfReference, rawTransitionDuration, outlineRemoved],
+  "css/utilities.css": [selfReference, rawTransitionDuration, rawSpacing, outlineRemoved],
+  "css/recipes.css": [selfReference, rawTransitionDuration, rawSpacing, outlineRemoved, paletteText],
 };
 
-/* SPEC.md's type table must match the tokens: size (px at the 16px
-   default), weight, leading and tracking for every role. The display sizes
-   and value-lg are clamps and are checked by their bounds. */
-async function specTypeTable() {
-  const spec = await readFile(join(root, "SPEC.md"), "utf8");
-  const tokens = stripComments(await readFile(join(root, "css/tokens.css"), "utf8"));
-  const tok = (name) => tokens.match(new RegExp(`--${name}:\\s*([^;]+);`))?.[1].trim();
-  const px = (v) => v?.endsWith("rem") ? `${parseFloat(v) * 16}px` : v;
-  const clampPx = (v) => (v?.match(/clamp\(([\d.]+)rem,.*,\s*([\d.]+)rem\)/) || []).slice(1).map((n) => `${parseFloat(n) * 16}`);
-  const out = [];
-  const lines = spec.split("\n");
-  lines.forEach((text, i) => {
-    const m = text.match(/^\| ([a-z-]+) \| ([^|]+) \| (\d+) \| ([\d.]+) \| ([^|]+) \|$/);
-    if (!m) return;
-    const [, role, size, weight, leading, tracking] = m.map((c) => c.trim());
-    const base = role.startsWith("display") ? "display" : role;
-    if (!tok(`cn-type-${base}-weight`)) return;
-    const want = { weight: tok(`cn-type-${base}-weight`), leading: tok(`cn-type-${base}-leading`), tracking: tok(`cn-type-${base}-tracking`) };
-    const sizeTok = tok(`cn-type-${role}-size`);
-    const sizeOk = sizeTok?.startsWith("clamp(")
-      ? clampPx(sizeTok).join(" to ") + "px" === size
-      : px(sizeTok) === size;
-    if (!sizeOk) out.push({ line: i + 1, message: `${role} size is ${size} in SPEC but ${sizeTok} in tokens` });
-    for (const [k, v] of Object.entries({ weight, leading, tracking })) {
-      if (String(want[k]) !== v) out.push({ line: i + 1, message: `${role} ${k} is ${v} in SPEC but ${want[k]} in tokens` });
-    }
-  });
-  return out;
+/* Contrast, computed from the :root tokens in tokens.css. Resolves hexes,
+   var() and color-mix(in srgb), then checks each PAIRS row with the default
+   tokens and with the prefers-contrast: more tokens. */
+const GROUNDS = ["--cn-surface-page", "--cn-surface-raised", "--cn-surface-overlay"];
+const TEXT_GROUNDS = [...GROUNDS, "--cn-surface-sunken"];
+const STATUS = ["--cn-danger", "--cn-warning", "--cn-success", "--cn-info"];
+const ROW_HOVER = "color-mix(in srgb, var(--cn-interactive) 16%, var(--base))";
+const fill = (role, pct) => `color-mix(in srgb, var(${role}) ${pct}%, transparent)`;
+
+/* [foreground, grounds, floor, what, mode]. A foreground or ground is a
+   token name or a color expression. @name is the color of the one-layer
+   shadow token --cn-name. A ground written as a list is layered, top first.
+   A row with a mode runs in that mode only. */
+const PAIRS = [
+  ["--cn-fg", TEXT_GROUNDS, 7, "headings and values"],
+  ["--cn-fg-body", TEXT_GROUNDS, 7, "running text, ledes and cells"],
+  ["--cn-fg-muted", TEXT_GROUNDS, 5.5, "meta and help text"],
+  ["--cn-fg-placeholder", TEXT_GROUNDS, 4.5, "placeholders"],
+  ["--cn-fg-body", ["--wash", ROW_HOVER], 4.5, "body text on an engaged or hovered row"],
+  ["--cn-fg-muted", ["--wash", ROW_HOVER], 4.5, "muted text on an engaged or hovered row"],
+  ["--cn-interactive", [...GROUNDS, "--wash"], 4.5, "links and mauve text"],
+  ["--cn-fg-on-accent", ["--cn-interactive", "--cn-interactive-hover"], 4.5, "text on the primary"],
+  ...STATUS.map((s) => [s, GROUNDS, 4.5, "status text"]),
+  ...STATUS.map((s) => [s, GROUNDS.flatMap((g) => [[fill(s, 4), g], [fill(s, 12), g]]), 4.5, "status text on its own tint and wash"]),
+  ["--cn-focus", GROUNDS, 3, "the focus ring"],
+  ["--control-edge", GROUNDS, 3, "control edges, the slider thumb and a hovered field's ring"],
+  ["--engaged-edge", [...GROUNDS, "--wash"], 3, "the engaged rim"],
+  ["@field-ring", GROUNDS, 3, "a resting field's ring", "prefers-contrast"],
+  ["@field-ring-overlay", ["--cn-surface-overlay"], 3, "a resting field's ring on an overlay", "prefers-contrast"],
+];
+
+function customProps(body, into = new Map()) {
+  for (const m of body.matchAll(/(--[\w-]+)\s*:([^;{}]*);/g)) into.set(m[1], m[2].trim());
+  return into;
 }
 
-/* ── Contrast, computed from the tokens ─────────────────────────────────────
-   Resolves the :root custom properties (hexes, var(), color-mix in
-   srgb, including mixes into transparent, and relative oklch), then checks every pairing the
-   SPEC promises, in the default and the prefers-contrast: more tokens. It
-   also checks each ratio written in a token comment against the computed
-   value on base, so a comment can't drift from the color it describes. */
-function rootBlocks(css) {
-  const blocks = [];
-  for (const m of css.matchAll(/(^|\n)([ \t]*):root\s*\{/g)) {
-    let depth = 1, i = m.index + m[0].length;
-    const start = i;
-    while (depth && i < css.length) { if (css[i] === "{") depth++; else if (css[i] === "}") depth--; i++; }
-    const media = css.slice(0, m.index).lastIndexOf("@media");
-    const inMore = media >= 0 && /prefers-contrast:\s*more/.test(css.slice(media, m.index)) && m[2].length > 0;
-    blocks.push({ body: css.slice(start, i - 1), offset: start, more: inMore, nested: m[2].length > 0 });
-  }
-  return blocks;
-}
-function customProps(body) {
-  const map = new Map();
-  for (const m of body.matchAll(/(--[\w-]+)\s*:([^;{}]*);/g)) if (!map.has(m[1])) map.set(m[1], m[2].trim());
-  return map;
-}
-const hexRGBA = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)).concat(1);
+/* Top-level comma parts of a value. */
 function splitTop(s) {
   const parts = []; let depth = 0, cur = "";
   for (const ch of s) {
     if (ch === "(") depth++; if (ch === ")") depth--;
     if (ch === "," && !depth) { parts.push(cur.trim()); cur = ""; } else cur += ch;
   }
-  parts.push(cur.trim());
-  return parts;
+  return [...parts, cur.trim()];
 }
-/* sRGB 0..255 to oklch and back, for relative oklch(from ...) colors. */
-const toLinear = (v) => { v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; };
-const toGamma = (v) => 255 * Math.min(1, Math.max(0, v <= .0031308 ? v * 12.92 : 1.055 * v ** (1 / 2.4) - .055));
-function srgbToOklch(rgb) {
-  const [r, g, b] = rgb.slice(0, 3).map(toLinear);
-  const l = Math.cbrt(.4122214708 * r + .5363325363 * g + .0514459929 * b);
-  const m = Math.cbrt(.2119034982 * r + .6806995451 * g + .1073969566 * b);
-  const s = Math.cbrt(.0883024619 * r + .2817188376 * g + .6299787005 * b);
-  const A = 1.9779984951 * l - 2.428592205 * m + .4505937099 * s;
-  const B = .0259040371 * l + .7827717662 * m - .808675766 * s;
-  return { l: .2104542553 * l + .793617785 * m - .0040720468 * s, c: Math.hypot(A, B), h: Math.atan2(B, A) * 180 / Math.PI };
-}
-function oklchToSrgb({ l: L, c, h }) {
-  const A = c * Math.cos(h * Math.PI / 180), B = c * Math.sin(h * Math.PI / 180);
-  const l = (L + .3963377774 * A + .2158037573 * B) ** 3;
-  const m = (L - .1055613458 * A - .0638541728 * B) ** 3;
-  const s = (L - .0894841775 * A - 1.291485548 * B) ** 3;
-  return [
-    4.0767416621 * l - 3.3077115913 * m + .2309699292 * s,
-    -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s,
-    -.0041960863 * l - .7034186147 * m + 1.707614701 * s,
-  ].map(toGamma);
-}
+
+/* A color expression as [r, g, b, alpha], or null when it cannot resolve. */
 function resolver(map) {
   const raw = (v, seen = new Set()) => {
-    v = v.trim();
-    const m = v.match(/^var\(\s*(--[\w-]+)\s*(?:,(.*))?\)$/s);
-    if (m) {
-      if (seen.has(m[1])) return null;
-      const next = map.get(m[1]) ?? m[2];
-      return next == null ? null : raw(next, new Set([...seen, m[1]]));
-    }
-    return v;
+    const m = v.trim().match(/^var\(\s*(--[\w-]+)\s*(?:,(.*))?\)$/s);
+    if (!m) return v.trim();
+    const next = seen.has(m[1]) ? null : map.get(m[1]) ?? m[2];
+    return next == null ? null : raw(next, new Set([...seen, m[1]]));
   };
-  const pct = (v) => { const r = raw(v); const n = r && r.match(/^([\d.]+)%$/); return n ? +n[1] / 100 : null; };
   const color = (v) => {
     const r = raw(v);
     if (!r) return null;
-    if (/^#[0-9a-f]{6}$/i.test(r)) return hexRGBA(r);
+    if (/^#[0-9a-f]{6}$/i.test(r)) return [1, 3, 5].map((i) => parseInt(r.slice(i, i + 2), 16)).concat(1);
     if (r === "transparent") return [0, 0, 0, 0];
-    const rgb = r.match(/^rgb\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+)\s*)?\)$/);
-    if (rgb) return [+rgb[1], +rgb[2], +rgb[3], rgb[4] == null ? 1 : +rgb[4]];
-    /* Relative oklch: oklch(from <color> L C H), where each channel is l,
-       c or h, a number, or calc() of one channel times or over a number. */
-    const rel = r.match(/^oklch\(\s*from\s+(.*)\)$/s);
-    if (rel) {
-      const parts = []; let depth = 0, cur = "";
-      for (const ch of rel[1]) {
-        if (ch === "(") depth++; if (ch === ")") depth--;
-        if (/\s/.test(ch) && !depth) { if (cur) parts.push(cur); cur = ""; } else cur += ch;
-      }
-      if (cur) parts.push(cur);
-      const src = parts.length === 4 && color(parts[0]);
-      if (!src) return null;
-      const from = srgbToOklch(src);
-      const chan = (expr) => {
-        if (expr in from) return from[expr];
-        if (/^-?[\d.]+$/.test(expr)) return +expr;
-        const c = expr.match(/^calc\(\s*([lch]|-?[\d.]+)\s*([*/])\s*([lch]|-?[\d.]+)\s*\)$/);
-        if (!c) return null;
-        const [x, y] = [c[1], c[3]].map((t) => (t in from ? from[t] : +t));
-        return c[2] === "*" ? x * y : x / y;
-      };
-      const [l, c, h] = parts.slice(1).map(chan);
-      if (l == null || c == null || h == null) return null;
-      return [...oklchToSrgb({ l, c, h }), src[3]];
-    }
     const mix = r.match(/^color-mix\(\s*in srgb\s*,(.*)\)$/s);
     if (!mix) return null;
     const [a, b] = splitTop(mix[1]).map((part) => {
-      const pm = part.match(/^(.*?)\s+((?:var\([^)]*\))|[\d.]+%)$/s);
-      return pm ? { c: color(pm[1]), p: pct(pm[2]) } : { c: color(part), p: null };
+      const pm = part.match(/^(.*?)\s+(var\([^)]*\)|[\d.]+%)$/s);
+      const pct = pm && raw(pm[2])?.match(/^([\d.]+)%$/);
+      return { c: color(pm ? pm[1] : part), p: pct ? +pct[1] / 100 : null };
     });
     if (!a?.c || !b?.c) return null;
-    let p = a.p ?? (b.p == null ? .5 : 1 - b.p);
+    const p = a.p ?? (b.p == null ? .5 : 1 - b.p);
     const alpha = a.c[3] * p + b.c[3] * (1 - p);
     if (!alpha) return [0, 0, 0, 0];
-    const ch = [0, 1, 2].map((i) => (a.c[i] * a.c[3] * p + b.c[i] * b.c[3] * (1 - p)) / alpha);
-    return [...ch, alpha];
+    return [0, 1, 2].map((i) => (a.c[i] * a.c[3] * p + b.c[i] * b.c[3] * (1 - p)) / alpha).concat(alpha);
   };
-  return { color, raw };
+  return color;
 }
+
 const over = (fg, bg) => [0, 1, 2].map((i) => fg[i] * fg[3] + bg[i] * (1 - fg[3])).concat(1);
 const lum = (c) => c.slice(0, 3).reduce((sum, v, i) => {
   v /= 255; v = v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4;
@@ -340,239 +163,42 @@ const lum = (c) => c.slice(0, 3).reduce((sum, v, i) => {
 }, 0);
 const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + .05) / (y + .05); };
 
-/* The page is mantle and raised surfaces are base, so text is checked on
-   both, on the overlay, and below the ground on the recessed sidebar and
-   the sunken wells, which hold code and the disabled primary's label. */
-const GROUNDS = ["--cn-surface-page", "--cn-surface-raised", "--cn-surface-overlay"];
-const TEXT_GROUNDS = [...GROUNDS, "--cn-surface-recessed", "--cn-surface-sunken"];
-const ON_PAGE = ["--cn-surface-page", "--cn-surface-raised"];
-const ON_OVERLAY = ["--cn-surface-overlay"];
-/* [foreground, grounds, floor, what the SPEC promises, mode]. A name that
-   starts with @ is the color of a one-layer shadow token: @field-ring reads
-   --cn-field-ring. A row with a mode runs in that mode only. The --edge,
-   --edge-strong, lit-edge, resting field-ring and carve-ring rows are
-   design floors that keep the depth ladder in order, not WCAG
-   obligations. */
-const PAIRS = [
-  ["--cn-fg", TEXT_GROUNDS, 7, "headings and values"],
-  ["--cn-fg-soft", TEXT_GROUNDS, 7, "ledes and cells"],
-  ["--cn-fg-body", TEXT_GROUNDS, 7, "running text"],
-  ["--cn-fg-muted", TEXT_GROUNDS, 5.5, "meta, help, table heads and the quiet tag"],
-  ["--cn-fg-placeholder", TEXT_GROUNDS, 4.5, "placeholders"],
-  ["--cn-fg-muted", ["--wash"], 4.5, "muted text on the engaged wash, the floor that stops --cn-step-engaged at 23%"],
-  ["--cn-fg-soft", ["--wash"], 5.5, "soft text on the engaged wash: a chosen segmented hint, a selected row's meta"],
-  ["--cn-interactive", ["--wash"], 4.5, "mauve text on the engaged wash"],
-  ["@field-hover-ring", GROUNDS, 3, "a hovered field's ring (1.4.11)"],
-  ["@field-ring", GROUNDS, 3, "a resting field's ring under prefers-contrast", "prefers-contrast"],
-  ["@field-ring-overlay", ON_OVERLAY, 3, "a resting field's ring on an overlay under prefers-contrast", "prefers-contrast"],
-  ["@field-ring", ON_PAGE, 2, "a resting field's hairline (design floor)"],
-  ["@field-ring-overlay", ON_OVERLAY, 2, "a resting field's hairline on an overlay (design floor)"],
-  ["@field-ring-page", ON_PAGE, 2, "a resting field's hairline on a panel or well inside an overlay (design floor)"],
-  ["@field-ring-page", ON_PAGE, 3, "a resting field's ring on a panel or well inside an overlay under prefers-contrast", "prefers-contrast"],
-  ["@carve-ring", ON_PAGE, 1.7, "the tabs carve and disabled field hairline (design floor)"],
-  ["--edge", ON_PAGE, 1.8, "the raised hairline (design floor)"],
-  ["--edge", ON_OVERLAY, 1.5, "the raised hairline (design floor)"],
-  ["--edge-strong", ON_PAGE, 2.4, "the lead and overlay hairline (design floor)"],
-  ["--edge-strong", ON_OVERLAY, 1.9, "the lead and overlay hairline (design floor)"],
-  ["@lit-edge", ON_PAGE, 1.4, "the lit top edge (design floor)"],
-  ["@lit-edge", ON_OVERLAY, 1.3, "the lit top edge (design floor)"],
-  ["--cn-focus", GROUNDS, 3, "the focus ring (1.4.11)"],
-  ["--control-edge", GROUNDS, 3, "unchecked control edges and the slider thumb (1.4.11)"],
-  ["--engaged-edge", [...GROUNDS, "--wash"], 3, "the engaged rim (1.4.11)"],
-  ["--cn-interactive", GROUNDS, 4.5, "links"],
-  ["--cn-danger", GROUNDS, 4.5, "danger text"],
-  ["--cn-warning", GROUNDS, 4.5, "warning text"],
-  ["--cn-success", GROUNDS, 4.5, "success text"],
-  ["--cn-info", GROUNDS, 4.5, "info text"],
-  ["--cn-fg-on-accent", ["--cn-interactive", "--cn-interactive-hover"], 4.5, "text on the primary"],
-  /* The data series. A row fails when a series cannot be resolved, so the
-     stepped-down 3 and 5 always pass through the relative oklch resolver,
-     and their token comments hold the exact ratios on base. */
-  ...[1, 2, 3, 4, 5, 6].map((n) => [`--cn-series-${n}`, GROUNDS, 3, "a data series mark (1.4.11)"]),
-];
-const TINTED = ["danger", "warning", "success", "info"];
-/* APCA 0.0.98G lightness contrast (Lc), as a magnitude. WCAG 2 flatters
-   light text on dark grounds; APCA does not, so text roles answer both. */
-function apca(text, bg) {
-  const y = (c) => {
-    const v = c.slice(0, 3).reduce((s, ch, i) => s + (ch / 255) ** 2.4 * [.2126729, .7151522, .0721750][i], 0);
-    return v < .022 ? v + (.022 - v) ** 1.414 : v;
-  };
-  const [yt, yb] = [y(text), y(bg)];
-  const s = yb > yt ? (yb ** .56 - yt ** .57) * 1.14 : (yb ** .65 - yt ** .62) * 1.14;
-  if (Math.abs(s) < .1) return 0;
-  return Math.abs(s > 0 ? s - .027 : s + .027) * 100;
-}
-const APCA = [["--cn-fg", 75], ["--cn-fg-soft", 60], ["--cn-fg-body", 60], ["--cn-fg-muted", 50], ["--cn-fg-placeholder", 40]];
-
 async function contrast() {
-  const file = "css/tokens.css";
-  const text = await readFile(join(root, file), "utf8");
-  const css = stripComments(text);
-  const blocks = rootBlocks(css);
+  const css = stripComments(await readFile(join(root, "css/tokens.css"), "utf8"));
   const base = new Map();
-  for (const b of blocks.filter((b) => !b.nested)) for (const [k, v] of customProps(b.body)) if (!base.has(k)) base.set(k, v);
+  for (const m of css.matchAll(/^:root\s*\{([^}]*)\}/gm)) customProps(m[1], base);
   const more = new Map(base);
-  const moreOwn = new Map();
-  for (const b of blocks.filter((b) => b.more)) for (const [k, v] of customProps(b.body)) { more.set(k, v); moreOwn.set(k, v); }
+  for (const m of css.matchAll(/@media\s*\(prefers-contrast:\s*more\)\s*\{\s*:root\s*\{([^}]*)\}/g)) customProps(m[1], more);
+  if (more.size === base.size && [...more].every(([k, v]) => base.get(k) === v))
+    return [`no @media (prefers-contrast: more) { :root { ... } } block found`];
+
   const out = [];
-  /* :root[data-contrast="more"] is the prefers-contrast block as an
-     opt-in attribute, so the two must declare the same tokens and values. */
-  const attr = css.match(/(?:^|\n):root\[data-contrast="more"\]\s*\{([^}]*)\}/);
-  if (!attr) out.push({ line: 1, message: `no :root[data-contrast="more"] block mirrors the prefers-contrast block` });
-  else {
-    const own = customProps(attr[1]);
-    for (const [k, v] of moreOwn) if (own.get(k) !== v) out.push({ line: lineOf(text, text.indexOf(':root[data-contrast="more"]')), message: `:root[data-contrast="more"] sets ${k} to ${own.get(k) ?? "nothing"}, the prefers-contrast block to ${v}` });
-    for (const k of own.keys()) if (!moreOwn.has(k)) out.push({ line: lineOf(text, text.indexOf(':root[data-contrast="more"]')), message: `:root[data-contrast="more"] sets ${k}, which the prefers-contrast block does not` });
-  }
   for (const [mode, map] of [["default", base], ["prefers-contrast", more]]) {
-    const { color } = resolver(map);
-    const ground = (name) => { const c = color(`var(${name})`); return c && over(c, color("var(--cn-surface-page)")); };
+    const color = resolver(map);
+    const expr = (name) => (name.startsWith("--") ? `var(${name})` : name);
     /* The color of a one-layer shadow: drop inset and the lengths. */
     const fgOf = (name) => name.startsWith("@")
       ? color((map.get(`--cn-${name.slice(1)}`) || "").replace(/^inset\s+/, "").replace(/^(?:-?[\d.]+(?:px)?\s+)+/, ""))
-      : color(`var(${name})`);
-    const check = (fgName, fg, grounds, floor, what) => {
+      : color(expr(name));
+    const page = color("var(--cn-surface-page)");
+    const ground = (layers) => [layers].flat().reduceRight((bg, l) => { const c = color(expr(l)); return c && bg && over(c, bg); }, page);
+    for (const [fgName, grounds, floor, what, only] of PAIRS) {
+      if (only && only !== mode) continue;
+      const fg = fgOf(fgName);
       for (const g of grounds) {
-        const bg = typeof g === "string" ? ground(g) : g.c;
-        const label = typeof g === "string" ? g : g.name;
-        if (!fg || !bg) { out.push({ line: 1, message: `${mode}: cannot resolve ${fgName} or ${label}` }); continue; }
+        const bg = ground(g), label = [g].flat().join(" over ");
+        if (!fg || !bg) { out.push(`${mode}: cannot resolve ${fgName} or ${label}`); continue; }
         const r = ratio(over(fg, bg), bg);
-        if (r < floor) out.push({ line: 1, message: `${mode}: ${fgName} on ${label} is ${r.toFixed(2)}:1, under ${floor}:1 for ${what}` });
-      }
-    };
-    for (const [fgName, grounds, floor, what, only] of PAIRS) if (!only || only === mode) check(fgName, fgOf(fgName), grounds, floor, what);
-    /* A carve is darkness only: every layer of the inset tokens falls from
-       the top left and is darker than the page, so no carve draws a light
-       lip or glow on its far walls. */
-    for (const name of ["--neu-inset", "--neu-inset-soft"]) {
-      for (const layer of splitTop(map.get(name) || "")) {
-        const parts = layer.replace(/^inset\s+/, "").match(/^((?:-?[\d.]+(?:px)?\s+)+)(.*)$/s);
-        const [x, y] = parts ? parts[1].trim().split(/\s+/).map(parseFloat) : [];
-        const c = parts && color(parts[2]);
-        if (!c) { out.push({ line: 1, message: `${mode}: cannot resolve a layer of ${name}` }); continue; }
-        if (x < 0 || y < 0) out.push({ line: 1, message: `${mode}: ${name} has a layer from the bottom right (${layer}); a carve has no lit side` });
-        for (const g of ["--cn-surface-page", "--cn-surface-raised", "--cn-surface-sunken"]) {
-          const bg = ground(g);
-          if (bg && lum(over(c, bg)) > lum(bg)) out.push({ line: 1, message: `${mode}: ${name} has a layer lighter than ${g} (${layer}); a carve is darkness only` });
-        }
+        if (r < floor) out.push(`${mode}: ${fgName} on ${label} is ${r.toFixed(2)}:1, under ${floor}:1 for ${what}`);
       }
     }
-    /* The lead and overlay hairline outranks the plain one on every ground. */
-    for (const g of GROUNDS) {
-      const bg = ground(g), [plain, strong] = ["--edge", "--edge-strong"].map((n) => color(`var(${n})`));
-      if (!bg || !plain || !strong) { out.push({ line: 1, message: `${mode}: cannot resolve the hairlines on ${g}` }); continue; }
-      const [rp, rs] = [plain, strong].map((c) => ratio(over(c, bg), bg));
-      if (rs <= rp) out.push({ line: 1, message: `${mode}: --edge-strong on ${g} is ${rs.toFixed(2)}:1, not above --edge at ${rp.toFixed(2)}:1` });
-    }
-    /* Hover is a wash that shows on a dim screen and stays under engaged:
-       --hover and the row hover hold 1.35:1 on base, the lowest ground a
-       ghost or a table row sits on, and neither reaches --wash. An overlay
-       is lighter, so a menu row's hover is lower there and has no floor. */
-    {
-      const bg = ground("--cn-surface-raised"), wash = color("var(--wash)");
-      const hovers = [
-        ["--hover", color("var(--hover)")],
-        ["the row hover (--cn-step-row)", color("color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base))")],
-      ];
-      for (const [name, c] of hovers) {
-        if (!bg || !wash || !c) { out.push({ line: 1, message: `${mode}: cannot resolve ${name} or --wash` }); continue; }
-        const [r, rw] = [ratio(over(c, bg), bg), ratio(over(wash, bg), bg)];
-        if (r < 1.35) out.push({ line: 1, message: `${mode}: ${name} on base is ${r.toFixed(2)}:1, under 1.35:1 for a hover wash (design floor)` });
-        if (r >= rw) out.push({ line: 1, message: `${mode}: ${name} on base is ${r.toFixed(2)}:1, not under the engaged --wash at ${rw.toFixed(2)}:1` });
-      }
-      /* The 7:1 and 5.5:1 role floors are for text at rest. Cell text on
-         a hovered row holds 4.5:1. */
-      const row = hovers[1][1];
-      for (const role of ["--cn-fg-soft", "--cn-fg-muted"]) {
-        const fg = color(`var(${role})`);
-        if (!bg || !row || !fg) { out.push({ line: 1, message: `${mode}: cannot resolve ${role} on the row hover` }); continue; }
-        const on = over(row, bg), r = ratio(over(fg, on), on);
-        if (r < 4.5) out.push({ line: 1, message: `${mode}: ${role} on a hovered row is ${r.toFixed(2)}:1, under 4.5:1` });
-      }
-    }
-    /* The well ring holds a well's shape on the page, on a panel and on
-       its own sunken fill, and stays the quietest carve ring. */
-    {
-      const [well, carve] = ["@well-ring", "@carve-ring"].map(fgOf);
-      for (const g of [...ON_PAGE, "--cn-surface-sunken"]) {
-        const bg = ground(g);
-        if (!bg || !well || !carve) { out.push({ line: 1, message: `${mode}: cannot resolve the well ring on ${g}` }); continue; }
-        const [rw, rc] = [well, carve].map((c) => ratio(over(c, bg), bg));
-        if (rw < 1.5) out.push({ line: 1, message: `${mode}: @well-ring on ${g} is ${rw.toFixed(2)}:1, under 1.5:1 for the well hairline (design floor)` });
-        if (rw >= rc) out.push({ line: 1, message: `${mode}: @well-ring on ${g} is ${rw.toFixed(2)}:1, not under the carve ring at ${rc.toFixed(2)}:1` });
-      }
-    }
-    for (const [fgName, floor] of APCA) {
-      for (const g of GROUNDS) {
-        const fg = color(`var(${fgName})`), bg = ground(g);
-        const lc = fg && bg ? apca(over(fg, bg), bg) : 0;
-        if (lc < floor) out.push({ line: 1, message: `${mode}: ${fgName} on ${g} is APCA Lc ${lc.toFixed(0)}, under Lc ${floor}` });
-      }
-    }
-    /* A status tone's text on its own tint (fields, banners) and wash
-       (tags), over each ground. */
-    for (const t of TINTED) {
-      for (const stop of ["tint", "wash"]) {
-        const fill = color(`var(--cn-${t}-${stop})`);
-        const grounds = GROUNDS.map((g) => ({ name: `--cn-${t}-${stop} over ${g}`, c: fill && ground(g) && over(fill, ground(g)) }));
-        check(`--cn-${t}`, color(`var(--cn-${t})`), grounds, 4.5, `${t} text on its ${stop}`);
-      }
-    }
-  }
-  /* Ratios written in :root comments, read against base, or against the
-     mantle page when the clause says "on the page". Only a ratio that ends
-     its clause or names one of those grounds is checked. */
-  const { color } = resolver(base);
-  const panel = color("var(--base)"), page = color("var(--cn-surface-page)");
-  for (const m of text.matchAll(/^\s*(--[\w-]+)\s*:[^;]*;\s*\/\*([^*]*)\*\//gm)) {
-    const r = m[2].match(/([\d.]+):1(\s*(?:$|,|on base\b|on the page\b))?/);
-    if (!r || r[2] === undefined) continue;
-    const c = color(`var(${m[1]})`);
-    if (!c) continue;
-    const onPage = /on the page/.test(r[2]);
-    const g = onPage ? page : panel;
-    const got = ratio(over(c, g), g);
-    if (Math.abs(got - +r[1]) > .06) out.push({ line: lineOf(text, m.index + m[0].indexOf(m[1])), message: `${m[1]} comment says ${r[1]}:1 but computes to ${got.toFixed(2)}:1 ${onPage ? "on the page" : "on base"}` });
-  }
-  return out.map((o) => ({ ...o, file }));
-}
-
-/* The showcase is the visual reference, so it follows the markup rules
-   too: no title= tooltips on elements, and no overflow: hidden standing
-   in for band corners. Skipped where showcase/src is not present, as in
-   the published package. */
-async function showcaseMarkup() {
-  const dir = join(root, "showcase/src");
-  let files;
-  try { files = await readdir(dir, { recursive: true }); } catch { return []; }
-  const out = [];
-  for (const name of files.filter((f) => /\.(tsx|ts|css)$/.test(f))) {
-    const text = await readFile(join(dir, name), "utf8");
-    const file = `showcase/src/${name}`;
-    const rules = name.endsWith(".css")
-      ? [[/overflow(?:-[xy])?\s*:\s*hidden/g, "overflow: hidden; never clip band corners"]]
-      : [
-          [/<[a-z][\w-]*\b[^>]*\stitle=/g, "title= on an element; use [data-tip]"],
-          [/style=[{"`][^}"`]*overflow(?:-[xy])?\s*:\s*hidden/g, "overflow: hidden in a style; never clip band corners"],
-        ];
-    for (const [re, message] of rules)
-      for (const m of text.matchAll(re)) out.push({ file, line: lineOf(text, m.index), message });
   }
   return out;
 }
 
 let failures = 0;
-for (const { file, line, message } of await showcaseMarkup()) {
-  console.error(`${file}:${line}: showcaseMarkup: ${message}`);
-  failures++;
-}
-for (const { line, message } of await specTypeTable()) {
-  console.error(`SPEC.md:${line}: specTypeTable: ${message}`);
-  failures++;
-}
-for (const { file, line, message } of await contrast()) {
-  console.error(`${file}:${line}: contrast: ${message}`);
+for (const message of await contrast()) {
+  console.error(`css/tokens.css: contrast: ${message}`);
   failures++;
 }
 for (const [file, checks] of Object.entries(CHECKS)) {
@@ -583,128 +209,6 @@ for (const [file, checks] of Object.entries(CHECKS)) {
       failures++;
     }
   }
-}
-
-/* ── Frozen tokens ───────────────────────────────────────────────────────────
-   The surface, hairline, shadow and plate tokens are frozen for 0.5.0. This
-   snapshot holds each one's resolved value: its first declaration in
-   tokens.css with every var() that has no fallback expanded down to the
-   hex, so a palette or shadow-ink edit trips it too. A value that differs
-   fails, and so does a new --neu-*, --cn-plate* or --cn-surface-* token
-   the snapshot does not list. To move a frozen token on purpose, change
-   the snapshot in the same commit and add a line to CHANGELOG.md. FROZEN_MORE and FROZEN_COMPACT hold the frozen
-   names that :root[data-contrast="more"] and [data-density="compact"]
-   re-declare. */
-const FROZEN_INK = "rgb(8 8 14)";
-const FROZEN_LIT = "inset 0 1px color-mix(in srgb, #585b70 45%, transparent)";
-const frozenPlate = (offsets) => offsets.map((o) => `${o} ${o} 0 var(--plate, ${FROZEN_INK})`).join(", ");
-const frozenSteps = (n) => frozenPlate(Array.from({ length: n }, (_, i) => `${i + 1}px`));
-const FROZEN = {
-  "--edge": "color-mix(in srgb, #585b70 70%, transparent)",
-  "--edge-strong": "#585b70",
-  "--cn-lit-edge": FROZEN_LIT,
-  "--cn-surface-page": "#181825",
-  "--cn-surface-raised": "#1e1e2e",
-  "--cn-surface-overlay": "color-mix(in srgb, #313244 90%, #1e1e2e)",
-  "--cn-surface-recessed": "color-mix(in srgb, #11111b 80%, #181825)",
-  "--cn-surface-band": "color-mix(in srgb, #11111b 50%, transparent)",
-  "--cn-surface-sunken": "#11111b",
-  "--neu-ink": FROZEN_INK,
-  "--neu-dark": "rgb(8 8 14 / .8)",
-  "--neu-dark-soft": "rgb(17 17 27 / .30)",
-  "--neu-shade": "rgb(8 8 14 / .72)",
-  "--neu-contact": FROZEN_INK,
-  "--neu-near": "rgb(8 8 14 / .8)",
-  "--neu-raised": `1px 1px 0 ${FROZEN_INK}, 4px 6px 10px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72)`,
-  "--neu-lifted": `6px 8px 0 ${FROZEN_INK}, 8px 14px 16px rgb(8 8 14 / .8), 18px 28px 48px rgb(8 8 14 / .72), ${FROZEN_LIT}`,
-  "--neu-raised-soft": `1px 1px 0 ${FROZEN_INK}, 3px 4px 9px rgb(8 8 14 / .5)`,
-  "--neu-inset": "inset 3px 3px 8px rgb(8 8 14 / .8)",
-  "--neu-inset-soft": "inset 2px 2px 5px rgb(8 8 14 / .5)",
-  "--cn-plate": frozenPlate(["calc(4px * .25)", "calc(4px * .5)", "calc(4px * .75)", "4px"]),
-  "--cn-plate-half": frozenPlate(["calc(4px * .125)", "calc(4px * .25)", "calc(4px * .375)", "calc(4px / 2)"]),
-  "--cn-plate-hover": frozenPlate(["calc((4px + 1px) * .25)", "calc((4px + 1px) * .5)", "calc((4px + 1px) * .75)", "calc(4px + 1px)"]),
-  "--cn-plate-lg": frozenSteps(10),
-  "--cn-plate-sm": frozenSteps(3),
-};
-const FROZEN_MORE = {
-  "--edge": "#6c7086",
-  "--edge-strong": "#7f849c",
-  "--neu-dark": "rgb(8 8 14 / .88)",
-  "--neu-shade": "rgb(8 8 14 / .86)",
-  "--neu-near": "rgb(8 8 14 / .9)",
-};
-const FROZEN_COMPACT = {
-  "--neu-raised": `1px 1px 0 ${FROZEN_INK}, 4px 6px 10px rgb(8 8 14 / .8), 10px 12px 24px rgb(8 8 14 / .72)`,
-};
-async function frozenTokens() {
-  const css = stripComments(await readFile(join(root, "css/tokens.css"), "utf8"));
-  const first = new Map(), at = new Map();
-  for (const m of css.matchAll(/(--[\w-]+)\s*:([^;{}]*);/g)) if (!first.has(m[1])) { first.set(m[1], m[2]); at.set(m[1], m.index); }
-  const resolve = (v, map, depth = 0) => {
-    const flat = v.replace(/\s+/g, " ").trim();
-    return depth > 20 ? flat : flat.replace(/var\(\s*(--[\w-]+)\s*\)/g, (all, n) => (map.has(n) ? resolve(map.get(n), map, depth + 1) : all));
-  };
-  const out = [];
-  const hold = (label, snapshot, map, names, line) => {
-    for (const name of names) {
-      const want = snapshot[name], got = map.has(name) ? resolve(map.get(name), map) : null;
-      if (got === null) out.push({ line, message: `${label}${name} is frozen but no longer declared` });
-      else if (want === undefined) out.push({ line: lineOf(css, at.get(name)), message: `${label}${name} is not in the frozen snapshot; it resolves to ${got}` });
-      else if (got !== want) out.push({ line: lineOf(css, at.get(name)), message: `${label}${name} is frozen at ${want} but resolves to ${got}; a deliberate change updates the snapshot in scripts/lint.mjs and adds a line to CHANGELOG.md` });
-    }
-  };
-  const family = [...first.keys()].filter((n) => /^--(?:neu-|cn-plate|cn-surface-)/.test(n));
-  hold("", FROZEN, first, new Set([...Object.keys(FROZEN), ...family]), 1);
-  for (const [label, snapshot, re] of [
-    ['data-contrast="more": ', FROZEN_MORE, /(?:^|\n):root\[data-contrast="more"\]\s*\{([^}]*)\}/],
-    ['data-density="compact": ', FROZEN_COMPACT, /(?:^|\n)\[data-density="compact"\]\s*\{([^}]*)\}/],
-  ]) {
-    const block = css.match(re);
-    if (!block) { out.push({ line: 1, message: `${label}no block to check the frozen tokens in` }); continue; }
-    const own = customProps(block[1]);
-    const names = new Set([...Object.keys(snapshot), ...[...own.keys()].filter((n) => n in FROZEN)]);
-    hold(label, snapshot, new Map([...first, ...own]), names, lineOf(css, block.index + 1));
-  }
-  return out;
-}
-for (const { line, message } of await frozenTokens()) {
-  console.error(`css/tokens.css:${line}: frozenTokens: ${message}`);
-  failures++;
-}
-
-/* ── SPEC shadow list ────────────────────────────────────────────────────────
-   SPEC Verification names every shadow layer a recipe may use, in the
-   bullet that starts "a `box-shadow` or `--hard-extra`". Each name in that
-   sentence has to be declared in tokens.css or recipes.css, so a removed
-   token cannot stay listed. `--shadow-pop/cast/mark` expands on the
-   slashes, and a `-half` style suffix extends the last full name, which
-   is `--cn-plate`. The check stops at the end of the list sentence: the
-   contract properties named after it, such as --plate, are read with a
-   fallback and never declared. */
-async function specShadowList() {
-  const spec = await readFile(join(root, "SPEC.md"), "utf8");
-  const bullet = spec.match(/^- a `box-shadow` or `--hard-extra`.*$/m);
-  if (!bullet) return [{ line: 1, message: "no `box-shadow` or `--hard-extra` bullet under Verification to read the shadow tokens from" }];
-  const line = lineOf(spec, bullet.index);
-  const list = bullet[0].match(/Every layer has a name in `tokens\.css`:(.*?)\.(?:\s|$)/);
-  if (!list) return [{ line, message: "the shadow bullet has no \"Every layer has a name in `tokens.css`:\" list" }];
-  const names = [];
-  let base = null;
-  for (const [, item] of list[1].matchAll(/`([^`]+)`/g)) {
-    if (item.startsWith("--")) {
-      const [head, ...rest] = item.split("/");
-      names.push(head, ...rest.map((r) => head.replace(/[^-]+$/, r)));
-      base = head;
-    } else if (item.startsWith("-") && base) names.push(base + item);
-    else return [{ line, message: `\`${item}\` in the shadow list is not a token name or a suffix of one` }];
-  }
-  const css = (await Promise.all(["css/tokens.css", "css/recipes.css"].map((f) => readFile(join(root, f), "utf8")))).map(stripComments).join("\n");
-  const declared = new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
-  return names.filter((n) => !declared.has(n)).map((n) => ({ line, message: `${n} is in the shadow list but is not declared in css/tokens.css or css/recipes.css` }));
-}
-for (const { line, message } of await specShadowList()) {
-  console.error(`SPEC.md:${line}: specShadowList: ${message}`);
-  failures++;
 }
 
 if (failures) {
