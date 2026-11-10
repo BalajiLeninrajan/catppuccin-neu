@@ -190,7 +190,7 @@ export function Why({ title, children }: WhyProps) {
  *   classes?: string,   // class string shown in a copyable code line below
  *   row?: boolean,      // lay children out as a wrapping flex row from the inline start; the stage shrinks to them
  *   why?: string,       // summary of the fold Doc builds from the prose beside this demo
- *   lead?: boolean,     // the first demo on a page, once per page: the stage drops its frame and takes 48px above and below
+ *   lead?: boolean,     // the first demo on a page, once per page; same frame as the rest, it leads by position
  *   children,
  * }
  */

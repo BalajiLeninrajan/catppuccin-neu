@@ -7,7 +7,7 @@ const HEIGHTS = [
   { height: "Below the ground", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken, --cn-well-ring", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
   { height: "The ground", tokens: "--cn-surface-page", who: "The page, the topbar, stat bands, static chips. Every other height is measured from it." },
   { height: "Raised, soft foot", tokens: "--cn-surface-raised, --edge, --neu-ink, --neu-raised, or --neu-raised-soft with --cn-lit-edge, or --neu-lifted with --edge-strong", who: "Panels, the selected tab, the one lead panel. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Raised, hard plate", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra, or --cn-plate-tilt with --cn-lit-edge", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate. The one tilted panel, holding prose, upright under prefers-contrast: more on the same plate." },
+  { height: "Raised, hard plate", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra, --cn-plate with --cn-lit-edge under the tilted panel", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate. The one tilted panel, holding prose, upright under prefers-contrast: more on the same plate." },
   { height: "Floating", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
 
@@ -80,7 +80,8 @@ export default function DepthPage() {
       <Demo lead title="Four heights and the foot ladder, on the page" why="One light, and why no component writes its own shadow" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-tilted · panel is-lead · cn-bg-overlay cn-pop">
         {/* Two groups. The first holds a carve, the ground and a plain
             panel on its soft foot. The second holds the rest of the foot
-            ladder in order, the 4px plate, the 6px tilt and the 9px lead,
+            ladder in order, the 4px plate, the tilt on the same plate
+            and the 9px lead,
             then the float. The first holds three, so it keeps three
             columns until its box is under 520px and then drops to one,
             never leaving one specimen alone on a row. The second sits on
@@ -101,7 +102,7 @@ export default function DepthPage() {
             <Height name="Raised, hard plate" cls=".cn-hard" note="A 4px block of ink replaces the cast.">
               <div class="cn-bg-raised cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
             </Height>
-            <Height name="The 6px plate, tipped" cls=".is-tilted" note="The one tilted aside, turned 1.2deg with its text.">
+            <Height name="The same plate, tipped" cls=".is-tilted" note="The one tilted aside, turned 1.2deg with its text on the 4px plate.">
               <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
             </Height>
             <Height name="The lead's 9px foot" cls=".is-lead" note="A resting panel on the deepest foot.">
@@ -121,12 +122,12 @@ export default function DepthPage() {
         resting on the page, and a hard plate means a clickable, an accent
         card or the one tilted aside. The foot ladder sets how tall it
         stands, counted in full ink under the bottom edge: panel 2px,
-        plate 4px, tilt 6px, lead 9px. The ink is capped near 1.14:1 on
+        plate 4px, lead 9px. The ink is capped near 1.14:1 on
         the page, so only its area can grow, and each step is at least
         2px past the one before. The panel and the plate differ by size
-        and by kind, soft with a cast or hard with none. The lead panel and the
-        tilted panel are steps on the ladder, so neither is a height of
-        its own. No static label is raised: a chip on a span is a flat outlined
+        and by kind, soft with a cast or hard with none. The lead panel is
+        the deepest foot and the tilted panel stands on the plate, so
+        neither is a height of its own. No static label is raised: a chip on a span is a flat outlined
         label. The avatar is the one small static thing on the soft raise.
       </p>
 
@@ -190,7 +191,8 @@ export default function DepthPage() {
         <code class="cn-code-inline">--cn-carve-ring</code>, surface-1. Both
         are the same on all four sides. A well's{" "}
         <code class="cn-code-inline">--cn-well-ring</code> is the quietest
-        of the three, surface-0 at 1.5:1 on the well's crust fill, since
+        of the three, halfway between surface-0 and surface-1 at 1.7:1 on
+        the well's crust fill, since
         the sunken fill alone is 1.07:1 under the page.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> closes all three
         into a full even ring, and a hovered field closes its ring in{" "}
@@ -303,7 +305,7 @@ export default function DepthPage() {
         crust halfway to black at .5 and 2px 2px 5px for the soft carve.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> deepens the
         cast to .86, the carve to .88 and the near shadow to .9, and stands
-        the tilted panel upright on its 6px plate, since rotated text
+        the tilted panel upright on its plate, since rotated text
         renders soft.
       </p>
 
@@ -434,8 +436,8 @@ export default function DepthPage() {
         reads <code class="cn-code-inline">--plate</code>, the shadow ink by default, so a
         control can re-key it inline.{" "}
         <code class="cn-code-inline">cn-hard-lg</code> is a fixed 10px offset.
-        The tilted hero card takes its own 6px plate,{" "}
-        <code class="cn-code-inline">--cn-plate-tilt</code>, under{" "}
+        The tilted hero card stands on the clickable's plate,{" "}
+        <code class="cn-code-inline">--cn-plate</code>, under{" "}
         <code class="cn-code-inline">--cn-lit-edge</code> and with no raised
         shadow, so it answers the light as a hard block without outweighing
         the data beside it.{" "}
@@ -586,7 +588,7 @@ export default function DepthPage() {
           {
             name: ".cn-hard-lg",
             values: "--cn-plate-lg: var(--plate) in 1px steps to 10px",
-            notes: "A fixed large offset. The tilted panel takes the 6px --cn-plate-tilt instead.",
+            notes: "A fixed large offset. The tilted panel takes --cn-plate, the 4px plate of a clickable, instead.",
           },
           {
             name: ".cn-hard-sm",

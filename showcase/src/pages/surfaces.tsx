@@ -178,7 +178,7 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         <code class="cn-code-inline">.is-tilted</code> is the one rotated surface: a
-        1.2° turn on a 6px plate under the lit top edge. The plate replaces
+        1.2° turn on the 4px plate of a clickable under the lit top edge. The plate replaces
         the raised shadow, as it does under a button, so the card answers
         the top-left light with a hard block and no soft cast. Use it once per view at most, for a
         summary or an aside in prose, never for the page's main data, and
@@ -191,7 +191,7 @@ export default function SurfacesPage() {
         an empty tail under the turn. It flattens to the regular raised panel
         at 1060px. Under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> it stands
-        upright and keeps its 6px plate, because rotated text renders soft.
+        upright and keeps its plate, because rotated text renders soft.
         The{" "}
         <a href="/#ornament-budget">ornament budget</a> lists the other
         once-per-view pieces.
@@ -300,7 +300,8 @@ export default function SurfacesPage() {
         reads as an outlined panel. The carve finishes it with one dark wall
         from the top left and no border or light lip.{" "}
         <code class="cn-code-inline">--cn-well-ring</code> is a quiet even
-        surface-0 hairline over the carve, 1.5:1 on the fill and the same
+        hairline over the carve, halfway between surface-0 and surface-1,
+        1.7:1 on the fill and the same
         on all four sides, so a well keeps its shape on a dim display.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> closes it
         into a surface-2 ring.
@@ -333,7 +334,7 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-tilted",
             values: "one per view",
-            notes: "rotate(1.2deg) and a 6px plate, --cn-plate-tilt, under the lit edge with no raised shadow, align-self: start so a grid row never stretches it. A summary or an aside in prose at 15px, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
+            notes: "rotate(1.2deg) on the clickable's plate, --cn-plate (4px, 3px cozy, 2px compact), under the lit edge with no raised shadow, align-self: start so a grid row never stretches it. A summary or an aside in prose at 15px, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
           },
           {
             name: ".panel.is-lead",
@@ -349,7 +350,7 @@ export default function SurfacesPage() {
           {
             name: ".well",
             values: "inset container",
-            notes: "No border, the --cn-surface-sunken fill; the full inner shadow finishes it under --cn-well-ring, an even surface-0 hairline that prefers-contrast: more lifts to surface-2. The card radius (12px).",
+            notes: "No border, the --cn-surface-sunken fill; the full inner shadow finishes it under --cn-well-ring, an even hairline halfway between surface-0 and surface-1 that prefers-contrast: more lifts to surface-2. The card radius (12px).",
           },
           {
             name: ".scroll-well",

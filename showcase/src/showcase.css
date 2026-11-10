@@ -131,33 +131,29 @@
   justify-items: start;
 }
 
-/* The lead demo, the first on a page, has no frame and 48px above and
-   below, so it sits open on the ground and the framed demos under it
-   read as secondary. Its specimen starts at the column edge, in line
-   with the caption and the copy line. Nothing is added to it. */
-.sc-demo.is-lead > .sc-demo-stage {
-  padding: var(--space-7) 0;
-  border: 0;
-  border-radius: 0;
-}
+/* The lead demo, the first on a page, takes the same frame and padding
+   as every other demo. It leads by position. */
 
-/* A row demo is as wide as its specimens or its copy line, whichever is
-   longer, so a single button does not sit in an 860px frame. Stages that
-   hold a table, a panel or a grid are not rows and keep the column. */
-.sc-demo-fit {
+/* A row demo's stage is as wide as its specimens, so a single button
+   does not sit in an 860px frame. The caption, the copy line and the
+   fold keep the column, so the block has one right edge under the
+   stage. Stages that hold a table, a panel or a grid are not rows and
+   keep the column. */
+.sc-demo-fit > .sc-demo-stage {
   width: fit-content;
   max-width: 100%;
   justify-self: start;
 }
 
 /* The fold under a demo: the package accordion, pulled up to the copy
-   line so the two read as one block, and held to the prose measure. Its
+   line so the two read as one block, and as wide as the column like the
+   copy line. Its prose stays at the 68ch measure through
+   .sc-doc .cn-copy. Its
    summary is the one docs change: the label role, 14px at 500 in the
    muted ink, the same voice as the demo caption, so a docs page keeps
    600 for headings and controls. The chevron and its place under the
    copy line tell the fold from the caption. Hovered or open it keeps the
    package's mauve, which this unlayered rule would otherwise beat. */
-.sc-why { max-width: var(--cn-measure); }
 details.sc-why > summary { font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-name-leading) var(--sans); }
 details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }
 .sc-doc > .sc-demo + .sc-why { margin-top: calc(var(--space-2) - var(--space-6)); }

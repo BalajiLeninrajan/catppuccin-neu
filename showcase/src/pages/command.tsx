@@ -67,7 +67,7 @@ export default function CommandPage() {
       <Props
         title="Contract"
         rows={[
-          { name: ".command", values: "div", notes: "min(480px, 100%) wide, 50px tall at every density, the card radius (12px), --cn-surface-sunken fill, --cn-well-ring over --neu-inset: a quiet even surface-0 hairline that closes into surface-2 under prefers-contrast: more. Ligatures off." },
+          { name: ".command", values: "div", notes: "min(480px, 100%) wide, 50px tall at every density, the card radius (12px), --cn-surface-sunken fill, --cn-well-ring over --neu-inset: a quiet even dark hairline that closes into surface-2 under prefers-contrast: more. Ligatures off." },
           { name: ".command.is-full", values: "modifier", notes: "Fills its container." },
           { name: ".command.is-wrap", values: "modifier", notes: "A long statement wraps instead of scrolling; the text becomes a block so inline spans inside it keep their whitespace." },
           { name: ".command-text", values: "code", notes: "Mono 500 14px, tabular. Scrolls sideways with no scrollbar when the command is longer than the well." },

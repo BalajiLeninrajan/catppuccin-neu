@@ -150,7 +150,7 @@ export default function InvoiceExample() {
       <section class="panel is-lead cn-morph" aria-labelledby="inv-lines">
         <div class="panel-header">
           <h2 id="inv-lines">Line items</h2>
-          <span class="chip">{LINES.length} items</span>
+          <span class="cn-meta">{LINES.length} items</span>
         </div>
         <table class="data-table">
           <thead>
@@ -177,7 +177,7 @@ export default function InvoiceExample() {
         </table>
         {/* The payment note fills the space left of the totals, which stay
             320px wide against the Amount column. */}
-        <div class="panel-body cn-split cn-top">
+        <div class="panel-body cn-split cn-baseline">
           <div class="cn-stack cn-gap-8" style="flex:1 1 240px;max-width:46ch">
             <p class="cn-name cn-m-0">How to pay</p>
             <p class="cn-meta cn-m-0">

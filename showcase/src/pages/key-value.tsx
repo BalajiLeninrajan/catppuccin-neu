@@ -37,8 +37,8 @@ export default function KeyValuePage() {
       <p class="cn-copy">
         Use <code class="cn-code-inline">.kv</code> when the reader looks up one
         value at a time: a record's settings, a deploy's metadata, an
-        invoice's header. Keys are labels in subtext-0. Values are text with
-        tabular numerals, and a long value wraps inside its column. At 520px
+        invoice's header. Keys are 400 in subtext-0. Values are 500 in the text
+        color with tabular numerals, so a pair differs by weight and ink, and a long value wraps inside its column. At 520px
         and below each key sits over its value.
       </p>
 
@@ -52,8 +52,8 @@ export default function KeyValuePage() {
         title="Contract"
         rows={[
           { name: ".kv", values: "dl", notes: "Grid: max-content keys, minmax(0, 1fr) values, 8px by 16px gap, 14px text." },
-          { name: "dt", values: "key", contrast: "7.4:1 on a panel", notes: "The label weight, 500, at the list's 14px, in --cn-fg-muted (subtext-0)." },
-          { name: "dd", values: "value", contrast: "11.3:1 on a panel", notes: "Text color, two ink stops over the key, as in a .stat.is-inline row. Tabular numerals, wraps anywhere." },
+          { name: "dt", values: "key", contrast: "7.4:1 on a panel", notes: "The meta weight, 400, at the list's 14px, in --cn-fg-muted (subtext-0)." },
+          { name: "dd", values: "value", contrast: "11.3:1 on a panel", notes: "500 in the text color, a weight step and two ink stops over the key, as in a .stat.is-inline row. Tabular numerals, wraps anywhere." },
           { name: "at 520px", values: "responsive", notes: "One column: key over value, 8px between pairs." },
         ]}
       />

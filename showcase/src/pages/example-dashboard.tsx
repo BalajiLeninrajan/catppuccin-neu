@@ -262,7 +262,7 @@ export default function DashboardExample() {
         <section class="panel cn-span-8" aria-labelledby="dash-chart">
           <div class="panel-header">
             <h2 id="dash-chart">Collected by method</h2>
-            <span class="chip">Last 4 months</span>
+            <span class="cn-meta">Last 4 months</span>
           </div>
           <figure class="panel-body cn-stack cn-gap-16 cn-m-0">
             <figcaption class="cn-sr-only">Collected by payment method, in thousands of dollars</figcaption>

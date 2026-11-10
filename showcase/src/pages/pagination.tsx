@@ -25,11 +25,11 @@ export default function PaginationPage() {
 
       <p class="cn-copy">
         Each page is a square ghost target at{" "}
-        <code class="cn-code-inline">--control-h-sm</code>, in the ui role with
+        <code class="cn-code-inline">--control-h-sm</code>, 14px at 500 with
         tabular figures, so every two-digit page is the same width. Hover is{" "}
         <code class="cn-code-inline">--hover</code>. The current page carries{" "}
         <code class="cn-code-inline">aria-current="page"</code> and takes the
-        engaged state: pressed in on the wash inside the mauve rim. A{" "}
+        engaged state: pressed in on the wash inside the mauve rim, at 600. A{" "}
         <code class="cn-code-inline">span</code> is the gap between runs, in{" "}
         <code class="cn-code-inline">--cn-fg-muted</code>. Previous and Next hold
         a 16px chevron. At the ends they take{" "}
@@ -51,14 +51,14 @@ export default function PaginationPage() {
       </Demo>
 
       <p class="cn-copy">
-        Crumbs run in the ui role. Links are{" "}
+        Crumbs run at 14px and 500. Links are{" "}
         <code class="cn-code-inline">--cn-fg-body</code> and turn{" "}
         <code class="cn-code-inline">--cn-fg</code> on hover; they sit in a{" "}
         <code class="cn-code-inline">nav</code>, so they carry no underline. A
         12px chevron in <code class="cn-code-inline">--cn-fg-faint</code> sits
         between crumbs and flips in right-to-left text. The last crumb is the
         page itself: <code class="cn-code-inline">aria-current="page"</code>,{" "}
-        <code class="cn-code-inline">--cn-fg</code> at 600, and not a link.
+        <code class="cn-code-inline">--cn-fg</code> at 600, a weight step over the crumbs before it, and not a link.
       </p>
 
       <h2 class="cn-title">Accessibility</h2>
@@ -102,12 +102,12 @@ export default function PaginationPage() {
         title="Contract"
         rows={[
           { name: ".pagination", values: "nav", notes: "Wrapping flex row, 4px gap." },
-          { name: ".pagination > a / button / span", values: "page targets", notes: "Square at --control-h-sm (min-width and height), 8px inline padding, the control radius, the ui role with tabular figures in --cn-fg-body. Hover --hover." },
-          { name: '[aria-current="page"]', values: "the current page", notes: "The engaged state: 1px sink, --wash, --neu-inset, the --engaged-edge rim, --cn-fg." },
+          { name: ".pagination > a / button / span", values: "page targets", notes: "Square at --control-h-sm (min-width and height), 8px inline padding, the control radius, 14px at 500 with tabular figures in --cn-fg-body. Hover --hover." },
+          { name: '[aria-current="page"]', values: "the current page", notes: "The engaged state: 1px sink, --wash, --neu-inset, the --engaged-edge rim, --cn-fg at 600." },
           { name: ".pagination > span", values: "the gap", notes: "--cn-fg-muted, no hover." },
           { name: ':disabled / [aria-disabled="true"]', values: "on a target", notes: "--disabled-opacity, not-allowed, no hover fill." },
           { name: "> svg", values: "in a target", notes: "16px." },
-          { name: ".breadcrumbs", values: "nav > ol > li", notes: "Wrapping flex list, 8px gap, no markers. Each li is the ui role in --cn-fg-muted." },
+          { name: ".breadcrumbs", values: "nav > ol > li", notes: "Wrapping flex list, 8px gap, no markers. Each li is 14px at 500 in --cn-fg-muted." },
           { name: ".breadcrumbs a", values: "a crumb", notes: "--cn-fg-body, --cn-fg on hover." },
           { name: "li + li::before", values: "the separator", notes: "A 12px chevron in --cn-fg-faint. Mirrored under :dir(rtl)." },
           { name: '.breadcrumbs [aria-current="page"]', values: "the last crumb", notes: "--cn-fg at 600." },

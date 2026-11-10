@@ -444,7 +444,7 @@ async function contrast() {
         const bg = ground(g);
         if (!bg || !well || !carve) { out.push({ line: 1, message: `${mode}: cannot resolve the well ring on ${g}` }); continue; }
         const [rw, rc] = [well, carve].map((c) => ratio(over(c, bg), bg));
-        if (rw < 1.25) out.push({ line: 1, message: `${mode}: @well-ring on ${g} is ${rw.toFixed(2)}:1, under 1.25:1 for the well hairline (design floor)` });
+        if (rw < 1.5) out.push({ line: 1, message: `${mode}: @well-ring on ${g} is ${rw.toFixed(2)}:1, under 1.5:1 for the well hairline (design floor)` });
         if (rw >= rc) out.push({ line: 1, message: `${mode}: @well-ring on ${g} is ${rw.toFixed(2)}:1, not under the carve ring at ${rc.toFixed(2)}:1` });
       }
     }
@@ -571,7 +571,6 @@ const FROZEN = {
   "--cn-plate-hover": frozenPlate(["calc((4px + 1px) * .25)", "calc((4px + 1px) * .5)", "calc((4px + 1px) * .75)", "calc(4px + 1px)"]),
   "--cn-plate-lg": frozenSteps(10),
   "--cn-plate-sm": frozenSteps(3),
-  "--cn-plate-tilt": frozenSteps(6),
 };
 const FROZEN_MORE = {
   "--edge": "#6c7086",

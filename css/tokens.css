@@ -198,7 +198,7 @@
   --cn-type-value-leading: 1;
   --cn-type-value-tracking: -.02em;
 
-  --cn-type-value-lg-size: clamp(1.625rem, .67rem + 2.94vw, 2.5rem); /* 40px from 996px up, 1.67x the value; display-sm less 4px up to 860px, then it closes on the 40px page title and meets it at 996px, at 600 against its 700 */
+  --cn-type-value-lg-size: clamp(1.625rem, .67rem + 2.94vw, 2.25rem); /* 36px from 860px up, 1.5x the value; display-sm less 4px, so it is under the page title at every width */
   --cn-type-value-lg-weight: 600;
   --cn-type-value-lg-leading: 1;
   --cn-type-value-lg-tracking: -.025em;
@@ -250,10 +250,10 @@
      The contact is 1px at every density. The panel's ink border side adds
      1px, so a plain panel shows 2px of ink: 2px under the 4px plate at
      default density, 1px under the 3px plate at cozy and level with the
-     2px plate at compact. The contact was 2px at default and cozy until
-     round 23, which put the panel 1px under the plate, and the two read
-     as one size. The panel's foot now leans on its near shadow and cast,
-     so it reads apart from a plate by kind and by size. */
+     2px plate at compact. A 2px contact would put the panel 1px under the
+     plate, and at 1x the two read as one size. The panel's foot leans on
+     its near shadow and cast, so it reads apart from a plate by kind and
+     by size. */
   --neu-shade: rgb(8 8 14 / .72);
   --neu-contact: var(--neu-ink);
   --neu-near: rgb(8 8 14 / .8);
@@ -262,7 +262,7 @@
      never by a line all round or a brighter one: a deeper full-ink contact,
      a deeper near shadow and a longer cast. It keeps the plain lit edge.
      The 6px 8px contact is the last step of the foot ladder in SPEC Depth:
-     panel 2px, plate 4px, tilt 6px, lead 9px with its ink border side. */
+     panel 2px, plate 4px, lead 9px with its ink border side. */
   --neu-lifted: 6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
@@ -349,9 +349,10 @@
      included. The tabs carve and a disabled field are not inputs waiting
      for text, so they take --cn-carve-ring, the quieter solid surface-1:
      1.9:1 on the page, 1.8:1 on a panel and 1.4:1 on an overlay. Wells and
-     the mono wells take --cn-well-ring, solid surface-0, the quietest of
-     the three: 1.5:1 on the well's own crust fill, 1.4:1 on the page and
-     1.3:1 on a panel. The sunken fill is only 1.07:1 under the page, so
+     the mono wells take --cn-well-ring, halfway between surface-0 and
+     surface-1, the quietest of the three and never lighter than
+     surface-1: 1.7:1 on the well's own crust fill, 1.6:1 on the page and
+     1.5:1 on a panel. The sunken fill is only 1.07:1 under the page, so
      the ring holds the well's shape on a dim display. Like the field ring
      it paints over the dark wall, so it is even on all four sides.
      prefers-contrast closes it into a surface-2 ring. */
@@ -360,7 +361,7 @@
   --cn-field-ring-overlay: inset 0 0 0 1px color-mix(in srgb, var(--overlay-0) 75%, transparent); /* 2.09:1 on the overlay fill; .popover, .modal and .drawer set --cn-field-ring to it */
   --cn-carve-ring: inset 0 0 0 1px var(--surface-1);
   --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
-  --cn-well-ring: inset 0 0 0 1px var(--surface-0);
+  --cn-well-ring: inset 0 0 0 1px color-mix(in srgb, var(--surface-1) 50%, var(--surface-0));
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
      for inner rules and dividers, --edge-strong for the lead panel and
      overlays: solid surface-2, 2.5:1 on base and 1.9:1 on an overlay,
@@ -481,7 +482,6 @@
   --cn-plate-hover: calc((var(--hard-offset) + 1px) * .25) calc((var(--hard-offset) + 1px) * .25) 0 var(--plate, var(--neu-ink)), calc((var(--hard-offset) + 1px) * .5) calc((var(--hard-offset) + 1px) * .5) 0 var(--plate, var(--neu-ink)), calc((var(--hard-offset) + 1px) * .75) calc((var(--hard-offset) + 1px) * .75) 0 var(--plate, var(--neu-ink)), calc(var(--hard-offset) + 1px) calc(var(--hard-offset) + 1px) 0 var(--plate, var(--neu-ink));
   --cn-plate-lg: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink)), 4px 4px 0 var(--plate, var(--neu-ink)), 5px 5px 0 var(--plate, var(--neu-ink)), 6px 6px 0 var(--plate, var(--neu-ink)), 7px 7px 0 var(--plate, var(--neu-ink)), 8px 8px 0 var(--plate, var(--neu-ink)), 9px 9px 0 var(--plate, var(--neu-ink)), 10px 10px 0 var(--plate, var(--neu-ink));
   --cn-plate-sm: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink));
-  --cn-plate-tilt: 1px 1px 0 var(--plate, var(--neu-ink)), 2px 2px 0 var(--plate, var(--neu-ink)), 3px 3px 0 var(--plate, var(--neu-ink)), 4px 4px 0 var(--plate, var(--neu-ink)), 5px 5px 0 var(--plate, var(--neu-ink)), 6px 6px 0 var(--plate, var(--neu-ink));
 }
 /* The ring between stacked avatars reads the stack's --ring-ground. */
 :where(.avatar) { --cn-ground-ring: 0 0 0 2px var(--ring-ground, var(--base)); }
@@ -572,7 +572,10 @@
    until-found must stay searchable. A consumer element that animates out
    through [hidden] opts out with data-cn-animate-hidden. */
 [hidden]:not([hidden="until-found"], [data-cn-animate-hidden], .popover, .toast) { display: none !important; }
-html { scroll-behavior: smooth; scrollbar-gutter: stable; }
+html { scrollbar-gutter: stable; }
+/* Smooth scrolling only while focus is in the page: a fragment link
+   glides, and a route change's scrollTo or find-in-page cuts. */
+html:focus-within { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--cn-surface-page); }
 button, input, select, textarea { font: inherit; }
 /* A legend drops its user-agent inline padding, so it starts on the same

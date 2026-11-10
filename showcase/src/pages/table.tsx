@@ -180,7 +180,8 @@ export default function TablePage() {
         seams, with no lit edge below, on mauve at{" "}
         <code class="cn-code-inline">--cn-step-row</code> (16%), level with
         the ghost hover, a step past the open accordion and a step under a
-        selected row.
+        selected row. The row's text steps to{" "}
+        <code class="cn-code-inline">--cn-fg</code> with it.
       </p>
 
       <p class="cn-copy">
@@ -374,7 +375,7 @@ export default function TablePage() {
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
-          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.39:1 on a panel, level with the 1.40:1 hover, past the open accordion's 1.08:1, 1.18:1 under a selected row's 1.63:1 wash · cell text 6.7:1 and muted text 5.3:1 on it, over the 4.5:1 a hovered row holds; the 7:1 and 5.5:1 floors are for text at rest", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (16%) into base, a step under a selected row." },
+          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.39:1 on a panel, level with the 1.40:1 hover, past the open accordion's 1.08:1, 1.18:1 under a selected row's 1.63:1 wash · cell text steps to --cn-fg, 8.2:1 on it · text with its own color stays, soft at 6.7:1 and muted at 5.3:1, over the 4.5:1 a hovered row holds; the 7:1 and 5.5:1 floors are for text at rest", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (16%) into base, a step under a selected row. Cell text steps from --cn-fg-soft to --cn-fg, so the hover is a fill and an ink change, with no outline or edge." },
           { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest it takes --cn-field-ring over the soft carve, like any field. Name it with aria-labelledby pointing at the column header and the row's name cell." },
           { name: '.data-table[aria-busy="true"]', values: "loading", notes: "No style of its own. Keep the head and the row count, and put a .skeleton.is-text with aria-hidden in each cell, sized to its column. The loaded rows take .cn-arrive." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
