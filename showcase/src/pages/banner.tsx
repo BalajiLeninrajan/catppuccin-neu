@@ -45,12 +45,9 @@ export default function BannerPage() {
 
       <p class="cn-copy">
         The message itself is{" "}
-        <code class="cn-code-inline">--cn-fg-body</code>, so a sentence stays
-        text-colored like every other sentence. A
-        status tone also swaps in its ladder and its glyph. A status tint
-        is its role at 6%, a step past the 4% a palette tone gets, so the
-        band shows its tone before its glyph. Unlike most inset surfaces, the banner keeps its hairline border.
-        The tint needs the edge to hold its shape on a dark ground.
+        <code class="cn-code-inline">--cn-fg-body</code>. A status tone also
+        swaps in its ladder and its glyph. The banner keeps a hairline
+        border in its tone.
       </p>
 
       <p class="cn-copy">
@@ -58,9 +55,8 @@ export default function BannerPage() {
         <code class="cn-code-inline">-warning</code>,{" "}
         <code class="cn-code-inline">-success</code> or{" "}
         <code class="cn-code-inline">-info</code> and no svg child draws the
-        matching 16px glyph from <code class="cn-code-inline">--cn-glyph-*</code>{" "}
-        through a mask in its tone. These banners hold only text. An svg child
-        replaces the CSS glyph when the status wants another shape.
+        matching 16px glyph from <code class="cn-code-inline">--cn-glyph-*</code>.
+        An svg child replaces the CSS glyph.
       </p>
 
       <Demo title="Palette tones with a leading glyph" classes="banner cn-tone-{tone} > svg + text">
@@ -87,17 +83,12 @@ export default function BannerPage() {
       </Demo>
 
       <p class="cn-copy">
-        A tone never carries meaning alone, because red, peach and pink sit
-        close in lightness. The words in the banner state the status:
-        "Payment failed", not a red band. A danger or warning banner also
-        leads with a glyph, because those are the tones a reader must not
-        miss. The palette tones draw none, so a red or yellow banner brings
-        an svg. Other palette tones may drop it, as in the blue banner above.
-        The svg goes first, at the 16px the recipe sets. The recipe sets the
-        svg's color to the tone, so stroke it with{" "}
-        <code class="cn-code-inline">currentColor</code>,
-        and mark it <code class="cn-code-inline">aria-hidden="true"</code>; the
-        text carries the message. For messages
+        A tone never carries meaning alone. The words in the banner state the
+        status: "Payment failed", not a red band. The palette tones draw no
+        glyph, so a red or yellow banner brings an svg. Other palette tones
+        may drop it. The svg goes first. Stroke it with{" "}
+        <code class="cn-code-inline">currentColor</code> and mark it{" "}
+        <code class="cn-code-inline">aria-hidden="true"</code>. For messages
         that arrive dynamically, put <code class="cn-code-inline">role="status"</code>{" "}
         on the banner, or <code class="cn-code-inline">role="alert"</code> for the red
         tone.
@@ -111,13 +102,13 @@ export default function BannerPage() {
             values: "div (or a status/alert region)",
             contrast: "Status tint 1.10:1 (red) to 1.16:1 (yellow) on a panel · body text on it 8.0:1 or better on a panel, 6.2:1 on an overlay",
             notes:
-              "Tint band: --cn-fg-body text at the ui size, 14px at 400, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). A palette tone's tint is the tone at 4%, --cn-step-tint, and its edge the tone 25% into surface-0. A status tone takes its ladder's stops, with the tint at 6%, --cn-step-status-tint. Its words state the status.",
+              "--cn-fg-body text at the ui size, 12px 16px padding, a --tint background and a --tone-border edge, inset-soft depth, the card radius (12px). A status tone takes its ladder's stops. Its words state the status.",
           },
           {
             name: ".banner svg",
             values: "one leading glyph",
             notes:
-              "16px, first in the banner, color set to --tone, currentColor stroke, aria-hidden. Seated by the flex gap, no extra wrapper. Replaces the CSS glyph on a status tone. Needed on .cn-tone-red and -yellow, which draw none.",
+              "16px, first in the banner, color set to --tone, currentColor stroke, aria-hidden. Replaces the CSS glyph on a status tone. Needed on .cn-tone-red and -yellow, which draw none.",
           },
           {
             name: ".banner::before",

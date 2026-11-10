@@ -45,13 +45,13 @@ const GROUNDS = [
   { name: "mantle", hex: "#181825", note: "The page ground, --cn-surface-page. Crust mixes into it for the recessed surface." },
   { name: "base", hex: "#1e1e2e", note: "The raised fill, --cn-surface-raised: panels and plated controls, one step above the page." },
   { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
-  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 60%, dashed open slots and the resting ring of a table-cell field." },
-  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 70%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
+  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38%, the hover wash at 60%, dashed open slots." },
+  { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the --edge hairline at 70%, the lit top edge at 45%, scrollbar thumbs." },
 ];
 
 const NEUTRAL_TEXT = [
-  { name: "overlay-0", hex: "#6c7086", note: "--edge under prefers-contrast: more, 3.4:1 on base, so a panel shows a 3:1 boundary. Not for text." },
-  { name: "overlay-1", hex: "#7f849c", note: "A hovered field's ring, --edge-strong under prefers-contrast: more, unchecked control edges, the slider thumb edge, disabled text, decorative icons and list markers. Not for readable text." },
+  { name: "overlay-0", hex: "#6c7086", note: "--edge under prefers-contrast: more. Not for text." },
+  { name: "overlay-1", hex: "#7f849c", note: "A hovered field's ring, unchecked control edges, disabled text, decorative icons and list markers. Not for readable text." },
   { name: "overlay-2", hex: "#9399b2", note: "Placeholders, --cn-fg-placeholder. The faintest readable text." },
   { name: "subtext-0", hex: "#a6adc8", note: "Meta, help and table heads, --cn-fg-muted." },
   { name: "subtext-1", hex: "#bac2de", note: "Body copy, ledes, table cells and code." },
@@ -163,11 +163,10 @@ export default function ColorsPage() {
 
       <h2 class="cn-title">Every hue has a job</h2>
       <p class="cn-copy">
-        No hue is free decoration. Each one does one thing, so a color on the
-        page always means the same thing. Six hues sit outside the six data
-        series and carry no status: use them only as a record's{" "}
-        <code class="cn-code-inline">--accent</code> when a seventh team or
-        project needs its own color.
+        Each hue does one thing, so a color on the page always means the same
+        thing. Six hues sit outside the six data series and carry no status.
+        Use them only as a record's <code class="cn-code-inline">--accent</code>{" "}
+        when a seventh team or project needs its own color.
       </p>
 
       <Demo title="Hue jobs" why="Why each hue has one job">
@@ -206,10 +205,9 @@ export default function ColorsPage() {
 
       <h2 class="cn-title">Semantic roles</h2>
       <p class="cn-copy">
-        Recipes read a role for each job instead of a palette name. Every role
-        is a Mocha color above. Because recipes read the roles, the{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> block can re-key
-        them in one place and every component follows. The{" "}
+        Recipes read a role for each job, not a palette name. The{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code> block re-keys
+        the roles in one place and every component follows. The{" "}
         <a href="/accessibility">Accessibility</a> page lists the ratio of
         each on base.
       </p>
@@ -218,18 +216,18 @@ export default function ColorsPage() {
         title="Role tokens"
         rows={[
           { name: "--cn-fg", values: "text", notes: "Headings, names, values." },
-          { name: "--cn-fg-soft", values: "var(--cn-fg-body)", notes: "Ledes, table cells, code, .cn-label and field labels. A job alias of body: Mocha has no stop between subtext-1 and text, so the two share a value and soft follows body under prefers-contrast: more." },
+          { name: "--cn-fg-soft", values: "var(--cn-fg-body)", notes: "Ledes, table cells, code, .cn-label and field labels. An alias of body." },
           { name: "--cn-fg-body", values: "subtext-1", notes: "Running text: body, .cn-copy, .cn-prose. text under prefers-contrast." },
           { name: "--cn-fg-muted", values: "subtext-0", notes: "Meta, help, table heads. subtext-1 under prefers-contrast." },
           { name: "--cn-fg-placeholder", values: "overlay-2", notes: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
           { name: "--cn-fg-faint", values: "overlay-1", contrast: "4.4:1 on base", notes: "Decorative icons. Icon buttons rest in --cn-fg-muted. overlay-2 under prefers-contrast." },
-          { name: "--cn-fg-disabled", values: "overlay-1", notes: "Disabled text, 4.4:1 on base, a stop under the placeholder on purpose; WCAG 1.4.3 exempts inactive controls. --control-edge, the unchecked edge and slider thumb edge, is overlay-1 too. Both move to overlay-2 under prefers-contrast." },
-          { name: "--cn-fg-on-accent", values: "crust", notes: "Text and glyphs on a solid accent fill: 9.2:1 on mauve." },
+          { name: "--cn-fg-disabled", values: "overlay-1", contrast: "4.4:1 on base", notes: "Disabled text. WCAG 1.4.3 exempts inactive controls. overlay-2 under prefers-contrast." },
+          { name: "--cn-fg-on-accent", values: "crust", contrast: "9.2:1 on mauve", notes: "Text and glyphs on a solid accent fill." },
           { name: "--cn-interactive", values: "mauve", notes: "Links, the primary, checked controls." },
           { name: "--cn-interactive-hover", values: "pink", notes: "Their hover." },
-          { name: "--cn-focus", values: "text", notes: "The focus ring, 11.3:1 on base. The one bright neutral no state uses, so focus differs from the mauve engaged rim by hue as well as shape." },
+          { name: "--cn-focus", values: "text", contrast: "11.3:1 on base", notes: "The focus ring." },
           { name: "--cn-danger", values: "red", notes: "Errors, overdue, destructive actions." },
-          { name: "--cn-warning", values: "yellow", notes: "Due soon, expiring, outside the domain. 1.8:1 from red, where peach is 1.3:1." },
+          { name: "--cn-warning", values: "yellow", notes: "Due soon, expiring, outside the domain." },
           { name: "--cn-success", values: "green", notes: "Paid, live, positive deltas." },
           { name: "--cn-info", values: "blue", notes: "Drafts, syncing, neutral status." },
         ]}
@@ -246,22 +244,19 @@ export default function ColorsPage() {
 
       <p class="cn-copy">
         The <code class="cn-code-inline">.cn-fg-*</code> utilities follow{" "}
-        <code class="cn-code-inline">prefers-contrast</code>; the{" "}
+        <code class="cn-code-inline">prefers-contrast</code>. The{" "}
         <code class="cn-code-inline">.cn-text-*</code> palette utilities below do
-        not. <code class="cn-code-inline">.cn-fg-faint</code> sits
-        under the text floor, so the demo leaves it out. Use it for icons and
-        text a reader can do without.{" "}
+        not. <code class="cn-code-inline">.cn-fg-faint</code> sits under the
+        text floor, so use it only for icons and text a reader can do without.{" "}
         <code class="cn-code-inline">.cn-tone-danger</code>,{" "}
         <code class="cn-code-inline">-warning</code>,{" "}
         <code class="cn-code-inline">-success</code> and{" "}
         <code class="cn-code-inline">-info</code> set{" "}
         <code class="cn-code-inline">--tone</code> from the status roles, swap
         in that role's ladder and bring its glyph. A tone never carries
-        meaning alone, because red, peach and pink sit close in lightness. The
-        word in the tag or banner states the status. Danger and warning also
-        lead with a glyph, because they are the tones a reader must not miss.
-        A status tag or banner with no svg of its own draws its glyph from
-        CSS, so the markup below holds only the word.
+        meaning alone: the word in the tag or banner states the status. A
+        status tag or banner with no svg of its own draws its glyph from CSS,
+        so the markup below holds only the word.
       </p>
 
       <Demo title="Tones by role" classes="tag cn-tone-danger · -warning · -success · -info  (the glyph comes from CSS)" row>
@@ -279,24 +274,23 @@ export default function ColorsPage() {
 
       <h2 class="cn-title">Status ladders</h2>
       <p class="cn-copy">
-        Each status role has four named stops, one per job. Tags, banners,
-        invalid fields and the icon-button hover read them through{" "}
+        Each status role has four named stops. Tags, banners, invalid fields
+        and the icon-button hover read them through{" "}
         <code class="cn-code-inline">--tint</code>,{" "}
         <code class="cn-code-inline">--tone-wash</code>,{" "}
         <code class="cn-code-inline">--tone-edge</code> and{" "}
         <code class="cn-code-inline">--tone-border</code>. By default those four
         mix the element's own <code class="cn-code-inline">--tone</code> at the
-        shared steps. The four status setters swap in their role's ladder
-        instead, so one hue's stop can be tuned without moving the mix steps
-        for every other hue. The palette setters set{" "}
+        shared steps. The four status setters swap in their role's ladder, so
+        you can tune one hue's stop alone. The palette setters set{" "}
         <code class="cn-code-inline">--tone</code> only.
       </p>
 
       <Props
         title="Ladder stops"
         rows={[
-          { name: "--cn-{role}-tint", values: "role 6% into transparent", default: "--tint", notes: "The status banner ground, at --cn-step-status-tint. An invalid field's well stays at 4%." },
-          { name: "--cn-{role}-wash", values: "role 12% into transparent", default: "--tone-wash", notes: "The tag ground and the icon-button hover. The danger ghost and the danger menu item read --cn-danger-wash directly." },
+          { name: "--cn-{role}-tint", values: "role 6% into transparent", default: "--tint", notes: "The status banner ground." },
+          { name: "--cn-{role}-wash", values: "role 12% into transparent", default: "--tone-wash", notes: "The tag ground and the icon-button hover." },
           { name: "--cn-{role}-edge", values: "role 40% into transparent", default: "--tone-edge", notes: "The icon-button hover edge." },
           { name: "--cn-{role}-border", values: "role 25% into surface-0", default: "--tone-border", notes: "The banner edge and .cn-edge-tone." },
         ]}
@@ -360,11 +354,8 @@ export default function ColorsPage() {
         Store the accent on the record, or derive it from a stable id, and
         set it inline wherever the record renders. It never comes from list
         position, so sorting or filtering never recolors an item. The six
-        accents are the six data series below: teal, yellow, blue, peach,
-        pink and mauve. A seventh record takes one of the six identity hues
-        (rosewater, flamingo, maroon, sky, sapphire or lavender), which
-        never mean status or interaction. Here Billing takes sapphire, which
-        sits beside peach and away from blue, its cool pair.
+        accents are the six data series. A seventh record takes one of the six
+        identity hues: rosewater, flamingo, maroon, sky, sapphire or lavender.
       </p>
 
       <Demo title="Six accents, one per team, and a seventh team on an identity hue" why="What --accent is for" classes='style="--accent:#94e2d5"  (from the record)' row>
@@ -400,31 +391,20 @@ export default function ColorsPage() {
       <p class="cn-copy">
         A chart takes <code class="cn-code-inline">--cn-series-1</code> to{" "}
         <code class="cn-code-inline">--cn-series-6</code> in order: teal,
-        yellow, blue, peach, pink and mauve. These are the six accents.
-        Mauve is the last slot, so a chart of up to five series holds no bar
-        in the interactive color. The first four alternate cool and warm;
-        peach and pink are the one pair of warm neighbors, a lightness step
-        apart. Series 3 and 5 are blue and pink at .795 of their oklch
-        lightness with chroma and hue kept, so they darken without a grey
-        cast: 4.3:1 and 5.7:1 on base, a lightness step under
-        the rest. At full strength blue collapses into mauve for a protan
-        reader and pink into teal for a deutan one. Under a full-severity
-        simulation (Machado 2009) every adjacent pair stays above dE 6 in
-        OKLab, the closest being series 1 and 2, teal and yellow, at 6.6 for
-        a protan reader. Blue and peach hold 23.5, peach and pink 12.9, and
-        pink and mauve 10.2 at their lowest. Series 3 and 5, blue and pink,
-        are not neighbors but sit at 7.5 for a protan reader, so hatch one
-        when a chart sets them side by side. A record with an identity
-        keeps its own <code class="cn-code-inline">--accent</code> instead, so
-        Payments is teal in every chart, whatever position it plots in.
+        yellow, blue, peach, pink and mauve. Mauve is the last slot, so a
+        chart of up to five series holds no bar in the interactive color.
+        Series 3 and 5 are blue and pink a lightness step down, which keeps
+        them apart from mauve and teal for a color-blind reader. Hatch one of
+        them when a chart sets the two side by side. A record with an identity
+        keeps its own <code class="cn-code-inline">--accent</code>, so Payments
+        is teal in every chart.
       </p>
 
       <p class="cn-copy">
         <code class="cn-code-inline">--cn-ramp-1</code> to{" "}
         <code class="cn-code-inline">--cn-ramp-5</code> is a sequential ramp
         for one measure: mauve mixed into surface-0 in oklab at 20, 40, 60, 80
-        and 100%. Oklab keeps the steps even in lightness, and data colors
-        are the one place the package mixes outside srgb.{" "}
+        and 100%.{" "}
         <code class="cn-code-inline">--cn-diverge-1</code> to{" "}
         <code class="cn-code-inline">--cn-diverge-5</code> is for a measure with
         a meaningful zero: red, red half into surface-1, surface-1 at zero,
@@ -432,8 +412,7 @@ export default function ColorsPage() {
         series and ramp mark keeps a word or a value next to it, and{" "}
         <code class="cn-code-inline">.is-hatched</code> on a{" "}
         <code class="cn-code-inline">.bar</code> or{" "}
-        <code class="cn-code-inline">.legend-item</code> adds stripes for a
-        series that must stand apart without color. Tailwind
+        <code class="cn-code-inline">.legend-item</code> adds stripes. Tailwind
         calls them <code class="cn-code-inline">series-1</code> to{" "}
         <code class="cn-code-inline">-6</code>,{" "}
         <code class="cn-code-inline">ramp-1</code> to{" "}
@@ -443,17 +422,14 @@ export default function ColorsPage() {
       </p>
 
       <p class="cn-copy">
-        Mocha's accents sit within 1.8:1 of each other in lightness, so hue
-        does the separating. Two hues from one family never sit side by side,
-        as neighboring series, adjacent tags or the two ends of a scale. The
-        warm family is red, maroon, peach, pink, flamingo and yellow. The cool pairs
-        are sky and teal, mauve and lavender, and blue and sapphire. Series 4
-        and 5, peach and pink, are the one allowed pair. A reader
-        with a red-green deficiency loses the warm family first, which is why
-        every status tone also carries a word and a shape.
+        Mocha's accents are close in lightness, so hue does the separating.
+        Never set two hues from one family side by side. The warm family is
+        red, maroon, peach, pink, flamingo and yellow. The cool pairs are sky
+        and teal, mauve and lavender, and blue and sapphire. Series 4 and 5,
+        peach and pink, are the one allowed pair.
       </p>
 
-      <Demo title="Series and ramps" why="How the series and ramps were picked" classes="--cn-series-1..6 · --cn-ramp-1..5 · --cn-diverge-1..5" row>
+      <Demo title="Series and ramps" why="The series and the ramps" classes="--cn-series-1..6 · --cn-ramp-1..5 · --cn-diverge-1..5" row>
         {SERIES.map((name, i) => (
           <div key={name} class="cn-stack cn-gap-8" style="justify-items:center">
             <div class="cn-r-mark" style={`width:48px;height:32px;background:var(--cn-series-${i + 1})`} />
@@ -538,12 +514,12 @@ export default function ColorsPage() {
       <Props
         title="Series and ramp tokens"
         rows={[
-          { name: "--cn-series-1", values: "teal", notes: "The first series, off mauve so a bar never reads as interactive. Tailwind series-1." },
+          { name: "--cn-series-1", values: "teal", notes: "Tailwind series-1." },
           { name: "--cn-series-2", values: "yellow", notes: "Tailwind series-2." },
-          { name: "--cn-series-3", values: "blue at .795 oklch lightness", notes: "About #5a83c5, 4.3:1 on base. Tailwind series-3." },
+          { name: "--cn-series-3", values: "blue at .795 oklch lightness", contrast: "4.3:1 on base", notes: "About #5a83c5. Tailwind series-3." },
           { name: "--cn-series-4", values: "peach", notes: "Tailwind series-4." },
-          { name: "--cn-series-5", values: "pink at .795 oklch lightness", notes: "About #ba8aad, 5.7:1 on base. Tailwind series-5." },
-          { name: "--cn-series-6", values: "mauve", notes: "The last slot, so a chart of up to five series holds no bar in the interactive color. Tailwind series-6." },
+          { name: "--cn-series-5", values: "pink at .795 oklch lightness", contrast: "5.7:1 on base", notes: "About #ba8aad. Tailwind series-5." },
+          { name: "--cn-series-6", values: "mauve", notes: "The last slot. Tailwind series-6." },
           { name: "--cn-ramp-1..5", values: "mauve into surface-0, oklab, 20 to 100%", notes: "One measure, low to high. --cn-ramp-5 is mauve itself. Tailwind ramp-1 to ramp-5." },
           { name: "--cn-diverge-1..5", values: "red, red 50% into surface-1, surface-1, blue 50% into surface-1, blue, oklab", notes: "A measure with a meaningful zero. --cn-diverge-3 is the zero. Tailwind diverge-1 to diverge-5." },
         ]}
@@ -551,25 +527,23 @@ export default function ColorsPage() {
 
       <h2 class="cn-title">Mix steps</h2>
       <p class="cn-copy">
-        Tinted surfaces are never opaque hue fills. Every tint is a{" "}
-        <code class="cn-code-inline">color-mix(in srgb, …)</code> of a hue into a
-        ground or into transparent, at one of nine steps. Every hue tint in
-        the recipes reads one of these tokens, so a wash is the same strength
-        on every component.
+        Every tint is a <code class="cn-code-inline">color-mix(in srgb, …)</code>{" "}
+        of a hue into a ground or into transparent, at one of nine steps, so a
+        wash is the same strength on every component.
       </p>
 
       <Props
         title="The steps"
         rows={[
           { name: "--cn-step-tint", values: "4%", notes: "A field in its tone, an untoned --tint, the open accordion row." },
-          { name: "--cn-step-status-tint", values: "6%", notes: "The four status tints, so a toned banner or .cn-tint shows its tone before its glyph and body text on it stays 8.0:1 or better on a panel." },
-          { name: "--cn-step-row", values: "16%", notes: "Table and ranked row hovers: 1.39:1 for mauve on base, level with the 1.40:1 hover, past the open carve's 1.08:1, and 1.18:1 under a selected row." },
-          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner. Also avatar grounds, the radio and live-dot halos and the .mark border." },
-          { name: "--cn-step-engaged", values: "23%", notes: "The engaged wash, --wash: 1.63:1 on base, 1.17:1 past the 1.40:1 hover. Muted text on it holds 4.52:1, which is why it stops at 23%; a hint on it takes --cn-fg-soft, 5.68:1. Segmented choices, toggled ghosts, selected rows, the current page." },
+          { name: "--cn-step-status-tint", values: "6%", notes: "The four status tints: a toned banner or .cn-tint." },
+          { name: "--cn-step-row", values: "16%", notes: "Table and ranked row hovers." },
+          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers. Also avatar grounds, the radio and live-dot halos and the .mark border." },
+          { name: "--cn-step-engaged", values: "23%", notes: "The engaged wash, --wash. Segmented choices, toggled ghosts, selected rows, the current page." },
           { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge, .cn-edge-mauve, .cn-edge-accent and the switch glow." },
           { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the avatar edge, the icon-button hover edge, the segmented hover, the switch glow while held." },
           { name: "--cn-step-strong", values: "50%", notes: "The warmed secondary and checked radio borders." },
-          { name: "--cn-step-vivid", values: "70%", notes: "Accent-card plates, so six accents stay apart, and --engaged-edge, so the rim clears 3:1." },
+          { name: "--cn-step-vivid", values: "70%", notes: "Accent-card plates and --engaged-edge." },
         ]}
       />
 
@@ -617,17 +591,13 @@ export default function ColorsPage() {
       <p class="cn-copy">
         Three of the mix tokens are states.{" "}
         <code class="cn-code-inline">--hover</code> is the ghost hover:
-        surface-1 at 60% over whatever sits under it, so a menu row on an
-        overlay still lights. Ghost buttons, menu rows,
-        page targets and sidebar links take it on hover.{" "}
-        <code class="cn-code-inline">--wash</code> is the engaged state: mauve
-        at <code class="cn-code-inline">--cn-step-engaged</code> (23%) into base,
-        a step past the hover, so the fill alone tells a chosen option
-        from a hovered one. An engaged state also wears{" "}
-        <code class="cn-code-inline">--engaged-edge</code>, a mauve rim at{" "}
-        <code class="cn-code-inline">--cn-step-vivid</code> (70%) that clears
-        the non-text floor on its own wash, and the full inset. The token
-        comments below carry each ratio.
+        surface-1 at 60% over whatever sits under it. Ghost buttons, menu
+        rows, page targets and sidebar links take it.{" "}
+        <code class="cn-code-inline">--wash</code> is the engaged fill: mauve
+        at <code class="cn-code-inline">--cn-step-engaged</code> into base. An
+        engaged state also wears{" "}
+        <code class="cn-code-inline">--engaged-edge</code>, a mauve rim, and the
+        full inset.
       </p>
 
       <Demo title="Hover and engaged" why="The hover and engaged mixes" classes="background: var(--hover) · cn-engaged (--wash, --engaged-edge, --neu-inset)" row>
@@ -651,14 +621,8 @@ export default function ColorsPage() {
         The neutral ramp maps one to one onto{" "}
         <code class="cn-code-inline">.cn-text-*</code> utilities, brightest to
         faintest. Readable text stops at overlay-2, the placeholder color.
-        Meta sits a stop above it on subtext-0, and labels
-        a stop above that on subtext-1. overlay-1 is for
-        decorative icons, a hovered field's ring, control edges
-        and disabled text, because it falls under the text floor. The{" "}
-        <a href="/accessibility">Accessibility</a> page has each role's
-        ratio. No recipe reads
-        overlay-0 by default; it is the panel hairline under{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code>. Palette hues get the same treatment, like{" "}
+        overlay-1 is for decorative icons, control edges and disabled text.
+        Palette hues get the same utilities, like{" "}
         <code class="cn-code-inline">.cn-text-mauve</code>, plus{" "}
         <code class="cn-code-inline">.cn-text-accent</code> and{" "}
         <code class="cn-code-inline">.cn-text-tone</code> for the contract properties.
@@ -676,14 +640,11 @@ export default function ColorsPage() {
       <h2 class="cn-title">Border utilities</h2>
       <p class="cn-copy">
         Each edge utility is a fixed mix. Hairlines belong to raised and
-        tinted surfaces; inset surfaces stay borderless.{" "}
+        tinted surfaces. Inset surfaces stay borderless.{" "}
         <code class="cn-code-inline">.cn-edge-tone</code> reads{" "}
-        <code class="cn-code-inline">--tone</code>;{" "}
-        <code class="cn-code-inline">.cn-edge-dashed</code> is the open-slot edge.
-        Dashed means an open slot and nothing else. The disabled checkbox,
-        radio and switch drop to a plain{" "}
-        <code class="cn-code-inline">--edge</code> instead, and the disabled
-        primary drops its edge for a carve.
+        <code class="cn-code-inline">--tone</code>.{" "}
+        <code class="cn-code-inline">.cn-edge-dashed</code> is the open-slot
+        edge, the only meaning of dashed.
       </p>
 
       <Demo
@@ -708,7 +669,7 @@ export default function ColorsPage() {
       <Props
         title="Edge reference"
         rows={[
-          { name: ".cn-edge", values: "surface-2 70%", notes: "Raised-surface hairline, 1.85:1 on base, the raised fill, 1.92:1 on the page and 1.6:1 on an overlay. The cut edge of panels, chips and controls." },
+          { name: ".cn-edge", values: "surface-2 70%", contrast: "1.85:1 on base", notes: "Raised-surface hairline. The cut edge of panels, chips and controls." },
           { name: ".cn-edge-soft", values: "surface-1 38%", notes: "Inner separators." },
           { name: ".cn-edge-line", values: "surface-0", notes: "Row separators, footer rules." },
           { name: ".cn-edge-mauve", values: "mauve at --cn-step-plate (25%)", notes: "Accent-forward edge." },
@@ -748,16 +709,16 @@ export default function ColorsPage() {
         title="Background reference"
         rows={[
           { name: ".cn-bg-page", values: "var(--cn-surface-page)", notes: "mantle. The page ground." },
-          { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", notes: "base, 1.07:1 on the page. The panel fill; a panel lifts by that step and by its edges and shadow." },
-          { name: ".cn-bg-overlay", values: "var(--cn-surface-overlay)", notes: "surface-0 90% into base, 1.27:1 on base. The popover, dialog and toast fill." },
-          { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "crust 80% into mantle, 1.05:1 under the page. The sidebar fill." },
-          { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 60% over the ground, 1.40:1 on base. The ghost hover as a fill." },
-          { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 50% over transparent, one step under its parent, 1.08:1 under base. Table heads." },
-          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust, 1.07:1 under the page and 1.14:1 under a panel. The well and skeleton fill; .well already carries it." },
+          { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", contrast: "1.07:1 on the page", notes: "base. The panel fill." },
+          { name: ".cn-bg-overlay", values: "var(--cn-surface-overlay)", contrast: "1.27:1 on base", notes: "surface-0 90% into base. The popover, dialog and toast fill." },
+          { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", contrast: "1.05:1 under the page", notes: "crust 80% into mantle. The sidebar fill." },
+          { name: ".cn-bg-hover", values: "var(--hover)", contrast: "1.40:1 on base", notes: "surface-1 60% over the ground. The ghost hover as a fill." },
+          { name: ".cn-bg-head", values: "var(--cn-surface-band)", contrast: "1.08:1 under base", notes: "crust 50% over transparent. Table heads." },
+          { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", contrast: "1.07:1 under the page, 1.14:1 under a panel", notes: "crust. The well and skeleton fill." },
           { name: ".cn-bg-base", values: "var(--base)", notes: "Raw base, the same color as the raised fill." },
           { name: ".cn-bg-mantle", values: "var(--mantle)", notes: "Raw mantle." },
           { name: ".cn-bg-crust", values: "var(--crust)", notes: "Deepest fill." },
-          { name: ".cn-tint", values: "tone 4% into transparent, 6% on a status tone", notes: "Semantic wash; pair with .cn-tone-*. A palette tone tints at --cn-step-tint and a status tone at --cn-step-status-tint." },
+          { name: ".cn-tint", values: "tone 4% into transparent, 6% on a status tone", notes: "Semantic wash. Pair with .cn-tone-*." },
         ]}
       />
     </Doc>

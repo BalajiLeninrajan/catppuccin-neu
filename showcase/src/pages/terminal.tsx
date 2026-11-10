@@ -34,12 +34,10 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        The <code class="cn-code-inline">&lt;pre&gt;</code> fills the surface and
-        scrolls on overflow; add <code class="cn-code-inline">.scroll-well</code> so
-        the scrollbar thumb matches the dark ground. Text wraps via{" "}
-        <code class="cn-code-inline">white-space: pre-wrap</code> and{" "}
-        <code class="cn-code-inline">overflow-wrap: anywhere</code>; there is no
-        horizontal scroll.
+        The <code class="cn-code-inline">&lt;pre&gt;</code> fills the surface,
+        wraps its text and scrolls down on overflow. Add{" "}
+        <code class="cn-code-inline">.scroll-well</code> so the scrollbar thumb
+        matches the dark ground.
       </p>
 
       <Demo title="Accent-keyed caret" why="How to key the caret" classes="terminal  (caret reads --accent)">
@@ -58,7 +56,7 @@ export default function TerminalPage() {
         The blinking caret is a plain <code class="cn-code-inline">span.caret</code>{" "}
         filled with <code class="cn-code-inline">var(--accent)</code>, mauve by
         default. A terminal that belongs to one team takes that team's
-        accent, here Payments' teal. The blink stops under reduced motion.
+        accent. The blink stops under reduced motion.
       </p>
 
       <Demo title="Inside a panel" why="When to put a terminal in a panel" classes="panel > terminal">
@@ -81,8 +79,7 @@ export default function TerminalPage() {
       </Demo>
 
       <p class="cn-copy">
-        A raised panel around the carved terminal is the strongest depth
-        contrast the system allows. Use it when the log is the point of the
+        Put the terminal in a raised panel when the log is the point of the
         page.
       </p>
 
@@ -93,7 +90,7 @@ export default function TerminalPage() {
             name: ".terminal",
             values: "surface",
             notes:
-              "The shared --cn-surface-sunken fill, --cn-well-ring (a quiet even dark hairline) over the full neu-inset, the card radius (12px), no border. Column flex; the pre stretches.",
+              "The --cn-surface-sunken fill, --cn-well-ring over the full neu-inset, the card radius (12px), no border. Column flex. The pre stretches.",
           },
           {
             name: ".terminal pre",

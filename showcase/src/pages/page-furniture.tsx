@@ -67,14 +67,12 @@ export default function PageFurniturePage() {
       </p>
 
       <p class="cn-copy">
-        A page header is a display title and a lede. The title names the
-        page. The lede says what is on it, with numbers where there are
-        numbers. Nothing sits above the title: a kicker there repeats the
-        lede. An <code class="cn-code-inline">em</code> inside the title turns mauve
+        A page header is a display title and a lede. Nothing sits above the
+        title. An <code class="cn-code-inline">em</code> inside the title turns mauve
         and upright. <code class="cn-code-inline">.display-title</code> is an alias
-        of <code class="cn-code-inline">.cn-display</code>. Both zero the heading's
-        margin, and <code class="cn-code-inline">.lede</code> is the lede role with
-        its own margins.
+        of <code class="cn-code-inline">.cn-display</code>, and{" "}
+        <code class="cn-code-inline">.lede</code> is the lede role with its own
+        margins.
       </p>
 
       <CodeBlock title="Header markup" code={headerSnippet} />
@@ -107,16 +105,15 @@ export default function PageFurniturePage() {
       </Demo>
 
       <p class="cn-copy">
-        The topbar is sticky, translucent over a 14px blur, and casts{" "}
-        <code class="cn-code-inline">--shadow-cast</code> with a lit hairline. Its
-        grid is 1fr, auto, 1fr, so the center nav stays centered. The nav is a
-        row of small ghost buttons; the current page takes{" "}
+        The topbar is sticky and translucent over a 14px blur. Its grid is
+        1fr, auto, 1fr, so the center nav stays centered. The nav is a row of
+        small ghost buttons. The current page takes{" "}
         <code class="cn-code-inline">aria-current</code> and the engaged state. At
         1060px the grid drops to two columns and anything with{" "}
-        <code class="cn-code-inline">.nav-secondary</code> hides. At 760px the bar
-        tightens and a nav that outgrows it scrolls sideways inside the bar.
-        Under <code class="cn-code-inline">prefers-reduced-transparency: reduce</code>{" "}
-        the bar drops the blur and fills with the opaque page ground, mantle.
+        <code class="cn-code-inline">.nav-secondary</code> hides. At 760px a nav
+        that outgrows the bar scrolls sideways inside it. Under{" "}
+        <code class="cn-code-inline">prefers-reduced-transparency: reduce</code>{" "}
+        the bar goes opaque.
       </p>
 
       <Demo title="Split topbar with a wordmark" why="When to split the topbar" classes="topbar is-split · wordmark > mark">
@@ -134,11 +131,9 @@ export default function PageFurniturePage() {
 
       <p class="cn-copy">
         A page with no center nav takes <code class="cn-code-inline">is-split</code>:
-        brand left, actions right. At 760px the action row wraps onto more
-        rows, right-aligned, so no action hides.{" "}
-        <code class="cn-code-inline">is-compact</code> is the 52px app strip, and
-        it follows <code class="cn-code-inline">--band-h</code> down to 44px at
-        compact density. A{" "}
+        brand left, actions right. At 760px the action row wraps, so no
+        action hides. <code class="cn-code-inline">is-compact</code> is the 52px
+        app strip, 44px at compact density. A{" "}
         <code class="cn-code-inline">.mark</code> before the wordmark's name is the
         brand tile, and <code class="cn-code-inline">.wordmark.is-lg</code> is the
         20px hero size.
@@ -158,10 +153,9 @@ export default function PageFurniturePage() {
 
       <p class="cn-copy">
         The footer is a hairline rule and metadata, with no depth or fill. It
-        follows the page column's <code class="cn-code-inline">--page-width</code>,
-        so it lines up with the content above it, and stacks at 760px.{" "}
-        <code class="cn-code-inline">.wordmark.is-sm</code> is its brand: a glyph in
-        mauve, the name, and an optional note.
+        follows the page column's <code class="cn-code-inline">--page-width</code>{" "}
+        and stacks at 760px.{" "}
+        <code class="cn-code-inline">.wordmark.is-sm</code> is its brand.
       </p>
 
       <CodeBlock title="The page shell" code={shellSnippet} />
@@ -187,32 +181,20 @@ export default function PageFurniturePage() {
         <code class="cn-code-inline">.sidebar</code> beside the content. This
         site's navigation is one. The sidebar is{" "}
         <code class="cn-code-inline">--sidebar-w</code> (264px) wide, full
-        height, sticky, on <code class="cn-code-inline">--cn-surface-recessed</code>,{" "}
-        crust 80% into mantle, a step under the page, with an <code class="cn-code-inline">--edge</code> rule, 1.92:1 on the page, and
-        scrolls on its own. <code class="cn-code-inline">.sidebar-head</code>{" "}
-        holds the wordmark and a <code class="cn-code-inline">.sidebar-toggle</code>;{" "}
+        height, sticky, on <code class="cn-code-inline">--cn-surface-recessed</code>,
+        and scrolls on its own. <code class="cn-code-inline">.sidebar-head</code>{" "}
+        holds the wordmark and a <code class="cn-code-inline">.sidebar-toggle</code>.{" "}
         <code class="cn-code-inline">.sidebar-nav</code> stacks groups 24px
-        apart, each a microlabel over links at the ui size and 500 in
-        --cn-fg-muted, so the links sit under the content they lead to. Hover
-        is --cn-fg on the ghost hover, the group that holds the current page
-        lifts its microlabel to --cn-fg, and <code class="cn-code-inline">aria-current="page"</code> is a
-        position, not a press: 600 in --cn-fg with a 4px mauve spine on its
-        start edge, so the nav never reads as a column of pressed buttons.
-        The rule sits on the
-        sidebar's inline end, so it moves to the other side in right-to-left
-        text.
+        apart, each a microlabel over links. The link with{" "}
+        <code class="cn-code-inline">aria-current="page"</code> is 600 in
+        --cn-fg with a 4px mauve spine on its start edge.
       </p>
       <p class="cn-copy">
         At 1060px and below the sidebar folds into a sticky blurred bar and
         the toggle shows. Your script sets{" "}
         <code class="cn-code-inline">.is-open</code> on the sidebar and{" "}
-        <code class="cn-code-inline">aria-expanded</code> on the toggle. The
-        body fades in and settles 4px over{" "}
-        <code class="cn-code-inline">--t-base</code> on the ease-out, and
-        leaves on the ease-in over{" "}
-        <code class="cn-code-inline">--t-exit</code>; it lands at once under
-        reduced motion. Crossing 1060px does not animate. Under reduced
-        transparency the folded bar goes opaque.
+        <code class="cn-code-inline">aria-expanded</code> on the toggle. Under
+        reduced transparency the folded bar goes opaque.
       </p>
 
       <CodeBlock
@@ -247,11 +229,9 @@ export default function PageFurniturePage() {
       </Demo>
 
       <p class="cn-copy">
-        The live dot pulses every 1.5s on{" "}
-        <code class="cn-code-inline">--ease-out</code>. It is decoration: pair
-        it with a word that states the status and keep it{" "}
-        <code class="cn-code-inline">aria-hidden</code>. Under reduced motion the
-        pulse stops on its first frame.
+        The live dot pulses every 1.5s. It is decoration: pair it with a word
+        that states the status and keep it{" "}
+        <code class="cn-code-inline">aria-hidden</code>.
       </p>
 
       <Props
@@ -285,7 +265,7 @@ export default function PageFurniturePage() {
           {
             name: ".page-main",
             values: ".is-narrow / .is-reading / --page-width",
-            notes: "min(--page-width, 100% - 2 × --page-gutter), centered, --page-pad block padding. --page-width falls back to --cn-width-page (1440px); is-narrow is --cn-width-narrow (860), is-reading --cn-width-reading (740) and also sets the lede at 20px.",
+            notes: "min(--page-width, 100% - 2 × --page-gutter), centered, --page-pad block padding. --page-width falls back to --cn-width-page (1440px). is-narrow is 860px, is-reading 740px with the lede at 20px.",
           },
           {
             name: "--page-gutter / --page-pad",

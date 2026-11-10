@@ -92,22 +92,18 @@ export default function DrawerPage() {
       </Demo>
 
       <p class="cn-copy">
-        The sheet is the full
-        viewport height with square corners and one hairline on the left. Its{" "}
-        <code class="cn-code-inline">header</code> is the shared band: it sits on
-        the sheet's overlay fill behind an <code class="cn-code-inline">--edge-soft</code>{" "}
-        divider. The footer is <code class="cn-code-inline">.panel-footer</code>,
-        also on the sheet's fill with a divider above it. The sheet is a flex column that scrolls as a
-        whole; push the footer down with{" "}
+        The sheet is the full viewport height with square corners and one
+        hairline on the left. Its{" "}
+        <code class="cn-code-inline">header</code> is the shared band, and the
+        footer is <code class="cn-code-inline">.panel-footer</code>. The sheet
+        is a flex column that scrolls as a whole. Push the footer down with{" "}
         <code class="cn-code-inline">margin-top: auto</code>.
       </p>
 
       <p class="cn-copy">
         The drawer slides in from past the right edge over{" "}
-        <code class="cn-code-inline">--t-slow</code> (.32s) and leaves on the ease-in
-        in .14s. The backdrop fades with it. Under reduced motion the drawer
-        fades in place over <code class="cn-code-inline">--t-fast</code>{" "}
-        instead of sliding.
+        <code class="cn-code-inline">--t-slow</code> and the backdrop fades with
+        it. Under reduced motion the drawer fades in place.
       </p>
 
       <Props
@@ -117,7 +113,7 @@ export default function DrawerPage() {
             name: "dialog.drawer",
             values: "showModal() / close()",
             default: "·",
-            notes: "width min(420px, 100vw - 40px); full height; right-pinned flex column; --cn-surface-overlay fill on --shadow-pop. A resting field inside takes --cn-field-ring-overlay, 2.1:1 on the overlay fill.",
+            notes: "width min(420px, 100vw - 40px), full height, right-pinned flex column, --cn-surface-overlay fill on --shadow-pop.",
           },
           {
             name: ".drawer > header",
@@ -135,7 +131,7 @@ export default function DrawerPage() {
             name: "border-inline-start",
             values: "1px solid var(--edge-strong)",
             default: "·",
-            notes: "The one hairline, surface-2. It follows the writing direction; the drawer itself stays pinned right. The pop shadow does the rest.",
+            notes: "The one hairline. It follows the writing direction. The drawer itself stays pinned right.",
           },
           {
             name: "::backdrop",

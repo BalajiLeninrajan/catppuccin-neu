@@ -252,29 +252,22 @@ export default function MenuPage() {
 
       <p class="cn-copy">
         The trigger is a ghost button. While the menu is open it carries{" "}
-        <code class="cn-code-inline">aria-expanded="true"</code>, and the ghost
-        recipe reads that as the engaged state: pressed in on the mauve wash
-        inside the <code class="cn-code-inline">--engaged-edge</code> rim. Open
-        the menu with a click, Enter, Space or ArrowDown. ArrowUp opens it on
-        the last row.
+        <code class="cn-code-inline">aria-expanded="true"</code> and takes the
+        engaged state. Open the menu with a click, Enter, Space or ArrowDown.
+        ArrowUp opens it on the last row.
       </p>
 
       <h2 class="cn-title">Rows</h2>
       <p class="cn-copy">
         Every <code class="cn-code-inline">[role^="menuitem"]</code> child is a
-        row at <code class="cn-code-inline">--control-h-sm</code>, 14px at 500 in{" "}
-        <code class="cn-code-inline">--cn-fg-soft</code>. Hover and keyboard focus
-        both paint <code class="cn-code-inline">--hover</code> and lift the label
-        to <code class="cn-code-inline">--cn-fg</code>. Keyboard focus also draws
-        the 2px <code class="cn-code-inline">--cn-focus</code> ring, inset 2px so the rows above and below
-        never clip it. The pointer gets the wash alone, so a reader using the
-        arrow keys always sees which row Enter will run. A leading svg sits at 16px
-        in <code class="cn-code-inline">--cn-fg-faint</code>. Once any row has
-        one, rows without an svg and the group labels indent to the icon
-        column, so every label starts on one line. A trailing{" "}
-        <code class="cn-code-inline">kbd</code> is the shortcut, in mono at the
-        code size, 13px; mirror it in <code class="cn-code-inline">aria-keyshortcuts</code>.
-        A <code class="cn-code-inline">menuitemcheckbox</code> with{" "}
+        row at <code class="cn-code-inline">--control-h-sm</code>. Hover and
+        keyboard focus both paint <code class="cn-code-inline">--hover</code>.
+        Keyboard focus also draws the focus ring, inset 2px. A leading svg
+        sits at 16px. Once any row has one, rows without an svg and the group
+        labels indent to the icon column. A trailing{" "}
+        <code class="cn-code-inline">kbd</code> is the shortcut. Mirror it in{" "}
+        <code class="cn-code-inline">aria-keyshortcuts</code>. A{" "}
+        <code class="cn-code-inline">menuitemcheckbox</code> with{" "}
         <code class="cn-code-inline">aria-checked="true"</code> draws a mauve check
         at the row's end. <code class="cn-code-inline">.is-danger</code> is red with
         a red wash. A disabled row drops to{" "}
@@ -285,26 +278,24 @@ export default function MenuPage() {
         <code class="cn-code-inline">hr role="separator"</code> is an{" "}
         <code class="cn-code-inline">--edge-soft</code> rule with 4px above and
         below. A <code class="cn-code-inline">.cn-microlabel</code> heads a group
-        of rows. It labels a fact about the rows under it, here that they
-        change the view, and it is the one uppercase voice in the menu.
+        of rows.
       </p>
 
       <h2 class="cn-title">Accessibility</h2>
       <p class="cn-copy">
-        The CSS needs no script to look right, but a menu is required to
-        have a keyboard model: <code class="cn-code-inline">menu()</code>{" "}
+        The CSS needs no script to look right, but a menu needs a keyboard
+        model: <code class="cn-code-inline">menu()</code>{" "}
         from <code class="cn-code-inline">catppuccin-neu/js</code>, or your
         own widget library.
         Give the trigger <code class="cn-code-inline">aria-haspopup="menu"</code>,{" "}
         <code class="cn-code-inline">aria-expanded</code> and{" "}
         <code class="cn-code-inline">aria-controls</code>, and label the menu
         with <code class="cn-code-inline">aria-labelledby</code> pointing at the
-        trigger. Rows take <code class="cn-code-inline">tabindex="-1"</code>: the
-        menu is one stop, and the arrow keys move inside it. When it opens,
-        focus goes to the first enabled row. ArrowDown and ArrowUp move and
-        wrap, Home and End go to the ends, and disabled rows are skipped.
-        Escape closes the menu and returns focus to the trigger. Tab closes it
-        and moves on. A press outside closes it in place. A{" "}
+        trigger. Rows take <code class="cn-code-inline">tabindex="-1"</code>.
+        When the menu opens, focus goes to the first enabled row. ArrowDown
+        and ArrowUp move and wrap, Home and End go to the ends, and disabled
+        rows are skipped. Escape closes the menu and returns focus to the
+        trigger. Tab closes it and moves on. A press outside closes it. A{" "}
         <code class="cn-code-inline">role="menu"</code> may only hold rows,
         groups and separators, so mark the group label{" "}
         <code class="cn-code-inline">aria-hidden="true"</code> and keep each row's
@@ -347,21 +338,19 @@ export default function MenuPage() {
 
       <p class="cn-copy">
         Or call <code class="cn-code-inline">menu(trigger)</code> from the{" "}
-        <a href="/behavior">behavior module</a>,{" "}
-        <code class="cn-code-inline">catppuccin-neu/js</code>. It reads{" "}
+        <a href="/behavior">behavior module</a>. It reads{" "}
         <code class="cn-code-inline">aria-controls</code> to find the menu and
-        wires all of the above: opening, the arrow keys, Escape and Tab, the
-        outside press, <code class="cn-code-inline">aria-expanded</code>, and a{" "}
+        wires all of the above, plus a{" "}
         <code class="cn-code-inline">menuitemcheckbox</code> that toggles and
-        stays open. The demo on this page is Preact and does its own wiring.
+        stays open.
       </p>
 
       <Props
         title="Contract"
         rows={[
-          { name: ".popover.menu", values: '[role="menu"]', notes: "Width auto, min 200px, max min(320px, 100vw - 32px), 4px padding. The popover fill, hairline, shadow and motion. Required to have a keyboard model: menu() from catppuccin-neu/js or your own." },
-          { name: '.menu > [role^="menuitem"]', values: "button or a", contrast: "Hover fill 1.23:1 on the popover · label 7.3:1 on it", notes: "--control-h-sm row, 12px inline padding, the control radius, 500 14px in --cn-fg-soft. Hover and :focus-visible share --hover and --cn-fg; :focus-visible adds the 2px --cn-focus ring at a -2px offset." },
-          { name: "> svg", values: "leading glyph", notes: "16px in --cn-fg-faint, aria-hidden. Once any row has one, iconless rows and group labels indent 36px, to the icon column's text edge." },
+          { name: ".popover.menu", values: '[role="menu"]', notes: "Width auto, min 200px, max min(320px, 100vw - 32px), 4px padding. The popover fill, hairline, shadow and motion. Needs a keyboard model: menu() from catppuccin-neu/js or your own." },
+          { name: '.menu > [role^="menuitem"]', values: "button or a", contrast: "Hover fill 1.23:1 on the popover · label 7.3:1 on it", notes: "--control-h-sm row, 12px inline padding, 500 14px in --cn-fg-soft. Hover and :focus-visible share --hover and --cn-fg. :focus-visible adds the 2px --cn-focus ring at a -2px offset." },
+          { name: "> svg", values: "leading glyph", notes: "16px in --cn-fg-faint, aria-hidden. Once any row has one, iconless rows and group labels indent 36px." },
           { name: "> kbd", values: "trailing shortcut", notes: "Pushed to the end, mono 500 13px in --cn-fg-muted. Mirror it in aria-keyshortcuts." },
           { name: '[aria-checked="true"]', values: "menuitemcheckbox / menuitemradio", notes: "A 14px mauve check at the row's end." },
           { name: ".is-danger", values: "on a row", notes: "--cn-danger label, a red wash at --cn-step-wash on hover and focus." },

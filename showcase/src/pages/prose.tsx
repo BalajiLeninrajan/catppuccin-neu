@@ -69,28 +69,22 @@ export default function ProsePage() {
       <p class="cn-copy">
         Text sets in the body role at <code class="cn-code-inline">--cn-measure</code>{" "}
         (68ch) with 16px between blocks. <code class="cn-code-inline">h2</code> is
-        the heading role with 48px above, <code class="cn-code-inline">h3</code> the
-        title role with 32px and <code class="cn-code-inline">h4</code> the name
-        role with 24px. Any heading keeps 12px under it, so it groups with the
-        text it introduces. Inline <code class="cn-code-inline">code</code> is mono
-        at .92em in <code class="cn-code-inline">--cn-fg-soft</code>, the same voice
-        as <code class="cn-code-inline">.cn-code-inline</code>. A{" "}
-        <code class="cn-code-inline">blockquote</code> hangs on a 2px{" "}
-        <code class="cn-code-inline">--edge-strong</code> rule at its inline start,
-        so it flips in right-to-left text. <code class="cn-code-inline">hr</code> is
-        an <code class="cn-code-inline">--edge-soft</code> rule with 32px on each
-        side. Lists and links keep the base rules: 20px indent, overlay-1
-        markers and the 40% underline. Body copy is 16px at the default
-        density and 15px at compact.
+        the heading role, <code class="cn-code-inline">h3</code> the title role
+        and <code class="cn-code-inline">h4</code> the name role. Inline{" "}
+        <code class="cn-code-inline">code</code> is mono, like{" "}
+        <code class="cn-code-inline">.cn-code-inline</code>. A{" "}
+        <code class="cn-code-inline">blockquote</code> hangs on a 2px rule at its
+        inline start. <code class="cn-code-inline">hr</code> is an{" "}
+        <code class="cn-code-inline">--edge-soft</code> rule. Lists and links
+        keep the base rules.
       </p>
 
       <h2 class="cn-title">Skip link</h2>
       <p class="cn-copy">
         <code class="cn-code-inline">.cn-skip-link</code> is the first focusable
-        element on a page. It waits above the viewport. When it takes keyboard
-        focus it slides in at the top inline-start corner on the overlay fill
-        with <code class="cn-code-inline">--shadow-pop</code>, over whatever sits
-        there. This site has one: reload the page and press Tab.
+        element on a page. It waits above the viewport and slides in at the
+        top inline-start corner when it takes keyboard focus. This site has
+        one: reload the page and press Tab.
       </p>
 
       <Demo title="As it looks while focused" why="How the skip link behaves" classes="cn-skip-link" row>
@@ -105,14 +99,12 @@ export default function ProsePage() {
       </Demo>
 
       <p class="cn-copy">
-        The specimen above is pinned in place with an inline style so it shows
-        at rest; the real one stays off screen until it is focused. Point its{" "}
-        <code class="cn-code-inline">href</code> at the{" "}
+        The specimen above is pinned in place with an inline style. Point the
+        link's <code class="cn-code-inline">href</code> at the{" "}
         <code class="cn-code-inline">main</code> element's id, and give{" "}
         <code class="cn-code-inline">main</code>{" "}
         <code class="cn-code-inline">tabindex="-1"</code>, so following the link
-        moves focus as well as scroll. The next Tab then lands on the first
-        control in the content.
+        moves focus as well as scroll.
       </p>
 
       <CodeBlock

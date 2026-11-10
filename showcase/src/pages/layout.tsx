@@ -44,12 +44,11 @@ export default function LayoutPage() {
       <p class="cn-copy">
         The package's layers are tokens, then recipes, then utilities. A{" "}
         <code class="cn-code-inline">cn-*</code> class on an element always beats the
-        recipe on that element, the same order Tailwind uses. The spacing
-        scale is six tokens, <code class="cn-code-inline">--space-1</code> to{" "}
-        <code class="cn-code-inline">--space-6</code>: 4, 8, 12, 16, 24 and 32. The
-        recipes use only these inside components. Two more,{" "}
+        recipe on that element. The spacing scale is six tokens,{" "}
+        <code class="cn-code-inline">--space-1</code> to{" "}
+        <code class="cn-code-inline">--space-6</code>: 4, 8, 12, 16, 24 and 32.{" "}
         <code class="cn-code-inline">--space-7</code> (48) and{" "}
-        <code class="cn-code-inline">--space-8</code> (64), set the rhythm between
+        <code class="cn-code-inline">--space-8</code> (64) set the rhythm between
         panels and page regions, never inside them.
       </p>
 
@@ -82,18 +81,16 @@ export default function LayoutPage() {
 
       <p class="cn-copy">
         Inside a <code class="cn-code-inline">.cn-container</code> the grids answer
-        the container's width instead of the viewport's, at the same 760 and
-        520 steps. This container is 420px wide, so its three-column grid
-        folds to one on a wide screen. Use it for a grid in a sidebar, a
-        drawer or a narrow pane.
+        the container's width, at the same 760 and 520 steps. This container
+        is 420px wide, so its three-column grid folds to one. Use it for a
+        grid in a sidebar, a drawer or a narrow pane.
       </p>
 
       <p class="cn-copy">
-        Component folds answer the container too. The stat grid and the panel
-        footer fold at 760px, and the segmented control, stat values, the
-        accordion meta and <code class="cn-code-inline">.kv</code> at 520px, so
-        a component in a narrow pane folds as it would on a phone. Page
-        chrome and the table's row mode still follow the viewport.
+        Component folds answer the container too: the stat grid and the panel
+        footer at 760px, and the segmented control, stat values, the
+        accordion meta and <code class="cn-code-inline">.kv</code> at 520px.
+        Page chrome and the table's row mode still follow the viewport.
       </p>
 
       <Demo title="A four-stat grid in a 380px container" why="What the container changed here" classes="cn-container > panel > stat-grid">
@@ -116,9 +113,7 @@ export default function LayoutPage() {
 
       <p class="cn-copy">
         The grid sets four across, but the container is under 520px, so it
-        holds two across and the values drop to the lede size, 18px. Outside
-        a container the same grid keeps four columns until the viewport
-        reaches 760px.
+        holds two across and the values drop to 18px.
       </p>
 
       <h2 class="cn-title">The page grid</h2>
@@ -132,23 +127,18 @@ export default function LayoutPage() {
         <code class="cn-code-inline">-7</code>,{" "}
         <code class="cn-code-inline">-8</code>,{" "}
         <code class="cn-code-inline">-9</code> or{" "}
-        <code class="cn-code-inline">-12</code>. Pairs that add to twelve,
-        such as 7 and 5 or 8 and 4, give a wide panel and a narrow one; three
-        4s give equal thirds. Children keep their content height, so a short
-        panel beside a tall one never stretches into an empty tail.
+        <code class="cn-code-inline">-12</code>. Children keep their content
+        height, so a short panel beside a tall one never stretches.
       </p>
 
       <p class="cn-copy">
-        Each grid holds one row; start a new grid for the next row. The grid
-        folds in two steps. At 1060px and below, or inside a{" "}
-        <code class="cn-code-inline">.cn-container</code> that narrow, splits
-        go to halves, and a 9 and an odd last child take the row: 7 and 5 or
-        8 and 4 go to 6 and 6, four 3s go two by two, three 4s fold to two
-        and one, and a 3 after a 9 takes the row. At 760px every
-        span takes the full row, in source order. In an app shell with a
-        sidebar, the content column is 264px narrower than the viewport, so
-        put <code class="cn-code-inline">.cn-container</code> on it and the
-        step answers the column's width.
+        Each grid holds one row. Start a new grid for the next row. At 1060px
+        and below, or inside a <code class="cn-code-inline">.cn-container</code>{" "}
+        that narrow, splits go to halves, and a 9 and an odd last child take
+        the row. At 760px every span takes the full row, in source order. In
+        an app shell with a sidebar, put{" "}
+        <code class="cn-code-inline">.cn-container</code> on the content column
+        so the step answers the column's width.
       </p>
 
       <Demo title="7 and 5, 8 and 4, three 4s" why="How the twelve-column grid spans and folds" classes="cn-grid-12 > cn-span-7 + cn-span-5">
@@ -171,39 +161,30 @@ export default function LayoutPage() {
 
       <h2 class="cn-title">Composition</h2>
       <p class="cn-copy">
-        A view is built from three gaps and the page grid, so pages line up
-        with each other. Regions of a view, such as the header, a band of
-        figures, a row of panels or a table, sit{" "}
-        <code class="cn-code-inline">--space-7</code> (48px) apart. Panels
-        inside a region sit <code class="cn-code-inline">--space-5</code>{" "}
-        (24px) apart, which is the page grid's gap. Content inside a panel
-        takes <code class="cn-code-inline">--body-pad</code>: put it in a{" "}
-        <code class="cn-code-inline">.panel-body</code>, not fixed padding
-        utilities, so it follows density. Every grid, the equal-column{" "}
-        <code class="cn-code-inline">.cn-grid-2/3/4</code> included, reads{" "}
-        <code class="cn-code-inline">--cn-grid-gap</code>, 24px. A grid of
-        small items rather than panels composes{" "}
+        Regions of a view, such as the header, a band of figures, a row of
+        panels or a table, sit <code class="cn-code-inline">--space-7</code>{" "}
+        (48px) apart. Panels inside a region sit{" "}
+        <code class="cn-code-inline">--cn-grid-gap</code> (24px) apart. Content
+        inside a panel goes in a <code class="cn-code-inline">.panel-body</code>,
+        which takes <code class="cn-code-inline">--body-pad</code> and follows
+        density. A grid of small items composes{" "}
         <code class="cn-code-inline">.cn-gap-16</code>.
       </p>
 
       <p class="cn-copy">
         A region holds at most three raised panels. More items go in one
-        panel, a ruled stat grid on the ground or a table, so raised stays a
-        rank and not a texture. A panel inside a panel takes the soft raise,
-        because it rests on its parent.
+        panel, a ruled stat grid on the ground or a table. A panel inside a
+        panel takes the soft raise.
       </p>
 
       <p class="cn-copy">
         A view reads in one order: the title and its one primary action, the
-        figures, the lead panel, then the rest. The tilted aside never comes
-        before the data it comments on, so on an 8 and 4 row the data takes
-        the 8 and comes first in the source, and the aside takes the 4. At
-        760px the row stacks in that order, data above aside. The{" "}
+        figures, the lead panel, then the rest. The tilted aside comes after
+        the data it comments on, in the source and on screen. The{" "}
         <a href="/examples/dashboard">dashboard example</a> is built this way.
-        Two kinds of view move the primary. A form puts it in the footer,
-        after the fields it submits, as the{" "}
+        A form puts the primary in the footer, as the{" "}
         <a href="/examples/settings">settings example</a> does. A first-run
-        screen puts it in the lead panel, beside the setup it starts, as the{" "}
+        screen puts it in the lead panel, as the{" "}
         <a href="/examples/empty-project">empty project</a> does.
       </p>
 
@@ -275,12 +256,10 @@ export default function LayoutPage() {
 
       <h2 class="cn-title">Split, measure and side</h2>
       <p class="cn-copy">
-        Three primitives cover the layouts pages kept writing by hand.{" "}
         <code class="cn-code-inline">.cn-split</code> pushes two groups to opposite
-        ends of a row, 12px apart vertically and 16px horizontally. The first
-        group takes the slack, and when the two no longer fit side by side the
-        second wraps under the first. It is the page or panel header with
-        actions.
+        ends of a row. The first group takes the slack, and when the two no
+        longer fit side by side the second wraps under the first. Use it for
+        a page or panel header with actions.
       </p>
 
       <Demo title="A header that wraps its actions" why="Split, measure and centering" classes="cn-split">
@@ -301,8 +280,7 @@ export default function LayoutPage() {
         <code class="cn-code-inline">--cn-measure</code> (68ch), centered in its
         parent. Use it for a block of prose inside a wide page.{" "}
         <code class="cn-code-inline">.cn-mx-auto</code> centers any box with a
-        width of its own and sets nothing else. It is the one horizontal
-        margin utility; every other horizontal space comes from a gap.
+        width of its own. It is the one horizontal margin utility.
       </p>
 
       <Demo title="A centered reading column and a centered box" why="The side layout" classes="cn-measure · cn-fit cn-mx-auto">
@@ -322,9 +300,8 @@ export default function LayoutPage() {
         <code class="cn-code-inline">.cn-with-side</code> puts a side of{" "}
         <code class="cn-code-inline">--side-w</code> (16rem by default) beside
         content that takes the rest, 24px apart. The side is the first child.
-        When the content would drop under 60% of the row, the two stack. There
-        is no breakpoint, so it works inside a panel, a drawer or a page, at
-        whatever width its container has.
+        When the content would drop under 60% of the row, the two stack. It
+        has no breakpoint, so it works at whatever width its container has.
       </p>
 
       <Demo title="A side beside fluid content" classes='cn-with-side  style="--side-w: 12rem"'>
@@ -363,30 +340,27 @@ export default function LayoutPage() {
       <CodeBlock title="The page shell" code={SHELL} />
 
       <p class="cn-copy">
-        <code class="cn-code-inline">.page-main</code> is the column every page had
-        been writing by hand: <code class="cn-code-inline">--cn-width-page</code>{" "}
-        (1440px), or the viewport less a{" "}
-        <code class="cn-code-inline">--page-gutter</code> on each side, centered, with{" "}
-        <code class="cn-code-inline">--page-pad</code> above and below. The topbar
-        reads the same gutter, so the brand lines up with the column edge. <code class="cn-code-inline">is-narrow</code> is{" "}
+        <code class="cn-code-inline">.page-main</code> is a centered column of{" "}
+        <code class="cn-code-inline">--cn-width-page</code> (1440px), or the
+        viewport less a <code class="cn-code-inline">--page-gutter</code> on each
+        side, with <code class="cn-code-inline">--page-pad</code> above and below.
+        The topbar reads the same gutter. The footer follows the same width.{" "}
+        <code class="cn-code-inline">is-narrow</code> is{" "}
         <code class="cn-code-inline">--cn-width-narrow</code> (860px),{" "}
         <code class="cn-code-inline">is-reading</code> is{" "}
         <code class="cn-code-inline">--cn-width-reading</code> (740px), and{" "}
-        <code class="cn-code-inline">--page-width</code> sets any other. The footer
-        follows the same width. <code class="cn-code-inline">.app-shell</code> fills
-        the viewport and pushes the footer to the bottom.{" "}
+        <code class="cn-code-inline">--page-width</code> sets any other.{" "}
+        <code class="cn-code-inline">.app-shell</code> fills the viewport and
+        pushes the footer to the bottom.{" "}
         <code class="cn-code-inline">.app-shell.is-fixed</code> is for an app that
-        owns the viewport: the shell is exactly the viewport height and the
-        root drops its reserved scrollbar gutter.
+        owns the viewport: the shell is exactly the viewport height.
       </p>
 
       <h2 class="cn-title">Widths and the measure</h2>
       <p class="cn-copy">
-        Page widths are tokens, so a consumer column can match the package's
-        without copying a number. <code class="cn-code-inline">--cn-measure</code>{" "}
-        is the longest line of running prose, 68ch, which{" "}
-        <a href="/prose">.cn-prose</a> sets on itself. This site's content
-        column is 860px, the narrow width.
+        Page widths are tokens, so a consumer column can match the package's.{" "}
+        <code class="cn-code-inline">--cn-measure</code> is the longest line of
+        running prose, 68ch, which <a href="/prose">.cn-prose</a> sets on itself.
       </p>
 
       <Props
@@ -408,15 +382,13 @@ export default function LayoutPage() {
         <code class="cn-code-inline">border-inline-start</code> and{" "}
         <code class="cn-code-inline">text-align: start</code>. Under{" "}
         <code class="cn-code-inline">dir="rtl"</code> spacing, rules and
-        alignment follow the text: the sidebar rule moves to the other side,
-        a blockquote's rule moves with it and the breadcrumb chevron flips.
-        Positions, transforms and the switch travel are still physical. The
-        utilities are named by side (<code class="cn-code-inline">.cn-text-left</code>,{" "}
-        <code class="cn-code-inline">.cn-auto-l</code>) and do not flip.{" "}
+        alignment follow the text. Positions, transforms and the switch
+        travel are still physical. The utilities named by side
+        (<code class="cn-code-inline">.cn-text-left</code>,{" "}
+        <code class="cn-code-inline">.cn-auto-l</code>) do not flip.{" "}
         <code class="cn-code-inline">.cn-mx-auto</code>,{" "}
         <code class="cn-code-inline">.cn-measure</code> and{" "}
-        <code class="cn-code-inline">.cn-with-side</code> are logical, so they
-        follow the text.
+        <code class="cn-code-inline">.cn-with-side</code> are logical.
       </p>
 
       <Props
@@ -425,14 +397,14 @@ export default function LayoutPage() {
           { name: ".cn-row", values: "flex, centered, gap 8", notes: "Add cn-between, cn-center, cn-end, cn-top, cn-baseline, cn-wrap." },
           { name: ".cn-stack", values: "grid, gap 12", notes: "A column of things. cn-gap-* changes the rhythm." },
           { name: ".cn-cluster", values: "flex, wrap, gap 8", notes: "Chips, tags, buttons that wrap." },
-          { name: ".cn-split", values: "wrapping flex, gap 12 by 16", notes: "Two groups at opposite ends; the first takes the slack, and the second wraps under it when they no longer fit. A header with actions. .cn-top and .cn-baseline realign it, and a .cn-lede after a title in the first group does not widen it, so the header wraps on the title's width. A lede with no title before it keeps its width." },
+          { name: ".cn-split", values: "wrapping flex, gap 12 by 16", notes: "Two groups at opposite ends. The first takes the slack, and the second wraps under it when they no longer fit. .cn-top and .cn-baseline realign it. A .cn-lede after a title in the first group does not widen it." },
           { name: ".cn-measure", values: "max-inline-size --cn-measure", notes: "A centered column at 68ch for prose inside a wide page." },
           { name: ".cn-with-side", values: "--side-w", default: "16rem", notes: "The first child is the side, the last takes the rest, gap 24. They stack when the content would drop under 60% of the row." },
           { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap --cn-grid-gap (24px)", notes: "Collapse at 760 and 520. Compose cn-gap-16 for a grid of small items." },
-          { name: ".cn-grid-12", values: "twelve columns, gap --cn-grid-gap (24px)", notes: "The page grid for one row of a region's panels; start a new grid for the next row. Children span with .cn-span-* and keep their content height (align-items: start)." },
-          { name: ".cn-span-3 / 4 / 5 / 6 / 7 / 8 / 9 / 12", values: "children of .cn-grid-12", notes: "Columns to span. At 1060px, or in a .cn-container that narrow, splits go to halves, and a 9 and an odd last child take the row, as does a 3 after a 9. Each takes the full row at 760px and below." },
+          { name: ".cn-grid-12", values: "twelve columns, gap --cn-grid-gap (24px)", notes: "The page grid for one row of a region's panels. Children span with .cn-span-* and keep their content height." },
+          { name: ".cn-span-3 / 4 / 5 / 6 / 7 / 8 / 9 / 12", values: "children of .cn-grid-12", notes: "Columns to span. At 1060px, or in a .cn-container that narrow, splits go to halves. Each takes the full row at 760px and below." },
           { name: "--cn-grid-gap", values: "token", default: "var(--space-5)", notes: "The gap of every .cn-grid-*, the 24px between panels in a region." },
-          { name: ".cn-container", values: "container-type: inline-size", notes: "Grids and component folds inside it answer its width, not the viewport's: the stat grid and panel footer at 760, the segmented control, stats, accordion meta and .kv at 520." },
+          { name: ".cn-container", values: "container-type: inline-size", notes: "Grids and component folds inside it answer its width, not the viewport's." },
           { name: ".cn-grow / .cn-fixed / .cn-min-0", values: "flex children", notes: "grow is flex 1 with min-width 0, the one that truncates." },
           { name: ".cn-w-full / .cn-fit / .cn-block / .cn-auto-l / .cn-mx-auto", values: "sizing", notes: "auto-l pushes an item to the far end of a row; mx-auto centers a box that has its own width." },
           { name: ".cn-divide", values: "children", notes: "surface-0 hairline between siblings, none on the first." },
@@ -441,7 +413,7 @@ export default function LayoutPage() {
           { name: ".cn-list-none", values: "ul, ol", notes: "No marker, no margin, no padding: a list used as layout." },
           { name: ".cn-scroll-x", values: "any box", notes: "Scrolls sideways inside itself with the system scrollbar color; the page never scrolls sideways." },
           { name: ".cn-sticky-top", values: "any child of a scroll box", notes: "position sticky, top 0, z-index 2. Table headers, pane toolbars." },
-          { name: "cn-microlabel cn-text-*", values: "composition", notes: "The type roles pin a color; the color utilities come later and win. A tracked label in the accent is two classes, not a restated role." },
+          { name: "cn-microlabel cn-text-*", values: "composition", notes: "The color utilities come after the type roles and win, so a tracked label in the accent is two classes." },
         ]}
       />
 

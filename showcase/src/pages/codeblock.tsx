@@ -81,8 +81,7 @@ export default function CodeblockPage() {
         Put a <code class="cn-code-inline">.btn.is-icon</code> as a direct child. The
         recipe pins it to the corner and pads the code clear of it. Copying is
         one delegated listener. Hold <code class="cn-code-inline">.is-copied</code>{" "}
-        on the button for a moment after the copy and it turns green, the
-        same signal as the <a href="/command">command</a>'s copy control.
+        on the button for a moment after the copy and it turns green.
       </p>
 
       <CodeBlock
@@ -124,8 +123,7 @@ export default function CodeblockPage() {
         Ligatures are off in every mono well and in{" "}
         <code class="cn-code-inline">.cn-code</code>, so{" "}
         <code class="cn-code-inline">=&gt;</code>, <code class="cn-code-inline">!=</code> and{" "}
-        <code class="cn-code-inline">&gt;=</code> stay two characters. Code reads and
-        copies as typed.
+        <code class="cn-code-inline">&gt;=</code> stay two characters.
       </p>
 
       <Demo title="No ligatures" why="Where the token spans come from" classes="font-variant-ligatures: none">
@@ -196,7 +194,7 @@ export default function CodeblockPage() {
           {
             name: ".codeblock",
             notes:
-              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --cn-well-ring (a quiet even dark hairline) over --neu-inset. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
+              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --cn-well-ring over --neu-inset. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
           },
           {
             name: ".is-numbered",

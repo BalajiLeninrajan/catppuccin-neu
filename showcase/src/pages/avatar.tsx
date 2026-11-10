@@ -19,10 +19,9 @@ export default function AvatarPage() {
 
       <p class="cn-copy">
         Take the accent from the person: store it on the user record or
-        derive it from the user id. Never from list position, or a person
-        changes color when the list sorts. For an image, put an{" "}
-        <code class="cn-code-inline">img</code> inside and it covers the round. The
-        tint stays behind it while it loads.
+        derive it from the user id, never from list position. For an image,
+        put an <code class="cn-code-inline">img</code> inside and it covers the
+        round.
       </p>
 
       <Demo title="Large" classes="avatar is-lg" row>
@@ -50,7 +49,7 @@ export default function AvatarPage() {
       </p>
 
       <p class="cn-copy">
-        Initials are not a name. Give an initials avatar{" "}
+        Give an initials avatar{" "}
         <code class="cn-code-inline">role="img"</code> and the person's name in{" "}
         <code class="cn-code-inline">aria-label</code>. A{" "}
         <code class="cn-code-inline">data-tip</code> with the same name shows it
@@ -79,7 +78,7 @@ export default function AvatarPage() {
           {
             name: ".avatar",
             values: "initials text or one img",
-            notes: "32px round, sans 600 14px. Accent initials, the accent at --cn-step-wash (12%) over mantle, and an --cn-step-edge (40%) accent hairline into surface-0.",
+            notes: "32px round, sans 600 14px. Accent initials on an accent tint with an accent hairline.",
           },
           {
             name: ".is-lg",
@@ -93,7 +92,7 @@ export default function AvatarPage() {
             name: "--ring-ground",
             values: "color",
             default: "var(--base)",
-            notes: "The ring color, base by default, the panel fill. Set it to the surface behind the stack, such as var(--cn-surface-page) on the page, as in the demo above.",
+            notes: "The ring color, the panel fill by default. Set it to the surface behind the stack, such as var(--cn-surface-page) on the page.",
           },
           {
             name: "--accent",

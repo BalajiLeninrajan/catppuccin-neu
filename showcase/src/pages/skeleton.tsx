@@ -65,27 +65,24 @@ export default function SkeletonPage() {
       <p class="cn-copy">
         Size each skeleton to the content it stands in for, so nothing jumps
         when the content lands. <code class="cn-code-inline">.is-text</code> is one
-        line of body copy, 1em tall. Consecutive lines sit 8px apart, and the
-        last of several is 62% wide, the way a paragraph ends short.{" "}
+        line of body copy, 1em tall. The last of several lines is 62% wide.{" "}
         <code class="cn-code-inline">.is-round</code> is a 32px circle, the size of
         an avatar. A bare <code class="cn-code-inline">.skeleton</code> is a block
-        16px tall; set its height and width inline.
+        16px tall. Set its height and width inline.
       </p>
 
       <p class="cn-copy">
         Mark the loading region <code class="cn-code-inline">aria-busy="true"</code>{" "}
-        so assistive tech waits for it, and give every skeleton{" "}
+        and give every skeleton{" "}
         <code class="cn-code-inline">aria-hidden="true"</code>. Under reduced motion
-        the skeleton holds still at .85 opacity, the midpoint of its breath.
+        the skeleton holds still.
       </p>
 
       <p class="cn-copy">
         Put <code class="cn-code-inline">.cn-arrive</code> on the content that
-        replaces a skeleton. It fades in and settles 2px over{" "}
-        <code class="cn-code-inline">--t-fast</code>, and the whole set arrives at
-        once, with no stagger. The demo above does this; toggle it to see the
-        swap. The <a href="/motion">Motion</a> page covers the other data
-        changes.
+        replaces a skeleton. The whole set arrives at once. Toggle the demo
+        above to see the swap. The <a href="/motion">Motion</a> page covers
+        the other data changes.
       </p>
 
       <CodeBlock
@@ -112,7 +109,7 @@ export default function SkeletonPage() {
           {
             name: ".skeleton",
             values: "block",
-            notes: "16px min-height, the control radius, the well carve: the --cn-surface-sunken fill, 1.14:1 under a panel and 1.07:1 under the page, under --neu-inset, darkness only with no ring. Breathes to .7 opacity over 1.6s, so at its faintest it still sits 1.10:1 under a panel.",
+            notes: "16px min-height, the control radius, the --cn-surface-sunken fill under --neu-inset with no ring. Breathes to .7 opacity over 1.6s.",
           },
           {
             name: ".skeleton.is-text",

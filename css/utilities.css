@@ -1,6 +1,5 @@
 /* ── Utilities ──────────────────────────────────────────────────────────────
-   Single-purpose classes on token values. No utility takes a numeric
-   parameter. Compose them; when a combination recurs, promote it to a recipe.
+   Single-purpose classes on token values. Compose them.
    Requires tokens.css. Layer: cn.utilities.                                 */
 
 /* ── Depth ──────────────────────────────────────────────────────────────── */
@@ -9,16 +8,12 @@
 .cn-raised-soft { box-shadow: var(--neu-raised-soft); }
 .cn-inset       { box-shadow: var(--neu-inset); }
 .cn-inset-soft  { box-shadow: var(--neu-inset-soft); }
-/* Floats above the surface: overlays only, never neu. */
 .cn-pop         { box-shadow: var(--shadow-pop); }
-/* Topbar cast plus its lit hairline. */
 .cn-cast        { box-shadow: var(--shadow-cast), var(--cn-lit-edge); }
-/* Solid-mark mini-drop. */
 .cn-mark-drop   { box-shadow: var(--shadow-mark); }
-/* The hard offset: a solid plate. Any clickable control may take it. */
 .cn-hard        { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
-.cn-hard-lg     { box-shadow: var(--cn-plate-lg); }  /* fixed large offset */
-.cn-hard-sm     { box-shadow: var(--cn-plate-sm); }  /* fixed small offset */
+.cn-hard-lg     { box-shadow: var(--cn-plate-lg); }
+.cn-hard-sm     { box-shadow: var(--cn-plate-sm); }
 .cn-flat        { box-shadow: none; }
 
 /* ── Interaction ────────────────────────────────────────────────────────── */
@@ -31,46 +26,31 @@
 .cn-pressable:active:not(:disabled, [aria-disabled="true"]),
 .cn-pressable-slide:active:not(:disabled, [aria-disabled="true"]) { transition-timing-function: var(--ease-out); transition-duration: var(--t-press); }
 
-/* The soft-control press: lift on hover, sink to an inset when held. */
 .cn-pressable:hover:not(:disabled, [aria-disabled="true"])  { transform: translateY(-1px); }
 .cn-pressable:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 
-/* The half-slide, only combined with .cn-hard. The control
-   slides halfway onto its own offset shadow, which shrinks to meet it. */
+/* The half-slide, only combined with .cn-hard. */
 .cn-pressable-slide:hover:not(:disabled, [aria-disabled="true"])  { transform: translate(-1px, -1px); }
 .cn-pressable-slide:active:not(:disabled, [aria-disabled="true"]) { transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2)); box-shadow: var(--cn-plate-half), var(--cn-lit-edge); }
-/* A touch screen keeps :hover after a tap, so the lift would stick. Only
-   the press runs there. */
+/* A touch screen keeps :hover after a tap, so only the press runs there. */
 @media (hover: none) {
   .cn-pressable:hover:not(:active), .cn-pressable-slide:hover:not(:active) { transform: none; }
 }
 
-/* (.cn-engaged, the engaged state for a chosen or toggled option, is
-   declared after the border utilities so its border-color beats a
-   composed .cn-edge-*.)                                                    */
-
 /* ── Type roles ─────────────────────────────────────────────────────────────
-   No bare font-family utility exists: pick the role, not the face. Each
-   role reads its --cn-type-<role>-size/-weight/-leading/-tracking tokens.
-   Every role is sans except .cn-code, .cn-code-meta and .cn-code-inline.
-   Numbers keep tabular-nums on the sans face. Uppercase is scarce: only
-   the microlabel shouts, and it labels a fact, never a section.            */
+   Pick by role. Only the microlabel is uppercase.                          */
 
-/* The label is 14px at 500 in --cn-fg-soft and meta is 14px at 400 in
-   --cn-fg-muted, so the two share a size and differ by weight and ink. */
 .cn-label {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   letter-spacing: var(--cn-type-label-tracking);
   color: var(--cn-fg-soft);
 }
-/* The label size in the uppercase voice: 12px, tracked .08em. */
 .cn-microlabel {
   font: var(--cn-type-micro-weight) var(--cn-type-micro-size)/var(--cn-type-micro-leading) var(--sans);
   letter-spacing: var(--cn-type-micro-tracking);
   text-transform: uppercase;
-  /* --cn-microlabel-ink lets a recipe lift the label, as the sidebar does
-     for the group that holds the current page; a color set in the recipes
-     layer would lose to this one. */
+  /* A recipe sets --cn-microlabel-ink, since a color in the recipes layer
+     loses to this one. */
   color: var(--cn-microlabel-ink, var(--cn-fg-muted));
 }
 .cn-ui {
@@ -88,8 +68,7 @@
   font-variant-numeric: tabular-nums;
   color: var(--accent);  /* opt out via a color utility */
 }
-/* On an accent card the plate carries the accent, so the value is text.
-   :where keeps this under the color utilities below. */
+/* :where keeps this under the color utilities below. */
 :where(.accent-card) .cn-value-lg { color: var(--cn-fg); }
 .cn-meta {
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
@@ -97,15 +76,12 @@
   font-variant-numeric: tabular-nums;
   color: var(--cn-fg-muted);
 }
-/* Code, CLI strings, machine literals. */
 .cn-code {
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
   letter-spacing: var(--cn-type-code-tracking);
   font-variant-numeric: tabular-nums;
   font-variant-ligatures: none;
 }
-/* Quiet inline code in prose: mono at the text ink, no chip. It scales
-   with the surrounding copy. */
 .cn-code-inline {
   color: var(--cn-fg-soft);
   font-family: var(--mono);
@@ -113,7 +89,6 @@
   font-size: .92em;
   font-weight: var(--cn-type-code-weight);
 }
-/* The mono secondary line: a model id, a path or a hash under a name. */
 .cn-code-meta {
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/1 var(--mono);
   font-variant-numeric: tabular-nums;
@@ -125,12 +100,8 @@
 .cn-text-center { text-align: center; }
 .cn-text-right  { text-align: right; }
 .cn-text-left   { text-align: left; }
-/* The type roles pin a color; the color utilities below come later in this
-   file and win, so "cn-microlabel cn-text-accent" is a tracked label in the
-   accent. Compose, never restate the role. */
+/* The color utilities below come later and win over a role's color. */
 
-/* The hero headline, margin zeroed. .display-title is an alias; .is-sm is
-   the page-title size. */
 .cn-display, .display-title {
   font: var(--cn-type-display-weight) var(--cn-type-display-size)/var(--cn-type-display-leading) var(--sans);
   letter-spacing: var(--cn-type-display-tracking);
@@ -147,7 +118,6 @@
   font: var(--cn-type-title-weight) var(--cn-type-title-size)/var(--cn-type-title-leading) var(--sans);
   letter-spacing: var(--cn-type-title-tracking);
 }
-/* Emphasized proper names: full-strength text color at body scale. */
 .cn-name {
   font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
   letter-spacing: var(--cn-type-name-tracking);
@@ -167,8 +137,7 @@
 
 /* ── Color ──────────────────────────────────────────────────────────────── */
 
-/* Text by role. These follow prefers-contrast; the palette names below
-   do not. */
+/* Text by role. These follow prefers-contrast; the palette names below do not. */
 .cn-fg          { color: var(--cn-fg); }
 .cn-fg-soft     { color: var(--cn-fg-soft); }
 .cn-fg-body     { color: var(--cn-fg-body); }
@@ -176,7 +145,6 @@
 .cn-fg-placeholder { color: var(--cn-fg-placeholder); }
 .cn-fg-faint    { color: var(--cn-fg-faint); }
 
-/* Text ramp + palette */
 .cn-text-text      { color: var(--text); }
 .cn-text-subtext-1 { color: var(--subtext-1); }
 .cn-text-subtext-0 { color: var(--subtext-0); }
@@ -195,7 +163,6 @@
 .cn-text-accent    { color: var(--accent); }
 .cn-text-tone      { color: var(--tone); }
 
-/* Backgrounds */
 .cn-bg-page   { background: var(--cn-surface-page); }
 .cn-bg-base   { background: var(--base); }
 .cn-bg-mantle { background: var(--mantle); }
@@ -211,8 +178,7 @@
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent) var(--cn-step-wash), var(--mantle)), var(--mantle) 48%);
 }
 
-/* Tone setters set --tone. The four status setters also bring their glyph
-   and their ladder stops; put them on the tagged element itself. */
+/* The four status setters also bring their glyph and ladder stops. */
 .cn-tone-danger  { --tone: var(--cn-danger); --cn-glyph: var(--cn-glyph-danger);
   --tint: var(--cn-danger-tint); --tone-wash: var(--cn-danger-wash); --tone-edge: var(--cn-danger-edge); --tone-border: var(--cn-danger-border); }
 .cn-tone-warning { --tone: var(--cn-warning); --cn-glyph: var(--cn-glyph-warning);
@@ -228,21 +194,17 @@
 .cn-tone-blue   { --tone: var(--blue); }
 .cn-tone-mauve  { --tone: var(--mauve); }
 
-/* ── Borders ──────────────────────────────────────────────────────────────
-   Hairlines belong to raised surfaces and tinted semantic surfaces.
-   Inset surfaces are defined by depth alone.                                */
+/* ── Borders ────────────────────────────────────────────────────────────── */
 
 .cn-edge        { border: 1px solid var(--edge); }
-.cn-edge-soft   { border: 1px solid var(--edge-soft); }  /* inner separators */
-.cn-edge-line   { border: 1px solid var(--surface-0); }  /* row separators, footer rules */
+.cn-edge-soft   { border: 1px solid var(--edge-soft); }
+.cn-edge-line   { border: 1px solid var(--surface-0); }
 .cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) var(--cn-step-plate), transparent); }
 .cn-edge-tone   { border: 1px solid var(--tone-border); }
 .cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) var(--cn-step-plate), var(--surface-0)); }
-.cn-edge-dashed { border: 1px dashed var(--surface-1); }  /* an open slot, and nothing else */
+.cn-edge-dashed { border: 1px dashed var(--surface-1); }
 
-/* The engaged state, for a chosen or toggled option: pressed in, on the mauve wash, inside a
-   mauve rim, so the chosen option outweighs the raised ones around it.
-   Declared after the edge utilities so the rim wins over a composed edge. */
+/* The engaged state. Declared after the edge utilities so its rim wins. */
 .cn-engaged {
   transform: translateY(1px);
   box-shadow: var(--neu-inset);
@@ -255,15 +217,13 @@
 .cn-r-panel   { border-radius: var(--cn-radius-panel); }
 .cn-r-card    { border-radius: var(--cn-radius-card); }
 .cn-r-control { border-radius: var(--cn-radius-control); }
-.cn-r-mark    { border-radius: var(--cn-radius-control); }  /* .mark tiles */
+.cn-r-mark    { border-radius: var(--cn-radius-control); }
 .cn-r-chip    { border-radius: var(--cn-radius-chip); }
 .cn-r-pill    { border-radius: 999px; }
 .cn-r-round   { border-radius: 50%; }
 
 /* ── Structure ──────────────────────────────────────────────────────────── */
 
-/* Left spine: marks position (the current row, the selected item), not
-   identity, so it paints in the interactive color. */
 .cn-spine { position: relative; }
 .cn-spine::before {
   content: "";
@@ -274,7 +234,7 @@
   background: var(--cn-interactive);
 }
 
-/* Screen-reader only: clipped, not hidden. */
+/* Screen-reader only. Clipped, so assistive tech still reads it. */
 .cn-sr-only {
   position: absolute;
   width: 1px;
@@ -290,26 +250,17 @@
 .cn-hidden { display: none !important; }
 
 /* ── Layout: primitives and one spacing scale ─────────────────────────────
-   Every gap, padding and margin reads --space-1..8: 4, 8, 12, 16, 24, 32
-   inside components, 48 and 64 for section rhythm. The utilities are named
-   by pixel value, and no other value exists.
-   A row is a centered flex line, a stack is a grid column, a cluster wraps.
-   A split pushes two groups apart, a measure centers a readable column,
-   and a sidebar layout keeps a fixed side beside fluid content.
-   Modifiers only ever add: cn-row cn-between cn-gap-12.                    */
+   Named by pixel value. Modifiers only add: cn-row cn-between cn-gap-12.   */
 
 .cn-row     { display: flex; align-items: center; gap: var(--space-2); }
 .cn-stack   { display: grid; gap: var(--space-3); }
 .cn-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
-/* Split: two groups at opposite ends that wrap onto two lines when they
-   no longer fit, the first group taking the slack. It sits above the
-   modifiers so .cn-top and .cn-baseline can realign it. */
+/* Split: two groups at opposite ends that wrap when they no longer fit.
+   It sits above the modifiers so .cn-top and .cn-baseline can realign it. */
 .cn-split { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-4); }
 .cn-split > :first-child { flex: 1 1 auto; min-width: 0; }
-/* A lede stacked under the title in the first group does not widen the
-   group, so the split wraps on the title's width, not on the length of
-   the copy. It needs the title before it: a lede alone would leave the
-   group no width, and the split would squeeze it and never wrap. */
+/* The lede does not widen the first group, so the split wraps on the title's width.
+   It needs the title before it, or the group has no width. */
 .cn-split > :first-child > :is(h1, h2, .cn-display, .display-title, .cn-heading, .cn-title) ~ .cn-lede { contain: inline-size; }
 .cn-between { justify-content: space-between; }
 .cn-center  { justify-content: center; }
@@ -326,28 +277,16 @@
 .cn-auto-l  { margin-left: auto; }
 .cn-mx-auto { margin-inline: auto; }
 
-/* Measure: a centered column at the prose measure, --cn-measure. */
 .cn-measure { max-inline-size: var(--cn-measure); margin-inline: auto; }
-/* Sidebar layout: the first child holds --side-w (16rem), the second takes
-   the rest, and they stack once the content would drop under 60% of the
-   row. No breakpoint, so it works in any container. */
 .cn-with-side { display: flex; flex-wrap: wrap; gap: var(--space-5); }
 .cn-with-side > :first-child { flex: 1 1 var(--side-w, 16rem); }
 .cn-with-side > :last-child { flex: 999 1 0; min-inline-size: 60%; }
 
-/* Column grids collapse on the system's own breakpoints. Every grid reads
-   --cn-grid-gap, the 24px between panels in a region; a grid of smaller
-   items composes .cn-gap-16. */
 .cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 .cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 .cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 @media (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
-/* The page grid: twelve columns 24px apart. A child spans with
-   .cn-span-3/4/5/6/7/8/9/12. Children keep their content height, so a
-   short panel beside a tall one never stretches into an empty tail. At
-   1060px every split becomes halves and a 9 takes the row; at 760px every
-   span takes the row. */
 .cn-grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; gap: var(--cn-grid-gap); }
 .cn-span-3 { grid-column: span 3; }
 .cn-span-4 { grid-column: span 4; }
@@ -357,11 +296,8 @@
 .cn-span-8 { grid-column: span 8; }
 .cn-span-9 { grid-column: span 9; }
 .cn-span-12 { grid-column: 1 / -1; }
-/* One row per .cn-grid-12. Splits go to halves, and a 9 and an odd last
-   child take the row: three 4s fold to two and one, and a 3 after a 9
-   takes the row because the 9 already took the one above it. A 6 or 12
-   never shares a row with splits, so the :has() guard only keeps the
-   odd-child rule off grids that break the contract. */
+/* Splits go to halves, and a 9 and an odd last child take the row.
+   The :has() guard keeps the odd-child rule off grids that mix in a 6 or 12. */
 @media (max-width: 1060px) {
   .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
   .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),
@@ -376,8 +312,7 @@
 }
 @media (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
 @container (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
-/* Inside a .cn-container the grids answer the container's width instead,
-   so a grid in a sidebar or a narrow pane folds on its own. */
+/* Inside a .cn-container the grids answer the container's width. */
 .cn-container { container-type: inline-size; }
 @container (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @container (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
@@ -388,7 +323,6 @@
 .cn-gap-16 { gap: var(--space-4); }
 .cn-gap-24 { gap: var(--space-5); }
 .cn-gap-32 { gap: var(--space-6); }
-/* Section rhythm: between panels and page regions, not inside them. */
 .cn-gap-48 { gap: var(--space-7); }
 .cn-gap-64 { gap: var(--space-8); }
 
@@ -438,22 +372,14 @@
 .cn-mb-48 { margin-bottom: var(--space-7); }
 .cn-mb-64 { margin-bottom: var(--space-8); }
 
-/* Rows separated by the line hairline, last one bare: Tailwind's divide-y. */
 .cn-divide > * + * { border-top: 1px solid var(--surface-0); }
-/* Lists as layout, not lists. */
-/* The reset is zero-specificity, so a spacing utility on the same list
-   still applies whatever the order. */
+/* Zero specificity, so a spacing utility on the same list still applies. */
 .cn-list-none { list-style: none; }
 :where(.cn-list-none) { margin: 0; padding: 0; }
-/* A wide thing scrolls inside its own box, never the page. */
 .cn-scroll-x { overflow-x: auto; scrollbar-color: var(--surface-2) transparent; }
-/* Pins to the top of its scroll container: table headers, pane toolbars. */
 .cn-sticky-top { position: sticky; top: 0; z-index: 2; }
 
-/* Inline icon sizes. Buttons, chips and banners size their own svg; these
-   are for an icon anywhere else. */
 .cn-icon-sm { width: 13px; height: 13px; flex: 0 0 auto; }
 .cn-icon    { width: 16px; height: 16px; flex: 0 0 auto; }
 .cn-icon-lg { width: 20px; height: 20px; flex: 0 0 auto; }
 
-/* (.scroll-well and .page-enter live in tokens.css.) */

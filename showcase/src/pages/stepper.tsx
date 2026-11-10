@@ -68,8 +68,7 @@ export default function StepperPage() {
 
       <p class="cn-copy">
         On the last step, keep <code class="cn-code-inline">aria-current="step"</code> alongside{" "}
-        <code class="cn-code-inline">.is-done</code> once the phase completes. The mauve tint still marks position while
-        the green text marks completion. The track wraps on narrow screens; it never scrolls.
+        <code class="cn-code-inline">.is-done</code> once the phase completes. The track wraps on narrow screens.
       </p>
 
       <CodeBlock

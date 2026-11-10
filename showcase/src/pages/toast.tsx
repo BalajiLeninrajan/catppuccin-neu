@@ -177,54 +177,37 @@ export default function ToastPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.toast-stack</code> is the viewport, fixed to
         the bottom-right corner. Append new toasts at the bottom.{" "}
-        <code class="cn-code-inline">.toast</code> is one item: a content column with a{" "}
+        <code class="cn-code-inline">.toast</code> is one item: a{" "}
         <code class="cn-code-inline">b</code> title over a span or p description, then trailing
         controls: a <code class="cn-code-inline">.btn-text</code> action, a{" "}
-        <code class="cn-code-inline">.btn.is-icon</code> close, or both. The border is{" "}
-        <code class="cn-code-inline">--edge-strong</code>, the neutral surface-2 overlay hairline; the toast
+        <code class="cn-code-inline">.btn.is-icon</code> close, or both. The toast
         carries no accent color.
       </p>
 
       <p class="cn-copy">
         Give the stack <code class="cn-code-inline">role="region"</code>,{" "}
         <code class="cn-code-inline">aria-live="polite"</code> and an{" "}
-        <code class="cn-code-inline">aria-label</code> such as "Notifications". The
-        live region announces each arrival, and the label lets a screen
-        reader jump to the stack by name. The demo's stack carries all three.
+        <code class="cn-code-inline">aria-label</code> such as "Notifications".
       </p>
 
       <p class="cn-copy">
         The stack collapses: the newest toast sits on top, up to two older
-        ones peek behind it, scaled back, and the fourth and older hide until
-        the stack thins. Hover or keyboard focus fans the stack out into the
-        column.
+        ones peek behind it, and the fourth and older hide. Hover or keyboard
+        focus fans the stack out into a column.
       </p>
 
       <p class="cn-copy">
-        Dismissing a toast from the middle needs no extra rule. Collapsed,
-        depth counts visible toasts only, so the pile re-steps on its
-        translate and scale. Fanned, the leaving toast collapses its height
-        and margin as it fades, so the toasts above it ride down instead of
-        jumping.
+        The exit animates only if the toast stays mounted and{" "}
+        <code class="cn-code-inline">hidden</code> is toggled. Unmount it after
+        the transition. Auto-dismiss after a few seconds and keep a manual
+        dismiss.
       </p>
 
       <p class="cn-copy">
-        Toasts fade in and slide 16px from the right edge. The exit animates only if
-        the toast stays mounted and <code class="cn-code-inline">hidden</code> is toggled;
-        unmount it after the transition. Unmounting directly gets the entrance only.
-        Auto-dismiss after a few seconds and keep a manual dismiss for anything a
-        reader might want to keep.
-      </p>
-
-      <p class="cn-copy">
-        A toast can also be swiped away. Drag it toward the end edge, right
-        in a left-to-right page, and it follows the pointer and fades. Past
-        80px, or on a quick flick, it dismisses; short of that it springs
-        back. The recipe sets <code class="cn-code-inline">touch-action: pan-y</code>,
-        so a vertical drag still scrolls the page and only a sideways one
-        moves the toast. Buttons and links inside the toast never start a
-        swipe. The close button stays, because a swipe is a shortcut, not
-        the only way out.
+        A toast can also be swiped away. Drag it toward the end edge. Past
+        80px, or on a quick flick, it dismisses. Short of that it springs
+        back. A vertical drag still scrolls the page, and buttons and links
+        inside the toast never start a swipe.
       </p>
 
       <Demo title="At rest, one item outside its stack" why="What needs script" row>
@@ -247,18 +230,14 @@ export default function ToastPage() {
       </Demo>
 
       <p class="cn-copy">
-        The CSS draws the toast and the pile; spawning, timers and dismissal
+        The CSS draws the toast and the pile. Spawning, timers and dismissal
         need script. The optional <a href="/behavior">behavior module</a> has{" "}
         <code class="cn-code-inline">toast(stack, {"{ title, body, timeout }"})</code>,
         which appends a toast with a dismiss button, pauses its timeout while
-        the pointer or focus is in the stack, dismisses on a swipe toward the
-        end edge, exits through{" "}
-        <code class="cn-code-inline">[hidden]</code> and then removes the node. In a
-        framework, write the same logic in its terms. This page runs the
-        Preact reference below: per-toast timers that manual dismissal
-        cancels, hover or focus on the stack pausing every timer and resuming
-        the remainder, a cap of five live toasts, the same swipe, and the
-        hidden-then-unmount exit.
+        the pointer or focus is in the stack, dismisses on a swipe, exits
+        through <code class="cn-code-inline">[hidden]</code> and then removes
+        the node. In a framework, write the same logic in its terms. This
+        page runs the Preact reference below.
       </p>
 
       <CodeBlock
@@ -330,14 +309,14 @@ function resume() {
             values: "one stack item",
             default: "·",
             notes:
-              "Flex row on --cn-surface-overlay with the --edge-strong border (surface-2, no accent); floats on --shadow-pop; the card radius (12px). The meta role.",
+              "Flex row on --cn-surface-overlay with the --edge-strong border, on --shadow-pop, at the card radius (12px).",
           },
           {
             name: "b + span/p",
             values: "title and description",
             default: "·",
             notes:
-              "The content column. b is the block title in the name role; the span or p after it is the description in --cn-fg-body.",
+              "b is the block title in the name role. The span or p after it is the description in --cn-fg-body.",
           },
           {
             name: ".btn-text / .btn.is-icon",
@@ -351,7 +330,7 @@ function resume() {
             values: "exit state",
             default: "·",
             notes:
-              "Toggle on a mounted toast to play the exit (--t-exit, .14s), then unmount. Unmounting directly gets the entrance only.",
+              "Toggle on a mounted toast to play the exit (--t-exit, .14s), then unmount.",
           },
         ]}
       />

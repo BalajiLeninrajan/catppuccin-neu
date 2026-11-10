@@ -592,8 +592,7 @@ for (const [file, checks] of Object.entries(CHECKS)) {
    hex, so a palette or shadow-ink edit trips it too. A value that differs
    fails, and so does a new --neu-*, --cn-plate* or --cn-surface-* token
    the snapshot does not list. To move a frozen token on purpose, change
-   the snapshot in the same commit and add a line under "Changed after the
-   freeze" in CHANGELOG.md. FROZEN_MORE and FROZEN_COMPACT hold the frozen
+   the snapshot in the same commit and add a line to CHANGELOG.md. FROZEN_MORE and FROZEN_COMPACT hold the frozen
    names that :root[data-contrast="more"] and [data-density="compact"]
    re-declare. */
 const FROZEN_INK = "rgb(8 8 14)";
@@ -651,7 +650,7 @@ async function frozenTokens() {
       const want = snapshot[name], got = map.has(name) ? resolve(map.get(name), map) : null;
       if (got === null) out.push({ line, message: `${label}${name} is frozen but no longer declared` });
       else if (want === undefined) out.push({ line: lineOf(css, at.get(name)), message: `${label}${name} is not in the frozen snapshot; it resolves to ${got}` });
-      else if (got !== want) out.push({ line: lineOf(css, at.get(name)), message: `${label}${name} is frozen at ${want} but resolves to ${got}; a deliberate change updates the snapshot in scripts/lint.mjs and adds a "Changed after the freeze" line to CHANGELOG.md` });
+      else if (got !== want) out.push({ line: lineOf(css, at.get(name)), message: `${label}${name} is frozen at ${want} but resolves to ${got}; a deliberate change updates the snapshot in scripts/lint.mjs and adds a line to CHANGELOG.md` });
     }
   };
   const family = [...first.keys()].filter((n) => /^--(?:neu-|cn-plate|cn-surface-)/.test(n));
