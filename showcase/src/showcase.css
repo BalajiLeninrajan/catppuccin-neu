@@ -32,11 +32,14 @@
 /* "On this page": hidden until the window has room for a second column. */
 .sc-toc { display: none; }
 
-/* From 1280px a page with a list drops the centering. The measure starts
-   --space-7 from the sidebar and the list takes the strip the centering
-   left empty. It sticks under the top padding and scrolls on its own
-   when it is taller than the window. */
-@media (min-width: 1280px) {
+/* From 1448px a page with a list drops the centering. That is the first
+   width where the measure keeps its 860px beside the list: 264 sidebar,
+   48 start pad, 860, 32 gap, 220 list, 24 end pad. Any narrower and the
+   list squeezes the docs tables. The measure starts --space-7 from the
+   sidebar and the list takes the strip the centering left empty. It
+   sticks under the top padding and scrolls on its own when it is taller
+   than the window. */
+@media (min-width: 1448px) {
   .sc-content.has-toc {
     display: grid;
     grid-template-columns: minmax(0, 860px) 220px;
@@ -128,6 +131,16 @@
   justify-items: start;
 }
 
+/* The lead demo, the first on a page, has no frame and 48px above and
+   below, so it sits open on the ground and the framed demos under it
+   read as secondary. Its specimen starts at the column edge, in line
+   with the caption and the copy line. Nothing is added to it. */
+.sc-demo.is-lead > .sc-demo-stage {
+  padding: var(--space-7) 0;
+  border: 0;
+  border-radius: 0;
+}
+
 /* A row demo is as wide as its specimens or its copy line, whichever is
    longer, so a single button does not sit in an 860px frame. Stages that
    hold a table, a panel or a grid are not rows and keep the column. */
@@ -140,9 +153,10 @@
 /* The fold under a demo: the package accordion, pulled up to the copy
    line so the two read as one block, and held to the prose measure. Its
    summary is the one docs change: the label role, 14px at 500 in the
-   muted ink, so the fold sits under the demo title, 14px at 600, instead
-   of over it. Hovered or open it keeps the package's mauve, which this unlayered
-   rule would otherwise beat. */
+   muted ink, the same voice as the demo caption, so a docs page keeps
+   600 for headings and controls. The chevron and its place under the
+   copy line tell the fold from the caption. Hovered or open it keeps the
+   package's mauve, which this unlayered rule would otherwise beat. */
 .sc-why { max-width: var(--cn-measure); }
 details.sc-why > summary { font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-name-leading) var(--sans); }
 details.sc-why:not([open]) > summary:not(:hover) { color: var(--cn-fg-muted); }

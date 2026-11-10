@@ -40,6 +40,7 @@ export default function ButtonPage() {
       lede="One base class and four variants. Primary and secondary rest on a plate and half-slide onto it when pressed. Ghost and icon buttons sink into a soft inset."
     >
       <Demo
+        lead
         title="Primary, live and disabled"
         classes="btn btn-primary · btn btn-primary[disabled]"
         why="How the primary is built and why it sinks when disabled"
@@ -324,7 +325,7 @@ export default function ButtonPage() {
           { name: ".btn", values: "base class", notes: "Height --control-h, 16px inline padding, the control radius (8px), sans 600 14px. Compose with one variant." },
           { name: ".btn-primary", contrast: "Disabled label 5.1:1 on the sunken fill", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the soft carve, --cn-well-ring (a quiet even surface-0 hairline, 1.5:1 on the fill) over --neu-inset-soft, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1), no plate, ramp, grain, gloss or dimming. One per view." },
           { name: ".btn-secondary", contrast: "Hover border 4.1:1 on base", notes: "--cn-surface-raised fill (base, a step above the page), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong and deepens the plate 1px to --cn-plate-hover. The fill stays base, since nothing raised is lighter than base. The default for clickables." },
-          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', contrast: "Resting hairline 1.22:1 on a panel, 1.24:1 on the page · hover fill 1.40:1 · engaged wash 1.52:1", notes: "No fill and no plate. Rests on an --edge-soft hairline (surface-1 at 38%), except in a topbar nav and as an icon button. Hover adds --hover and steps the hairline to --edge. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
+          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', contrast: "Resting hairline 1.22:1 on a panel, 1.24:1 on the page · hover fill 1.40:1 · engaged wash 1.63:1", notes: "No fill and no plate. Rests on an --edge-soft hairline (surface-1 at 38%), except in a topbar nav and as an icon button. Hover adds --hover and steps the hairline to --edge. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 23% into base), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },
           { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", contrast: "Resting glyph 7.4:1 on base", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted (subtext-0) and tints toward --tone on hover. Needs aria-label." },

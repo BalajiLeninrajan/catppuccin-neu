@@ -67,7 +67,7 @@ export default function CodeblockPage() {
       title="Code block"
       lede="A carved well for snippets, in mono 500 13px on a 1.6 line height. It shares its radius, fill, carve and type with the terminal and the command."
     >
-      <Demo title="Code block" classes="codeblock > pre">
+      <Demo lead title="Code block" classes="codeblock > pre">
         <div class="codeblock" style="width:min(560px,100%)">
           <pre>{SHELL_SNIPPET}</pre>
         </div>

@@ -77,7 +77,7 @@ export default function DepthPage() {
       lede="Every elevation is one of a small set of shadows, lit from one light at the top left. Height above the page separates surfaces; a hairline only cuts their edge."
     >
       <h2 class="cn-title">One model</h2>
-      <Demo title="Four heights and the foot ladder, on the page" why="One light, and why no component writes its own shadow" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-tilted · panel is-lead · cn-bg-overlay cn-pop">
+      <Demo lead title="Four heights and the foot ladder, on the page" why="One light, and why no component writes its own shadow" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-tilted · panel is-lead · cn-bg-overlay cn-pop">
         {/* Two groups. The first holds a carve, the ground and a plain
             panel on its soft foot. The second holds the rest of the foot
             ladder in order, the 4px plate, the 6px tilt and the 9px lead,
@@ -93,7 +93,7 @@ export default function DepthPage() {
             <Height name="The ground" cls="--cn-surface-page" note="Mantle and nothing else.">
               <div class="cn-meta" style={SPEC_BOX}>Invoice #1042</div>
             </Height>
-            <Height name="Raised, soft foot" cls=".panel" note="The base fill, a hairline on the top and left, 3px of ink and a cast.">
+            <Height name="Raised, soft foot" cls=".panel" note="The base fill, a hairline on the top and left, 2px of ink and a cast.">
               <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
             </Height>
           </div>
@@ -120,11 +120,11 @@ export default function DepthPage() {
         surface stands on one of two feet. A soft foot means a panel
         resting on the page, and a hard plate means a clickable, an accent
         card or the one tilted aside. The foot ladder sets how tall it
-        stands, counted in full ink under the bottom edge: panel 3px,
+        stands, counted in full ink under the bottom edge: panel 2px,
         plate 4px, tilt 6px, lead 9px. The ink is capped near 1.14:1 on
-        the page, so at 1x the ladder reads as three sizes: short, 6px and
-        9px. The panel and the plate share the short one and differ by
-        kind, soft with a cast or hard with none. The lead panel and the
+        the page, so only its area can grow, and each step is at least
+        2px past the one before. The panel and the plate differ by size
+        and by kind, soft with a cast or hard with none. The lead panel and the
         tilted panel are steps on the ladder, so neither is a height of
         its own. No static label is raised: a chip on a span is a flat outlined
         label. The avatar is the one small static thing on the soft raise.
@@ -181,7 +181,11 @@ export default function DepthPage() {
         sides are <code class="cn-code-inline">--neu-ink</code> and belong
         to the foot. Carved surfaces have no lip. A resting field takes{" "}
         <code class="cn-code-inline">--cn-field-ring</code>, a quiet even
-        hairline of surface-2 at 85%. The tabs carve and a disabled field
+        hairline of surface-2 at 85%, 2.1:1 on a panel. Inside a popover,
+        modal or drawer it swaps to{" "}
+        <code class="cn-code-inline">--cn-field-ring-overlay</code>,
+        overlay-0 at 75%, which holds the same 2.1:1 on the lighter
+        overlay fill. The tabs carve and a disabled field
         take the quieter{" "}
         <code class="cn-code-inline">--cn-carve-ring</code>, surface-1. Both
         are the same on all four sides. A well's{" "}
@@ -273,7 +277,7 @@ export default function DepthPage() {
         <code class="cn-code-inline">rgb(8 8 14)</code>:{" "}
         <code class="cn-code-inline">--neu-shade</code> at .72 for the cast,{" "}
         <code class="cn-code-inline">--neu-contact</code>, the full ink,
-        for a 2px edge where the surface meets the
+        for a 1px edge where the surface meets the
         ground, <code class="cn-code-inline">--neu-near</code> at .8 for a
         3px 4px 6px shadow that lays a 4 to 6px dark foot along the
         bottom and right edges, and <code class="cn-code-inline">--neu-dark</code> at
@@ -288,9 +292,9 @@ export default function DepthPage() {
         panel and the deeper foot ranks it. A panel's right and bottom
         border sides are the same ink, so they are the last 1px of its
         foot on the ladder. The utilities table has the ink's
-        ratios. Compact density drops the
-        plate to 2px and the plain contact to 1px, so a plain panel stays
-        under a plated control. Nothing darkens or brightens a panel's top and left, because a dark line all
+        ratios. The plain contact is 1px at every density, so a plain
+        panel shows 2px of ink: under the 4px and 3px plates at default
+        and cozy, and level with the 2px plate at compact. Nothing darkens or brightens a panel's top and left, because a dark line all
         round reads as a heavier outline, not as height, and a bright one as a bevel. The soft raise
         keeps contact and a short cast, so every raise answers the light
         the same way: no raise draws a top-left highlight outside its edge.
@@ -312,7 +316,7 @@ export default function DepthPage() {
 --neu-near:    rgb(8 8 14 / .8);    /* the dark foot just past the contact */
 --neu-dark:    rgb(8 8 14 / .8);    /* a carve's dark wall */
 
---neu-raised:      2px 2px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
+--neu-raised:      1px 1px 0 var(--neu-contact), 3px 4px 6px var(--neu-near), 10px 12px 24px var(--neu-shade), var(--cn-lit-edge);
 --neu-lifted:      6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
 --neu-raised-soft: 1px 1px 0 var(--neu-contact), 3px 4px 9px rgb(8 8 14 / .5);
 --neu-inset:       inset 3px 3px 8px var(--neu-dark);
@@ -475,7 +479,7 @@ export default function DepthPage() {
         2px to meet it. <code class="cn-code-inline">cn-engaged</code> is the
         engaged state, for a chosen or toggled option: pressed in on the mauve wash, inside an{" "}
         <code class="cn-code-inline">--engaged-edge</code> rim. The wash is
-        mauve 20% into base, a step past the ghost hover, and
+        mauve 23% into base, a step past the ghost hover, and
         the rim clears the non-text floor on it, so a chosen option outweighs the raised
         ones beside it. The rim colors a border, so give
         the element one, here <code class="cn-code-inline">cn-edge</code>.
@@ -633,7 +637,7 @@ export default function DepthPage() {
           {
             name: ".cn-engaged",
             values: "inset, the mauve wash, the --engaged-edge rim, 1px sink",
-            contrast: "Wash 1.52:1 on base, past the 1.40:1 hover · rim 3.5:1 on the wash",
+            contrast: "Wash 1.63:1 on base, past the 1.40:1 hover · rim 3.3:1 on the wash",
             notes: "The engaged state, for a chosen or toggled option. It sets border-color, so compose it on an element with a border. Under forced colors the rim draws in Highlight.",
           },
         ]}

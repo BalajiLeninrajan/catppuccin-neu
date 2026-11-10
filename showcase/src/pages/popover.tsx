@@ -93,7 +93,7 @@ export default function PopoverPage() {
         inside it.
       </p>
 
-      <Demo title="Anchored, click to open" why="Anchoring, corners and the exit" classes="popover">
+      <Demo lead title="Anchored, click to open" why="Anchoring, corners and the exit" classes="popover">
         <AnchoredDemo />
       </Demo>
 
@@ -205,7 +205,7 @@ document.addEventListener("focusout", undismiss, true);`}
             name: ".popover",
             values: "child of a position: relative anchor",
             default: "·",
-            notes: "width min(390px, 100vw - 32px); z-index 80; --cn-surface-overlay fill, the --edge-strong (surface-2) border, floats on --shadow-pop. Add .menu for an action list.",
+            notes: "width min(390px, 100vw - 32px); z-index 80; --cn-surface-overlay fill, the --edge-strong (surface-2) border, floats on --shadow-pop. A resting field inside takes --cn-field-ring-overlay, 2.1:1 on the overlay fill. Add .menu for an action list.",
           },
           {
             name: ".popover > :first-child",

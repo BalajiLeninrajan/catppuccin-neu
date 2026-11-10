@@ -24,6 +24,7 @@ export default function BannerPage() {
       </p>
 
       <Demo
+        lead
         title="Status tones: the glyph comes from CSS"
         classes="banner cn-tone-danger · -warning · -success · -info > text"
         why="How one tone class sets the tint, the edge and the glyph"

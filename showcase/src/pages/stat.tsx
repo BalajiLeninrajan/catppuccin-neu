@@ -8,7 +8,7 @@ export default function StatPage() {
       title="Stat"
       lede="One recipe for numbers in three sizes: the stat tile, the large stat and the inline row, plus a grid that lays tiles out in a row."
     >
-      <Demo title="Stat tiles" row classes="stat">
+      <Demo lead title="Stat tiles" row classes="stat">
         <div class="stat">
           <span>Active teams</span>
           <strong>48</strong>
@@ -125,7 +125,7 @@ export default function StatPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code-inline">.is-lg</code> steps the figure up to 36px, 1.5 times the 24px value, and
+        <code class="cn-code-inline">.is-lg</code> steps the figure up to 40px, 1.67 times the 24px value, and
         colors it with <code class="cn-code-inline">var(--accent)</code>, mauve by
         default. When the number belongs to one item, such as a team, set that
         item's accent. Use one large stat per surface. On an accent card the
@@ -157,7 +157,10 @@ export default function StatPage() {
 
       <p class="cn-copy">
         An inline row puts the label left and the value right on one
-        baseline. Stack rows in a <code class="cn-code-inline">.cn-divide</code> for
+        baseline. Both are 14px at 500: the label in{" "}
+        <code class="cn-code-inline">--cn-fg-muted</code> and the value in{" "}
+        <code class="cn-code-inline">--cn-fg</code>, two ink stops apart, so
+        the value is the brighter end of the row. Stack rows in a <code class="cn-code-inline">.cn-divide</code> for
         hairlines between them; each row then gets 8px above and below. The
         rows need no card. Put the stack in a well or a panel body when it
         needs a frame.
@@ -210,7 +213,7 @@ export default function StatPage() {
             name: ".stat.is-lg",
             values: "large tile",
             default: "--accent: var(--mauve)",
-            notes: "36px figure in the accent from 860px up; below that it follows the page title down, 4px under it. Text-colored inside an accent card, and with .cn-fg on its strong when the view's mauve primary shares the band. Steps down to 24px at 520px.",
+            notes: "40px figure in the accent from 996px up, level with the page title at 600 against its 700. Under 860px it follows the page title down, 4px under it. Text-colored inside an accent card, and with .cn-fg on its strong when the view's mauve primary shares the band. Steps down to 24px at 520px.",
           },
           {
             name: ".stat-grid",
@@ -227,7 +230,8 @@ export default function StatPage() {
           {
             name: ".stat.is-inline",
             values: "label and value row",
-            notes: "Baseline-aligned, the label role. Label in --cn-fg-muted (subtext-0); value (b or strong) in --cn-fg-soft (subtext-1), tabular.",
+            contrast: "Label 7.4:1 · value 11.3:1 on a panel",
+            notes: "Baseline-aligned, the label role. Label in --cn-fg-muted (subtext-0); value (b or strong) in --cn-fg (text), tabular. Key and value share 14px at 500 and sit two ink stops apart, as in .kv.",
           },
           {
             name: ".cn-divide > .stat.is-inline",

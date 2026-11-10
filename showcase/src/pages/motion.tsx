@@ -179,7 +179,7 @@ export default function MotionPage() {
         one of five durations.
       </p>
 
-      <Demo title="Curves and durations" why="Which curve and duration to pick" classes="--ease-out · --ease-in · --ease-spring · --t-*">
+      <Demo lead title="Curves and durations" why="Which curve and duration to pick" classes="--ease-out · --ease-in · --ease-spring · --t-*">
         <CurvesDemo />
       </Demo>
 
@@ -334,6 +334,36 @@ export default function MotionPage() {
           { name: "--t-slow × 2 (.64s)", values: "progress", notes: "The progress fill's width on --ease-out, slowing into the value." },
         ]}
       />
+
+      <Props
+        title="Every component"
+        rows={[
+          { name: ".btn, .segmented > *, a > .accent-card", values: "down: --t-press, --ease-out · back: --t-fast, --ease-spring", notes: "The press. The control travels half its plate offset and the plate shortens with it. A linked chip uses the same pair. Pagination items and sidebar links lift and settle over --t-fast on the spring." },
+          { name: ".btn-text", values: "--t-fast, --ease-out", notes: "The 1px press. Its color fades over --t-fast with no curve named." },
+          { name: ".checkbox, .radio", values: "box: --t-fast, --ease-out · tick: --t-base, --ease-spring", notes: "The box presses on the fast-out and the tick lands on the spring. The radio dot scales over --t-fast on the fast-out." },
+          { name: ".switch", values: "paddle: --t-base, --ease-spring · carve: --t-base, --ease-out", notes: "The paddle travels 23px and overshoots once. Its fill and the plate's carve follow in the same time." },
+          { name: ".slider", values: "thumb: --t-fast, --ease-spring · held: --t-press, --ease-out", notes: "The thumb's scale. It shrinks to .92 while held." },
+          { name: ".field input", values: "--t-base, --ease-out", notes: "The focus ring and the hover hairline, as a box-shadow. Nothing moves." },
+          { name: ".tabs", values: "pill: --t-fast, --ease-out", notes: "The pill slides and resizes to the selected tab. The panel cuts." },
+          { name: ".accordion", values: "fold: --t-slow, --ease-out · chevron: --t-base, --ease-out", notes: "The fold opens through grid-template-rows, so no height is animated. The frame's shadow and border follow over --t-base." },
+          { name: ".data-table tr, .ranked-row", values: "--t-fast, --ease-out", notes: "The row press on hover. The sort chevron turns over --t-base on the fast-out, and the sorted rows cut." },
+          { name: ".progress-track > span", values: "--t-slow × 2, --ease-out", notes: "The fill's width, slowing into the value." },
+          { name: "[data-tip]", values: "--t-fast, --ease-out, after .4s", notes: "Rises 2px into place. On leave it holds for --t-slow, then fades." },
+          { name: ".popover, .menu", values: "in: --t-fast, --ease-out · out: --t-exit, --ease-in", notes: "Fades and drops 4px." },
+          { name: "dialog.modal, ::backdrop", values: "in: --t-base, --ease-out · out: --t-exit, --ease-in", notes: "Fades, rises 8px and scales from .98. The scrim fades with it." },
+          { name: "dialog.drawer", values: "in: --t-slow, --ease-out · out: --t-exit, --ease-in", notes: "Slides in from its edge with no fade." },
+          { name: ".toast", values: "in: --t-base, --ease-out · out: --t-exit, --ease-in", notes: "Fades and slides 16px. The pile closes up over --t-base." },
+          { name: ".cn-arrive", values: "--t-fast, --ease-out", notes: "Loaded content and inserted rows: a fade and a 2px settle, once." },
+          { name: ".page-enter > *", values: "--t-slow, --ease-out, 40ms apart", notes: "A view's first render. The route cross-fade and .cn-morph run over --t-base on the fast-out." },
+          { name: ".spinner, .live-dot, .skeleton, .caret", values: "loops", notes: "Keyframes with literal durations: .8s linear, 1.5s on --ease-out, 1.6s on --ease-in, .75s in two steps." },
+        ]}
+      />
+
+      <p class="cn-copy cn-m-0">
+        A reorder, a removed row, a tab panel and a changed number have no
+        row here because they cut. The vocabulary is small on purpose: a
+        press, a lift, a fade, a short slide and one stagger.
+      </p>
 
       <h2 class="cn-label">Overlay motion contract</h2>
 

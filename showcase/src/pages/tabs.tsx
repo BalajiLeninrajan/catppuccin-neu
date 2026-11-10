@@ -94,6 +94,7 @@ export default function TabsPage() {
       </p>
 
       <Demo
+        lead
         title="Tabs with panels"
         classes='tabs[role="tablist"] > [role="tab"][aria-selected="true"]'
         why="Why the selected tab rises, and the keys it answers"

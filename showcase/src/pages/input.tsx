@@ -95,7 +95,7 @@ export default function InputPage() {
         whatever it sits on.
       </p>
 
-      <Demo title="Field" classes="field" why="Why focus adds no border, and how values are set">
+      <Demo lead title="Field" classes="field" why="Why focus adds no border, and how values are set">
         <div class="sc-grid">
           <div class="field">
             <label for="demo-ws-name">Workspace name</label>
@@ -454,8 +454,15 @@ export default function InputPage() {
             name: "--cn-field-ring",
             values: "box-shadow",
             default: "inset 0 0 0 1px, surface-2 at 85%",
-            contrast: "2.1:1 on a panel, 2.2:1 on the page, 1.7:1 on an overlay · more contrast: 5.8:1 on a panel, 4.6:1 on an overlay",
+            contrast: "2.1:1 on a panel, 2.2:1 on the page · more contrast: 5.8:1 on a panel, 4.6:1 on an overlay",
             notes: "The resting ring of every live field, table-cell fields included. Under 3:1 on purpose; hover, focus and prefers-contrast: more pass it. Listed before the carve, so it paints over the dark wall and is never brighter on the bottom and right. A full overlay-2 ring under prefers-contrast: more.",
+          },
+          {
+            name: "--cn-field-ring-overlay",
+            values: "box-shadow",
+            default: "inset 0 0 0 1px, overlay-0 at 75%",
+            contrast: "2.1:1 on an overlay · more contrast: 4.6:1",
+            notes: "The resting ring inside .popover, .modal and .drawer, which set --cn-field-ring to it. The overlay fill is lighter, so the surface-2 ring is only 1.7:1 there. Never used on the page or a panel: a .panel or .well inside an overlay sets --cn-field-ring back to --cn-field-ring-page, a copy of the surface-2 ring.",
           },
           {
             name: "--cn-carve-ring",

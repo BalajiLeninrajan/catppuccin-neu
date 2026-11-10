@@ -44,7 +44,7 @@ export default function CommandPage() {
       title="Command"
       lede="A copyable command line: a carved well, one command in mono, a prompt glyph, and an icon button that copies it and turns green for a moment."
     >
-      <Demo title="The command" why="Why the command is mono and carved" classes="command · command-text · command-prompt · command-copy">
+      <Demo lead title="The command" why="Why the command is mono and carved" classes="command · command-text · command-prompt · command-copy">
         <Command text="npx catppuccin-neu-sync public/styles" />
       </Demo>
 

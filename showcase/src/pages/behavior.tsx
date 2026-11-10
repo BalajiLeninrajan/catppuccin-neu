@@ -165,6 +165,7 @@ export default function BehaviorPage() {
       </p>
 
       <Demo
+        lead
         title="The module, live"
         classes='import { tabs, menu, slider, toast } from "catppuccin-neu/js"'
         why="What to try, and what the module does that CSS cannot"

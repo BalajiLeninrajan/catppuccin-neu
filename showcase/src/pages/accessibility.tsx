@@ -84,8 +84,8 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--cn-surface-raised", "base", "1.07:1 on the page", "Panels, plated controls, chips, the selected tab. A fill step above the page, never lighter than base, and they lift by their edges and shadow too."],
   ["--cn-surface-overlay", "surface-0 90% into base", "1.27:1 (1.36:1 on the page)", "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link."],
   ["--cn-surface-sunken", "crust", "1.14:1 under base (1.07:1 under the page)", "Wells, the mono wells, stepper pills, skeletons, the switch plate: below the ground wherever they sit."],
-  ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
-  ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
+  ["--wash", "mauve 23% into base", "1.63:1","The engaged state, a step past the hover."],
+  ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.3:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
   ["--hover", "surface-1 60% over the ground", "1.40:1 (1.23:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
   ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's top and left; the right and bottom border sides are --neu-ink, 1.22:1 under the fill, and the fill step shows its bounds. overlay-0 on all four sides under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
@@ -197,7 +197,7 @@ export default function AccessibilityPage() {
         Text reads a semantic role, not a palette name.
       </p>
 
-      <Demo title="Semantic roles on a panel and an overlay" why="How the text roles were set, and why a tone never works alone">
+      <Demo lead title="Semantic roles on a panel and an overlay" why="How the text roles were set, and why a tone never works alone">
         <div style="width:100%">
           <Table
             head={["Swatch", "Role", "Palette", "WCAG, a panel · overlay", "APCA Lc, a panel · overlay", "Use"]}
@@ -492,7 +492,7 @@ export default function AccessibilityPage() {
           { name: "--cn-fg-placeholder", values: "4.5:1", notes: "On the page, raised, overlay, recessed and sunken fills." },
           { name: "status roles, links", values: "4.5:1", notes: "On the page, raised and overlay fills, and each status role on its own tint." },
           { name: "field hover ring, control edge, focus ring, engaged rim", values: "3:1", notes: "On the page, raised and overlay fills. The control edge covers the slider thumb. The rim also on --wash." },
-          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet hairline, surface-2 at 85%, 2.1:1 on a panel, below 3:1 by design." },
+          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet hairline, surface-2 at 85%, 2.1:1 on a panel, below 3:1 by design. Its design floor is 2:1 on the page and a panel, and 2:1 for --cn-field-ring-overlay on the overlay fill." },
           { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.8, 2.4, 1.4:1 · 1.5, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill, so the depth ladder holds its order. --edge-strong must stay above --edge on every ground. Not WCAG obligations." },
           { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer falls from the top left and is darker than the page, a panel and a well, so no carve draws a light lip or glow." },
           { name: "--cn-fg-on-accent", values: "4.5:1", notes: "On the primary and its hover." },
@@ -526,7 +526,11 @@ export default function AccessibilityPage() {
         panel. It also captures the Depth page and the dashboard and invoice
         examples at 1x and fails when more than 0.1% of the pixels differ
         from the committed baselines, so a depth cue cannot drift without a
-        deliberate baseline update. Before the pages it checks motion from
+        deliberate baseline update. It saves each of those captures again
+        to <code class="cn-code-inline">showcase/a11y-shots/dimmed/</code>{" "}
+        at half the luminance and a 1.3 gamma, the dim, low-gamma display
+        where the fill steps close up, for a person to judge the hairline,
+        the foot and the sidebar rule. Before the pages it checks motion from
         the animations the browser is running: the entrance children of the
         dashboard example and of the Modal page must stagger 0 to 200ms in
         40ms steps over --t-slow, and a

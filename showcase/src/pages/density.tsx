@@ -65,7 +65,7 @@ export default function DensityPage() {
         </p>
       </section>
 
-      <Demo title="The knobs at each density" why="How to set density, and what ignores it">
+      <Demo lead title="The knobs at each density" why="How to set density, and what ignores it">
         <div style="width:100%">
           <table class="data-table">
             <thead>

@@ -55,7 +55,7 @@ export default function SelectionPage() {
         These three are native inputs and need no script.
       </p>
 
-      <Demo title="Checkbox" classes="label.choice > input.checkbox" why="The label, the hit target and the disabled state" row>
+      <Demo lead title="Checkbox" classes="label.choice > input.checkbox" why="The label, the hit target and the disabled state" row>
         <label class="choice">
           <input type="checkbox" class="checkbox" checked />
           Email receipts
@@ -151,10 +151,11 @@ export default function SelectionPage() {
         as a control and not as a disabled one.
         Checking slides the paddle across, flips its tilt, lights it mauve,
         sets a 2 by 8px crust bar at its center, the "I" of a wall switch, and
-        gives it a 6px glow of mauve at{" "}
-        <code class="cn-code-inline">--cn-step-fill</code> (14%). Held while on,
+        gives it an 8px glow of mauve at{" "}
+        <code class="cn-code-inline">--cn-step-plate</code> (25%), a soft blur
+        with no ring that lights the dark plate around the paddle. Held while on,
         the glow blooms to 12px at{" "}
-        <code class="cn-code-inline">--cn-step-plate</code> (25%). With the bar,
+        <code class="cn-code-inline">--cn-step-edge</code> (40%). With the bar,
         on reads by a mark as well as by color and position.
       </p>
 
@@ -308,7 +309,7 @@ export default function SelectionPage() {
             values: 'input[type="checkbox"]',
             contrast: "Plate fill 1.14:1 under a panel, 1.07:1 under the page · edges 4.4:1 on a panel",
             notes:
-              "50 by 28px plate, 8px radius, the --cn-surface-sunken fill under --neu-inset and a 1px --control-edge inset ring. The 21 by 22px paddle rests on --cn-surface-raised with its own 1px --control-edge, tilted 16deg. Checked, it slides 23px on the spring, flips its tilt, takes the mauve ramp with a 2 by 8px crust bar at its center and glows 6px at --cn-step-fill; held while on, 12px at --cn-step-plate.",
+              "50 by 28px plate, 8px radius, the --cn-surface-sunken fill under --neu-inset and a 1px --control-edge inset ring. The 21 by 22px paddle rests on --cn-surface-raised with its own 1px --control-edge, tilted 16deg. Checked, it slides 23px on the spring, flips its tilt, takes the mauve ramp with a 2 by 8px crust bar at its center and glows 8px at --cn-step-plate; held while on, 12px at --cn-step-edge.",
           },
           {
             name: ":disabled",

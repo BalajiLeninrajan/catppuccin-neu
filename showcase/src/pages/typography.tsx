@@ -14,7 +14,7 @@ export default function TypographyPage() {
         <code class="cn-code-inline">-tracking</code>, and one class that reads them.
       </p>
 
-      <Demo title="cn-display · 700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.02em · balance" classes="cn-display" why="How a role is built">
+      <Demo lead title="cn-display · 700 · clamp(36px, 5.44px + 5.88vw, 56px)/1.08 · -0.02em · balance" classes="cn-display" why="How a role is built">
         <h1 class="cn-display">
           Every team, <em>one dashboard</em>
         </h1>
@@ -94,7 +94,7 @@ export default function TypographyPage() {
         <span class="cn-value">1,284</span>
       </Demo>
 
-      <Demo title="cn-value-lg · 600 · clamp(26px, 10.72px + 2.94vw, 36px) · -0.025em · colored by --accent" why="Where the large value gets its color" classes="cn-value-lg">
+      <Demo title="cn-value-lg · 600 · clamp(26px, 10.72px + 2.94vw, 40px) · -0.025em · colored by --accent" why="Where the large value gets its color" classes="cn-value-lg">
         <div class="sc-row">
           <span class="cn-value-lg">$42,180</span>
           <span class="cn-value-lg" style={accentStyle(PAYMENTS.accent)}>
@@ -134,9 +134,9 @@ export default function TypographyPage() {
         what a reader acts on. A band or a row holds one small size plus the
         microlabel, and one 600: a stat is a 14px label, a 24px value and a 14px note,
         and a table row is 14px cells under a 14px head, with the name its
-        one 600 and a key figure at 500 in the text color. The large steps run 20, 24, 28 and 36px: title, value,
+        one 600 and a key figure at 500 in the text color. The large steps run 20, 24, 28 and 40px: title, value,
         heading and value-lg, so a stat value outweighs the panel title above
-        it, and the large value is 1.5 times the value beside it. At 520px both step down: the value to 18px and the band title to
+        it, and the large value is 1.67 times the value beside it. At 40px it is level with the page title, at 600 against the title's 700. At 520px both step down: the value to 18px and the band title to
         16px. Tracking is 0 through 18px, -0.01em at 20px and -0.02em from
         24px up: the value, the heading and both display sizes. value-lg
         alone is -0.025em, since it sets figures. Words at 700 stop at
@@ -264,7 +264,7 @@ export default function TypographyPage() {
           { name: ".cn-label", values: "sans", default: "500 · 14px/1.25 · subtext-1", notes: "Field and section labels; sentence case. --cn-fg-soft, a stop above meta." },
           { name: ".cn-microlabel", values: "sans", default: "500 · 12px/1.25 · +0.08em · uppercase · subtext-0", notes: "A fact's label. The only uppercase role and the only 12px one." },
           { name: ".cn-value", values: "sans", default: "600 · 24px/1 · -0.02em · tabular", notes: "Stat numbers." },
-          { name: ".cn-value-lg", values: "sans", default: "600 · clamp(26px, 10.72px + 2.94vw, 36px)/1 · -0.025em · tabular", notes: "Large stat in var(--accent); text inside an accent card. 36px from 860px up, then 4px under the page title. Opt out with a color utility." },
+          { name: ".cn-value-lg", values: "sans", default: "600 · clamp(26px, 10.72px + 2.94vw, 40px)/1 · -0.025em · tabular", notes: "Large stat in var(--accent); text inside an accent card. 40px from 996px up, level with the page title at 600 against its 700. Under 860px it is 4px under the page title. Opt out with a color utility." },
           { name: ".cn-meta", values: "sans", default: "400 · 14px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. The label's size, a weight under its 500 and a stop dimmer, --cn-fg-muted." },
           { name: ".cn-code", values: "mono", default: "500 · 13px/1.6 · tabular", notes: "Machine literals, CLI strings." },
           { name: ".cn-code-inline", values: "mono", default: "500 · 0.92em · subtext-1", notes: "Code inside prose, in --cn-fg-soft." },

@@ -15,7 +15,7 @@ export default function StepperPage() {
         The recipe styles every direct child of <code class="cn-code-inline">.stepper</code> as a borderless inset pill.
       </p>
 
-      <Demo title="The three states" why="How to mark each phase" classes="stepper › .is-done / [aria-current='step'] / (rest)" row>
+      <Demo lead title="The three states" why="How to mark each phase" classes="stepper › .is-done / [aria-current='step'] / (rest)" row>
         <div class="stepper">
           <span class="is-done">Done</span>
           <span aria-current="step">Current</span>

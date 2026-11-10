@@ -33,7 +33,7 @@ export default function BarChartPage() {
       title="Bar chart"
       lede="Horizontal bars with a label column and the value printed beside each bar. The number is always text, so the bar's color is never the only key."
     >
-      <Demo title="One bar per row, keyed by identity" why="The grid, and how a bar gets its color" classes='bar-chart > span + bar-group > bar[style="--value; --accent"]'>
+      <Demo lead title="One bar per row, keyed by identity" why="The grid, and how a bar gets its color" classes='bar-chart > span + bar-group > bar[style="--value; --accent"]'>
         <div class="cn-stack cn-gap-16" style="width:min(560px,100%)">
           <div class="segmented" role="group" aria-label="Month" style="width:min(240px,100%)">
             {MONTHS.map((m, i) => (

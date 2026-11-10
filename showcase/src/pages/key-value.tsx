@@ -16,7 +16,7 @@ export default function KeyValuePage() {
       title="Key-value list"
       lede="A dl grid for the details of one record. Keys sit in a column as wide as the longest key; values take the rest."
     >
-      <Demo title="In a panel" why="When to use .kv, and when a stat row" classes="dl.kv">
+      <Demo lead title="In a panel" why="When to use .kv, and when a stat row" classes="dl.kv">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Workspace details</h2>
@@ -52,8 +52,8 @@ export default function KeyValuePage() {
         title="Contract"
         rows={[
           { name: ".kv", values: "dl", notes: "Grid: max-content keys, minmax(0, 1fr) values, 8px by 16px gap, 14px text." },
-          { name: "dt", values: "key", notes: "The label weight, 500, at the list's 14px, in --cn-fg-muted (subtext-0)." },
-          { name: "dd", values: "value", notes: "Text color, tabular numerals, wraps anywhere." },
+          { name: "dt", values: "key", contrast: "7.4:1 on a panel", notes: "The label weight, 500, at the list's 14px, in --cn-fg-muted (subtext-0)." },
+          { name: "dd", values: "value", contrast: "11.3:1 on a panel", notes: "Text color, two ink stops over the key, as in a .stat.is-inline row. Tabular numerals, wraps anywhere." },
           { name: "at 520px", values: "responsive", notes: "One column: key over value, 8px between pairs." },
         ]}
       />

@@ -1,10 +1,10 @@
 /* ── Example: billing dashboard ────────────────────────────────────────────
    A composed screen built only from package classes, no sc- chrome. It
    follows the SPEC's Composition section: regions 48px apart, in reading
-   order. The title and its one primary on one line in a split with the
-   lede under them, the key figures ruled on the page
+   order. A split holds the title over its lede and the one primary, on the
+   title line, the key figures ruled on the page
    ground, the invoice table as the lead panel, then the chart and the one
-   tilted aside on the page grid, the chart first. The whole view runs at
+   tilted aside on the page grid, 8 and 4, the chart first. The whole view runs at
    cozy density, the SPEC's density for a desktop data tool. The aside
    holds prose, a heading in the name role and a link; the supporting
    figures sit on the ground under it as one list of divided rows, with no
@@ -29,9 +29,9 @@ const PendingClock = () => (
 
 const STATUS: Record<Status, { label: string; tone: string; Glyph: () => JSX.Element }> = {
   paid: { label: "Paid", tone: "cn-tone-success", Glyph: SuccessGlyph },
-  /* Pending is the row's in-progress state, so it takes the quiet tag:
-     the column keeps one shape, and with no tone it stays under every
-     toned tag. */
+  /* Pending is the row's in-progress state, so it takes the quiet tag: a
+     plain muted label with no fill, so the column holds two fills, the
+     wash and the one solid. */
   pending: { label: "Pending", tone: "is-quiet", Glyph: PendingClock },
   /* Due soon may sit above Overdue: status tags carry a word and a glyph,
      so the SPEC exempts them from the warm-family adjacency rule. */
@@ -105,7 +105,9 @@ const COLLECTED = [
   { month: "Aug", values: [62.0, 43.1, 12.2] },
   { month: "Sep", values: [74.5, 39.3, 13.1] },
 ];
-const CHART_MAX = 80;
+/* The scale ends just above the largest value, 74.5, so the longest bar
+   reaches the end of its track. */
+const CHART_MAX = 75;
 const COLLECTED_TOTAL = COLLECTED.reduce((sum, row) => sum + row.values.reduce((a, b) => a + b, 0), 0);
 
 function InvoiceTable() {
@@ -197,30 +199,33 @@ function InvoiceTable() {
 export default function DashboardExample() {
   return (
     <div class="cn-stack cn-gap-48 page-enter" data-density="cozy">
-      {/* The title and its primary share one line in a split, and the lede
-          sits under them, so the button never stands alone below the copy.
+      {/* The header is a split aligned to the top. Its first child is a
+          stack of the title and the lede, and the primary is its second
+          child. On a wide screen the primary sits on the title line. When
+          the row wraps on a phone the primary lands after the lede, not
+          between the title and the copy.
           The title is the full display size, so the 28px lead band title
           below never reads as a second headline. It has no mauve em: the
           primary beside it is the top band's one mauve mark, so the hero
           stat below is text-colored too.
           The chart's three series are teal, yellow and blue: mauve is the
           sixth series, so no bar shares the primary's color. */}
-      <header class="cn-stack cn-gap-24">
-        <div class="cn-split">
+      <header class="cn-split cn-top">
+        <div class="cn-stack cn-gap-24">
           <h1 class="cn-display">
             Billing, September
           </h1>
-          <button type="button" class="btn btn-primary cn-morph">New invoice</button>
+          <p class="cn-lede cn-m-0">
+            {INVOICES.length} invoices from the last six weeks, across 6 teams.
+            Collections settle nightly at 02:00 UTC, so these figures are from
+            this morning's run.
+          </p>
         </div>
-        <p class="cn-lede cn-m-0">
-          {INVOICES.length} invoices from the last six weeks, across 6 teams.
-          Collections settle nightly at 02:00 UTC, so these figures are from
-          this morning's run.
-        </p>
+        <button type="button" class="btn btn-primary cn-morph">New invoice</button>
       </header>
 
-      {/* The headline figure is a large stat at 36px, so it outranks the
-          28px lead band title below it. It is text-colored, not mauve: the
+      {/* The headline figure is a large stat in the value-lg role, so it
+          outranks the 28px lead band title below it. It is text-colored, not mauve: the
           primary sits in the same top band, and mauve stays on the primary. */}
       <section class="stat-grid is-ruled" aria-label="Key figures">
         <div class="stat is-lg">
@@ -254,7 +259,7 @@ export default function DashboardExample() {
       <InvoiceTable />
 
       <div class="cn-grid-12">
-        <section class="panel cn-span-7" aria-labelledby="dash-chart">
+        <section class="panel cn-span-8" aria-labelledby="dash-chart">
           <div class="panel-header">
             <h2 id="dash-chart">Collected by method</h2>
             <span class="chip">Last 4 months</span>
@@ -294,7 +299,7 @@ export default function DashboardExample() {
         {/* The stack packs to the top: the figures sit one grid gap under
             the aside, and any slack falls at the end of the column. No
             panel stretches. */}
-        <div class="cn-stack cn-gap-24 cn-span-5">
+        <div class="cn-stack cn-gap-24 cn-span-4">
         <aside class="panel is-tilted" aria-labelledby="dash-summary">
           <div class="panel-body cn-stack cn-gap-12">
             <h2 id="dash-summary" class="cn-name cn-m-0">Where September stands</h2>

@@ -44,7 +44,7 @@ export default function SparklinePage() {
       title="Sparkline"
       lede="One measure over time, as a small line beside its latest value. The value is text, so the line's color is never the only key."
     >
-      <Demo title="One series" why="What a sparkline is made of" classes='sparkline[style="--series"] > svg (polyline, circle) + span'>
+      <Demo lead title="One series" why="What a sparkline is made of" classes='sparkline[style="--series"] > svg (polyline, circle) + span'>
         <div class="cn-stack cn-gap-8">
           <span class="cn-label">Collected per week, last 12 weeks</span>
           <Spark values={COLLECTED} label="$74.5k this week" style="--series:var(--cn-series-1)" />

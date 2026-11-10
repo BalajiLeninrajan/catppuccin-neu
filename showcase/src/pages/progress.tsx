@@ -16,7 +16,7 @@ export default function ProgressPage() {
       title="Progress"
       lede="A borderless inset track with a fill in the --accent ramp. The fill inherits the track's radius, so nothing needs overflow clipping."
     >
-      <Demo title="Live tracks" why="What you set and how the fill moves" classes="progress-track > span">
+      <Demo lead title="Live tracks" why="What you set and how the fill moves" classes="progress-track > span">
         <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:18px">
           {values.map((v, i) => (
             <div key={LABELS[i]}>

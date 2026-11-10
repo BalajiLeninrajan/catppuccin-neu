@@ -203,7 +203,7 @@ function NotFound() {
 }
 
 /* The content column. A page with three or more targets gets the "On this
-   page" list in a right column from 1280px up; the rest stay centered.
+   page" list in a right column from 1448px up; the rest stay centered.
    The examples take the wide column, 1040px against the docs' 860px. */
 function Content({ children }: { children: ComponentChildren }) {
   const { path } = useLocation();

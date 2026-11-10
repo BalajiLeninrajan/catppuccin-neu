@@ -170,7 +170,7 @@ export default function ToastPage() {
         the pile.
       </p>
 
-      <Demo title="Spawner, auto-dismisses after 7s" why="The stack, the live region, the pile and the swipe" classes="toast-stack toast">
+      <Demo lead title="Spawner, auto-dismisses after 7s" why="The stack, the live region, the pile and the swipe" classes="toast-stack toast">
         <ToastSpawner />
       </Demo>
 

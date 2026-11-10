@@ -13,7 +13,7 @@ export default function AccentCardPage() {
         <code class="cn-code-inline">--cn-step-vivid</code>.
       </p>
 
-      <Demo title="Teams, each in its own accent" why="Where the plate color comes from and where to store the accent" classes="accent-card  (set --accent from the record)">
+      <Demo lead title="Teams, each in its own accent" why="Where the plate color comes from and where to store the accent" classes="accent-card  (set --accent from the record)">
         <div class="sc-grid" style="width:100%">
           {TEAMS.map((team) => (
             <div class="accent-card" style={accentStyle(team.accent)} key={team.name}>

@@ -24,7 +24,9 @@
    full page at 1400x900 and 1x in the default modes, and diffs each
    capture against its baseline in visual-baselines/ with pixelmatch. A
    route fails when its size changes or more than VISUAL_LIMIT of its
-   pixels differ; the diff image goes to a11y-shots/visual/. The
+   pixels differ; the diff image goes to a11y-shots/visual/. Each capture
+   is also saved to a11y-shots/dimmed/ as a dim, low-gamma display would
+   show it (half the luminance, then a 1.3 gamma), for review only. The
    baselines depend on the system Chromium and its installed fonts, so
    refresh them with --update-shots after a deliberate visual change or
    on a new machine, and look at them before committing.
@@ -100,6 +102,24 @@ function visualDiff(route, png, baselines, diffs, update) {
   writeFileSync(out, PNG.sync.write(diff));
   writeFileSync(join(diffs, `${shotName(route)}.png`), png);
   return `${n} pixels (${(share * 100).toFixed(2)}%) differ from the baseline, over ${VISUAL_LIMIT * 100}%; see ${out}`;
+}
+
+/* The worst display the depth cues have to survive, applied to a VISUAL
+   capture and saved for review, never diffed. DIM_LIGHT is a backlight at
+   that share of full luminance, scaled in linear light. DIM_GAMMA is the
+   extra power a panel with crushed blacks applies to the encoded value,
+   which pulls mantle, base and crust toward one another. Judge the
+   panel hairline, the foot, the well ring and the sidebar rule here
+   before proposing a change to --edge. */
+const DIM_LIGHT = 0.5;
+const DIM_GAMMA = 1.3;
+function dimmed(png) {
+  const img = PNG.sync.read(Buffer.from(png));
+  const scale = DIM_LIGHT ** (1 / 2.2);
+  const lut = Uint8Array.from({ length: 256 }, (_, v) => Math.round(255 * ((v / 255) * scale) ** DIM_GAMMA));
+  for (let i = 0; i < img.data.length; i += 4)
+    for (let c = 0; c < 3; c++) img.data[i + c] = lut[img.data[i + c]];
+  return PNG.sync.write(img);
 }
 
 /* Known false positives, as rule + selector pairs. A violation node is
@@ -496,6 +516,7 @@ async function main() {
   const shots = join(root, "a11y-shots/forced-colors");
   const baselines = join(root, "visual-baselines");
   const diffs = join(root, "a11y-shots/visual");
+  const dims = join(root, "a11y-shots/dimmed");
   let failures = 0;
   let skipped = 0;
   const review = new Map();
@@ -547,6 +568,8 @@ async function main() {
           failures++;
           lines.push(`  visual: ${problem}`);
         }
+        mkdirSync(dims, { recursive: true });
+        writeFileSync(join(dims, `${shotName(route)}.png`), dimmed(png));
       }
 
       const composed = await composition(page, route.startsWith("/examples/"));

@@ -14,7 +14,7 @@ export default function ProsePage() {
         bare elements, and only inside itself.
       </p>
 
-      <Demo title="A help article" why="Where .cn-prose belongs and what it styles" classes="cn-prose">
+      <Demo lead title="A help article" why="Where .cn-prose belongs and what it styles" classes="cn-prose">
         <article class="cn-prose">
           <h2>Sending invoices on a schedule</h2>
           <p>

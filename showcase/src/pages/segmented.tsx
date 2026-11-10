@@ -27,7 +27,7 @@ export default function SegmentedPage() {
         a row of buttons or a group of labels wrapping visually hidden radios.
       </p>
 
-      <Demo title="Button form" why="Markup and the selected state" classes='segmented › button[aria-pressed="true"]'>
+      <Demo lead title="Button form" why="Markup and the selected state" classes='segmented › button[aria-pressed="true"]'>
         <div class="segmented" role="group" aria-label="Billing period">
           {PERIODS.map((p) => (
             <button
@@ -47,7 +47,7 @@ export default function SegmentedPage() {
         Mark the selection with{" "}
         <code class="cn-code-inline">aria-pressed="true"</code> on a button, or{" "}
         <code class="cn-code-inline">.active</code> on a label. The selected option sits pressed in on the mauve wash,
-        inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides. The wash is mauve 20% into
+        inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides. The wash is mauve 23% into
         base and the rim clears the non-text floor on it, so the choice outweighs the raised options beside it.
       </p>
 
@@ -156,7 +156,7 @@ export default function SegmentedPage() {
         rows={[
           { name: ".segmented", notes: "Equal-width column grid, 8px gap. Styles every direct child, buttons or labels." },
           { name: ".segmented > *", notes: "Rests on --cn-surface-raised with a hairline, the plate and the lit top edge. Hover warms the border to mauve at --cn-step-edge." },
-          { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', contrast: "Wash 1.52:1 on base · rim 3.5:1 on the wash", notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
+          { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', contrast: "Wash 1.63:1 on base · rim 3.3:1 on the wash · hint 4.52:1 on the wash", notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
           { name: '.segmented > :disabled / [aria-disabled="true"]', notes: "An unavailable option: --disabled-opacity (.7), no plate, an --edge-soft outline, a not-allowed cursor, no hover lift or press. A chosen option that is disabled keeps the engaged carve and dims." },
           { name: "svg inside an option", notes: "16px, sized by the recipe." },
           { name: ".is-stacked", notes: "Vertical list, 12px gap, taller rows, 18px <b>. For described options." },

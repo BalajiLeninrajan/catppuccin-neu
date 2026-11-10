@@ -21,7 +21,7 @@ export default function LayoutPage() {
         Three primitives place children: a row, a stack and a wrapping cluster.
       </p>
 
-      <Demo title="Row, stack, cluster" why="The three primitives, and how a utility beats a recipe" classes="cn-row · cn-stack · cn-cluster">
+      <Demo lead title="Row, stack, cluster" why="The three primitives, and how a utility beats a recipe" classes="cn-row · cn-stack · cn-cluster">
         <div class="cn-stack cn-gap-16" style="width:min(520px,100%)">
           <div class="cn-row cn-between">
             <span class="cn-name">A row, space between</span>
@@ -196,8 +196,8 @@ export default function LayoutPage() {
       <p class="cn-copy">
         A view reads in one order: the title and its one primary action, the
         figures, the lead panel, then the rest. The tilted aside never comes
-        before the data it comments on, so on a 7 and 5 row the data takes
-        the 7 and comes first in the source, and the aside takes the 5. At
+        before the data it comments on, so on an 8 and 4 row the data takes
+        the 8 and comes first in the source, and the aside takes the 4. At
         760px the row stacks in that order, data above aside. The{" "}
         <a href="/examples/dashboard">dashboard example</a> is built this way.
         Two kinds of view move the primary. A form puts it in the footer,
@@ -229,13 +229,13 @@ export default function LayoutPage() {
             <span class="cn-meta">panel is-lead, the table the view is about</span>
           </div>
           <div class="cn-grid-12">
-            <div class="panel panel-body cn-span-7 cn-stack cn-gap-4">
+            <div class="panel panel-body cn-span-8 cn-stack cn-gap-4">
               <span class="cn-label">4 · The rest</span>
-              <span class="cn-meta">cn-span-7, first in the source</span>
+              <span class="cn-meta">cn-span-8, first in the source</span>
             </div>
-            <div class="panel panel-body cn-span-5 cn-stack cn-gap-4">
+            <div class="panel panel-body cn-span-4 cn-stack cn-gap-4">
               <span class="cn-label">5 · The aside</span>
-              <span class="cn-meta">cn-span-5, after the data it comments on; tilted in a real view</span>
+              <span class="cn-meta">cn-span-4, after the data it comments on; tilted in a real view</span>
             </div>
           </div>
         </div>
@@ -245,12 +245,15 @@ export default function LayoutPage() {
         title="The skeleton of a view"
         code={`<a class="cn-skip-link" href="#main">Skip to content</a>
 <main id="main" tabindex="-1" class="page-main cn-stack cn-gap-48">
-  <header class="cn-split">…title… <button class="btn btn-primary">…</button></header>
+  <header class="cn-split cn-top">
+    <div class="cn-stack cn-gap-24">…title, then lede…</div>
+    <button class="btn btn-primary">…</button>
+  </header>
   <section class="stat-grid is-ruled" aria-label="Key figures">…</section>
   <section class="panel is-lead">…the table…</section>
   <div class="cn-grid-12">
-    <section class="panel cn-span-7">…the chart…</section>
-    <aside class="panel is-tilted cn-span-5"><h2 class="cn-name">…</h2> <p>…what it means, in prose…</p></aside>
+    <section class="panel cn-span-8">…the chart…</section>
+    <aside class="panel is-tilted cn-span-4"><h2 class="cn-name">…</h2> <p>…what it means, in prose…</p></aside>
   </div>
 </main>`}
       />
@@ -422,7 +425,7 @@ export default function LayoutPage() {
           { name: ".cn-row", values: "flex, centered, gap 8", notes: "Add cn-between, cn-center, cn-end, cn-top, cn-baseline, cn-wrap." },
           { name: ".cn-stack", values: "grid, gap 12", notes: "A column of things. cn-gap-* changes the rhythm." },
           { name: ".cn-cluster", values: "flex, wrap, gap 8", notes: "Chips, tags, buttons that wrap." },
-          { name: ".cn-split", values: "wrapping flex, gap 12 by 16", notes: "Two groups at opposite ends; the first takes the slack, and the second wraps under it when they no longer fit. A header with actions." },
+          { name: ".cn-split", values: "wrapping flex, gap 12 by 16", notes: "Two groups at opposite ends; the first takes the slack, and the second wraps under it when they no longer fit. A header with actions. .cn-top and .cn-baseline realign it, and a .cn-lede after a title in the first group does not widen it, so the header wraps on the title's width. A lede with no title before it keeps its width." },
           { name: ".cn-measure", values: "max-inline-size --cn-measure", notes: "A centered column at 68ch for prose inside a wide page." },
           { name: ".cn-with-side", values: "--side-w", default: "16rem", notes: "The first child is the side, the last takes the rest, gap 24. They stack when the content would drop under 60% of the row." },
           { name: ".cn-grid-2 / -3 / -4", values: "equal columns, gap --cn-grid-gap (24px)", notes: "Collapse at 760 and 520. Compose cn-gap-16 for a grid of small items." },

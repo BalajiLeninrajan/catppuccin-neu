@@ -186,10 +186,11 @@ export function Why({ title, children }: WhyProps) {
 /**
  * Demo: a captioned specimen stage. Children sit directly on the page ground.
  * props: {
- *   title?: string,     // .cn-name caption above the stage: the ui role, 14px at 600 in --cn-fg
+ *   title?: string,     // caption above the stage: the label role, 14px at 500 in --cn-fg-muted, so 600 stays with headings and controls
  *   classes?: string,   // class string shown in a copyable code line below
  *   row?: boolean,      // lay children out as a wrapping flex row from the inline start; the stage shrinks to them
  *   why?: string,       // summary of the fold Doc builds from the prose beside this demo
+ *   lead?: boolean,     // the first demo on a page, once per page: the stage drops its frame and takes 48px above and below
  *   children,
  * }
  */
@@ -198,13 +199,14 @@ export interface DemoProps {
   classes?: string;
   row?: boolean;
   why?: string;
+  lead?: boolean;
   children?: ComponentChildren;
 }
 
-export function Demo({ title, classes, row, children }: DemoProps) {
+export function Demo({ title, classes, row, lead, children }: DemoProps) {
   return (
-    <figure class={`sc-demo${row ? " sc-demo-fit" : ""}`}>
-      {title ? <figcaption class="cn-name">{title}</figcaption> : null}
+    <figure class={`sc-demo${row ? " sc-demo-fit" : ""}${lead ? " is-lead" : ""}`}>
+      {title ? <figcaption class="cn-label cn-fg-muted">{title}</figcaption> : null}
       <div class={`sc-demo-stage${row ? " sc-demo-row" : ""}`}>{children}</div>
       {classes ? <CopyLine text={classes} /> : null}
     </figure>
@@ -218,7 +220,8 @@ export function Demo({ title, classes, row, children }: DemoProps) {
  *   rows: Array<{ name: string, values?: string, default?: string, contrast?: string, notes?: string }>,
  * }
  * `name` is the class / custom property / attribute being documented.
- * `contrast` holds measured ratios; the column shows when any row has one.
+ * `contrast` holds measured ratios. The Values, Default and Contrast
+ * columns each show only when some row fills them, so no column is all "·".
  */
 export interface PropsRow {
   name: string;
@@ -234,6 +237,8 @@ export interface PropsProps {
 }
 
 export function Props({ title, rows }: PropsProps) {
+  const hasValues = rows.some((r) => r.values);
+  const hasDefault = rows.some((r) => r.default);
   const hasContrast = rows.some((r) => r.contrast);
   return (
     <section class="sc-props">
@@ -243,8 +248,8 @@ export function Props({ title, rows }: PropsProps) {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Values</th>
-              <th>Default</th>
+              {hasValues ? <th>Values</th> : null}
+              {hasDefault ? <th>Default</th> : null}
               {hasContrast ? <th>Contrast</th> : null}
               <th>Notes</th>
             </tr>
@@ -257,8 +262,8 @@ export function Props({ title, rows }: PropsProps) {
                       spaces may wrap between its parts. */}
                   <code class={`cn-code-inline${/\s/.test(r.name) ? "" : " cn-nowrap"}`}>{r.name}</code>
                 </td>
-                <td data-label="Values">{r.values ?? "·"}</td>
-                <td data-label="Default">{r.default ?? "·"}</td>
+                {hasValues ? <td data-label="Values">{r.values ?? "·"}</td> : null}
+                {hasDefault ? <td data-label="Default">{r.default ?? "·"}</td> : null}
                 {hasContrast ? <td data-label="Contrast">{r.contrast ?? "·"}</td> : null}
                 <td data-label="Notes">{r.notes ?? ""}</td>
               </tr>

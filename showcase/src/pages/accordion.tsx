@@ -51,7 +51,7 @@ export default function AccordionPage() {
       title="Accordion"
       lede="Stacked disclosure rows on native details and summary. No JS."
     >
-      <Demo title="Accordion" classes="details.accordion > summary + .fold" why="What the native element gives you">
+      <Demo lead title="Accordion" classes="details.accordion > summary + .fold" why="What the native element gives you">
         <div style="width:min(640px,100%)">
           {ITEMS.map(([title, body, open]) => (
             <details class="accordion" key={title} open={open}>

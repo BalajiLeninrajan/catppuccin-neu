@@ -98,6 +98,60 @@ function SubscriptionsTable() {
   );
 }
 
+/* A table while its rows load. The head and the row count stay, each cell
+   holds a text skeleton sized to its column, and the loaded rows take
+   .cn-arrive, so the whole set lands at once. */
+function LoadingTable() {
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <div class="cn-stack cn-gap-16" style="width:100%">
+      <div class="panel">
+        <table class="data-table" aria-busy={loading ? "true" : "false"}>
+          <thead>
+            <tr>
+              <th scope="col">Customer</th>
+              <th scope="col">Plan</th>
+              <th scope="col" class="is-num">Amount</th>
+              <th scope="col">Renews</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ROWS.map((r) =>
+              loading ? (
+                <tr key={`${r.email}-loading`}>
+                  <td class="cell-name">
+                    <span class="skeleton is-text" style="width:9rem" aria-hidden="true" />
+                    <span class="skeleton is-text" style="width:11rem" aria-hidden="true" />
+                  </td>
+                  <td data-label="Plan"><span class="skeleton is-text" style="width:5rem" aria-hidden="true" /></td>
+                  <td class="is-num" data-label="Amount"><span class="skeleton is-text" style="width:4.5rem;margin-inline-start:auto" aria-hidden="true" /></td>
+                  <td data-label="Renews"><span class="skeleton is-text" style="width:3.5rem" aria-hidden="true" /></td>
+                </tr>
+              ) : (
+                <tr key={r.email} class="cn-arrive">
+                  <td class="cell-name">
+                    <strong>{r.name}</strong>
+                    <small>{r.email}</small>
+                  </td>
+                  <td data-label="Plan">{r.plan}</td>
+                  <td class="is-num" data-label="Amount"><strong>{money(r.amount)}</strong></td>
+                  <td data-label="Renews">{r.renews}</td>
+                </tr>
+              ),
+            )}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <button type="button" class="btn btn-secondary" onClick={() => setLoading(!loading)}>
+          {loading ? "Show rows" : "Show loading"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function TablePage() {
   return (
     <Doc
@@ -105,6 +159,7 @@ export default function TablePage() {
       lede="An opt-in class on a plain <table>. The recipe scopes all table styling, so bare tables elsewhere stay untouched."
     >
       <Demo
+        lead
         title="Sortable, selectable"
         classes='data-table · th[aria-sort] > button · tr[aria-selected="true"] · .is-num'
         why="Sorting, selection, cell weights and numeric columns"
@@ -258,6 +313,32 @@ export default function TablePage() {
         shows where it is. Hover and focus ring it like any field.
       </p>
 
+      <Demo
+        title="Loading rows"
+        classes='data-table[aria-busy="true"] > td > skeleton is-text · tr.cn-arrive'
+        why="What a loading table keeps, and how an optimistic row lands"
+      >
+        <LoadingTable />
+      </Demo>
+
+      <p class="cn-copy">
+        A loading table keeps its head and its row count. Set{" "}
+        <code class="cn-code-inline">aria-busy="true"</code> on the table and
+        put a <code class="cn-code-inline">.skeleton.is-text</code> in each
+        cell, sized to the column and hidden from assistive tech, so nothing
+        jumps when the data lands. The loaded rows take{" "}
+        <code class="cn-code-inline">.cn-arrive</code> and arrive together,
+        with no stagger. Use the row count of the page size, or of the last
+        load.
+      </p>
+
+      <p class="cn-copy">
+        An optimistic row shows at once, with the values the reader entered
+        and no skeleton. When the server confirms, any value it changed swaps
+        in place, like every changed number. If the save fails, the row
+        leaves at once and a toast or a banner says why.
+      </p>
+
       <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child" why="What the mark's number and color mean">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
@@ -293,8 +374,9 @@ export default function TablePage() {
           { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
           { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
           { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Pair it with a checkbox or a grid role." },
-          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.39:1 on a panel, level with the 1.40:1 hover, past the open accordion's 1.08:1, 1.10:1 under a selected row · cell text 6.7:1 and muted text 5.3:1 on it, over the 4.5:1 a hovered row holds; the 7:1 and 5.5:1 floors are for text at rest", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (16%) into base, a step under a selected row." },
+          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.39:1 on a panel, level with the 1.40:1 hover, past the open accordion's 1.08:1, 1.18:1 under a selected row's 1.63:1 wash · cell text 6.7:1 and muted text 5.3:1 on it, over the 4.5:1 a hovered row holds; the 7:1 and 5.5:1 floors are for text at rest", notes: "The row presses in: a dark top edge on each cell, no lit bottom edge, and mauve at --cn-step-row (16%) into base, a step under a selected row." },
           { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding, the control radius and --neu-inset-soft. At rest it takes --cn-field-ring over the soft carve, like any field. Name it with aria-labelledby pointing at the column header and the row's name cell." },
+          { name: '.data-table[aria-busy="true"]', values: "loading", notes: "No style of its own. Keep the head and the row count, and put a .skeleton.is-text with aria-hidden in each cell, sized to its column. The loaded rows take .cn-arrive." },
           { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
           { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },
           { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. The last trailing cell sits on the title line, the one before it under it. Keep its data-label for the desktop header." },

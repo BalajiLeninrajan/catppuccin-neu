@@ -16,7 +16,7 @@
    above the mantle page, the --edge hairline on the top and left, and the
    raised shadow. The right and bottom border sides are --neu-ink, so on
    the side away from the light the fill meets the ink directly, 1.22:1,
-   and the border joins the 2px contact as a 3px foot: the side of a
+   and the border joins the 1px contact as a 2px foot: the side of a
    block, the plate's logic at panel scale. Darkness only; the top and
    left stay the quiet hairline. */
 .panel {
@@ -35,7 +35,7 @@
 /* The lead panel: the one a view is about, one per view. It takes the
    base fill like every panel and stands higher by darkness on the side
    away from the light: --neu-lifted's foot on the bottom and right is
-   the last step of the foot ladder in SPEC Depth (panel 3px, plate 4px,
+   the last step of the foot ladder in SPEC Depth (panel 2px, plate 4px,
    tilt 6px, lead 9px), over a deeper near shadow and a longer cast. The
    lead is a resting panel with a deeper foot, not a height of its own.
    The --edge-strong hairline is its one
@@ -949,7 +949,7 @@ a:active > .accent-card {
   display: inline-grid; place-items: center;
   flex: 0 0 auto;
   color: var(--cn-fg-on-accent);
-  border: 1px solid color-mix(in srgb, currentColor var(--cn-step-fill), transparent);
+  border: 1px solid color-mix(in srgb, currentColor var(--cn-step-wash), transparent);
   border-radius: var(--cn-radius-control);
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
@@ -1007,7 +1007,7 @@ a:active > .accent-card {
    border stays transparent so forced colors still draws one. Tone text on
    the wash is 5.7:1 (red) to 9.4:1 (yellow) on the page. The wash stays
    at --cn-step-wash: at --cn-step-engaged, red text on a tag in a popover
-   falls to 3.9:1, under the 4.5:1 a label needs. */
+   falls to 3.7:1, under the 4.5:1 a label needs. */
 /* A tone never carries meaning alone: the tag's word states the status.
    Danger and warning also lead with a glyph; other tones may. */
 .tag {
@@ -1027,13 +1027,13 @@ a:active > .accent-card {
    a control, so it has no plate, gloss, grain, carve or raise, and it
    keeps the tag's size and chip radius. Mauve never fills a tag. */
 .tag.is-solid { color: var(--cn-fg-on-accent); background: var(--tone); box-shadow: none; }
-/* Quiet tag: a row's default or in-progress state, such as Pending, so a
-   status column keeps one shape. No tone: --cn-fg-muted on the sunken
-   fill, crust, 8.4:1. The fill is darker than a panel (1.14:1) and the
-   page (1.07:1), never a lighter grey, under the same soft carve, with no
-   outline and no light edge. It draws no glyph; it may bring an svg. Every
-   toned tag outranks it by hue. */
-.tag.is-quiet { color: var(--cn-fg-muted); background: var(--cn-surface-sunken); }
+/* Quiet tag: a row's default or in-progress state, such as Pending. No
+   tone, no fill and no carve: a plain --cn-fg-muted label, 7.4:1 on a
+   panel. It keeps the tag's padding, transparent border and 12px svg, so
+   the word lines up with the filled tags in its column, and a status
+   column holds two fills, the wash and the one solid. It draws no glyph;
+   it may bring an svg. */
+.tag.is-quiet { color: var(--cn-fg-muted); background: transparent; box-shadow: none; }
 
 /* Inline banner: semantic tint band, no card chrome. The tint keeps its
    hairline edge. The message is body text at the ui size, 14px at 400 on
@@ -1172,7 +1172,7 @@ a:active > .accent-card {
   height: 9px;
   border-radius: 50%;
   background: var(--cn-interactive);
-  /* Halo ring at --cn-step-fill, the same composite as the .live-dot. */
+  /* Halo ring at --cn-step-wash, the same composite as the .live-dot. */
   box-shadow: var(--cn-halo-ring);
   opacity: 0;
   transform: scale(.5);
@@ -1264,7 +1264,7 @@ a:active > .accent-card {
 /* Open is its own step, the open carve: the full carve, a mauve tint at
    --cn-step-tint over whatever holds it and a mauve title. It is not the
    engaged state. The engaged --wash would drop body text in the fold to
-   6.1:1, under the 7:1 body floor, so the open row stays near its own
+   5.7:1, under the 7:1 body floor, so the open row stays near its own
    ground, and on the mantle page it never turns lighter than the page. */
 .accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) {
   border-radius: var(--cn-radius-card);
@@ -1406,7 +1406,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   color: var(--accent);
   border: 1px solid color-mix(in srgb, var(--accent) var(--cn-step-edge), var(--surface-0));
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) var(--cn-step-fill), var(--mantle));
+  background: color-mix(in srgb, var(--accent) var(--cn-step-wash), var(--mantle));
   box-shadow: var(--neu-raised-soft);
   font: var(--cn-type-name-weight) var(--cn-type-label-size)/1 var(--sans);
   user-select: none;
@@ -1594,7 +1594,7 @@ a:hover:not(:active) > .accent-card {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 .stat.is-inline :is(b, strong) {
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg);
   font: inherit;
   letter-spacing: normal;
   font-variant-numeric: tabular-nums;
@@ -1762,7 +1762,7 @@ a:hover:not(:active) > .accent-card {
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
   /* Its own step, 1.39:1 on a panel: level with the 1.40:1 hover, past the
-     open carve's 1.08:1, and 1.10:1 under a selected row's wash. */
+     open carve's 1.08:1, and 1.18:1 under a selected row's wash. */
   background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
 }
 /* Selected row: the engaged treatment, the wash with the full press. */
@@ -1921,6 +1921,16 @@ a:hover:not(:active) > .accent-card {
 }
 
 /* ── Overlays: all float on --shadow-pop, never neu ────────────────────── */
+
+/* A resting field on the overlay fill takes the overlay ring, overlay-0 at
+   75%: 2.09:1 there, where the page ring is only 1.7:1. The token carries
+   its own prefers-contrast value, so the overlay-2 ring still wins. A
+   hovered field sets --cn-field-ring on itself and is not affected. A
+   panel or a well inside an overlay is base or crust, not the overlay
+   fill, so it takes the page ring back: overlay-0 there is about 2.6:1
+   over crust and reads as an outlined box. */
+:is(.popover, .modal, .drawer) { --cn-field-ring: var(--cn-field-ring-overlay); }
+:is(.popover, .modal, .drawer) :is(.panel, .well) { --cn-field-ring: var(--cn-field-ring-page); }
 
 /* Popover / menu: anchored to a relative parent. No overflow clipping:
    filled first/last children follow the parent radius instead. */
@@ -2695,7 +2705,8 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
      <main>…</main>
    </div>
    The sidebar sits one step below the mantle page, on crust 80% into
-   mantle, and scrolls on its own. The current link is a position: the
+   mantle, behind an --edge rule (1.92:1 on the page), and scrolls on its
+   own. The current link is a position: the
    spine and 600, no press. At 1060px and below it folds into
    a sticky bar; the consumer toggles .is-open and aria-expanded.          */
 .app-shell.has-sidebar { flex-direction: row; }
@@ -2710,7 +2721,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   z-index: 50;
   display: flex;
   flex-direction: column;
-  border-inline-end: 1px solid var(--edge-soft);
+  border-inline-end: 1px solid var(--edge);
   background: var(--cn-surface-recessed);
 }
 .sidebar-head {
@@ -2773,7 +2784,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
     width: auto;
     height: auto;
     border-inline-end: 0;
-    border-bottom: 1px solid var(--edge-soft);
+    border-bottom: 1px solid var(--edge);
     background: color-mix(in srgb, var(--cn-surface-recessed) 88%, transparent);
     backdrop-filter: blur(14px);
   }

@@ -58,7 +58,7 @@ export default function SkeletonPage() {
       title="Skeleton"
       lede="A carved placeholder where content is loading. It takes the well carve, below the ground, and breathes until the content arrives."
     >
-      <Demo title="Loading a member row and a stat" why="Sizing, ARIA and the arrival" classes="skeleton · skeleton is-text · skeleton is-round">
+      <Demo lead title="Loading a member row and a stat" why="Sizing, ARIA and the arrival" classes="skeleton · skeleton is-text · skeleton is-round">
         <LoadingDemo />
       </Demo>
 

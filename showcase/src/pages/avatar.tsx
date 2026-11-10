@@ -9,7 +9,7 @@ export default function AvatarPage() {
       title="Avatar"
       lede="An initials round keyed by --accent. The tint, the hairline border and the initials all come from that one property."
     >
-      <Demo title="People, each in their own accent" why="Where an avatar's accent comes from" classes="avatar  (set --accent from the record)" row>
+      <Demo lead title="People, each in their own accent" why="Where an avatar's accent comes from" classes="avatar  (set --accent from the record)" row>
         {PEOPLE.map((p) => (
           <span key={p.initials} class="avatar" style={accentStyle(p.accent)} role="img" aria-label={p.name} data-tip={p.name}>
             {p.initials}
@@ -79,7 +79,7 @@ export default function AvatarPage() {
           {
             name: ".avatar",
             values: "initials text or one img",
-            notes: "32px round, sans 600 14px. Accent initials, the accent at --cn-step-fill (14%) over mantle, and an --cn-step-edge (40%) accent hairline into surface-0.",
+            notes: "32px round, sans 600 14px. Accent initials, the accent at --cn-step-wash (12%) over mantle, and an --cn-step-edge (40%) accent hairline into surface-0.",
           },
           {
             name: ".is-lg",

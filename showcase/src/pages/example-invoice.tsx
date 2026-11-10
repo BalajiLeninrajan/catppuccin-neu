@@ -177,7 +177,7 @@ export default function InvoiceExample() {
         </table>
         {/* The payment note fills the space left of the totals, which stay
             320px wide against the Amount column. */}
-        <div class="panel-body cn-split" style="align-items:flex-start">
+        <div class="panel-body cn-split cn-top">
           <div class="cn-stack cn-gap-8" style="flex:1 1 240px;max-width:46ch">
             <p class="cn-name cn-m-0">How to pay</p>
             <p class="cn-meta cn-m-0">

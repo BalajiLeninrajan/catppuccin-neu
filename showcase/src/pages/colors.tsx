@@ -130,7 +130,7 @@ export default function ColorsPage() {
         Mocha tokens below and never a raw hex value.
       </p>
 
-      <Demo title="Grounds & surfaces" why="Tokens, never raw hexes">
+      <Demo lead title="Grounds & surfaces" why="Tokens, never raw hexes">
         <div class="sc-grid">
           {GROUNDS.map((t) => (
             <Swatch key={t.name} {...t} />
@@ -562,24 +562,22 @@ export default function ColorsPage() {
         rows={[
           { name: "--cn-step-tint", values: "4%", notes: "A field in its tone, an untoned --tint, the open accordion row." },
           { name: "--cn-step-status-tint", values: "6%", notes: "The four status tints, so a toned banner or .cn-tint shows its tone before its glyph and body text on it stays 8.0:1 or better on a panel." },
-          { name: "--cn-step-row", values: "16%", notes: "Table and ranked row hovers: 1.39:1 for mauve on base, level with the 1.40:1 hover, past the open carve's 1.08:1, and 1.10:1 under a selected row." },
-          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
-          { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.40:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
-          { name: "--cn-step-fill", values: "14%", notes: "Avatar grounds, the radio and live-dot halos, the .mark border and the switch glow." },
-          { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge, .cn-edge-mauve, .cn-edge-accent and the switch glow while held." },
-          { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the avatar edge, the icon-button hover edge, the segmented hover." },
+          { name: "--cn-step-row", values: "16%", notes: "Table and ranked row hovers: 1.39:1 for mauve on base, level with the 1.40:1 hover, past the open carve's 1.08:1, and 1.18:1 under a selected row." },
+          { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner. Also avatar grounds, the radio and live-dot halos and the .mark border." },
+          { name: "--cn-step-engaged", values: "23%", notes: "The engaged wash, --wash: 1.63:1 on base, 1.17:1 past the 1.40:1 hover. Muted text on it holds 4.52:1, which is why it stops at 23%. Segmented choices, toggled ghosts, selected rows, the current page." },
+          { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge, .cn-edge-mauve, .cn-edge-accent and the switch glow." },
+          { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the avatar edge, the icon-button hover edge, the segmented hover, the switch glow while held." },
           { name: "--cn-step-strong", values: "50%", notes: "The warmed secondary and checked radio borders." },
           { name: "--cn-step-vivid", values: "70%", notes: "Accent-card plates, so six accents stay apart, and --engaged-edge, so the rim clears 3:1." },
         ]}
       />
 
-      <Demo title="The nine steps of mauve into base" row>
+      <Demo title="The eight steps of mauve into base" row>
         {[
           ["tint", 4],
-          ["row", 8],
           ["wash", 12],
-          ["engaged", 20],
-          ["fill", 14],
+          ["row", 16],
+          ["engaged", 23],
           ["plate", 25],
           ["edge", 40],
           ["strong", 50],
@@ -602,8 +600,8 @@ export default function ColorsPage() {
 --edge:      color-mix(in srgb, var(--surface-2) 70%, transparent); /* raised-surface hairline: 1.85:1 on base */
 --edge-soft: color-mix(in srgb, var(--surface-1) 38%, transparent); /* inner separators */
 --edge-strong: var(--surface-2);                                   /* lead panel and overlay hairline: 2.5:1 */
---wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
---engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its wash */
+--wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.63:1 */
+--engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.3:1 on its wash */
 --hover:     color-mix(in srgb, var(--surface-1) 60%, transparent);  /* the hover wash: 1.40:1 on base, 1.23:1 on overlay */
 --cn-well-ring: inset 0 0 0 1px var(--surface-0); /* wells and mono wells: 1.5:1 on the sunken fill, surface-2 under prefers-contrast */
 
@@ -622,7 +620,7 @@ export default function ColorsPage() {
         overlay still lights. Ghost buttons, menu rows,
         page targets and sidebar links take it on hover.{" "}
         <code class="cn-code-inline">--wash</code> is the engaged state: mauve
-        at <code class="cn-code-inline">--cn-step-engaged</code> (20%) into base,
+        at <code class="cn-code-inline">--cn-step-engaged</code> (23%) into base,
         a step past the hover, so the fill alone tells a chosen option
         from a hovered one. An engaged state also wears{" "}
         <code class="cn-code-inline">--engaged-edge</code>, a mauve rim at{" "}

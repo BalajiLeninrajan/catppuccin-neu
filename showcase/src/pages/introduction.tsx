@@ -61,7 +61,7 @@ export default function IntroductionPage() {
         right gives their height.
       </p>
 
-      <Demo title="First look" why="What you are looking at" row classes="btn btn-primary">
+      <Demo lead title="First look" why="What you are looking at" row classes="btn btn-primary">
         <button type="button" class="btn btn-primary">New invoice</button>
         <button type="button" class="btn btn-secondary">Export</button>
         <span class="chip"><span class="live-dot" aria-hidden="true" /> 3 online</span>
@@ -267,10 +267,10 @@ export default function IntroductionPage() {
         <ol class="cn-copy">
           <li>A <code class="cn-code-inline">.cn-skip-link</code> to <code class="cn-code-inline">#main</code> as the first focusable element, with <code class="cn-code-inline">tabindex="-1"</code> on the <code class="cn-code-inline">main</code> it targets. CSS cannot add it, so the markup does.</li>
           <li><code class="cn-code-inline">.page-main</code> holding a stack 48px apart.</li>
-          <li>The title and its one primary on one line in a <code class="cn-code-inline">.cn-split</code>, with the lede below the split.</li>
+          <li>A <code class="cn-code-inline">.cn-split.cn-top</code> holding a stack of the title and the lede, then the one primary, so the primary sits on the title line and lands after the lede when the split wraps.</li>
           <li>The key figures on the ground, in a <code class="cn-code-inline">.stat-grid.is-ruled</code>.</li>
           <li>One <code class="cn-code-inline">.panel.is-lead</code>, the thing the view is about.</li>
-          <li>A <code class="cn-code-inline">.cn-grid-12</code> row of 7 and 5: the data first, the aside last, tilted, in prose.</li>
+          <li>A <code class="cn-code-inline">.cn-grid-12</code> row of 8 and 4: the data first, the aside last, tilted, in prose.</li>
           <li>At most three raised panels in any region.</li>
         </ol>
         <p class="cn-copy">

@@ -44,7 +44,7 @@ export default function PageFurniturePage() {
         The furniture recipes never style bare elements.
       </p>
 
-      <Demo title="Page header" why="What goes on which element" classes="cn-display · lede">
+      <Demo lead title="Page header" why="What goes on which element" classes="cn-display · lede">
         <header>
           <h1 class="cn-display">
             Revenue, <em>last 90 days</em>
@@ -188,7 +188,7 @@ export default function PageFurniturePage() {
         site's navigation is one. The sidebar is{" "}
         <code class="cn-code-inline">--sidebar-w</code> (264px) wide, full
         height, sticky, on <code class="cn-code-inline">--cn-surface-recessed</code>,{" "}
-        crust 80% into mantle, a step under the page, with an <code class="cn-code-inline">--edge-soft</code> rule, and
+        crust 80% into mantle, a step under the page, with an <code class="cn-code-inline">--edge</code> rule, 1.92:1 on the page, and
         scrolls on its own. <code class="cn-code-inline">.sidebar-head</code>{" "}
         holds the wordmark and a <code class="cn-code-inline">.sidebar-toggle</code>;{" "}
         <code class="cn-code-inline">.sidebar-nav</code> stacks groups 24px
@@ -306,7 +306,7 @@ export default function PageFurniturePage() {
             name: ".live-dot",
             values: "7px pulse dot",
             default: "green",
-            notes: "A 4px halo at --cn-step-fill (14%), pulsing every 1.5s on --ease-out. currentColor fill and halo; recolor with a .cn-text-* utility. Keep aria-hidden.",
+            notes: "A 4px halo at --cn-step-wash (12%), pulsing every 1.5s on --ease-out. currentColor fill and halo; recolor with a .cn-text-* utility. Keep aria-hidden.",
           },
         ]}
       />

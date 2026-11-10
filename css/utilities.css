@@ -301,6 +301,16 @@
 .cn-row     { display: flex; align-items: center; gap: var(--space-2); }
 .cn-stack   { display: grid; gap: var(--space-3); }
 .cn-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+/* Split: two groups at opposite ends that wrap onto two lines when they
+   no longer fit, the first group taking the slack. It sits above the
+   modifiers so .cn-top and .cn-baseline can realign it. */
+.cn-split { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-4); }
+.cn-split > :first-child { flex: 1 1 auto; min-width: 0; }
+/* A lede stacked under the title in the first group does not widen the
+   group, so the split wraps on the title's width, not on the length of
+   the copy. It needs the title before it: a lede alone would leave the
+   group no width, and the split would squeeze it and never wrap. */
+.cn-split > :first-child > :is(h1, h2, .cn-display, .display-title, .cn-heading, .cn-title) ~ .cn-lede { contain: inline-size; }
 .cn-between { justify-content: space-between; }
 .cn-center  { justify-content: center; }
 .cn-end     { justify-content: flex-end; }
@@ -316,10 +326,6 @@
 .cn-auto-l  { margin-left: auto; }
 .cn-mx-auto { margin-inline: auto; }
 
-/* Split: two groups at opposite ends that wrap onto two lines when they
-   no longer fit, the first group taking the slack. */
-.cn-split { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-4); }
-.cn-split > :first-child { flex: 1 1 auto; min-width: 0; }
 /* Measure: a centered column at the prose measure, --cn-measure. */
 .cn-measure { max-inline-size: var(--cn-measure); margin-inline: auto; }
 /* Sidebar layout: the first child holds --side-w (16rem), the second takes

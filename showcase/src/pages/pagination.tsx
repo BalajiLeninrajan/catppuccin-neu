@@ -15,7 +15,7 @@ export default function PaginationPage() {
     >
       <h2 class="cn-title">Pagination</h2>
 
-      <Demo title="A long list" classes='nav.pagination > button[aria-current="page"] · span (gap)' row>
+      <Demo lead title="A long list" classes='nav.pagination > button[aria-current="page"] · span (gap)' row>
         <Pager current={page} total={12} label="Invoice pages" onPage={setPage} />
       </Demo>
 

@@ -73,7 +73,7 @@ export default function ModalPage() {
         <code class="cn-code-inline">&lt;dialog&gt;</code>.
       </p>
 
-      <Demo title="Live demo" why="What the dialog element gives you" classes="dialog.modal">
+      <Demo lead title="Live demo" why="What the dialog element gives you" classes="dialog.modal">
         <ModalDemo trigger="Invite a teammate" triggerClass="btn btn-primary" title="Invite a teammate" action="Send invite">
           <p class="cn-copy" style="margin:0">
             They get access to every dashboard in this workspace. You can change
@@ -140,7 +140,7 @@ export default function ModalPage() {
             name: "dialog.modal",
             values: "showModal() / close()",
             default: "·",
-            notes: "width min(520px, 100vw - 32px); max-height 100dvh - 48px; --cn-surface-overlay fill, the --edge-strong hairline, --shadow-pop. Radius is --cn-radius-panel.",
+            notes: "width min(520px, 100vw - 32px); max-height 100dvh - 48px; --cn-surface-overlay fill, the --edge-strong hairline, --shadow-pop. Radius is --cn-radius-panel. A resting field inside takes --cn-field-ring-overlay, 2.1:1 on the overlay fill.",
           },
           {
             name: ".modal.is-wide",

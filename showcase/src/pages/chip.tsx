@@ -76,7 +76,7 @@ export default function ChipPage() {
       title="Chip"
       lede="Two small metadata marks. The outlined .chip holds facts such as counts and versions. The carved .tag holds a semantic state through --tone. Both stay on one line."
     >
-      <Demo title="Chip" classes="chip" row>
+      <Demo lead title="Chip" classes="chip" row>
         <span class="chip">v2.4.1</span>
         <span class="chip">12 members</span>
         <span class="chip">Updated 4m ago</span>
@@ -178,9 +178,10 @@ export default function ChipPage() {
         solid danger tag out of the band or row that holds the primary: red
         and mauve are close, so it belongs in a status column. A row's
         default or in-progress state, such as Pending, takes{" "}
-        <code class="cn-code-inline">.tag.is-quiet</code>: muted text on the
-        sunken fill, darker than the panel, with no tone. The column keeps
-        one shape, and every toned tag still outranks it.
+        <code class="cn-code-inline">.tag.is-quiet</code>: a plain muted label with no
+        tone, no fill and no carve. It keeps the tag's padding, so the word
+        lines up with the filled tags, and the column holds two fills, the
+        wash and the one solid.
       </p>
 
       <Demo title="Status tag with its own svg" classes="tag cn-tone-success > svg + word" row>
@@ -282,8 +283,8 @@ export default function ChipPage() {
           {
             name: ".tag.is-quiet",
             values: "modifier",
-            contrast: "Muted text on crust 8.4:1",
-            notes: "A row's default or in-progress state, such as Pending. No tone: --cn-fg-muted on --cn-surface-sunken, darker than a panel, under the tag's soft carve. No outline and no light edge. Draws no glyph; may bring a 12px svg.",
+            contrast: "Muted text 7.4:1 on a panel, 5.8:1 on an overlay",
+            notes: "A row's default or in-progress state, such as Pending. No tone, no fill and no carve: a --cn-fg-muted label that keeps the tag's padding and transparent border, so it lines up with the filled tags. Draws no glyph; may bring a 12px svg.",
           },
           {
             name: ".tag svg",

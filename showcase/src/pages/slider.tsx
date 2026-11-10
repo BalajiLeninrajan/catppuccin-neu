@@ -65,7 +65,7 @@ export default function SliderPage() {
         <code class="cn-code-inline">input type="range"</code>.
       </p>
 
-      <Demo title="With a label and an output" why="How the track and thumb are built" classes='input[type="range"].slider[style="--value: …"] + output'>
+      <Demo lead title="With a label and an output" why="How the track and thumb are built" classes='input[type="range"].slider[style="--value: …"] + output'>
         <SliderRow
           id="slider-terms"
           label="Payment terms"

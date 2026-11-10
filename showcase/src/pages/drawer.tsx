@@ -87,7 +87,7 @@ export default function DrawerPage() {
         <code class="cn-code-inline">showModal()</code>.
       </p>
 
-      <Demo title="Live demo" why="Markup, layout and motion" classes="dialog.drawer">
+      <Demo lead title="Live demo" why="Markup, layout and motion" classes="dialog.drawer">
         <DrawerDemo />
       </Demo>
 
@@ -117,7 +117,7 @@ export default function DrawerPage() {
             name: "dialog.drawer",
             values: "showModal() / close()",
             default: "·",
-            notes: "width min(420px, 100vw - 40px); full height; right-pinned flex column; --cn-surface-overlay fill on --shadow-pop.",
+            notes: "width min(420px, 100vw - 40px); full height; right-pinned flex column; --cn-surface-overlay fill on --shadow-pop. A resting field inside takes --cn-field-ring-overlay, 2.1:1 on the overlay fill.",
           },
           {
             name: ".drawer > header",

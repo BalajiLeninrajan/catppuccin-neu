@@ -29,6 +29,7 @@ export default function SurfacesPage() {
     >
       <h2 class="cn-title">The surface ladder</h2>
       <Demo
+        lead
         title="Six fills"
         classes="cn-bg-page / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well"
         why="Why nothing raised is lighter than base"
@@ -112,8 +113,8 @@ export default function SurfacesPage() {
         border sides are the <code class="cn-code-inline">--edge</code> hairline.
         Its right and bottom sides are <code class="cn-code-inline">--neu-ink</code>,
         so on the side away from the light the fill meets the ink with no
-        lighter line between them, and the border joins the 2px contact edge
-        as a 3px foot. Nothing on the top or left is brightened. The
+        lighter line between them, and the border joins the 1px contact edge
+        as a 2px foot. Nothing on the top or left is brightened. The
         header and footer are bands on the panel's own fill, each parted from
         the body by an <code class="cn-code-inline">--edge-soft</code> divider. A
         darker header would sink below the surface it titles, so the title's
@@ -205,7 +206,7 @@ export default function SurfacesPage() {
         surface-2, on its top and left, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
         the bottom and right, 9px deep and 7px wide with its ink border
-        sides, where a button's plate is 4px and a plain panel's foot 3px,
+        sides, where a button's plate is 4px and a plain panel's foot 2px,
         and a longer cast. It is a resting panel with a deeper foot, not a
         height of its own. It keeps the plain lit edge and draws no outline all
         round, because neither a bright line nor a heavier outline reads as
@@ -312,7 +313,7 @@ export default function SurfacesPage() {
             name: ".panel",
             values: "raised container",
             contrast: "Fill 1.07:1 on the page · --edge 1.85:1 on the fill · fill against the ink sides 1.22:1",
-            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow, cast and the lit top edge), an --edge hairline on the top and left and --neu-ink border sides on the right and bottom, a 3px foot with the contact. All four sides return to the hairline under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
+            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow, cast and the lit top edge), an --edge hairline on the top and left and --neu-ink border sides on the right and bottom, a 2px foot with the contact. All four sides return to the hairline under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and keeps the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",

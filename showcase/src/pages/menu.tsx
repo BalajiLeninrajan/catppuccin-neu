@@ -226,6 +226,7 @@ export default function MenuPage() {
       </p>
 
       <Demo
+        lead
         title="Anatomy, pinned open"
         classes='btn btn-ghost[aria-expanded="true"] · popover menu[role="menu"]'
         why="Markup, size and surface"

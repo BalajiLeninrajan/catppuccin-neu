@@ -24,7 +24,7 @@ export default function TerminalPage() {
       title="Terminal"
       lede="A carved log surface in mono. It shares its radius, fill and type with the code block and the command."
     >
-      <Demo title="Log surface with caret" why="How the log scrolls and colors" classes="terminal / terminal .caret">
+      <Demo lead title="Log surface with caret" why="How the log scrolls and colors" classes="terminal / terminal .caret">
         <div class="terminal" style="width:min(560px,100%);height:230px">
           <pre class="scroll-well" tabIndex={0} role="region" aria-label="Deploy log">
             {LOG}
