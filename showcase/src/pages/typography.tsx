@@ -225,7 +225,7 @@ export default function TypographyPage() {
       </p>
 
       <Demo title="cn-code · 500 · 13px/1.6 · mono" why="Where mono is used" classes="cn-code">
-        <code class="cn-code">pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.1</code>
+        <code class="cn-code">pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.5.0</code>
       </Demo>
 
       <Demo title="cn-code-inline · mono · .92em · 500 · subtext-1" why="Why inline code has no chip" classes="cn-code-inline">

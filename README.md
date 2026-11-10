@@ -20,7 +20,7 @@ Docs and every component: [catppuccin-neu.balajileninrajan.dev](https://catppucc
 With a bundler:
 
 ```sh
-pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.4.1
+pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.5.0
 ```
 
 ```js
@@ -30,8 +30,8 @@ import "catppuccin-neu/css/index.css";
 From the CDN, for a page with no `package.json`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css" />
-<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.5.0/css/index.css" />
+<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.5.0/js/auto.js"></script>
 ```
 
 Copy both lines. Tabs, menus, listboxes and comboboxes need a keyboard

@@ -3,9 +3,9 @@
 One line per change, newest version first. [SPEC.md](./SPEC.md) describes
 what ships now. This file records how it got there.
 
-## Unreleased
+## 0.5.0
 
-This becomes 0.5.0: it removes the 0.4 aliases.
+This release removes the 0.4 aliases.
 
 **Frozen for 0.5.0.** The surface and shadow tokens hold these values for the 0.5.0 tag, and any later change to one of them needs its own line in this file. The values lock at the 0.5.0 tag, and the list under "Changed after the freeze" records every move before it. `pnpm lint` holds a snapshot of each resolved value and fails when one differs:
 

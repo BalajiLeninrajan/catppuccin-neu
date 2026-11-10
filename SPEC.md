@@ -57,10 +57,10 @@ utilities layer lands on top.
 
 ### Distribution
 
-- Bundled apps install the git tag (`github:BalajiLeninrajan/catppuccin-neu#v0.4.1`) and import `catppuccin-neu/css/index.css`.
+- Bundled apps install the git tag (`github:BalajiLeninrajan/catppuccin-neu#v0.5.0`) and import `catppuccin-neu/css/index.css`.
 - Zero-build pages with a `package.json` run `catppuccin-neu-sync <dir>` in a pre-build hook and ignore the copies in git.
-- Pages with no `package.json` link `https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css`. Pin a full tag. Link `index.css`, not the three files, so the layers survive.
-- The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model. A stylesheet cannot run script, so one tag wires them, and a static page with none of those widgets can leave it out. Bundled apps add `import "catppuccin-neu/js/auto"`. Pages with no `package.json` put `<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>` beside the stylesheet link, pinned to the same tag. Either wires every widget in the document and the ones added later. `init()` from `catppuccin-neu/js` does the same on the app's own schedule, and the consumer's own widget library replaces both. See [Behavior](#behavior).
+- Pages with no `package.json` link `https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.5.0/css/index.css`. Pin a full tag. Link `index.css`, not the three files, so the layers survive.
+- The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model. A stylesheet cannot run script, so one tag wires them, and a static page with none of those widgets can leave it out. Bundled apps add `import "catppuccin-neu/js/auto"`. Pages with no `package.json` put `<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.5.0/js/auto.js"></script>` beside the stylesheet link, pinned to the same tag. Either wires every widget in the document and the ones added later. `init()` from `catppuccin-neu/js` does the same on the app's own schedule, and the consumer's own widget library replaces both. See [Behavior](#behavior).
 - Nobody commits copies of the CSS. Tags never move once pushed.
 
 The docs deploy as the `catppuccin-neu` Cloudflare Worker at

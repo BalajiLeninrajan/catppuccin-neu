@@ -6,7 +6,7 @@ const autoSnippet = `// with a bundler: one line in your entry file
 import "catppuccin-neu/js/auto";
 
 <!-- with no build: one tag beside the stylesheet link, on the same version -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>`;
+<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.5.0/js/auto.js"></script>`;
 
 const importSnippet = `import { init } from "catppuccin-neu/js";
 
