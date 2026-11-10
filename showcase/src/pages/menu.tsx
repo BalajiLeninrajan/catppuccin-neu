@@ -359,12 +359,12 @@ export default function MenuPage() {
         title="Contract"
         rows={[
           { name: ".popover.menu", values: '[role="menu"]', notes: "Width auto, min 200px, max min(320px, 100vw - 32px), 4px padding. The popover fill, hairline, shadow and motion. Required to have a keyboard model: menu() from catppuccin-neu/js or your own." },
-          { name: '.menu > [role^="menuitem"]', values: "button or a", notes: "--control-h-sm row, 12px inline padding, the control radius, 500 14px in --cn-fg-soft. Hover and :focus-visible share --hover and --cn-fg; :focus-visible adds the 2px --cn-focus ring at a -2px offset." },
+          { name: '.menu > [role^="menuitem"]', values: "button or a", contrast: "Hover fill 1.23:1 on the popover · label 7.3:1 on it", notes: "--control-h-sm row, 12px inline padding, the control radius, 500 14px in --cn-fg-soft. Hover and :focus-visible share --hover and --cn-fg; :focus-visible adds the 2px --cn-focus ring at a -2px offset." },
           { name: "> svg", values: "leading glyph", notes: "16px in --cn-fg-faint, aria-hidden. Once any row has one, iconless rows and group labels indent 36px, to the icon column's text edge." },
           { name: "> kbd", values: "trailing shortcut", notes: "Pushed to the end, mono 500 13px in --cn-fg-muted. Mirror it in aria-keyshortcuts." },
           { name: '[aria-checked="true"]', values: "menuitemcheckbox / menuitemradio", notes: "A 14px mauve check at the row's end." },
           { name: ".is-danger", values: "on a row", notes: "--cn-danger label, a red wash at --cn-step-wash on hover and focus." },
-          { name: ':disabled / [aria-disabled="true"]', values: "on a row", notes: "--disabled-opacity, not-allowed, no hover fill." },
+          { name: ':disabled / [aria-disabled="true"]', values: "on a row", notes: "--disabled-opacity (.7), not-allowed, no hover fill." },
           { name: 'hr[role="separator"]', values: "between groups", notes: "An --edge-soft rule, 4px above and below." },
           { name: ".cn-microlabel", values: "group label", notes: "Padded to line up with the row labels, at the icon column when the menu has icons. aria-hidden inside role=menu." },
           { name: 'btn-ghost[aria-expanded="true"]', values: "the trigger", notes: "The engaged state while the menu is open: --wash, --neu-inset, the --engaged-edge rim." },

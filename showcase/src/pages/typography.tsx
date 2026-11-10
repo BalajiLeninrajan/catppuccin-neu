@@ -74,7 +74,7 @@ export default function TypographyPage() {
         <span class="cn-ui">Export as CSV</span>
       </Demo>
 
-      <Demo title="cn-label · 500 · 13px/1.25 · subtext-1" classes="cn-label">
+      <Demo title="cn-label · 500 · 14px/1.25 · subtext-1" classes="cn-label">
         <span class="cn-label">Billing period</span>
       </Demo>
 
@@ -94,7 +94,7 @@ export default function TypographyPage() {
         <span class="cn-value">1,284</span>
       </Demo>
 
-      <Demo title="cn-value-lg · 600 · 32px · -0.025em · colored by --accent" why="Where the large value gets its color" classes="cn-value-lg">
+      <Demo title="cn-value-lg · 600 · clamp(26px, 10.72px + 2.94vw, 36px) · -0.025em · colored by --accent" why="Where the large value gets its color" classes="cn-value-lg">
         <div class="sc-row">
           <span class="cn-value-lg">$42,180</span>
           <span class="cn-value-lg" style={accentStyle(PAYMENTS.accent)}>
@@ -129,14 +129,14 @@ export default function TypographyPage() {
         the heading, and the wordmark reads the display weight. The title is 600, so a panel title never outweighs the
         page heading. Names, titles and buttons (<code class="cn-code-inline">.btn</code>) are 600.
         Chrome, the label and the microlabel, is 500, and meta is 400. The
-        label is 13px at 500 in subtext-1 and meta is 14px at 400 in
-        subtext-0, so they differ by size, weight and ink. 600 marks
-        what a reader acts on. A band or a row holds two small sizes at most
-        and one 600: a stat is a 13px label, a 24px value and a 13px note,
-        and a table row is 14px cells under a 13px head, with the name its
-        one 600 and a key figure at 500 in the text color. The large steps run 20, 24, 28 and 32px: title, value,
+        label is 14px at 500 in subtext-1 and meta is 14px at 400 in
+        subtext-0, so they share a size and differ by weight and ink. 600 marks
+        what a reader acts on. A band or a row holds one small size plus the
+        microlabel, and one 600: a stat is a 14px label, a 24px value and a 14px note,
+        and a table row is 14px cells under a 14px head, with the name its
+        one 600 and a key figure at 500 in the text color. The large steps run 20, 24, 28 and 36px: title, value,
         heading and value-lg, so a stat value outweighs the panel title above
-        it. At 520px both step down: the value to 18px and the band title to
+        it, and the large value is 1.5 times the value beside it. At 520px both step down: the value to 18px and the band title to
         16px. Tracking is 0 through 18px, -0.01em at 20px and -0.02em from
         24px up: the value, the heading and both display sizes. value-lg
         alone is -0.025em, since it sets figures. Words at 700 stop at
@@ -163,8 +163,10 @@ export default function TypographyPage() {
       <p class="cn-copy">
         Every size is rem, so the reader's browser font-size setting scales
         every role. The px on this page are at the 16px default. The
-        microlabel is the one 12px role; the label and code are 13px, and
-        meta is 14px so it reads apart from the label at 1x. The
+        microlabel is the one 12px role. The label, meta and ui are all
+        14px, at 500, 400 and 600. Mono code is 13px, which matches Plex
+        Sans at 14px in x-height, and compact density sets table heads and
+        cells at 13px. The
         name is the ui role in <code class="cn-code-inline">--cn-fg</code>:
         its tokens alias the ui tokens, so it is the same 14px at 600, set
         apart by its color. Body copy is 16px, and
@@ -188,8 +190,8 @@ export default function TypographyPage() {
         <code class="cn-code-inline">h2</code> or{" "}
         <code class="cn-code-inline">h3</code> in a panel, modal or drawer
         header is the title role at{" "}
-        <code class="cn-code-inline">--band-title-size</code> instead: 20px by
-        default and 14px at cozy and compact density. The lead panel's title
+        <code class="cn-code-inline">--band-title-size</code> instead: 20px at
+        default and cozy density and 14px at compact. The lead panel's title
         takes <code class="cn-code-inline">--lead-title-size</code> at the
         heading weight: 28px at default and cozy, and 20px at compact and at
         655px and under, where display-sm drops under 34px.
@@ -259,11 +261,11 @@ export default function TypographyPage() {
           { name: ".cn-lede", values: "sans", default: "400 · 18px/1.6 · subtext-1", notes: "Intro paragraph; max-width --cn-measure (68ch). 20px in .page-main.is-reading. .lede is the recipe form." },
           { name: ".cn-copy", values: "sans", default: "400 · 16px/1.6 · subtext-1", notes: "Body prose in --cn-fg-body, the same role as body. 15px at compact density." },
           { name: ".cn-ui", values: "sans", default: "600 · 14px/1.25", notes: "Control text outside a recipe." },
-          { name: ".cn-label", values: "sans", default: "500 · 13px/1.25 · subtext-1", notes: "Field and section labels; sentence case. --cn-fg-soft, a stop above meta." },
+          { name: ".cn-label", values: "sans", default: "500 · 14px/1.25 · subtext-1", notes: "Field and section labels; sentence case. --cn-fg-soft, a stop above meta." },
           { name: ".cn-microlabel", values: "sans", default: "500 · 12px/1.25 · +0.08em · uppercase · subtext-0", notes: "A fact's label. The only uppercase role and the only 12px one." },
           { name: ".cn-value", values: "sans", default: "600 · 24px/1 · -0.02em · tabular", notes: "Stat numbers." },
-          { name: ".cn-value-lg", values: "sans", default: "600 · 32px/1 · -0.025em · tabular", notes: "Large stat in var(--accent); text inside an accent card. Opt out with a color utility." },
-          { name: ".cn-meta", values: "sans", default: "400 · 14px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. A size above the 13px label, a weight under its 500 and a stop dimmer, --cn-fg-muted." },
+          { name: ".cn-value-lg", values: "sans", default: "600 · clamp(26px, 10.72px + 2.94vw, 36px)/1 · -0.025em · tabular", notes: "Large stat in var(--accent); text inside an accent card. 36px from 860px up, then 4px under the page title. Opt out with a color utility." },
+          { name: ".cn-meta", values: "sans", default: "400 · 14px/1.5 · tabular · subtext-0", notes: "Timestamps, counts, versions. The label's size, a weight under its 500 and a stop dimmer, --cn-fg-muted." },
           { name: ".cn-code", values: "mono", default: "500 · 13px/1.6 · tabular", notes: "Machine literals, CLI strings." },
           { name: ".cn-code-inline", values: "mono", default: "500 · 0.92em · subtext-1", notes: "Code inside prose, in --cn-fg-soft." },
           { name: ".cn-code-meta", values: "mono", default: "500 · 13px/1 · subtext-0", notes: "A model id, a path or a hash under a name." },

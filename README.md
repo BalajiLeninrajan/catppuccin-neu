@@ -31,17 +31,15 @@ From the CDN, for a page with no `package.json`:
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/css/index.css" />
+<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>
 ```
+
+Copy both lines. Tabs, menus, listboxes and comboboxes need a keyboard
+model, and a stylesheet cannot run script, so the second tag wires them. A
+static page with none of those widgets can drop it.
 
 Pin a full tag. `@main` and `@v0.4` float and re-cache every 12 hours. Link
 `index.css`, not the three files, so the layer wrappers survive.
-
-Tabs, menus, listboxes and comboboxes need a keyboard model, and a
-stylesheet cannot run script. Add the one tag that wires them:
-
-```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.4.1/js/auto.js"></script>
-```
 
 For a page with a `package.json` but no bundler, copy the CSS in a
 pre-build hook and ignore the copies in git:

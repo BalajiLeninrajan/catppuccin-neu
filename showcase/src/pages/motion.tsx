@@ -399,7 +399,7 @@ export default function MotionPage() {
           { name: "a layout the reader opened", values: "follows the reader", notes: "A panel that grows because the reader opened something moves with them. The accordion's height transition is the model." },
           { name: "a layout that shifts on its own", values: "--t-base, view transition", notes: "A column appears or a banner lands above content: name the moving regions with view-transition-name and run a view transition, so nothing jumps under the pointer." },
           { name: "width or height on a box of text", values: "never animates", notes: "Text reflows on every frame of a size tween. Use a view transition, or the accordion's grid-template-rows fold." },
-          { name: ".page-enter", values: "the one stagger", notes: "A view's first render only. Five steps 40ms apart, then the rest together, so no reveal runs past .2s plus --t-slow." },
+          { name: ".page-enter", values: "the one stagger", notes: "A view's first render only. Five steps 40ms apart, then the rest together, so no reveal runs past .2s plus --t-slow. Its exit is the route cross-fade over --t-base, where the browser has view transitions." },
         ]}
       />
 
@@ -472,7 +472,12 @@ document.startViewTransition(() => showBanner());`}
         app changes routes in script, so it calls{" "}
         <code class="cn-code-inline">document.startViewTransition</code> around
         the route change instead, behind a check that the browser has it. This
-        site wraps every in-app link that way.
+        site wraps every in-app link that way, and back and forward too. The
+        cross-fade is the exit that pairs with{" "}
+        <code class="cn-code-inline">.page-enter</code>: the old view fades
+        out as one piece while the new one staggers in. A browser without
+        view transitions swaps the views with no exit. There
+        is no staggered exit, because it would hold every navigation back.
       </p>
 
       <p class="cn-copy">

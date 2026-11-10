@@ -298,7 +298,9 @@ export default function SurfacesPage() {
         under the page and 1.14:1 under a panel. So it sits below the ground and never
         reads as an outlined panel. The carve finishes it with one dark wall
         from the top left and no border or light lip.{" "}
-        <code class="cn-code-inline">--cn-well-ring</code> paints nothing until{" "}
+        <code class="cn-code-inline">--cn-well-ring</code> is a quiet even
+        surface-0 hairline over the carve, 1.5:1 on the fill and the same
+        on all four sides, so a well keeps its shape on a dim display.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> closes it
         into a surface-2 ring.
       </p>
@@ -346,7 +348,7 @@ export default function SurfacesPage() {
           {
             name: ".well",
             values: "inset container",
-            notes: "No border, the --cn-surface-sunken fill; the full inner shadow finishes it, and --cn-well-ring rings it under prefers-contrast: more. The card radius (12px).",
+            notes: "No border, the --cn-surface-sunken fill; the full inner shadow finishes it under --cn-well-ring, an even surface-0 hairline that prefers-contrast: more lifts to surface-2. The card radius (12px).",
           },
           {
             name: ".scroll-well",

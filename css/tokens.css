@@ -44,7 +44,7 @@
   --cn-fg-placeholder: var(--overlay-2); /* placeholders and code line numbers, the floor for text: 5.8:1 */
   --cn-fg-faint: var(--overlay-1);       /* decorative icons: 4.4:1 */
   --cn-fg-on-accent: var(--crust);       /* text and glyphs on a solid accent fill: 9.2:1 on mauve */
-  --cn-fg-disabled: var(--overlay-1);    /* disabled text: 4.4:1 */
+  --cn-fg-disabled: var(--overlay-1);    /* disabled text: 4.4:1, under the placeholder on purpose; WCAG 1.4.3 exempts inactive controls */
   --cn-interactive: var(--mauve);        /* links, the primary, checked controls: 8.1:1 */
   --cn-interactive-hover: var(--pink);
   --cn-focus: var(--text);               /* the focus ring, the one bright neutral no state uses: 11.3:1 */
@@ -131,9 +131,9 @@
      one of these, so a wash means the same strength everywhere. */
   --cn-step-tint: 4%;     /* a field in its tone, an untoned --tint, the open carve */
   --cn-step-status-tint: 6%; /* the four status tints, so a toned banner or .cn-tint: body text stays 8.0:1 or better on a panel */
-  --cn-step-row: 13%;     /* the row hover: 1.30:1 for mauve on base, level with the 1.31:1 hover, under the 1.52:1 selected row */
-  --cn-step-wash: 12%;    /* tone hover washes, the accent tint: 1.27:1 for mauve on base */
-  --cn-step-engaged: 20%; /* the engaged wash: 1.52:1, a step past the 1.31:1 hover */
+  --cn-step-row: 16%;     /* the row hover: 1.39:1 for mauve on base, level with the 1.40:1 hover, under the 1.52:1 selected row */
+  --cn-step-wash: 12%;    /* tone hover washes, the accent tint: 1.27:1 for mauve on base. It stays at 12% because red text on its own wash over an overlay is 4.54:1, and 13% takes it to 4.45:1 */
+  --cn-step-engaged: 20%; /* the engaged wash: 1.52:1, a step past the 1.40:1 hover */
   --cn-step-fill: 14%;    /* avatar grounds, halos, the mark border */
   --cn-step-plate: 25%;   /* the primary plate, banner edges, the mauve and accent edges */
   --cn-step-edge: 40%;    /* hue hairlines */
@@ -152,12 +152,12 @@
   --cn-type-micro-leading: 1.25;
   --cn-type-micro-tracking: .08em;
 
-  --cn-type-label-size: .8125rem;  /* 13px; micro is the one 12px role */
+  --cn-type-label-size: .875rem;   /* 14px, one size with meta and ui; the three differ by weight and ink */
   --cn-type-label-weight: 500;
   --cn-type-label-leading: 1.25;
   --cn-type-label-tracking: 0;
 
-  --cn-type-meta-size: .875rem;    /* 14px, a size above the 13px label, so the two read apart at 1x */
+  --cn-type-meta-size: .875rem;    /* 14px, the label's size */
   --cn-type-meta-weight: 400;      /* a step under the 500 label, and a stop dimmer in ink */
   --cn-type-meta-leading: 1.5;
   --cn-type-meta-tracking: 0;
@@ -199,7 +199,7 @@
   --cn-type-value-leading: 1;
   --cn-type-value-tracking: -.02em;
 
-  --cn-type-value-lg-size: 2rem;   /* 32px */
+  --cn-type-value-lg-size: clamp(1.625rem, .67rem + 2.94vw, 2.25rem); /* 36px from 860px up, 1.5x the value; display-sm less 4px, so it is under the page title at every width */
   --cn-type-value-lg-weight: 600;
   --cn-type-value-lg-leading: 1;
   --cn-type-value-lg-tracking: -.025em;
@@ -261,11 +261,8 @@
   /* The lead panel stands higher by darkness on its bottom and right only,
      never by a line all round or a brighter one: a deeper full-ink contact,
      a deeper near shadow and a longer cast. It keeps the plain lit edge.
-     The 6px 8px contact is a hard foot 8px deep and 6px wide, four times a
-     plain panel's 2px on the bottom and three times on the right, past the
-     4px plate, so at 1x the lead never reads lower than a button. It is
-     2px deeper than the tilted panel's 6px plate on the bottom and as wide
-     on the right. */
+     The 6px 8px contact is the last step of the foot ladder in SPEC Depth:
+     panel 3px, plate 4px, tilt 6px, lead 9px with its ink border side. */
   --neu-lifted: 6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
@@ -324,11 +321,12 @@
   --cn-stat-rule: var(--edge); /* the .stat-grid.is-ruled rule, equal to --edge: 1.92:1 on the page at twice the width */
   --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
   --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its own wash */
-  --hover:     color-mix(in srgb, var(--surface-1) 50%, transparent);  /* the hover wash: 1.31:1 on base, 1.19:1 on overlay, so a menu row still lights */
+  --hover:     color-mix(in srgb, var(--surface-1) 60%, transparent);  /* the hover wash: 1.40:1 on base, 1.23:1 on overlay, so a menu row still lights */
   --control-edge: var(--overlay-1);  /* unchecked control edges, the off paddle, the slider thumb: 4.4:1 on base */
-  /* .6 keeps a disabled ghost label at 4.2:1. The primary goes flat instead
-     of dimming. */
-  --disabled-opacity: .6;
+  /* .7 keeps a disabled ghost label at 5.2:1 on base and a disabled chip
+     label, subtext-0, at 4.3:1. More contrast takes it to .8. The primary
+     goes flat instead of dimming. */
+  --disabled-opacity: .7;
   /* A carved field at rest is its dark wall plus a quiet even hairline:
      surface-2 at 85% on all four sides, 2.2:1 on the page, 2.1:1 on a panel
      and 1.7:1 on an overlay. It is the same on every side and never brightens the bottom
@@ -342,13 +340,16 @@
      included. The tabs carve and a disabled field are not inputs waiting
      for text, so they take --cn-carve-ring, the quieter solid surface-1:
      1.9:1 on the page, 1.8:1 on a panel and 1.4:1 on an overlay. Wells and
-     the mono wells take --cn-well-ring, which paints nothing until
-     prefers-contrast closes it into a surface-2 ring, because their sunken
-     fill already separates them. */
+     the mono wells take --cn-well-ring, solid surface-0, the quietest of
+     the three: 1.5:1 on the well's own crust fill, 1.4:1 on the page and
+     1.3:1 on a panel. The sunken fill is only 1.07:1 under the page, so
+     the ring holds the well's shape on a dim display. Like the field ring
+     it paints over the dark wall, so it is even on all four sides.
+     prefers-contrast closes it into a surface-2 ring. */
   --cn-field-ring: inset 0 0 0 1px color-mix(in srgb, var(--surface-2) 85%, transparent);
   --cn-carve-ring: inset 0 0 0 1px var(--surface-1);
   --cn-field-hover-ring: inset 0 0 0 1px var(--control-edge);
-  --cn-well-ring: inset 0 0 0 1px transparent;
+  --cn-well-ring: inset 0 0 0 1px var(--surface-0);
   /* Hairline strengths: --edge for raised surfaces and controls, --edge-soft
      for inner rules and dividers, --edge-strong for the lead panel and
      overlays: solid surface-2, 2.5:1 on base and 1.9:1 on an overlay,
@@ -398,7 +399,7 @@
   --lead-pad: var(--space-6);        /* 32px */
   --body-pad: var(--space-5);
   --cell-pad: var(--space-3) var(--space-4);
-  --cell-font-size: var(--cn-type-ui-size);   /* 14px; compact is 13 */
+  --cell-font-size: var(--cn-type-ui-size);   /* 14px; compact is 13. Table heads follow it */
   --chip-pad: var(--space-2) var(--space-3);
   --well-pad: var(--space-3) var(--space-4);  /* code block and terminal */
   --empty-h: 260px;                  /* empty-state floor */
@@ -521,7 +522,7 @@
   --control-h-sm: 1.75rem; /* 28px */
   --band-h: 52px;
   --band-pad: var(--space-2) var(--space-5);
-  --band-title-size: var(--cn-type-name-size);
+  --band-title-size: var(--cn-type-title-size); /* 20px, what a 52px band holds */
   --lead-band-h: 60px;
   --lead-pad: var(--space-5);
   --body-pad: var(--space-4) var(--space-5);
@@ -549,7 +550,7 @@
   --lead-pad: var(--space-4);
   --body-pad: var(--space-3) var(--space-4);
   --cell-pad: var(--space-1) var(--space-2);
-  --cell-font-size: var(--cn-type-label-size);
+  --cell-font-size: .8125rem; /* 13px, the one sans step under 14, as body steps to 15 */
   --cn-type-body-size: .9375rem;
   --chip-pad: var(--space-1) var(--space-2);
   --well-pad: var(--space-2) var(--space-3);
@@ -699,7 +700,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --neu-dark: rgb(8 8 14 / .88);
     --neu-shade: rgb(8 8 14 / .86);
     --neu-near: rgb(8 8 14 / .9);
-    --disabled-opacity: .7;
+    --disabled-opacity: .8;
     --grain: 0;
   }
   a { text-decoration-color: currentColor; }
@@ -722,7 +723,7 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
   --neu-dark: rgb(8 8 14 / .88);
   --neu-shade: rgb(8 8 14 / .86);
   --neu-near: rgb(8 8 14 / .9);
-  --disabled-opacity: .7;
+  --disabled-opacity: .8;
   --grain: 0;
 }
 :root[data-contrast="more"] a { text-decoration-color: currentColor; }

@@ -442,7 +442,7 @@ export default function InputPage() {
             name: ":disabled",
             values: "on the control",
             contrast: "Text 4.4:1 on a panel, 4.8:1 on the page · ring 1.8:1 on a panel",
-            notes: "--cn-fg-disabled text, placeholder and label (overlay-1; overlay-2 under prefers-contrast), --cn-carve-ring over --neu-inset-soft, no hover ring, no opacity.",
+            notes: "--cn-fg-disabled text, placeholder and label (overlay-1; overlay-2 under prefers-contrast), --cn-carve-ring over --neu-inset-soft, no hover ring, no opacity. The text sits under 4.5:1 on purpose, a stop below a placeholder; WCAG 1.4.3 exempts inactive controls.",
           },
           {
             name: ":focus",

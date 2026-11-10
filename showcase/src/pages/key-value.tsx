@@ -52,7 +52,7 @@ export default function KeyValuePage() {
         title="Contract"
         rows={[
           { name: ".kv", values: "dl", notes: "Grid: max-content keys, minmax(0, 1fr) values, 8px by 16px gap, 14px text." },
-          { name: "dt", values: "key", notes: "The label role, 500 13px, in --cn-fg-muted (subtext-0)." },
+          { name: "dt", values: "key", notes: "The label weight, 500, at the list's 14px, in --cn-fg-muted (subtext-0)." },
           { name: "dd", values: "value", notes: "Text color, tabular numerals, wraps anywhere." },
           { name: "at 520px", values: "responsive", notes: "One column: key over value, 8px between pairs." },
         ]}

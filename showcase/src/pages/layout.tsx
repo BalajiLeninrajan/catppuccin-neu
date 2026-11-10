@@ -221,7 +221,7 @@ export default function LayoutPage() {
             <div class="stat-grid is-ruled" style="--stat-cols:3">
               <div class="stat"><span>Collected</span><strong>$126,940</strong></div>
               <div class="stat"><span>Outstanding</span><strong>$13,422</strong></div>
-              <div class="stat"><span>Past due</span><strong>$5,806</strong></div>
+              <div class="stat"><span>Past due</span><strong>$8,141</strong></div>
             </div>
           </div>
           <div class="panel is-lead panel-body cn-stack cn-gap-4">

@@ -196,7 +196,7 @@ export default function CodeblockPage() {
           {
             name: ".codeblock",
             notes:
-              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --neu-inset with --cn-well-ring. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
+              "Inset well at the card radius (12px), --well-pad padding (12px 16px), the --cn-surface-sunken fill, --cn-well-ring (a quiet even surface-0 hairline) over --neu-inset. Mono 500 13px/1.6 in --cn-fg-soft with ligatures off.",
           },
           {
             name: ".is-numbered",

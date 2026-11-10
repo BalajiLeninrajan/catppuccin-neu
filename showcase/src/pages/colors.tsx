@@ -45,7 +45,7 @@ const GROUNDS = [
   { name: "mantle", hex: "#181825", note: "The page ground, --cn-surface-page. Crust mixes into it for the recessed surface." },
   { name: "base", hex: "#1e1e2e", note: "The raised fill, --cn-surface-raised: panels and plated controls, one step above the page." },
   { name: "surface-0", hex: "#313244", note: "Row separators. Mixed into base for the overlay surface; raised surfaces stay on base." },
-  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 50%, dashed open slots and the resting ring of a table-cell field." },
+  { name: "surface-1", hex: "#45475a", note: "--edge-soft at 38% and the hover wash at 60%, dashed open slots and the resting ring of a table-cell field." },
   { name: "surface-2", hex: "#585b70", note: "--edge-strong solid, the lead panel and overlay hairline. The --edge hairline at 70%, the lit top edge of raised surfaces at 45%, the well ring under prefers-contrast, scrollbar thumbs." },
 ];
 
@@ -223,7 +223,7 @@ export default function ColorsPage() {
           { name: "--cn-fg-muted", values: "subtext-0", notes: "Meta, help, table heads. subtext-1 under prefers-contrast." },
           { name: "--cn-fg-placeholder", values: "overlay-2", notes: "Placeholders. The floor for readable text. subtext-0 under prefers-contrast." },
           { name: "--cn-fg-faint", values: "overlay-1", contrast: "4.4:1 on base", notes: "Decorative icons. Icon buttons rest in --cn-fg-muted. overlay-2 under prefers-contrast." },
-          { name: "--cn-fg-disabled", values: "overlay-1", notes: "Disabled text, 4.4:1 on base. --control-edge, the unchecked edge and slider thumb edge, is overlay-1 too. Both move to overlay-2 under prefers-contrast." },
+          { name: "--cn-fg-disabled", values: "overlay-1", notes: "Disabled text, 4.4:1 on base, a stop under the placeholder on purpose; WCAG 1.4.3 exempts inactive controls. --control-edge, the unchecked edge and slider thumb edge, is overlay-1 too. Both move to overlay-2 under prefers-contrast." },
           { name: "--cn-fg-on-accent", values: "crust", notes: "Text and glyphs on a solid accent fill: 9.2:1 on mauve." },
           { name: "--cn-interactive", values: "mauve", notes: "Links, the primary, checked controls." },
           { name: "--cn-interactive-hover", values: "pink", notes: "Their hover." },
@@ -562,9 +562,9 @@ export default function ColorsPage() {
         rows={[
           { name: "--cn-step-tint", values: "4%", notes: "A field in its tone, an untoned --tint, the open accordion row." },
           { name: "--cn-step-status-tint", values: "6%", notes: "The four status tints, so a toned banner or .cn-tint shows its tone before its glyph and body text on it stays 8.0:1 or better on a panel." },
-          { name: "--cn-step-row", values: "13%", notes: "Table and ranked row hovers: 1.30:1 for mauve on base, level with the 1.31:1 hover, past the open carve's 1.08:1, and 1.17:1 under a selected row." },
+          { name: "--cn-step-row", values: "16%", notes: "Table and ranked row hovers: 1.39:1 for mauve on base, level with the 1.40:1 hover, past the open carve's 1.08:1, and 1.10:1 under a selected row." },
           { name: "--cn-step-wash", values: "12%", notes: "Tone hover washes, 1.27:1 for mauve on base: the tag ground, the current stepper phase, the dashed, icon and danger ghost hovers, the .cn-tint-accent corner." },
-          { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.31:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
+          { name: "--cn-step-engaged", values: "20%", notes: "The engaged wash, --wash: 1.52:1 on base, a step past the 1.40:1 hover. Segmented choices, toggled ghosts, selected rows, the current page." },
           { name: "--cn-step-fill", values: "14%", notes: "Avatar grounds, the radio and live-dot halos, the .mark border and the switch glow." },
           { name: "--cn-step-plate", values: "25%", notes: "The primary's plate, the banner edge, .cn-edge-mauve, .cn-edge-accent and the switch glow while held." },
           { name: "--cn-step-edge", values: "40%", notes: "Hue hairlines: the avatar edge, the icon-button hover edge, the segmented hover." },
@@ -604,8 +604,8 @@ export default function ColorsPage() {
 --edge-strong: var(--surface-2);                                   /* lead panel and overlay hairline: 2.5:1 */
 --wash:      color-mix(in srgb, var(--cn-interactive) var(--cn-step-engaged), var(--base)); /* the engaged state: 1.52:1 */
 --engaged-edge: color-mix(in srgb, var(--cn-interactive) var(--cn-step-vivid), transparent); /* the engaged rim: 4.7:1 on base, 3.5:1 on its wash */
---hover:     color-mix(in srgb, var(--surface-1) 50%, transparent);  /* the hover wash: 1.31:1 on base, 1.19:1 on overlay */
---cn-well-ring: inset 0 0 0 1px transparent; /* wells and mono wells: a surface-2 ring under prefers-contrast only */
+--hover:     color-mix(in srgb, var(--surface-1) 60%, transparent);  /* the hover wash: 1.40:1 on base, 1.23:1 on overlay */
+--cn-well-ring: inset 0 0 0 1px var(--surface-0); /* wells and mono wells: 1.5:1 on the sunken fill, surface-2 under prefers-contrast */
 
 /* The tone stops are declared on each tinted recipe, so they read that
    element's --tone. A status .cn-tone-* swaps in its ladder. */
@@ -618,7 +618,7 @@ export default function ColorsPage() {
       <p class="cn-copy">
         Three of the mix tokens are states.{" "}
         <code class="cn-code-inline">--hover</code> is the ghost hover:
-        surface-1 at 50% over whatever sits under it, so a menu row on an
+        surface-1 at 60% over whatever sits under it, so a menu row on an
         overlay still lights. Ghost buttons, menu rows,
         page targets and sidebar links take it on hover.{" "}
         <code class="cn-code-inline">--wash</code> is the engaged state: mauve
@@ -752,7 +752,7 @@ export default function ColorsPage() {
           { name: ".cn-bg-raised", values: "var(--cn-surface-raised)", notes: "base, 1.07:1 on the page. The panel fill; a panel lifts by that step and by its edges and shadow." },
           { name: ".cn-bg-overlay", values: "var(--cn-surface-overlay)", notes: "surface-0 90% into base, 1.27:1 on base. The popover, dialog and toast fill." },
           { name: ".cn-bg-recessed", values: "var(--cn-surface-recessed)", notes: "crust 80% into mantle, 1.05:1 under the page. The sidebar fill." },
-          { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 50% over the ground, 1.31:1 on base. The ghost hover as a fill." },
+          { name: ".cn-bg-hover", values: "var(--hover)", notes: "surface-1 60% over the ground, 1.40:1 on base. The ghost hover as a fill." },
           { name: ".cn-bg-head", values: "var(--cn-surface-band)", notes: "crust 30% over transparent, one step under its parent. Table heads." },
           { name: ".cn-bg-well", values: "var(--cn-surface-sunken)", notes: "crust, 1.07:1 under the page and 1.14:1 under a panel. The well and skeleton fill; .well already carries it." },
           { name: ".cn-bg-base", values: "var(--base)", notes: "Raw base, the same color as the raised fill." },

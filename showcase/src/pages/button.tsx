@@ -248,7 +248,7 @@ export default function ButtonPage() {
       </Demo>
 
       <p class="cn-copy">
-        Small is the toolbar height (<code class="cn-code-inline">--control-h-sm</code>) with 13px type. Large is the
+        Small is the toolbar height (<code class="cn-code-inline">--control-h-sm</code>) with the label size, 14px. Large is the
         one hero action: the control height plus 12px, with 16px type. A view holds at most one{" "}
         <code class="cn-code-inline">.is-lg</code>, so the large icon button gets its own specimen. An svg inside a
         button is sized by the button: 16px by default, 14px in small, 18px in large and 20px in a large icon
@@ -322,19 +322,19 @@ export default function ButtonPage() {
         title="Variants and knobs"
         rows={[
           { name: ".btn", values: "base class", notes: "Height --control-h, 16px inline padding, the control radius (8px), sans 600 14px. Compose with one variant." },
-          { name: ".btn-primary", contrast: "Disabled label 5.1:1 on the sunken fill", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the soft carve, --neu-inset-soft with --cn-well-ring, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1), no plate, ramp, grain, gloss or dimming. One per view." },
+          { name: ".btn-primary", contrast: "Disabled label 5.1:1 on the sunken fill", notes: "Mauve ramp under grain, crust text, mauve-mix plate and a white top rim. Hover moves the ramp to pink. Disabled, it sinks: --cn-surface-sunken under the soft carve, --cn-well-ring (a quiet even surface-0 hairline, 1.5:1 on the fill) over --neu-inset-soft, inside a transparent 1px border, a --cn-fg-disabled label (overlay-1), no plate, ramp, grain, gloss or dimming. One per view." },
           { name: ".btn-secondary", contrast: "Hover border 4.1:1 on base", notes: "--cn-surface-raised fill (base, a step above the page), --edge hairline, the lit top edge and the --neu-ink plate. Hover warms the border to mauve at --cn-step-strong and deepens the plate 1px to --cn-plate-hover. The fill stays base, since nothing raised is lighter than base. The default for clickables." },
-          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', contrast: "Resting hairline 1.22:1 on a panel, 1.24:1 on the page · hover fill 1.31:1 · engaged wash 1.52:1", notes: "No fill and no plate. Rests on an --edge-soft hairline (surface-1 at 38%), except in a topbar nav and as an icon button. Hover adds --hover and steps the hairline to --edge. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
+          { name: ".btn-ghost", values: '[aria-pressed="true"] / [aria-current] / [aria-expanded="true"]', contrast: "Resting hairline 1.22:1 on a panel, 1.24:1 on the page · hover fill 1.40:1 · engaged wash 1.52:1", notes: "No fill and no plate. Rests on an --edge-soft hairline (surface-1 at 38%), except in a topbar nav and as an icon button. Hover adds --hover and steps the hairline to --edge. Toggled, current or holding an open menu, it takes the engaged state: --wash (mauve 20% into base), --neu-inset and the --engaged-edge rim, which hover leaves in place." },
           { name: ".btn-ghost.is-danger", notes: "Red label, red wash on hover. Destructive actions." },
           { name: ".btn-ghost.is-dashed", notes: "A dashed surface-1 border on the card radius. An open slot, the only meaning of dashed; mauve on hover." },
           { name: ".btn.is-icon", values: ".cn-tone-* · .is-lg", contrast: "Resting glyph 7.4:1 on base", notes: "Square at --control-h-sm (34px), or --control-h in large. The glyph rests in --cn-fg-muted (subtext-0) and tints toward --tone on hover. Needs aria-label." },
-          { name: ".btn-text", notes: "Inline mauve text button at 13px 600 with no padding, so it sits flush with the content edge; pink on hover. Held, it moves 1px." },
-          { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with 13px type, or the hero action at --control-h + 12px with the body size, 16px. One .is-lg per view." },
+          { name: ".btn-text", notes: "Inline mauve text button at 14px 600 with no padding, so it sits flush with the content edge; pink on hover. Held, it moves 1px." },
+          { name: ".is-sm / .is-lg", values: "on .btn", notes: "Toolbar height with the label size, 14px, or the hero action at --control-h + 12px with the body size, 16px. One .is-lg per view." },
           { name: "svg", values: "inside any button", notes: "Sized by the button: 16px, 14 in small, 18 in large, 20 in a large icon button, 13 in text." },
-          { name: ":disabled", notes: "--disabled-opacity (.6) and a not-allowed cursor. No plate: the secondary goes flat on an --edge-soft outline and the primary sinks instead of dimming. Drops focus." },
+          { name: ":disabled", notes: "--disabled-opacity (.7) and a not-allowed cursor. No plate: the secondary goes flat on an --edge-soft outline and the primary sinks instead of dimming. Drops focus." },
           { name: '[aria-disabled="true"]', values: "on .btn", notes: "Looks the same as :disabled, sunken primary included, but stays focusable, so a [data-tip] can say why. No hover lift or press. Your handler ignores the click." },
           { name: '[aria-busy="true"]', values: "on .btn", notes: "Hides the label and keeps the width, turns a 16px spinner (14px in small), stops clicks, stays focusable. Pair with aria-disabled." },
-          { name: "--disabled-opacity", default: ".6", contrast: "Disabled ghost label 4.2:1 on base", notes: "Dims a disabled label, --cn-fg-body at .6 on a ghost. The primary does not read it; it sinks. .7 under prefers-contrast: more." },
+          { name: "--disabled-opacity", default: ".7", contrast: "Disabled ghost label 5.2:1 on base · disabled chip label 4.3:1", notes: "Dims a disabled label, --cn-fg-body at .7 on a ghost. The primary does not read it; it sinks. .8 under prefers-contrast: more." },
           { name: "--grain", default: ".22", notes: "Grain strength on the primary and every other solid accent fill. 0 turns it off." },
           { name: "--plate", default: "var(--neu-ink)", notes: "The plate's color, read by the secondary button, segmented options and .cn-hard." },
           { name: "--hard-extra", default: "var(--cn-lit-edge)", notes: "Layers drawn over the plate. The secondary keeps the lit top edge; the primary replaces it with its gloss." },

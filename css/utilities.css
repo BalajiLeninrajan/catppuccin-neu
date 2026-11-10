@@ -56,8 +56,8 @@
    Numbers keep tabular-nums on the sans face. Uppercase is scarce: only
    the microlabel shouts, and it labels a fact, never a section.            */
 
-/* The label is 13px at 500 in --cn-fg-soft and meta is 14px at 400 in
-   --cn-fg-muted, so the two differ by size, weight and ink. */
+/* The label is 14px at 500 in --cn-fg-soft and meta is 14px at 400 in
+   --cn-fg-muted, so the two share a size and differ by weight and ink. */
 .cn-label {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
   letter-spacing: var(--cn-type-label-tracking);

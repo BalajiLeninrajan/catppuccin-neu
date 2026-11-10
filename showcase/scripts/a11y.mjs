@@ -37,8 +37,9 @@
    Before the routes it checks motion in the default modes, from
    getAnimations() and not from frames: the .page-enter children of
    /examples/dashboard and of the /modal docs page stagger 0 to 200ms in
-   40ms steps over --t-slow, and a modal and a toast enter over --t-base
-   and leave over --t-exit.
+   40ms steps over --t-slow, a modal and a toast enter over --t-base
+   and leave over --t-exit, the tab pill slides over --t-fast and a held
+   primary presses over --t-press.
    --motion runs that check alone.
 
    Uses the system Chromium; puppeteer-core never downloads a browser.
@@ -57,6 +58,9 @@ import { PNG } from "pngjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
+/* The package's own module. The docs keep their own roving handler, so
+   the motion check wires tabs() itself to get the sliding pill. */
+const behaviorSource = readFileSync(join(root, "..", "js", "index.js"), "utf8");
 
 const TAGS = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"];
 const DESKTOP = { width: 1400, height: 900 };
@@ -339,7 +343,8 @@ function focusRing(page) {
    example, which has four, and of the Modal docs page, which has more
    than six, must stagger 0, 40, 80, 120, 160 and then 200ms over
    --t-slow. A modal and a toast must enter over --t-base and leave over
-   --t-exit. An observer installed
+   --t-exit. The tab pill must slide over --t-fast when the selection
+   moves, and a held primary must press over --t-press. An observer installed
    before the page's own script reads the entrance in the task that renders
    it, so a slow machine cannot miss it. Returns a list of problems. */
 async function motion(browser, url) {
@@ -430,6 +435,40 @@ async function motion(browser, url) {
     })()`);
     check("/toast", "the toast", "entry", toast.entry, base, "--t-base");
     check("/toast", "the toast", "close", toast.leave, exit, "--t-exit");
+
+    /* The tab pill. tabs() places the first pill with no slide, so the
+       read comes after a click on the second tab. */
+    const [fast, press] = [await token("--t-fast"), await token("--t-press")];
+    await open(page, url + "/tabs");
+    await page.addScriptTag({ type: "module", content: `${behaviorSource}\nwindow.__cnTabs = tabs;` });
+    await page.waitForFunction(() => window.__cnTabs, { timeout: 10000 });
+    const pill = await page.evaluate(async () => {
+      const list = document.querySelector('main .tabs[role="tablist"]');
+      window.__cnTabs(list);
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      list.querySelectorAll('[role="tab"]:not(:disabled)')[1].click();
+      return list
+        .getAnimations({ subtree: true })
+        .filter((a) => a.transitionProperty && a.effect.pseudoElement === "::before")
+        .map((a) => [a.transitionProperty, a.effect.getTiming().duration]);
+    });
+    if (!pill.some(([prop]) => prop === "translate")) out.push("/tabs: the tab pill runs no translate transition when the selection moves");
+    check("/tabs", "the tab pill", "a tab change", pill, fast, "--t-fast");
+
+    /* A held primary. The hover lift finishes first, so the read holds
+       only what the press started. */
+    await open(page, url + "/button");
+    const button = await page.$("main .btn-primary:not(:disabled)");
+    await button.scrollIntoView();
+    const box = await button.boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await settle(page);
+    await page.mouse.down();
+    const held = await button.evaluate(read);
+    await page.mouse.up();
+    for (const prop of ["transform", "box-shadow"])
+      if (!held.some(([p]) => p === prop)) out.push(`/button: a held primary runs no ${prop} transition`);
+    check("/button", "a held primary", "press", held, press, "--t-press");
   } finally {
     await page.close();
   }
@@ -588,7 +627,7 @@ async function main() {
     process.exit(1);
   }
   if (onlyMotion) return;
-  console.log(`\nThe page entrance, the modal and the toast run on their duration tokens. All ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion, fit 700px (200% zoom) without clipping, fit 390px and 320px, keep the composition budget${note}, and ${updateShots ? "wrote new visual baselines" : "match the visual baselines"} for ${VISUAL.join(", ")}.`);
+  console.log(`\nThe page entrance, the modal, the toast, the tab pill and a held primary run on their duration tokens. All ${count} routes pass axe (${TAGS.join(", ")}) by default and under prefers-contrast: more, keep their text under 1.4.12 spacing, ring in Highlight under forced colors, land at once under reduced motion, fit 700px (200% zoom) without clipping, fit 390px and 320px, keep the composition budget${note}, and ${updateShots ? "wrote new visual baselines" : "match the visual baselines"} for ${VISUAL.join(", ")}.`);
   console.log(`Forced-colors screenshots for review: ${shots}`);
 }
 

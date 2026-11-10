@@ -157,7 +157,7 @@ export default function BehaviorPage() {
   return (
     <Doc
       title="Behavior"
-      lede="The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes are required to have a keyboard model: one import of catppuccin-neu/js/auto, or your own widget library."
+      lede="The CSS needs no script to look right, but tabs, menus, listboxes and comboboxes need a keyboard model, and one tag wires them: js/auto.js beside the stylesheet link, or one import of catppuccin-neu/js/auto."
     >
       <p class="cn-copy">
         The tabs, menu, slider and toast below run on the module, not on
@@ -196,8 +196,9 @@ export default function BehaviorPage() {
       <CodeBlock title="One line" code={autoSnippet} />
 
       <p class="cn-copy">
-        A stylesheet cannot run script, so the keyboard model is opt-in, and
-        the opt-in is one line.{" "}
+        A stylesheet cannot run script, so one tag wires the keyboard model.
+        The quick start prints it in the same block as the stylesheet link,
+        and a static page with none of these widgets can leave it out.{" "}
         <code class="cn-code-inline">catppuccin-neu/js/auto</code> has no
         exports. It wires every widget in the document once the DOM is
         parsed, then watches the document: a widget that renders later is

@@ -93,7 +93,7 @@ export default function TerminalPage() {
             name: ".terminal",
             values: "surface",
             notes:
-              "The shared --cn-surface-sunken fill, full neu-inset with --cn-well-ring, the card radius (12px), no border. Column flex; the pre stretches.",
+              "The shared --cn-surface-sunken fill, --cn-well-ring (a quiet even surface-0 hairline) over the full neu-inset, the card radius (12px), no border. Column flex; the pre stretches.",
           },
           {
             name: ".terminal pre",

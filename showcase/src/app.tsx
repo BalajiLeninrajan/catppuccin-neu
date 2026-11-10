@@ -63,15 +63,17 @@ function Sidebar() {
   );
 }
 
-/* Route changes from a link click run inside document.startViewTransition
-   where the browser has it, so the root cross-fades and the .cn-morph lead
-   panel and primary morph between the two examples. The listener sits on
-   the document, so a link's own onClick runs first and preact-iso's
-   window listener runs after; it applies preact-iso's checks, stops the
-   event short of that listener and hands the route change to the
-   transition. Browsers without the API keep the plain swap. */
+/* Route changes from a link click, and from back and forward, run inside
+   document.startViewTransition where the browser has it, so the root
+   cross-fades and the .cn-morph lead panel and primary morph between the
+   two examples. The click listener sits on the document, so a link's own
+   onClick runs first and preact-iso's window listener runs after; it
+   applies preact-iso's checks, stops the event short of that listener and
+   hands the route change to the transition. The popstate listener sits on
+   window in the capture phase, so it runs before preact-iso's and stops
+   it the same way. Browsers without the API keep the plain swap. */
 function ViewTransitions() {
-  const { route } = useLocation();
+  const { route, url: current } = useLocation();
 
   useEffect(() => {
     if (!("startViewTransition" in document)) return;
@@ -91,9 +93,24 @@ function ViewTransitions() {
         return new Promise<void>((resolve) => setTimeout(resolve));
       });
     };
+    /* The history entry has already changed, so the route replaces it
+       with itself. A hash-only move keeps the path and falls through. */
+    const onPop = (e: PopStateEvent) => {
+      const url = location.pathname + location.search;
+      if (url === current) return;
+      e.stopImmediatePropagation();
+      document.startViewTransition(() => {
+        route(url, true);
+        return new Promise<void>((resolve) => setTimeout(resolve));
+      });
+    };
     document.addEventListener("click", onClick);
-    return () => document.removeEventListener("click", onClick);
-  }, [route]);
+    window.addEventListener("popstate", onPop, true);
+    return () => {
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("popstate", onPop, true);
+    };
+  }, [route, current]);
 
   return null;
 }

@@ -157,7 +157,7 @@ export default function SegmentedPage() {
           { name: ".segmented", notes: "Equal-width column grid, 8px gap. Styles every direct child, buttons or labels." },
           { name: ".segmented > *", notes: "Rests on --cn-surface-raised with a hairline, the plate and the lit top edge. Hover warms the border to mauve at --cn-step-edge." },
           { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', contrast: "Wash 1.52:1 on base · rim 3.5:1 on the wash", notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
-          { name: '.segmented > :disabled / [aria-disabled="true"]', notes: "An unavailable option: --disabled-opacity (.6), no plate, an --edge-soft outline, a not-allowed cursor, no hover lift or press. A chosen option that is disabled keeps the engaged carve and dims." },
+          { name: '.segmented > :disabled / [aria-disabled="true"]', notes: "An unavailable option: --disabled-opacity (.7), no plate, an --edge-soft outline, a not-allowed cursor, no hover lift or press. A chosen option that is disabled keeps the engaged carve and dims." },
           { name: "svg inside an option", notes: "16px, sized by the recipe." },
           { name: ".is-stacked", notes: "Vertical list, 12px gap, taller rows, 18px <b>. For described options." },
           { name: "<b> / <small>", notes: "Option title (sans 600 14px) and a quiet hint line at the 14px meta role in --cn-fg-muted inside each option." },

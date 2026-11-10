@@ -86,7 +86,7 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--cn-surface-sunken", "crust", "1.14:1 under base (1.07:1 under the page)", "Wells, the mono wells, stepper pills, skeletons, the switch plate: below the ground wherever they sit."],
   ["--wash", "mauve 20% into base", "1.52:1", "The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.5:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
-  ["--hover", "surface-1 50% over the ground", "1.31:1 (1.19:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
+  ["--hover", "surface-1 60% over the ground", "1.40:1 (1.23:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
   ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's top and left; the right and bottom border sides are --neu-ink, 1.22:1 under the fill, and the fill step shows its bounds. overlay-0 on all four sides under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
 ];
@@ -373,8 +373,8 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         Every size is rem, so the reader's browser font-size setting scales
         every role. The microlabel is the one 12px role at the 16px default;
-        labels are 13px at 500 in subtext-1 and meta is 14px at 400 in
-        subtext-0, so the two differ by size as well as weight and ink. Body copy is 16px, and 15px at compact density.{" "}
+        labels are 14px at 500 in subtext-1 and meta is 14px at 400 in
+        subtext-0, so the two share a size and differ by weight and ink. Body copy is 16px, and 15px at compact density.{" "}
         <code class="cn-code-inline">.page-main.is-reading</code> sets the lede
         at 20px.
       </p>
@@ -531,6 +531,8 @@ export default function AccessibilityPage() {
         dashboard example and of the Modal page must stagger 0 to 200ms in
         40ms steps over --t-slow, and a
         modal and a toast must enter over --t-base and leave over --t-exit.
+        The tab pill must slide over --t-fast when the selection moves, and
+        a held primary must press over --t-press.
         axe covers the WCAG 2.5.8 target size. Any
         violation fails the run. Text that axe cannot measure, such as a link
         partly below the fold or text over a gradient, is listed as needing

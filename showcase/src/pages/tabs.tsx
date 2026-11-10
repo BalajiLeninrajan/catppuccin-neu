@@ -211,7 +211,7 @@ export default function TabsPage() {
           { name: '.tabs > [role="tab"]', values: "button", contrast: "Resting label 7.4:1 on base", notes: "--control-h-sm tall, 16px inline padding, the ui role (600 14px) in --cn-fg-muted, a transparent border. Hover turns the label --cn-fg." },
           { name: '[aria-selected="true"]', values: "on a tab", contrast: "Rim 4.7:1 on base", notes: "Rises out of the carve: --cn-surface-raised fill, the --engaged-edge rim, --neu-raised-soft and --cn-lit-edge, label in --cn-fg. A tab is a view, so it rises; a segmented choice is a setting, so it presses in. With tabs() wired, the fill is one .tabs::before pill that slides to the selected tab over --t-fast on the ease-out." },
           { name: '[role="tab"] > svg', values: "one leading glyph", notes: "16px, aria-hidden. The label stays the name." },
-          { name: ":disabled", values: "on a tab", notes: "--disabled-opacity (.6) and a not-allowed cursor. Skip it in the arrow-key order." },
+          { name: ":disabled", values: "on a tab", notes: "--disabled-opacity (.7) and a not-allowed cursor. Skip it in the arrow-key order." },
           { name: '[role="tabpanel"]', values: "consumer markup", notes: "No recipe. Toggle hidden on the panels that are not selected." },
         ]}
       />

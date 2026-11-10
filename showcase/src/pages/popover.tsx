@@ -66,7 +66,7 @@ function AnatomyDemo() {
           </div>
           <div class="sc-row">
             <span class="tag cn-tone-green">Paid</span>
-            <span class="tag cn-tone-info">Pending</span>
+            <span class="tag is-quiet">Pending</span>
             <span class="tag cn-tone-red">
               <DangerGlyph />
               Overdue

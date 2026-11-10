@@ -187,8 +187,8 @@ const CHECKS = {
 };
 
 /* SPEC.md's type table must match the tokens: size (px at the 16px
-   default), weight, leading and tracking for every role. Display sizes are
-   clamps and are checked by their bounds. */
+   default), weight, leading and tracking for every role. The display sizes
+   and value-lg are clamps and are checked by their bounds. */
 async function specTypeTable() {
   const spec = await readFile(join(root, "SPEC.md"), "utf8");
   const tokens = stripComments(await readFile(join(root, "css/tokens.css"), "utf8"));
@@ -205,7 +205,7 @@ async function specTypeTable() {
     if (!tok(`cn-type-${base}-weight`)) return;
     const want = { weight: tok(`cn-type-${base}-weight`), leading: tok(`cn-type-${base}-leading`), tracking: tok(`cn-type-${base}-tracking`) };
     const sizeTok = tok(`cn-type-${role}-size`);
-    const sizeOk = role.startsWith("display")
+    const sizeOk = sizeTok?.startsWith("clamp(")
       ? clampPx(sizeTok).join(" to ") + "px" === size
       : px(sizeTok) === size;
     if (!sizeOk) out.push({ line: i + 1, message: `${role} size is ${size} in SPEC but ${sizeTok} in tokens` });
@@ -307,7 +307,7 @@ const PAIRS = [
   ["--cn-fg", TEXT_GROUNDS, 7, "headings and values"],
   ["--cn-fg-soft", TEXT_GROUNDS, 7, "ledes and cells"],
   ["--cn-fg-body", TEXT_GROUNDS, 7, "running text"],
-  ["--cn-fg-muted", TEXT_GROUNDS, 5.5, "meta, help and table heads"],
+  ["--cn-fg-muted", TEXT_GROUNDS, 5.5, "meta, help, table heads and the quiet tag"],
   ["--cn-fg-placeholder", TEXT_GROUNDS, 4.5, "placeholders"],
   ["@field-hover-ring", GROUNDS, 3, "a hovered field's ring (1.4.11)"],
   ["@field-ring", GROUNDS, 3, "a resting field's ring under prefers-contrast", "prefers-contrast"],
@@ -404,6 +404,44 @@ async function contrast() {
       if (!bg || !plain || !strong) { out.push({ line: 1, message: `${mode}: cannot resolve the hairlines on ${g}` }); continue; }
       const [rp, rs] = [plain, strong].map((c) => ratio(over(c, bg), bg));
       if (rs <= rp) out.push({ line: 1, message: `${mode}: --edge-strong on ${g} is ${rs.toFixed(2)}:1, not above --edge at ${rp.toFixed(2)}:1` });
+    }
+    /* Hover is a wash that shows on a dim screen and stays under engaged:
+       --hover and the row hover hold 1.35:1 on base, the lowest ground a
+       ghost or a table row sits on, and neither reaches --wash. An overlay
+       is lighter, so a menu row's hover is lower there and has no floor. */
+    {
+      const bg = ground("--cn-surface-raised"), wash = color("var(--wash)");
+      const hovers = [
+        ["--hover", color("var(--hover)")],
+        ["the row hover (--cn-step-row)", color("color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base))")],
+      ];
+      for (const [name, c] of hovers) {
+        if (!bg || !wash || !c) { out.push({ line: 1, message: `${mode}: cannot resolve ${name} or --wash` }); continue; }
+        const [r, rw] = [ratio(over(c, bg), bg), ratio(over(wash, bg), bg)];
+        if (r < 1.35) out.push({ line: 1, message: `${mode}: ${name} on base is ${r.toFixed(2)}:1, under 1.35:1 for a hover wash (design floor)` });
+        if (r >= rw) out.push({ line: 1, message: `${mode}: ${name} on base is ${r.toFixed(2)}:1, not under the engaged --wash at ${rw.toFixed(2)}:1` });
+      }
+      /* The 7:1 and 5.5:1 role floors are for text at rest. Cell text on
+         a hovered row holds 4.5:1. */
+      const row = hovers[1][1];
+      for (const role of ["--cn-fg-soft", "--cn-fg-muted"]) {
+        const fg = color(`var(${role})`);
+        if (!bg || !row || !fg) { out.push({ line: 1, message: `${mode}: cannot resolve ${role} on the row hover` }); continue; }
+        const on = over(row, bg), r = ratio(over(fg, on), on);
+        if (r < 4.5) out.push({ line: 1, message: `${mode}: ${role} on a hovered row is ${r.toFixed(2)}:1, under 4.5:1` });
+      }
+    }
+    /* The well ring holds a well's shape on the page, on a panel and on
+       its own sunken fill, and stays the quietest carve ring. */
+    {
+      const [well, carve] = ["@well-ring", "@carve-ring"].map(fgOf);
+      for (const g of [...ON_PAGE, "--cn-surface-sunken"]) {
+        const bg = ground(g);
+        if (!bg || !well || !carve) { out.push({ line: 1, message: `${mode}: cannot resolve the well ring on ${g}` }); continue; }
+        const [rw, rc] = [well, carve].map((c) => ratio(over(c, bg), bg));
+        if (rw < 1.25) out.push({ line: 1, message: `${mode}: @well-ring on ${g} is ${rw.toFixed(2)}:1, under 1.25:1 for the well hairline (design floor)` });
+        if (rw >= rc) out.push({ line: 1, message: `${mode}: @well-ring on ${g} is ${rw.toFixed(2)}:1, not under the carve ring at ${rc.toFixed(2)}:1` });
+      }
     }
     for (const [fgName, floor] of APCA) {
       for (const g of GROUNDS) {

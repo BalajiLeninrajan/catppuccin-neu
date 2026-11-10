@@ -165,7 +165,7 @@ export default function ChipPage() {
         <span class="tag cn-tone-danger is-solid">Overdue</span>
         <span class="tag cn-tone-warning">Due soon</span>
         <span class="tag cn-tone-success">Paid</span>
-        <span class="cn-meta">Pending</span>
+        <span class="tag is-quiet">Pending</span>
       </Demo>
 
       <p class="cn-copy">
@@ -174,10 +174,13 @@ export default function ChipPage() {
         with its tone and sets the word and glyph in crust, 8.1:1 on red, so
         the one urgent status in a view outranks the rest by lightness too.
         It is a status mark, not a control: no plate, no gloss and no raise,
-        and it never takes mauve. Keep it to one status per view. A row's
-        default or in-progress state, such as Pending, is plain meta text
-        with no tag, so a column of tags never out-shouts the one that
-        matters.
+        and it never takes mauve. Keep it to one status per view, and keep a
+        solid danger tag out of the band or row that holds the primary: red
+        and mauve are close, so it belongs in a status column. A row's
+        default or in-progress state, such as Pending, takes{" "}
+        <code class="cn-code-inline">.tag.is-quiet</code>: muted text on the
+        sunken fill, darker than the panel, with no tone. The column keeps
+        one shape, and every toned tag still outranks it.
       </p>
 
       <Demo title="Status tag with its own svg" classes="tag cn-tone-success > svg + word" row>
@@ -277,6 +280,12 @@ export default function ChipPage() {
             notes: "The one urgent status in a view. The tone fills the tag and the word and glyph take --cn-fg-on-accent. No carve, plate, gloss, grain or raise, so it reads as a mark and not a button. A status tone only, never mauve.",
           },
           {
+            name: ".tag.is-quiet",
+            values: "modifier",
+            contrast: "Muted text on crust 8.4:1",
+            notes: "A row's default or in-progress state, such as Pending. No tone: --cn-fg-muted on --cn-surface-sunken, darker than a panel, under the tag's soft carve. No outline and no light edge. Draws no glyph; may bring a 12px svg.",
+          },
+          {
             name: ".tag svg",
             values: "one leading glyph",
             notes: "12px, first in the tag, aria-hidden. Replaces the CSS glyph on a status tone. Needed on .cn-tone-red and -yellow, which draw none; optional on other palette tones.",
@@ -296,7 +305,7 @@ export default function ChipPage() {
             name: ".mark",
             values: "28px square",
             default: "--accent: var(--mauve)",
-            notes: "Accent ramp under grain, crust glyph at 13px 600, --shadow-mark, tabular numerals. Set --accent inline per record.",
+            notes: "Accent ramp under grain, crust glyph at 14px 600, --shadow-mark, tabular numerals. Set --accent inline per record.",
           },
         ]}
       />
@@ -312,6 +321,9 @@ export default function ChipPage() {
 
 <!-- a status tone draws its own glyph -->
 <span class="tag cn-tone-danger">Overdue</span>
+
+<!-- a default or in-progress state takes no tone -->
+<span class="tag is-quiet">Pending</span>
 
 <!-- a palette tone brings one; red and yellow must -->
 <span class="tag cn-tone-red">

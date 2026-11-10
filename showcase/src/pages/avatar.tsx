@@ -79,7 +79,7 @@ export default function AvatarPage() {
           {
             name: ".avatar",
             values: "initials text or one img",
-            notes: "32px round, sans 600 13px. Accent initials, the accent at --cn-step-fill (14%) over mantle, and an --cn-step-edge (40%) accent hairline into surface-0.",
+            notes: "32px round, sans 600 14px. Accent initials, the accent at --cn-step-fill (14%) over mantle, and an --cn-step-edge (40%) accent hairline into surface-0.",
           },
           {
             name: ".is-lg",

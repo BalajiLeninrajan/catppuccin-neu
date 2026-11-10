@@ -35,9 +35,8 @@
 /* The lead panel: the one a view is about, one per view. It takes the
    base fill like every panel and stands higher by darkness on the side
    away from the light: --neu-lifted's foot on the bottom and right is
-   deeper than a plain panel's, a 6px 8px full-ink contact, past the 4px
-   plate, 2px deeper than the tilted panel's 6px one on the bottom and as
-   wide on the right, over a deeper near shadow and a longer cast. The
+   the last step of the foot ladder in SPEC Depth (panel 3px, plate 4px,
+   tilt 6px, lead 9px), over a deeper near shadow and a longer cast. The
    lead is a resting panel with a deeper foot, not a height of its own.
    The --edge-strong hairline is its one
    step in line strength; it keeps the plain lit edge and draws no outline
@@ -63,9 +62,9 @@
 /* The one rotated hero card. It stands on a plate like a clickable, so
    the 6px plate replaces the raised shadow: the hard block and the lit
    top edge answer the top-left light, with no soft cast under them. The
-   plate stays at 6px, two past a button's, so the aside does not outshout
-   the data panel beside it. At ≤1060px it flattens to a plain resting
-   panel on --neu-raised. It is the
+   plate is the 6px step of the foot ladder in SPEC Depth, under the
+   lead's, so the aside does not outshout the data panel beside it. At
+   ≤1060px it flattens to a plain resting panel on --neu-raised. It is the
    aside, so its prose sets one step down at 15px, the compact body size
    (.9375rem): rotated text at 14px rendered soft at 1x, and 15px keeps it
    crisp while the data panel beside it stays the louder block. The size
@@ -172,12 +171,13 @@
    Borderless: the carve, one dark wall from the top left, and the sunken
    fill define it. A shadow alone tops out near 1.2:1 on the mantle page, so
    a transparent well read as an outlined panel; the darker fill puts it
-   below the ground, so it needs no hairline. --cn-well-ring paints only
-   under prefers-contrast. */
+   below the ground. --cn-well-ring is a quiet even surface-0 ring, listed
+   before the carve so it paints over the dark wall and stays the same on
+   all four sides. */
 .well {
   border-radius: var(--cn-radius-card);
   background: var(--cn-surface-sunken);
-  box-shadow: var(--neu-inset), var(--cn-well-ring);
+  box-shadow: var(--cn-well-ring), var(--neu-inset);
 }
 /* A scrolling well hints at its overflow: the bottom edge of the well
    dissolves via a mask, so content visibly runs past the fold. */
@@ -190,7 +190,7 @@
 .terminal, .codeblock, .command {
   border-radius: var(--cn-radius-card);
   background: var(--cn-surface-sunken);
-  box-shadow: var(--neu-inset), var(--cn-well-ring);
+  box-shadow: var(--cn-well-ring), var(--neu-inset);
   color: var(--cn-fg-soft);
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
   font-variant-numeric: tabular-nums;
@@ -387,7 +387,8 @@ a:active > .accent-card {
 .btn-primary:hover:not(:disabled, [aria-disabled="true"]) { --cn-fill: var(--cn-interactive-hover); }
 /* Disabled primary goes flat and sinks: no plate, ramp, grain or gloss,
    no edge, just the sunken fill under the soft carve and the well ring,
-   like an empty slot pressed into the page. The carve is --neu-inset-soft,
+   the quiet even surface-0 hairline painted over the carve, like an empty
+   slot pressed into the page. The carve is --neu-inset-soft,
    the depth of a disabled field, so it stays shallower than any press and
    never reads as a held or engaged button. A disabled secondary is a flat
    outline on the base fill, so the two never share a silhouette. The border stays 1px
@@ -400,7 +401,7 @@ a:active > .accent-card {
   color: var(--cn-fg-disabled);
   border: 1px solid transparent;
   background-image: none;
-  box-shadow: var(--neu-inset-soft), var(--cn-well-ring);
+  box-shadow: var(--cn-well-ring), var(--neu-inset-soft);
   opacity: 1;
 }
 .btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"])::before { opacity: 0; }
@@ -962,7 +963,7 @@ a:active > .accent-card {
    flat label: the base fill and the --edge outline, no shadow, so nothing
    about it says press. A chip that is a link or a button is a clickable,
    so it stands on the ink plate under the lit edge, with the shared
-   press. Raise and plate mean clickable. */
+   press. On a chip, raise and plate mean clickable. */
 .chip {
   padding: var(--chip-pad);
   display: inline-flex; align-items: center; gap: var(--space-2);
@@ -1026,6 +1027,13 @@ a:active > .accent-card {
    a control, so it has no plate, gloss, grain, carve or raise, and it
    keeps the tag's size and chip radius. Mauve never fills a tag. */
 .tag.is-solid { color: var(--cn-fg-on-accent); background: var(--tone); box-shadow: none; }
+/* Quiet tag: a row's default or in-progress state, such as Pending, so a
+   status column keeps one shape. No tone: --cn-fg-muted on the sunken
+   fill, crust, 8.4:1. The fill is darker than a panel (1.14:1) and the
+   page (1.07:1), never a lighter grey, under the same soft carve, with no
+   outline and no light edge. It draws no glyph; it may bring an svg. Every
+   toned tag outranks it by hue. */
+.tag.is-quiet { color: var(--cn-fg-muted); background: var(--cn-surface-sunken); }
 
 /* Inline banner: semantic tint band, no card chrome. The tint keeps its
    hairline edge. The message is body text at the ui size, 14px at 400 on
@@ -1547,8 +1555,8 @@ a:hover:not(:active) > .accent-card {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 /* The note under the value shares the label's voice, so a stat holds one
-   small size: 13 label, 24 value, 13 note. Write it as a bare p; a
-   .cn-meta on it would bring 14px back. */
+   small size at one weight: 14 label, 24 value, 14 note. Write it as a
+   bare p; a .cn-meta on it would drop it to 400, a second voice. */
 .stat > p {
   margin: 0;
   color: var(--cn-fg-muted);
@@ -1650,7 +1658,7 @@ a:hover:not(:active) > .accent-card {
   border-bottom: 1px solid var(--edge);
   background: var(--cn-surface-band);
   text-align: start;
-  font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
+  font: var(--cn-type-label-weight) var(--cell-font-size)/var(--cn-type-label-leading) var(--sans);
 }
 .data-table td {
   padding: var(--cell-pad);
@@ -1688,6 +1696,10 @@ a:hover:not(:active) > .accent-card {
 .data-table .cell-name strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
 /* The meta line follows the cell size: 14px at default and cozy, 13px at
    compact. Weight and ink keep it apart from the name above it. */
+/* A tag, a chip or a small button in a cell follows the cell size, so a
+   compact row holds 13px throughout and no tag is larger than the cell
+   text beside it. At default and cozy the two sizes are equal. */
+.data-table td :is(.tag, .chip:not(.is-glyph), .btn.is-sm, .btn-text) { font-size: var(--cell-font-size); }
 .data-table .cell-name small  { color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cell-font-size) var(--sans); }
 
 /* Sortable header: a button inside th[aria-sort]. The chevron shows the
@@ -1749,8 +1761,8 @@ a:hover:not(:active) > .accent-card {
 }
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
-  /* Its own step, 1.30:1 on a panel: level with the 1.31:1 hover, past the
-     open carve's 1.08:1, and 1.17:1 under a selected row's wash. */
+  /* Its own step, 1.39:1 on a panel: level with the 1.40:1 hover, past the
+     open carve's 1.08:1, and 1.10:1 under a selected row's wash. */
   background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
 }
 /* Selected row: the engaged treatment, the wash with the full press. */
@@ -1899,7 +1911,7 @@ a:hover:not(:active) > .accent-card {
   gap: var(--space-2) var(--space-4);
   font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
 }
-.kv dt { color: var(--cn-fg-muted); font-weight: var(--cn-type-label-weight); font-size: var(--cn-type-label-size); line-height: inherit; }
+.kv dt { color: var(--cn-fg-muted); font-weight: var(--cn-type-label-weight); font-size: inherit; line-height: inherit; }
 .kv dd {
   min-width: 0;
   margin: 0;
@@ -2250,7 +2262,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
-    /* The same 1.30:1 row hover as the desktop table. */
+    /* The same 1.39:1 row hover as the desktop table. */
     background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
@@ -2309,8 +2321,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .stat strong { font-size: var(--cn-type-lede-size); }
   .stat.is-lg strong { font-size: var(--cn-type-value-size); }
   /* The band title steps down with the stat value, so the value still
-     outweighs the title above it. Cozy and compact titles are already
-     smaller. */
+     outweighs the title above it. Compact titles are already smaller. */
   :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
   .panel.is-lead > .panel-header :is(h2, h3) { font-size: min(var(--lead-title-size), var(--cn-type-body-size)); }
   .accordion-stack { padding: var(--space-2) var(--space-3); }

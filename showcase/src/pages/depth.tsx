@@ -4,11 +4,11 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 /* One model, lowest first. Height is distance from the ground; the light
    is above and to the top left. */
 const HEIGHTS = [
-  { height: "Below the ground", draws: "A carve: one dark wall from the top left and nothing on the far walls, so no light lip and no bevel. Wells, stepper pills, skeletons and the switch plate also take the sunken fill, crust, darker than the page and a panel.", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
-  { height: "The ground", draws: "Mantle, and nothing else. A static chip is a flat outlined label on it, with no shadow.", tokens: "--cn-surface-page", who: "The page, the topbar, stat bands, static chips. Every other height is measured from it." },
-  { height: "Resting on it", draws: "The base fill, one step above the page, the plain hairline on the top and left, the lit top edge, ink border sides on the right and bottom that join a dark foot of contact edge and near shadow, a soft cast. The lead panel is the same height with a deeper foot, 9px deep and 7px wide with its ink border sides, past the 4px plate, under the brighter hairline, a taller header band and more padding.", tokens: "--cn-surface-raised, --edge, --neu-ink, --neu-raised, or --neu-raised-soft with --cn-lit-edge, or --neu-lifted with --edge-strong", who: "Panels, the selected tab, the one lead panel. A panel inside a panel takes --neu-raised-soft with the lit edge." },
-  { height: "Standing on a plate", draws: "The base fill and lit top edge over a hard offset, the plate's side in the shadow ink. The plate replaces the soft shadow. The tilted panel is a plate at 6px, tipped 1.2deg with its text.", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra, or --cn-plate-tilt with --cn-lit-edge", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate. The one tilted panel, holding prose, upright under prefers-contrast: more on the same plate." },
-  { height: "Floating", draws: "The overlay fill, no contact edge, the two-layer pop shadow.", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
+  { height: "Below the ground", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken, --cn-well-ring", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
+  { height: "The ground", tokens: "--cn-surface-page", who: "The page, the topbar, stat bands, static chips. Every other height is measured from it." },
+  { height: "Raised, soft foot", tokens: "--cn-surface-raised, --edge, --neu-ink, --neu-raised, or --neu-raised-soft with --cn-lit-edge, or --neu-lifted with --edge-strong", who: "Panels, the selected tab, the one lead panel. A panel inside a panel takes --neu-raised-soft with the lit edge." },
+  { height: "Raised, hard plate", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra, or --cn-plate-tilt with --cn-lit-edge", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate. The one tilted panel, holding prose, upright under prefers-contrast: more on the same plate." },
+  { height: "Floating", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
 
 /* The height specimens share one footprint so only the depth differs. */
@@ -32,13 +32,14 @@ function Tokens({ text }: { text: string }) {
 }
 
 
-function Height({ name, cls, children }: { name: string; cls: string; children?: ComponentChildren }) {
+function Height({ name, cls, note, children }: { name: string; cls: string; note: string; children?: ComponentChildren }) {
   return (
     <figure class="cn-stack cn-gap-16 cn-m-0" style="align-content:start;text-align:center">
       {children}
       <figcaption class="cn-stack cn-gap-4">
         <span class="cn-name">{name}</span>
         <code class="cn-code-meta">{cls}</code>
+        <span class="cn-meta">{note}</span>
       </figcaption>
     </figure>
   );
@@ -55,7 +56,7 @@ interface CubeProps {
 
 /* A raised cube takes the raised fill, base; a carved one takes the page
    ground. Only the shadow utility differs. */
-function Cube({ cls, bg = "cn-bg-raised", label, size = 96, style = "" }: CubeProps) {
+function Cube({ cls, bg = "cn-bg-raised", label, size = 128, style = "" }: CubeProps) {
   return (
     <div style="display:grid;gap:12px;justify-items:center">
       <div
@@ -76,39 +77,56 @@ export default function DepthPage() {
       lede="Every elevation is one of a small set of shadows, lit from one light at the top left. Height above the page separates surfaces; a hairline only cuts their edge."
     >
       <h2 class="cn-title">One model</h2>
-      <Demo title="Heights, lowest first" why="One light, and why no component writes its own shadow">
-        <div style="width:100%">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th scope="col">Height</th>
-                <th scope="col">What draws it</th>
-                <th scope="col">Tokens</th>
-                <th scope="col">Who</th>
-              </tr>
-            </thead>
-            <tbody>
-              {HEIGHTS.map((h) => (
-                <tr key={h.height}>
-                  <td class="cell-name"><strong>{h.height}</strong></td>
-                  <td data-label="What draws it">{h.draws}</td>
-                  <td data-label="Tokens"><Tokens text={h.tokens} /></td>
-                  <td data-label="Who">{h.who}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <Demo title="Four heights and the foot ladder, on the page" why="One light, and why no component writes its own shadow" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-tilted · panel is-lead · cn-bg-overlay cn-pop">
+        {/* Two groups. The first holds a carve, the ground and a plain
+            panel on its soft foot. The second holds the rest of the foot
+            ladder in order, the 4px plate, the 6px tilt and the 9px lead,
+            then the float. The first holds three, so it keeps three
+            columns until its box is under 520px and then drops to one,
+            never leaving one specimen alone on a row. The second sits on
+            four columns and folds to two. */}
+        <div class="cn-stack cn-gap-32" style="width:100%">
+          <div style={THREE_UP}>
+            <Height name="Below the ground" cls=".well" note="One dark wall from the top left, the sunken fill and a quiet even ring.">
+              <div class="well cn-meta" style={SPEC_BOX}>Search invoices</div>
+            </Height>
+            <Height name="The ground" cls="--cn-surface-page" note="Mantle and nothing else.">
+              <div class="cn-meta" style={SPEC_BOX}>Invoice #1042</div>
+            </Height>
+            <Height name="Raised, soft foot" cls=".panel" note="The base fill, a hairline on the top and left, 3px of ink and a cast.">
+              <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
+            </Height>
+          </div>
+          <div class="cn-grid-4">
+            <Height name="Raised, hard plate" cls=".cn-hard" note="A 4px block of ink replaces the cast.">
+              <div class="cn-bg-raised cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
+            </Height>
+            <Height name="The 6px plate, tipped" cls=".is-tilted" note="The one tilted aside, turned 1.2deg with its text.">
+              <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
+            </Height>
+            <Height name="The lead's 9px foot" cls=".is-lead" note="A resting panel on the deepest foot.">
+              <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
+            </Height>
+            <Height name="Floating" cls=".cn-pop" note="The overlay fill, no contact edge, the pop shadow.">
+              <div class="cn-bg-overlay cn-pop cn-r-card cn-meta" style={`${SPEC_BOX};border:1px solid var(--edge-strong)`}>Invoice sent</div>
+            </Height>
+          </div>
         </div>
       </Demo>
 
       <p class="cn-copy">
-        Every depth on the page is one of five heights above or below the
-        ground, under the one light. Pick the height for a new surface and
-        its fill and shadow follow from the row. A soft foot means a panel
-        resting on the page, and a hard plate means a clickable or the one
-        tilted aside. The lead panel is a resting panel with a deeper foot
-        and the tilted panel is a 6px plate, so neither is a height of its
-        own. No static label is raised: a chip on a span is a flat outlined
+        Every depth on the page is one of four heights: below the ground,
+        the ground, raised and floating, under the one light. A raised
+        surface stands on one of two feet. A soft foot means a panel
+        resting on the page, and a hard plate means a clickable, an accent
+        card or the one tilted aside. The foot ladder sets how tall it
+        stands, counted in full ink under the bottom edge: panel 3px,
+        plate 4px, tilt 6px, lead 9px. The ink is capped near 1.14:1 on
+        the page, so at 1x the ladder reads as three sizes: short, 6px and
+        9px. The panel and the plate share the short one and differ by
+        kind, soft with a cast or hard with none. The lead panel and the
+        tilted panel are steps on the ladder, so neither is a height of
+        its own. No static label is raised: a chip on a span is a flat outlined
         label. The avatar is the one small static thing on the soft raise.
       </p>
 
@@ -124,47 +142,33 @@ export default function DepthPage() {
         <code class="cn-code-inline">--cn-surface-page</code>, mantle, and
         raised and plated surfaces take{" "}
         <code class="cn-code-inline">--cn-surface-raised</code>, base, one fill
-        step above it, close enough that the shadows still read. A raised
-        surface lifts by that step, its contact edge, its cast, its lit top
-        edge and its hairline, never by a fill lighter than base. Only
+        step above it, close enough that the shadows still read. A panel
+        shows its height with three signals: that fill step, the hairline
+        on its top and left, and the dark foot on its bottom and right,
+        never a fill lighter than base. Only
         overlays, which float free of the page, take a lighter step.
       </p>
 
-      <Demo title="The five heights and their two variants, on the page" why="Hairlines, the lit edge and the fixed light" classes="well · (the ground) · panel · cn-bg-raised cn-edge cn-hard · panel is-lead · panel is-tilted · cn-bg-overlay cn-pop">
-        {/* Two groups. The first holds the three lowest heights: a carve,
-            the ground and a plain panel resting on it. The second holds
-            the plate and the float with the two variants between them:
-            the lead, a resting panel with a deeper foot, and the tilt, a
-            6px plate. The first
-            holds three, so it keeps three columns until its box is under
-            520px and then drops to one, never leaving one specimen alone on
-            a row. The second sits on four columns and folds to two. */}
-        <div class="cn-stack cn-gap-32" style="width:100%">
-          <div style={THREE_UP}>
-            <Height name="Below the ground" cls=".well">
-              <div class="well cn-meta" style={SPEC_BOX}>Search invoices</div>
-            </Height>
-            <Height name="The ground" cls="--cn-surface-page">
-              <div class="cn-meta" style={SPEC_BOX}>Invoice #1042</div>
-            </Height>
-            <Height name="Resting on it" cls=".panel">
-              <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
-            </Height>
-          </div>
-          <div class="cn-grid-4">
-            <Height name="Standing on a plate" cls=".cn-hard">
-              <div class="cn-bg-raised cn-edge cn-hard cn-r-card cn-meta" style={SPEC_BOX}>Export</div>
-            </Height>
-            <Height name="Resting, the lead's foot" cls=".is-lead">
-              <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
-            </Height>
-            <Height name="On a 6px plate, tipped" cls=".is-tilted">
-              <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
-            </Height>
-            <Height name="Floating" cls=".cn-pop">
-              <div class="cn-bg-overlay cn-pop cn-r-card cn-meta" style={`${SPEC_BOX};border:1px solid var(--edge-strong)`}>Invoice sent</div>
-            </Height>
-          </div>
+      <Demo title="Heights, lowest first" why="Hairlines, the lit edge and the fixed light">
+        <div style="width:100%">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">Height</th>
+                <th scope="col">Tokens</th>
+                <th scope="col">Who</th>
+              </tr>
+            </thead>
+            <tbody>
+              {HEIGHTS.map((h) => (
+                <tr key={h.height}>
+                  <td class="cell-name"><strong>{h.height}</strong></td>
+                  <td data-label="Tokens"><Tokens text={h.tokens} /></td>
+                  <td data-label="Who">{h.who}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Demo>
 
@@ -181,8 +185,9 @@ export default function DepthPage() {
         take the quieter{" "}
         <code class="cn-code-inline">--cn-carve-ring</code>, surface-1. Both
         are the same on all four sides. A well's{" "}
-        <code class="cn-code-inline">--cn-well-ring</code> paints nothing,
-        since the sunken fill already sets it apart.{" "}
+        <code class="cn-code-inline">--cn-well-ring</code> is the quietest
+        of the three, surface-0 at 1.5:1 on the well's crust fill, since
+        the sunken fill alone is 1.07:1 under the page.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> closes all three
         into a full even ring, and a hovered field closes its ring in{" "}
         <code class="cn-code-inline">--control-edge</code>. An engaged state is
@@ -256,7 +261,7 @@ export default function DepthPage() {
         blur at reduced strength. Panels and cards take the regular shadows;
         avatars, the selected tab, nested panels and held states take the
         soft ones, which is why the soft pair is shown on an avatar and a
-        checkbox: on a 96px cube
+        checkbox: on a 128px cube
         it is nearly the strong pair, and the specimen would argue against
         the token it documents.
       </p>
@@ -274,16 +279,15 @@ export default function DepthPage() {
         bottom and right edges, and <code class="cn-code-inline">--neu-dark</code> at
         .8 for a carve's dark wall, because a well's wall falls on whatever
         holds it.
-        The raised token has four layers: contact, near shadow, cast and the
-        lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
+        The raised token draws the foot as one shape, contact, near shadow
+        and cast, under the lit top edge. <code class="cn-code-inline">--neu-lifted</code>, for
         the one lead panel, spends its extra darkness on the bottom and
         right only: a 6px 8px contact in the full ink, an 8px 14px 16px near
         shadow and an 18px 28px 48px cast. Even black is close to the
         page, so a longer cast barely shows; the fill step separates the
         panel and the deeper foot ranks it. A panel's right and bottom
-        border sides are the same ink, so they add 1px to the contact:
-        9px of full ink under the lead's bottom edge where a plain panel
-        has 3px, past a button's 4px plate. The table below has the ink's
+        border sides are the same ink, so they are the last 1px of its
+        foot on the ladder. The utilities table has the ink's
         ratios. Compact density drops the
         plate to 2px and the plain contact to 1px, so a plain panel stays
         under a plated control. Nothing darkens or brightens a panel's top and left, because a dark line all
@@ -529,8 +533,11 @@ export default function DepthPage() {
 </button>`}
       />
 
+      <details class="accordion">
+        <summary>Depth utilities</summary>
+        <div class="fold">
+          <div>
       <Props
-        title="Depth utilities"
         rows={[
           {
             name: ".cn-raised",
@@ -626,11 +633,14 @@ export default function DepthPage() {
           {
             name: ".cn-engaged",
             values: "inset, the mauve wash, the --engaged-edge rim, 1px sink",
-            contrast: "Wash 1.52:1 on base, past the 1.31:1 hover · rim 3.5:1 on the wash",
+            contrast: "Wash 1.52:1 on base, past the 1.40:1 hover · rim 3.5:1 on the wash",
             notes: "The engaged state, for a chosen or toggled option. It sets border-color, so compose it on an element with a border. Under forced colors the rim draws in Highlight.",
           },
         ]}
       />
+          </div>
+        </div>
+      </details>
     </Doc>
   );
 }

@@ -8,8 +8,8 @@
    cozy density, the SPEC's density for a desktop data tool. The aside
    holds prose, a heading in the name role and a link; the supporting
    figures sit on the ground under it as one list of divided rows, with no
-   panel of their own, pinned to the bottom of the column so its last row
-   ends on the chart footer's line.                                       */
+   panel of their own, one grid gap under the aside. The column packs to
+   the top, so any slack falls at its end.                                */
 
 import { useState } from "preact/hooks";
 import type { JSX } from "preact";
@@ -19,10 +19,9 @@ import { DangerGlyph, WarningGlyph, SuccessGlyph } from "../lib/glyphs";
 
 type Status = "paid" | "pending" | "due" | "overdue";
 
-/* The pending clock outside a tag, so it sizes itself: 13px, .cn-icon-sm,
-   in the meta ink of the word beside it. */
+/* The pending clock. The tag sizes it, 12px, in the word's ink. */
 const PendingClock = () => (
-  <svg class="cn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="9" />
     <path d="M12 7v5l3 2" />
   </svg>
@@ -30,10 +29,10 @@ const PendingClock = () => (
 
 const STATUS: Record<Status, { label: string; tone: string; Glyph: () => JSX.Element }> = {
   paid: { label: "Paid", tone: "cn-tone-success", Glyph: SuccessGlyph },
-  /* Pending is the row's in-progress state, so it is plain meta text with
-     a clock, not a tag: a column of toned tags would out-shout the one
-     Overdue. It has no tone. */
-  pending: { label: "Pending", tone: "", Glyph: PendingClock },
+  /* Pending is the row's in-progress state, so it takes the quiet tag:
+     the column keeps one shape, and with no tone it stays under every
+     toned tag. */
+  pending: { label: "Pending", tone: "is-quiet", Glyph: PendingClock },
   /* Due soon may sit above Overdue: status tags carry a word and a glyph,
      so the SPEC exempts them from the warm-family adjacency rule. */
   due: { label: "Due soon", tone: "cn-tone-warning", Glyph: WarningGlyph },
@@ -63,10 +62,13 @@ const shortDate = (t: number) =>
 
 /* 42 invoices, one a day, newest first, on 14-day terms. Recent ones are
    mostly open and older ones mostly paid; status follows from the due date,
-   so every tab and page is stable. */
+   so every tab and page is stable. One recent invoice is on 3-day terms
+   and unpaid, so the table's first page holds an Overdue row and the
+   view's one solid tag is on screen. */
+const SHORT_TERMS = 4;
 const INVOICES: Invoice[] = Array.from({ length: 42 }, (_, i) => {
   const issued = TODAY - i * DAY;
-  const due = issued + 14 * DAY;
+  const due = issued + (i === SHORT_TERMS ? 3 : 14) * DAY;
   const unpaid = i < 10 ? i % 3 !== 2 : i % 9 === 4;
   const status: Status = !unpaid ? "paid" : due < TODAY ? "overdue" : due - TODAY <= 5 * DAY ? "due" : "pending";
   return {
@@ -170,17 +172,10 @@ function InvoiceTable() {
                   <td data-label="Issued">{inv.issued}</td>
                   <td data-label="Due">{inv.due}</td>
                   <td class="is-trail" data-label="Status">
-                    {inv.status === "pending" ? (
-                      <span class="cn-meta cn-row cn-gap-4">
-                        <s.Glyph />
-                        {s.label}
-                      </span>
-                    ) : (
-                      <span class={`tag ${s.tone}`}>
-                        <s.Glyph />
-                        {s.label}
-                      </span>
-                    )}
+                    <span class={`tag ${s.tone}`}>
+                      <s.Glyph />
+                      {s.label}
+                    </span>
                   </td>
                   <td class="is-num is-trail" data-label="Amount"><strong>{money(inv.amount)}</strong></td>
                 </tr>
@@ -204,13 +199,15 @@ export default function DashboardExample() {
     <div class="cn-stack cn-gap-48 page-enter" data-density="cozy">
       {/* The title and its primary share one line in a split, and the lede
           sits under them, so the button never stands alone below the copy.
-          The title has no mauve em: the primary beside it is the top
-          band's one mauve mark, so the hero stat below is text-colored too.
+          The title is the full display size, so the 28px lead band title
+          below never reads as a second headline. It has no mauve em: the
+          primary beside it is the top band's one mauve mark, so the hero
+          stat below is text-colored too.
           The chart's three series are teal, yellow and blue: mauve is the
           sixth series, so no bar shares the primary's color. */}
       <header class="cn-stack cn-gap-24">
         <div class="cn-split">
-          <h1 class="cn-display is-sm">
+          <h1 class="cn-display">
             Billing, September
           </h1>
           <button type="button" class="btn btn-primary cn-morph">New invoice</button>
@@ -222,7 +219,7 @@ export default function DashboardExample() {
         </p>
       </header>
 
-      {/* The headline figure is a large stat at 32px, so it outranks the
+      {/* The headline figure is a large stat at 36px, so it outranks the
           28px lead band title below it. It is text-colored, not mauve: the
           primary sits in the same top band, and mauve stays on the primary. */}
       <section class="stat-grid is-ruled" aria-label="Key figures">
@@ -237,13 +234,14 @@ export default function DashboardExample() {
           <p>{OPEN.length} open invoices</p>
         </div>
         {/* The one figure that needs action carries the danger signal; the
-            other three stay neutral. Overdue is the view's one urgent
-            status, so its tag is the solid one here and in the table. */}
+            other three stay neutral. Its tag is the washed one: the solid
+            tag stays in the table's status column, out of the top band,
+            where a solid red would sit beside the mauve primary. */}
         <div class="stat cn-tone-danger">
           <span>Past due</span>
           <strong>{whole(total(LATE))}</strong>
           <p>
-            <span class="tag cn-tone-danger is-solid">{LATE.length} overdue</span>
+            <span class="tag cn-tone-danger">{LATE.length} overdue</span>
           </p>
         </div>
         <div class="stat">
@@ -293,10 +291,10 @@ export default function DashboardExample() {
             <strong class="cn-name">${COLLECTED_TOTAL.toFixed(1)}k</strong>
           </div>
         </section>
-        {/* The stack stretches to the chart panel's height and parts its
-            two children, so the aside stays at the top and the figures end
-            on the chart footer's line. No panel stretches. */}
-        <div class="cn-stack cn-gap-24 cn-span-5" style="align-self:stretch;align-content:space-between">
+        {/* The stack packs to the top: the figures sit one grid gap under
+            the aside, and any slack falls at the end of the column. No
+            panel stretches. */}
+        <div class="cn-stack cn-gap-24 cn-span-5">
         <aside class="panel is-tilted" aria-labelledby="dash-summary">
           <div class="panel-body cn-stack cn-gap-12">
             <h2 id="dash-summary" class="cn-name cn-m-0">Where September stands</h2>
@@ -312,8 +310,9 @@ export default function DashboardExample() {
         </aside>
         {/* Supporting figures sit on the ground, not in a third panel, so
             the row reads in three levels: the chart panel, the tilted
-            aside, then these. The heading takes the name role, the size
-            of a cozy band title. The figures take one form, divided rows:
+            aside, then these. The heading takes the name role, 14px at 600:
+            the SPEC puts ground and tilted-aside headings there, under the
+            20px panel titles. The figures take one form, divided rows:
             the ruled stat grid stays unique to the top band. */}
         <section class="cn-stack cn-gap-8" aria-labelledby="dash-refunds">
           <h2 id="dash-refunds" class="cn-name cn-m-0">Payments this month</h2>

@@ -170,7 +170,7 @@ export default function SliderPage() {
           { name: "track", values: "::-webkit-slider-runnable-track / ::-moz-range-track", notes: "7px, pill radius, crust under --neu-inset-soft. Filled with --cn-interactive up to --value." },
           { name: "thumb", values: "::-webkit-slider-thumb / ::-moz-range-thumb", contrast: "Edge 4.8:1 on the page, 4.4:1 on a raised fill, 3.5:1 on an overlay", notes: "20px round, 1px --control-edge border (overlay-1; overlay-2 under prefers-contrast), --cn-surface-raised, --neu-raised-soft and --cn-lit-edge. Hover edge --engaged-edge; held, scale .92 on the press timing, back on the spring." },
           { name: "--value", values: "0% to 100%", default: "0%", notes: "Where the fill stops outside Firefox. Set it from an input listener, or with slider() from catppuccin-neu/js." },
-          { name: ":disabled", values: "on the input", notes: "--disabled-opacity (.6) and a not-allowed cursor." },
+          { name: ":disabled", values: "on the input", notes: "--disabled-opacity (.7) and a not-allowed cursor." },
         ]}
       />
     </Doc>

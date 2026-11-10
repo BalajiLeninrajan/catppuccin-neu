@@ -74,7 +74,7 @@ export default function SelectionPage() {
         The
         whole label is the hit target. When the input is disabled the
         control dims itself to{" "}
-        <code class="cn-code-inline">--disabled-opacity</code> (.6) and the
+        <code class="cn-code-inline">--disabled-opacity</code> (.7) and the
         label text takes <code class="cn-code-inline">--cn-fg-disabled</code>,
         with no extra class. A disabled control dims the same way outside a{" "}
         <code class="cn-code-inline">.choice</code>.
@@ -314,7 +314,7 @@ export default function SelectionPage() {
             name: ":disabled",
             values: "on the input",
             notes:
-              "Each control dims to --disabled-opacity (.6). Checkbox and radio edges drop to --edge. The switch paddle lies flat with no tilt and no raise, and paddle and plate drop to --edge, the plate on the soft inset with no sunken fill. No dashes.",
+              "Each control dims to --disabled-opacity (.7). Checkbox and radio edges drop to --edge. The switch paddle lies flat with no tilt and no raise, and paddle and plate drop to --edge, the plate on the soft inset with no sunken fill. No dashes.",
           },
           {
             name: ".choice:has(:disabled)",

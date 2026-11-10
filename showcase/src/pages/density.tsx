@@ -16,7 +16,7 @@ const COMPACT_CODE = `<section data-density="cozy">
 const TONE_TAGS = [
   ["red", "Overdue"],
   ["green", "Paid"],
-  ["peach", "Pending"],
+  ["peach", "Disputed"],
   ["blue", "Synced"],
   ["yellow", "Due soon"],
   ["mauve", "Archived"],
@@ -30,13 +30,13 @@ const KNOBS: Array<[string, string, string, string, string]> = [
   ["--cn-radius-panel", "16px", "16px", "12px", "Panels and modals. A table head at a panel edge follows it minus 1px."],
   ["--band-h", "64px", "52px", "44px", "Panel, modal and drawer header bands. The topbar is this plus 4px."],
   ["--band-pad", "12px 24px", "8px 24px", "8px 16px", "Band padding."],
-  ["--band-title-size", "20px", "14px", "14px", "An h2 or h3 in a header band."],
+  ["--band-title-size", "20px", "20px", "14px", "An h2 or h3 in a header band."],
   ["--lead-title-size", "28px", "28px", "20px", "The lead panel's band title, at the heading weight. 20px at 655px and under, where display-sm drops under 34px."],
   ["--lead-band-h", "72px", "60px", "48px", "The lead panel's header band, taller than --band-h."],
   ["--lead-pad", "32px", "24px", "16px", "The lead panel's header and footer inline padding, its body padding and a filling table's outer columns."],
   ["--body-pad", "24px", "16px 24px", "12px 16px", ".panel-body padding."],
   ["--cell-pad", "12px 16px", "8px 12px", "4px 8px", "Table cells."],
-  ["--cell-font-size", "14px", "14px", "13px", "Table body text."],
+  ["--cell-font-size", "14px", "14px", "13px", "Table head and body text."],
   ["--cn-type-body-size", "16px", "16px", "15px", "The body role: body, .cn-copy and .cn-prose."],
   ["--chip-pad", "8px 12px", "4px 12px", "4px 8px", ".chip padding."],
   ["--well-pad", "12px 16px", "12px 16px", "8px 12px", "Code block and terminal padding."],
@@ -99,8 +99,8 @@ export default function DensityPage() {
         <code class="cn-code-inline">data-density="compact"</code> on any element
         to retune them for that subtree. Cozy is for desktop data tools
         that want more rows on screen: 38px controls, a 3px plate, 52px
-        bands, 14px band titles and 8px by 12px table cells, with the body
-        size and panel radius left alone. Compact is the dense strip for
+        bands and 8px by 12px table cells, with the band title, the body
+        size and the panel radius left alone. Compact is the dense strip for
         readouts: 28px controls, a 2px plate, the card radius on panels,
         44px bands and tighter table cells, chips and code wells. Control
         heights are rem (46px is 2.875rem), so a reader who raises the
