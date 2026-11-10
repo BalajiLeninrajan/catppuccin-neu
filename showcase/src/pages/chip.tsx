@@ -1,5 +1,5 @@
 import { Doc, Demo, Props, CodeBlock, TONES, TEAMS, accentStyle } from "../lib/doc";
-import { TONE_GLYPH, NEEDS_GLYPH } from "../lib/glyphs";
+import { TONE_GLYPH } from "../lib/glyphs";
 
 /* Small inline glyphs (24-unit grid, stroke = currentColor). Decorative:
    always paired with a text label, always aria-hidden. */
@@ -74,15 +74,15 @@ export default function ChipPage() {
   return (
     <Doc
       title="Chip"
-      lede="Two small metadata marks. The outlined .chip holds facts such as counts and versions. The carved .tag holds a semantic state through --tone. Both stay on one line."
+      lede="The outlined .chip holds a fact such as a count or a version. The carved .tag holds a status through --tone."
     >
-      <Demo lead title="Chip" classes="chip" row>
+      <Demo title="Chip" classes="chip" row>
         <span class="chip">v2.4.1</span>
         <span class="chip">12 members</span>
         <span class="chip">Updated 4m ago</span>
       </Demo>
 
-      <Demo title="With glyph" why="Glyphs and the accessible name" classes="chip" row>
+      <Demo title="With glyph" classes="chip" row>
         <span class="chip">
           <ClockGlyph />
           Updated 4m ago
@@ -98,15 +98,10 @@ export default function ChipPage() {
       </Demo>
 
       <p class="cn-copy">
-        A chip keeps its label at every width. Mark the glyph{" "}
-        <code class="cn-code-inline">aria-hidden="true"</code> so the label is the
-        accessible name. For an icon-only chip, add{" "}
-        <code class="cn-code-inline">.is-glyph</code> and keep the label in the
-        markup or in an <code class="cn-code-inline">aria-label</code> with{" "}
-        <code class="cn-code-inline">role="img"</code>.
+        Mark the glyph <code class="cn-code-inline">aria-hidden="true"</code>. The label is the accessible name.
       </p>
 
-      <Demo title="Links and buttons" why="Why a clickable chip stands on a plate" classes="a.chip · button.chip" row>
+      <Demo title="Links and buttons" classes="a.chip · button.chip" row>
         <a class="chip" href="#" onClick={(e) => e.preventDefault()}>
           v2.4.1 release notes
         </a>
@@ -121,78 +116,17 @@ export default function ChipPage() {
       </Demo>
 
       <p class="cn-copy">
-        A chip that is an <code class="cn-code-inline">a</code> or a{" "}
-        <code class="cn-code-inline">button</code> stands on the ink plate under
-        the lit top edge, like every clickable. A static chip on a span is a
-        flat outlined label. On hover a clickable chip lifts 1px. Held, it
-        slides half the offset onto its plate. Keep it to a link or an action
-        on one fact. A choice between options is a segmented control or tabs.
+        A chip on an <code class="cn-code-inline">a</code> or a <code class="cn-code-inline">button</code> stands on a plate and presses. Use it for a link or an action on one fact.
       </p>
 
-      <Demo title="Icon-only" classes="chip is-glyph" row>
-        <span class="chip is-glyph" role="img" aria-label="Auto-renew on">
-          <BoltGlyph />
-        </span>
-        <span class="chip is-glyph" role="img" aria-label="12 members">
-          <UsersGlyph />
-        </span>
-      </Demo>
-
-      <Demo title="Status tags: the glyph comes from CSS" why="Where the status glyph comes from" classes="tag cn-tone-danger · -warning · -success · -info > word" row>
-        <span class="tag cn-tone-danger">Overdue</span>
-        <span class="tag cn-tone-success">Paid</span>
-        <span class="tag cn-tone-warning">Due soon</span>
-        <span class="tag cn-tone-info">Synced</span>
-      </Demo>
-
-      <p class="cn-copy">
-        A tag with <code class="cn-code-inline">.cn-tone-danger</code>,{" "}
-        <code class="cn-code-inline">-warning</code>,{" "}
-        <code class="cn-code-inline">-success</code> or{" "}
-        <code class="cn-code-inline">-info</code> and no svg child draws the
-        matching glyph itself, from <code class="cn-code-inline">--cn-glyph-*</code>.
-        The markup above holds only the word. A screen reader never hears the
-        glyph. Bring an svg to use a different shape.
-      </p>
-
-      <Demo title="Solid tag: the one urgent status" why="When a tag takes the solid fill" classes="tag cn-tone-danger is-solid" row>
-        <span class="tag cn-tone-danger is-solid">Overdue</span>
-        <span class="tag cn-tone-warning">Due soon</span>
-        <span class="tag cn-tone-success">Paid</span>
-        <span class="tag is-quiet">Pending</span>
-      </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code-inline">.is-solid</code> fills the tag with its
-        tone and sets the word and glyph in crust, for the one urgent status
-        in a view. It is a status mark, not a control, and it never takes
-        mauve. Keep a solid danger tag out of the band or row that holds the
-        primary. A row's default or in-progress state, such as Pending, takes{" "}
-        <code class="cn-code-inline">.tag.is-quiet</code>: a plain muted label
-        that keeps the tag's padding, so the word lines up with the filled
-        tags.
-      </p>
-
-      <Demo title="Status tag with its own svg" classes="tag cn-tone-success > svg + word" row>
+      <Demo title="Status tag" classes="tag cn-tone-success > svg + word" row>
         <span class="tag cn-tone-success">
           <TONE_GLYPH.mauve />
           Paid on schedule
         </span>
       </Demo>
 
-      <Demo title="Palette tags: a glyph on red and yellow" classes="tag cn-tone-{red, green, peach, yellow, blue, mauve} > (svg) + word" row>
-        {TONES.map((tone) => {
-          const Glyph = TONE_GLYPH[tone];
-          return (
-            <span key={tone} class={`tag cn-tone-${tone}`}>
-              {NEEDS_GLYPH.has(tone) ? <Glyph /> : null}
-              {TONE_LABELS[tone]}
-            </span>
-          );
-        })}
-      </Demo>
-
-      <Demo title="Palette tags: a glyph on every tone" why="Why the word states the status" classes="tag cn-tone-{tone} > svg + word" row>
+      <Demo title="Palette tags" classes="tag cn-tone-{tone} > svg + word" row>
         {TONES.map((tone) => {
           const Glyph = TONE_GLYPH[tone];
           return (
@@ -205,15 +139,10 @@ export default function ChipPage() {
       </Demo>
 
       <p class="cn-copy">
-        A tone never carries meaning alone. The word in the tag states the
-        status: "Overdue", not a red dot. The palette tones,{" "}
-        <code class="cn-code-inline">.cn-tone-red</code> and the rest, draw no
-        glyph, so a red or yellow tag brings an svg. In a column of tags,
-        give every tag a glyph so the words line up. The svg goes first, with{" "}
-        <code class="cn-code-inline">aria-hidden="true"</code>.
+        A tone never carries meaning alone. The word states the status, and the svg goes first with <code class="cn-code-inline">aria-hidden="true"</code>.
       </p>
 
-      <Demo title="Marks" why="What a mark is for" classes='mark  (set --accent from the record)' row>
+      <Demo title="Marks" classes='mark  (set --accent from the record)' row>
         {TEAMS.map((team) => (
           <span class="sc-row" key={team.name}>
             <span class="mark" style={accentStyle(team.accent)} aria-hidden="true">
@@ -225,74 +154,18 @@ export default function ChipPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code-inline">.mark</code> is the 28px identity square for a
-        team tile, a rank or the logo. Set <code class="cn-code-inline">--accent</code>{" "}
-        inline from the record it stands for, so the same team gets the same
-        square everywhere.
+        Set <code class="cn-code-inline">--accent</code> inline from the record the mark stands for.
       </p>
 
       <Props
-        title="Contract"
+        title="Classes and tokens"
         rows={[
-          {
-            name: ".chip",
-            values: "span, a, or button",
-            notes: "Outlined pill on --cn-surface-raised with the --edge outline. Flat when static: no shadow and no lit edge. No wrapping; keep labels short.",
-          },
-          {
-            name: ":is(a, button).chip",
-            values: ":hover · :active · :disabled · [aria-disabled]",
-            notes: "Stands on the hard offset in --plate under --cn-lit-edge. Hover lifts 1px. Held, it half-slides onto the plate. Disabled: --disabled-opacity, no plate, the flat --cn-surface-sunken fill.",
-          },
-          {
-            name: ".chip svg",
-            values: "one leading glyph",
-            notes: "14px. Decorative: aria-hidden, and the label text carries the name.",
-          },
-          {
-            name: ".chip.is-glyph",
-            values: "modifier",
-            notes: "Icon-only at any width: 8px padding, 16px svg, label hidden with font-size 0. Keep an accessible name.",
-          },
-          {
-            name: ".tag",
-            values: "span",
-            notes: "Status tag: 4px padding, the chip radius, label role. A shallow carve in --tone-wash with no outline. Always holds a word that states the status.",
-          },
-          {
-            name: ".tag.is-solid",
-            values: "modifier",
-            contrast: "Crust on the fill 8.1:1 (red) to 14.8:1 (yellow)",
-            notes: "The one urgent status in a view. The tone fills the tag and the word and glyph take --cn-fg-on-accent. A status tone only, never mauve.",
-          },
-          {
-            name: ".tag.is-quiet",
-            values: "modifier",
-            contrast: "Muted text 7.4:1 on a panel, 5.8:1 on an overlay",
-            notes: "A row's default or in-progress state, such as Pending. A --cn-fg-muted label with no tone, fill or carve, which keeps the tag's padding. Draws no glyph.",
-          },
-          {
-            name: ".tag svg",
-            values: "one leading glyph",
-            notes: "12px, first in the tag, aria-hidden. Replaces the CSS glyph on a status tone. Needed on .cn-tone-red and -yellow, which draw none; optional on other palette tones.",
-          },
-          {
-            name: ".tag::before",
-            values: "status glyph",
-            notes: "On .cn-tone-danger, -warning, -success or -info with no svg child: a 12px --cn-glyph-* mask in currentColor. Forced colors paint it CanvasText.",
-          },
-          {
-            name: "--tone",
-            values: ".cn-tone-danger / -warning / -success / -info · .cn-tone-red / -green / -peach / -yellow / -blue / -mauve",
-            default: "var(--cn-info)",
-            notes: "Semantic color. Set it with a tone utility or inline.",
-          },
-          {
-            name: ".mark",
-            values: "28px square",
-            default: "--accent: var(--mauve)",
-            notes: "Accent ramp under grain, crust glyph at 14px 600, --shadow-mark, tabular numerals. Set --accent inline per record.",
-          },
+          { name: ".chip", values: "span, a or button", notes: "An outlined pill for one fact. One line." },
+          { name: ":is(a, button).chip", values: ":disabled", notes: "Stands on a plate and presses." },
+          { name: ".tag", values: "span", notes: "A carved status label in --tone. Always holds a word." },
+          { name: ".chip svg / .tag svg", values: "one leading glyph", notes: "Decorative, aria-hidden." },
+          { name: "--tone", values: ".cn-tone-danger / -warning / -success / -info · .cn-tone-red / -green / -peach / -yellow / -blue / -mauve", default: "var(--cn-info)", notes: "Set it with a tone utility or inline." },
+          { name: ".mark", values: "28px square", default: "--accent: var(--mauve)", notes: "An identity square. Set --accent per record." },
         ]}
       />
 
@@ -305,14 +178,7 @@ export default function ChipPage() {
   12 members
 </span>
 
-<!-- a status tone draws its own glyph -->
-<span class="tag cn-tone-danger">Overdue</span>
-
-<!-- a default or in-progress state takes no tone -->
-<span class="tag is-quiet">Pending</span>
-
-<!-- a palette tone brings one; red and yellow must -->
-<span class="tag cn-tone-red">
+<span class="tag cn-tone-danger">
   <svg aria-hidden="true"><!-- cross glyph --></svg>
   Overdue
 </span>

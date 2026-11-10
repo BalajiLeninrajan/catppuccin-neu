@@ -1,12 +1,6 @@
-/* Status glyphs for tags and banners (24-unit grid, stroke =
-   currentColor). No width or height: .tag > svg sets 12px and .banner > svg
-   16px. A .tag or .banner with .cn-tone-danger, -warning, -success or -info
-   and no svg child already draws the matching glyph from --cn-glyph-* in
-   CSS, so these are for the palette tones (.cn-tone-red and the rest),
-   which draw none, and for a status that wants a different shape. A child
-   svg replaces the CSS glyph. A danger or warning tag or banner always
-   leads with a glyph; other tones may. The glyph goes first and is
-   aria-hidden; the word beside it states the status. */
+/* Status glyphs for tags and banners. No width or height: .tag > svg and
+   .banner > svg size them. The glyph goes first and is aria-hidden; the word
+   beside it states the status. */
 
 import type { JSX } from "preact";
 
@@ -68,11 +62,10 @@ export const ScheduledGlyph = () => (
   </svg>
 );
 
-/* The tones whose tags and banners must lead with a glyph. The status
-   names get theirs from CSS; the palette hues need an svg. */
+/* The tones whose tags and banners lead with a glyph. */
 export const NEEDS_GLYPH = new Set(["red", "yellow", "danger", "warning"]);
 
-/* One glyph per .cn-tone-* hue, in the order of TONES. */
+/* One glyph per .cn-tone-* class. */
 export const TONE_GLYPH: Record<string, () => JSX.Element> = {
   red: DangerGlyph,
   green: SuccessGlyph,

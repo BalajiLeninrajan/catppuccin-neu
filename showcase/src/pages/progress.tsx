@@ -14,9 +14,9 @@ export default function ProgressPage() {
   return (
     <Doc
       title="Progress"
-      lede="A borderless inset track with a fill in the --accent ramp. The fill inherits the track's radius, so nothing needs overflow clipping."
+      lede="An inset track with a fill in the --accent ramp."
     >
-      <Demo lead title="Live tracks" why="What you set and how the fill moves" classes="progress-track > span">
+      <Demo title="Live tracks" classes="progress-track > span">
         <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:18px">
           {values.map((v, i) => (
             <div key={LABELS[i]}>
@@ -38,28 +38,10 @@ export default function ProgressPage() {
       </Demo>
 
       <p class="cn-copy">
-        Width is the only thing you set, inline, from data. The fill eases to
-        its new width over .64s and slows into the value. Pair each track
-        with a <code class="cn-code-inline">.stat.is-inline</code> for the label and
-        value above it.
+        Set the fill width inline from data. Pair each track with a <code class="cn-code-inline">.stat.is-inline</code> for the label and the value.
       </p>
 
-      <Demo title="The scale" why="Where the fill color comes from" classes="progress-track">
-        <div style="width:min(460px,100%);display:flex;flex-direction:column;gap:14px">
-          {[8, 25, 50, 75, 100].map((v) => (
-            <div class="progress-track" key={v}>
-              <span style={`width:${v}%`} />
-            </div>
-          ))}
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        The fill is the <code class="cn-code-inline">--accent</code> ramp under grain, mauve by default.
-        On an accent card the bar takes the card's accent.
-      </p>
-
-      <Demo title="Large" why="When to use the large track" classes="progress-track is-lg">
+      <Demo title="Large" classes="progress-track is-lg">
         <div style="width:min(460px,100%)">
           <div class="progress-track is-lg">
             <span style="width:58%" />
@@ -67,12 +49,7 @@ export default function ProgressPage() {
         </div>
       </Demo>
 
-      <p class="cn-copy">
-        <code class="cn-code-inline">.is-lg</code> makes the track 12px tall, for the
-        one bar a page is about: a quota, an upload, a plan limit.
-      </p>
-
-      <Demo title="Custom fill · --progress-fill" why="How to re-key the fill" classes="progress-track">
+      <Demo title="Custom fill · --progress-fill" classes="progress-track">
         <div class="cn-stack cn-gap-16" style="width:min(460px,100%)">
           <div class="cn-stack cn-gap-8">
             <div class="stat is-inline">
@@ -115,40 +92,16 @@ export default function ProgressPage() {
       </Demo>
 
       <p class="cn-copy">
-        Set <code class="cn-code-inline">--progress-fill</code> on the track (or a
-        wrapper) to re-key the fill per instance: any token color or a
-        gradient built from tokens. The fill color never states the status
-        alone. The label and the value beside the bar do.
+        Set <code class="cn-code-inline">--progress-fill</code> on the track to re-key one fill. The fill color never states the status alone. The label and the value beside the bar do.
       </p>
 
       <Props
-        title="Progress classes"
+        title="Classes and tokens"
         rows={[
-          {
-            name: ".progress-track",
-            values: "track",
-            notes:
-              "7px tall, pill radius, crust ground, soft inset. No border: the inset defines it.",
-          },
-          {
-            name: ".progress-track > span",
-            values: "width: 0 to 100%",
-            default: "width: 0",
-            notes:
-              "Block fill; inherits the track radius; fills with var(--progress-fill), then the accent ramp under grain; width transitions over .64s on --ease-out.",
-          },
-          {
-            name: ".progress-track.is-lg",
-            values: "modifier",
-            notes: "12px tall.",
-          },
-          {
-            name: "--progress-fill",
-            values: "token color or token gradient",
-            default: "the accent ramp",
-            notes:
-              "Set on the track or a wrapper to re-key the fill per instance.",
-          },
+          { name: ".progress-track", values: "track", notes: "An inset pill." },
+          { name: ".progress-track > span", values: "width: 0 to 100%", default: "width: 0", notes: "The fill. Set its width inline." },
+          { name: ".progress-track.is-lg", values: "modifier", notes: "12px tall, for the one bar a page is about." },
+          { name: "--progress-fill", values: "a color or a gradient", default: "the accent ramp", notes: "Re-keys the fill for one track." },
         ]}
       />
 

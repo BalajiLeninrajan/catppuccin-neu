@@ -1,122 +1,8 @@
 import { useState } from "preact/hooks";
-import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
+import { Doc, Demo, Props } from "../lib/doc";
 
-const tokensSnippet = `:root {
-  --ease-out:    cubic-bezier(.16, 1, .3, 1);   /* answering the pointer, arriving */
-  --ease-in:     cubic-bezier(.7, 0, .84, 0);   /* leaving */
-  --ease-spring: cubic-bezier(.3, 1.4, .4, 1);  /* returning; the fallback */
-  --t-press: .08s;  /* a press going down */
-  --t-exit:  .14s;  /* an overlay leaving */
-  --t-fast:  .16s;  /* controls */
-  --t-base:  .22s;  /* modals, toasts, checks */
-  --t-slow:  .32s;  /* drawers, folds, page entrance */
-}
-
-/* Where linear() works, the spring is a damped spring with one 8% overshoot */
-@supports (transition-timing-function: linear(0, 1)) {
-  :root {
-    --ease-spring: linear(0, .047, .161, .31, .47, .623, .757, .868, .954, 1.015, 1.054,
-      1.076, 1.083, 1.081, 1.073, 1.061, 1.047, 1.034, 1.023, 1.013, 1.005, 1, .996, .994, 1);
-  }
-}`;
-
-const viewTransitionSnippet = `/* your stylesheet: opt in to cross-document route changes */
-@view-transition { navigation: auto; }
-
-/* the package already times the root cross-fade and the cn-morph
-   groups (tokens.css), and cuts both under reduced motion */
-::view-transition-old(root), ::view-transition-new(root) {
-  animation-duration: var(--t-base);
-  animation-timing-function: var(--ease-out);
-}`;
-
-const morphSnippet = `<!-- the same two names on every route: they morph instead of cross-fading -->
-<section class="panel is-lead cn-morph">…</section>
-<button class="btn btn-primary cn-morph">New invoice</button>`;
-
-const keyframesSnippet = `@keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
-@keyframes spin  { to { transform: rotate(360deg); } }
-@keyframes pulse { 50% { opacity: .45; box-shadow: 0 0 0 7px transparent; } }
-@keyframes blink { 50% { opacity: 0; } }
-@keyframes breathe { to { opacity: .7; } }
-@keyframes cast  { from { box-shadow: 0 0 0 transparent; border-bottom-color: transparent; } }`;
-
-const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    animation-duration: .01ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
-    transition-delay: 0s !important;
-  }
-  :is(.popover, .toast, dialog.modal, dialog.drawer), [data-tip]::after { transition-duration: var(--t-fast) !important; }
-  /* The universal selector does not reach view-transition pseudo-elements,
-     so route cross-fades and morphs are cut here by name. */
-  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01ms !important; animation-delay: 0s !important; }
-  /* A frozen spinner reads as a broken ring, so it keeps a slow spin, and
-     a busy button keeps its spinner turning. */
-  .spinner, .btn[aria-busy="true"]::after {
-    animation-duration: 2.4s !important;
-    animation-iteration-count: infinite !important;
-  }
-  /* The skeleton holds still at its midpoint instead of pulsing. */
-  .skeleton { animation: none !important; opacity: .85; }
-}`;
-
-const arriveSnippet = `/* tokens.css: no stagger, the whole set arrives at once */
-.cn-arrive { transition: opacity var(--t-fast) var(--ease-out), translate var(--t-fast) var(--ease-out); }
-@starting-style { .cn-arrive { opacity: 0; translate: 0 2px; } }
-
-<!-- a row a live list inserts -->
-<tr class="cn-arrive">…</tr>
-
-<!-- content that replaces a skeleton -->
-<div class="cn-arrive">…loaded panel body…</div>`;
-
-const INVOICES = [
-  ["Invoice #1043", "$1,240"],
-  ["Invoice #1044", "$318"],
-  ["Invoice #1045", "$2,905"],
-  ["Invoice #1046", "$76"],
-  ["Invoice #1047", "$4,410"],
-];
-
-/* A live list: each insert arrives with .cn-arrive; a remove leaves at once. */
-function ArriveDemo() {
-  const [rows, setRows] = useState<number[]>([]);
-  const next = rows.length ? Math.max(...rows) + 1 : 0;
-  return (
-    <div class="sc-row cn-gap-16 cn-top">
-      <div class="well cn-px-16 cn-py-8" style="width:min(320px,100%);min-height:64px">
-        {rows.length ? (
-          <div class="cn-divide">
-            {rows.map((i) => (
-              <div key={i} class="stat is-inline cn-arrive">
-                <span>{INVOICES[i % INVOICES.length][0]}</span>
-                <b>{INVOICES[i % INVOICES.length][1]}</b>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p class="cn-meta cn-m-0">No new invoices.</p>
-        )}
-      </div>
-      <div class="cn-stack cn-gap-8">
-        <button type="button" class="btn btn-secondary" onClick={() => setRows([next, ...rows])}>
-          Insert a row
-        </button>
-        <button type="button" class="btn btn-ghost" disabled={!rows.length} onClick={() => setRows(rows.slice(1))}>
-          Remove a row
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* Every curve and duration side by side: identical blocks, each moving
-   24px, all fired by one button. Curves run over --t-slow so the shapes
-   differ visibly; durations run on --ease-out. */
+/* Identical blocks, each moving 24px, all fired by one button. Curves run
+   over --t-slow so the shapes differ; durations run on --ease-out. */
 const CURVES = ["--ease-out", "--ease-in", "--ease-spring"];
 const DURATIONS = [["--t-press", ".08s"], ["--t-exit", ".14s"], ["--t-fast", ".16s"], ["--t-base", ".22s"], ["--t-slow", ".32s"]];
 
@@ -125,7 +11,7 @@ function Track({ label, note, transition, moved }: { label: string; note: string
     <div class="sc-row cn-gap-16">
       <code class="cn-code-inline" style="min-width:13ch">{label}</code>
       <div class="well" style="width:56px;padding:4px">
-        <span style={`display:block;width:16px;height:16px;border-radius:4px;background:var(--cn-fg-soft);transition:${transition};translate:${moved ? "24px" : "0"} 0`} />
+        <span style={`display:block;width:16px;height:16px;border-radius:4px;background:var(--cn-fg-body);transition:${transition};translate:${moved ? "24px" : "0"} 0`} />
       </div>
       <span class="cn-meta">{note}</span>
     </div>
@@ -170,56 +56,32 @@ export default function MotionPage() {
   return (
     <Doc
       title="Motion"
-      lede="Two curves, a spring, five durations and six keyframes, with a reduced-motion block in the tokens. Motion is small and mechanical, and only the spring overshoots."
+      lede="Two curves, a spring and five durations. Motion is small and mechanical, and only the spring overshoots."
     >
-      <h2 class="cn-label">Motion tokens</h2>
-
-      <p class="cn-copy">
-        Every transition in the package rides one of three curves and names
-        one of five durations.
-      </p>
-
-      <Demo lead title="Curves and durations" why="Which curve and duration to pick" classes="--ease-out · --ease-in · --ease-spring · --t-*">
+      <Demo title="Curves and durations" classes="--ease-out · --ease-in · --ease-spring · --t-*">
         <CurvesDemo />
       </Demo>
 
       <p class="cn-copy">
-        Each block travels 24px. The three curves run over{" "}
-        <code class="cn-code-inline">--t-slow</code> and the five durations run
-        on the fast-out. Press Replay again mid-travel: each block turns back
-        from where it is. Every state change in the package is a transition,
-        so it retargets mid-flight. Only page-enter and the loops are
-        keyframes, and those restart.
+        Anything arriving or answering the pointer takes{" "}
+        <code class="cn-code-inline">--ease-out</code>, anything leaving takes{" "}
+        <code class="cn-code-inline">--ease-in</code>, and anything returning
+        takes <code class="cn-code-inline">--ease-spring</code>. A press goes
+        down over <code class="cn-code-inline">--t-press</code> and comes
+        back on the spring.
       </p>
 
-      <p class="cn-copy">
-        Anything answering the pointer or arriving takes{" "}
-        <code class="cn-code-inline">--ease-out</code>. Anything leaving takes{" "}
-        <code class="cn-code-inline">--ease-in</code>. Anything returning takes{" "}
-        <code class="cn-code-inline">--ease-spring</code>, which passes its
-        target once by 8% and settles. Without{" "}
-        <code class="cn-code-inline">linear()</code> easing it falls back to{" "}
-        <code class="cn-code-inline">cubic-bezier(.3, 1.4, .4, 1)</code>.
-        Presses go down on the fast-out over{" "}
-        <code class="cn-code-inline">--t-press</code> and come back on the spring.
-        Overlays leave on the ease-in over <code class="cn-code-inline">--t-exit</code>.
-      </p>
-
-      <CodeBlock title="The tokens (tokens.css)" code={tokensSnippet} />
-
-      <Demo title="Page entrance" why="How the stagger works" classes=".page-enter">
+      <Demo title="Page entrance" classes=".page-enter">
         <PageEnterDemo />
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code-inline">.page-enter</code> runs the{" "}
-        <code class="cn-code-inline">enter</code> keyframe on each of its children,
-        40ms apart. The sixth child and later share the .2s delay. The fill is{" "}
-        <code class="cn-code-inline">backwards</code> only, so no child stays a
-        containing block for fixed descendants such as modals and toasts.
+        <code class="cn-code-inline">.page-enter</code> staggers its
+        children on a view's first render. Nothing else in the package
+        staggers.
       </p>
 
-      <Demo title="Loops" why="The six keyframes" classes="spin · pulse · blink · breathe" row>
+      <Demo title="Loops" classes="spinner · live-dot · caret" row>
         <span class="chip">
           <span class="spinner" aria-hidden="true"></span>
           Syncing
@@ -234,308 +96,43 @@ export default function MotionPage() {
             <span class="caret" aria-hidden="true" />
           </pre>
         </div>
-        <div style="width:160px" aria-hidden="true">
-          <span class="skeleton is-text" />
-          <span class="skeleton is-text" />
-        </div>
       </Demo>
 
-      <p class="cn-copy">
-        All six keyframes live in tokens.css, so any recipe or consumer rule
-        can reference them by name. The table below says what each drives.{" "}
-        <code class="cn-code-inline">cast</code> fades the topbar's shadow in
-        over the first 60px of scroll, where the browser supports a scroll
-        timeline.
-      </p>
-
-      <CodeBlock title="The keyframes (tokens.css)" code={keyframesSnippet} />
-
       <Props
-        title="Keyframes"
+        title="Motion tokens"
         rows={[
-          {
-            name: "enter",
-            values: "opacity 0 → 1, translateY(7px) → none",
-            notes: "Used by .page-enter > * (--t-slow on --ease-out, once, 40ms apart). Fill backwards only.",
-          },
-          {
-            name: "spin",
-            values: "rotate to 360deg",
-            notes: "Used by .spinner, a 16px accent-keyed ring, and the busy button's spinner: .8s linear infinite.",
-          },
-          {
-            name: "pulse",
-            values: "opacity dips to .45, halo collapses at 50%",
-            notes: "Used by .live-dot: 1.5s on --ease-out, infinite.",
-          },
-          {
-            name: "blink",
-            values: "opacity 0 at 50%",
-            notes: "Used by .terminal .caret (.75s steps(2) infinite).",
-          },
-          {
-            name: "breathe",
-            values: "opacity to .5",
-            notes: "Used by .skeleton: 1.6s on --ease-in, infinite, alternate.",
-          },
-          {
-            name: "cast",
-            values: "box-shadow and border-bottom-color from transparent",
-            notes: "Used by .topbar under @supports (animation-timeline: scroll()): linear, both, range 0 to 60px.",
-          },
+          { name: "--ease-out", values: "cubic-bezier(.16, 1, .3, 1)", notes: "Arriving, and answering the pointer." },
+          { name: "--ease-in", values: "cubic-bezier(.7, 0, .84, 0)", notes: "Leaving." },
+          { name: "--ease-spring", values: "one 8% overshoot", notes: "Returning: a released press, the checkbox tick, the switch." },
+          { name: "--t-press", values: ".08s", notes: "A press going down." },
+          { name: "--t-exit", values: ".14s", notes: "An overlay leaving." },
+          { name: "--t-fast", values: ".16s", notes: "Controls, tooltips, table rows, links." },
+          { name: "--t-base", values: ".22s", notes: "Modals, toasts, the checkbox tick, the switch." },
+          { name: "--t-slow", values: ".32s", notes: "Drawers, the accordion fold, the page entrance." },
+          { name: ".page-enter", values: "enter", notes: "Children fade and rise 7px, 40ms apart." },
+          { name: ".spinner", values: "spin", notes: "A 16px ring in --accent, .8s a turn." },
+          { name: ".live-dot", values: "pulse", notes: "A 1.5s pulse." },
+          { name: ".terminal .caret", values: "blink", notes: "Two steps, .75s." },
         ]}
       />
 
-      <h2 class="cn-label">Durations</h2>
-
+      <h2 class="cn-title">Reduced motion</h2>
       <p class="cn-copy">
-        Five duration tokens, tiered by what moves. Controls answer fast and
-        larger structure takes longer. Keyframe loops keep literal durations.
-        The lint fails on any other literal in a transition.
+        Under <code class="cn-code-inline">prefers-reduced-motion: reduce</code>{" "}
+        presses, slides, the fold and the page entrance land at once.
+        Overlays and tooltips still fade in place over{" "}
+        <code class="cn-code-inline">--t-fast</code>, and the spinner keeps a
+        slow 2.4s turn so it does not read as broken.
       </p>
 
-      <Props
-        title="Tiers"
-        rows={[
-          { name: "--t-press (.08s)", values: "the down-press", notes: "Buttons, segments, pressables, the accent card, checkbox and radio, on --ease-out. Up comes back over --t-fast on --ease-spring." },
-          { name: "--t-exit (.14s)", values: "exits", notes: "Every overlay leaving, on --ease-in." },
-          { name: "--t-fast (.16s)", values: "controls, arriving data", notes: "Buttons, inputs, chips, popovers, tooltips, table rows, links, and .cn-arrive. Transform and box-shadow on the spring or the fast-out; color fades plain." },
-          { name: "--t-base (.22s)", values: "modal, backdrop, toast", notes: "Entrances on --ease-out. The checkbox tick lands on the spring and the switch paddle travels in the same time." },
-          { name: "--t-slow (.32s)", values: "drawer, fold, page entrance", notes: "The drawer slide, the accordion fold and .page-enter." },
-          { name: "--t-slow + --t-press (.4s)", values: "tooltip delay", notes: "A pointer crossing a toolbar does not fire a row of tooltips. On leave it lingers for --t-slow so the pointer can reach the bubble." },
-          { name: "--t-slow × 2 (.64s)", values: "progress", notes: "The progress fill's width on --ease-out, slowing into the value." },
-        ]}
-      />
-
-      <Props
-        title="Every component"
-        rows={[
-          { name: ".btn, .segmented > *, a > .accent-card", values: "down: --t-press, --ease-out · back: --t-fast, --ease-spring", notes: "The press. The control travels half its plate offset and the plate shortens with it. A linked chip uses the same pair. Pagination items and sidebar links lift and settle over --t-fast on the spring." },
-          { name: ".btn-text", values: "--t-fast, --ease-out", notes: "The 1px press. Its color fades over --t-fast with no curve named." },
-          { name: ".checkbox, .radio", values: "box: --t-fast, --ease-out · tick: --t-base, --ease-spring", notes: "The box presses on the fast-out and the tick lands on the spring. The radio dot scales over --t-fast on the fast-out." },
-          { name: ".switch", values: "paddle: --t-base, --ease-spring · carve: --t-base, --ease-out", notes: "The paddle travels 23px and overshoots once. Its fill and the plate's carve follow in the same time." },
-          { name: ".slider", values: "thumb: --t-fast, --ease-spring · held: --t-press, --ease-out", notes: "The thumb's scale. It shrinks to .92 while held." },
-          { name: ".field input", values: "--t-base, --ease-out", notes: "The focus ring and the hover hairline, as a box-shadow. Nothing moves." },
-          { name: ".tabs", values: "pill: --t-fast, --ease-out", notes: "The pill slides and resizes to the selected tab. The panel cuts." },
-          { name: ".accordion", values: "fold: --t-slow, --ease-out · chevron: --t-base, --ease-out", notes: "The fold opens through grid-template-rows, so no height is animated. The frame's shadow and border follow over --t-base." },
-          { name: ".data-table tr, .ranked-row", values: "--t-fast, --ease-out", notes: "The row press on hover. The sort chevron turns over --t-base on the fast-out, and the sorted rows cut." },
-          { name: ".progress-track > span", values: "--t-slow × 2, --ease-out", notes: "The fill's width, slowing into the value." },
-          { name: "[data-tip]", values: "--t-fast, --ease-out, after .4s", notes: "Rises 2px into place. On leave it holds for --t-slow, then fades." },
-          { name: ".popover, .menu", values: "in: --t-fast, --ease-out · out: --t-exit, --ease-in", notes: "Fades and drops 4px." },
-          { name: "dialog.modal, ::backdrop", values: "in: --t-base, --ease-out · out: --t-exit, --ease-in", notes: "Fades, rises 8px and scales from .98. The scrim fades with it." },
-          { name: "dialog.drawer", values: "in: --t-slow, --ease-out · out: --t-exit, --ease-in", notes: "Slides in from its edge with no fade." },
-          { name: ".toast", values: "in: --t-base, --ease-out · out: --t-exit, --ease-in", notes: "Fades and slides 16px. The pile closes up over --t-base." },
-          { name: ".cn-arrive", values: "--t-fast, --ease-out", notes: "Loaded content and inserted rows: a fade and a 2px settle, once." },
-          { name: ".page-enter > *", values: "--t-slow, --ease-out, 40ms apart", notes: "A view's first render. The route cross-fade and .cn-morph run over --t-base on the fast-out." },
-          { name: ".spinner, .live-dot, .skeleton, .caret", values: "loops", notes: "Keyframes with literal durations: .8s linear, 1.5s on --ease-out, 1.6s on --ease-in, .75s in two steps." },
-        ]}
-      />
-
-      <p class="cn-copy cn-m-0">
-        A reorder, a removed row, a tab panel and a changed number have no
-        row here because they cut.
-      </p>
-
-      <h2 class="cn-label">Overlay motion contract</h2>
-
+      <h2 class="cn-title">Hiding things</h2>
       <p class="cn-copy">
-        Entrances take <code class="cn-code-inline">--ease-out</code> and exits take{" "}
-        <code class="cn-code-inline">--ease-in</code> over{" "}
-        <code class="cn-code-inline">--t-exit</code>. Modals and drawers are native{" "}
-        <code class="cn-code-inline">&lt;dialog&gt;</code> elements, so they enter
-        through <code class="cn-code-inline">@starting-style</code>. Popovers and
-        toasts stay mounted and toggle the{" "}
-        <code class="cn-code-inline">hidden</code> attribute. Their{" "}
-        <code class="cn-code-inline">[hidden]</code> rule keeps display and
-        drops visibility, so the exit plays.
+        The <code class="cn-code-inline">hidden</code> attribute is{" "}
+        <code class="cn-code-inline">display: none</code>, except on a toast,
+        which plays its exit first. To animate your own element out through{" "}
+        <code class="cn-code-inline">hidden</code>, add{" "}
+        <code class="cn-code-inline">data-cn-animate-hidden</code>.
       </p>
-
-      <Props
-        title="Per-overlay motion"
-        rows={[
-          { name: ".popover", values: "--t-fast", notes: "Fades and drops 4px from above." },
-          { name: "dialog.modal", values: "--t-base", notes: "Fades, rises 8px and scales from .98." },
-          { name: "dialog.drawer", values: "--t-slow", notes: "Slides in from past the right edge; no fade." },
-          { name: "::backdrop", values: "--t-base", notes: "Fades with its dialog. The 2px blur stays." },
-          { name: ".toast", values: "--t-base", notes: "Fades and slides 16px in from the right edge it lives on." },
-        ]}
-      />
-
-      <p class="cn-copy">
-        Each overlay page repeats its row next to its specimens. See{" "}
-        <a href="/popover">
-          Popover &amp; tooltip
-        </a>
-        ,{" "}
-        <a href="/modal">
-          Modal
-        </a>
-        , and{" "}
-        <a href="/drawer">
-          Drawer
-        </a>
-        .
-      </p>
-
-      <h2 class="cn-label">Data changes</h2>
-
-      <p class="cn-copy">
-        Data moves less than chrome. A reader is comparing numbers.
-      </p>
-
-      <Props
-        title="When data changes"
-        rows={[
-          { name: "progress", values: "--t-slow × 2, --ease-out", notes: "The bar eases to its new width and slows into the value." },
-          { name: "a changed number", values: "swaps in place", notes: "Values are tabular, so the width holds. Never count up or tween a figure." },
-          { name: ".cn-arrive", values: "--t-fast, --ease-out", notes: "Content that replaces a skeleton, and a row a live list inserts: a fade and a 2px settle. The whole set arrives at once." },
-          { name: "a removed row", values: "leaves at once", notes: "A dismissed toast or a closed overlay is the only exit that animates." },
-          { name: "a reorder the reader asked for", values: "cuts", notes: "A sort, a filter or a new page swaps with no motion." },
-          { name: "a tab change", values: "cuts; the pill slides", notes: "The tab panel cuts. The selected tab's pill slides over --t-fast on the ease-out." },
-          { name: "a filter that empties a table", values: "cuts", notes: "The table cuts to the .empty-state with no .cn-arrive." },
-          { name: "a reorder from elsewhere", values: "--t-base, --ease-out", notes: "May use a view transition with a view-transition-name per row." },
-          { name: "a layout the reader opened", values: "follows the reader", notes: "A panel that grows because the reader opened something moves with them, like the accordion fold." },
-          { name: "a layout that shifts on its own", values: "--t-base, view transition", notes: "A column appears or a banner lands above content. Name the moving regions with view-transition-name and run a view transition." },
-          { name: "width or height on a box of text", values: "never animates", notes: "Use a view transition, or the accordion's grid-template-rows fold." },
-          { name: ".page-enter", values: "the one stagger", notes: "A view's first render only. Five steps 40ms apart, then the rest together. Its exit is the route cross-fade over --t-base." },
-        ]}
-      />
-
-      <p class="cn-copy">
-        Three of these rules run live on their own pages: the progress fill
-        on{" "}
-        <a href="/progress">
-          Progress
-        </a>
-        , a number swapping in place on{" "}
-        <a href="/bar-chart">
-          Bar chart
-        </a>
-        , and a sort that cuts on{" "}
-        <a href="/table">
-          Table
-        </a>
-        .
-      </p>
-
-      <Demo title="A live list" why="How data changes move" classes="cn-arrive">
-        <ArriveDemo />
-      </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code-inline">.cn-arrive</code> enters through{" "}
-        <code class="cn-code-inline">@starting-style</code>, so it runs once when
-        the element first renders and never again on an update. Put it on
-        the inserted row or the loaded block, not on the list around it.
-      </p>
-
-      <p class="cn-copy">
-        When the layout shifts on its own, such as a column appearing or a
-        banner landing above the content, give the moving regions a{" "}
-        <code class="cn-code-inline">view-transition-name</code> and wrap the
-        change in <code class="cn-code-inline">document.startViewTransition()</code>{" "}
-        at <code class="cn-code-inline">--t-base</code>. Never animate width or
-        height on a box that holds text.
-      </p>
-
-      <CodeBlock
-        title="A banner that lands above content"
-        code={`/* name the regions that move */
-#sync-banner { view-transition-name: sync-banner; }
-#invoices    { view-transition-name: invoices; }
-::view-transition-group(*) { animation-duration: var(--t-base); animation-timing-function: var(--ease-out); }
-
-/* then make the change inside a transition */
-document.startViewTransition(() => showBanner());`}
-      />
-
-      <CodeBlock title=".cn-arrive (tokens.css)" code={arriveSnippet} />
-
-      <h2 class="cn-label">Route changes</h2>
-
-      <p class="cn-copy">
-        A multi-page site can opt in to a cross-fade between pages with{" "}
-        <code class="cn-code-inline">@view-transition {"{ navigation: auto; }"}</code>{" "}
-        in its own CSS. The package does not opt in for you. It times the
-        root cross-fade and the <code class="cn-code-inline">.cn-morph</code>{" "}
-        groups, both at <code class="cn-code-inline">--t-base</code> on{" "}
-        <code class="cn-code-inline">--ease-out</code>, and cuts both under
-        reduced motion. A single-page app calls{" "}
-        <code class="cn-code-inline">document.startViewTransition</code> around
-        the route change, behind a check that the browser has it. The
-        cross-fade is the exit that pairs with{" "}
-        <code class="cn-code-inline">.page-enter</code>. There is no staggered
-        exit.
-      </p>
-
-      <p class="cn-copy">
-        To morph what both pages share, add{" "}
-        <code class="cn-code-inline">.cn-morph</code> to the lead panel and to
-        the page's one primary on every route. It names them{" "}
-        <code class="cn-code-inline">cn-lead</code> and{" "}
-        <code class="cn-code-inline">cn-primary</code>. Two elements with one{" "}
-        <code class="cn-code-inline">view-transition-name</code> abort the
-        whole transition, so put it on one primary per page. To see it, go
-        from the <a href="/examples/dashboard">dashboard example</a> to the{" "}
-        <a href="/examples/invoice">invoice example</a>.
-      </p>
-
-      <CodeBlock title="Opting in" code={viewTransitionSnippet} />
-
-      <CodeBlock title="Morphing the lead and the primary" code={morphSnippet} />
-
-      <h2 class="cn-label">Reduced motion</h2>
-
-      <p class="cn-copy">
-        Reduced motion removes movement, not feedback. Presses, slides, the
-        fold and the page entrance land at once, and scroll-behavior goes
-        auto. The live dot stops on its first frame.
-      </p>
-
-      <p class="cn-copy">
-        Three things keep moving. Popovers, toasts, dialogs, drawers and
-        tooltips still fade over <code class="cn-code-inline">--t-fast</code>,
-        in place. The spinner and a busy button keep a slow 2.4s spin. The
-        skeleton holds still at the midpoint of its breath.
-      </p>
-
-      <CodeBlock title="Reduced motion (tokens.css)" code={reducedMotionSnippet} />
-
-      <h2 class="cn-label">Visibility</h2>
-
-      <p class="cn-copy">
-        The tokens reset sets <code class="cn-code-inline">[hidden]</code> to{" "}
-        <code class="cn-code-inline">display: none !important</code>. Two cases
-        are left out: <code class="cn-code-inline">hidden="until-found"</code>,
-        and the popover and toast, which animate out and keep their own{" "}
-        <code class="cn-code-inline">[hidden]</code> rules. A consumer element
-        that animates out through <code class="cn-code-inline">[hidden]</code>{" "}
-        opts out with <code class="cn-code-inline">data-cn-animate-hidden</code>.
-      </p>
-
-      <p class="cn-copy">
-        <code class="cn-code-inline">.cn-sr-only</code> clips content out of the
-        visual layout but leaves it in the accessibility tree. Use it to label
-        icon-only controls. <code class="cn-code-inline">.cn-hidden</code> is{" "}
-        <code class="cn-code-inline">display: none !important</code>. Never
-        compose it onto an overlay, because it skips the exit animation.
-      </p>
-
-      <Props
-        title="Visibility"
-        rows={[
-          {
-            name: ".cn-sr-only",
-            values: "clip pattern",
-            notes: "Visually hidden, still announced. Clipped, not hidden.",
-          },
-          {
-            name: ".cn-hidden",
-            values: "display: none !important",
-            notes: "Removed from layout and the accessibility tree. Skips overlay exit animations; use the hidden attribute there instead.",
-          },
-        ]}
-      />
     </Doc>
   );
 }

@@ -42,36 +42,28 @@ export default function CommandPage() {
   return (
     <Doc
       title="Command"
-      lede="A copyable command line: a carved well, one command in mono, a prompt glyph, and an icon button that copies it and turns green for a moment."
+      lede="A copyable command line in a carved well."
     >
-      <Demo lead title="The command" why="The well and the copy control" classes="command · command-text · command-prompt · command-copy">
+      <Demo title="The command" classes="command · command-text · command-prompt · command-copy">
         <Command text="npx catppuccin-neu-sync public/styles" />
       </Demo>
 
-      <p class="cn-copy">
-        The well shares the terminal's inset and the{" "}
-        <code class="cn-code-inline">--cn-surface-sunken</code> fill, with
-        ligatures off, so the command copies as it reads. The copy control
-        is the icon button with <code class="cn-code-inline">--tone</code> set to
-        mauve.
-      </p>
-
       <Demo title="Full width" classes="command is-full">
         <div style="width:100%">
-          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v1.0.0" full />
+          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v2.0.0" full />
         </div>
       </Demo>
 
       <Props
-        title="Contract"
+        title="Classes"
         rows={[
-          { name: ".command", values: "div", notes: "min(480px, 100%) wide, 50px tall at every density, the card radius (12px), --cn-surface-sunken fill, --cn-well-ring over --neu-inset. Ligatures off." },
+          { name: ".command", values: "div", notes: "A carved well that holds one command." },
           { name: ".command.is-full", values: "modifier", notes: "Fills its container." },
-          { name: ".command.is-wrap", values: "modifier", notes: "A long statement wraps instead of scrolling." },
-          { name: ".command-text", values: "code", notes: "Mono 500 14px, tabular. Scrolls sideways with no scrollbar when the command is longer than the well." },
-          { name: ".command-prompt", values: "span", notes: "The $ in mauve, unselectable so a copy never carries it." },
-          { name: ".command-copy", values: "button.btn.is-icon", notes: "Both glyphs in the markup; .copy-glyph shows at rest, .done-glyph while the command is .is-copied." },
-          { name: ".is-copied", values: "state on .command", notes: "Set by the consumer for a moment after a copy. The control turns green." },
+          { name: ".command.is-wrap", values: "modifier", notes: "A long command wraps instead of scrolling." },
+          { name: ".command-text", values: "code", notes: "The command." },
+          { name: ".command-prompt", values: "span", notes: "The $. A copy never carries it." },
+          { name: ".command-copy", values: "button.btn.is-icon", notes: "Holds .copy-glyph and .done-glyph." },
+          { name: ".is-copied", values: "state on .command", notes: "Set it for a moment after a copy. The control turns green." },
         ]}
       />
 

@@ -79,66 +79,23 @@ export default function DrawerPage() {
   return (
     <Doc
       title="Drawer"
-      lede="A side sheet pinned to the right edge, for settings, detail views and forms that outgrow a modal. It is a native <dialog>, so the platform handles focus, Escape and the scrim."
+      lede="A side sheet on a native <dialog>, for settings, detail views and forms that outgrow a modal."
     >
-      <p class="cn-copy">
-        Put <code class="cn-code-inline">.drawer</code> on a{" "}
-        <code class="cn-code-inline">&lt;dialog&gt;</code> and open it with{" "}
-        <code class="cn-code-inline">showModal()</code>.
-      </p>
-
-      <Demo lead title="Live demo" why="Markup, layout and motion" classes="dialog.drawer">
+      <Demo title="Live demo" classes="dialog.drawer">
         <DrawerDemo />
       </Demo>
 
       <p class="cn-copy">
-        The sheet is the full viewport height with square corners and one
-        hairline on the left. Its{" "}
-        <code class="cn-code-inline">header</code> is the shared band, and the
-        footer is <code class="cn-code-inline">.panel-footer</code>. The sheet
-        is a flex column that scrolls as a whole. Push the footer down with{" "}
-        <code class="cn-code-inline">margin-top: auto</code>.
-      </p>
-
-      <p class="cn-copy">
-        The drawer slides in from past the right edge over{" "}
-        <code class="cn-code-inline">--t-slow</code> and the backdrop fades with
-        it. Under reduced motion the drawer fades in place.
+        Open it with <code class="cn-code-inline">showModal()</code>. The sheet is a flex column, so push the footer down with <code class="cn-code-inline">margin-top: auto</code>.
       </p>
 
       <Props
-        title="Contract"
+        title="Classes"
         rows={[
-          {
-            name: "dialog.drawer",
-            values: "showModal() / close()",
-            default: "·",
-            notes: "width min(420px, 100vw - 40px), full height, right-pinned flex column, --cn-surface-overlay fill on --shadow-pop.",
-          },
-          {
-            name: ".drawer > header",
-            values: "title and close control",
-            default: "·",
-            notes: "The shared band: --band-h tall, --band-pad, on the sheet's overlay fill with an --edge-soft bottom divider.",
-          },
-          {
-            name: "footer band",
-            values: ".panel-footer",
-            default: "·",
-            notes: "No fill; the divider separates it. margin-top: auto pins it down.",
-          },
-          {
-            name: "border-inline-start",
-            values: "1px solid var(--edge-strong)",
-            default: "·",
-            notes: "The one hairline. It follows the writing direction. The drawer itself stays pinned right.",
-          },
-          {
-            name: "::backdrop",
-            values: "the scrim",
-            default: "·",
-            notes: "Crust at 80% with a 2px blur. Under reduced transparency the blur goes and the crust deepens to 88%.",
-          },
+          { name: "dialog.drawer", values: "showModal() / close()", notes: "Full height, pinned to the right edge." },
+          { name: ".drawer > header", values: "title and close control", notes: "The shared band." },
+          { name: ".drawer > footer.panel-footer", values: "action row", notes: "margin-top: auto pins it down." },
+          { name: "::backdrop", values: "the scrim", notes: "Drawn by the recipe." },
         ]}
       />
 

@@ -37,10 +37,9 @@ const money = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigi
 type SortKey = "name" | "amount";
 type Dir = "ascending" | "descending";
 
-/* Sortable, selectable table. aria-sort and aria-selected are the style hooks. */
+/* Sortable table. aria-sort is the style hook. */
 function SubscriptionsTable() {
   const [sort, setSort] = useState<{ key: SortKey; dir: Dir }>({ key: "amount", dir: "descending" });
-  const [selected, setSelected] = useState<string[]>(["Jonah Reyes"]);
 
   const rows = [...ROWS].sort((a, b) => {
     const d = sort.key === "amount" ? a.amount - b.amount : a.name.localeCompare(b.name);
@@ -49,20 +48,17 @@ function SubscriptionsTable() {
   const sortBy = (key: SortKey) =>
     setSort((s) => ({ key, dir: s.key === key && s.dir === "ascending" ? "descending" : "ascending" }));
   const ariaSort = (key: SortKey) => (sort.key === key ? sort.dir : "none");
-  const toggle = (name: string) =>
-    setSelected((s) => (s.includes(name) ? s.filter((n) => n !== name) : [...s, name]));
 
   return (
     <table class="data-table">
       <thead>
         <tr>
-          <th scope="col"><span class="cn-sr-only">Select</span></th>
           <th scope="col" aria-sort={ariaSort("name")}>
             <button type="button" onClick={() => sortBy("name")}>Customer</button>
           </th>
           <th scope="col">Plan</th>
           <th scope="col">Status</th>
-          <th scope="col" class="is-num" aria-sort={ariaSort("amount")}>
+          <th scope="col" aria-sort={ariaSort("amount")}>
             <button type="button" onClick={() => sortBy("amount")}>Amount</button>
           </th>
           <th scope="col">Renews</th>
@@ -70,25 +66,21 @@ function SubscriptionsTable() {
       </thead>
       <tbody>
         {rows.map((r) => {
-          const on = selected.includes(r.name);
           const Glyph = TONE_GLYPH[r.tone];
           return (
-            <tr key={r.email} aria-selected={on ? "true" : undefined}>
-              <td class="cell-select">
-                <input type="checkbox" class="checkbox" checked={on} onChange={() => toggle(r.name)} aria-label={`Select ${r.name}`} />
-              </td>
+            <tr key={r.email}>
               <td class="cell-name">
                 <strong>{r.name}</strong>
                 <small>{r.email}</small>
               </td>
               <td data-label="Plan">{r.plan}</td>
-              <td class="is-trail" data-label="Status">
+              <td data-label="Status">
                 <span class={`tag cn-tone-${r.tone}`}>
                   <Glyph />
                   {r.status}
                 </span>
               </td>
-              <td class="is-num is-trail" data-label="Amount"><strong>{money(r.amount)}</strong></td>
+              <td data-label="Amount"><strong>{money(r.amount)}</strong></td>
               <td data-label="Renews">{r.renews}</td>
             </tr>
           );
@@ -98,71 +90,15 @@ function SubscriptionsTable() {
   );
 }
 
-/* A table while its rows load. The head and the row count stay, each cell
-   holds a text skeleton sized to its column, and the loaded rows take
-   .cn-arrive, so the whole set lands at once. */
-function LoadingTable() {
-  const [loading, setLoading] = useState(true);
-
-  return (
-    <div class="cn-stack cn-gap-16" style="width:100%">
-      <div class="panel">
-        <table class="data-table" aria-busy={loading ? "true" : "false"}>
-          <thead>
-            <tr>
-              <th scope="col">Customer</th>
-              <th scope="col">Plan</th>
-              <th scope="col" class="is-num">Amount</th>
-              <th scope="col">Renews</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ROWS.map((r) =>
-              loading ? (
-                <tr key={`${r.email}-loading`}>
-                  <td class="cell-name">
-                    <span class="skeleton is-text" style="width:9rem" aria-hidden="true" />
-                    <span class="skeleton is-text" style="width:11rem" aria-hidden="true" />
-                  </td>
-                  <td data-label="Plan"><span class="skeleton is-text" style="width:5rem" aria-hidden="true" /></td>
-                  <td class="is-num" data-label="Amount"><span class="skeleton is-text" style="width:4.5rem;margin-inline-start:auto" aria-hidden="true" /></td>
-                  <td data-label="Renews"><span class="skeleton is-text" style="width:3.5rem" aria-hidden="true" /></td>
-                </tr>
-              ) : (
-                <tr key={r.email} class="cn-arrive">
-                  <td class="cell-name">
-                    <strong>{r.name}</strong>
-                    <small>{r.email}</small>
-                  </td>
-                  <td data-label="Plan">{r.plan}</td>
-                  <td class="is-num" data-label="Amount"><strong>{money(r.amount)}</strong></td>
-                  <td data-label="Renews">{r.renews}</td>
-                </tr>
-              ),
-            )}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <button type="button" class="btn btn-secondary" onClick={() => setLoading(!loading)}>
-          {loading ? "Show rows" : "Show loading"}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export default function TablePage() {
   return (
     <Doc
       title="Table"
-      lede="An opt-in class on a plain <table>. The recipe scopes all table styling, so bare tables elsewhere stay untouched."
+      lede="An opt-in class on a plain <table>. Bare tables stay untouched."
     >
       <Demo
-        lead
-        title="Sortable, selectable"
-        classes='data-table · th[aria-sort] > button · tr[aria-selected="true"] · .is-num'
-        why="Sorting, selection, cell weights and numeric columns"
+        title="Sortable"
+        classes="data-table · th[aria-sort] > button · td.cell-name · td[data-label]"
       >
         <div style="width:100%">
           <SubscriptionsTable />
@@ -170,55 +106,16 @@ export default function TablePage() {
       </Demo>
 
       <p class="cn-copy">
-        A sortable column is a <code class="cn-code-inline">button</code> inside{" "}
-        <code class="cn-code-inline">th[aria-sort]</code>. The chevron shows the
-        direction and hides while the column is unsorted. A selected row
-        takes <code class="cn-code-inline">aria-selected="true"</code> and the
-        engaged wash. A selectable row needs a checkbox in a{" "}
-        <code class="cn-code-inline">td.cell-select</code>, so the selection
-        never rests on the fill alone. Hovering a row presses it in on mauve at{" "}
-        <code class="cn-code-inline">--cn-step-row</code>, a step under a
-        selected row.
+        A sortable column is a <code class="cn-code-inline">button</code> inside <code class="cn-code-inline">th[aria-sort]</code>. Set <code class="cn-code-inline">aria-sort</code> to <code class="cn-code-inline">ascending</code>, <code class="cn-code-inline">descending</code> or <code class="cn-code-inline">none</code>.
       </p>
 
       <p class="cn-copy">
-        <code class="cn-code-inline">.cell-name</code> marks the name column:{" "}
-        <code class="cn-code-inline">&lt;strong&gt;</code> is the primary line at 600,{" "}
-        <code class="cn-code-inline">&lt;small&gt;</code> the secondary under it. Each
-        is a block, so the cell needs no <code class="cn-code-inline">&lt;br&gt;</code>. Other cells
-        are 400 at <code class="cn-code-inline">--cell-font-size</code>. Wrap a
-        key figure, such as an amount, in{" "}
-        <code class="cn-code-inline">&lt;strong&gt;</code> and it takes 500 in{" "}
-        <code class="cn-code-inline">--cn-fg</code>. Status goes in a{" "}
-        <code class="cn-code-inline">.tag</code> whose word states it, such as
-        "Past due".
-      </p>
-
-      <p class="cn-copy">
-        Put <code class="cn-code-inline">.is-num</code> on the{" "}
-        <code class="cn-code-inline">th</code> and every{" "}
-        <code class="cn-code-inline">td</code> of a numeric column, like Amount
-        above. Figures align on the right edge. A sortable numeric header
-        reverses its button, so the label sits flush right with the figures.
-      </p>
-
-      <h2 class="cn-title">Phone mode</h2>
-      <p class="cn-copy">
-        At 760px and below the header row drops and each row becomes a stack
-        of label and value lines. Give every data cell a{" "}
-        <code class="cn-code-inline">data-label</code>, which becomes the line's
-        label. A cell without the attribute, such as the name, spans the row. A{" "}
-        <code class="cn-code-inline">td.cell-select</code> checkbox rides at the row's
-        end. Mark the cells a reader scans for with{" "}
-        <code class="cn-code-inline">td.is-trail</code>, such as the amount and
-        the status. They leave the stack and ride beside the name. Narrow
-        this window to see the table above switch.
+        At 760px and below each row becomes a stack of label and value lines. Give every data cell a <code class="cn-code-inline">data-label</code>. A cell without one, such as the name, spans the row.
       </p>
 
       <Demo
-        title="Opting out: a scrolling table"
+        title="A scrolling table"
         classes="table-scroll > data-table.is-sticky-head"
-        why="When a table should scroll instead of stacking"
       >
         <div class="panel" style="width:100%">
           <div class="table-scroll" style="max-height:240px" tabIndex={0} role="region" aria-label="Events">
@@ -228,7 +125,7 @@ export default function TablePage() {
                   <th scope="col">Time</th>
                   <th scope="col">Event</th>
                   <th scope="col">Subject</th>
-                  <th scope="col" class="is-num">Amount</th>
+                  <th scope="col">Amount</th>
                 </tr>
               </thead>
               <tbody>
@@ -237,7 +134,7 @@ export default function TablePage() {
                     <td><code class="cn-code-inline">{time}</code></td>
                     <td><code class="cn-code-inline">{event}</code></td>
                     <td>{subject}</td>
-                    <td class="is-num">{amount === "·" ? amount : <strong>{amount}</strong>}</td>
+                    <td>{amount === "·" ? amount : <strong>{amount}</strong>}</td>
                   </tr>
                 ))}
               </tbody>
@@ -247,79 +144,10 @@ export default function TablePage() {
       </Demo>
 
       <p class="cn-copy">
-        Inside <code class="cn-code-inline">.table-scroll</code>, a table with no{" "}
-        <code class="cn-code-inline">data-label</code> cells stays a table at every
-        width and scrolls sideways inside its wrapper. Use it for logs and
-        wide numeric grids. <code class="cn-code-inline">.is-sticky-head</code>{" "}
-        pins the header to the top of the nearest scroll container. The
-        wrapper only scrolls vertically when it has a height limit, so give
-        it a <code class="cn-code-inline">max-height</code>.
+        Inside <code class="cn-code-inline">.table-scroll</code>, a table with no <code class="cn-code-inline">data-label</code> cells stays a table at every width and scrolls sideways. Give the wrapper a <code class="cn-code-inline">max-height</code> so the sticky head can pin.
       </p>
 
-      <Demo
-        title="Inline edit: a field in a cell"
-        classes='table-scroll > data-table > td > input[aria-labelledby]'
-        why="How a cell field gets its name and its bounds"
-      >
-        <div class="panel" style="width:min(560px,100%)">
-          <div class="table-scroll">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th scope="col" id="seat-team">Team</th>
-                  <th scope="col" id="seat-count" class="is-num">Seats</th>
-                  <th scope="col" id="seat-owner">Billing contact</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[["Payments", "14", "maya@example.com"], ["Support", "9", "jonah@example.com"], ["Identity", "6", ""]].map(([team, seats, owner], i) => (
-                  <tr key={team}>
-                    <td id={`seat-row-${i}`}>{team}</td>
-                    <td class="is-num">
-                      <input class="input" type="number" inputMode="numeric" value={seats} aria-labelledby={`seat-count seat-row-${i}`} style="max-width:6rem;text-align:end" />
-                    </td>
-                    <td>
-                      <input class="input" type="email" value={owner} placeholder="name@example.com" aria-labelledby={`seat-owner seat-row-${i}`} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </Demo>
-
-      <p class="cn-copy">
-        An <code class="cn-code-inline">.input</code> in a cell is the inline
-        edit, at the small control height with the soft carve. A cell field
-        has no label above it, so name it from the column header and the row
-        through <code class="cn-code-inline">aria-labelledby</code>.
-      </p>
-
-      <Demo
-        title="Loading rows"
-        classes='data-table[aria-busy="true"] > td > skeleton is-text · tr.cn-arrive'
-        why="What a loading table keeps, and how an optimistic row lands"
-      >
-        <LoadingTable />
-      </Demo>
-
-      <p class="cn-copy">
-        A loading table keeps its head and its row count. Set{" "}
-        <code class="cn-code-inline">aria-busy="true"</code> on the table and
-        put a <code class="cn-code-inline">.skeleton.is-text</code> in each
-        cell, sized to the column and hidden from assistive tech. The loaded
-        rows take <code class="cn-code-inline">.cn-arrive</code> and arrive
-        together.
-      </p>
-
-      <p class="cn-copy">
-        An optimistic row shows at once, with the values the reader entered
-        and no skeleton. If the save fails, the row leaves at once and a
-        toast or a banner says why.
-      </p>
-
-      <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child" why="What the mark's number and color mean">
+      <Demo title="Ranked rows" classes="ranked-row / panel > ranked-row:last-child">
         <div class="panel" style="width:min(560px,100%)">
           <div class="panel-header">
             <h2>Top teams</h2>
@@ -337,31 +165,17 @@ export default function TablePage() {
         </div>
       </Demo>
 
-      <p class="cn-copy">
-        <code class="cn-code-inline">.ranked-row</code> is the ordered-list line: a
-        rank mark, a name, a trailing value. The number is the rank. The
-        mark's color is the team's own accent, so it does not change when the
-        ranking does.
-      </p>
-
       <Props
-        title="Table classes"
+        title="Classes"
         rows={[
-          { name: ".data-table", values: "on <table>", contrast: "Header rule 1.85:1 on a panel · row rules 1.3:1", notes: "Scopes all table styling. Sans tabular body at 400 and --cell-font-size (14px, 13px compact), a --cn-surface-band header at 500, surface-0 rules between rows. A tag, a chip or a small button in a cell follows --cell-font-size. Cell padding is --cell-pad." },
-          { name: "td strong", values: "a key figure", notes: "An amount or another figure a reader scans for: 500 in --cn-fg." },
-          { name: ".is-num", values: "on th and td", notes: "Right-aligns a numeric column. On a sortable header the button reverses, so the label meets the right edge." },
-          { name: ".cell-name", values: "on <td>", notes: "strong is the 600 primary line; small is the quiet secondary line under it. Both are blocks, so no <br>." },
-          { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "Sort control with a direction chevron and a focus ring. The chevron hides while unsorted." },
-          { name: 'tr[aria-selected="true"]', values: "state", notes: "The wash and a deeper press. Required: a checkbox in a td.cell-select on every selectable row." },
-          { name: "tbody tr:hover", values: "state", contrast: "Fill 1.39:1 on a panel · cell text 8.2:1 on it", notes: "The row presses in on mauve at --cn-step-row, a step under a selected row. Cell text steps from --cn-fg-soft to --cn-fg." },
-          { name: "td .input", values: "inline edit", notes: "--control-h-sm, 12px inline padding and --neu-inset-soft. Name it with aria-labelledby pointing at the column header and the row's name cell." },
-          { name: '.data-table[aria-busy="true"]', values: "loading", notes: "No style of its own. Keep the head and the row count, and put a .skeleton.is-text with aria-hidden in each cell. The loaded rows take .cn-arrive." },
-          { name: "td[data-label]", values: "attribute", notes: "The line's label in phone mode at 760px and below." },
-          { name: "td.cell-select", values: "on <td>", notes: "A row-select checkbox cell. In phone mode it floats to the row's end instead of taking a line." },
-          { name: "td.is-trail", values: "on <td>", notes: "Phone mode only: the cell leaves the label stack and rides beside the name. Keep its data-label for the desktop header." },
-          { name: ".table-scroll", values: "wrapper", notes: "Opts a table with no data-label cells out of phone mode. The table scrolls sideways inside it. Panel corner rules reach through it." },
-          { name: ".data-table.is-sticky-head", values: "modifier", notes: "Header pinned to the top of the scroll container, ruled with an inset shadow. The wrapper needs a max-height to scroll vertically." },
-          { name: ".ranked-row", values: "mark + strong + b", notes: "Flex row, hairline divider, same hover press. The .mark shrinks to a 22px key at 14px. b right-aligns the value." },
+          { name: ".data-table", values: "on <table>", notes: "Scopes all table styling." },
+          { name: ".cell-name", values: "on <td>", notes: "strong is the primary line, small the line under it." },
+          { name: "td strong", values: "a key figure", notes: "Heavier, in the full text color." },
+          { name: "th[aria-sort] > button", values: "ascending / descending / none", notes: "A sort control with a direction chevron." },
+          { name: "td[data-label]", values: "attribute", notes: "The line label at 760px and below." },
+          { name: ".table-scroll", values: "wrapper", notes: "Keeps a table with no data-label cells a table on phones." },
+          { name: ".data-table.is-sticky-head", values: "modifier", notes: "Pins the header. The wrapper needs a max-height." },
+          { name: ".ranked-row", values: "mark + strong + b", notes: "A rank mark, a name and a trailing value." },
         ]}
       />
 
@@ -370,31 +184,21 @@ export default function TablePage() {
         code={`<table class="data-table">
   <thead>
     <tr>
-      <th scope="col"><span class="cn-sr-only">Select</span></th>
       <th scope="col" aria-sort="ascending"><button type="button">Customer</button></th>
       <th scope="col">Status</th>
-      <th scope="col" class="is-num" aria-sort="none"><button type="button">Amount</button></th>
+      <th scope="col" aria-sort="none"><button type="button">Amount</button></th>
     </tr>
   </thead>
   <tbody>
-    <!-- a selectable row always carries its checkbox -->
-    <tr aria-selected="true">
-      <td class="cell-select"><input type="checkbox" class="checkbox" checked aria-label="Select Maya Okafor"></td>
+    <tr>
       <td class="cell-name">
         <strong>Maya Okafor</strong>
         <small>maya@example.com</small>
       </td>
-      <td data-label="Status"><span class="tag cn-tone-success">Active</span></td>
-      <td class="is-num" data-label="Amount">$1,240.00</td>
-    </tr>
-    <tr>
-      <td class="cell-select"><input type="checkbox" class="checkbox" aria-label="Select Theo Lindqvist"></td>
-      <td class="cell-name"><strong>Theo Lindqvist</strong><small>theo@example.com</small></td>
-      <!-- danger and warning tags lead with a glyph -->
       <td data-label="Status">
-        <span class="tag cn-tone-danger"><svg aria-hidden="true">…</svg>Past due</span>
+        <span class="tag cn-tone-success"><svg aria-hidden="true">…</svg>Active</span>
       </td>
-      <td class="is-num" data-label="Amount">$24.00</td>
+      <td data-label="Amount"><strong>$1,240.00</strong></td>
     </tr>
   </tbody>
 </table>

@@ -12,19 +12,6 @@
   box-shadow: var(--neu-raised);
 }
 .panel .panel { box-shadow: var(--neu-raised-soft), var(--cn-lit-edge); }
-/* The lead panel: the one a view is about, one per view. */
-.panel.is-lead {
-  border-color: var(--edge-strong);
-  box-shadow: var(--neu-lifted);
-}
-@media (prefers-contrast: more) {
-  .panel { border-color: var(--edge); }
-  .panel.is-lead { border-color: var(--edge-strong); }
-}
-/* :where() holds the toggle to the weight of the media-query rules, so a
-   border color composed onto a panel wins the same way in both modes. */
-:where(:root[data-contrast="more"]) .panel { border-color: var(--edge); }
-:where(:root[data-contrast="more"]) .panel.is-lead { border-color: var(--edge-strong); }
 
 /* The one rotated hero card. It stands on the rest plate. Its prose size
    rides on the body token because .cn-copy is a utility and outranks any
@@ -40,7 +27,7 @@
 
 /* Bands: the panel header and footer, and the modal and drawer headers.
    A filled child at a panel edge follows the parent radius minus the 1px
-   border. Never use overflow: hidden, which clips popovers and plates. */
+   border. Never use overflow: hidden, which clips tooltips and plates. */
 .panel-header, .panel-footer, .modal > header, .drawer > header {
   min-height: var(--band-h);
   padding: var(--band-pad);
@@ -60,19 +47,6 @@
   margin: 0;
   font: var(--cn-type-title-weight) var(--band-title-size)/var(--cn-type-title-leading) var(--sans);
   letter-spacing: var(--cn-type-title-tracking);
-}
-.panel.is-lead > .panel-header :is(h2, h3) {
-  font-size: var(--lead-title-size);
-  font-weight: var(--cn-type-heading-weight);
-  letter-spacing: var(--cn-type-heading-tracking);
-}
-.panel.is-lead > .panel-header { min-height: var(--lead-band-h); }
-.panel.is-lead > :is(.panel-header, .panel-footer) { padding-inline: var(--lead-pad); }
-.panel.is-lead > .panel-body { padding: var(--lead-pad); }
-/* A table that fills the lead panel insets its outer columns to --lead-pad. */
-@media (min-width: 761px) {
-  :is(.panel.is-lead > .data-table, .panel.is-lead > :is(.table-scroll, [role="tabpanel"]) > .data-table, .panel.is-lead > [role="tabpanel"] > .table-scroll > .data-table) :is(th, td):first-child { padding-inline-start: var(--lead-pad); }
-  :is(.panel.is-lead > .data-table, .panel.is-lead > :is(.table-scroll, [role="tabpanel"]) > .data-table, .panel.is-lead > [role="tabpanel"] > .table-scroll > .data-table) :is(th, td):last-child { padding-inline-end: var(--lead-pad); }
 }
 /* A band with a .band-actions cluster wraps when the actions outgrow the row. */
 :is(.panel-header, .modal > header, .drawer > header):has(> .band-actions) { flex-wrap: wrap; row-gap: var(--space-2); }
@@ -105,7 +79,7 @@
 
 /* Well: an inset container. The ring is listed before the carve so it
    paints over the dark wall. */
-.well {
+.well, .terminal, .codeblock, .command {
   border-radius: var(--cn-radius-card);
   background: var(--cn-surface-sunken);
   box-shadow: var(--cn-well-ring), var(--neu-inset);
@@ -115,10 +89,7 @@
 }
 
 .terminal, .codeblock, .command {
-  border-radius: var(--cn-radius-card);
-  background: var(--cn-surface-sunken);
-  box-shadow: var(--cn-well-ring), var(--neu-inset);
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
   font-variant-numeric: tabular-nums;
   /* => stays two characters, so code reads and copies as typed. */
@@ -187,7 +158,7 @@
 .wordmark > .mark { width: 28px; height: 28px; margin-inline-end: var(--space-2); font-size: var(--cn-type-ui-size); }
 .wordmark.is-lg { font-size: var(--cn-type-title-size); }
 .wordmark.is-lg > .mark { width: 34px; height: 34px; margin-inline-end: var(--space-3); font-size: var(--cn-type-body-size); }
-.wordmark.is-sm { font-size: var(--cn-type-ui-size); font-weight: var(--cn-type-name-weight); }
+.wordmark.is-sm { font-size: var(--cn-type-ui-size); font-weight: var(--cn-type-ui-weight); }
 .wordmark.is-sm > .mark { width: 20px; height: 20px; margin-inline-end: var(--space-2); font-size: var(--cn-type-micro-size); }
 .wordmark.is-sm > svg { width: 16px; height: 16px; flex: 0 0 auto; margin-inline-end: var(--space-2); color: var(--cn-interactive); }
 .wordmark.is-sm b { color: var(--cn-interactive); font-style: normal; }
@@ -236,7 +207,7 @@
   border-radius: var(--cn-radius-control);
   font-family: var(--sans);
   font-size: var(--cn-type-ui-size);
-  font-weight: var(--cn-type-name-weight);
+  font-weight: var(--cn-type-ui-weight);
   cursor: pointer;
   transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast), --cn-fill var(--t-fast);
@@ -254,13 +225,16 @@
 /* ── Hard-offset press ──────────────────────────────────────────────────────
    Hover lifts 1px. Held half-slides onto the plate, which shrinks to meet
    it. --hard-extra holds shadow layers a recipe draws over the plate.     */
-:is(.btn-primary, .btn-secondary, .segmented > *, .accent-card) {
+:is(.btn-primary, .btn-secondary, .segmented > *, .accent-card),
+:is(a, button).chip {
   --hard-extra: var(--cn-lit-edge);
   box-shadow: var(--cn-plate), var(--hard-extra);
 }
 :is(.btn-primary, .btn-secondary, .segmented > *):hover:not(:disabled, [aria-disabled="true"]),
+:is(a, button).chip:hover,
 a:hover > .accent-card { transform: translate(-1px, -1px); }
 :is(.btn-primary, .btn-secondary, .segmented > *):active:not(:disabled, [aria-disabled="true"]),
+:is(a, button).chip:active,
 a:active > .accent-card {
   transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
   box-shadow: var(--cn-plate-half), var(--hard-extra);
@@ -271,8 +245,8 @@ a:active > .accent-card {
 /* Primary. The ramp runs under the border, so the border stays transparent. */
 .btn-primary {
   --cn-fill: var(--cn-interactive);
-  --plate: color-mix(in srgb, var(--cn-interactive) var(--cn-step-plate), var(--surface-0));
-  --hard-extra: var(--cn-primary-rim);
+  --plate: color-mix(in srgb, var(--cn-interactive) 25%, var(--surface-0));
+  --hard-extra: inset 0 1px rgb(255 255 255 / .3), inset 0 -2px color-mix(in srgb, var(--crust) 22%, transparent);
   color: var(--cn-fg-on-accent);
   border: 1px solid transparent;
   background-color: var(--cn-fill);
@@ -285,7 +259,7 @@ a:active > .accent-card {
 .btn-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
   --cn-fill: var(--cn-surface-sunken);
   --hard-extra: none;
-  color: var(--cn-fg-disabled);
+  color: var(--cn-fg-faint);
   border: 1px solid transparent;
   background-image: none;
   box-shadow: var(--cn-well-ring), var(--neu-inset-soft);
@@ -296,11 +270,11 @@ a:active > .accent-card {
 /* ── Fill grain ─────────────────────────────────────────────────────────────
    Solid accent fills carry film grain under their content, densest at the
    bottom right. --grain sets the strength.                                 */
-:is(.btn-primary, .checkbox:is(:checked, :indeterminate), .mark, .progress-track span) {
+:is(.btn-primary, .checkbox:checked, .mark, .progress-track span) {
   position: relative;
   isolation: isolate;
 }
-:is(.btn-primary, .checkbox:is(:checked, :indeterminate), .mark, .progress-track span)::before {
+:is(.btn-primary, .checkbox:checked, .mark, .progress-track span)::before {
   content: "";
   position: absolute;
   inset: -1px;
@@ -321,7 +295,7 @@ a:active > .accent-card {
   background: var(--cn-surface-raised);
 }
 .btn-secondary:hover:not(:disabled, [aria-disabled="true"]) {
-  border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-strong), var(--surface-1));
+  border-color: color-mix(in srgb, var(--cn-interactive) 50%, var(--surface-1));
 }
 .btn-secondary:hover:not(:active, :disabled, [aria-disabled="true"]) {
   box-shadow: var(--cn-plate-hover), var(--hard-extra);
@@ -350,7 +324,7 @@ a:active > .accent-card {
 .btn-ghost:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset-soft); }
 /* Three classes, so it beats the icon button's overlay-1 rest color. */
 .btn.btn-ghost.is-danger { --tone: var(--cn-danger); color: var(--cn-danger); }
-.btn-ghost.is-danger:hover:not(:disabled, [aria-disabled="true"]) { color: var(--cn-danger); background: var(--cn-danger-wash); }
+.btn-ghost.is-danger:hover:not(:disabled, [aria-disabled="true"]) { color: var(--cn-danger); background: color-mix(in srgb, var(--cn-danger) 12%, transparent); }
 .btn-ghost:is([aria-pressed="true"], [aria-current], [aria-expanded="true"]) {
   transform: translateY(1px);
   color: var(--cn-fg);
@@ -367,7 +341,7 @@ a:active > .accent-card {
 .btn-ghost.is-dashed:hover:not(:disabled, [aria-disabled="true"]) {
   color: var(--cn-interactive);
   border-color: var(--cn-interactive);
-  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-wash), transparent);
+  background: color-mix(in srgb, var(--cn-interactive) 12%, transparent);
 }
 
 /* Icon button: a square at the small height, tinted toward --tone on hover. */
@@ -396,7 +370,7 @@ a:active > .accent-card {
   border: 0;
   border-radius: var(--cn-radius-control); /* the focus ring traces this */
   background: transparent;
-  font: var(--cn-type-name-weight) var(--cn-type-label-size) var(--sans);
+  font: var(--cn-type-ui-weight) var(--cn-type-label-size) var(--sans);
   cursor: pointer;
   transition: color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
@@ -433,9 +407,9 @@ a:active > .accent-card {
 .field label {
   display: block;
   margin: 0 0 var(--space-2) 1px;
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
-  letter-spacing: var(--cn-type-label-tracking);
+  letter-spacing: 0;
 }
 
 /* Fields. The background stays transparent so the parent ground shows.
@@ -470,13 +444,12 @@ a:active > .accent-card {
 :is(.input, .field :is(input, select, textarea)):focus { outline: 2px solid var(--cn-focus); outline-offset: 3px; }
 /* Hover swaps the ring token instead of the shadow, so a validation ring, a
    disabled field and a read-only rule keep their own shadow. */
-:is(.input, .field :is(input, select, textarea)):hover:not(:disabled, :focus) { --cn-field-ring: var(--cn-field-hover-ring); }
+:is(.input, .field :is(input, select, textarea)):hover:not(:disabled, :focus) { --cn-field-ring: inset 0 0 0 1px var(--control-edge); }
 /* iOS Safari zooms a focused field under 16px. A literal 1rem, because
    compact density steps the body role to 15px. */
 @media (pointer: coarse) {
   .input,
-  .field input, .field select, .field textarea,
-  .data-table td .input { font-size: 1rem; }
+  .field input, .field select, .field textarea { font-size: 1rem; }
 }
 .field small {
   display: block;
@@ -485,17 +458,14 @@ a:active > .accent-card {
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 .field:has([aria-invalid="true"]), .input[aria-invalid="true"] { --tone: var(--cn-danger); }
-.field.is-warning, .input.is-warning { --tone: var(--cn-warning); }
-:is(.field:has([aria-invalid="true"]), .field.is-warning) :is(input, select, textarea),
-.input:is([aria-invalid="true"], .is-warning) {
+.field:has([aria-invalid="true"]) :is(input, select, textarea),
+.input[aria-invalid="true"] {
   /* background-color only, so an invalid select keeps its chevron. */
   background-color: var(--tint);
-  box-shadow: var(--cn-validation-ring), var(--neu-inset);
+  box-shadow: inset 0 0 0 1px var(--tone), var(--neu-inset);
 }
-:is(.field:has([aria-invalid="true"]), .field.is-warning) small { color: var(--cn-fg-body); }
-.field:has([aria-invalid="true"]) { --cn-glyph: var(--cn-glyph-danger); }
-.field.is-warning { --cn-glyph: var(--cn-glyph-warning); }
-:is(.field:has([aria-invalid="true"]), .field.is-warning) small::before {
+.field:has([aria-invalid="true"]) small { color: var(--cn-fg-body); }
+.field:has([aria-invalid="true"]) small::before {
   content: "";
   display: inline-block;
   inline-size: 12px;
@@ -503,26 +473,26 @@ a:active > .accent-card {
   margin-inline-end: var(--space-1);
   vertical-align: -1px;
   background: var(--tone);
-  mask: var(--cn-glyph) center / contain no-repeat;
+  mask: var(--cn-glyph-danger) center / contain no-repeat;
 }
 
 :is(.input, .field :is(input, select, textarea)):disabled {
-  color: var(--cn-fg-disabled);
+  color: var(--cn-fg-faint);
   box-shadow: var(--cn-carve-ring), var(--neu-inset-soft);
   cursor: not-allowed;
 }
-:is(.input, .field :is(input, textarea)):disabled::placeholder { color: var(--cn-fg-disabled); }
+:is(.input, .field :is(input, textarea)):disabled::placeholder { color: var(--cn-fg-faint); }
 /* Read-only reads as printed text: no carve, a rule underneath. */
 :is(.input, .field :is(input, textarea))[readonly] {
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   background: transparent;
-  box-shadow: var(--cn-readonly-rule);
+  box-shadow: inset 0 -1px 0 var(--edge);
   border-radius: 0;
   cursor: default;
 }
 /* A focused read-only field takes the control radius back for its ring. */
 :is(.input, .field :is(input, textarea))[readonly]:focus { border-radius: var(--cn-radius-control); }
-.field:has(:disabled) label { color: var(--cn-fg-disabled); }
+.field:has(:disabled) label { color: var(--cn-fg-faint); }
 :is(select.input, .field select) {
   appearance: none;
   padding-inline-end: calc(var(--space-6) + var(--space-2));
@@ -532,43 +502,6 @@ a:active > .accent-card {
   background-size: 15px;
   cursor: pointer;
 }
-:is(.input, .field input)[role="combobox"] {
-  padding-inline-end: calc(var(--space-6) + var(--space-2));
-  background-image: var(--cn-chevron-image);
-  background-repeat: no-repeat;
-  background-position: right var(--space-3) center;
-  background-size: 15px;
-}
-:is(.input, .field input):is([type="date"], [type="datetime-local"], [type="month"], [type="week"])::-webkit-calendar-picker-indicator {
-  width: 16px;
-  height: 16px;
-  padding: 0;
-  background: var(--cn-calendar-image) center / contain no-repeat;
-  cursor: pointer;
-}
-:is(.input, .field input)[type="file"] {
-  padding-block: calc((var(--control-h) - var(--control-h-sm)) / 2);
-  padding-inline-start: calc((var(--control-h) - var(--control-h-sm)) / 2);
-  color: var(--cn-fg-soft);
-  line-height: var(--control-h-sm);
-  cursor: pointer;
-}
-:is(.input, .field input)[type="file"]::file-selector-button {
-  height: var(--control-h-sm);
-  margin-inline-end: var(--space-3);
-  padding: 0 var(--space-3);
-  color: var(--cn-fg);
-  border: 1px solid var(--edge);
-  border-radius: var(--cn-radius-control);
-  background: var(--cn-surface-raised);
-  box-shadow: var(--cn-plate-sm), var(--cn-lit-edge);
-  font: var(--cn-type-ui-weight) var(--cn-type-label-size)/1 var(--sans);
-  cursor: pointer;
-  transition: border-color var(--t-fast), translate var(--t-press) var(--ease-out), box-shadow var(--t-press) var(--ease-out);
-}
-:is(.input, .field input)[type="file"]:hover:not(:disabled)::file-selector-button { border-color: var(--control-edge); }
-:is(.input, .field input)[type="file"]:active:not(:disabled)::file-selector-button { translate: 1px 1px; box-shadow: var(--cn-plate-half), var(--cn-lit-edge); }
-:is(.input, .field input)[type="file"]:disabled::file-selector-button { color: var(--cn-fg-disabled); border-color: var(--edge-soft); box-shadow: none; cursor: not-allowed; }
 
 /* Customizable selects (Chrome 135+). Elsewhere the native picker stays. */
 @supports (appearance: base-select) {
@@ -594,7 +527,7 @@ a:active > .accent-card {
   :is(select.input, .field select) option {
     padding: var(--space-2) var(--space-3);
     border-radius: var(--cn-radius-control);
-    color: var(--cn-fg-soft);
+    color: var(--cn-fg-body);
     background: transparent;
     font: var(--cn-type-label-weight) var(--cn-type-ui-size) var(--sans);
   }
@@ -604,7 +537,7 @@ a:active > .accent-card {
     outline: 2px solid transparent;
   }
   :is(select.input, .field select) option:focus-visible { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
-  :is(select.input, .field select) option:checked { color: var(--cn-interactive); background: var(--wash); font-weight: var(--cn-type-name-weight); }
+  :is(select.input, .field select) option:checked { color: var(--cn-interactive); background: var(--wash); font-weight: var(--cn-type-ui-weight); }
   :is(select.input, .field select) option::checkmark { color: var(--cn-interactive); }
 }
 
@@ -623,7 +556,7 @@ a:active > .accent-card {
   width: max-content;
   max-width: 240px;
   padding: var(--space-2) var(--space-3);
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   border: 1px solid var(--edge-strong);
   border-radius: var(--cn-radius-control);
   background: var(--cn-surface-overlay);
@@ -639,16 +572,8 @@ a:active > .accent-card {
 }
 /* The delay keeps a pointer crossing a toolbar from firing a row of them. */
 [data-tip]:is(:hover, :focus-visible, :has(:focus-visible))::after { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: calc(var(--t-slow) + var(--t-press)); }
-/* The SPEC listener sets data-tip-dismissed on Escape (WCAG 1.4.13). */
+/* A listener sets data-tip-dismissed on Escape (WCAG 1.4.13). */
 [data-tip][data-tip-dismissed]::after { opacity: 0; visibility: hidden; transition-delay: 0s; }
-
-/* Hero variant. Compounded with the base selectors, so it wins inside a .field. */
-:is(.input, .field input).input-lg {
-  height: calc(var(--control-h) + var(--space-3));
-  padding: 0 var(--space-4);
-  border-radius: var(--cn-radius-card);
-  font-size: var(--cn-type-lede-size);
-}
 
 .input-icon { position: relative; }
 .input-icon svg {
@@ -687,9 +612,9 @@ a:active > .accent-card {
   transition: transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring),
               background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
-.segmented > *:hover { border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-edge), var(--surface-1)); }
+.segmented > *:hover { border-color: color-mix(in srgb, var(--cn-interactive) 40%, var(--surface-1)); }
 /* A chosen option that is disabled keeps the engaged carve below and only dims. */
-.segmented > :is(:disabled, [aria-disabled="true"]) {
+.segmented > :disabled {
   opacity: var(--disabled-opacity);
   border-color: transparent;
   background: var(--cn-surface-sunken);
@@ -705,12 +630,12 @@ a:active > .accent-card {
   background: var(--wash);
   box-shadow: var(--neu-inset);
 }
-.segmented b { font-family: var(--sans); font-size: var(--cn-type-name-size); font-weight: var(--cn-type-name-weight); }
+.segmented b { font-family: var(--sans); font-size: var(--cn-type-ui-size); font-weight: var(--cn-type-ui-weight); }
 .segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) b { color: var(--cn-interactive); }
 .segmented > * > svg { width: 16px; height: 16px; flex: 0 0 auto; }
 .segmented small { color: var(--cn-fg-muted); font-size: var(--cn-type-meta-size); }
 /* --cn-fg-muted is too dim on the chosen option's wash. */
-.segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) small { color: var(--cn-fg-soft); }
+.segmented :is(.active, [aria-pressed="true"], [aria-checked="true"]) small { color: var(--cn-fg-body); }
 .segmented label:has(input:focus-visible) {
   outline: 2px solid var(--cn-focus);
   outline-offset: 3px;
@@ -742,7 +667,7 @@ a:active > .accent-card {
 .stepper > .active,
 .stepper > [aria-current="step"] {
   color: var(--cn-interactive);
-  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-wash), transparent);
+  background: color-mix(in srgb, var(--cn-interactive) 12%, transparent);
 }
 .stepper > .is-done { color: var(--cn-success); }
 
@@ -753,13 +678,13 @@ a:active > .accent-card {
   display: inline-grid; place-items: center;
   flex: 0 0 auto;
   color: var(--cn-fg-on-accent);
-  border: 1px solid color-mix(in srgb, currentColor var(--cn-step-wash), transparent);
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
   border-radius: var(--cn-radius-control);
   background-color: var(--cn-fill);
   background-image: var(--cn-fill-ramp);
   background-origin: border-box;
   box-shadow: var(--shadow-mark);
-  font: var(--cn-type-name-weight) var(--cn-type-label-size)/1 var(--sans);
+  font: var(--cn-type-ui-weight) var(--cn-type-label-size)/1 var(--sans);
   font-variant-numeric: tabular-nums;
 }
 
@@ -778,15 +703,8 @@ a:active > .accent-card {
 }
 .chip > svg { width: 14px; height: 14px; flex: 0 0 auto; }
 :is(a, button).chip { text-decoration: none; cursor: pointer; transition: color var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast) var(--ease-spring), transform var(--t-fast) var(--ease-spring); }
-:is(a, button).chip { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
-:is(a, button).chip:hover { color: var(--cn-fg); border-color: var(--control-edge); transform: translate(-1px, -1px); }
-:is(a, button).chip:active {
-  transform: translate(calc(var(--hard-offset) / 2), calc(var(--hard-offset) / 2));
-  box-shadow: var(--cn-plate-half), var(--cn-lit-edge);
-  transition-timing-function: var(--ease-out);
-  transition-duration: var(--t-press);
-}
-:is(a, button).chip:is(:disabled, [aria-disabled="true"]) {
+:is(a, button).chip:hover { color: var(--cn-fg); border-color: var(--control-edge); }
+:is(a, button).chip:disabled {
   opacity: var(--disabled-opacity);
   color: var(--cn-fg-muted);
   border-color: transparent;
@@ -795,9 +713,6 @@ a:active > .accent-card {
   transform: none;
   cursor: not-allowed;
 }
-/* Icon-only: keep an accessible name on the element. */
-.chip.is-glyph { padding: var(--space-2); font-size: 0; }
-.chip.is-glyph > svg { width: 16px; height: 16px; }
 
 /* Status tag: set the color with .cn-tone-*. The border stays transparent
    so forced colors still draws one. */
@@ -812,10 +727,6 @@ a:active > .accent-card {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
 }
 .tag > svg { width: 12px; height: 12px; flex: 0 0 auto; }
-/* Solid tag: the one urgent status in a view. */
-.tag.is-solid { color: var(--cn-fg-on-accent); background: var(--tone); box-shadow: none; }
-/* Quiet tag: a row's default state. It draws no glyph. */
-.tag.is-quiet { color: var(--cn-fg-muted); background: transparent; box-shadow: none; }
 
 /* Inline banner. The tone stays on the glyph, the edge and the tint. */
 .banner {
@@ -830,17 +741,6 @@ a:active > .accent-card {
   line-height: var(--cn-type-meta-leading);
 }
 .banner > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--tone); }
-/* A toned tag or banner with no svg of its own draws its --cn-glyph-*. */
-:is(.tag, .banner):is(.cn-tone-danger, .cn-tone-warning, .cn-tone-success, .cn-tone-info):not(:has(> svg))::before {
-  content: "";
-  flex: 0 0 auto;
-  inline-size: 12px;
-  block-size: 12px;
-  background: var(--tone);
-  mask: var(--cn-glyph) center / contain no-repeat;
-}
-.banner:is(.cn-tone-danger, .cn-tone-warning, .cn-tone-success, .cn-tone-info):not(:has(> svg))::before { inline-size: 16px; block-size: 16px; }
-.tag.is-solid:not(:has(> svg))::before { background: currentColor; }
 
 /* ── Selection controls ─────────────────────────────────────────────────── */
 
@@ -849,11 +749,11 @@ a:active > .accent-card {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-meta-leading) var(--sans);
   cursor: pointer;
 }
-.choice:has(:disabled) { color: var(--cn-fg-disabled); cursor: not-allowed; }
+.choice:has(:disabled) { color: var(--cn-fg-faint); cursor: not-allowed; }
 :is(.checkbox, .radio, .switch):disabled { opacity: var(--disabled-opacity); }
 :is(.checkbox, .radio):is([aria-invalid="true"], [aria-invalid="true"] *):not(:checked) { border-color: var(--cn-danger); }
 
@@ -871,9 +771,9 @@ a:active > .accent-card {
   cursor: pointer;
   transition: background var(--t-fast), box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.checkbox:hover:not(:disabled, [aria-disabled="true"]):not(:checked) { border-color: var(--engaged-edge); }
-.checkbox:active:not(:disabled, [aria-disabled="true"]),
-.radio:active:not(:disabled, [aria-disabled="true"]) { transform: translateY(1px); box-shadow: var(--neu-inset); }
+.checkbox:hover:not(:disabled):not(:checked) { border-color: var(--engaged-edge); }
+.checkbox:active:not(:disabled),
+.radio:active:not(:disabled) { transform: translateY(1px); box-shadow: var(--neu-inset); }
 .checkbox::after {
   content: "";
   position: absolute;
@@ -893,20 +793,6 @@ a:active > .accent-card {
   box-shadow: var(--neu-inset-soft), var(--cn-gloss-inset);
 }
 .checkbox:checked::after { opacity: 1; transform: none; }
-/* Indeterminate: set it from script (el.indeterminate = true). */
-.checkbox:indeterminate {
-  --cn-fill: var(--cn-interactive);
-  border-color: transparent;
-  background-color: var(--cn-fill);
-  background-image: var(--cn-fill-ramp);
-  background-origin: border-box;
-  box-shadow: var(--neu-inset-soft), var(--cn-gloss-inset);
-}
-.checkbox:indeterminate::after {
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");
-  opacity: 1;
-  transform: none;
-}
 
 .radio {
   appearance: none;
@@ -923,10 +809,10 @@ a:active > .accent-card {
   cursor: pointer;
   transition: box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast), transform var(--t-fast) var(--ease-out);
 }
-.radio:hover:not(:disabled, [aria-disabled="true"]):not(:checked) { border-color: var(--engaged-edge); }
+.radio:hover:not(:disabled):not(:checked) { border-color: var(--engaged-edge); }
 /* The radio only gets a dot, so it takes the full carve. The checkbox keeps the soft one. */
 .radio:checked {
-  border-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-strong), var(--surface-1));
+  border-color: color-mix(in srgb, var(--cn-interactive) 50%, var(--surface-1));
   box-shadow: var(--neu-inset);
 }
 .radio::after {
@@ -935,7 +821,7 @@ a:active > .accent-card {
   height: 9px;
   border-radius: 50%;
   background: var(--cn-interactive);
-  box-shadow: var(--cn-halo-ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cn-interactive) 12%, transparent);
   opacity: 0;
   transform: scale(.5);
   transition: opacity var(--t-fast), transform var(--t-fast) var(--ease-out);
@@ -951,7 +837,7 @@ a:active > .accent-card {
   position: relative;
   border-radius: var(--cn-radius-control);
   background: var(--cn-surface-sunken);
-  box-shadow: var(--neu-inset), var(--cn-switch-ring);
+  box-shadow: var(--neu-inset), inset 0 0 0 1px var(--control-edge);
   cursor: pointer;
   transition: box-shadow var(--t-base) var(--ease-out);
 }
@@ -981,32 +867,31 @@ a:active > .accent-card {
   box-shadow: var(--cn-switch-glow), var(--cn-gloss-inset);
   transform: perspective(120px) rotateY(-16deg);
 }
-.switch:active:not(:disabled, [aria-disabled="true"])::after { transform: perspective(120px) rotateY(0deg) scale(.96); }
-.switch:checked:active:not(:disabled, [aria-disabled="true"])::after {
-  box-shadow: var(--cn-switch-glow-held), var(--cn-gloss-inset);
+.switch:active:not(:disabled)::after { transform: perspective(120px) rotateY(0deg) scale(.96); }
+.switch:checked:active:not(:disabled)::after {
+  box-shadow: 0 0 12px color-mix(in srgb, var(--cn-interactive) 40%, transparent), var(--cn-gloss-inset);
 }
 
 .checkbox:disabled, .radio:disabled, .switch:disabled { cursor: not-allowed; }
 /* A disabled switch lies flat, so it never reads as off. */
 .switch:disabled::after { transform: none; box-shadow: none; border-color: var(--edge); }
-.switch:disabled { background: transparent; box-shadow: var(--neu-inset-soft), var(--cn-disabled-ring); }
+.switch:disabled { background: transparent; box-shadow: var(--neu-inset-soft), inset 0 0 0 1px var(--edge); }
 :is(.checkbox, .radio):disabled { border-color: var(--edge); }
 
 /* ── Accordion: a disclosure row ────────────────────────────────────────────
-   Use details. The label form, a label holding a hidden checkbox or radio,
-   needs the SPEC listeners.                                                */
+   Use details, or a label holding a hidden checkbox or radio.             */
 .accordion {
   border-bottom: 1px solid var(--edge-soft);
   transition: box-shadow var(--t-base) var(--ease-out), border-color var(--t-base), border-radius var(--t-base);
 }
 /* Open is the open carve. The engaged wash would dim the fold's body text. */
-.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) {
+.accordion:is(:has(> label > input:checked), [data-open], [open]) {
   border-radius: var(--cn-radius-card);
   border-bottom-color: transparent;
-  background: color-mix(in srgb, var(--cn-interactive) var(--cn-step-tint), transparent);
+  background: color-mix(in srgb, var(--cn-interactive) 4%, transparent);
   box-shadow: var(--neu-inset);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) > :is(label, summary) { color: var(--cn-interactive); }
+.accordion:is(:has(> label > input:checked), [data-open], [open]) > :is(label, summary) { color: var(--cn-interactive); }
 .accordion > :is(label, summary) {
   min-height: 48px;
   padding: var(--space-3);
@@ -1016,7 +901,7 @@ a:active > .accent-card {
   justify-content: space-between;
   gap: var(--space-4);
   color: var(--cn-fg);
-  font: var(--cn-type-name-weight) var(--cn-type-body-size)/var(--cn-type-name-leading) var(--sans);
+  font: var(--cn-type-ui-weight) var(--cn-type-body-size)/var(--cn-type-ui-leading) var(--sans);
   cursor: pointer;
   transition: color var(--t-fast);
 }
@@ -1029,7 +914,7 @@ a:active > .accent-card {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237f849c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
   transition: transform var(--t-base) var(--ease-out);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) > :is(label, summary)::after { transform: rotate(180deg); }
+.accordion:is(:has(> label > input:checked), [data-open], [open]) > :is(label, summary)::after { transform: rotate(180deg); }
 /* The input stays keyboard-reachable. Its focus ring draws on the label. */
 .accordion > :is(label, summary) > input {
   appearance: none;
@@ -1057,7 +942,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   grid-template-rows: 0fr;
   transition: grid-template-rows var(--t-slow) var(--ease-out);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) .fold {
+.accordion:is(:has(> label > input:checked), [data-open], [open]) .fold {
   grid-template-rows: 1fr;
 }
 .accordion .fold > * {
@@ -1068,7 +953,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   visibility: hidden;
   transition: visibility var(--t-slow);
 }
-.accordion:is(:has(> label > input:checked), .is-open, [data-open], [open]) .fold > * { visibility: visible; }
+.accordion:is(:has(> label > input:checked), [data-open], [open]) .fold > * { visibility: visible; }
 /* Padding would floor the collapsed wrapper, so the spacing is a margin. */
 .accordion .fold > * > :last-child { margin-bottom: var(--space-4); }
 /* The title grows, so trailing meta sits against the chevron. */
@@ -1090,21 +975,6 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   animation: spin .8s linear infinite;
 }
 
-/* Skeleton. .is-text is one line of body copy, .is-round an avatar. Mark
-   the loading region aria-busy="true" and keep skeletons aria-hidden. */
-.skeleton {
-  display: block;
-  min-height: var(--space-4);
-  border-radius: var(--cn-radius-control);
-  background: var(--cn-surface-sunken);
-  box-shadow: var(--neu-inset);
-  animation: breathe 1.6s var(--ease-in) infinite alternate;
-}
-.skeleton.is-text { height: 1em; min-height: 0; border-radius: var(--cn-radius-chip); }
-.skeleton.is-text + .skeleton.is-text { margin-top: var(--space-2); }
-.skeleton.is-text:last-child:not(:only-child) { width: 62%; }
-.skeleton.is-round { width: 32px; height: 32px; border-radius: 50%; }
-
 /* ── Avatar: initials or an image on an accent-tinted round ────────────── */
 
 .avatar {
@@ -1115,18 +985,17 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
   place-items: center;
   overflow: hidden;
   color: var(--accent);
-  border: 1px solid color-mix(in srgb, var(--accent) var(--cn-step-edge), var(--surface-0));
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--surface-0));
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) var(--cn-step-wash), var(--mantle));
+  background: color-mix(in srgb, var(--accent) 12%, var(--mantle));
   box-shadow: var(--neu-raised-soft);
-  font: var(--cn-type-name-weight) var(--cn-type-label-size)/1 var(--sans);
+  font: var(--cn-type-ui-weight) var(--cn-type-label-size)/1 var(--sans);
   user-select: none;
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
-.avatar.is-lg { width: 44px; height: 44px; font-size: var(--cn-type-body-size); }
 .avatar-stack { display: inline-flex; }
 /* Set --ring-ground to the surface behind the stack. */
-.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), var(--cn-ground-ring); }
+.avatar-stack .avatar { box-shadow: var(--neu-raised-soft), 0 0 0 2px var(--ring-ground, var(--base)); }
 .avatar-stack .avatar + .avatar { margin-inline-start: calc(-1 * var(--space-2)); }
 
 /* ── Code block: a carved snippet well ──────────────────────────────────── */
@@ -1211,7 +1080,7 @@ details.accordion::details-content { transition: content-visibility var(--t-slow
 /* ── Accent cards keyed by --accent ─────────────────────────────────────── */
 
 .accent-card {
-  --plate: color-mix(in srgb, var(--accent) var(--cn-step-vivid), var(--surface-0));
+  --plate: color-mix(in srgb, var(--accent) 70%, var(--surface-0));
   min-width: 0;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--edge);
@@ -1250,15 +1119,6 @@ a:hover:not(:active) > .accent-card {
 }
 .stat strong { font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans); letter-spacing: var(--cn-type-value-tracking); font-variant-numeric: tabular-nums; }
 .stat.is-lg strong { font-size: var(--cn-type-value-lg-size); color: var(--accent); }
-/* Four across, two at 760px and below. --stat-cols sets the wide count. */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(var(--stat-cols, 4), minmax(0, 1fr));
-  gap: var(--space-4);
-}
-.stat-grid.is-ruled > .stat { padding-block: var(--space-1); padding-inline: var(--space-4) 0; border-inline-start: 2px solid var(--cn-stat-rule); }
-/* The panel body already insets the stats. This beats the 520px .stat padding. */
-.panel-body .stat-grid:not(.is-ruled) > .stat { padding: 0; }
 
 .stat.is-inline {
   padding: 0;
@@ -1278,20 +1138,6 @@ a:hover:not(:active) > .accent-card {
   font-variant-numeric: tabular-nums;
 }
 .cn-divide > .stat.is-inline { padding-block: var(--space-2); }
-/* A summary total. It follows the .cn-divide list instead of sitting in it. */
-.stat.is-inline.is-total {
-  margin-block-start: var(--space-3);
-  padding-block-start: var(--space-3);
-  color: var(--cn-fg);
-  border-top: 1px solid var(--edge);
-  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
-}
-.stat.is-inline.is-total > span { color: var(--cn-fg); font: inherit; }
-.stat.is-inline.is-total :is(b, strong) {
-  color: var(--cn-fg);
-  font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans);
-  letter-spacing: var(--cn-type-value-tracking);
-}
 
 /* Progress. Re-key the fill per instance with --progress-fill. */
 .progress-track {
@@ -1321,13 +1167,13 @@ a:hover:not(:active) > .accent-card {
   padding: var(--cell-pad);
   color: var(--cn-fg-muted);
   border-bottom: 1px solid var(--edge);
-  background: var(--cn-surface-band);
+  background: color-mix(in srgb, var(--crust) 50%, transparent);
   text-align: start;
   font: var(--cn-type-label-weight) var(--cell-font-size)/var(--cn-type-label-leading) var(--sans);
 }
 .data-table td {
   padding: var(--cell-pad);
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   border-bottom: 1px solid var(--surface-0);
   font: var(--cn-type-body-weight) var(--cell-font-size) var(--sans);
   font-variant-numeric: tabular-nums;
@@ -1335,23 +1181,11 @@ a:hover:not(:active) > .accent-card {
 /* A key figure in a cell: wrap it in strong. */
 .data-table td strong { color: var(--cn-fg); font-weight: var(--cn-type-label-weight); }
 .data-table tbody tr:last-child td { border-bottom: 0; }
-/* Numeric columns: put .is-num on the th and each td. */
-.data-table :is(th, td).is-num { text-align: end; }
-.data-table th.is-num[aria-sort] > button { flex-direction: row-reverse; }
-/* Inline edit: an .input in a cell. :where() keeps the selector as light
-   as .input, so its states still win. */
-:where(.data-table td) .input {
-  height: var(--control-h-sm);
-  padding: 0 var(--space-3);
-  border-radius: var(--cn-radius-control);
-  box-shadow: var(--cn-field-ring), var(--neu-inset-soft);
-  font-size: var(--cell-font-size);
-}
 /* Name cell: each line is a block, so the cell stacks them without a <br>. */
 .data-table .cell-name :is(strong, small) { display: block; }
-.data-table .cell-name strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
+.data-table .cell-name strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-ui-size) var(--sans); }
 /* A tag, chip or small button in a cell follows the cell size. */
-.data-table td :is(.tag, .chip:not(.is-glyph), .btn.is-sm, .btn-text) { font-size: var(--cell-font-size); }
+.data-table td :is(.tag, .chip, .btn.is-sm, .btn-text) { font-size: var(--cell-font-size); }
 .data-table .cell-name small  { color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cell-font-size) var(--sans); }
 
 .data-table th[aria-sort] > button {
@@ -1390,7 +1224,7 @@ a:hover:not(:active) > .accent-card {
   top: 0;
   z-index: 1;
   border-bottom: 0;
-  box-shadow: var(--cn-sticky-rule);
+  box-shadow: inset 0 -1px var(--edge);
 }
 /* Focus not obscured (WCAG 2.4.11): rows stop clear of the pinned head. */
 .data-table.is-sticky-head tbody :is(tr, a, button, input, select, textarea, summary, [tabindex]) {
@@ -1407,81 +1241,23 @@ a:hover:not(:active) > .accent-card {
 .data-table tbody tr:hover td, .ranked-row:hover {
   --press-top: rgb(17 17 27 / .5);
   color: var(--cn-fg);
-  background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
+  background-color: color-mix(in srgb, var(--cn-interactive) 16%, var(--base));
 }
-.data-table tbody tr[aria-selected="true"] td {
-  --press-top: rgb(17 17 27 / .66);
-  color: var(--cn-fg);
-  background-color: var(--wash);
-}
-/* The selection also reads without the fill, by weight and ink. */
-.data-table tbody tr[aria-selected="true"] > :is(td:first-child:not(.cell-select), td.cell-select + td) { font-weight: var(--cn-type-name-weight); }
-.data-table tbody tr[aria-selected="true"] td small { color: var(--cn-fg-soft); }
 
 .ranked-row {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   border-bottom: 1px solid var(--surface-0);
   font: var(--cn-type-label-weight) var(--cn-type-ui-size) var(--sans);
   font-variant-numeric: tabular-nums;
 }
 .ranked-row:last-child { border-bottom: 0; }
-.ranked-row strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-name-size) var(--sans); }
+.ranked-row strong { color: var(--cn-fg); font: var(--cn-type-ui-weight) var(--cn-type-ui-size) var(--sans); }
 .ranked-row b { margin-inline-start: auto; color: var(--cn-fg); font-weight: var(--cn-type-value-weight); }
 .ranked-row .mark { width: 22px; height: 22px; font-size: var(--cn-type-label-size); }
-
-/* Bar chart. --value is the bar's share of the track. --series falls back to --accent. */
-.bar-chart {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  align-items: center;
-  gap: var(--space-3) var(--space-4);
-}
-.bar-chart > :not(.bar-group) { color: var(--cn-fg-muted); font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans); }
-.bar-group { min-width: 0; display: grid; gap: var(--space-1); }
-.bar {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--cn-fg-soft);
-  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
-  font-variant-numeric: tabular-nums;
-}
-.bar::before {
-  content: "";
-  flex: 0 0 auto;
-  inline-size: calc(var(--value, 0%) * .8);
-  block-size: 12px;
-  border-radius: var(--cn-radius-chip);
-  --cn-fill: var(--series, var(--accent));
-  background: var(--cn-fill);
-  transition: inline-size calc(var(--t-slow) * 2) var(--ease-out);
-}
-
-/* Sparkline: an svg line in --series beside its value, in a fixed 96x24 box. */
-.sparkline {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--cn-fg-soft);
-  font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
-  font-variant-numeric: tabular-nums;
-}
-.sparkline > svg { width: 96px; height: 24px; flex: 0 0 auto; overflow: visible; }
-.sparkline > svg :is(polyline, path) {
-  fill: none;
-  stroke: var(--series, var(--accent));
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-.sparkline > svg circle { fill: var(--series, var(--accent)); }
 
 .legend {
   margin: 0;
@@ -1508,16 +1284,6 @@ a:hover:not(:active) > .accent-card {
   border-radius: var(--cn-radius-chip);
   background: var(--series, var(--accent));
 }
-/* Hatched: a second key besides hue. */
-:is(.bar, .legend-item).is-hatched::before {
-  --cn-hatch: repeating-linear-gradient(135deg, color-mix(in srgb, var(--base) 45%, transparent) 0 2px, transparent 2px 5px);
-  background-image: var(--cn-hatch);
-}
-/* Without relative color the ramp is invalid, so the flat fill stays. */
-@supports (color: oklch(from red l c h)) {
-  .bar::before { background-image: var(--cn-fill-ramp); }
-  .bar.is-hatched::before { background-image: var(--cn-hatch), var(--cn-fill-ramp); }
-}
 
 /* Key-value list: <dl class="kv"><dt>Region</dt><dd>us-east-1</dd></dl> */
 .kv {
@@ -1538,39 +1304,8 @@ a:hover:not(:active) > .accent-card {
 
 /* ── Overlays: all float on --shadow-pop, never neu ────────────────────── */
 
-/* Fields on the overlay fill take the overlay ring. A panel or a well
-   inside an overlay takes the page ring back. */
-:is(.popover, .modal, .drawer) { --cn-field-ring: var(--cn-field-ring-overlay); }
-:is(.popover, .modal, .drawer) :is(.panel, .well) { --cn-field-ring: var(--cn-field-ring-page); }
-
-/* Popover / menu: anchored to a relative parent. No overflow clipping. */
-.popover {
-  position: absolute;
-  z-index: 80;
-  width: min(390px, calc(100vw - var(--space-6)));
-  border: 1px solid var(--edge-strong);
-  border-radius: var(--cn-radius-card);
-  background: var(--cn-surface-overlay);
-  box-shadow: var(--shadow-pop);
-}
-/* Child bands follow the parent: the card radius minus the 1px border. */
-.popover > :first-child { border-top-left-radius: calc(var(--cn-radius-card) - 1px); border-top-right-radius: calc(var(--cn-radius-card) - 1px); }
-.popover > :last-child  { border-bottom-left-radius: calc(var(--cn-radius-card) - 1px); border-bottom-right-radius: calc(var(--cn-radius-card) - 1px); }
-
-.popover > header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-}
-.popover > footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--edge-soft);
-}
+/* Fields on the overlay fill take the overlay ring. */
+:is(.modal, .drawer) { --cn-field-ring: var(--cn-field-ring-overlay); }
 
 .modal {
   position: fixed;
@@ -1614,54 +1349,15 @@ a:hover:not(:active) > .accent-card {
   width: min(380px, calc(100vw - 2 * var(--space-5)));
 }
 .toast-stack .toast { width: 100%; }
-/* Collapsed pile: only the newest visible toast stays in flow. Older ones
-   pin to its box and lift behind it. Hover or focus fans the column out.
-   Depth counts visible toasts only, so an exiting [hidden] toast never shifts the pile. */
-/* Exiting toasts leave the flow at once, so the pile reserves no ghost row. */
-.toast-stack .toast[hidden] {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: auto;
-  z-index: 1;
-}
-/* Fanned, the exiting toast stays in flow and collapses its row. The
-   negative margin swallows the flex gap its slot leaves. */
-.toast-stack:is(:hover, :focus-within) .toast[hidden] {
-  position: static;
-  max-height: 0;
-  margin-bottom: calc(-1 * var(--space-2));
-  padding-block: 0;
-  border-block-width: 0;
-  overflow: clip;
-}
-.toast-stack:not(:hover):not(:focus-within) .toast:not([hidden]):has(~ .toast:not([hidden])) {
-  position: absolute;
-  inset: 0;
-  width: auto;
-  overflow: clip;
-  translate: 0 -12px;
-  scale: .96;
-  z-index: -1;
-}
-.toast-stack:not(:hover):not(:focus-within) .toast:not([hidden]):has(~ .toast:not([hidden]) ~ .toast:not([hidden])) {
-  translate: 0 -22px;
-  scale: .92;
-  z-index: -2;
-}
-.toast-stack:not(:hover):not(:focus-within) .toast:not([hidden]):has(~ .toast:not([hidden]) ~ .toast:not([hidden]) ~ .toast:not([hidden])) {
-  opacity: 0;
-  visibility: hidden;
-}
+/* An exiting toast leaves the flow at once, so the stack keeps no ghost row. */
+.toast-stack .toast[hidden] { position: absolute; inset: auto 0 0; width: auto; }
 .toast {
-  /* Caps nothing in practice; exists so the fanned exit can animate height. */
   max-height: 140px;
   max-width: 100%;
   padding: var(--space-3) var(--space-4);
   display: flex;
   align-items: flex-start;
-  /* Vertical scroll stays native; a sideways drag is the swipe to dismiss. */
+  /* Vertical scroll stays native. A sideways drag is left for a swipe to dismiss. */
   touch-action: pan-y;
   gap: var(--space-3);
   color: var(--cn-fg);
@@ -1669,13 +1365,15 @@ a:hover:not(:active) > .accent-card {
   border-radius: var(--cn-radius-card);
   background: var(--cn-surface-overlay);
   box-shadow: var(--shadow-pop);
+  /* The toast travels on translate, so transform stays free for consumers. */
+  transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), visibility var(--t-base);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 .toast > :first-child { flex: 1; min-width: 0; }
 .toast b {
   display: block;
   color: var(--cn-fg);
-  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
+  font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
 }
 .toast span,
 .toast p {
@@ -1684,19 +1382,11 @@ a:hover:not(:active) > .accent-card {
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
 }
 
-/* ── Overlay motion ──────────────────────────────────────────────────────────
-   Popovers and toasts enter via @starting-style and exit via [hidden],
-   which keeps display and drops visibility, so the exit animates. These
-   rules stay after the component blocks.                                   */
-.popover { transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out), visibility var(--t-fast); }
-/* The toast travels on translate, so transform stays free for consumers. */
-.toast   { transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), scale var(--t-base) var(--ease-out), visibility var(--t-base), max-height var(--t-base) var(--ease-out), margin var(--t-base) var(--ease-out), padding var(--t-base) var(--ease-out), border-width var(--t-base) var(--ease-out); }
-.popover[hidden] { display: block; visibility: hidden; opacity: 0; transform: translateY(-4px); pointer-events: none; }
-.toast[hidden]   { display: flex; visibility: hidden; opacity: 0; translate: 16px 0; pointer-events: none; }
-:is(.popover, .toast)[hidden] { transition-timing-function: var(--ease-in); transition-duration: var(--t-exit); }
+/* The toast enters via @starting-style and exits via [hidden], which keeps
+   display and drops visibility, so the exit animates. */
+.toast[hidden] { display: flex; visibility: hidden; opacity: 0; translate: 16px 0; pointer-events: none; transition-timing-function: var(--ease-in); transition-duration: var(--t-exit); }
 @starting-style {
-  .popover:not([hidden]) { opacity: 0; transform: translateY(-4px); }
-  .toast:not([hidden])   { opacity: 0; translate: 16px 0; }
+  .toast:not([hidden]) { opacity: 0; translate: 16px 0; }
 }
 
 /* ── Dialogs ─────────────────────────────────────────────────────────────────
@@ -1738,13 +1428,11 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .popover[hidden] { transform: none; }
   .toast[hidden] { translate: 0 0; }
   dialog.modal { transform: none; }
   dialog.drawer { transform: none; opacity: 0; transition: opacity var(--t-fast) var(--ease-out), overlay var(--t-fast) allow-discrete, display var(--t-fast) allow-discrete; }
   dialog.drawer[open] { opacity: 1; }
   @starting-style {
-    .popover:not([hidden]) { transform: none; }
     .toast:not([hidden]) { translate: 0 0; }
     dialog.modal[open] { transform: none; }
     dialog.drawer[open] { transform: none; opacity: 0; }
@@ -1755,24 +1443,24 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 /* ── Page furniture ─────────────────────────────────────────────────────────
    Recipes never style bare element selectors (the tokens reset aside).   */
 
-.lede { max-width: var(--cn-measure); margin: var(--space-5) 0; color: var(--cn-fg-soft); font-family: var(--sans); font-size: var(--cn-type-lede-size); line-height: var(--cn-type-lede-leading); }
+.lede { max-width: var(--cn-measure); margin: var(--space-5) 0; color: var(--cn-fg-body); font-family: var(--sans); font-size: var(--cn-type-lede-size); line-height: var(--cn-type-lede-leading); }
 
 /* The page column. --page-width re-keys it, and the footer follows. */
 .page-main {
-  width: min(var(--page-width, var(--cn-width-page)), 100% - 2 * var(--page-gutter));
+  width: min(var(--page-width, 1440px), 100% - 2 * var(--page-gutter));
   min-width: 0;
   margin: 0 auto;
   position: relative;
   padding: var(--page-pad) 0;
 }
-.page-main.is-narrow  { --page-width: var(--cn-width-narrow); }
+.page-main.is-narrow  { --page-width: 860px; }
 .page-main.is-reading {
-  --page-width: var(--cn-width-reading);
+  --page-width: 740px;
   --cn-type-lede-size: 1.25rem;
 }
 
 .page-footer {
-  width: min(var(--page-width, var(--cn-width-page)), 100% - 2 * var(--page-gutter));
+  width: min(var(--page-width, 1440px), 100% - 2 * var(--page-gutter));
   min-height: 72px;
   margin: 0 auto;
   padding: var(--space-3) 0;
@@ -1780,23 +1468,16 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   color: var(--cn-fg-muted);
   border-top: 1px solid var(--surface-0);
 }
-.page-footer > span { font: var(--cn-type-name-weight) var(--cn-type-label-size) var(--sans); }
+.page-footer > span { font: var(--cn-type-ui-weight) var(--cn-type-label-size) var(--sans); }
 .page-footer p { margin: 0; font: var(--cn-type-meta-weight) var(--cn-type-meta-size) var(--sans); }
-
-/* Deck: hash-routed views, no JS. The :target child shows; the first is the default. */
-.deck > * { display: none; }
-.deck > :target,
-.deck > :has(:target) { display: block; }
-.deck:not(:has(:target)) > :first-child { display: block; }
 
 /* ── Responsive ─────────────────────────────────────────────────────────────
    Three breakpoints, always these three. Each one removes decoration; none
    removes content.                                                          */
 
-/* 1060: drop ornament: the tilted card flattens, secondary nav hides. */
+/* 1060: drop ornament: the tilted card flattens. */
 @media (max-width: 1060px) {
   .topbar { grid-template-columns: 1fr auto; }
-  .topbar .nav-secondary { display: none; }
   .panel.is-tilted {
     transform: none;
     box-shadow: var(--neu-raised);
@@ -1806,11 +1487,9 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 @media (prefers-contrast: more) {
   .panel.is-tilted { transform: none; }
 }
-:root[data-contrast="more"] .panel.is-tilted { transform: none; }
 
 /* 760: tablet and phone: tighter chrome, tables become label and value rows. */
 @media (max-width: 760px) {
-  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .topbar { min-height: min(60px, calc(var(--band-h) + var(--space-1))); padding: var(--space-2) var(--page-gutter); }
   :root:has(.topbar) { scroll-padding-top: calc(min(60px, calc(var(--band-h) + var(--space-1))) + var(--space-3)); }
   .topbar nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
@@ -1843,14 +1522,10 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
     border-radius: 0;
     background: none;
   }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:is(:hover, [aria-selected="true"]) td { background: none; }
+  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover td { background: none; }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr:hover {
     --press-top: rgb(17 17 27 / .5);
-    background-color: color-mix(in srgb, var(--cn-interactive) var(--cn-step-row), var(--base));
-  }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tbody tr[aria-selected="true"] {
-    --press-top: rgb(17 17 27 / .66);
-    background-color: var(--wash);
+    background-color: color-mix(in srgb, var(--cn-interactive) 16%, var(--base));
   }
   .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td[data-label] {
     --label-w: 7.5rem;
@@ -1866,24 +1541,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
     color: var(--cn-fg-muted);
     font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-body-leading) var(--sans);
   }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td.cell-select { float: right; padding: 0; margin-inline-start: var(--space-3); }
-  /* Trailing cells (td.is-trail) sit beside the name on a grid. */
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: baseline;
-  }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td { grid-column: 1 / -1; }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.cell-name { grid-column: 1; grid-row: 1 / span 2; align-self: start; }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.is-trail {
-    grid-column: 2;
-    grid-row: 1;
-    padding-inline-start: var(--space-3);
-    text-align: end;
-  }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.is-trail:has(~ td.is-trail) { grid-row: 2; }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) td.is-trail::before { content: none; }
-  .data-table:is(:not(.table-scroll > *), :has(td[data-label])) tr:has(> td.is-trail) > td.cell-select { grid-column: 3; grid-row: 1; float: none; align-self: start; }
   .panel > .data-table:is(:not(.table-scroll > *), :has(td[data-label])):last-child tbody tr:last-child {
     border-radius: 0 0 calc(var(--cn-radius-panel) - 1px) calc(var(--cn-radius-panel) - 1px);
   }
@@ -1896,26 +1553,7 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   .stat strong { font-size: var(--cn-type-lede-size); }
   .stat.is-lg strong { font-size: var(--cn-type-value-size); }
   :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
-  .panel.is-lead > .panel-header :is(h2, h3) { font-size: min(var(--lead-title-size), var(--cn-type-body-size)); }
   .accordion-stack { padding: var(--space-2) var(--space-3); }
-  .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
-  .accordion > :is(label, summary) > .cn-meta { order: 1; flex-basis: 100%; }
-  .kv { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
-  .kv dd + dt { margin-top: var(--space-2); }
-}
-
-/* The same folds answer a .cn-container's width. Page chrome stays on the viewport. */
-@container (max-width: 760px) {
-  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .panel-footer { flex-wrap: wrap; }
-}
-@container (max-width: 520px) {
-  .segmented { grid-auto-flow: row; }
-  .stat { padding-inline: var(--space-2); }
-  .stat strong { font-size: var(--cn-type-lede-size); }
-  .stat.is-lg strong { font-size: var(--cn-type-value-size); }
-  :is(.panel-header, .modal > header, .drawer > header) :is(h2, h3) { font-size: min(var(--band-title-size), var(--cn-type-body-size)); }
-  .panel.is-lead > .panel-header :is(h2, h3) { font-size: min(var(--lead-title-size), var(--cn-type-body-size)); }
   .accordion > :is(label, summary):has(> .cn-meta) { flex-wrap: wrap; row-gap: var(--space-1); }
   .accordion > :is(label, summary) > .cn-meta { order: 1; flex-basis: 100%; }
   .kv { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1); }
@@ -1924,8 +1562,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 
 @media (prefers-reduced-transparency: reduce) {
   .topbar { background: var(--cn-surface-page); backdrop-filter: none; }
-  .sidebar { backdrop-filter: none; }
-  @media (max-width: 1060px) { .sidebar { background: var(--cn-surface-recessed); } }
   dialog:is(.modal, .drawer)::backdrop { backdrop-filter: none; background: color-mix(in srgb, var(--crust) 88%, transparent); }
 }
 
@@ -1937,145 +1573,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
   a:hover:not(:active) > .accent-card,
   .btn-secondary:hover:not(:active) { box-shadow: var(--cn-plate), var(--hard-extra); }
 }
-
-/* ── Tabs: views of one panel ────────────────────────────────────────────────
-   The selected tab rises out of a shallow carve, the reverse of the
-   segmented control.                                                       */
-.tabs {
-  position: relative;
-  max-width: 100%;
-  padding: var(--space-1);
-  display: inline-flex;
-  gap: var(--space-1);
-  overflow-x: auto;
-  border-radius: var(--cn-radius-card);
-  box-shadow: var(--cn-carve-ring), var(--neu-inset-soft);
-  scrollbar-width: none;
-}
-.tabs > [role="tab"] {
-  min-height: var(--control-h-sm);
-  padding: 0 var(--space-4);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex: 0 0 auto;
-  color: var(--cn-fg-muted);
-  border: 1px solid transparent;
-  border-radius: var(--cn-radius-control);
-  background: transparent;
-  font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast);
-}
-.tabs > [role="tab"]:hover { color: var(--cn-fg); }
-.tabs > [role="tab"][aria-selected="true"] {
-  color: var(--cn-fg);
-  border-color: var(--engaged-edge);
-  background: var(--cn-surface-raised);
-  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
-}
-/* With tabs() wired, the selected fill moves as one pill. */
-.tabs[data-cn-indicator] { isolation: isolate; }
-.tabs[data-cn-indicator]::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: var(--space-1);
-  bottom: var(--space-1);
-  left: 0;
-  width: var(--cn-tab-w, 0);
-  translate: var(--cn-tab-x, 0) 0;
-  border: 1px solid var(--engaged-edge);
-  border-radius: var(--cn-radius-control);
-  background: var(--cn-surface-raised);
-  box-shadow: var(--neu-raised-soft), var(--cn-lit-edge);
-  pointer-events: none;
-  transition: translate var(--t-fast) var(--ease-out), width var(--t-fast) var(--ease-out);
-}
-.tabs[data-cn-indicator] > [role="tab"][aria-selected="true"] { border-color: transparent; background: transparent; box-shadow: none; }
-.tabs > [role="tab"] > svg { width: 16px; height: 16px; flex: 0 0 auto; }
-.tabs > [role="tab"]:disabled { opacity: var(--disabled-opacity); cursor: not-allowed; }
-
-/* ── Menu: a list of actions in a popover ──────────────────────────────────
-   menu() in catppuccin-neu/js wires the arrow keys, Home, End and Escape. */
-.menu { width: auto; min-width: 200px; max-width: min(320px, 100vw - 2 * var(--space-4)); padding: var(--space-1); }
-.menu [role^="menuitem"] {
-  width: 100%;
-  min-height: var(--control-h-sm);
-  padding: 0 var(--space-3);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--cn-fg-soft);
-  border: 0;
-  border-radius: var(--cn-radius-control);
-  background: transparent;
-  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
-  text-align: start;
-  text-decoration: none;
-  cursor: pointer;
-}
-.menu [role^="menuitem"]:is(:hover, :focus-visible) { color: var(--cn-fg); background: var(--hover); }
-/* The focus ring is inset so the row's neighbors don't clip it. */
-.menu [role^="menuitem"]:focus-visible { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
-.menu [role^="menuitem"] > svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--cn-fg-faint); }
-.menu [role^="menuitem"] > kbd { margin-inline-start: auto; color: var(--cn-fg-muted); font: var(--cn-type-code-weight) var(--cn-type-code-size)/1 var(--mono); }
-.menu [role^="menuitem"][aria-checked="true"]::after {
-  content: "";
-  width: 14px;
-  height: 14px;
-  margin-inline-start: auto;
-  flex: 0 0 auto;
-  background: var(--cn-interactive);
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-.menu > .is-danger { color: var(--cn-danger); }
-.menu > .is-danger:is(:hover, :focus-visible) { color: var(--cn-danger); background: var(--cn-danger-wash); }
-.menu [role^="menuitem"]:is(:disabled, [aria-disabled="true"]) { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
-.menu > [role="separator"] { margin: var(--space-1) 0; border: 0; border-top: 1px solid var(--edge-soft); }
-.menu > .cn-microlabel { padding: var(--space-2) var(--space-3) var(--space-1); }
-/* Once any row leads with an icon, every label starts at the icon column's text edge. */
-.menu:has(> [role^="menuitem"] > svg) > [role^="menuitem"]:not(:has(> svg)),
-.menu:has(> [role^="menuitem"] > svg) > .cn-microlabel { padding-inline-start: calc(var(--space-3) + var(--space-4) + var(--space-2)); }
-
-/* ── Listbox: a list of options to pick from ───────────────────────────────
-   Compose .well standalone, or .popover under a combobox. listbox() in
-   catppuccin-neu/js marks the active row data-active.                     */
-.listbox {
-  max-height: min(320px, 50vh);
-  padding: var(--space-1);
-  display: grid;
-  align-content: start;
-  overflow-y: auto;
-  scrollbar-color: var(--surface-2) transparent;
-}
-.popover.listbox { width: auto; min-width: 200px; }
-.listbox [role="option"] {
-  min-height: var(--control-h-sm);
-  padding: 0 var(--space-3);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--cn-fg-soft);
-  border-radius: var(--cn-radius-control);
-  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
-  cursor: pointer;
-}
-.listbox [role="option"]:is(:hover, [data-active]) { color: var(--cn-fg); background: var(--hover); }
-.listbox [role="option"][aria-selected="true"] { color: var(--cn-fg); background: var(--wash); font-weight: var(--cn-type-name-weight); }
-.listbox [role="option"][aria-selected="true"]::after {
-  content: "";
-  width: 14px;
-  height: 14px;
-  margin-inline-start: auto;
-  flex: 0 0 auto;
-  background: var(--cn-interactive);
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 13 4 4 10-10'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-.listbox [role="option"][aria-disabled="true"] { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
-.listbox:focus-visible:has([data-active]) { outline-color: transparent; }
-:is(.listbox:focus-visible, .listbox[data-cn-keyboard]) [role="option"][data-active] { outline: 2px solid var(--cn-focus); outline-offset: -2px; }
 
 /* ── Slider: a range input ──────────────────────────────────────────────────
    Firefox fills the track natively. Elsewhere the consumer keeps --value
@@ -2126,65 +1623,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 /* Undoes the field carve rules, so the slider keeps its own track. */
 .field .slider { height: 24px; padding: 0; border-radius: 0; background: transparent; box-shadow: none; }
 
-/* ── Pagination and breadcrumbs: position in a sequence ──────────────────── */
-.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
-.pagination > :is(a, button, span) {
-  min-width: var(--control-h-sm);
-  height: var(--control-h-sm);
-  padding: 0 var(--space-2);
-  display: inline-grid;
-  place-items: center;
-  color: var(--cn-fg-body);
-  border: 1px solid transparent;
-  border-radius: var(--cn-radius-control);
-  background: transparent;
-  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/1 var(--sans);
-  font-variant-numeric: tabular-nums;
-  text-decoration: none;
-  transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
-}
-.pagination > :is(a, button) { cursor: pointer; }
-.pagination > span { color: var(--cn-fg-muted); }
-.pagination > :is(a, button):hover { color: var(--cn-fg); background: var(--hover); }
-.pagination > [aria-current="page"] {
-  transform: translateY(1px);
-  color: var(--cn-fg);
-  border-color: var(--engaged-edge);
-  background: var(--wash);
-  box-shadow: var(--neu-inset);
-  font-weight: var(--cn-type-ui-weight);
-}
-.pagination > :is(a, button) > svg { width: 16px; height: 16px; }
-.pagination > :is(a, button):is(:disabled, [aria-disabled="true"]) { opacity: var(--disabled-opacity); cursor: not-allowed; background: transparent; }
-.breadcrumbs ol { margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); list-style: none; }
-.breadcrumbs li { margin: 0; display: inline-flex; align-items: center; gap: var(--space-2); color: var(--cn-fg-muted); font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans); }
-.breadcrumbs li + li::before {
-  content: "";
-  width: 12px;
-  height: 12px;
-  background: var(--cn-fg-faint);
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-.breadcrumbs:dir(rtl) li + li::before { scale: -1 1; }
-.breadcrumbs a { color: var(--cn-fg-body); }
-.breadcrumbs a:hover { color: var(--cn-fg); }
-.breadcrumbs [aria-current="page"] { color: var(--cn-fg); font-weight: var(--cn-type-name-weight); }
-
-/* ── Prose: long-form content ───────────────────────────────────────────────
-   The one recipe that styles bare elements, and only inside itself.       */
-.cn-prose { max-inline-size: var(--cn-measure); color: var(--cn-fg-body); font: var(--cn-type-body-weight) var(--cn-type-body-size)/var(--cn-type-body-leading) var(--sans); }
-.cn-prose > * { margin-block: 0; }
-.cn-prose > * + * { margin-block-start: var(--space-4); }
-.cn-prose > h2 { margin-block-start: var(--space-7); color: var(--cn-fg); font: var(--cn-type-heading-weight) var(--cn-type-heading-size)/var(--cn-type-heading-leading) var(--sans); letter-spacing: var(--cn-type-heading-tracking); text-wrap: balance; }
-.cn-prose > h3 { margin-block-start: var(--space-6); color: var(--cn-fg); font: var(--cn-type-title-weight) var(--cn-type-title-size)/var(--cn-type-title-leading) var(--sans); letter-spacing: var(--cn-type-title-tracking); }
-.cn-prose > h4 { margin-block-start: var(--space-5); color: var(--cn-fg); font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans); }
-.cn-prose > :is(h2, h3, h4) + * { margin-block-start: var(--space-3); }
-.cn-prose > :first-child { margin-block-start: 0; }
-.cn-prose :not(pre) > code { color: var(--cn-fg-soft); font-family: var(--mono); font-size: .92em; font-variant-ligatures: none; }
-.cn-prose > blockquote { margin-inline: 0; padding-inline-start: var(--space-4); color: var(--cn-fg-soft); border-inline-start: 2px solid var(--edge-strong); }
-.cn-prose > hr { margin-block: var(--space-6); border: 0; border-top: 1px solid var(--edge-soft); }
-.cn-prose strong { color: var(--cn-fg); font-weight: var(--cn-type-name-weight); }
-
 /* ── Skip link: the first focusable element on a page ──────────────────────
    Hidden until it takes keyboard focus.                                   */
 .cn-skip-link {
@@ -2205,103 +1643,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 }
 .cn-skip-link:focus-visible { translate: 0 0; }
 
-/* ── Sidebar: an app's side navigation ──────────────────────────────────────
-   At 1060px and below it folds into a sticky bar. The consumer toggles
-   .is-open and aria-expanded.                                              */
-.app-shell.has-sidebar { flex-direction: row; }
-.app-shell.has-sidebar > :not(.sidebar) { flex: 1 1 0; min-width: 0; }
-.sidebar {
-  width: var(--sidebar-w, 264px);
-  height: 100vh;
-  height: 100dvh;
-  flex: 0 0 auto;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  border-inline-end: 1px solid var(--edge);
-  background: var(--cn-surface-recessed);
-}
-.sidebar-head {
-  padding: var(--space-5) var(--space-5) var(--space-6);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-}
-.sidebar-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 0 var(--space-3) var(--space-6);
-  scrollbar-color: var(--surface-2) transparent;
-}
-.sidebar-toggle { display: none; }
-.sidebar-nav { display: grid; gap: var(--space-5); align-content: start; }
-.sidebar-nav > * { display: grid; gap: var(--space-1); }
-.sidebar-nav .cn-microlabel { margin: 0 0 var(--space-2); padding: 0 var(--space-3); }
-.sidebar-nav a {
-  padding: var(--space-2) var(--space-3);
-  color: var(--cn-fg-muted);
-  border: 1px solid transparent;
-  border-radius: var(--cn-radius-control);
-  font: var(--cn-type-label-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
-  text-decoration: none;
-  transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast) var(--ease-spring), box-shadow var(--t-fast) var(--ease-spring);
-}
-.sidebar-nav a:hover { color: var(--cn-fg); background: var(--hover); }
-/* The current page is a position: the spine and 600, no press. Its group
-   lifts its microlabel through --cn-microlabel-ink, because .cn-microlabel
-   sets its color in the utilities layer, which wins. */
-.sidebar-nav > :has(a[aria-current="page"]) { --cn-microlabel-ink: var(--cn-fg); }
-.sidebar-nav a[aria-current="page"] {
-  position: relative;
-  color: var(--cn-fg);
-  font-weight: var(--cn-type-name-weight);
-}
-.sidebar-nav a[aria-current="page"]::before {
-  content: "";
-  position: absolute;
-  inset-block: var(--space-2);
-  inset-inline-start: 0;
-  width: 4px;
-  border-start-end-radius: var(--cn-radius-chip);
-  border-end-end-radius: var(--cn-radius-chip);
-  background: var(--cn-interactive);
-}
-@media (max-width: 1060px) {
-  .app-shell.has-sidebar { flex-direction: column; }
-  .sidebar {
-    width: auto;
-    height: auto;
-    border-inline-end: 0;
-    border-bottom: 1px solid var(--edge);
-    background: color-mix(in srgb, var(--cn-surface-recessed) 88%, transparent);
-    backdrop-filter: blur(14px);
-  }
-  .sidebar-head { padding: var(--space-3) var(--page-gutter); }
-  /* Focus not obscured (WCAG 2.4.11): scrolls stop short of the folded bar. */
-  :root:has(.sidebar) { scroll-padding-top: calc(var(--control-h-sm) + 3 * var(--space-3) + 1px); }
-  .sidebar-toggle { display: inline-flex; }
-  /* Opacity and translate only, so no box that holds text changes height. */
-  .sidebar-body {
-    display: none;
-    max-height: min(60vh, 480px);
-    padding: 0 var(--page-gutter) var(--space-5);
-    opacity: 0;
-    translate: 0 -4px;
-    transition: opacity var(--t-exit) var(--ease-in), translate var(--t-exit) var(--ease-in), display var(--t-exit) allow-discrete;
-  }
-  .sidebar.is-open .sidebar-body {
-    display: grid;
-    opacity: 1;
-    translate: none;
-    transition: opacity var(--t-base) var(--ease-out), translate var(--t-base) var(--ease-out), display var(--t-base) allow-discrete;
-  }
-  @starting-style { .sidebar.is-open .sidebar-body { opacity: 0; translate: 0 -4px; } }
-}
-
 /* ── App shell and live dot ─────────────────────────────────────────────── */
 
 .app-shell {
@@ -2318,6 +1659,6 @@ dialog:is(.modal, .drawer)[open]::backdrop { opacity: 1; }
 .live-dot {
   width: 7px; height: 7px; flex: 0 0 auto; display: inline-block; border-radius: 50%;
   color: var(--cn-success); background: currentColor;
-  box-shadow: var(--cn-live-halo);
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 12%, transparent);
   animation: pulse 1.5s var(--ease-out) infinite;
 }

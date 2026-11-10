@@ -20,14 +20,9 @@ export default function SegmentedPage() {
   return (
     <Doc
       title="Segmented"
-      lede="A row of mutually exclusive options. Options carry the hard offset at rest, half-slide while held, and press in once selected."
+      lede="A row of mutually exclusive options."
     >
-      <p class="cn-copy">
-        The recipe styles every direct child of <code class="cn-code-inline">.segmented</code>, so the same class works on
-        a row of buttons or a group of labels wrapping visually hidden radios.
-      </p>
-
-      <Demo lead title="Button form" why="Markup and the selected state" classes='segmented › button[aria-pressed="true"]'>
+      <Demo title="Button form" classes='segmented › button[aria-pressed="true"]'>
         <div class="segmented" role="group" aria-label="Billing period">
           {PERIODS.map((p) => (
             <button
@@ -44,18 +39,10 @@ export default function SegmentedPage() {
       </Demo>
 
       <p class="cn-copy">
-        Mark the selection with{" "}
-        <code class="cn-code-inline">aria-pressed="true"</code> on a button, or{" "}
-        <code class="cn-code-inline">.active</code> on a label. The selected option sits pressed in on the mauve wash,
-        inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides.
+        Mark the selection with <code class="cn-code-inline">aria-pressed="true"</code> on a button, or <code class="cn-code-inline">.active</code> on a label.
       </p>
 
-      <p class="cn-copy">
-        Use buttons for switches the app reacts to at once. Set{" "}
-        <code class="cn-code-inline">aria-pressed</code> from your state.
-      </p>
-
-      <Demo title="Radio form" why="How the radio form submits and takes focus" classes="segmented › label.active > input.cn-sr-only">
+      <Demo title="Radio form" classes="segmented › label.active > input.cn-sr-only">
         <div class="segmented">
           {PERIODS.map((p) => (
             <label key={p.id} class={period === p.id ? "active" : ""}>
@@ -74,12 +61,10 @@ export default function SegmentedPage() {
       </Demo>
 
       <p class="cn-copy">
-        Inside a form, wrap a radio in each option's label and hide it with{" "}
-        <code class="cn-code-inline">.cn-sr-only</code>. The value submits natively and arrow keys move the selection.
-        When the hidden input takes keyboard focus, the recipe draws the focus outline, <code class="cn-code-inline">--cn-focus</code>, around the whole label.
+        Inside a form, wrap a radio in each label and hide it with <code class="cn-code-inline">.cn-sr-only</code>. The value submits natively and arrow keys move the selection.
       </p>
 
-      <Demo title="A disabled option" why="How an unavailable option looks" classes="segmented › button[disabled]">
+      <Demo title="A disabled option" classes="segmented › button[disabled]">
         <div class="segmented" role="group" aria-label="Export format">
           <button type="button" aria-pressed="true">
             <b>CSV</b>
@@ -96,13 +81,7 @@ export default function SegmentedPage() {
         </div>
       </Demo>
 
-      <p class="cn-copy">
-        A <code class="cn-code-inline">disabled</code> or{" "}
-        <code class="cn-code-inline">aria-disabled="true"</code> option dims, drops its plate and outline and takes the flat sunken fill,
-        like a disabled secondary button.
-      </p>
-
-      <Demo title="Stacked" why="When to stack" classes="segmented is-stacked">
+      <Demo title="Stacked" classes="segmented is-stacked">
         <div class="segmented is-stacked" style="width: min(420px, 100%)">
           {PLANS.map((p) => (
             <label key={p.id} class={plan === p.id ? "active" : ""}>
@@ -119,12 +98,6 @@ export default function SegmentedPage() {
           ))}
         </div>
       </Demo>
-
-      <p class="cn-copy">
-        <code class="cn-code-inline">.is-stacked</code> turns the grid vertical with roomier rows and a larger{" "}
-        <code class="cn-code-inline">&lt;b&gt;</code>, for options that need a description. Below 520px the default row
-        form stacks on its own.
-      </p>
 
       <CodeBlock
         title="Markup"
@@ -150,18 +123,14 @@ export default function SegmentedPage() {
       />
 
       <Props
-        title="Variants & knobs"
+        title="Classes and tokens"
         rows={[
-          { name: ".segmented", notes: "Equal-width column grid, 8px gap. Styles every direct child, buttons or labels." },
-          { name: ".segmented > *", notes: "Rests on --cn-surface-raised with a hairline, the plate and the lit top edge. Hover warms the border to mauve at --cn-step-edge." },
-          { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', contrast: "Wash 1.63:1 on base · rim 3.3:1 on the wash · hint 5.68:1 on the wash", notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
-          { name: '.segmented > :disabled / [aria-disabled="true"]', notes: "--disabled-opacity (.7), no plate, no outline, the flat --cn-surface-sunken fill, a not-allowed cursor. A chosen option that is disabled keeps the engaged carve and dims." },
-          { name: "svg inside an option", notes: "16px, sized by the recipe." },
-          { name: ".is-stacked", notes: "Vertical list, 12px gap, taller rows, 18px <b>. For described options." },
-          { name: "<b> / <small>", notes: "Option title (sans 600 14px) and a quiet hint line at the 14px meta role in --cn-fg-muted inside each option." },
-          { name: ".cn-sr-only", notes: "Hides the radio in the label form; label:has(input:focus-visible) draws the focus outline." },
-          { name: "--control-h", default: "46px", notes: "Option min-height is the knob + 12px (58px); stacked is the knob + 24px." },
-          { name: "--plate", default: "var(--neu-ink)", notes: "The plate under every unselected option." },
+          { name: ".segmented", values: "wrapper", notes: "Styles every direct child, buttons or labels." },
+          { name: "[aria-pressed=\"true\"] / [aria-checked=\"true\"] / .active", values: "on a child", notes: "The selection." },
+          { name: ":disabled", values: "on a button", notes: "Dims and loses the plate." },
+          { name: ".is-stacked", values: "modifier", notes: "A vertical list for options with a description." },
+          { name: "<b> / <small>", values: "inside a child", notes: "The option title and a hint line." },
+          { name: "--plate", default: "var(--neu-ink)", notes: "The plate under each unselected option." },
         ]}
       />
     </Doc>

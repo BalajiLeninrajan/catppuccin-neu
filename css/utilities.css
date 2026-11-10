@@ -7,14 +7,7 @@
 .cn-raised      { box-shadow: var(--neu-raised); }
 .cn-raised-soft { box-shadow: var(--neu-raised-soft); }
 .cn-inset       { box-shadow: var(--neu-inset); }
-.cn-inset-soft  { box-shadow: var(--neu-inset-soft); }
-.cn-pop         { box-shadow: var(--shadow-pop); }
-.cn-cast        { box-shadow: var(--shadow-cast), var(--cn-lit-edge); }
-.cn-mark-drop   { box-shadow: var(--shadow-mark); }
 .cn-hard        { box-shadow: var(--cn-plate), var(--cn-lit-edge); }
-.cn-hard-lg     { box-shadow: var(--cn-plate-lg); }
-.cn-hard-sm     { box-shadow: var(--cn-plate-sm); }
-.cn-flat        { box-shadow: none; }
 
 /* ── Interaction ────────────────────────────────────────────────────────── */
 
@@ -42,20 +35,18 @@
 
 .cn-label {
   font: var(--cn-type-label-weight) var(--cn-type-label-size)/var(--cn-type-label-leading) var(--sans);
-  letter-spacing: var(--cn-type-label-tracking);
-  color: var(--cn-fg-soft);
+  letter-spacing: 0;
+  color: var(--cn-fg-body);
 }
 .cn-microlabel {
   font: var(--cn-type-micro-weight) var(--cn-type-micro-size)/var(--cn-type-micro-leading) var(--sans);
   letter-spacing: var(--cn-type-micro-tracking);
   text-transform: uppercase;
-  /* A recipe sets --cn-microlabel-ink, since a color in the recipes layer
-     loses to this one. */
-  color: var(--cn-microlabel-ink, var(--cn-fg-muted));
+  color: var(--cn-fg-muted);
 }
 .cn-ui {
   font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
-  letter-spacing: var(--cn-type-ui-tracking);
+  letter-spacing: 0;
 }
 .cn-value {
   font: var(--cn-type-value-weight) var(--cn-type-value-size)/var(--cn-type-value-leading) var(--sans);
@@ -63,7 +54,7 @@
   font-variant-numeric: tabular-nums;
 }
 .cn-value-lg {
-  font: var(--cn-type-value-lg-weight) var(--cn-type-value-lg-size)/var(--cn-type-value-lg-leading) var(--sans);
+  font: var(--cn-type-value-weight) var(--cn-type-value-lg-size)/var(--cn-type-value-leading) var(--sans);
   letter-spacing: var(--cn-type-value-lg-tracking);
   font-variant-numeric: tabular-nums;
   color: var(--accent);  /* opt out via a color utility */
@@ -72,18 +63,18 @@
 :where(.accent-card) .cn-value-lg { color: var(--cn-fg); }
 .cn-meta {
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
-  letter-spacing: var(--cn-type-meta-tracking);
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   color: var(--cn-fg-muted);
 }
 .cn-code {
   font: var(--cn-type-code-weight) var(--cn-type-code-size)/var(--cn-type-code-leading) var(--mono);
-  letter-spacing: var(--cn-type-code-tracking);
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   font-variant-ligatures: none;
 }
 .cn-code-inline {
-  color: var(--cn-fg-soft);
+  color: var(--cn-fg-body);
   font-family: var(--mono);
   font-variant-ligatures: none;
   font-size: .92em;
@@ -109,41 +100,28 @@
   margin: 0;
 }
 :is(.cn-display, .display-title).is-sm { font-size: var(--cn-type-display-sm-size); }
-.cn-heading {
-  font: var(--cn-type-heading-weight) var(--cn-type-heading-size)/var(--cn-type-heading-leading) var(--sans);
-  letter-spacing: var(--cn-type-heading-tracking);
-  text-wrap: balance;
-}
 .cn-title {
   font: var(--cn-type-title-weight) var(--cn-type-title-size)/var(--cn-type-title-leading) var(--sans);
   letter-spacing: var(--cn-type-title-tracking);
 }
 .cn-name {
-  font: var(--cn-type-name-weight) var(--cn-type-name-size)/var(--cn-type-name-leading) var(--sans);
-  letter-spacing: var(--cn-type-name-tracking);
+  font: var(--cn-type-ui-weight) var(--cn-type-ui-size)/var(--cn-type-ui-leading) var(--sans);
+  letter-spacing: 0;
   color: var(--cn-fg);
 }
 .cn-lede {
   font: var(--cn-type-lede-weight) var(--cn-type-lede-size)/var(--cn-type-lede-leading) var(--sans);
-  letter-spacing: var(--cn-type-lede-tracking);
-  color: var(--cn-fg-soft);
+  letter-spacing: 0;
+  color: var(--cn-fg-body);
   max-width: var(--cn-measure);
 }
 .cn-copy {
   font: var(--cn-type-body-weight) var(--cn-type-body-size)/var(--cn-type-body-leading) var(--sans);
-  letter-spacing: var(--cn-type-body-tracking);
+  letter-spacing: 0;
   color: var(--cn-fg-body);
 }
 
 /* ── Color ──────────────────────────────────────────────────────────────── */
-
-/* Text by role. These follow prefers-contrast; the palette names below do not. */
-.cn-fg          { color: var(--cn-fg); }
-.cn-fg-soft     { color: var(--cn-fg-soft); }
-.cn-fg-body     { color: var(--cn-fg-body); }
-.cn-fg-muted    { color: var(--cn-fg-muted); }
-.cn-fg-placeholder { color: var(--cn-fg-placeholder); }
-.cn-fg-faint    { color: var(--cn-fg-faint); }
 
 .cn-text-text      { color: var(--text); }
 .cn-text-subtext-1 { color: var(--subtext-1); }
@@ -152,41 +130,19 @@
 .cn-text-overlay-1 { color: var(--overlay-1); }
 .cn-text-overlay-0 { color: var(--overlay-0); }
 .cn-text-mauve     { color: var(--mauve); }
-.cn-text-pink      { color: var(--pink); }
 .cn-text-red       { color: var(--red); }
 .cn-text-green     { color: var(--green); }
-.cn-text-peach     { color: var(--peach); }
-.cn-text-yellow    { color: var(--yellow); }
-.cn-text-blue      { color: var(--blue); }
-.cn-text-teal      { color: var(--teal); }
-.cn-text-lavender  { color: var(--lavender); }
 .cn-text-accent    { color: var(--accent); }
-.cn-text-tone      { color: var(--tone); }
 
-.cn-bg-page   { background: var(--cn-surface-page); }
 .cn-bg-base   { background: var(--base); }
 .cn-bg-mantle { background: var(--mantle); }
-.cn-bg-crust  { background: var(--crust); }
 .cn-bg-well   { background: var(--cn-surface-sunken); }
-.cn-bg-head   { background: var(--cn-surface-band); }
-.cn-bg-raised  { background: var(--cn-surface-raised); }
-.cn-bg-overlay { background: var(--cn-surface-overlay); }
-.cn-bg-recessed { background: var(--cn-surface-recessed); }
-.cn-bg-hover   { background: var(--hover); }
 .cn-tint      { background: var(--tint); }
-.cn-tint-accent {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) var(--cn-step-wash), var(--mantle)), var(--mantle) 48%);
-}
 
-/* The four status setters also bring their glyph and ladder stops. */
-.cn-tone-danger  { --tone: var(--cn-danger); --cn-glyph: var(--cn-glyph-danger);
-  --tint: var(--cn-danger-tint); --tone-wash: var(--cn-danger-wash); --tone-edge: var(--cn-danger-edge); --tone-border: var(--cn-danger-border); }
-.cn-tone-warning { --tone: var(--cn-warning); --cn-glyph: var(--cn-glyph-warning);
-  --tint: var(--cn-warning-tint); --tone-wash: var(--cn-warning-wash); --tone-edge: var(--cn-warning-edge); --tone-border: var(--cn-warning-border); }
-.cn-tone-success { --tone: var(--cn-success); --cn-glyph: var(--cn-glyph-success);
-  --tint: var(--cn-success-tint); --tone-wash: var(--cn-success-wash); --tone-edge: var(--cn-success-edge); --tone-border: var(--cn-success-border); }
-.cn-tone-info    { --tone: var(--cn-info); --cn-glyph: var(--cn-glyph-info);
-  --tint: var(--cn-info-tint); --tone-wash: var(--cn-info-wash); --tone-edge: var(--cn-info-edge); --tone-border: var(--cn-info-border); }
+.cn-tone-danger  { --tone: var(--cn-danger); }
+.cn-tone-warning { --tone: var(--cn-warning); }
+.cn-tone-success { --tone: var(--cn-success); }
+.cn-tone-info    { --tone: var(--cn-info); }
 .cn-tone-red    { --tone: var(--red); }
 .cn-tone-green  { --tone: var(--green); }
 .cn-tone-peach  { --tone: var(--peach); }
@@ -198,10 +154,6 @@
 
 .cn-edge        { border: 1px solid var(--edge); }
 .cn-edge-soft   { border: 1px solid var(--edge-soft); }
-.cn-edge-line   { border: 1px solid var(--surface-0); }
-.cn-edge-mauve  { border: 1px solid color-mix(in srgb, var(--mauve) var(--cn-step-plate), transparent); }
-.cn-edge-tone   { border: 1px solid var(--tone-border); }
-.cn-edge-accent { border: 1px solid color-mix(in srgb, var(--accent) var(--cn-step-plate), var(--surface-0)); }
 .cn-edge-dashed { border: 1px dashed var(--surface-1); }
 
 /* The engaged state. Declared after the edge utilities so its rim wins. */
@@ -217,22 +169,11 @@
 .cn-r-panel   { border-radius: var(--cn-radius-panel); }
 .cn-r-card    { border-radius: var(--cn-radius-card); }
 .cn-r-control { border-radius: var(--cn-radius-control); }
-.cn-r-mark    { border-radius: var(--cn-radius-control); }
 .cn-r-chip    { border-radius: var(--cn-radius-chip); }
 .cn-r-pill    { border-radius: 999px; }
 .cn-r-round   { border-radius: 50%; }
 
 /* ── Structure ──────────────────────────────────────────────────────────── */
-
-.cn-spine { position: relative; }
-.cn-spine::before {
-  content: "";
-  position: absolute;
-  inset: var(--space-3) auto var(--space-3) 0;
-  width: 4px;
-  border-radius: 0 var(--cn-radius-chip) var(--cn-radius-chip) 0;
-  background: var(--cn-interactive);
-}
 
 /* Screen-reader only. Clipped, so assistive tech still reads it. */
 .cn-sr-only {
@@ -255,13 +196,6 @@
 .cn-row     { display: flex; align-items: center; gap: var(--space-2); }
 .cn-stack   { display: grid; gap: var(--space-3); }
 .cn-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
-/* Split: two groups at opposite ends that wrap when they no longer fit.
-   It sits above the modifiers so .cn-top and .cn-baseline can realign it. */
-.cn-split { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-4); }
-.cn-split > :first-child { flex: 1 1 auto; min-width: 0; }
-/* The lede does not widen the first group, so the split wraps on the title's width.
-   It needs the title before it, or the group has no width. */
-.cn-split > :first-child > :is(h1, h2, .cn-display, .display-title, .cn-heading, .cn-title) ~ .cn-lede { contain: inline-size; }
 .cn-between { justify-content: space-between; }
 .cn-center  { justify-content: center; }
 .cn-end     { justify-content: flex-end; }
@@ -275,47 +209,12 @@
 .cn-fit     { width: fit-content; }
 .cn-block   { display: block; }
 .cn-auto-l  { margin-left: auto; }
-.cn-mx-auto { margin-inline: auto; }
-
-.cn-measure { max-inline-size: var(--cn-measure); margin-inline: auto; }
-.cn-with-side { display: flex; flex-wrap: wrap; gap: var(--space-5); }
-.cn-with-side > :first-child { flex: 1 1 var(--side-w, 16rem); }
-.cn-with-side > :last-child { flex: 999 1 0; min-inline-size: 60%; }
 
 .cn-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 .cn-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 .cn-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--cn-grid-gap); }
 @media (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
-.cn-grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; gap: var(--cn-grid-gap); }
-.cn-span-3 { grid-column: span 3; }
-.cn-span-4 { grid-column: span 4; }
-.cn-span-5 { grid-column: span 5; }
-.cn-span-6 { grid-column: span 6; }
-.cn-span-7 { grid-column: span 7; }
-.cn-span-8 { grid-column: span 8; }
-.cn-span-9 { grid-column: span 9; }
-.cn-span-12 { grid-column: 1 / -1; }
-/* Splits go to halves, and a 9 and an odd last child take the row.
-   The :has() guard keeps the odd-child rule off grids that mix in a 6 or 12. */
-@media (max-width: 1060px) {
-  .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
-  .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),
-  .cn-grid-12 > .cn-span-9 + .cn-span-3 { grid-column: 1 / -1; }
-  .cn-grid-12 > .cn-span-9 { grid-column: 1 / -1; }
-}
-@container (max-width: 1060px) {
-  .cn-grid-12 > :is(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8) { grid-column: span 6; }
-  .cn-grid-12:not(:has(> :not(.cn-span-3, .cn-span-4, .cn-span-5, .cn-span-7, .cn-span-8))) > :last-child:nth-child(odd),
-  .cn-grid-12 > .cn-span-9 + .cn-span-3 { grid-column: 1 / -1; }
-  .cn-grid-12 > .cn-span-9 { grid-column: 1 / -1; }
-}
-@media (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
-@container (max-width: 760px) { .cn-grid-12 > [class*="cn-span-"] { grid-column: 1 / -1; } }
-/* Inside a .cn-container the grids answer the container's width. */
-.cn-container { container-type: inline-size; }
-@container (max-width: 760px) { .cn-grid-3, .cn-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@container (max-width: 520px) { .cn-grid-2, .cn-grid-3, .cn-grid-4 { grid-template-columns: minmax(0, 1fr); } }
 
 .cn-gap-4  { gap: var(--space-1); }
 .cn-gap-8  { gap: var(--space-2); }
@@ -323,11 +222,8 @@
 .cn-gap-16 { gap: var(--space-4); }
 .cn-gap-24 { gap: var(--space-5); }
 .cn-gap-32 { gap: var(--space-6); }
-.cn-gap-48 { gap: var(--space-7); }
-.cn-gap-64 { gap: var(--space-8); }
 
 .cn-p-0  { padding: 0; }
-.cn-p-4  { padding: var(--space-1); }
 .cn-p-8  { padding: var(--space-2); }
 .cn-p-12 { padding: var(--space-3); }
 .cn-p-16 { padding: var(--space-4); }
@@ -339,16 +235,9 @@
 .cn-px-12 { padding-inline: var(--space-3); }
 .cn-px-16 { padding-inline: var(--space-4); }
 .cn-px-24 { padding-inline: var(--space-5); }
-.cn-px-32 { padding-inline: var(--space-6); }
 
-.cn-py-0  { padding-block: 0; }
 .cn-py-8  { padding-block: var(--space-2); }
 .cn-py-12 { padding-block: var(--space-3); }
-.cn-py-16 { padding-block: var(--space-4); }
-.cn-py-24 { padding-block: var(--space-5); }
-.cn-py-32 { padding-block: var(--space-6); }
-.cn-py-48 { padding-block: var(--space-7); }
-.cn-py-64 { padding-block: var(--space-8); }
 
 .cn-m-0  { margin: 0; }
 
@@ -359,18 +248,13 @@
 .cn-mt-16 { margin-top: var(--space-4); }
 .cn-mt-24 { margin-top: var(--space-5); }
 .cn-mt-32 { margin-top: var(--space-6); }
-.cn-mt-48 { margin-top: var(--space-7); }
-.cn-mt-64 { margin-top: var(--space-8); }
 
 .cn-mb-0  { margin-bottom: 0; }
-.cn-mb-4  { margin-bottom: var(--space-1); }
 .cn-mb-8  { margin-bottom: var(--space-2); }
 .cn-mb-12 { margin-bottom: var(--space-3); }
 .cn-mb-16 { margin-bottom: var(--space-4); }
 .cn-mb-24 { margin-bottom: var(--space-5); }
 .cn-mb-32 { margin-bottom: var(--space-6); }
-.cn-mb-48 { margin-bottom: var(--space-7); }
-.cn-mb-64 { margin-bottom: var(--space-8); }
 
 .cn-divide > * + * { border-top: 1px solid var(--surface-0); }
 /* Zero specificity, so a spacing utility on the same list still applies. */

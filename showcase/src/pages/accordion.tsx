@@ -49,9 +49,9 @@ export default function AccordionPage() {
   return (
     <Doc
       title="Accordion"
-      lede="Stacked disclosure rows on native details and summary. No JS."
+      lede="Stacked disclosure rows on native details and summary. No script."
     >
-      <Demo lead title="Accordion" classes="details.accordion > summary + .fold" why="What the native element gives you">
+      <Demo title="Accordion" classes="details.accordion > summary + .fold">
         <div style="width:min(640px,100%)">
           {ITEMS.map(([title, body, open]) => (
             <details class="accordion" key={title} open={open}>
@@ -66,17 +66,9 @@ export default function AccordionPage() {
         </div>
       </Demo>
 
-      <p class="cn-copy">
-        The summary is the row and the whole row is the hit target. Enter and
-        Space toggle it, and assistive tech announces it as a disclosure.{" "}
-        <code class="cn-code-inline">[open]</code> is the open state. Closed content
-        leaves the tab order and the accessibility tree.
-      </p>
-
       <Demo
         title="Trailing meta, stacked in a panel"
         classes="panel accordion-stack · summary > b + .cn-meta"
-        why="How the title, the meta and the stack fit together"
       >
         <div class="panel accordion-stack" style="width:min(640px,100%)">
           {REVIEWS.map(([title, meta, body, open]) => (
@@ -97,18 +89,12 @@ export default function AccordionPage() {
       </Demo>
 
       <p class="cn-copy">
-        Wrap the title in <code class="cn-code-inline">b</code> (bold) or{" "}
-        <code class="cn-code-inline">p</code> (regular) and it grows, so the
-        meta rides against the chevron.{" "}
-        <code class="cn-code-inline">.accordion-stack</code> pads the group and drops
-        the closed last row's divider at the panel edge. At 520px and below
-        the meta wraps under the title.
+        Wrap the title in <code class="cn-code-inline">b</code> or <code class="cn-code-inline">p</code> and the meta rides against the chevron.
       </p>
 
       <Demo
         title="Exclusive group, details sharing a name"
         classes='details.accordion[name="billing-cycle"]'
-        why="How a shared name makes the group exclusive"
       >
         <div style="width:min(640px,100%)">
           {CYCLES.map(([title, body, open]) => (
@@ -125,9 +111,7 @@ export default function AccordionPage() {
       </Demo>
 
       <p class="cn-copy">
-        Give every <code class="cn-code-inline">details</code> in a group the same{" "}
-        <code class="cn-code-inline">name</code>. Opening one closes the rest, and
-        clicking the open one closes it, so the group can fully close.
+        Give every <code class="cn-code-inline">details</code> in a group the same <code class="cn-code-inline">name</code>. Opening one closes the rest.
       </p>
 
       <CodeBlock
@@ -143,49 +127,20 @@ export default function AccordionPage() {
       />
 
       <Props
-        title="Contract"
+        title="Classes"
         rows={[
-          {
-            name: "details.accordion",
-            values: "one disclosure row",
-            contrast: "Open tint 1.08:1 on a panel",
-            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] takes the card radius, the full inset, mauve at --cn-step-tint over whatever holds it, and a mauve title.",
-          },
-          {
-            name: "[name]",
-            values: "shared group name",
-            notes: "Makes the group exclusive. The open row still closes on click.",
-          },
-          {
-            name: "summary",
-            values: "title, or b + .cn-meta",
-            notes: "48px min-height row with a chevron. The title sets at the body size at 600 in --cn-fg. The native marker is hidden. Its focus ring draws inside the row.",
-          },
-          {
-            name: ".fold",
-            values: "one wrapper element inside",
-            notes: "Animates open and closed over --t-slow (.32s). Where ::details-content is missing, the close is instant.",
-          },
-          {
-            name: ".accordion-stack",
-            values: "on a .panel",
-            notes: "Pads the group and drops the closed last row's divider.",
-          },
-          {
-            name: ".is-open / [data-open]",
-            values: "state alias",
-            notes: "The open treatment on a div, for a framework that owns the state.",
-          },
+          { name: "details.accordion", values: "one disclosure row", notes: "[open] is the open state." },
+          { name: "[name]", values: "shared group name", notes: "Makes the group exclusive." },
+          { name: "summary", values: "title, or b + .cn-meta", notes: "The whole row is the hit target." },
+          { name: ".fold", values: "one wrapper element inside", notes: "Animates open and closed." },
+          { name: ".accordion-stack", values: "on a .panel", notes: "Pads the group." },
+          { name: "[data-open]", values: "state alias", notes: "The open treatment on a div, for a framework that owns the state." },
         ]}
       />
 
       <h2 class="cn-title">Label form</h2>
       <p class="cn-copy">
-        The older form still works: a <code class="cn-code-inline">div.accordion</code>{" "}
-        holding a label with a hidden checkbox, or radios sharing a name for an
-        exclusive group, then the same fold. Screen readers announce it as a
-        checkbox. It needs two listeners that details does not: one for Enter,
-        and one that lets a radio group close.
+        A <code class="cn-code-inline">div.accordion</code> holding a label with a hidden checkbox, or radios sharing a name, takes the same fold. Screen readers announce it as a checkbox. It needs two listeners that details does not.
       </p>
 
       <CodeBlock

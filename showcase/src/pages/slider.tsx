@@ -24,10 +24,10 @@ function SliderRow({ id, label, min, max, step = 1, initial, format, help, disab
   return (
     <div class="cn-stack cn-gap-8" style="width:min(420px,100%)">
       <div class="cn-row cn-between cn-baseline">
-        <label for={id} class={`cn-label${disabled ? " cn-fg-faint" : ""}`}>
+        <label for={id} class="cn-label" style={disabled ? "color:var(--cn-fg-faint)" : undefined}>
           {label}
         </label>
-        <output for={id} class="cn-ui cn-fg cn-tabular">
+        <output for={id} class="cn-ui cn-tabular" style="color:var(--cn-fg)">
           {format(value)}
         </output>
       </div>
@@ -61,11 +61,10 @@ export default function SliderPage() {
       lede="A range input on a carved track. The fill runs mauve up to a raised round thumb."
     >
       <p class="cn-copy">
-        Put <code class="cn-code-inline">.slider</code> on an{" "}
-        <code class="cn-code-inline">input type="range"</code>.
+        Put <code class="cn-code-inline">.slider</code> on an <code class="cn-code-inline">input type="range"</code>.
       </p>
 
-      <Demo lead title="With a label and an output" why="How the track and thumb are built" classes='input[type="range"].slider[style="--value: …"] + output'>
+      <Demo title="With a label and an output" classes='input[type="range"].slider[style="--value: …"] + output'>
         <SliderRow
           id="slider-terms"
           label="Payment terms"
@@ -86,15 +85,7 @@ export default function SliderPage() {
         />
       </Demo>
 
-      <p class="cn-copy">
-        The track is the progress track's carve. The thumb is a 20px raised
-        round on <code class="cn-code-inline">--cn-surface-raised</code> inside
-        a 1px <code class="cn-code-inline">--control-edge</code>. On hover its
-        edge warms to <code class="cn-code-inline">--engaged-edge</code>, and
-        held it shrinks to .92.
-      </p>
-
-      <Demo title="Disabled" why="Why the fill needs --value" classes="slider:disabled">
+      <Demo title="Disabled" classes="slider:disabled">
         <SliderRow
           id="slider-seats"
           label="Seats on the plan"
@@ -108,24 +99,11 @@ export default function SliderPage() {
       </Demo>
 
       <p class="cn-copy">
-        Firefox paints the fill natively. Other engines cannot, so the
-        recipe fills the track with a gradient that stops at{" "}
-        <code class="cn-code-inline">--value</code>. Keep it in step with one{" "}
-        <code class="cn-code-inline">input</code> listener, as below. A disabled
-        slider drops to <code class="cn-code-inline">--disabled-opacity</code>{" "}
-        with a not-allowed cursor. Give its label the disabled color yourself.
+        Firefox paints the fill natively. Other engines fill up to <code class="cn-code-inline">--value</code>, so keep it in step with the <code class="cn-code-inline">input</code> listener below.
       </p>
 
-      <h2 class="cn-title">Accessibility</h2>
       <p class="cn-copy">
-        A native range input brings its own keys. Pair it with a visible{" "}
-        <code class="cn-code-inline">label</code> and an{" "}
-        <code class="cn-code-inline">output for</code> that shows the value in
-        words. When the number alone is not the value a reader needs, set{" "}
-        <code class="cn-code-inline">aria-valuetext</code> to the same words,
-        such as "30 days". Keep the slider out of a{" "}
-        <code class="cn-code-inline">.field</code>, which styles every{" "}
-        <code class="cn-code-inline">input</code> in it as a carved well.
+        Pair the slider with a visible <code class="cn-code-inline">label</code> and an <code class="cn-code-inline">output</code>. Set <code class="cn-code-inline">aria-valuetext</code> when the number alone is not the value, such as "30 days". Keep it out of a <code class="cn-code-inline">.field</code>, which styles every <code class="cn-code-inline">input</code> inside as a well.
       </p>
 
       <CodeBlock
@@ -146,21 +124,12 @@ export default function SliderPage() {
 });`}
       />
 
-      <p class="cn-copy">
-        <code class="cn-code-inline">slider(input)</code> in the optional{" "}
-        <a href="/behavior">behavior module</a> does the same for one slider,
-        and <code class="cn-code-inline">init()</code> wires every{" "}
-        <code class="cn-code-inline">input[type="range"].slider</code> on the page.
-      </p>
-
       <Props
-        title="Contract"
+        title="Classes and tokens"
         rows={[
-          { name: ".slider", values: 'input[type="range"]', notes: "Full width, 24px tall, no native chrome." },
-          { name: "track", values: "::-webkit-slider-runnable-track / ::-moz-range-track", notes: "7px, pill radius, crust under --neu-inset-soft. Filled with --cn-interactive up to --value." },
-          { name: "thumb", values: "::-webkit-slider-thumb / ::-moz-range-thumb", contrast: "Edge 4.8:1 on the page, 4.4:1 on a raised fill, 3.5:1 on an overlay", notes: "20px round, 1px --control-edge border, --cn-surface-raised, --neu-raised-soft and --cn-lit-edge. Hover edge --engaged-edge. Held, scale .92." },
-          { name: "--value", values: "0% to 100%", default: "0%", notes: "Where the fill stops outside Firefox. Set it from an input listener, or with slider() from catppuccin-neu/js." },
-          { name: ":disabled", values: "on the input", notes: "--disabled-opacity (.7) and a not-allowed cursor." },
+          { name: ".slider", values: "input[type=\"range\"]", notes: "A carved track with a raised round thumb." },
+          { name: "--value", values: "0% to 100%", default: "0%", notes: "Where the fill stops outside Firefox." },
+          { name: ":disabled", values: "on the input", notes: "Dims the slider." },
         ]}
       />
     </Doc>

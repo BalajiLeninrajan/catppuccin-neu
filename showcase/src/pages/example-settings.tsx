@@ -1,9 +1,6 @@
-/* ── Example: billing settings ─────────────────────────────────────────────
-   A composed form built only from package classes, no sc- chrome. One
-   column at the narrow width, the header and the form 48px apart, sections
-   as plain panels 24px apart, one primary in the footer, and no tilted
-   panel: the tilt never sits on a form. The billing email shows an error:
-   the field closes into a red ring and its message leads with a glyph.  */
+/* Example: billing settings. A form built only from package classes. One
+   primary in the footer and no tilted panel. The billing email shows an
+   error. */
 
 import { useState } from "preact/hooks";
 
@@ -18,22 +15,13 @@ export default function SettingsExample() {
   const [receipts, setReceipts] = useState(true);
 
   return (
-    <div class="cn-stack cn-gap-48 page-enter">
+    <div class="cn-stack cn-gap-32 page-enter">
       <header class="cn-stack cn-gap-12">
-        <nav class="breadcrumbs cn-mb-12" aria-label="Breadcrumb">
-          <ol>
-            <li><a href="#" onClick={noNav}>Northwind Ops</a></li>
-            <li><a href="#" onClick={noNav}>Settings</a></li>
-            <li><span aria-current="page">Billing</span></li>
-          </ol>
-        </nav>
         <h1 class="cn-display is-sm">Billing settings</h1>
         <p class="cn-lede cn-m-0 cn-mt-12">
           How Northwind Ops invoices its customers and pays for its own plan.
           Changes apply to the next invoice, not to ones already sent.
         </p>
-        {/* When the page was last saved is the page's state, so it sits in
-            the header and the form footer holds only its two actions. */}
         <p class="cn-meta cn-m-0">Last saved Sep 24 by Nadia Rahman</p>
       </header>
 
@@ -99,7 +87,7 @@ export default function SettingsExample() {
             <div class="cn-stack cn-gap-8">
               <div class="cn-row cn-between cn-baseline">
                 <label for="set-grace" class="cn-label">Late fee grace period</label>
-                <output for="set-grace" class="cn-ui cn-fg cn-tabular">{graceText(grace)}</output>
+                <output for="set-grace" class="cn-ui cn-text-text cn-tabular">{graceText(grace)}</output>
               </div>
               <input
                 id="set-grace"

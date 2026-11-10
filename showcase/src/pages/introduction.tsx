@@ -5,256 +5,80 @@ const LAYER_CODE = `@layer cn.tokens, cn.recipes, cn.utilities;
 @import "./recipes.css" layer(cn.recipes);
 @import "./utilities.css" layer(cn.utilities);`;
 
-const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v1.0.0/css/index.css">
-<!-- the keyboard model for tabs, menus, listboxes and comboboxes -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v1.0.0/js/auto.js"></script>`;
+const CDN_CODE = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v2.0.0/css/index.css">`;
 
-const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v1.0.0`;
+const INSTALL_CODE = `pnpm add github:BalajiLeninrajan/catppuccin-neu#v2.0.0`;
 
 const IMPORT_CODE = `/* your entry stylesheet */
 @import "catppuccin-neu/css/index.css";`;
 
 const FONTS_CODE = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">`;
-
-const SYNC_CODE = `# copies tokens.css, utilities.css, recipes.css, index.css into public/styles
-node node_modules/catppuccin-neu/scripts/sync.mjs public/styles
-
-# or via the package bin
-pnpm exec catppuccin-neu-sync public/styles`;
-
-const LINKS_CODE = `<link rel="stylesheet" href="/styles/tokens.css">
-<link rel="stylesheet" href="/styles/recipes.css">
-<link rel="stylesheet" href="/styles/utilities.css">`;
-
-const TAILWIND_CODE = `// tailwind.config.cjs (Tailwind v3)
-module.exports = {
-  presets: [require("catppuccin-neu/tailwind/preset.cjs")],
-};
-
-/* Tailwind v4: the package first, so its layers are declared before
-   Tailwind's and a utility on an element beats the recipe on it. */
-@import "catppuccin-neu/css/index.css";
-@import "catppuccin-neu/tailwind/theme.css";
-@import "tailwindcss";`;
-
-/* A Lucide-style download glyph: 24-unit grid, stroke 2, round caps.
-   No width or height, so each recipe sizes it. */
-const DownloadIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-    <path d="m7 10 5 5 5-5" />
-    <path d="M12 15V3" />
-  </svg>
-);
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">`;
 
 export default function IntroductionPage() {
   return (
     <Doc
       title="Introduction"
-      lede="catppuccin-neu is a dark-only design system: Catppuccin Mocha color, neumorphic depth from a fixed top-left light source, one mauve accent. It ships as four plain CSS files."
+      lede="catppuccin-neu is a dark-only design system in plain CSS: Catppuccin Mocha color, a mauve primary, hard plates under everything you can click, carved fields and one tilted panel per view."
     >
-      <p class="cn-copy">
-        The page is mantle and surfaces sit a fill step above it on base. A
-        quiet hairline cuts their edge, and a dark foot on the bottom and
-        right gives their height.
-      </p>
-
-      <Demo lead title="First look" why="What you are looking at" row classes="btn btn-primary">
+      <Demo title="First look" row classes="btn btn-primary">
         <button type="button" class="btn btn-primary">New invoice</button>
         <button type="button" class="btn btn-secondary">Export</button>
         <span class="chip"><span class="live-dot" aria-hidden="true" /> 3 online</span>
         <span class="tag cn-tone-green">Paid</span>
       </Demo>
 
-      <section>
-        <h2 class="cn-title">The idea</h2>
-        <p class="cn-copy">
-          Raised panels sit on base, one fill step above the mantle page, with
-          a hairline, a contact edge and a cast shadow. Inputs, wells and
-          selected states press in with an inset. Clickable controls carry a
-          flat hard-offset shadow and press with a half-slide onto it. Type is
-          IBM Plex Sans everywhere, JetBrains Mono for code. Mauve is the one
-          accent. Every other color is a semantic tint passed through a
-          custom property.
-        </p>
-      </section>
+      <p class="cn-copy">
+        The page is mantle and panels sit one fill step above it on base. The
+        light comes from the top left, so every shadow falls down and to the
+        right.
+      </p>
 
       <section>
-        <h2 class="cn-title">Dark only</h2>
+        <h2 class="cn-title">Install</h2>
         <p class="cn-copy">
-          The package sets <code class="cn-code-inline">color-scheme: dark</code>{" "}
-          and does not answer{" "}
-          <code class="cn-code-inline">prefers-color-scheme: light</code>. Body
-          text is subtext-1, not white, at weight 400 and 1.6 leading. Under{" "}
-          <code class="cn-code-inline">prefers-contrast: more</code> every text
-          role moves one stop lighter.
+          A hand-written page links the CDN. Pin a full tag, and link{" "}
+          <code class="cn-code-inline">index.css</code> so the three files
+          keep their layers.
         </p>
+        <CodeBlock title="CDN (no build)" code={CDN_CODE} />
+        <p class="cn-copy">
+          A project with a bundler takes the git dependency and imports the
+          one entry point.
+        </p>
+        <CodeBlock title="Add the dependency" code={INSTALL_CODE} />
+        <CodeBlock title="Import the CSS" code={IMPORT_CODE} />
+        <p class="cn-copy">
+          The package ships no font files. Link Inter and JetBrains
+          Mono on every page.
+        </p>
+        <CodeBlock title="Fonts (index.html)" code={FONTS_CODE} />
       </section>
 
       <section>
         <h2 class="cn-title">Three layers, one import</h2>
         <p class="cn-copy">
-          The package is three cascade layers.{" "}
-          <code class="cn-code-inline">cn.tokens</code> holds the palette, shadows,
-          contract properties, and reset. <code class="cn-code-inline">cn.recipes</code>{" "}
-          holds full components. <code class="cn-code-inline">cn.utilities</code>{" "}
-          holds single-purpose <code class="cn-code-inline">cn-*</code> classes and
-          sits above the recipes, so{" "}
-          <code class="cn-code-inline">panel cn-flat</code> clears the panel's shadow. Your own
-          CSS stays unlayered, so it always wins without{" "}
+          <code class="cn-code-inline">cn.tokens</code> holds the palette,
+          the shadows and the reset. <code class="cn-code-inline">cn.recipes</code>{" "}
+          holds the components. <code class="cn-code-inline">cn.utilities</code>{" "}
+          holds the <code class="cn-code-inline">cn-*</code> classes and sits
+          last, so <code class="cn-code-inline">panel cn-p-16</code> pads the
+          panel. Your own CSS stays unlayered and wins without{" "}
           <code class="cn-code-inline">!important</code>.
         </p>
         <CodeBlock title="css/index.css, the entry point" code={LAYER_CODE} />
       </section>
 
       <section>
-        <h2 class="cn-title">Install</h2>
+        <h2 class="cn-title">Where to go next</h2>
         <p class="cn-copy">
-          A hand-written page with no <code class="cn-code-inline">package.json</code>{" "}
-          links the CDN. jsDelivr serves the repo's tags from GitHub. Pin a
-          full tag. Link <code class="cn-code-inline">index.css</code> rather than
-          the three files, so the relative imports keep their layer wrappers.
-          The second tag loads the keyboard model for every tablist, menu
-          button, listbox, combobox and slider on the page.
-        </p>
-        <CodeBlock title="CDN (no build)" code={CDN_CODE} />
-        <p class="cn-copy">
-          Anything with a bundler takes the git dependency. Add it, import
-          the one entry point, and link the two font families on every public
-          page. The package ships no font files.
-        </p>
-        <CodeBlock title="Add the dependency" code={INSTALL_CODE} />
-        <CodeBlock title="Import the CSS" code={IMPORT_CODE} />
-        <CodeBlock title="Fonts (index.html)" code={FONTS_CODE} />
-        <p class="cn-copy">
-          The CSS reads ARIA state and needs no script to look right. Tabs,
-          menus, listboxes and comboboxes still need a keyboard model: add{" "}
-          <code class="cn-code-inline">import "catppuccin-neu/js/auto"</code>{" "}
-          to your entry file, or use your own widget library. The{" "}
-          <a href="/behavior">Behavior</a> page covers it.
-        </p>
-      </section>
-
-      <section>
-        <h2 class="cn-title">Zero-build sites</h2>
-        <p class="cn-copy">
-          <code class="cn-code-inline">scripts/sync.mjs</code>{" "}
-          copies the CSS files into any directory you point it at. Run it in a
-          pre-build hook and gitignore the output. Node 18+, no dependencies.
-          The three files also work as plain{" "}
-          <code class="cn-code-inline">&lt;link&gt;</code> tags loaded in order:
-          tokens, recipes, utilities.
-        </p>
-        <CodeBlock title="Sync the CSS" code={SYNC_CODE} />
-        <CodeBlock title="Link in order" code={LINKS_CODE} />
-      </section>
-
-      <section>
-        <h2 class="cn-title">Tailwind</h2>
-        <p class="cn-copy">
-          A Tailwind preset maps the system onto theme keys: palette colors,
-          the semantic roles (<code class="cn-code-inline">text-fg-muted</code>,{" "}
-          <code class="cn-code-inline">ring-focus</code>,{" "}
-          <code class="cn-code-inline">bg-surface-raised</code> and the rest),{" "}
-          <code class="cn-code-inline">accent</code> and{" "}
-          <code class="cn-code-inline">tone</code>, the type roles{" "}
-          (<code class="cn-code-inline">text-label</code>,{" "}
-          <code class="cn-code-inline">text-heading</code> and the rest), font stacks,
-          the data series and ramps (<code class="cn-code-inline">bg-series-1</code>{" "}
-          to <code class="cn-code-inline">-6</code>,{" "}
-          <code class="cn-code-inline">bg-ramp-1</code> to{" "}
-          <code class="cn-code-inline">-5</code>,{" "}
-          <code class="cn-code-inline">bg-diverge-1</code> to{" "}
-          <code class="cn-code-inline">-5</code>), role-named radii, the shadow
-          set, control heights and the motion durations. Components still come from the CSS recipes.
-        </p>
-        <CodeBlock title="Preset (v3) / theme (v4)" code={TAILWIND_CODE} />
-      </section>
-
-      <section>
-        <h2 class="cn-title">Icons</h2>
-        <p class="cn-copy">
-          The package ships no icon set, but every recipe that holds an icon
-          sizes it. Use one stroke family throughout: a 24-unit grid, round
-          caps and joins, a stroke of 2 to 2.2,{" "}
-          <code class="cn-code-inline">currentColor</code> and no fills.{" "}
-          <a href="https://lucide.dev/" target="_blank" rel="noreferrer">Lucide</a>{" "}
-          matches it.
-        </p>
-        <p class="cn-copy">
-          Recipes set 12px in a tag, 13px in a text button, 14px in a chip or
-          a small button, 16px in a button, a banner or a menu row, and 18 to
-          20px in a large button or a large icon button. Leave width and
-          height off the svg and let the recipe size it. An icon beside a word
-          is <code class="cn-code-inline">aria-hidden</code>. An icon alone needs
-          an accessible name on its control.
-        </p>
-      </section>
-
-      <Demo title="One stroke family at recipe sizes" row classes="btn btn-secondary > svg · btn is-icon[aria-label] · chip > svg">
-        <button type="button" class="btn btn-secondary">
-          <DownloadIcon />
-          Export
-        </button>
-        <button type="button" class="btn btn-secondary is-sm">
-          <DownloadIcon />
-          Export
-        </button>
-        <button type="button" class="btn btn-ghost is-icon" aria-label="Download statement">
-          <DownloadIcon />
-        </button>
-        <span class="chip">
-          <DownloadIcon />
-          PDF
-        </span>
-      </Demo>
-
-      <section id="ornament-budget">
-        <h2 class="cn-title">Ornament budget</h2>
-        <p class="cn-copy">
-          A view holds:
-        </p>
-        <ul class="cn-copy">
-          <li>one tilted panel, holding a summary or an aside in prose, never a table, a form or ruled rows, with its heading in the name role;</li>
-          <li>one primary button;</li>
-          <li>at most one <code class="cn-code-inline">.is-lg</code> control.</li>
-        </ul>
-        <p class="cn-copy">
-          <code class="cn-code-inline">.is-lg</code> here means a hero control: a
-          large button or <code class="cn-code-inline">.input-lg</code>. Grain
-          sits only on solid accent fills. Blur sits only on the topbar, the
-          folded sidebar and the scrim. Plates sit only under things a reader
-          can click, under accent cards and under the one tilted panel.
-        </p>
-        <p class="cn-copy">
-          The four <a href="/examples/dashboard">Examples</a> pages, a
-          dashboard, a settings screen, an invoice detail and an empty
-          project, are built from package classes alone and stay inside this
-          budget.
-        </p>
-      </section>
-
-      <section id="compose-a-view">
-        <h2 class="cn-title">Compose a view</h2>
-        <p class="cn-copy">
-          Most views follow one skeleton. The <a href="/layout">Layout</a>{" "}
-          page has the rules.
-        </p>
-        <ol class="cn-copy">
-          <li>A <code class="cn-code-inline">.cn-skip-link</code> to <code class="cn-code-inline">#main</code> as the first focusable element, with <code class="cn-code-inline">tabindex="-1"</code> on the <code class="cn-code-inline">main</code> it targets.</li>
-          <li><code class="cn-code-inline">.page-main</code> holding a stack 48px apart.</li>
-          <li>A <code class="cn-code-inline">.cn-split.cn-top</code> holding a stack of the title and the lede, then the one primary.</li>
-          <li>The key figures on the ground, in a <code class="cn-code-inline">.stat-grid.is-ruled</code>.</li>
-          <li>One <code class="cn-code-inline">.panel.is-lead</code>, the thing the view is about.</li>
-          <li>A <code class="cn-code-inline">.cn-grid-12</code> row of 8 and 4: the data first, the aside last, tilted, in prose.</li>
-          <li>At most three raised panels in any region.</li>
-        </ol>
-        <p class="cn-copy">
-          The <a href="/depth">Depth</a> page says what each height may wear,
-          and the <a href="/examples/dashboard">dashboard</a> follows the
-          skeleton step by step.
+          The Foundation pages cover <a href="/colors">color</a>,{" "}
+          <a href="/typography">type</a>, <a href="/depth">depth</a> and{" "}
+          <a href="/layout">layout</a>. Each component page lists its classes
+          under the demo. The <a href="/examples/dashboard">dashboard</a> and{" "}
+          <a href="/examples/settings">settings</a> examples are built from
+          package classes alone.
         </p>
       </section>
     </Doc>
