@@ -204,15 +204,14 @@ with a deeper foot, `--edge-strong`, `--neu-lifted` and more room) or on a
 hard plate (the hard offset; the tilted panel, one per page, stands on the same plate). A cast shadow barely registers on a dark page, since even
 black is only 1.2:1 on mantle, so the base fill does the separating and
 height rides on a dark foot along the bottom and right edges: the 1px
-full-ink contact edge under the panel's 1px ink border side, and the near
+full-ink contact edge and the near
 shadow, 6 to 10px of near black where the cast fades. `--edge` cuts the panel's outline, at
 1.85:1 on base; with the fill step doing the separating, the hairline
 stays quiet so a panel never reads as an outlined box. The lead keeps the
-lit edge (1.5:1 on base), takes `--edge-strong` (2.5:1) on its top and left and stands
-on a hard foot past the 4px plate: an 8px by 6px contact plus its 1px
-`--neu-ink` border sides, 9px deep and 7px wide, so it ranks by darkness
-on the side away from the light, not by a brighter line or a line all
-round. It also ranks by room: its header band is `--lead-band-h` tall, its
+lit edge (1.5:1 on base), takes `--edge-strong` (2.5:1) and stands
+on a hard foot past the 4px plate, a contact 8px deep and 6px wide, so
+it ranks by darkness on the side away from the light, not by a bright
+rim or a dark outline. It also ranks by room: its header band is `--lead-band-h` tall, its
 header, body and footer pad `--lead-pad`, and its band title steps up to
 `--lead-title-size` at the heading weight.
 
@@ -368,8 +367,8 @@ because a well's wall falls on whatever holds it. A carve is that one wall: `--n
 3px 3px 8px and `--neu-inset-soft` at 2px 2px 5px and .5, with no layer
 from the bottom right and none lighter than the page, a panel or a well.
 
-A panel shows its height with three signals: the fill step, the hairline
-on its top and left, and the dark foot on its bottom and right. The foot
+A panel shows its height with three signals: the fill step, the hairline,
+and the dark foot on its bottom and right. The foot
 is one shape made of the contact, the near shadow and the cast. A plain
 panel has no lit top edge: `--neu-raised` is darkness only. The lit edge
 (surface-2 at 45%, 1.5:1 on base) marks the light side of plates, the
@@ -382,28 +381,25 @@ step is deeper than the one before it:
 
 | Foot | Ink | Made of |
 | --- | --- | --- |
-| panel | 2px | the 1px contact of `--neu-raised` and the 1px ink border side |
+| panel | 1px | the 1px contact of `--neu-raised` |
 | plate | 4px | `--hard-offset`, under a clickable and under the tilted panel |
-| lead | 9px | the 6px 8px contact of `--neu-lifted` and the border side, 7px wide on the right |
+| lead | 8px | the 6px 8px contact of `--neu-lifted`, 6px wide on the right |
 
 Comments and recipe notes point at this ladder and do not compare two
 feet any other way. A panel's thin ink runs into its near shadow and
 cast, and a plate is a hard block with no cast, so the two differ by
 kind as well as size. Density moves the plate only: 3px at cozy and 2px
-at compact, where it is level with the panel's 2px and kind alone tells
-them apart. The panel and the lead keep 2px and 9px at every density.
+at compact, still 1px past the panel's. The panel and the lead keep 1px
+and 8px at every density.
 
 `--neu-lifted` is the lead panel's: the lit edge over the ladder's
 deepest foot, spent on the bottom and right only, with an 8px 14px 16px
 near shadow and an 18px 28px 48px cast. The lead is a resting panel, not
 a height of its own; the foot is its rank.
-A panel's right and bottom border sides are `--neu-ink`, not the
-hairline, so the fill meets the ink directly at 1.22:1 and the border
-side is the last 1px of the panel and lead feet. The top and left sides
-keep the hairline, `--edge` or `--edge-strong`, and nothing there is
-brightened. Under `prefers-contrast: more` or `data-contrast="more"` all
-four sides return to the hairline, overlay-0 or overlay-1, so the 3:1
-boundary holds on every side.
+A panel's border is the hairline on all four sides, `--edge` or
+`--edge-strong` on the lead, and no side is darkened or brightened.
+Under `prefers-contrast: more` or `data-contrast="more"` the hairline is
+overlay-0 or overlay-1, so the 3:1 boundary holds on every side.
 `--neu-raised-soft` is contact and a short cast. No raise
 draws a top-left highlight outside its edge, because on a dark ground that layer
 reads as a grey glow; a caller that wants the lit side adds
@@ -425,7 +421,7 @@ neither is a height of its own.
 | --- | --- | --- |
 | below the ground | a carve: one dark wall from the top left, nothing on the bottom and right walls; wells, the mono wells, stepper pills, skeletons and the switch plate also take the sunken fill, crust, darker than the page and a panel, and a well takes the even `--cn-well-ring` | fields, selects, textareas, wells, the mono wells, skeletons, tabs, the switch plate, stepper pills, the disabled primary |
 | the ground | mantle, and nothing else. A static chip is a flat label on it: the base fill and the `--edge` outline, no shadow | the page, the topbar, stat bands, static chips |
-| raised, on a soft foot | the base fill a step above the page, the `--edge` hairline on the top and left, and `--neu-ink` border sides on the right and bottom that join the dark foot. The lead panel is the same height on the ladder's deepest foot, `--neu-lifted`, under the `--edge-strong` hairline, a taller header band and wider padding | panels, the selected tab, the one lead panel |
+| raised, on a soft foot | the base fill a step above the page, the `--edge` hairline on all four sides, and the dark foot on the bottom and right. The lead panel is the same height on the ladder's deepest foot, `--neu-lifted`, under the `--edge-strong` hairline, a taller header band and wider padding | panels, the selected tab, the one lead panel |
 | raised, on a hard plate | the base fill and lit edge over a hard offset, which replaces the cast. The plate's side is `--neu-ink`, except where the block itself carries the item's color: the one primary (mauve 25% into surface-0) and accent cards (the accent 70% into surface-0). The tilted panel stands on the same plate, `--cn-plate`, tipped 1.2deg with its text, and takes no raised shadow | clickables, link and button chips, accent cards, the one tilted panel |
 | floating | the overlay fill, no contact, the two-layer pop shadow | popovers, menus, dialogs, toasts |
 
@@ -436,8 +432,7 @@ is the one small static thing on the soft raise.
 
 A hairline stays on raised and floating surfaces: `--edge` on panels and
 controls, `--edge-strong` on the lead panel and overlays. A panel draws
-it on the top and left only; its right and bottom border sides are
-`--neu-ink` and belong to the foot. It is the
+it on all four sides. It is the
 surface's cut edge, not a border standing in for depth; carved surfaces
 have none. The fill step shows a panel's bounds on the page and the
 hairline cuts them, so every panel keeps the hairline. A nested panel's
@@ -580,7 +575,7 @@ with its label.
 | `--control-h` | 46px (2.875rem) | 38px | 28px |
 | `--control-h-sm` | 34px (2.125rem) | 28px | 26px, never under 24px |
 | `--hard-offset` | 4px | 3px | 2px |
-| `--neu-raised` contact | 1px 1px | 1px 1px | 1px 1px. The panel's ink border side adds 1px, so a panel shows 2px of ink at every density: under the default and cozy plates and level with the compact one, where it reads apart by its near shadow and cast |
+| `--neu-raised` contact | 1px 1px | 1px 1px | 1px 1px. It is a plain panel's whole hard foot, 1px of ink at every density and under the plate at each one. The panel also reads apart by its near shadow and cast |
 | `--cn-radius-panel` | 16px | 16px | 12px |
 | `--band-h` | 64px | 52px | 44px |
 | `--band-pad` | 12px 24px | 8px 24px | 8px 16px |
@@ -819,11 +814,11 @@ properties only and never style bare elements.
 
 ### Surfaces
 
-- `.panel`: the main container. A 1px border, `--edge` on the top and left and `--neu-ink` on the right and bottom, where it joins the 1px contact as a 2px ink foot, panel radius, the raised fill (base, a step above the mantle page), `--neu-raised`, no padding. Under `prefers-contrast: more` or `data-contrast="more"` all four border sides are `--edge`.
+- `.panel`: the main container. A 1px `--edge` border on all four sides, panel radius, the raised fill (base, a step above the mantle page), `--neu-raised`, whose 1px contact is the panel's hard foot, no padding. Under `prefers-contrast: more` or `data-contrast="more"` the border stays `--edge`, which is overlay-0 there.
 - `.panel.is-tilted`: rotated 1.2deg, on the clickable's hard plate (`--cn-plate`: 4px, 3px at cozy and 2px at compact) under the lit edge, with no raised shadow since the plate replaces the cast, short enough that the aside never outweighs the data panel beside it, `align-self: start` so a grid row never stretches it into an empty tail. Flat at 1060px and below, and upright under `prefers-contrast: more` or `data-contrast="more"`. It holds prose with a heading in the name role: no table, form or ruled rows. Its prose, `.cn-copy` and `.cn-prose` included, sets at 15px (.9375rem, the compact body size) on the body leading: the panel sets `--cn-type-body-size` to 15px for its subtree, since rotated 14px text renders soft at 1x.
 - `.panel-header`, `.panel-footer`: bands `--band-h` tall with `--band-pad`. Both sit on the panel's fill. The header has a bottom divider and the footer a top one. A band holding `.band-actions` wraps; the cluster is right-aligned and wraps inside itself. Other bands stay on one line. An `h2` in a header takes `--band-title-size`; in the lead panel it takes `--lead-title-size` at the heading weight and tracking. At 520px both step down to the body size.
 - `.panel-body`: the content band, `--body-pad`.
-- `.panel.is-lead`: the panel a view is about, at most one per view. The base fill with the `--edge-strong` hairline on its top and left and `--neu-ink` border sides on its right and bottom, on `--neu-lifted`, the 9px step of the [foot ladder](#depth), a header band `--lead-band-h` tall (72px, 60px cozy, 48px compact), `--lead-pad` (32px, 24px cozy, 16px compact) on its header and footer inline, around its body and on the outer columns of a table that fills it, directly or through a `.table-scroll` or a tab panel (above 760px), and a band title at `--lead-title-size` (the heading size, 28px, or the title size at 655px and under) at 700, so it outranks its neighbors by height, by its title and by its room, not by an ornament. Its one step in line strength is the hairline ladder, `--edge-strong` over `--edge`, with no bright rim, lip or dark outline on top. The deeper foot carries the rank, because a longer cast barely shows on a dark page.
+- `.panel.is-lead`: the panel a view is about, at most one per view. The base fill with the `--edge-strong` hairline on all four sides, on `--neu-lifted`, the 8px step of the [foot ladder](#depth), a header band `--lead-band-h` tall (72px, 60px cozy, 48px compact), `--lead-pad` (32px, 24px cozy, 16px compact) on its header and footer inline, around its body and on the outer columns of a table that fills it, directly or through a `.table-scroll` or a tab panel (above 760px), and a band title at `--lead-title-size` (the heading size, 28px, or the title size at 655px and under) at 700, so it outranks its neighbors by height, by its title and by its room, not by an ornament. Its one step in line strength is the hairline ladder, `--edge-strong` over `--edge`, with no bright rim, lip or dark outline on top. The deeper foot carries the rank, because a longer cast barely shows on a dark page.
 - `.panel.is-shell`: drops its chrome at 760px so a phone page runs edge to edge.
 - Band corner rule: a filled first or last child of a rounded surface takes the parent radius minus 1px on its outer corners. This covers popover children, and tables or ranked rows at a panel's edge, through `.table-scroll` too. Never fix corner bleed with `overflow: hidden`; it clips popovers and plates.
 - `.well`: card radius, the sunken fill, and `--cn-well-ring` over `--neu-inset`. The fill, crust, puts it below the ground on the page and in a panel; without it the carve read as an outlined panel at 1x. The ring is a quiet even hairline halfway between surface-0 and surface-1, 1.7:1 on the fill, with no lighter side. `.well.scroll-well` fades its bottom 34px with a mask.

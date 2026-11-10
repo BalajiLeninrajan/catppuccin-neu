@@ -251,15 +251,13 @@
      page, so the shadow cannot carry height alone: the base fill a step
      above the page does the separating and the foot says which side is
      down.
-     The contact is 1px at every density. The panel's ink border side adds
-     1px, so a plain panel shows 2px of ink: 2px under the 4px plate at
-     default density, 1px under the 3px plate at cozy and level with the
-     2px plate at compact. A 2px contact would put the panel 1px under the
-     plate, and at 1x the two read as one size. The panel's foot leans on
-     its near shadow and cast, so it reads apart from a plate by kind and
-     by size.
+     The contact is 1px at every density, and it is a plain panel's whole
+     hard foot: 3px under the 4px plate at default density, 2px under the
+     3px plate at cozy and 1px under the 2px plate at compact. The panel's
+     foot leans on its near shadow and cast, so it reads apart from a
+     plate by kind and by size.
      --neu-raised is darkness only. A plain panel has no lit top edge: its
-     fill step, its top and left hairline and its foot already say raised,
+     fill step, its hairline and its foot already say raised,
      and the lit edge added no height. */
   --neu-shade: rgb(8 8 14 / .72);
   --neu-contact: var(--neu-ink);
@@ -269,7 +267,7 @@
      never by a line all round or a brighter one: a deeper full-ink contact,
      a deeper near shadow and a longer cast. It keeps the lit edge.
      The 6px 8px contact is the last step of the foot ladder in SPEC Depth:
-     panel 2px, plate 4px, lead 9px with its ink border side. */
+     panel 1px, plate 4px, lead 8px. */
   --neu-lifted: 6px 8px 0 var(--neu-contact), 8px 14px 16px var(--neu-near), 18px 28px 48px var(--neu-shade), var(--cn-lit-edge);
   /* The soft raise follows the same light: contact and a short cast, no
      top-left highlight. Callers that want the lit side add --cn-lit-edge. */
@@ -555,9 +553,8 @@
 /* Compact density. */
 [data-density="compact"] {
   --hard-offset: 2px;
-  /* --neu-raised keeps its 1px contact. With the panel's ink border side
-     the panel shows 2px of ink, level with this plate, and reads apart
-     by its near shadow and cast. */
+  /* --neu-raised keeps its 1px contact, so a panel's hard foot is 1px
+     under this plate, and it reads apart by its near shadow and cast. */
   --control-h: 1.75rem;   /* 28px */
   --control-h-sm: max(24px, 1.625rem); /* 26px, never under the 24px target floor */
   --cn-radius-panel: var(--cn-radius-card);

@@ -109,12 +109,10 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         The panel fills with <code class="cn-code-inline">--cn-surface-raised</code>{" "}
-        under <code class="cn-code-inline">--neu-raised</code>. Its top and left
-        border sides are the <code class="cn-code-inline">--edge</code> hairline.
-        Its right and bottom sides are <code class="cn-code-inline">--neu-ink</code>,
-        so on the side away from the light the fill meets the ink with no
-        lighter line between them, and the border joins the 1px contact edge
-        as a 2px foot. Nothing on the top or left is brightened. The
+        under <code class="cn-code-inline">--neu-raised</code>. Its border
+        is the <code class="cn-code-inline">--edge</code> hairline on all four
+        sides, and the token's 1px contact edge is its hard foot. No side is
+        darkened or brightened. The
         header and footer are bands on the panel's own fill, each parted from
         the body by an <code class="cn-code-inline">--edge-soft</code> divider. A
         darker header would sink below the surface it titles, so the title's
@@ -203,13 +201,13 @@ export default function SurfacesPage() {
         view is about, such as the invoice table on a billing dashboard. It
         takes the base fill like every panel, with the brighter{" "}
         <code class="cn-code-inline">--edge-strong</code> hairline, solid
-        surface-2, on its top and left, and stands on{" "}
+        surface-2, on all four sides, and stands on{" "}
         <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
-        the bottom and right, 9px deep and 7px wide with its ink border
-        sides, where a button's plate is 4px and a plain panel's foot 2px,
+        the bottom and right, 8px deep and 6px wide,
+        where a button's plate is 4px and a plain panel's foot 1px,
         and a longer cast. It is a resting panel with a deeper foot, not a
-        height of its own. It keeps the lit edge and draws no outline all
-        round, because neither a bright line nor a heavier outline reads as
+        height of its own. It keeps the lit edge and adds no bright rim or dark
+        outline, because neither reads as
         height. Its band title takes{" "}
         <code class="cn-code-inline">--lead-title-size</code> at the heading
         weight, 28px at default density where other panels use 20px, and
@@ -313,8 +311,8 @@ export default function SurfacesPage() {
           {
             name: ".panel",
             values: "raised container",
-            contrast: "Fill 1.07:1 on the page · --edge 1.85:1 on the fill · fill against the ink sides 1.22:1",
-            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow and cast, with no lit edge), an --edge hairline on the top and left and --neu-ink border sides on the right and bottom, a 2px foot with the contact. All four sides return to the hairline under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and adds the lit edge. At most three per region.",
+            contrast: "Fill 1.07:1 on the page · --edge 1.85:1 on the fill",
+            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow and cast, with no lit edge), an --edge hairline on all four sides, and a 1px foot, the contact. The hairline is overlay-0 under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and adds the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",
@@ -340,7 +338,7 @@ export default function SurfacesPage() {
             name: ".panel.is-lead",
             values: "one per view",
             contrast: "--edge-strong 2.5:1 on the fill",
-            notes: "The panel the view is about. The base fill with the --edge-strong hairline on the top and left and --neu-ink border sides on the right and bottom, on --neu-lifted with its deeper foot, 9px deep and 7px wide, and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
+            notes: "The panel the view is about. The base fill with the --edge-strong hairline on all four sides, on --neu-lifted with its deeper foot, 8px deep and 6px wide, and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
           },
           {
             name: ".panel.is-shell",

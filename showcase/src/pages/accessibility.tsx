@@ -87,7 +87,7 @@ const SURFACES: Array<[string, string, string, string]> = [
   ["--wash", "mauve 23% into base", "1.63:1","The engaged state, a step past the hover."],
   ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.3:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
   ["--hover", "surface-1 60% over the ground", "1.40:1 (1.23:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
-  ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's top and left; the right and bottom border sides are --neu-ink, 1.22:1 under the fill, and the fill step shows its bounds. overlay-0 on all four sides under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
+  ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's outline on all four sides, and the fill step shows its bounds. overlay-0 under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
   ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
 ];
 

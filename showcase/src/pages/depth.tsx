@@ -6,7 +6,7 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 const HEIGHTS = [
   { height: "Below the ground", tokens: "--neu-inset or --neu-inset-soft, transparent or --cn-surface-sunken, --cn-well-ring", who: "Fields, wells, skeletons, tabs, the switch plate, stepper pills, engaged states, the disabled primary." },
   { height: "The ground", tokens: "--cn-surface-page", who: "The page, the topbar, stat bands, static chips. Every other height is measured from it." },
-  { height: "Raised, soft foot", tokens: "--cn-surface-raised, --edge, --neu-ink, --neu-raised, or --neu-raised-soft with --cn-lit-edge, or --neu-lifted with --edge-strong", who: "Panels, the selected tab, the one lead panel. A panel inside a panel takes --neu-raised-soft with the lit edge." },
+  { height: "Raised, soft foot", tokens: "--cn-surface-raised, --edge, --neu-raised, or --neu-raised-soft with --cn-lit-edge, or --neu-lifted with --edge-strong", who: "Panels, the selected tab, the one lead panel. A panel inside a panel takes --neu-raised-soft with the lit edge." },
   { height: "Raised, hard plate", tokens: "--hard-offset in --plate or --neu-ink, --hard-extra, --cn-plate with --cn-lit-edge under the tilted panel", who: "Secondary buttons, segmented options, link and button chips, accent cards. The primary stands on its own mauve plate. The one tilted panel, holding prose, upright under prefers-contrast: more on the same plate." },
   { height: "Floating", tokens: "--cn-surface-overlay, --shadow-pop, --edge-strong", who: "Popovers, menus, dialogs, drawers, toasts, tooltips." },
 ];
@@ -81,7 +81,7 @@ export default function DepthPage() {
         {/* Two groups. The first holds a carve, the ground and a plain
             panel on its soft foot. The second holds the rest of the foot
             ladder in order, the 4px plate, the tilt on the same plate
-            and the 9px lead,
+            and the 8px lead,
             then the float. The first holds three, so it keeps three
             columns until its box is under 520px and then drops to one,
             never leaving one specimen alone on a row. The second sits on
@@ -94,7 +94,7 @@ export default function DepthPage() {
             <Height name="The ground" cls="--cn-surface-page" note="Mantle and nothing else.">
               <div class="cn-meta" style={SPEC_BOX}>Invoice #1042</div>
             </Height>
-            <Height name="Raised, soft foot" cls=".panel" note="The base fill, a hairline on the top and left, 2px of ink and a cast.">
+            <Height name="Raised, soft foot" cls=".panel" note="The base fill, a hairline, 1px of ink and a cast.">
               <div class="panel cn-meta" style={SPEC_BOX}>Revenue</div>
             </Height>
           </div>
@@ -105,7 +105,7 @@ export default function DepthPage() {
             <Height name="The same plate, tipped" cls=".is-tilted" note="The one tilted aside, turned 1.2deg with its text on the 4px plate.">
               <div class="panel is-tilted cn-meta" style={SPEC_BOX}>This month</div>
             </Height>
-            <Height name="The lead's 9px foot" cls=".is-lead" note="A resting panel on the deepest foot.">
+            <Height name="The lead's 8px foot" cls=".is-lead" note="A resting panel on the deepest foot.">
               <div class="panel is-lead cn-meta" style={SPEC_BOX}>Invoices</div>
             </Height>
             <Height name="Floating" cls=".cn-pop" note="The overlay fill, no contact edge, the pop shadow.">
@@ -121,8 +121,8 @@ export default function DepthPage() {
         surface stands on one of two feet. A soft foot means a panel
         resting on the page, and a hard plate means a clickable, an accent
         card or the one tilted aside. The foot ladder sets how tall it
-        stands, counted in full ink under the bottom edge: panel 2px,
-        plate 4px, lead 9px. The ink is capped near 1.14:1 on
+        stands, counted in full ink under the bottom edge: panel 1px,
+        plate 4px, lead 8px. The ink is capped near 1.14:1 on
         the page, so only its area can grow, and each step is at least
         2px past the one before. The panel and the plate differ by size
         and by kind, soft with a cast or hard with none. The lead panel is
@@ -145,8 +145,8 @@ export default function DepthPage() {
         raised and plated surfaces take{" "}
         <code class="cn-code-inline">--cn-surface-raised</code>, base, one fill
         step above it, close enough that the shadows still read. A panel
-        shows its height with three signals: that fill step, the hairline
-        on its top and left, and the dark foot on its bottom and right,
+        shows its height with three signals: that fill step, the hairline,
+        and the dark foot on its bottom and right,
         never a fill lighter than base. Only
         overlays, which float free of the page, take a lighter step.
       </p>
@@ -179,9 +179,7 @@ export default function DepthPage() {
         <code class="cn-code-inline">--edge</code> or{" "}
         <code class="cn-code-inline">--edge-strong</code>. It is the
         surface's cut edge, not a border standing in for depth. A panel
-        draws it on its top and left only; its right and bottom border
-        sides are <code class="cn-code-inline">--neu-ink</code> and belong
-        to the foot. Carved surfaces have no lip. A resting field takes{" "}
+        draws it on all four sides. Carved surfaces have no lip. A resting field takes{" "}
         <code class="cn-code-inline">--cn-field-ring</code>, a quiet even
         hairline of surface-2 at 85%, 2.1:1 on a panel. Inside a popover,
         modal or drawer it swaps to{" "}
@@ -304,12 +302,9 @@ export default function DepthPage() {
         right only: a 6px 8px contact in the full ink, an 8px 14px 16px near
         shadow and an 18px 28px 48px cast. Even black is close to the
         page, so a longer cast barely shows; the fill step separates the
-        panel and the deeper foot ranks it. A panel's right and bottom
-        border sides are the same ink, so they are the last 1px of its
-        foot on the ladder. The utilities table has the ink's
+        panel and the deeper foot ranks it. The utilities table has the ink's
         ratios. The plain contact is 1px at every density, so a plain
-        panel shows 2px of ink: under the 4px and 3px plates at default
-        and cozy, and level with the 2px plate at compact. Nothing darkens or brightens a panel's top and left, because a dark line all
+        panel shows 1px of ink, under the plate at every density. Nothing darkens or brightens a panel's hairline, because a dark line all
         round reads as a heavier outline, not as height, and a bright one as a bevel. The soft raise
         keeps contact and a short cast, so every raise answers the light
         the same way: no raise draws a top-left highlight outside its edge.
@@ -631,7 +626,7 @@ export default function DepthPage() {
             values: "any token or color-mix",
             default: "var(--neu-ink)",
             contrast: "Ink 1.22:1 under base, 1.14:1 under the page · crust 1.14:1 under base, 1.07:1 under the page",
-            notes: "Contract prop read by the whole hard family. Unset, the plate is the shadow ink, crust halfway to black, which is also a panel's contact edge and its right and bottom border sides.",
+            notes: "Contract prop read by the whole hard family. Unset, the plate is the shadow ink, crust halfway to black, which is also a panel's contact edge.",
           },
           {
             name: "--hard-offset",

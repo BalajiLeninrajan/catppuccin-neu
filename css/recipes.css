@@ -13,17 +13,11 @@
 /* ── Surfaces ───────────────────────────────────────────────────────────── */
 
 /* Panel: the primary content container. Raised: the base fill a step
-   above the mantle page, the --edge hairline on the top and left, and the
-   raised shadow. The right and bottom border sides are --neu-ink, so on
-   the side away from the light the fill meets the ink directly, 1.22:1,
-   and the border joins the 1px contact as a 2px foot: the side of a
-   block, the plate's logic at panel scale. Darkness only; the top and
-   left stay the quiet hairline. */
+   above the mantle page, the --edge hairline on all four sides, and the
+   raised shadow, whose 1px contact is the panel's foot. */
 .panel {
   min-width: 0;
   border: 1px solid var(--edge);
-  border-right-color: var(--neu-ink);
-  border-bottom-color: var(--neu-ink);
   border-radius: var(--cn-radius-panel);
   background: var(--cn-surface-raised);
   box-shadow: var(--neu-raised);
@@ -35,17 +29,17 @@
 /* The lead panel: the one a view is about, one per view. It takes the
    base fill like every panel and stands higher by darkness on the side
    away from the light: --neu-lifted's foot on the bottom and right is
-   the last step of the foot ladder in SPEC Depth (panel 2px, plate 4px,
-   lead 9px), over a deeper near shadow and a longer cast. The
+   the last step of the foot ladder in SPEC Depth (panel 1px, plate 4px,
+   lead 8px), over a deeper near shadow and a longer cast. The
    lead is a resting panel with a deeper foot, not a height of its own.
    The --edge-strong hairline is its one
-   step in line strength; it keeps the lit edge and draws no outline
-   all round, since neither a bright line nor a heavier outline reads as
+   step in line strength; it keeps the lit edge and adds no bright rim
+   or dark outline, since neither reads as
    height. Its band title takes --lead-title-size at the heading weight
    (see the panel-header rule below). It outranks its neighbors by height
    and by its title, not by an ornament. */
 .panel.is-lead {
-  border-color: var(--edge-strong) var(--neu-ink) var(--neu-ink) var(--edge-strong);
+  border-color: var(--edge-strong);
   box-shadow: var(--neu-lifted);
 }
 /* More contrast keeps the full outline, overlay-0 on a panel and
