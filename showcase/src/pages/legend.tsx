@@ -50,31 +50,23 @@ export default function LegendPage() {
 
       <p class="cn-copy">
         Each item sets its color with <code class="cn-code-inline">--series</code>{" "}
-        inline, and the mark in the chart reads the same property. Labels are
-        sentence case at the meta size. The list wraps onto more lines when
-        it runs out of room. A value after the label is optional; put it in
-        the label text. The order is on purpose. Peach and red are one warm
-        family, so blue Draft sits between them. Green and peach blur
-        together for a red-green deficiency, so they never touch. Green Paid
-        does touch red Overdue, so Overdue is hatched.
+        inline, and the mark in the chart reads the same property. The list
+        wraps when it runs out of room. A value after the label is optional.
+        Order the items so two hues from one family never touch. Hatch one of
+        a pair a red-green color-blind reader confuses, such as green beside
+        red.
       </p>
 
       <p class="cn-copy">
-        Status hues carry meaning, so a legend keyed by them suits a status
-        breakdown. Set <code class="cn-code-inline">--series</code> to the
-        status role where one exists, such as{" "}
+        For a status breakdown, set <code class="cn-code-inline">--series</code>{" "}
+        to the status role where one exists, such as{" "}
         <code class="cn-code-inline">--cn-success</code>, and to a palette
-        tone where none does, such as peach for Pending. For a chart's series, set{" "}
-        <code class="cn-code-inline">--series</code> inline to{" "}
+        tone where none does. For a chart's series, set it to{" "}
         <code class="cn-code-inline">--cn-series-1</code>,{" "}
-        <code class="cn-code-inline">-2</code> and on, in order. The order
-        runs teal, yellow, blue, peach, pink and mauve, so mauve, the
-        interactive color, shows only in a chart of six. For series
-        that are items with an identity, such as teams, key the swatch by the
-        item's own accent instead: leave{" "}
+        <code class="cn-code-inline">-2</code> and on, in order. For series
+        that are items with an identity, such as teams, leave{" "}
         <code class="cn-code-inline">--series</code> unset and the swatch takes{" "}
-        <code class="cn-code-inline">--accent</code>. The swatch never stands alone: the label
-        names the series, and a value can follow it. The{" "}
+        <code class="cn-code-inline">--accent</code>. The{" "}
         <a href="/colors">Colors</a> page lists the series order, and the{" "}
         <a href="/bar-chart">Bar chart</a> page pairs a legend with grouped
         bars.
@@ -82,9 +74,7 @@ export default function LegendPage() {
 
       <p class="cn-copy">
         <code class="cn-code-inline">.is-hatched</code> on a legend item
-        stripes its swatch, the second key for a series that must stand
-        apart without color. Put the same class on the series' bars, so the
-        key and the mark match.
+        stripes its swatch. Put the same class on the series' bars.
       </p>
 
       <Demo title="A hatched series" classes="legend-item.is-hatched" row>

@@ -99,11 +99,9 @@ export default function PopoverPage() {
 
       <p class="cn-copy">
         Filled first and last children inherit the corner radius. Never clip
-        with <code class="cn-code-inline">overflow: hidden</code>; it clips the shadow too. The
-        recipe lays out <code class="cn-code-inline">header</code> and{" "}
-        <code class="cn-code-inline">footer</code> bands on the overlay fill. The header takes no darker
-        fill, the same rule panel, modal and drawer headers follow, so it never sinks below the surface it
-        titles.
+        with <code class="cn-code-inline">overflow: hidden</code>, which clips
+        the shadow too. The recipe lays out <code class="cn-code-inline">header</code> and{" "}
+        <code class="cn-code-inline">footer</code> bands on the overlay fill.
       </p>
 
       <p class="cn-copy">
@@ -111,8 +109,7 @@ export default function PopoverPage() {
         with <code class="cn-code-inline">.menu</code> and{" "}
         <code class="cn-code-inline">role="menu"</code>. The exit animates
         only if the element stays mounted and{" "}
-        <code class="cn-code-inline">hidden</code> is toggled; unmounting gets the
-        entrance only.
+        <code class="cn-code-inline">hidden</code> is toggled.
       </p>
 
       <Demo title="Anatomy, pinned open" classes="popover">
@@ -154,33 +151,22 @@ export default function PopoverPage() {
       </p>
 
       <p class="cn-copy">
-        The bubble is generated content with empty alt text,{" "}
-        <code class="cn-code-inline">content: attr(data-tip) / ""</code>, so a
-        screen reader never folds it into the element's accessible name.
-        Carry the same words yourself. On a labeled control, point{" "}
+        A screen reader never folds the bubble into the element's accessible
+        name, so carry the same words yourself. On a labeled control, point{" "}
         <code class="cn-code-inline">aria-describedby</code> at an element that
-        holds them; a <code class="cn-code-inline">hidden</code> element still
+        holds them. A <code class="cn-code-inline">hidden</code> element still
         works as a description. On an icon button, put them in{" "}
-        <code class="cn-code-inline">aria-label</code>, because the tip is the
-        only words the button has.
+        <code class="cn-code-inline">aria-label</code>.
       </p>
 
       <p class="cn-copy">
-        CSS alone does not hide a tip on Escape. A CSS-only consumer must add
-        the listener below or call{" "}
-        <code class="cn-code-inline">tooltips()</code> from{" "}
-        <code class="cn-code-inline">catppuccin-neu/js</code>, or the tip fails
-        WCAG 1.4.13.
-      </p>
-
-      <p class="cn-copy">
-        Escape hides a showing tooltip. The listener below sets{" "}
+        CSS alone does not hide a tip on Escape, which WCAG 1.4.13 asks for.
+        Add the listener below, or call{" "}
+        <code class="cn-code-inline">tooltips()</code> from the{" "}
+        <a href="/behavior">behavior module</a>. It sets{" "}
         <code class="cn-code-inline">data-tip-dismissed</code> on Escape and clears it
-        when the pointer or focus leaves. This site runs it, so hover a
-        tooltip above and press Escape. A touch screen has no hover, so a
-        tooltip is never the only place a fact lives.{" "}
-        <code class="cn-code-inline">tooltips()</code> in the{" "}
-        <a href="/behavior">behavior module</a> installs the same listener.
+        when the pointer or focus leaves. A touch screen has no hover, so a
+        tooltip is never the only place a fact lives.
       </p>
 
       <CodeBlock
@@ -205,7 +191,7 @@ document.addEventListener("focusout", undismiss, true);`}
             name: ".popover",
             values: "child of a position: relative anchor",
             default: "·",
-            notes: "width min(390px, 100vw - 32px); z-index 80; --cn-surface-overlay fill, the --edge-strong (surface-2) border, floats on --shadow-pop. A resting field inside takes --cn-field-ring-overlay, 2.1:1 on the overlay fill. Add .menu for an action list.",
+            notes: "width min(390px, 100vw - 32px), z-index 80, --cn-surface-overlay fill, the --edge-strong border, --shadow-pop. Add .menu for an action list.",
           },
           {
             name: ".popover > :first-child",
@@ -223,7 +209,7 @@ document.addEventListener("focusout", undismiss, true);`}
             name: "[data-tip]",
             values: "any focusable element",
             default: "·",
-            notes: "A popover-styled bubble on the overlay fill above the element on hover and focus, after --t-slow + --t-press (.4s). Max width 240px. Its text has empty alt, so carry the words in aria-describedby or aria-label. Use it instead of title=.",
+            notes: "A bubble on the overlay fill above the element on hover and focus, after .4s. Max width 240px. Carry the words in aria-describedby or aria-label. Use it instead of title=.",
           },
           {
             name: "[data-tip-dismissed]",
@@ -241,7 +227,7 @@ document.addEventListener("focusout", undismiss, true);`}
             name: "[hidden]",
             values: "exit state",
             default: "·",
-            notes: "Toggle on a mounted popover to play the exit; unmounting gets the entrance only.",
+            notes: "Toggle on a mounted popover to play the exit.",
           },
         ]}
       />

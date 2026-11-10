@@ -81,14 +81,14 @@ const NON_TEXT: EdgeRow[] = [
    the panel fill, unless the row names the page. */
 const SURFACES: Array<[string, string, string, string]> = [
   ["--cn-surface-page", "mantle", "the ground", "The body, the app shell, the topbar, stat bands."],
-  ["--cn-surface-raised", "base", "1.07:1 on the page", "Panels, plated controls, chips, the selected tab. A fill step above the page, never lighter than base, and they lift by their edges and shadow too."],
+  ["--cn-surface-raised", "base", "1.07:1 on the page", "Panels, plated controls, chips, the selected tab."],
   ["--cn-surface-overlay", "surface-0 90% into base", "1.27:1 (1.36:1 on the page)", "Popovers, menus, dialogs, drawers, toasts, tooltips, the skip link."],
-  ["--cn-surface-sunken", "crust", "1.14:1 under base (1.07:1 under the page)", "Wells, the mono wells, stepper pills, skeletons, the switch plate: below the ground wherever they sit."],
+  ["--cn-surface-sunken", "crust", "1.14:1 under base (1.07:1 under the page)", "Wells, the mono wells, stepper pills, skeletons, the switch plate."],
   ["--wash", "mauve 23% into base", "1.63:1","The engaged state, a step past the hover."],
-  ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.3:1 on its wash)", "The rim of every engaged state, so a chosen option outweighs the raised ones beside it."],
-  ["--hover", "surface-1 60% over the ground", "1.40:1 (1.23:1 on an overlay)", "The ghost, menu, pagination and sidebar hover. A menu row on an overlay still lights."],
-  ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. It cuts a panel's outline on all four sides, and the fill step shows its bounds. overlay-0 under prefers-contrast: more, 3.4:1, so a panel gets a 3:1 boundary."],
-  ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers, above --edge on every ground. overlay-1 under prefers-contrast: more, 4.4:1."],
+  ["--engaged-edge", "mauve 70% over the ground", "4.7:1 (3.3:1 on its wash)", "The rim of every engaged state."],
+  ["--hover", "surface-1 60% over the ground", "1.40:1 (1.23:1 on an overlay)", "The ghost, menu, pagination and sidebar hover."],
+  ["--edge", "surface-2 70% over the ground", "1.85:1 (1.92:1 on the page, 1.6:1 on an overlay)", "The hairline of panels and controls. overlay-0 under prefers-contrast: more, 3.4:1."],
+  ["--edge-strong", "surface-2", "2.5:1 (1.9:1 on an overlay)", "The hairline of the lead panel, overlays and drawers. overlay-1 under prefers-contrast: more, 4.4:1."],
 ];
 
 const COMPONENTS: Array<[string, string]> = [
@@ -96,7 +96,7 @@ const COMPONENTS: Array<[string, string]> = [
   ["Toast stack", 'Mark it role="region" aria-live="polite" with an aria-label, such as "Notifications".'],
   ["Busy button", 'Set aria-busy="true" with aria-disabled="true" while the action runs. Keep focus on it; never switch to disabled.'],
   ["Modal and drawer", "Open with showModal(). It traps focus, answers Escape and returns focus to the trigger."],
-  ["Tooltip", 'The bubble has empty alt text, so it is never part of the accessible name. Carry the same words in aria-describedby, or in aria-label on an icon button. Supplemental only: a fact never lives only in a tooltip. Escape dismisses it through tooltips() in catppuccin-neu/js, or the listener on the Popover page.'],
+  ["Tooltip", 'The bubble is never part of the accessible name. Carry the same words in aria-describedby, or in aria-label on an icon button. A fact never lives only in a tooltip. Escape dismisses it through tooltips() in catppuccin-neu/js, or the listener on the Popover page.'],
   ["Avatar", 'Give an initials avatar role="img" and the person\'s name in aria-label.'],
   ["Accordion", "Use details and summary. Enter, Space and the disclosure role come with it."],
   ["Tabs", 'role="tablist" with an aria-label, role="tab" with aria-selected and aria-controls, role="tabpanel" with aria-labelledby. Keep a roving tabindex and wire Left, Right, Home and End, or call tabs() from catppuccin-neu/js.'],
@@ -141,7 +141,7 @@ const WCAG: Array<[string, string, string, string]> = [
   ["1.4.13 Content on hover or focus", "AA", "Escape dismisses a tooltip, and it stays while the pointer is on its control or the bubble, or focus is inside it. On leave it lingers for --t-slow, so the pointer can cross onto the bubble.", "JS module: tooltips(), or the listener on the Popover page."],
   ["2.1.1 Keyboard", "A", "Buttons, fields, details, dialog and range inputs work from the keyboard natively. Tabs and menus need the arrow-key model.", "JS module: one import of catppuccin-neu/js/auto, or tabs(), menu() and init(). axe checks that every docs scroller takes focus."],
   ["2.4.7 Focus visible", "AA", "Every focusable element draws a 2px --cn-focus ring, text, 3px off its edge. No recipe removes it.", "Lint fails on outline: none and computes the ring's contrast."],
-  ["2.4.11 Focus not obscured (minimum)", "AA", "A page that holds a .topbar gets scroll-padding-top on the root: the bar's minimum height plus 12px, 80px by default, 72px at 760px and below, 64px for a compact bar. Rows and controls under a sticky table head take a scroll-margin-top of a control height plus 4px. The folded sidebar bar at 1060px and below sets the same padding from its closed height. Focus, fragment links and scrollIntoView() stop clear of all three. A topbar that wraps taller than its minimum is not covered.", "Documented rule. For a taller bar, set scroll-padding-top on html to the bar's height plus the 5px focus ring."],
+  ["2.4.11 Focus not obscured (minimum)", "AA", "A page that holds a .topbar gets scroll-padding-top on the root: the bar's minimum height plus 12px. Rows and controls under a sticky table head take a scroll-margin-top. The folded sidebar bar sets the same padding from its closed height. A topbar that wraps taller than its minimum is not covered.", "Documented rule. For a taller bar, set scroll-padding-top on html to the bar's height plus the 5px focus ring."],
   ["2.5.8 Target size (minimum)", "AA", "The smallest control is the compact small control, max(24px, 1.625rem): 26px at the default size and never under 24px. A 20px checkbox, radio or the switch counts once wrapped in .choice, which makes the label row the target.", "Documented rule. Wrap choices in .choice. axe checks target size on every docs page."],
   ["2.5.5 Target size (enhanced)", "AAA", "Under pointer: coarse every control is 44px or taller at every density.", "Documented rule."],
   ["2.3.3 Animation from interactions", "AAA", "Under reduced motion presses, slides and the page entrance land at once and overlays fade in place. Spinners keep a slow turn.", "The browser check reloads every docs page under reduced motion and fails on any transition or animation longer than 1ms, overlay fades and spinners excepted."],
@@ -215,50 +215,29 @@ export default function AccessibilityPage() {
 
       <p class="cn-copy">
         Labels are{" "}
-        <code class="cn-code-inline">--cn-fg-soft</code>, subtext-1. Meta,
-        help and table heads are{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code>, subtext-0.
-        Readable text stops at{" "}
-        <code class="cn-code-inline">--cn-fg-placeholder</code>, overlay-2,
-        which only placeholders use. The two roles under it are for icons
-        and disabled states. Running text in{" "}
-        <code class="cn-code-inline">--cn-fg-body</code> is subtext-1 and
-        stays above its floor on every ground. The page is mantle, darker
-        than a panel, so text there reads a little higher than the table's
-        panel column.
+        <code class="cn-code-inline">--cn-fg-soft</code>. Meta, help and table
+        heads are <code class="cn-code-inline">--cn-fg-muted</code>. Readable
+        text stops at <code class="cn-code-inline">--cn-fg-placeholder</code>,
+        which only placeholders use. The two roles under it are for icons and
+        disabled states. The page is darker than a panel, so text there reads
+        a little higher than the table's panel column.
       </p>
 
       <p class="cn-copy">
-        WCAG 2 ratios flatter light text on a dark ground, so the text roles
-        also answer APCA lightness contrast, written Lc. The table above gives
-        both. <code class="cn-code-inline">--cn-fg</code> holds Lc
-        75, the soft and body roles Lc 60, which is APCA's level for content
-        text, <code class="cn-code-inline">--cn-fg-muted</code> Lc 50 and{" "}
-        <code class="cn-code-inline">--cn-fg-placeholder</code> Lc 40. Muted
-        text holds meta and help, never running copy, which is what lets it
-        sit under the content level. A placeholder is never the only copy of
+        The text roles also answer APCA lightness contrast, written Lc. Muted
+        text holds meta and help, never running copy. A placeholder is never the only copy of
         a fact.
       </p>
 
       <p class="cn-copy">
         The status roles pass as text, but red, peach and pink sit close in
-        lightness: red and peach are 1.3:1 apart, red and pink 1.5:1, red and
-        yellow 1.8:1. A tone never carries meaning alone (WCAG 1.4.1). The
-        word in the tag or banner states the status, so it survives for a
-        reader who cannot tell the hues apart. Danger and warning also lead
-        with a glyph, because they are the tones a reader must not miss. The
-        glyph is <code class="cn-code-inline">aria-hidden</code>; the word is
-        what a screen reader hears. Other tones may take a glyph.
-      </p>
-
-      <p class="cn-copy">
-        Under a full-severity simulation (Machado 2009), the four status
-        roles stay apart in OKLab with one exception. Warning and success,
-        yellow and green, fall to dE 2.9 for a protan reader and 6.6 for a
-        deutan one. Every other pair stays at 10.7 or more. Those two are
-        told apart by shape and word: the warning triangle against the
-        checked circle, and "Due soon" against "Paid". An svg that replaces
-        a status glyph must keep a shape distinct from the other three.
+        lightness, and yellow and green merge for a red-green color-blind
+        reader. A tone never carries meaning alone (WCAG 1.4.1). The word in
+        the tag or banner states the status. Danger and warning also lead
+        with a glyph. The glyph is{" "}
+        <code class="cn-code-inline">aria-hidden</code>, and the word is what a
+        screen reader hears. An svg that replaces a status glyph must keep a
+        shape distinct from the other three.
       </p>
 
       <p class="cn-copy">
@@ -266,9 +245,8 @@ export default function AccessibilityPage() {
         <code class="cn-code-inline">-warning</code>,{" "}
         <code class="cn-code-inline">-success</code> or{" "}
         <code class="cn-code-inline">-info</code> draws its glyph in CSS when the
-        markup holds no svg. The glyph is a masked background, so it is never
-        read aloud. The palette tones draw none; a red or yellow tag brings
-        an <code class="cn-code-inline">aria-hidden</code> svg.
+        markup holds no svg. The palette tones draw none, so a red or yellow
+        tag brings an <code class="cn-code-inline">aria-hidden</code> svg.
       </p>
 
       <Demo title="The word states the status; the glyph comes from CSS" classes="tag cn-tone-danger · -warning · -success · -info" row>
@@ -280,24 +258,16 @@ export default function AccessibilityPage() {
 
       <h2 class="cn-title">Non-text contrast</h2>
       <p class="cn-copy">
-        A control's bounds need 3:1 against what surrounds them when they are
-        the only way to find the control. A button is identified by its
-        label, so its resting hairline is decoration and sits under 3:1 by
-        design. A field is identified by the label above it and by its
-        carve, so its resting edge is a quiet even hairline, surface-2 at
-        85%, not a 3:1 ring: a brighter ring at rest read as an outlined
-        box, and a light lip on a carve's far walls reads as a bevel. Its
-        state still shows at 3:1. Hover closes a full 1px{" "}
-        <code class="cn-code-inline">--control-edge</code> ring and focus draws the 2px
-        focus ring. So a field is findable the moment a reader reaches for
-        it. Give every field a visible label. Checkboxes, radios and switches
-        carry a full edge at rest, because the box is the whole control and
-        has no label inside it. That edge and the slider thumb's are{" "}
-        <code class="cn-code-inline">--control-edge</code>, overlay-1, so an
-        unchecked box inside a panel or a dialog still clears 3:1. Under{" "}
+        A control's bounds need 3:1 only when they are the one way to find
+        the control. Buttons and fields rest on a hairline under 3:1. A label
+        identifies each, so give every field a visible label. Hover closes a
+        1px <code class="cn-code-inline">--control-edge</code> ring and focus
+        draws the 2px focus ring, both above 3:1. Checkboxes, radios and
+        switches carry a full{" "}
+        <code class="cn-code-inline">--control-edge</code> at rest. Under{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> the edge
         and disabled text move to overlay-2, and a resting field closes into
-        a full overlay-2 ring. The table has each edge's ratio.
+        a full overlay-2 ring.
       </p>
 
       <Demo title="Edges that identify a control" why="Which edges need 3:1 and which do not">
@@ -317,15 +287,10 @@ export default function AccessibilityPage() {
 
       <h2 class="cn-title">Surfaces</h2>
       <p class="cn-copy">
-        The page is mantle and panels and plated controls are base, one fill
-        step above it, so text on a panel reads a little lower than on the
-        page; every ratio here is quoted on the panel, the lower of the two.
-        Only the overlay fill sits lighter than base, and a lighter overlay
-        would drop the placeholder role under its floor, so the ladder stops
-        there. A raised surface shows its bounds by the fill step, and its
-        hairline cuts its outline. An engaged state is
-        a wash a step past the hover, and it also wears a mauve rim that
-        clears 3:1 on that wash. The table has each ratio.
+        The page is mantle. Panels and plated controls are base, one fill
+        step above it. Every ratio here is quoted on the panel. Only the
+        overlay fill sits lighter than base. An engaged state is a wash a
+        step past the hover, inside a mauve rim that clears 3:1 on that wash.
       </p>
 
       <Demo title="Fills and lines" why="How a surface shows its bounds">
@@ -361,22 +326,16 @@ export default function AccessibilityPage() {
       <h2 class="cn-title">Focus</h2>
       <p class="cn-copy">
         Focus is a 2px ring in <code class="cn-code-inline">--cn-focus</code>,
-        text, the one bright neutral no state uses. It eases out from the
-        element's edge to a 3px offset. The system never removes it. Fields
-        take the same outline on any focus, pointer or keyboard, since typing
-        follows either way. Focus and the engaged rim differ by hue and by
-        shape: focus is a neutral 2px standing 3px off the edge, the rim 1px
-        of mauve on it.
+        the one bright neutral no state uses. It eases out from the element's
+        edge to a 3px offset. The system never removes it. Fields take the
+        same outline on any focus, pointer or keyboard.
       </p>
 
       <h2 class="cn-title">Type</h2>
       <p class="cn-copy">
         Every size is rem, so the reader's browser font-size setting scales
-        every role. The microlabel is the one 12px role at the 16px default;
-        labels are 14px at 500 in subtext-1 and meta is 14px at 400 in
-        subtext-0, so the two share a size and differ by weight and ink. Body copy is 16px, and 15px at compact density.{" "}
-        <code class="cn-code-inline">.page-main.is-reading</code> sets the lede
-        at 20px.
+        every role. The microlabel is the one 12px role at the 16px default.
+        Labels and meta are 14px. Body copy is 16px, and 15px at compact density.
       </p>
 
       <h2 class="cn-title">Touch</h2>
@@ -390,10 +349,9 @@ export default function AccessibilityPage() {
       <h2 class="cn-title">Reader preferences</h2>
       <p class="cn-copy">
         The system answers four more media queries with no work on your
-        side. Most readers never set the contrast preference, so the same
-        step also runs from{" "}
+        side. The contrast step also runs from{" "}
         <code class="cn-code-inline">data-contrast="more"</code> on the root
-        element. Offer it as a toggle; this one sets it for the whole site.
+        element. Offer it as a toggle. This one sets it for the whole site.
       </p>
 
       <Demo title="More contrast, without the OS setting" why="Why the contrast step also has a toggle" classes='html[data-contrast="more"]'>
@@ -406,11 +364,11 @@ export default function AccessibilityPage() {
           {
             name: "prefers-contrast: more",
             values: 'or data-contrast="more"',
-            notes: "Text steps up one palette stop: muted to subtext-1, placeholders to subtext-0. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Panel hairlines move to overlay-0, 3.4:1, and the lead and overlay hairline to overlay-1, so a panel shows a 3:1 boundary. A resting field and the tabs carve close into a full overlay-2 ring, and wells and the mono wells into a surface-2 ring, disabled opacity rises to .7, link underlines go solid, and grain goes off. The tilted panel stands upright on its plate, because rotated text renders soft. The look stays Mocha.",
+            notes: "Text steps up one palette stop. The raised and carved shadows deepen. Disabled text and control edges move to overlay-2. Panel hairlines move to overlay-0, so a panel shows a 3:1 boundary. A resting field and the tabs carve close into a full overlay-2 ring, link underlines go solid, and grain goes off. The tilted panel stands upright.",
           },
           {
             name: "prefers-reduced-motion: reduce",
-            notes: "Presses, slides and the page entrance land at once. Popovers, toasts, dialogs, drawers and tooltips fade in place at --t-fast with no travel. The spinner and a busy button keep a slow 2.4s spin, because a frozen ring reads as broken. Skeletons hold still.",
+            notes: "Presses, slides and the page entrance land at once. Popovers, toasts, dialogs, drawers and tooltips fade in place at --t-fast with no travel. The spinner and a busy button keep a slow 2.4s spin. Skeletons hold still.",
           },
           {
             name: "prefers-reduced-transparency: reduce",
@@ -418,7 +376,7 @@ export default function AccessibilityPage() {
           },
           {
             name: "forced-colors: active",
-            notes: "Focus draws in Highlight. Carved fields, wells, the mono wells, stepper pills, the tabs carve and the progress track lose their shadows, so they draw a CanvasText edge, and so do the checkbox, radio and switch. Engaged states lose their wash, so the engaged ghost, the segmented choice and the current page draw a Highlight rim, and so does the selected tab, and a selected table row a Highlight outline. The current sidebar link's spine draws in Highlight. Checked and indeterminate states fill with Highlight. The grain hides.",
+            notes: "Focus draws in Highlight. Carved fields, wells, stepper pills, the tabs carve, the progress track, the checkbox, radio and switch draw a CanvasText edge. Engaged states and the selected tab draw a Highlight rim, and a selected table row a Highlight outline. Checked and indeterminate states fill with Highlight. The grain hides.",
           },
         ]}
       />
@@ -426,9 +384,7 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         Under forced colors, from the{" "}
         <code class="cn-code-inline">test:a11y</code> run in Chromium's
-        emulation. Shadows, fills and the plate are gone, so every control
-        keeps a system-color edge, the disabled primary keeps its edge in
-        GrayText, and the chosen segmented option draws a Highlight rim.
+        emulation. Every control keeps a system-color edge.
       </p>
 
       <div class="cn-stack cn-gap-16">
@@ -457,9 +413,7 @@ export default function AccessibilityPage() {
         What a screen reader should speak for each widget when the markup
         follows the table above. These follow from the roles and states.
         Nobody has confirmed them with a screen reader yet, and readers
-        differ in wording and order. A pass with NVDA in Firefox and
-        VoiceOver in Safari on tabs, menu and combobox is still owed. When
-        someone runs it, the reader, browser, version and date go here.
+        differ in wording and order.
       </p>
 
       <Demo title="What a reader should speak" why="Expected, not yet confirmed with a screen reader">
@@ -472,16 +426,11 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">pnpm lint</code> computes every ratio on
         this page from the tokens, in the default values and under{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code>. It resolves
-        hexes, <code class="cn-code-inline">var()</code> and srgb{" "}
-        <code class="cn-code-inline">color-mix</code>, composites mixes into
-        transparent over the ground, and fails the build when a pairing drops
-        under its floor. It also fails when a ratio written in a token comment
-        is more than .06 off the computed value on base, or on the page when
-        the comment says so, and when the{" "}
+        <code class="cn-code-inline">prefers-contrast: more</code>. It fails
+        the build when a pairing drops under its floor, when a ratio in a
+        token comment drifts from the computed value, and when the{" "}
         <code class="cn-code-inline">data-contrast</code> block drifts from the
-        media block. The text roles get a
-        second check in APCA 0.0.98G on the same grounds and in both modes.
+        media block. The text roles get a second check in APCA.
       </p>
 
       <Props
@@ -492,9 +441,9 @@ export default function AccessibilityPage() {
           { name: "--cn-fg-placeholder", values: "4.5:1", notes: "On the page, raised, overlay, recessed and sunken fills." },
           { name: "status roles, links", values: "4.5:1", notes: "On the page, raised and overlay fills, and each status role on its own tint." },
           { name: "field hover ring, control edge, focus ring, engaged rim", values: "3:1", notes: "On the page, raised and overlay fills. The control edge covers the slider thumb. The rim also on --wash." },
-          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is the quiet hairline, surface-2 at 85%, 2.1:1 on a panel, below 3:1 by design. Its design floor is 2:1 on the page and a panel, and 2:1 for --cn-field-ring-overlay on the overlay fill." },
-          { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.8, 2.4, 1.4:1 · 1.5, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill, so the depth ladder holds its order. --edge-strong must stay above --edge on every ground. Not WCAG obligations." },
-          { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer falls from the top left and is darker than the page, a panel and a well, so no carve draws a light lip or glow." },
+          { name: "resting field ring", values: "3:1", notes: "Under prefers-contrast: more only. By default the ring is a quiet hairline with a 2:1 design floor." },
+          { name: "--edge, --edge-strong, --cn-lit-edge", values: "1.8, 2.4, 1.4:1 · 1.5, 1.9, 1.3:1", notes: "Design floors on the page and raised fills · the overlay fill. Not WCAG obligations." },
+          { name: "--neu-inset, --neu-inset-soft", values: "dark only", notes: "Every layer is darker than the page, a panel and a well, so no carve draws a light lip." },
           { name: "--cn-fg-on-accent", values: "4.5:1", notes: "On the primary and its hover." },
           { name: "--cn-fg", values: "APCA Lc 75", notes: "On the page, raised and overlay fills." },
           { name: "--cn-fg-soft, --cn-fg-body", values: "APCA Lc 60", notes: "On the page, raised and overlay fills. APCA's level for content text." },
@@ -507,59 +456,38 @@ export default function AccessibilityPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">pnpm --dir showcase test:a11y</code> builds
         this site and opens every page in Chromium at 1400 by 900. It runs
-        axe-core with the wcag2a, wcag2aa, wcag21aa and wcag22aa rules. It
-        then applies the WCAG 1.4.12 text-spacing override (line height 1.5,
-        letter spacing .12em, word spacing .16em, 2em after a paragraph) and
-        fails on any element with hidden or clipped overflow whose text runs
-        past its box. It reloads the page under forced colors, saves a
-        full-page screenshot to{" "}
-        <code class="cn-code-inline">showcase/a11y-shots/forced-colors/</code>{" "}
-        for a person to review, and fails if the first focused control does
-        not ring in Highlight. It reloads the page under prefers-contrast:
-        more and runs axe again, then under reduced motion and fails on any
-        transition or animation longer than 1ms. Overlay fades and spinners
-        are exempt. Last, it reloads the page at 700px, the desktop at 200%
-        zoom, and fails on sideways scroll or clipped text, then at 390px
-        and 320px and fails if it scrolls sideways. In the desktop pass it
-        fails when any element holds more than three raised panels, and when
-        an example view holds more than one primary, tilted panel or lead
-        panel. It also captures the Depth page and the dashboard and invoice
-        examples at 1x and fails when more than 0.1% of the pixels differ
-        from the committed baselines, so a depth cue cannot drift without a
-        deliberate baseline update. It saves each of those captures again
-        to <code class="cn-code-inline">showcase/a11y-shots/dimmed/</code>{" "}
-        at half the luminance and a 1.3 gamma, the dim, low-gamma display
-        where the fill steps close up, for a person to judge the hairline,
-        the foot and the sidebar rule. Before the pages it checks motion from
-        the animations the browser is running: the entrance children of the
-        dashboard example and of the Modal page must stagger 0 to 200ms in
-        40ms steps over --t-slow, and a
-        modal and a toast must enter over --t-base and leave over --t-exit.
-        The tab pill must slide over --t-fast when the selection moves, and
-        a held primary must press over --t-press.
-        axe covers the WCAG 2.5.8 target size. Any
-        violation fails the run. Text that axe cannot measure, such as a link
-        partly below the fold or text over a gradient, is listed as needing
-        review and does not fail it.
+        axe-core with the wcag2a, wcag2aa, wcag21aa and wcag22aa rules, by
+        default and under prefers-contrast: more. It applies the WCAG 1.4.12
+        text-spacing override and fails on clipped text. Under forced colors
+        it saves a screenshot for review and fails if the first focused
+        control does not ring in Highlight. Under reduced motion it fails on
+        any transition or animation longer than 1ms, overlay fades and
+        spinners excepted. At 700px, the desktop at 200% zoom, it fails on
+        sideways scroll or clipped text, and at 390px and 320px on sideways
+        scroll. It fails when any element holds more than three raised
+        panels, or an example view holds more than one primary, tilted panel
+        or lead panel.
+      </p>
+      <p class="cn-copy">
+        It also diffs the Depth page and the dashboard and invoice examples
+        against committed baselines, and checks that the page entrance, a
+        modal, a toast, the tab pill and a held primary run on their duration
+        tokens.
       </p>
 
       <p class="cn-copy">
         It checks each page as it loads. Menus, dialogs, drawers, toasts and
-        tooltips stay closed, and hover and focus states are not drawn. A
-        forced colors screenshot is a record for review, not a pass or fail
-        beyond the focus ring.
-        No one has tested the docs or the package with a screen reader, and
-        axe finds only part of what WCAG asks. It checks these docs, not
-        your markup.
+        tooltips stay closed, and hover and focus states are not drawn. No one
+        has tested the docs or the package with a screen reader, and axe
+        finds only part of what WCAG asks. It checks these docs, not your
+        markup.
       </p>
 
       <h2 class="cn-title">WCAG 2.2</h2>
       <p class="cn-copy">
         What the package does for each AA criterion it can affect, and how
         that is checked. Two AAA criteria are listed because the package
-        answers them too. axe runs on the docs pages through the browser
-        check above, not on your pages. The package has not yet been tested
-        with a screen reader. Names, roles and states come from your markup.
+        answers them too. Names, roles and states come from your markup.
       </p>
 
       <Demo title="Criteria the package touches" why="How to read this table">
@@ -576,17 +504,13 @@ export default function AccessibilityPage() {
         The system is dark by design. It sets{" "}
         <code class="cn-code-inline">color-scheme: dark</code>, so native scrollbars
         and form controls match, and it does not answer{" "}
-        <code class="cn-code-inline">prefers-color-scheme: light</code>. It
-        is built on Catppuccin Mocha, and every shadow, plate and contrast
-        ratio is tuned against Mocha's base, so a light theme would need its
-        own depth model, not a palette swap.
+        <code class="cn-code-inline">prefers-color-scheme: light</code>.
       </p>
       <p class="cn-copy">
         Light text on a dark ground blooms for readers with astigmatism, so
-        the system keeps the mitigations that fit dark mode: body text is
-        subtext-1 rather than white, body weight is 400, leading is 1.6, and{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> lifts every
-        text role a stop.
+        body text is subtext-1 rather than white, body weight is 400, leading
+        is 1.6, and <code class="cn-code-inline">prefers-contrast: more</code>{" "}
+        lifts every text role a stop.
       </p>
     </Doc>
   );

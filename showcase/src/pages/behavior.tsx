@@ -6,7 +6,7 @@ const autoSnippet = `// with a bundler: one line in your entry file
 import "catppuccin-neu/js/auto";
 
 <!-- with no build: one tag beside the stylesheet link, on the same version -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v0.5.0/js/auto.js"></script>`;
+<script type="module" src="https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v1.0.0/js/auto.js"></script>`;
 
 const importSnippet = `import { init } from "catppuccin-neu/js";
 
@@ -182,31 +182,23 @@ export default function BehaviorPage() {
       </p>
 
       <p class="cn-copy">
-        The recipes style ARIA state: a tab with{" "}
-        <code class="cn-code-inline">aria-selected="true"</code> rises, a trigger
-        with <code class="cn-code-inline">aria-expanded="true"</code> wears the
-        engaged state. CSS cannot set that state or answer the arrow keys.
-        The module does, following the WAI-ARIA patterns, with no framework
-        and no dependencies. Every function returns a cleanup that removes
-        what it added. Slider fill and toasts are optional. An app with
-        its own widget library brings its own keyboard model and skips the
-        module; the
-        showcase's other demos are Preact and do their own wiring.
+        The recipes style ARIA state. CSS cannot set that state or answer the
+        arrow keys. The module does, following the WAI-ARIA patterns, with no
+        framework and no dependencies. Every function returns a cleanup that
+        removes what it added. An app with its own widget library skips the
+        module.
       </p>
 
       <CodeBlock title="One line" code={autoSnippet} />
 
       <p class="cn-copy">
-        A stylesheet cannot run script, so one tag wires the keyboard model.
-        The quick start prints it in the same block as the stylesheet link,
-        and a static page with none of these widgets can leave it out.{" "}
         <code class="cn-code-inline">catppuccin-neu/js/auto</code> has no
         exports. It wires every widget in the document once the DOM is
-        parsed, then watches the document: a widget that renders later is
-        wired when it lands, each element once, and one that leaves has its
-        listeners removed. Call <code class="cn-code-inline">init()</code>{" "}
-        instead when you want to choose the moment or keep the cleanup, and
-        load one or the other for the same markup, not both.
+        parsed, then watches the document. A widget that renders later is
+        wired when it lands, and one that leaves has its listeners removed.
+        Call <code class="cn-code-inline">init()</code> when you want to choose
+        the moment or keep the cleanup. Load one or the other for the same
+        markup, not both.
       </p>
 
       <CodeBlock title="Wire everything yourself" code={importSnippet} />
@@ -224,8 +216,7 @@ export default function BehaviorPage() {
         and installs <code class="cn-code-inline">tooltips()</code>. It wires what
         is in the page when it runs. For markup that renders later, wire
         the new widget directly, or load{" "}
-        <code class="cn-code-inline">catppuccin-neu/js/auto</code>, which
-        watches for it.
+        <code class="cn-code-inline">catppuccin-neu/js/auto</code>.
       </p>
 
       <Props
@@ -277,10 +268,9 @@ export default function BehaviorPage() {
       />
 
       <p class="cn-copy">
-        Disabled items, through <code class="cn-code-inline">disabled</code> or{" "}
-        <code class="cn-code-inline">aria-disabled="true"</code>, are skipped by
-        every widget. Focus return, the outside press and Escape behave the
-        same in each one.
+        Every widget skips disabled items, through{" "}
+        <code class="cn-code-inline">disabled</code> or{" "}
+        <code class="cn-code-inline">aria-disabled="true"</code>.
       </p>
 
       <CodeBlock title="One widget at a time" code={oneAtATimeSnippet} />
@@ -290,7 +280,7 @@ export default function BehaviorPage() {
       <p class="cn-copy">
         The module adds behavior, not names. Labels, roles and{" "}
         <code class="cn-code-inline">aria-controls</code> links are still your
-        markup; the <a href="/accessibility">Accessibility</a> page lists what
+        markup. The <a href="/accessibility">Accessibility</a> page lists what
         each component needs.
       </p>
     </Doc>

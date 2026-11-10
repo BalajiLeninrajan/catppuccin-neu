@@ -27,12 +27,10 @@ export default function EmptyStatePage() {
       </Demo>
 
       <p class="cn-copy">
-        The recipe
-        styles three children. An <code class="cn-code-inline">svg</code> before the
-        title sits in a 56px round carve on the soft inset.{" "}
-        <code class="cn-code-inline">strong</code> is the title,{" "}
-        <code class="cn-code-inline">span</code> the supporting line, and anything
-        else joins the 8px stack. A button adds 16px above itself, so the action
+        The recipe styles three children. An{" "}
+        <code class="cn-code-inline">svg</code> before the title sits in a 56px
+        round carve. <code class="cn-code-inline">strong</code> is the title and{" "}
+        <code class="cn-code-inline">span</code> the supporting line. A button
         stands 24px under the copy.
       </p>
 

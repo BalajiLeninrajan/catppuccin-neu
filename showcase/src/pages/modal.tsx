@@ -95,12 +95,10 @@ export default function ModalPage() {
       </Demo>
 
       <p class="cn-copy">
-        The platform gives you the
-        top layer, focus trapping, Escape, and{" "}
+        The platform gives you the top layer, focus trapping, Escape, and{" "}
         <code class="cn-code-inline">::backdrop</code>, which the recipe draws as the
-        blurred crust scrim. The modal fades in, rises 8px and scales up from
-        .98. It leaves on the ease-in in .14s. Add one listener if a backdrop
-        click should close it.
+        blurred crust scrim. Add one listener if a backdrop click should
+        close it.
       </p>
 
       <Demo title="Wide" why="When to go wide" classes="dialog.modal.is-wide">
@@ -140,7 +138,7 @@ export default function ModalPage() {
             name: "dialog.modal",
             values: "showModal() / close()",
             default: "·",
-            notes: "width min(520px, 100vw - 32px); max-height 100dvh - 48px; --cn-surface-overlay fill, the --edge-strong hairline, --shadow-pop. Radius is --cn-radius-panel. A resting field inside takes --cn-field-ring-overlay, 2.1:1 on the overlay fill.",
+            notes: "width min(520px, 100vw - 32px), max-height 100dvh - 48px, --cn-surface-overlay fill, the --edge-strong hairline, --shadow-pop. Radius is --cn-radius-panel.",
           },
           {
             name: ".modal.is-wide",
@@ -152,7 +150,7 @@ export default function ModalPage() {
             name: ".modal > header",
             values: "title and close control",
             default: "·",
-            notes: "The shared band: --band-h tall, --band-pad, on the dialog's overlay fill with an --edge-soft bottom divider. No darker fill, so the header never sinks below the surface it titles.",
+            notes: "The shared band: --band-h tall, --band-pad, on the dialog's overlay fill with an --edge-soft bottom divider.",
           },
           {
             name: ".modal > footer.panel-footer",

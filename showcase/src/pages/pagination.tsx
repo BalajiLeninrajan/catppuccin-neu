@@ -25,16 +25,13 @@ export default function PaginationPage() {
 
       <p class="cn-copy">
         Each page is a square ghost target at{" "}
-        <code class="cn-code-inline">--control-h-sm</code>, 14px at 500 with
-        tabular figures, so every two-digit page is the same width. Hover is{" "}
-        <code class="cn-code-inline">--hover</code>. The current page carries{" "}
+        <code class="cn-code-inline">--control-h-sm</code> with tabular figures,
+        so every two-digit page is the same width. The current page carries{" "}
         <code class="cn-code-inline">aria-current="page"</code> and takes the
-        engaged state: pressed in on the wash inside the mauve rim, at 600. A{" "}
-        <code class="cn-code-inline">span</code> is the gap between runs, in{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code>. Previous and Next hold
-        a 16px chevron. At the ends they take{" "}
-        <code class="cn-code-inline">aria-disabled="true"</code>, which dims them
-        and keeps them focusable, so focus is not lost on the last page.
+        engaged state. A <code class="cn-code-inline">span</code> is the gap
+        between runs. Previous and Next hold a 16px chevron. At the ends they
+        take <code class="cn-code-inline">aria-disabled="true"</code>, which
+        dims them and keeps them focusable.
       </p>
 
       <h2 class="cn-title">Breadcrumbs</h2>
@@ -51,14 +48,11 @@ export default function PaginationPage() {
       </Demo>
 
       <p class="cn-copy">
-        Crumbs run at 14px and 500. Links are{" "}
-        <code class="cn-code-inline">--cn-fg-body</code> and turn{" "}
-        <code class="cn-code-inline">--cn-fg</code> on hover; they sit in a{" "}
-        <code class="cn-code-inline">nav</code>, so they carry no underline. A
-        12px chevron in <code class="cn-code-inline">--cn-fg-faint</code> sits
-        between crumbs and flips in right-to-left text. The last crumb is the
-        page itself: <code class="cn-code-inline">aria-current="page"</code>,{" "}
-        <code class="cn-code-inline">--cn-fg</code> at 600, a weight step over the crumbs before it, and not a link.
+        Crumb links carry no underline, because they sit in a{" "}
+        <code class="cn-code-inline">nav</code>. A 12px chevron sits between
+        crumbs and flips in right-to-left text. The last crumb is the page
+        itself: <code class="cn-code-inline">aria-current="page"</code>, at 600,
+        and not a link.
       </p>
 
       <h2 class="cn-title">Accessibility</h2>
@@ -66,13 +60,11 @@ export default function PaginationPage() {
         Both are a <code class="cn-code-inline">nav</code> landmark, so give each
         an <code class="cn-code-inline">aria-label</code> ("Invoice pages",
         "Breadcrumb"). In an app, pages are links to{" "}
-        <code class="cn-code-inline">?page=n</code>, so back and forward work; the
-        recipe styles buttons the same way. Give a page target an{" "}
+        <code class="cn-code-inline">?page=n</code>, so back and forward work.
+        Give a page target an{" "}
         <code class="cn-code-inline">aria-label</code> such as "Page 4", and the
         chevron targets "Previous page" and "Next page". Mark the gap{" "}
-        <code class="cn-code-inline">aria-hidden="true"</code>. The chevrons
-        between crumbs are generated content, so a screen reader hears the
-        list of links and its length, not the separators.
+        <code class="cn-code-inline">aria-hidden="true"</code>.
       </p>
 
       <CodeBlock

@@ -32,7 +32,7 @@ export default function SurfacesPage() {
         lead
         title="Six fills"
         classes="cn-bg-page / cn-bg-raised / cn-bg-overlay / cn-bg-recessed / cn-bg-head / cn-bg-well"
-        why="Why nothing raised is lighter than base"
+        why="How the ladder is ordered"
       >
         {/* A fixed 176px track fits the longest token, so the six swatches
             sit at an even pitch and still wrap on a narrow screen. */}
@@ -51,22 +51,10 @@ export default function SurfacesPage() {
       </Demo>
 
       <p class="cn-copy">
-        Recipes read these six fills, never a raw ground.
-        The page is mantle. Panels and plated controls sit on base, one fill
-        step above it, and lift by that step, their contact edge, their
-        cast and their hairline. Nothing raised is
-        lighter than base: overlays float free of the page, so they alone
-        take a lighter step. Wells, skeletons and the sidebar go the other
-        way, darker than the page, with crust as the darker step.
-      </p>
-
-      <p class="cn-copy">
-        The overlay stops where it does because a lighter step would drop
-        the placeholder role under the text floor. Body text and
-        placeholders hold their floors on it, and a hovered field rings in
-        overlay-1, which clears the non-text floor on the page, in a panel
-        and on the overlay. The table below has each step's ratio, and
-        the <a href="/input">input</a> page has the ring's.
+        Recipes read these six fills, never a raw ground. The page is mantle.
+        Panels and plated controls sit on base, one fill step above it.
+        Nothing raised is lighter than base. Only overlays take a lighter
+        step. Wells, skeletons and the sidebar are darker than the page.
       </p>
 
       <Props
@@ -109,33 +97,25 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         The panel fills with <code class="cn-code-inline">--cn-surface-raised</code>{" "}
-        under <code class="cn-code-inline">--neu-raised</code>. Its border
-        is the <code class="cn-code-inline">--edge</code> hairline on all four
-        sides, and the token's 1px contact edge is its hard foot. No side is
-        darkened or brightened. The
-        header and footer are bands on the panel's own fill, each parted from
-        the body by an <code class="cn-code-inline">--edge-soft</code> divider. A
-        darker header would sink below the surface it titles, so the title's
-        weight anchors it instead. Their height and padding come from{" "}
+        under <code class="cn-code-inline">--neu-raised</code>, with the{" "}
+        <code class="cn-code-inline">--edge</code> hairline on all four sides.
+        The header and footer are bands on the panel's own fill, each parted
+        from the body by an <code class="cn-code-inline">--edge-soft</code>{" "}
+        divider. Their height and padding come from{" "}
         <code class="cn-code-inline">--band-h</code> and{" "}
-        <code class="cn-code-inline">--band-pad</code>, the same rule the modal and
-        drawer headers use. A filled child at a panel edge, such as a table
-        head, carries its own radius,{" "}
-        <code class="cn-code-inline">calc(var(--cn-radius-panel) - 1px)</code> on the
-        outer corners. Never fix a corner with{" "}
-        <code class="cn-code-inline">overflow: hidden</code>; that clips anchored
-        popovers and hard-offset shadows. The panel has no padding of its own,
-        so tables can fill it; put prose and controls in{" "}
+        <code class="cn-code-inline">--band-pad</code>. A filled child at a
+        panel edge, such as a table head, carries its own radius. Never fix a
+        corner with <code class="cn-code-inline">overflow: hidden</code>, which
+        clips anchored popovers and hard-offset shadows. The panel has no
+        padding of its own, so tables can fill it. Put prose and controls in{" "}
         <code class="cn-code-inline">.panel-body</code>.
       </p>
 
       <p class="cn-copy">
-        A panel inside a panel rests on its parent, not on the page, so it
-        takes <code class="cn-code-inline">--neu-raised-soft</code> and adds
-        the lit edge, which a plain panel does not carry. A region of
-        a view holds at most three raised panels. More items go in one panel,
-        a ruled stat grid on the ground or a table, so raised stays a rank
-        and not a texture.
+        A panel inside a panel takes{" "}
+        <code class="cn-code-inline">--neu-raised-soft</code> and adds the lit
+        edge. A region of a view holds at most three raised panels. More
+        items go in one panel, a ruled stat grid on the ground or a table.
       </p>
 
       <Demo
@@ -176,21 +156,12 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         <code class="cn-code-inline">.is-tilted</code> is the one rotated surface: a
-        1.2° turn on the 4px plate of a clickable under the lit top edge. The plate replaces
-        the raised shadow, as it does under a button, so the card answers
-        the top-left light with a hard block and no soft cast. Use it once per view at most, for a
-        summary or an aside in prose, never for the page's main data, and
-        never on a panel holding a table, a form or ruled rows, because
-        rotated rules drift against the text on them. Its heading takes the
-        name role, no larger than the panel titles beside it, so the tilt
-        does the lifting and the type does not. It takes{" "}
-        <code class="cn-code-inline">align-self: start</code>, so in a grid it
-        keeps its content height instead of stretching to the row and showing
-        an empty tail under the turn. It flattens to the regular raised panel
-        at 1060px. Under{" "}
-        <code class="cn-code-inline">prefers-contrast: more</code> it stands
-        upright and keeps its plate, because rotated text renders soft.
-        The{" "}
+        1.2° turn on the 4px plate of a clickable. Use it once per view at
+        most, for a summary or an aside in prose. Never use it for the page's
+        main data, or on a panel holding a table, a form or ruled rows. Its
+        heading takes the name role. It keeps its content height in a grid,
+        flattens to the regular raised panel at 1060px, and stands upright
+        under <code class="cn-code-inline">prefers-contrast: more</code>. The{" "}
         <a href="/#ornament-budget">ornament budget</a> lists the other
         once-per-view pieces.
       </p>
@@ -199,27 +170,15 @@ export default function SurfacesPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.panel.is-lead</code> marks the panel a
         view is about, such as the invoice table on a billing dashboard. It
-        takes the base fill like every panel, with the brighter{" "}
-        <code class="cn-code-inline">--edge-strong</code> hairline, solid
-        surface-2, on all four sides, and stands on{" "}
-        <code class="cn-code-inline">--neu-lifted</code>: a hard dark foot on
-        the bottom and right, 8px deep and 6px wide,
-        where a button's plate is 4px and a plain panel's foot 1px,
-        and a longer cast. It is a resting panel with a deeper foot, not a
-        height of its own. It keeps the lit edge and adds no bright rim or dark
-        outline, because neither reads as
-        height. Its band title takes{" "}
-        <code class="cn-code-inline">--lead-title-size</code> at the heading
-        weight, 28px at default density where other panels use 20px, and
-        20px at 655px and under. Its header band is{" "}
-        <code class="cn-code-inline">--lead-band-h</code> tall, 72px where a
-        plain band is 64px, and{" "}
+        takes the brighter <code class="cn-code-inline">--edge-strong</code>{" "}
+        hairline and stands on <code class="cn-code-inline">--neu-lifted</code>,
+        an 8px foot where a plain panel's is 1px. Its band title takes{" "}
+        <code class="cn-code-inline">--lead-title-size</code>, 28px where other
+        panels use 20px. Its header band is{" "}
+        <code class="cn-code-inline">--lead-band-h</code> tall, and{" "}
         <code class="cn-code-inline">--lead-pad</code> gives its header, body
-        and footer 32px of room where a plain panel has 24px; both step down
-        with density. A cast barely shows on a dark page, so the deeper foot,
-        the title and the room carry the rank. It adds height, a larger title
-        and room, not an ornament: no plate, tilt or color. Use one per view at most.
-        The tilted aside comments on the data; the lead panel holds it.
+        and footer 32px of room. All three step down with density. Use one
+        per view at most.
       </p>
 
       <Demo title="A lead panel beside a raised one" classes="panel is-lead" why="How the lead panel outranks its neighbors">
@@ -265,7 +224,7 @@ export default function SurfacesPage() {
         </div>
       </Demo>
 
-      <Demo title="Scrolling well" classes="well scroll-well" why="The scroll cue, and why a well has no border">
+      <Demo title="Scrolling well" classes="well scroll-well" why="The scroll cue and the well fill">
         <div
           class="well scroll-well cn-px-16 cn-py-8"
           style="width:min(560px,100%);max-height:180px;overflow:auto"
@@ -292,15 +251,10 @@ export default function SurfacesPage() {
 
       <p class="cn-copy">
         The well takes the{" "}
-        <code class="cn-code-inline">--cn-surface-sunken</code> fill the code
-        wells and stepper pills use, crust, the darkest Mocha stop: 1.07:1
-        under the page and 1.14:1 under a panel. So it sits below the ground and never
-        reads as an outlined panel. The carve finishes it with one dark wall
-        from the top left and no border or light lip.{" "}
+        <code class="cn-code-inline">--cn-surface-sunken</code> fill, crust,
+        under one dark wall from the top left.{" "}
         <code class="cn-code-inline">--cn-well-ring</code> is a quiet even
-        hairline over the carve, halfway between surface-0 and surface-1,
-        1.7:1 on the fill and the same
-        on all four sides, so a well keeps its shape on a dim display.{" "}
+        hairline over the carve.{" "}
         <code class="cn-code-inline">prefers-contrast: more</code> closes it
         into a surface-2 ring.
       </p>
@@ -312,7 +266,7 @@ export default function SurfacesPage() {
             name: ".panel",
             values: "raised container",
             contrast: "Fill 1.07:1 on the page · --edge 1.85:1 on the fill",
-            notes: "--cn-surface-raised fill (base, a step above the page), --neu-raised (contact, near shadow and cast, with no lit edge), an --edge hairline on all four sides, and a 1px foot, the contact. The hairline is overlay-0 under prefers-contrast: more. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and adds the lit edge. At most three per region.",
+            notes: "--cn-surface-raised fill, --neu-raised and an --edge hairline on all four sides. Radius from --cn-radius-panel. Inside another panel it takes --neu-raised-soft and adds the lit edge. At most three per region.",
           },
           {
             name: ".panel-header / .panel-footer",
@@ -332,13 +286,13 @@ export default function SurfacesPage() {
           {
             name: ".panel.is-tilted",
             values: "one per view",
-            notes: "rotate(1.2deg) on the clickable's plate, --cn-plate (4px, 3px cozy, 2px compact), under the lit edge with no raised shadow, align-self: start so a grid row never stretches it. A summary or an aside in prose at 15px, never a table, a form or ruled rows; its heading in the name role. Flattens at 1060px and stands upright under prefers-contrast: more.",
+            notes: "rotate(1.2deg) on the clickable's plate, --cn-plate, with no raised shadow. A summary or an aside in prose, never a table, a form or ruled rows. Flattens at 1060px and stands upright under prefers-contrast: more.",
           },
           {
             name: ".panel.is-lead",
             values: "one per view",
             contrast: "--edge-strong 2.5:1 on the fill",
-            notes: "The panel the view is about. The base fill with the --edge-strong hairline on all four sides, on --neu-lifted with its deeper foot, 8px deep and 6px wide, and its longer cast, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size at the heading weight, so it outranks its neighbors by height, by its title and by its room. No ornament.",
+            notes: "The panel the view is about. The --edge-strong hairline, --neu-lifted with its 8px foot, a --lead-band-h header band, --lead-pad around its body and in its bands, and a band title at --lead-title-size.",
           },
           {
             name: ".panel.is-shell",
@@ -348,7 +302,7 @@ export default function SurfacesPage() {
           {
             name: ".well",
             values: "inset container",
-            notes: "No border, the --cn-surface-sunken fill; the full inner shadow finishes it under --cn-well-ring, an even hairline halfway between surface-0 and surface-1 that prefers-contrast: more lifts to surface-2. The card radius (12px).",
+            notes: "No border, the --cn-surface-sunken fill, the full inner shadow and --cn-well-ring. The card radius (12px).",
           },
           {
             name: ".scroll-well",

@@ -87,14 +87,11 @@ export default function SliderPage() {
       </Demo>
 
       <p class="cn-copy">
-        The track is the
-        progress track's carve: 7px, crust, on the soft inset. The thumb is a
-        20px raised round on <code class="cn-code-inline">--cn-surface-raised</code>{" "}
-        with the soft raise and the lit top edge, inside a 1px{" "}
-        <code class="cn-code-inline">--control-edge</code>, overlay-1, so the
-        thumb clears the non-text floor wherever the slider sits. On hover its edge warms to{" "}
-        <code class="cn-code-inline">--engaged-edge</code>, and held it shrinks
-        to .92 and springs back on release.
+        The track is the progress track's carve. The thumb is a 20px raised
+        round on <code class="cn-code-inline">--cn-surface-raised</code> inside
+        a 1px <code class="cn-code-inline">--control-edge</code>. On hover its
+        edge warms to <code class="cn-code-inline">--engaged-edge</code>, and
+        held it shrinks to .92.
       </p>
 
       <Demo title="Disabled" why="Why the fill needs --value" classes="slider:disabled">
@@ -116,26 +113,19 @@ export default function SliderPage() {
         <code class="cn-code-inline">--value</code>. Keep it in step with one{" "}
         <code class="cn-code-inline">input</code> listener, as below. A disabled
         slider drops to <code class="cn-code-inline">--disabled-opacity</code>{" "}
-        with a not-allowed cursor; give its label the disabled color yourself.
-        The demo uses <code class="cn-code-inline">.cn-fg-faint</code>, which
-        is overlay-1 like <code class="cn-code-inline">--cn-fg-disabled</code>{" "}
-        and moves with it under <code class="cn-code-inline">prefers-contrast</code>.
+        with a not-allowed cursor. Give its label the disabled color yourself.
       </p>
 
       <h2 class="cn-title">Accessibility</h2>
       <p class="cn-copy">
-        A native range input brings its own keys: Left and Down step down,
-        Right and Up step up, Page Up and Page Down take bigger steps, and
-        Home and End go to the ends. Pair it with a visible{" "}
+        A native range input brings its own keys. Pair it with a visible{" "}
         <code class="cn-code-inline">label</code> and an{" "}
         <code class="cn-code-inline">output for</code> that shows the value in
         words. When the number alone is not the value a reader needs, set{" "}
         <code class="cn-code-inline">aria-valuetext</code> to the same words,
-        such as "30 days". Point{" "}
-        <code class="cn-code-inline">aria-describedby</code> at any help text.
-        Keep the slider out of a <code class="cn-code-inline">.field</code>: the
-        field recipe styles every <code class="cn-code-inline">input</code> in it
-        as a carved well.
+        such as "30 days". Keep the slider out of a{" "}
+        <code class="cn-code-inline">.field</code>, which styles every{" "}
+        <code class="cn-code-inline">input</code> in it as a carved well.
       </p>
 
       <CodeBlock
@@ -168,7 +158,7 @@ export default function SliderPage() {
         rows={[
           { name: ".slider", values: 'input[type="range"]', notes: "Full width, 24px tall, no native chrome." },
           { name: "track", values: "::-webkit-slider-runnable-track / ::-moz-range-track", notes: "7px, pill radius, crust under --neu-inset-soft. Filled with --cn-interactive up to --value." },
-          { name: "thumb", values: "::-webkit-slider-thumb / ::-moz-range-thumb", contrast: "Edge 4.8:1 on the page, 4.4:1 on a raised fill, 3.5:1 on an overlay", notes: "20px round, 1px --control-edge border (overlay-1; overlay-2 under prefers-contrast), --cn-surface-raised, --neu-raised-soft and --cn-lit-edge. Hover edge --engaged-edge; held, scale .92 on the press timing, back on the spring." },
+          { name: "thumb", values: "::-webkit-slider-thumb / ::-moz-range-thumb", contrast: "Edge 4.8:1 on the page, 4.4:1 on a raised fill, 3.5:1 on an overlay", notes: "20px round, 1px --control-edge border, --cn-surface-raised, --neu-raised-soft and --cn-lit-edge. Hover edge --engaged-edge. Held, scale .92." },
           { name: "--value", values: "0% to 100%", default: "0%", notes: "Where the fill stops outside Firefox. Set it from an input listener, or with slider() from catppuccin-neu/js." },
           { name: ":disabled", values: "on the input", notes: "--disabled-opacity (.7) and a not-allowed cursor." },
         ]}

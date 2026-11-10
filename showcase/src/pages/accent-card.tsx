@@ -25,16 +25,9 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        The plates sit
-        well apart from the page, so
-        the plate reads as the card's color and not as a shadow.
-      </p>
-
-      <p class="cn-copy">
         The accent belongs to the team, not to its place in the grid. Store it
         on the record, or derive it from a stable id, and read it wherever the
-        team appears. Payments is teal here, in the table's ranked rows and on
-        the density page. Sorting or filtering the grid never recolors a card.
+        team appears. Sorting or filtering the grid never recolors a card.
       </p>
 
       <Demo title="Linked card" why="How a linked card presses" classes="a > .accent-card">
@@ -52,9 +45,8 @@ export default function AccentCardPage() {
 
       <p class="cn-copy">
         Wrap the card in a plain <code class="cn-code-inline">&lt;a&gt;</code>. Hover
-        lifts the card 1px off its plate and the plate grows 1px. Active
-        half-slides it onto the plate, the same press as every button. The
-        wrapper is the link, never the card itself.
+        lifts the card 1px off its plate. Active half-slides it onto the
+        plate. The wrapper is the link, never the card itself.
       </p>
 
       <Demo title="With a stat and a progress bar" why="Why the value inside a card is not accent-colored" classes="accent-card > .stat.is-lg + .progress-track">
@@ -70,12 +62,9 @@ export default function AccentCardPage() {
       </Demo>
 
       <p class="cn-copy">
-        Inside the card the hero value is text-colored, so the accent is not
-        repeated on the plate and the number. A data mark such as the
-        progress fill keeps the accent, and so do an avatar and a
-        <code class="cn-code-inline">.mark</code>, which identify the record
-        the way the plate does. Controls inside the card rest on their
-        own plate, not the card's.
+        Inside the card the hero value is text-colored. A progress fill, an
+        avatar and a <code class="cn-code-inline">.mark</code> keep the accent.
+        Controls inside the card rest on their own plate.
       </p>
 
       <Props
@@ -93,7 +82,7 @@ export default function AccentCardPage() {
             values: "recipe",
             contrast: "Plate on the page: 4.9:1 (blue) to 7.5:1 (yellow)",
             notes:
-              "--cn-surface-raised fill, --edge hairline, card radius, 12px 16px padding, and the hard offset in --plate (accent at --cn-step-vivid, 70%, into surface-0, so six accents stay apart) under the lit top edge. No neu shadow.",
+              "--cn-surface-raised fill, --edge hairline, card radius, 12px 16px padding, and the hard offset in --plate, the accent at --cn-step-vivid into surface-0, under the lit top edge. No neu shadow.",
           },
           {
             name: "a > .accent-card",

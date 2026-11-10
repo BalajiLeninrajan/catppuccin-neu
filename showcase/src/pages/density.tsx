@@ -98,13 +98,9 @@ export default function DensityPage() {
         Set <code class="cn-code-inline">data-density="cozy"</code> or{" "}
         <code class="cn-code-inline">data-density="compact"</code> on any element
         to retune them for that subtree. Cozy is for desktop data tools
-        that want more rows on screen: 38px controls, a 3px plate, 52px
-        bands and 8px by 12px table cells, with the band title, the body
-        size and the panel radius left alone. Compact is the dense strip for
-        readouts: 28px controls, a 2px plate, the card radius on panels,
-        44px bands and tighter table cells, chips and code wells. Control
-        heights are rem (46px is 2.875rem), so a reader who raises the
-        browser font size gets taller controls along with larger labels.
+        that want more rows on screen. Compact is the dense strip for
+        readouts. Control heights are rem, so they grow with the browser font
+        size.
       </p>
 
       <p class="cn-copy">
@@ -190,7 +186,7 @@ export default function DensityPage() {
         <p class="cn-copy">
           Three properties carry color and are read by most recipes. Set
           them inline or on a wrapper to re-key a subtree. No recipe needs a
-          variant class for color. The rest of the contract follows them.
+          variant class for color.
         </p>
       </section>
 
@@ -221,7 +217,7 @@ export default function DensityPage() {
             values: "any Mocha token or mix",
             default: "var(--neu-ink)",
             notes:
-              "The plate under the secondary button, segmented options and the cn-hard family. The primary button and the accent card set their own. Undeclared on :root; recipes read var(--plate, var(--neu-ink)), the shadow ink at 1.22:1 under base.",
+              "The plate under the secondary button, segmented options and the cn-hard family. The primary button and the accent card set their own.",
           },
         ]}
       />

@@ -47,14 +47,12 @@ export default function SegmentedPage() {
         Mark the selection with{" "}
         <code class="cn-code-inline">aria-pressed="true"</code> on a button, or{" "}
         <code class="cn-code-inline">.active</code> on a label. The selected option sits pressed in on the mauve wash,
-        inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides. The wash is mauve 23% into
-        base and the rim clears the non-text floor on it, so the choice outweighs the raised options beside it.
+        inside the <code class="cn-code-inline">--engaged-edge</code> rim, and never slides.
       </p>
 
       <p class="cn-copy">
         Use buttons for switches the app reacts to at once. Set{" "}
-        <code class="cn-code-inline">aria-pressed</code> from your state; it is both the announced state and the style
-        hook.
+        <code class="cn-code-inline">aria-pressed</code> from your state.
       </p>
 
       <Demo title="Radio form" why="How the radio form submits and takes focus" classes="segmented › label.active > input.cn-sr-only">
@@ -101,7 +99,7 @@ export default function SegmentedPage() {
       <p class="cn-copy">
         A <code class="cn-code-inline">disabled</code> or{" "}
         <code class="cn-code-inline">aria-disabled="true"</code> option dims, drops its plate and outline and takes the flat sunken fill,
-        like a disabled secondary button. A plate says an option can be pressed, so an unavailable one has none.
+        like a disabled secondary button.
       </p>
 
       <Demo title="Stacked" why="When to stack" classes="segmented is-stacked">
@@ -157,7 +155,7 @@ export default function SegmentedPage() {
           { name: ".segmented", notes: "Equal-width column grid, 8px gap. Styles every direct child, buttons or labels." },
           { name: ".segmented > *", notes: "Rests on --cn-surface-raised with a hairline, the plate and the lit top edge. Hover warms the border to mauve at --cn-step-edge." },
           { name: '.segmented > [aria-pressed="true"] / [aria-checked="true"] / .active', contrast: "Wash 1.63:1 on base · rim 3.3:1 on the wash · hint 5.68:1 on the wash", notes: "The selection. Pressed in on --wash and --neu-inset, the --engaged-edge rim; <b> turns mauve. A Highlight rim under forced colors." },
-          { name: '.segmented > :disabled / [aria-disabled="true"]', notes: "An unavailable option: --disabled-opacity (.7), no plate, no outline, the flat --cn-surface-sunken fill, a not-allowed cursor, no hover lift or press. A chosen option that is disabled keeps the engaged carve and dims." },
+          { name: '.segmented > :disabled / [aria-disabled="true"]', notes: "--disabled-opacity (.7), no plate, no outline, the flat --cn-surface-sunken fill, a not-allowed cursor. A chosen option that is disabled keeps the engaged carve and dims." },
           { name: "svg inside an option", notes: "16px, sized by the recipe." },
           { name: ".is-stacked", notes: "Vertical list, 12px gap, taller rows, 18px <b>. For described options." },
           { name: "<b> / <small>", notes: "Option title (sans 600 14px) and a quiet hint line at the 14px meta role in --cn-fg-muted inside each option." },

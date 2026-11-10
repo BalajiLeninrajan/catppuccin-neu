@@ -44,32 +44,30 @@ export default function CommandPage() {
       title="Command"
       lede="A copyable command line: a carved well, one command in mono, a prompt glyph, and an icon button that copies it and turns green for a moment."
     >
-      <Demo lead title="The command" why="Why the command is mono and carved" classes="command · command-text · command-prompt · command-copy">
+      <Demo lead title="The command" why="The well and the copy control" classes="command · command-text · command-prompt · command-copy">
         <Command text="npx catppuccin-neu-sync public/styles" />
       </Demo>
 
       <p class="cn-copy">
-        The text is mono because it is a command. The well shares the
-        terminal's full inset and the{" "}
-        <code class="cn-code-inline">--cn-surface-sunken</code> fill, with ligatures off, so the command copies as it reads. The copy control
+        The well shares the terminal's inset and the{" "}
+        <code class="cn-code-inline">--cn-surface-sunken</code> fill, with
+        ligatures off, so the command copies as it reads. The copy control
         is the icon button with <code class="cn-code-inline">--tone</code> set to
-        mauve. Use the
-        icon, not a worded "Copy" button, so the command stays the thing the
-        reader sees first.
+        mauve.
       </p>
 
       <Demo title="Full width" classes="command is-full">
         <div style="width:100%">
-          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v0.5.0" full />
+          <Command text="pnpm add github:BalajiLeninrajan/catppuccin-neu#v1.0.0" full />
         </div>
       </Demo>
 
       <Props
         title="Contract"
         rows={[
-          { name: ".command", values: "div", notes: "min(480px, 100%) wide, 50px tall at every density, the card radius (12px), --cn-surface-sunken fill, --cn-well-ring over --neu-inset: a quiet even dark hairline that closes into surface-2 under prefers-contrast: more. Ligatures off." },
+          { name: ".command", values: "div", notes: "min(480px, 100%) wide, 50px tall at every density, the card radius (12px), --cn-surface-sunken fill, --cn-well-ring over --neu-inset. Ligatures off." },
           { name: ".command.is-full", values: "modifier", notes: "Fills its container." },
-          { name: ".command.is-wrap", values: "modifier", notes: "A long statement wraps instead of scrolling; the text becomes a block so inline spans inside it keep their whitespace." },
+          { name: ".command.is-wrap", values: "modifier", notes: "A long statement wraps instead of scrolling." },
           { name: ".command-text", values: "code", notes: "Mono 500 14px, tabular. Scrolls sideways with no scrollbar when the command is longer than the well." },
           { name: ".command-prompt", values: "span", notes: "The $ in mauve, unselectable so a copy never carries it." },
           { name: ".command-copy", values: "button.btn.is-icon", notes: "Both glyphs in the markup; .copy-glyph shows at rest, .done-glyph while the command is .is-copied." },

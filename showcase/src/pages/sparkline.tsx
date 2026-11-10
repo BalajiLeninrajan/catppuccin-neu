@@ -53,14 +53,11 @@ export default function SparklinePage() {
 
       <p class="cn-copy">
         A <code class="cn-code-inline">.sparkline</code> is an inline row: an
-        svg line, 96 by 24, and its value in the meta role in{" "}
-        <code class="cn-code-inline">--cn-fg-soft</code>, tabular. The line is
-        a 2px stroke with round caps and joins in{" "}
+        svg line, 96 by 24, and its value as text. The line is a 2px stroke in{" "}
         <code class="cn-code-inline">--series</code>, or the record's{" "}
         <code class="cn-code-inline">--accent</code> when that is unset. An
-        optional circle marks the latest point. The stroke does not scale
-        with the box, so it stays 2px at any size. The svg is{" "}
-        <code class="cn-code-inline">aria-hidden</code>: the text beside it
+        optional circle marks the latest point. The svg is{" "}
+        <code class="cn-code-inline">aria-hidden</code>. The text beside it
         carries the value, and a label above it says what the line measures.
       </p>
 
@@ -93,10 +90,9 @@ export default function SparklinePage() {
       <p class="cn-copy">
         Teams have an identity, so each line leaves{" "}
         <code class="cn-code-inline">--series</code> unset and takes the
-        team's own <code class="cn-code-inline">--accent</code>, as their bars
-        do. Each line scales to its own range, so it shows the shape of one
-        series, not a comparison between rows. Compare rows with a{" "}
-        <a href="/bar-chart">bar chart</a>, which shares one scale.
+        team's own <code class="cn-code-inline">--accent</code>. Each line
+        scales to its own range, so it shows the shape of one series. Compare
+        rows with a <a href="/bar-chart">bar chart</a>, which shares one scale.
       </p>
 
       <Props

@@ -56,8 +56,7 @@ export default function ProgressPage() {
 
       <p class="cn-copy">
         The fill is the <code class="cn-code-inline">--accent</code> ramp under grain, mauve by default.
-        On an accent card the bar takes the card's accent, because a progress
-        fill is a data mark.
+        On an accent card the bar takes the card's accent.
       </p>
 
       <Demo title="Large" why="When to use the large track" classes="progress-track is-lg">
@@ -118,11 +117,8 @@ export default function ProgressPage() {
       <p class="cn-copy">
         Set <code class="cn-code-inline">--progress-fill</code> on the track (or a
         wrapper) to re-key the fill per instance: any token color or a
-        gradient built from tokens. A success meter or a yellow quota warning
-        reads the status roles and stays on the palette without touching the
-        recipe. The fill color never states the status alone; the label and
-        the value beside the bar do. When the bar is a warning, say so in a
-        tag, and lead it with the warning glyph like every warning tag.
+        gradient built from tokens. The fill color never states the status
+        alone. The label and the value beside the bar do.
       </p>
 
       <Props

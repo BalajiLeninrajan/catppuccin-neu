@@ -68,13 +68,11 @@ export default function StatPage() {
       <p class="cn-copy">
         <code class="cn-code-inline">.stat-grid</code> lays stats out four across
         with a 16px gap. Set <code class="cn-code-inline">--stat-cols</code> for
-        another count. At 760px and below it goes to two across, whatever{" "}
-        <code class="cn-code-inline">--stat-cols</code> says, and it stays at two
-        on the narrowest phone. A column of single figures spends the height a
-        reader scrolls for, so the grid never drops to one.
+        another count. At 760px and below it goes to two across and never
+        drops to one.
       </p>
 
-      <Demo title="Ruled, on the page ground" why="Why figures on the ground take a rule" classes="stat-grid is-ruled > stat">
+      <Demo title="Ruled, on the page ground" why="Figures on the page ground" classes="stat-grid is-ruled > stat">
         <section class="stat-grid is-ruled" style="width:100%" aria-label="Key figures">
           <div class="stat">
             <span>Collected this month</span>
@@ -100,19 +98,12 @@ export default function StatPage() {
       </Demo>
 
       <p class="cn-copy">
-        A row of key figures often sits straight on the page, under the title
-        and before any panel. <code class="cn-code-inline">.is-ruled</code>{" "}
-        hangs each stat from a 2px <code class="cn-code-inline">--cn-stat-rule</code>,
-        equal to <code class="cn-code-inline">--edge</code>, on its start side,
-        with 16px between the rule and the label, so the row reads as one
-        band without a panel around it. The rule follows the writing
-        direction. Inside a panel, use the plain grid. A note under the
-        value goes in a bare <code class="cn-code-inline">&lt;p&gt;</code>. It
-        is 14px at 500 in{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code>, under a label in
-        the micro role, 12px uppercase at 500 in the same ink. A stat reads
-        micro, 24, 14, so the label is a caption and the note is the one
-        14px line.
+        For a row of key figures straight on the page,{" "}
+        <code class="cn-code-inline">.is-ruled</code> hangs each stat from a 2px{" "}
+        <code class="cn-code-inline">--cn-stat-rule</code> on its start side, so
+        the row reads as one band without a panel around it. Inside a panel,
+        use the plain grid. A note under the value goes in a bare{" "}
+        <code class="cn-code-inline">&lt;p&gt;</code>.
       </p>
 
       <Demo title="Large stat" why="When the large stat takes an accent" row classes="stat is-lg  (reads --accent)">
@@ -127,13 +118,11 @@ export default function StatPage() {
       </Demo>
 
       <p class="cn-copy">
-        <code class="cn-code-inline">.is-lg</code> steps the figure up to 36px, 1.5 times the 24px value, and
+        <code class="cn-code-inline">.is-lg</code> steps the figure up to 36px and
         colors it with <code class="cn-code-inline">var(--accent)</code>, mauve by
         default. When the number belongs to one item, such as a team, set that
         item's accent. Use one large stat per surface. On an accent card the
-        figure stays text-colored, because the plate already shows the accent.
-        Every figure is sans with <code class="cn-code-inline">tabular-nums</code>, so
-        columns of numbers line up.
+        figure stays text-colored.
       </p>
 
       <Demo title="Inline rows" why="How inline rows stack" classes="cn-divide > stat is-inline">
@@ -159,13 +148,9 @@ export default function StatPage() {
 
       <p class="cn-copy">
         An inline row puts the label left and the value right on one
-        baseline. Both are 14px: the label at 400 in{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code> and the value at 500 in{" "}
-        <code class="cn-code-inline">--cn-fg</code>, a weight step and two ink stops apart, so
-        the value is the brighter end of the row. Stack rows in a <code class="cn-code-inline">.cn-divide</code> for
-        hairlines between them; each row then gets 8px above and below. The
-        rows need no card. Put the stack in a well or a panel body when it
-        needs a frame.
+        baseline, both at 14px. Stack rows in a{" "}
+        <code class="cn-code-inline">.cn-divide</code> for hairlines between
+        them. Put the stack in a well or a panel body when it needs a frame.
       </p>
 
       <Demo title="A summary total" why="Where the total goes" classes="cn-divide > stat is-inline · stat is-inline is-total">
@@ -191,11 +176,8 @@ export default function StatPage() {
         The row a list adds up to takes{" "}
         <code class="cn-code-inline">.is-total</code>. Put it after the{" "}
         <code class="cn-code-inline">.cn-divide</code> list, not inside it. Its
-        label is the name role and its value the value role, 24px at 600, both
-        in <code class="cn-code-inline">--cn-fg</code>, under an{" "}
-        <code class="cn-code-inline">--edge</code> rule with 12px above and
-        below the rule. It stays text-colored: only the hero value takes the
-        accent.
+        value is 24px at 600 under an <code class="cn-code-inline">--edge</code>{" "}
+        rule. It stays text-colored.
       </p>
 
       <Props
@@ -209,31 +191,31 @@ export default function StatPage() {
           {
             name: ".stat > p",
             values: "optional note",
-            notes: "A line under the value: 14px at 500 in --cn-fg-muted, the label's weight and ink, no margin. Leave .cn-meta off it, so the note stays at 500.",
+            notes: "A line under the value: 14px at 500 in --cn-fg-muted, no margin. Leave .cn-meta off it.",
           },
           {
             name: ".stat.is-lg",
             values: "large tile",
             default: "--accent: var(--mauve)",
-            notes: "36px figure in the accent from 860px up. Under 860px it follows the page title down, and it is 4px under that title at every width. Text-colored inside an accent card, and with .cn-fg on its strong when the view's mauve primary shares the band. Steps down to 24px at 520px.",
+            notes: "36px figure in the accent from 860px up. Text-colored inside an accent card. Add .cn-fg on its strong when the view's mauve primary shares the band. Steps down to 24px at 520px.",
           },
           {
             name: ".stat-grid",
             values: "wrapper around .stat tiles",
             default: "--stat-cols: 4",
-            notes: "Equal columns, 16px gap. Two across at 760px and below; never one. In a .panel-body an unruled grid's stats take no padding of their own, so they line up with the header title.",
+            notes: "Equal columns, 16px gap. Two across at 760px and below, never one.",
           },
           {
             name: ".stat-grid.is-ruled",
             values: "stats on the page ground",
             contrast: "Rule 1.92:1 on the page",
-            notes: "Each stat hangs from a 2px --cn-stat-rule (equal to --edge; surface-2 under prefers-contrast: more) on its inline-start side, 16px in, with 4px block padding. For a figures band outside any panel.",
+            notes: "Each stat hangs from a 2px --cn-stat-rule on its inline-start side, 16px in. For a figures band outside any panel.",
           },
           {
             name: ".stat.is-inline",
             values: "label and value row",
             contrast: "Label 7.4:1 · value 11.3:1 on a panel",
-            notes: "Baseline-aligned at 14px. Label at 400 in --cn-fg-muted (subtext-0); value (b or strong) at 500 in --cn-fg (text), tabular. Key and value sit a weight step and two ink stops apart, as in .kv.",
+            notes: "Baseline-aligned at 14px. Label at 400 in --cn-fg-muted. Value (b or strong) at 500 in --cn-fg, tabular.",
           },
           {
             name: ".cn-divide > .stat.is-inline",

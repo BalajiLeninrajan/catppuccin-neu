@@ -99,11 +99,10 @@ export default function AccordionPage() {
       <p class="cn-copy">
         Wrap the title in <code class="cn-code-inline">b</code> (bold) or{" "}
         <code class="cn-code-inline">p</code> (regular) and it grows, so the
-        meta rides against the chevron instead of floating mid-row.{" "}
+        meta rides against the chevron.{" "}
         <code class="cn-code-inline">.accordion-stack</code> pads the group and drops
         the closed last row's divider at the panel edge. At 520px and below
-        the meta wraps under the title and the chevron stays on the title
-        line.
+        the meta wraps under the title.
       </p>
 
       <Demo
@@ -150,7 +149,7 @@ export default function AccordionPage() {
             name: "details.accordion",
             values: "one disclosure row",
             contrast: "Open tint 1.08:1 on a panel",
-            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] is its own step, the open carve, not the engaged state: card radius, full inset, mauve at --cn-step-tint (4%) over whatever holds it, so it never turns lighter than the mantle page, mauve title. The engaged --wash would drop body text in the fold under its floor.",
+            notes: "Flat with a hairline bottom divider. Stack siblings for a group. [open] takes the card radius, the full inset, mauve at --cn-step-tint over whatever holds it, and a mauve title.",
           },
           {
             name: "[name]",
@@ -160,7 +159,7 @@ export default function AccordionPage() {
           {
             name: "summary",
             values: "title, or b + .cn-meta",
-            notes: "48px min-height row with a chevron. The question sets at the body size, 16px (15px compact), at 600 in --cn-fg, so it matches the answer in size and leads it by weight and ink. The native marker is hidden. Its focus ring draws inside the row.",
+            notes: "48px min-height row with a chevron. The title sets at the body size at 600 in --cn-fg. The native marker is hidden. Its focus ring draws inside the row.",
           },
           {
             name: ".fold",

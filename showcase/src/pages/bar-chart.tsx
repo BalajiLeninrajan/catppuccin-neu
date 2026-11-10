@@ -64,24 +64,21 @@ export default function BarChartPage() {
       <p class="cn-copy">
         The chart is a two-column grid: labels in a column that fits them,
         bars in the rest. A label is any direct child that is not a{" "}
-        <code class="cn-code-inline">.bar-group</code>, set in the meta role in{" "}
-        <code class="cn-code-inline">--cn-fg-muted</code>. Each{" "}
+        <code class="cn-code-inline">.bar-group</code>. Each{" "}
         <code class="cn-code-inline">.bar</code> draws its bar from{" "}
         <code class="cn-code-inline">--value</code>, the share of the track,
         and holds its value as text. The bar takes at most 80% of the track,
         so the longest value still fits beside it. Switch the month: bars ease
-        to the new value over twice <code class="cn-code-inline">--t-slow</code>,
-        like a progress fill.
+        to the new value over twice <code class="cn-code-inline">--t-slow</code>.
       </p>
 
       <p class="cn-copy">
         Teams have an identity, so each bar leaves{" "}
         <code class="cn-code-inline">--series</code> unset and falls back to the
-        team's own <code class="cn-code-inline">--accent</code>. Payments is teal
-        here as it is everywhere else. Set <code class="cn-code-inline">--value</code>{" "}
-        from data. The recipe does not scale it, so pick the maximum yourself
-        and keep it fixed while the data changes, or a bar that stayed the
-        same would appear to move.
+        team's own <code class="cn-code-inline">--accent</code>. Set{" "}
+        <code class="cn-code-inline">--value</code> from data. The recipe does
+        not scale it, so pick the maximum yourself and keep it fixed while
+        the data changes.
       </p>
 
       <Demo title="Grouped series with a legend" why="How grouped series take their colors" classes="legend + bar-chart > bar-group > bar × 2">
@@ -119,8 +116,7 @@ export default function BarChartPage() {
         apart, one per series. Series without an identity take{" "}
         <code class="cn-code-inline">--cn-series-1</code>,{" "}
         <code class="cn-code-inline">-2</code> and on, in order, and a{" "}
-        <a href="/legend">legend</a> above the chart names them. Sighted
-        readers match a bar to its series by position and color, so give each
+        <a href="/legend">legend</a> above the chart names them. Give each
         value a visually hidden series name for screen readers.
       </p>
 
@@ -156,9 +152,8 @@ export default function BarChartPage() {
 
       <p class="cn-copy">
         <code class="cn-code-inline">.is-hatched</code> stripes a bar and its
-        legend swatch, a second key besides hue, for a series that must stand
-        apart without color. Hatch the same series in the bars and in the
-        legend, so the key matches the mark.
+        legend swatch, for a series that must stand apart without color.
+        Hatch the same series in the bars and in the legend.
       </p>
 
       <Props
@@ -167,9 +162,9 @@ export default function BarChartPage() {
           { name: ".bar-chart", values: "div", notes: "Grid: a max-content label column and a minmax(0, 1fr) bar column, 12px by 16px gap, rows centered." },
           { name: ".bar-chart > :not(.bar-group)", values: "label", notes: "The meta role, 400 14px, in --cn-fg-muted." },
           { name: ".bar-group", values: "div", notes: "One row's bars, stacked 4px apart. Holds one .bar or several." },
-          { name: ".bar", values: "div", notes: "A row: a 12px bar on the chip radius in --series, painted as the fill ramp lit from the top left, without grain, then the value as text in the meta role, --cn-fg-soft, tabular." },
+          { name: ".bar", values: "div", notes: "A row: a 12px bar on the chip radius in --series, then the value as text in the meta role, --cn-fg-soft, tabular." },
           { name: "--value", values: "percentage", default: "0%", notes: "The bar's share of the track. The bar is --value × 80% of the track wide. Set it from data." },
-          { name: "--series", values: "token color", default: "var(--accent)", notes: "The bar color: --cn-series-* for series, a status role for a status, or a palette tone for a status with no role. Leave it unset and the bar takes the record's --accent." },
+          { name: "--series", values: "token color", default: "var(--accent)", notes: "The bar color: --cn-series-* for series, a status role for a status, or a palette tone for a status with no role. Unset, the bar takes the record's --accent." },
           { name: ".is-hatched", values: "on .bar", notes: "Diagonal stripes over the bar, base at 45%, 2px on and 3px off. The series' .legend-item takes the same class." },
           { name: "transition", values: "inline-size", notes: "Twice --t-slow on the ease-out, so a new value slides in. Instant under reduced motion." },
         ]}

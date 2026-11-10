@@ -71,13 +71,10 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The
-        whole label is the hit target. When the input is disabled the
-        control dims itself to{" "}
-        <code class="cn-code-inline">--disabled-opacity</code> (.7) and the
-        label text takes <code class="cn-code-inline">--cn-fg-disabled</code>,
-        with no extra class. A disabled control dims the same way outside a{" "}
-        <code class="cn-code-inline">.choice</code>.
+        The whole label is the hit target. When the input is disabled the
+        control dims to <code class="cn-code-inline">--disabled-opacity</code>{" "}
+        and the label text takes{" "}
+        <code class="cn-code-inline">--cn-fg-disabled</code>, with no extra class.
       </p>
 
       <Demo title="Mixed" classes="input.checkbox:indeterminate" why="How to set the mixed state">
@@ -87,11 +84,9 @@ export default function SelectionPage() {
       <p class="cn-copy">
         A parent row whose children are partly checked shows the mauve fill
         with a dash. There is no attribute for it. Set{" "}
-        <code class="cn-code-inline">el.indeterminate = true</code> from script
-        whenever some but not all children are checked, and clear it when
-        none or all are. Clicking the parent checks or clears every child. A
-        custom control keeps <code class="cn-code-inline">aria-checked="mixed"</code>{" "}
-        instead.
+        <code class="cn-code-inline">el.indeterminate = true</code> from script.
+        A custom control keeps{" "}
+        <code class="cn-code-inline">aria-checked="mixed"</code> instead.
       </p>
 
 
@@ -140,23 +135,12 @@ export default function SelectionPage() {
       </Demo>
 
       <p class="cn-copy">
-        The switch is an abstract light switch: a carved wall plate holds a
-        raised rocker paddle on <code class="cn-code-inline">--cn-surface-raised</code>.
-        The plate is a filled carve: it takes{" "}
-        <code class="cn-code-inline">--cn-surface-sunken</code>, darker than
-        the page and a panel, so the base paddle stands a fill step above
-        its track. The paddle is never lightened.
-        The off paddle carries a 1px{" "}
-        <code class="cn-code-inline">--control-edge</code>, overlay-1, so it reads
-        as a control and not as a disabled one.
-        Checking slides the paddle across, flips its tilt, lights it mauve,
-        sets a 2 by 8px crust bar at its center, the "I" of a wall switch, and
-        gives it an 8px glow of mauve at{" "}
-        <code class="cn-code-inline">--cn-step-plate</code> (25%), a soft blur
-        with no ring that lights the dark plate around the paddle. Held while on,
-        the glow blooms to 12px at{" "}
-        <code class="cn-code-inline">--cn-step-edge</code> (40%). With the bar,
-        on reads by a mark as well as by color and position.
+        The switch is a rocker paddle on a carved plate. The plate takes{" "}
+        <code class="cn-code-inline">--cn-surface-sunken</code> and the paddle{" "}
+        <code class="cn-code-inline">--cn-surface-raised</code>. Checking slides
+        the paddle across, flips its tilt, lights it mauve with a glow and
+        sets a crust bar at its center, so on reads by a mark as well as by
+        color and position.
       </p>
 
       <Demo
@@ -185,14 +169,10 @@ export default function SelectionPage() {
 
       <p class="cn-copy">
         A disabled switch lies flat: the paddle loses its tilt and its raise,
-        paddle and plate drop to the soft{" "}
-        <code class="cn-code-inline">--edge</code>, and the plate loses its
-        sunken fill. An off switch still tilts,
-        stands proud of the plate and keeps its{" "}
-        <code class="cn-code-inline">--control-edge</code>, so the two never
-        read as the same control. A disabled checkbox and radio drop to{" "}
-        <code class="cn-code-inline">--edge</code> too. None of them is
-        dashed, because dashed means an open slot. All three dim to{" "}
+        and the plate loses its sunken fill. An off switch still tilts and
+        keeps its <code class="cn-code-inline">--control-edge</code>. A
+        disabled checkbox and radio drop to{" "}
+        <code class="cn-code-inline">--edge</code>. All three dim to{" "}
         <code class="cn-code-inline">--disabled-opacity</code>.
       </p>
 
@@ -229,11 +209,10 @@ export default function SelectionPage() {
         checkbox or radio, or on the{" "}
         <code class="cn-code-inline">fieldset</code> that holds them. Each
         unchecked box takes a <code class="cn-code-inline">--cn-danger</code>{" "}
-        edge; a checked one keeps its fill. Put the message in a{" "}
+        edge. Put the message in a{" "}
         <code class="cn-code-inline">small</code> and point{" "}
-        <code class="cn-code-inline">aria-describedby</code> at it, so the
-        message is read with the group. The red legend and message here are
-        utilities; the recipe colors only the boxes.
+        <code class="cn-code-inline">aria-describedby</code> at it. The red
+        legend and message here are utilities.
       </p>
 
       <CodeBlock
@@ -269,9 +248,8 @@ export default function SelectionPage() {
       <h2 class="cn-title">Accessibility</h2>
       <p class="cn-copy">
         A checkbox, radio or switch is a native input and needs no script. A{" "}
-        <a href="/input">listbox or combobox</a> is a custom widget and is
-        required to have a keyboard model:{" "}
-        <code class="cn-code-inline">listbox()</code> from{" "}
+        <a href="/input">listbox or combobox</a> is a custom widget and needs
+        a keyboard model: <code class="cn-code-inline">listbox()</code> from{" "}
         <code class="cn-code-inline">catppuccin-neu/js</code>, or your own
         widget library.
       </p>
@@ -309,13 +287,13 @@ export default function SelectionPage() {
             values: 'input[type="checkbox"]',
             contrast: "Plate fill 1.14:1 under a panel, 1.07:1 under the page · edges 4.4:1 on a panel",
             notes:
-              "50 by 28px plate, 8px radius, the --cn-surface-sunken fill under --neu-inset and a 1px --control-edge inset ring. The 21 by 22px paddle rests on --cn-surface-raised with its own 1px --control-edge, tilted 16deg. Checked, it slides 23px on the spring, flips its tilt, takes the mauve ramp with a 2 by 8px crust bar at its center and glows 8px at --cn-step-plate; held while on, 12px at --cn-step-edge.",
+              "50 by 28px plate on the --cn-surface-sunken fill under --neu-inset. The paddle rests on --cn-surface-raised, tilted 16deg. Checked, it slides 23px on the spring, flips its tilt, takes the mauve ramp with a crust bar at its center and glows.",
           },
           {
             name: ":disabled",
             values: "on the input",
             notes:
-              "Each control dims to --disabled-opacity (.7). Checkbox and radio edges drop to --edge. The switch paddle lies flat with no tilt and no raise, and paddle and plate drop to --edge, the plate on the soft inset with no sunken fill. No dashes.",
+              "Each control dims to --disabled-opacity (.7). Checkbox and radio edges drop to --edge. The switch paddle lies flat with no tilt and no raise.",
           },
           {
             name: ".choice:has(:disabled)",
