@@ -174,7 +174,6 @@
   /* Carve rings, even on all four sides. Live fields take --cn-field-ring,
      disabled fields --cn-carve-ring, and wells --cn-well-ring. */
   --cn-field-ring: inset 0 0 0 1px color-mix(in srgb, var(--surface-2) 85%, transparent);
-  --cn-field-ring-overlay: inset 0 0 0 1px color-mix(in srgb, var(--overlay-0) 75%, transparent); /* .modal and .drawer set --cn-field-ring to this */
   --cn-carve-ring: inset 0 0 0 1px var(--surface-1);
   --cn-well-ring: inset 0 0 0 1px color-mix(in srgb, var(--surface-1) 50%, var(--surface-0));
   /* The overlay hairline. */
@@ -392,7 +391,6 @@ a:hover { color: var(--cn-interactive-hover); text-decoration-color: currentColo
     --edge-strong: var(--overlay-1);
     --control-edge: var(--overlay-2);
     --cn-field-ring: inset 0 0 0 1px var(--overlay-2);
-    --cn-field-ring-overlay: inset 0 0 0 1px var(--overlay-2);
     --cn-carve-ring: inset 0 0 0 1px var(--overlay-2);
     --cn-well-ring: inset 0 0 0 1px var(--surface-2);
     --neu-dark: rgb(8 8 14 / .88);

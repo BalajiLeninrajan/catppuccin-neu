@@ -53,7 +53,7 @@ Light comes from the top left. Every surface sits at one of five heights.
 | the ground | mantle | the page, the topbar, static chips |
 | raised on a soft foot | the base fill, the `--edge` hairline on all four sides, `--neu-raised` | panels |
 | raised on a hard plate | the base fill and a lit top edge over a solid plate `--hard-offset` deep | buttons, segmented options, link and button chips, accent cards, the tilted panel |
-| floating | the overlay fill, `--edge-strong`, `--shadow-pop` | dialogs, drawers, toasts, tooltips |
+| floating | `--edge-strong`, `--shadow-pop`; the base fill on dialogs and drawers, the overlay fill on toasts and tooltips | dialogs, drawers, toasts, tooltips |
 
 - A panel stands on 1px of ink and a plate on 4px. Compact density moves the plate to 2px and nothing else.
 - The plate is ink. Under the primary it is mauve, and under an accent card it is the card's `--accent`.

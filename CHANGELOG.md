@@ -5,6 +5,7 @@ Newest version first.
 ## 2.0.1
 
 - A `.legend-item` swatch reads `--tone` again when the item sets no `--series`. 0.5.0 moved the swatch to `--series` and dropped `--tone`, so a legend written for 0.4.1 drew every swatch in the accent. `--series` still wins when both are set, and an item that sets neither keeps the accent. A `--tone` set above the item does not reach the swatch.
+- `.modal` and `.drawer` take the base fill, `--cn-surface-raised`, in place of the lighter overlay fill. Fields inside them use the same resting ring as fields on a panel, and `--cn-field-ring-overlay` is gone. Toasts, tooltips and the select list keep the overlay fill.
 
 ## 2.0.0
 
