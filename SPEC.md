@@ -8,7 +8,7 @@ in `css/tokens.css`. Utilities are the `cn-*` classes in
 The [docs site](https://catppuccin-neu.balajileninrajan.dev) shows every
 component, but it renders in the browser. Read this file when you cannot
 run a browser. A page that loads the CSS from the CDN can fetch it at
-`https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v2.0.0/SPEC.md`.
+`https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v2.0.1/SPEC.md`.
 
 ## Design rules
 
@@ -53,7 +53,7 @@ Light comes from the top left. Every surface sits at one of five heights.
 | the ground | mantle | the page, the topbar, static chips |
 | raised on a soft foot | the base fill, the `--edge` hairline on all four sides, `--neu-raised` | panels |
 | raised on a hard plate | the base fill and a lit top edge over a solid plate `--hard-offset` deep | buttons, segmented options, link and button chips, accent cards, the tilted panel |
-| floating | the overlay fill, `--edge-strong`, `--shadow-pop` | dialogs, drawers, toasts, tooltips |
+| floating | `--edge-strong`, `--shadow-pop`; the base fill on dialogs and drawers, the overlay fill on toasts and tooltips | dialogs, drawers, toasts, tooltips |
 
 - A panel stands on 1px of ink and a plate on 4px. Compact density moves the plate to 2px and nothing else.
 - The plate is ink. Under the primary it is mauve, and under an accent card it is the card's `--accent`.
@@ -139,7 +139,7 @@ look follows. Nothing here needs script except where a line says so.
 - `.table-scroll`: wraps a wide table so it scrolls sideways. With a `max-height`, `.data-table.is-sticky-head` pins the head inside it.
 - `.ranked-row`: a `.mark` rank, a `strong` name and a trailing `b` value.
 - `.progress-track`: a track holding one `span` whose width is the value. `.is-lg` is thicker.
-- `.legend` holding `.legend-item` rows. Each swatch reads `--series`, then `--accent`.
+- `.legend` holding `.legend-item` rows. Each swatch reads `--series`, then the item's own `--tone`, then `--accent`.
 - `.kv`: a `dl` of `dt` keys and `dd` values.
 
 **Code**

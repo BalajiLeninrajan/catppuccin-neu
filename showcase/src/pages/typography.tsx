@@ -104,7 +104,7 @@ export default function TypographyPage() {
       </p>
 
       <Demo title="cn-code" classes="cn-code">
-        <code class="cn-code">pnpm add github:BalajiLeninrajan/catppuccin-neu#v2.0.0</code>
+        <code class="cn-code">pnpm add github:BalajiLeninrajan/catppuccin-neu#v2.0.1</code>
       </Demo>
 
       <Demo title="cn-code-inline" classes="cn-code-inline">

@@ -1275,6 +1275,7 @@ a:hover:not(:active) > .accent-card {
   gap: var(--space-2);
   color: var(--cn-fg-body);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
+  --tone: var(--accent);   /* an item that sets neither --series nor --tone keeps the accent */
 }
 .legend-item::before {
   content: "";
@@ -1282,7 +1283,7 @@ a:hover:not(:active) > .accent-card {
   height: 10px;
   flex: 0 0 auto;
   border-radius: var(--cn-radius-chip);
-  background: var(--series, var(--accent));
+  background: var(--series, var(--tone));
 }
 
 /* Key-value list: <dl class="kv"><dt>Region</dt><dd>us-east-1</dd></dl> */
@@ -1302,10 +1303,8 @@ a:hover:not(:active) > .accent-card {
   overflow-wrap: anywhere;
 }
 
-/* ── Overlays: all float on --shadow-pop, never neu ────────────────────── */
-
-/* Fields on the overlay fill take the overlay ring. */
-:is(.modal, .drawer) { --cn-field-ring: var(--cn-field-ring-overlay); }
+/* ── Overlays: all float on --shadow-pop, never neu. Dialogs and drawers
+   take the base fill; toasts and tooltips take the overlay fill. ──────── */
 
 .modal {
   position: fixed;
@@ -1318,7 +1317,7 @@ a:hover:not(:active) > .accent-card {
   overflow: auto;
   border: 1px solid var(--edge-strong);
   border-radius: var(--cn-radius-panel);
-  background: var(--cn-surface-overlay);
+  background: var(--cn-surface-raised);
   box-shadow: var(--shadow-pop);
 }
 .modal.is-wide { width: min(760px, calc(100vw - var(--space-6))); }
@@ -1331,7 +1330,7 @@ a:hover:not(:active) > .accent-card {
   flex-direction: column;
   overflow: auto;
   border-inline-start: 1px solid var(--edge-strong);
-  background: var(--cn-surface-overlay);
+  background: var(--cn-surface-raised);
   box-shadow: var(--shadow-pop);
 }
 

@@ -109,7 +109,6 @@ const PAIRS = [
   ["--control-edge", GROUNDS, 3, "control edges, the slider thumb and a hovered field's ring"],
   ["--engaged-edge", [...GROUNDS, "--wash"], 3, "the engaged rim"],
   ["@field-ring", GROUNDS, 3, "a resting field's ring", "prefers-contrast"],
-  ["@field-ring-overlay", ["--cn-surface-overlay"], 3, "a resting field's ring on an overlay", "prefers-contrast"],
 ];
 
 function customProps(body, into = new Map()) {

@@ -4,7 +4,7 @@ import { Doc, Demo, Props, CodeBlock } from "../lib/doc";
 const LADDER = [
   { token: "--cn-surface-page", mix: "mantle", use: "The page, the app shell, the topbar." },
   { token: "--cn-surface-raised", mix: "base", use: "Panels, buttons, chips, accent cards." },
-  { token: "--cn-surface-overlay", mix: "surface-0 90% into base", use: "Dialogs, drawers, toasts, tooltips." },
+  { token: "--cn-surface-overlay", mix: "surface-0 90% into base", use: "Toasts, tooltips, the select list. Dialogs and drawers take the raised fill." },
   { token: "--cn-surface-sunken", mix: "crust", use: "Wells, code wells, stepper pills." },
 ];
 
