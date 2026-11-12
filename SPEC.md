@@ -8,7 +8,7 @@ in `css/tokens.css`. Utilities are the `cn-*` classes in
 The [docs site](https://catppuccin-neu.balajileninrajan.dev) shows every
 component, but it renders in the browser. Read this file when you cannot
 run a browser. A page that loads the CSS from the CDN can fetch it at
-`https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v2.0.0/SPEC.md`.
+`https://cdn.jsdelivr.net/gh/BalajiLeninrajan/catppuccin-neu@v2.0.1/SPEC.md`.
 
 ## Design rules
 
@@ -139,7 +139,7 @@ look follows. Nothing here needs script except where a line says so.
 - `.table-scroll`: wraps a wide table so it scrolls sideways. With a `max-height`, `.data-table.is-sticky-head` pins the head inside it.
 - `.ranked-row`: a `.mark` rank, a `strong` name and a trailing `b` value.
 - `.progress-track`: a track holding one `span` whose width is the value. `.is-lg` is thicker.
-- `.legend` holding `.legend-item` rows. Each swatch reads `--series`, then `--accent`.
+- `.legend` holding `.legend-item` rows. Each swatch reads `--series`, then the item's own `--tone`, then `--accent`.
 - `.kv`: a `dl` of `dt` keys and `dd` values.
 
 **Code**

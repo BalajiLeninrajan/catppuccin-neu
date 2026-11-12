@@ -55,7 +55,7 @@ export default function LegendPage() {
         rows={[
           { name: ".legend", values: "ul", notes: "A wrapping row with no bullets." },
           { name: ".legend-item", values: "li", notes: "A swatch in --series, then the label." },
-          { name: "--series", values: "a color", default: "var(--accent)", notes: "The swatch color. Match it to the mark in the chart." },
+          { name: "--series", values: "a color", default: "var(--accent)", notes: "The swatch color. Match it to the mark in the chart. An item that sets --tone and no --series uses --tone." },
         ]}
       />
 

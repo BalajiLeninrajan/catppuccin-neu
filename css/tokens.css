@@ -153,7 +153,7 @@
 
   /* Contract properties: set on an element or wrapper to re-key a subtree.
      --plate is undeclared so a subtree can set it. Read var(--plate, var(--neu-ink)). */
-  --accent: var(--mauve);            /* per-instance accent; legend swatches read --series first */
+  --accent: var(--mauve);            /* per-instance accent; legend swatches read --series, then --tone */
   --tone: var(--cn-info);            /* status color; info until a .cn-tone-* sets it */
   --hard-offset: 4px;
   --page-gutter: clamp(var(--space-3), 3vw, var(--space-6));

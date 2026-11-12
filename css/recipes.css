@@ -1275,6 +1275,7 @@ a:hover:not(:active) > .accent-card {
   gap: var(--space-2);
   color: var(--cn-fg-body);
   font: var(--cn-type-meta-weight) var(--cn-type-meta-size)/var(--cn-type-meta-leading) var(--sans);
+  --tone: var(--accent);   /* an item that sets neither --series nor --tone keeps the accent */
 }
 .legend-item::before {
   content: "";
@@ -1282,7 +1283,7 @@ a:hover:not(:active) > .accent-card {
   height: 10px;
   flex: 0 0 auto;
   border-radius: var(--cn-radius-chip);
-  background: var(--series, var(--accent));
+  background: var(--series, var(--tone));
 }
 
 /* Key-value list: <dl class="kv"><dt>Region</dt><dd>us-east-1</dd></dl> */
